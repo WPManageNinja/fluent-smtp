@@ -1,0 +1,41 @@
+<?php
+
+!defined('WPINC') && die;
+
+define('FLUENTMAIL', 'fluentmail');
+define('FLUENTMAIL_PLUGIN_VERSION', '1.0.0');
+define('FLUENTMAIL_UPLOAD_DIR', '/fluentmail');
+define('FLUENT_MAIL_DB_PREFIX', 'fsmpt_');
+define('FLUENTMAIL_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('FLUENTMAIL_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
+
+spl_autoload_register(function($class) {
+    $match = 'FluentMail';
+
+    if (!preg_match("/\b{$match}\b/", $class)) {
+        return;
+    }
+
+    $path = plugin_dir_path(__FILE__);
+    
+    $file = str_replace(
+        ['FluentMail', '\\', '/App/', '/Includes/'],
+        ['', DIRECTORY_SEPARATOR, 'app/', 'includes/'],
+        $class
+    );
+
+    require(trailingslashit($path) . trim($file, '/') . '.php');
+});
+
+add_filter('cron_schedules', function($schedules) {
+    $schedules['fluentmail_every_minute'] = [
+        'interval' => 60,
+        'display'  => __('Every Minute (FluentMail)')
+    ];
+
+    return $schedules;
+});
+
+if (!wp_next_scheduled('fluent_mail_delete_email_logs')) {
+    wp_schedule_event(time(), 'fluentmail_every_minute', 'fluent_mail_delete_email_logs');
+}

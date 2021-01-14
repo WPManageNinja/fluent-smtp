@@ -1,0 +1,174 @@
+<?php
+
+namespace FluentMail\App\Models;
+
+use FluentMail\Includes\Support\Arr;
+use FluentMail\App\Services\Mailer\Manager;
+use FluentMail\App\Models\Traits\SendTestEmailTrait;
+use FluentMail\Includes\Support\ValidationException;
+
+class Settings
+{
+    use SendTestEmailTrait;
+
+    protected $optionName = FLUENTMAIL . '-settings';
+
+    public function get()
+    {
+        return get_option($this->optionName, []);
+    }
+
+    public function getSettings()
+    {
+        return $this->get();
+    }
+
+    public function store($inputs)
+    {
+        $settings = $this->getSettings();   
+        $mappings = $this->getMappings($settings);
+        $connections = $this->getConnections($settings);
+        $email = Arr::get($inputs, 'connection.sender_email');
+
+        $key = $inputs['connection_key'];
+
+        if (isset($connections[$key])) {
+            $mappings = array_filter($mappings, function($mappingKey) use ($key) {
+                return $mappingKey != $key;
+            });
+            unset($connections[$key]);
+        }
+
+        $uniqueKey = $this->generateUniqueKey($email);
+
+        $extraMappings = $inputs['valid_senders'];
+        $extraMappings[] = $email;
+        $extraMappings = array_unique($extraMappings);
+        $extraMappings = array_fill_keys($extraMappings, $uniqueKey);
+
+        $mappings = array_merge($mappings, $extraMappings);
+
+        $connections[$uniqueKey] = [
+            'title' => (isset($inputs['connection_name'])) ? $inputs['connection_name'] : 'Default',
+            'provider_settings' => $inputs['connection']
+        ];
+
+
+        $settings['mappings'] = $mappings;
+        $settings['connections'] = $connections;
+
+        $misc = $this->getMisc($settings);
+
+        if(empty($misc['default_connection']) || $misc['default_connection'] == $key) {
+            $misc['default_connection'] = $uniqueKey;
+            $settings['misc'] = $misc;
+        }
+
+        update_option($this->optionName, $settings);
+
+        return $settings;
+    }
+
+    public function generateUniqueKey($email)
+    {
+        return md5($email);
+    }
+
+    public function saveGlobalSettings($data)
+    {
+        return update_option($this->optionName, $data);
+    }
+
+    public function delete($key)
+    {
+        $settings = $this->getSettings();
+
+        $item = array_filter($settings['mappings'], function($k) use ($key) {
+            return $k == $key;
+        });
+
+        $values = array_keys($item);
+        $email = reset($values);
+
+        if ($email) {
+            unset($settings['mappings'][$email]);
+            unset($settings['connections'][$key]);
+        }
+
+        update_option($this->optionName, $settings);
+
+        return Arr::get($settings, 'connections', []);
+    }
+
+    public function getDefaults()
+    {
+        $url = str_replace(
+            ['http://', 'http://www.', 'www.'],
+            '',
+            get_bloginfo('wpurl')
+        );
+
+        return [
+            'sender_name' => $url,
+            'sender_email' => get_option('admin_email')
+        ];
+    }
+
+    public function getVerifiedEmails()
+    {
+        $optionName = FLUENTMAIL . '-ses-verified-emails';
+
+        return get_option($optionName, []);
+    }
+
+    public function saveVerifiedEmails($verifiedEmails)
+    {
+        $optionName = FLUENTMAIL . '-ses-verified-emails';
+        $emails = get_option($optionName, []);
+        update_option($optionName, array_unique(array_merge(
+            $emails, $verifiedEmails
+        )));
+    }
+
+    public function getConnections($settings = null)
+    {
+        $settings = $settings ?: $this->getSettings();
+        
+        return Arr::get($settings, 'connections', []);
+    }
+
+    public function getMappings($settings = null)
+    {
+        $settings = $settings ?: $this->getSettings();
+        
+        return Arr::get($settings, 'mappings', []);
+    }
+
+    public function getMisc($settings = null)
+    {
+        $settings = $settings ?: $this->getSettings();
+
+        return Arr::get($settings, 'misc', []);
+    }
+
+    public function getConnection($email)
+    {
+        $settings = $this->getSettings();
+        $mappings = $this->getMappings($settings);
+        $connections = $this->getConnections($settings);
+
+        if (isset($mappings[$email])) {
+            if (isset($connections[$mappings[$email]])) {
+                return $connections[$mappings[$email]];
+            }
+        }
+        return [];
+    }
+
+    public function updateMiscSettings($misc)
+    {
+        $settings = $this->get();
+        $settings['misc'] = $misc;
+        $this->saveGlobalSettings($settings);
+    }
+}
