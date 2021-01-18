@@ -10,7 +10,7 @@
                 >Log All Emails for Reporting</el-checkbox>
             </el-form-item>
 
-            <el-form-item v-if="settings.misc.log_emails == 'yes'" label="FluentCRM Email Logging">
+            <el-form-item v-if="settings.misc.log_emails == 'yes' && !!appVars.has_fluentcrm" label="FluentCRM Email Logging">
                 <el-checkbox v-model="settings.misc.disable_fluentcrm_logs" true-label="yes" false-label="no">Disable Logging for FluentCRM Emails (Recommeneded)</el-checkbox>
             </el-form-item>
             
@@ -80,5 +80,5 @@
                     });
             }
         }
-    }
+    };
 </script>

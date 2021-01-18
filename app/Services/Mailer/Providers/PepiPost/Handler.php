@@ -30,14 +30,17 @@ class Handler extends BaseHandler
     {
         $body = [
             'from' => $this->getFrom(),
-            'reply_to' => $this->getReplyTo(),
             'personalizations' => $this->getRecipients(),
             'subject' => $this->getSubject(),
             'content' => $this->getBody(),
             'headers' => $this->getCustomEmailHeaders()
         ];
 
-        if (isset($this->params['attachments'])) {
+        if ($replyTo = $this->getReplyTo()) {
+            $body['reply_to'] = $replyTo;
+        }
+
+        if (!empty($this->getParam('attachments'))) {
             $body['attachments'] = $this->getAttachments();
         }
 
@@ -53,9 +56,21 @@ class Handler extends BaseHandler
         return $this->handleResponse($this->response);
     }
 
+    public function setSettings($settings)
+    {
+        if($settings['key_store'] == 'wp_config') {
+            $settings['api_key'] = defined('FLUENTMAIL_PEPIPOST_API_KEY') ? FLUENTMAIL_PEPIPOST_API_KEY : '';
+        }
+        $this->settings = $settings;
+        return $this;
+    }
+
     protected function getFrom()
     {
-        return $this->getParam('from');
+        return [
+            'name' => $this->getParam('sender_name'),
+            'email' => $this->getParam('sender_email')
+        ];
     }
 
     protected function getReplyTo()
@@ -84,7 +99,7 @@ class Handler extends BaseHandler
                 : $recipient['email'];
            }, $recipient);
 
-            $this->params['formatted'][$key] = implode(', ', $array);
+            $this->attributes['formatted'][$key] = implode(', ', $array);
         }
 
         return [$recipients];
@@ -114,7 +129,7 @@ class Handler extends BaseHandler
         return [
             [
                 'type' => 'html',
-                'value' => $this->getParam('body')
+                'value' => $this->getParam('message')
             ]
         ];
     }
@@ -123,7 +138,7 @@ class Handler extends BaseHandler
     {
         $data = [];
 
-        foreach ($this->params['attachments'] as $attachment) {
+        foreach ($this->getParam('attachments') as $attachment) {
             $file = false;
 
             try {

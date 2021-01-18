@@ -26,7 +26,6 @@
                     style="width:100%"
                 >
                     <el-option label="Successful" value="sent" />
-                    <el-option label="Resent" value="resent" />
                     <el-option label="Failed" value="failed" />
                 </el-select>
 

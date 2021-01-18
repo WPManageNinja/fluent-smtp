@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name:  Fluent SMTP
-Plugin URI:   https://github.com/WPManageNinja/fluent-smtp
+Plugin Name:  FluentSMTP
+Plugin URI:   https://fluentsmtp.com
 Description:  The Ultimate SMTP Connection Plugin for WordPress.
 Version:      1.0.0
-Author:       WPManageNinja Team
-Author URI:   https://wpmanageninja.com
+Author:       FluentSMTP & WPManageNinja Team
+Author URI:   https://fluentsmtp.com
 License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain:  fluent-smtp
@@ -30,3 +30,9 @@ call_user_func(function() {
         do_action('fluentMail_loaded', $application);
     });
 });
+
+/*
+ * Thanks for checking the source code
+ * Please check the full source here: https://github.com/WPManageNinja/fluent-smtp
+ * Would love to welcome your pull request
+*/

@@ -8,114 +8,94 @@
             :visible.sync="logViewerProps.dialogVisible"
         >
             <div v-loading="loading">
-                <el-row class="log-row">
-                    <el-col :span="4">
-                        <strong>Status</strong>
-                    </el-col>
-                    <el-col :span="20">
-                        : <span :class="{
-                            success: log.status == 'sent',
-                            resent: log.status == 'resent',
-                            fail: log.status == 'failed'
-                        }">
-                            <span v-if="log.status=='sent'">Successful</span>
-                            <span v-else-if="log.status=='resent'" style="font-size:14px;">
-                                <span class="fail">Unsuccessful</span>
-                                <span style="color:#606266;">&rarr;</span>
-                                Resent <span style="color:#606266;">({{ log.updated_at }})</span>
+                <ul class="fss_log_items">
+                    <li>
+                        <div class="item_header">Status:</div>
+                        <div class="item_content">
+                            <span :class="{
+                                success: log.status == 'sent',
+                                resent: log.status == 'resent',
+                                fail: log.status == 'failed'
+                            }">
+                                <span
+                                    style="text-transform:capitalize;margin-right:10px;"
+                                >{{log.status}}</span>
+
+                                <el-button
+                                    size="mini"
+                                    type="success"
+                                    icon="el-icon-refresh"
+                                    @click="handleRetry(log, 'retry')"
+                                    :plain="true"
+                                    v-if="log.status == 'failed'"
+                                >Retry</el-button>
+
+                                <el-button
+                                    size="mini"
+                                    type="success"
+                                    icon="el-icon-refresh-right"
+                                    @click="handleRetry(log, 'resend')"
+                                    v-if="log.status == 'sent'"
+                                >
+                                    Resend
+                                </el-button>
                             </span>
-                            <span v-else>Unsuccessful</span>
-                            <span
-                                v-if="log.status == 'failed'"
-                                style="display: inline-block;float:right;color:#67C23A;cursor:pointer;"
-                                @click="handleRetry(log)"
-                            >Retry</span>
-                        </span>
-                    </el-col>
-                </el-row>
-                <hr class="log-border">
-
-                <el-row class="log-row">
-                    <el-col :span="4">
-                        <strong>Date-Time</strong>
-                    </el-col>
-                    <el-col :span="20">
-                        : {{ log.created_at }}
-                    </el-col>
-                </el-row>
-                <hr class="log-border">
-
-                <el-row class="log-row">
-                    <el-col :span="4">
-                        <strong>From</strong>
-                    </el-col>
-                    <el-col :span="20">
-                        : <span v-html="log.from"></span>
-                    </el-col>
-                </el-row>
-                <hr class="log-border">
-
-                <el-row class="log-row">
-                    <el-col :span="4">
-                        <strong>Reply To:</strong>
-                    </el-col>
-                    <el-col :span="20">
-                        : <span v-html="log.headers['Reply-To']"></span>
-                    </el-col>
-                </el-row>
-                <hr class="log-border">
-
-                <el-row class="log-row">
-                    <el-col :span="4">
-                        <strong>To:</strong>
-                    </el-col>
-                    <el-col :span="20">
-                        : <span v-html="log.to"></span>
-                    </el-col>
-                </el-row>
-                <hr class="log-border">
-
-                <el-row class="log-row">
-                    <el-col :span="4">
-                        <strong>CC:</strong>
-                    </el-col>
-                    <el-col :span="20">
-                        : <span v-html="log.headers.Cc"></span>
-                    </el-col>
-                </el-row>
-                <hr class="log-border">
-
-                <el-row class="log-row">
-                    <el-col :span="4">
-                        <strong>BCC:</strong>
-                    </el-col>
-                    <el-col :span="20">
-                        : <span v-html="log.headers.Bcc"></span>
-                    </el-col>
-                </el-row>
-                <hr class="log-border">
-
-                <el-row class="log-row">
-                    <el-col :span="4">
-                        <strong>Subject</strong>
-                    </el-col>
-                    <el-col :span="20">
-                        : <span v-html="log.subject"></span>
-                    </el-col>
-                </el-row>
-                <hr class="log-border">
-
-                <el-row class="log-row" v-if="log.extra.provider">
-                    <el-col :span="4">
-                        <strong>Mailer</strong>
-                    </el-col>
-                    <el-col :span="20">
-                        : <span>{{ settings.providers[log.extra.provider].title }}</span>
-                    </el-col>
-                </el-row>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item_header">Date-Time:</div>
+                        <div class="item_content">{{ log.created_at }}</div>
+                    </li>
+                    <li>
+                        <div class="item_header">From:</div>
+                        <div class="item_content"><span v-html="log.from"></span></div>
+                    </li>
+                    <li v-if="log.headers['Reply-To']">
+                        <div class="item_header">Reply To:</div>
+                        <div class="item_content">
+                            <span v-html="log.headers['Reply-To']"></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item_header">To:</div>
+                        <div class="item_content">
+                            <span v-html="log.to"></span>
+                        </div>
+                    </li>
+                    <li v-if="log.headers.Cc">
+                        <div class="item_header">CC:</div>
+                        <div class="item_content">
+                            <span v-html="log.headers.Cc"></span>
+                        </div>
+                    </li>
+                    <li v-if="log.headers.Bcc">
+                        <div class="item_header">BCC:</div>
+                        <div class="item_content">
+                            <span v-html="log.headers.Bcc"></span>
+                        </div>
+                    </li>
+                    <li v-if="log.resent_count > 0">
+                        <div class="item_header">Resent Count:</div>
+                        <div class="item_content">
+                            <span v-html="log.resent_count"></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item_header">Subject:</div>
+                        <div class="item_content">
+                            <span v-html="log.subject"></span>
+                        </div>
+                    </li>
+                    <li v-if="log.extra.provider">
+                        <div class="item_header">Mailer:</div>
+                        <div class="item_content">
+                            <span>{{ settings.providers[log.extra.provider].title }}</span>
+                        </div>
+                    </li>
+                </ul>
 
                 <el-collapse v-model="activeName" style="margin-top:10px;">
-                    <el-collapse-item name="1">
+                    <el-collapse-item name="email_body">
                         <template slot="title">
                             <strong style="color:#606266">Email Body</strong>
                         </template>
@@ -123,7 +103,7 @@
                         <EmailbodyContainer :content="log.body" />
                     </el-collapse-item>
                     
-                    <el-collapse-item name="2">
+                    <el-collapse-item name="attachments">
                         <template slot="title">
                             <strong style="color:#606266">
                                 Attachments ({{getAttachments(log).length}})
@@ -139,7 +119,7 @@
                         </div>
                     </el-collapse-item>
 
-                    <el-collapse-item name="3">
+                    <el-collapse-item name="tech_info">
                         <template slot="title">
                             <strong style="color:#606266">Technical Information</strong>
                         </template>
@@ -190,13 +170,14 @@
 
 <script>
     import EmailbodyContainer from './EmailbodyContainer';
+
     export default {
         name: 'LogViewer',
         props: ['logViewerProps'],
         components: { EmailbodyContainer },
         data() {
             return {
-                activeName: null,
+                activeName: 'email_body',
                 loading: false,
                 next: false,
                 prev: false,
@@ -251,7 +232,7 @@
             closed() {
                 this.next = true;
                 this.prev = true;
-                this.activeName = null
+                this.activeName = 'email_body'
             },
             getAttachmentName(name) {
                 if (!name) return;
@@ -259,12 +240,16 @@
 
                 return name.split('/').pop();
             },
-            handleRetry(log) {
+            handleRetry(log, type) {
                 this.retrying = true;
-                this.$post('logs/retry', { id: log.id }).then(res => {
-                    this.logViewerProps.log = res.data.email.retries;
+                this.$post('logs/retry', {
+                    id: log.id,
+                    type: type
+                }).then(res => {
+                    this.logViewerProps.retries = res.data.email.retries;
                     this.logViewerProps.log.status = res.data.email.status;
                     this.logViewerProps.log.updated_at = res.data.email.updated_at;
+                    this.logViewerProps.log.resent_count = res.data.email.resent_count;
                 }).fail(error => {
                     this.$notify.error({
                         offset: 19,

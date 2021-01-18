@@ -9,11 +9,13 @@ use FluentMail\Includes\Core\Application;
 class Factory
 {
     protected $app = null;
+
     protected $settings = null;
 
     public function __construct(Application $app, Settings $settings)
     {
         $this->app = $app;
+        
         $this->settings = $settings;
     }
 
@@ -38,19 +40,6 @@ class Factory
             )->setSettings($settings);
         }
         
-
-        throw new InvalidArgumentException(
-            "There is no matching provider found by email: {$email}"
-        );
-    }
-
-    public function has($email)
-    {
-        if ($conn = $this->settings->getConnection($email)) {
-            return true;
-        } elseif ($default = $this->getDefaultProvider()) {
-            return true;
-        }
 
         throw new InvalidArgumentException(
             "There is no matching provider found by email: {$email}"

@@ -41,7 +41,7 @@ class Handler extends BaseHandler
         }
 
 
-        if (isset($this->params['attachments'])) {
+        if (!empty($this->getParam('attachments'))) {
             $body['attachments'] = $this->getAttachments();
         }
 
@@ -59,7 +59,15 @@ class Handler extends BaseHandler
 
     protected function getFrom()
     {
-        return $this->getParam('from');
+        $from = [
+            'email' => $this->getParam('sender_email')
+        ];
+
+        if ($name = $this->getParam('sender_name')) {
+            $from['name'] = $name;
+        }
+
+        return $from;
     }
 
     protected function getReplyTo()
@@ -87,7 +95,7 @@ class Handler extends BaseHandler
                 : $recipient['email'];
            }, $recipient);
 
-            $this->params['formatted'][$key] = implode(', ', $array);
+            $this->attributes['formatted'][$key] = implode(', ', $array);
         }
 
         return [$recipients];
@@ -112,7 +120,7 @@ class Handler extends BaseHandler
     {
         return [
             [
-                'value' => $this->getParam('body'),
+                'value' => $this->getParam('message'),
                 'type' => $this->getParam('headers.content-type')
             ]
         ];
@@ -166,6 +174,15 @@ class Handler extends BaseHandler
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . $this->getSetting('api_key')
         ];
+    }
+
+    public function setSettings($settings)
+    {
+        if($settings['key_store'] == 'wp_config') {
+            $settings['api_key'] = defined('FLUENTMAIL_SENDGRID_API_KEY') ? FLUENTMAIL_SENDGRID_API_KEY : '';
+        }
+        $this->settings = $settings;
+        return $this;
     }
 
     public function isEmailSent()

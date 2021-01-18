@@ -4,7 +4,7 @@
             <el-form-item label="Connection Provider">
                 <el-radio-group v-model="connection.provider">
                     <el-radio-button v-for="(provider, providerName) in providers" :key="providerName" :label="providerName">
-                        <img :title="provider.title" style="height:32px;" :src="provider.image" />
+                        <img :title="provider.title" style="width:100px;height:32px;" :src="provider.image" />
                     </el-radio-button>
                 </el-radio-group>
             </el-form-item>
@@ -21,7 +21,7 @@
                                     v-model="connection.sender_email"
                                 ></el-input>
                             </el-form-item>
-                            <div v-if="connection.return_path !== undefinded">
+                            <div v-if="connection.return_path !== 'undefinded'">
                                 <el-checkbox
                                     true-label="yes"
                                     false-label="no"
@@ -72,10 +72,11 @@
                         :provider="providers[connection.provider]"
                     />
                 </div>
-                <p v-html="providers[connection.provider].note"></p>
+                <p v-if="providers[connection.provider].note" style="padding: 20px 0px;" v-html="providers[connection.provider].note"></p>
                 <el-button v-loading="saving" @click="saveConnectionSettings()" type="success">Save Connection Settings</el-button>
             </template>
             <p v-if="saving">Validating Data. Please wait</p>
+            <el-alert style="margin-top: 20px" v-if="has_error" type="error">Credential Verification Failed. Please check your inputs</el-alert>
         </el-form>
     </div>
 </template>
@@ -86,6 +87,7 @@
     import sendgrid from './Partials/Providers/SendGrid';
     import sendinblue from './Partials/Providers/SendInBlue';
     import AmazonSes from './Partials/Providers/AmazonSes';
+    import sparkpost from './Partials/Providers/SparkPost';
     import smtp from './Partials/Providers/Smtp';
     import Errors from '@/Bits/Errors';
     import Error from '@/Pieces/Error';
@@ -99,13 +101,16 @@
             pepipost,
             sendgrid,
             sendinblue,
+            sparkpost,
             smtp,
             Error
         },
         data() {
             return {
                 saving: false,
-                errors: new Errors()
+                errors: new Errors(),
+                api_error: '',
+                has_error: false
             }
         },
         watch: {
@@ -125,6 +130,8 @@
         methods: {
             saveConnectionSettings() {
                 this.saving = true;
+                this.api_error = '';
+                this.has_error = false;
                 this.$post('settings', {
                     connection: this.connection,
                     connection_key: this.connection_key
@@ -139,8 +146,9 @@
                         });
                     })
                     .fail((error) => {
-                        console.log(error);
                         this.errors.record(error.responseJSON.data);
+                        this.api_error = error.responseJSON.data.api_error;
+                        this.has_error = true;
                     })
                     .always(() => {
                         this.saving = false;

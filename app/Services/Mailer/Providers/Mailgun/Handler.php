@@ -71,7 +71,7 @@ class Handler extends BaseHandler
 
         $params = array_merge($params, $this->getDefaultParams());
         
-        if (isset($this->attributes['attachments'])) {
+        if (!empty($this->attributes['attachments'])) {
             $params = $this->getAttachments($params);
         }
         
@@ -80,11 +80,20 @@ class Handler extends BaseHandler
         return $this->handleResponse($this->response);
     }
 
+    public function setSettings($settings)
+    {
+        if($settings['key_store'] == 'wp_config') {
+            $settings['api_key'] = defined('FLUENTMAIL_MAILGUN_API_KEY') ? FLUENTMAIL_MAILGUN_API_KEY : '';
+            $settings['domain_name'] = defined('FLUENTMAIL_MAILGUN_DOMAIN') ? FLUENTMAIL_MAILGUN_DOMAIN : '';
+        }
+        $this->settings = $settings;
+
+        return $this;
+    }
+
     protected function getFrom()
     {
-        return $this->setFrom(
-            $this->getParam('from')
-        );
+        return $this->getParam('from');
     }
 
     protected function getReplyTo()

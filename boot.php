@@ -26,16 +26,3 @@ spl_autoload_register(function($class) {
 
     require(trailingslashit($path) . trim($file, '/') . '.php');
 });
-
-add_filter('cron_schedules', function($schedules) {
-    $schedules['fluentmail_every_minute'] = [
-        'interval' => 60,
-        'display'  => __('Every Minute (FluentMail)')
-    ];
-
-    return $schedules;
-});
-
-if (!wp_next_scheduled('fluent_mail_delete_email_logs')) {
-    wp_schedule_event(time(), 'fluentmail_every_minute', 'fluent_mail_delete_email_logs');
-}

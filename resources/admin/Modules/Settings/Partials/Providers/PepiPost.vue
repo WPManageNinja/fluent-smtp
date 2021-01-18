@@ -1,6 +1,12 @@
 <template>
     <div>
-        <el-form-item>
+        <h3 class="fs_config_title">PepiPost API Settings</h3>
+        <el-radio-group size="mini" v-model="connection.key_store">
+            <el-radio-button label="db">Store API Keys in DB</el-radio-button>
+            <el-radio-button label="wp_config">Store API Keys in Config File</el-radio-button>
+        </el-radio-group>
+
+        <el-form-item v-if="connection.key_store == 'db'">
             <label for="pepipost-key">
                 API Key
             </label>
@@ -12,11 +18,22 @@
             
             <error :error="errors.get('api_key')" />
 
-            <span class="small-help-text" style="display:block;margin-top:-10px">
-                Follow this link to get an API Key from Pepipost (Click Show button on Settings Page):
-                <a target="_blank" href="https://app.pepipost.com/app/settings/integration">Get API Key.</a>
-            </span>
         </el-form-item>
+
+        <div class="fss_condesnippet_wrapper" v-else-if="connection.key_store == 'wp_config'">
+            <el-form-item>
+                <label>Simply copy the following snippet and replace the stars with the corresponding credential. Then simply paste to wp-config.php file of your WordPress installation</label>
+                <div class="code_snippet">
+                    <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_PEPIPOST_API_KEY', '********************' );</textarea>
+                </div>
+                <error :error="errors.get('api_key')" />
+            </el-form-item>
+        </div>
+
+        <span class="small-help-text" style="display:block;margin-top:-10px">
+            Follow this link to get an API Key from Pepipost (Click Show button on Settings Page):
+            <a target="_blank" href="https://app.pepipost.com/app/settings/integration">Get API Key.</a>
+        </span>
     </div>
 </template>
 
@@ -30,6 +47,11 @@
         components: {
             InputPassword,
             Error
+        },
+        'connection.key_store'(value) {
+            if (value === 'wp_config') {
+                this.connection.api_key = '';
+            }
         },
         data() {
             return {

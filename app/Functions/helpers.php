@@ -2,6 +2,7 @@
 
 use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\App\Services\Mailer\Providers\Factory;
+use FluentMail\App\Services\Mailer\Providers\AmazonSes\SimpleEmailService;
 
 if (!function_exists('fluentMail')) {
     function fluentMail($module = null)
@@ -65,13 +66,6 @@ if (!function_exists('fluentMailWpParseArgs')) {
     }
 }
 
-if (!function_exists('fluentMailHasPro')) {
-    function fluentMailHasPro()
-    {
-        return defined('FLUENTMAIL_PRO');
-    }
-}
-
 if (!function_exists('fluentMailIsListedSenderEmail')) {
     function fluentMailIsListedSenderEmail($email)
     {
@@ -124,24 +118,26 @@ if (!function_exists('fluentMailDefaultConnection')) {
 if (!function_exists('fluentMailgetConnection')) {
     function fluentMailgetConnection($email)
     {
-        $factory = fluentMail(FluentMail\App\Services\Mailer\Providers\Factory::class);
+        $factory = fluentMail(Factory::class);
         if (!($connection = $factory->get($email))) {
             $connection = fluentMailDefaultConnection();
         }
-        
+
         return $connection;
     }
 }
 
-if (!function_exists('fluentGetMailDriver')) {
-    function fluentGetMailDriver($fromEmail)
+if (!function_exists('fluentMailGetProvider')) {
+    function fluentMailGetProvider($fromEmail)
     {
-        static $drivers = [];
-        if(isset($drivers[$fromEmail])) {
-            return $drivers[$fromEmail];
+        static $providers = [];
+
+        if (isset($providers[$fromEmail])) {
+            return $providers[$fromEmail];
         }
 
         $manager = fluentMail(Manager::class);
+
         $mappings = $manager->getSettings('mappings');
 
         if (isset($mappings[$fromEmail])) {
@@ -149,21 +145,44 @@ if (!function_exists('fluentGetMailDriver')) {
             $connections = $manager->getSettings('connections');
             $connection = $connections[$connectionId]['provider_settings'];
         } else {
-            $connection = fluentMailDefaultConnection();
-            if ($connection) {
+            if ($connection = fluentMailDefaultConnection()) {
                 $connection['force_from_email_id'] = $connection['sender_email'];
             }
         }
 
-        if($connection) {
+        if ($connection) {
             $factory = fluentMail(Factory::class);
             $driver = $factory->make($connection['provider']);
             $driver->setSettings($connection);
-            $drivers[$fromEmail] = $driver;
+            $providers[$fromEmail] = $driver;
         } else {
-            $drivers[$fromEmail] = false;
+            $providers[$fromEmail] = false;
         }
 
-        return $drivers[$fromEmail];
+        return $providers[$fromEmail];
+    }
+}
+
+if (!function_exists('fluentMailSesConnection')) {
+    function fluentMailSesConnection($connection)
+    {
+        static $drivers = [];
+
+        if (isset($drivers[$connection['sender_email']])) {
+            return $drivers[$connection['sender_email']];
+        }
+
+        $region = 'email.' . $connection['region'] . '.amazonaws.com';
+
+        $ses = new SimpleEmailService(
+            $connection['access_key'],
+            $connection['secret_key'],
+            $region,
+            false
+        );
+
+        $drivers[$connection['sender_email']] = $ses;
+
+        return $drivers[$connection['sender_email']];
     }
 }

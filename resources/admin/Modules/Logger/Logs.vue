@@ -1,6 +1,6 @@
 <template>
     <div class="logs">
-        <div v-if="isLogsOn">
+        <div>
             <div class="header">
                 <div style="float:left;margin-top:6px;">Email Logs</div>
                 
@@ -25,60 +25,24 @@
 
             <div class="content">
 
-                <div v-if="logStatusInfo || logStatusWarning">
-                    <el-alert style="margin-bottom:10px;" v-if="logStatusInfo">
-                        <span>
-                            <i class="el-icon-circle-check successful"></i>
-                            <span style="vertical-align:top;">Successfully sent at the first time.</span>
-                        </span>
-
-                        <span>
-                            <i class="el-icon-circle-close unsuccessful"></i>
-                            <span style="vertical-align:top;">Sending failed at the first time.</span>
-                        </span>
-
-                        <span>
-                            <i class="el-icon-refresh resent"></i>
-                            <span style="vertical-align:top;">
-                                Resent (Successfully sent after failed attempt.)
-                            </span>
-                        </span>
-
-                        <span class="dont-show" @click="dontShowStatusInfo('icons')">
-                            Don't show again
-                        </span>
-                    </el-alert>
-
-                    <el-alert
-                        show-icon
-                        type="warning"
-                        style="margin-bottom:10px;"
-                        v-if="logStatusWarning"
-                    >
-                        The status successful, unsuccessful or resent doesn't mean that emails delived to the recipients, or failed to deliver. It simply means that, the plugin sent the emails to the selected mailer service provider successfully. It's upto the mailer service provider you are using to send and track the delivery status.
-
-                        <span class="dont-show" @click="dontShowStatusInfo('message')">
-                            Don't show again
-                        </span>
-                    </el-alert>
-                </div>
-
                 <el-table
+                    stripe
                     :data="emailLogs"
                     v-loading="loading"
                     style="width:100%"
+                    :row-class-name="tableRowClassName"
                     @selection-change="handleSelectionChange"
                 >
                     <el-table-column type="selection" width="55" />
-                    <el-table-column label="Subject" width="300">
+                    <el-table-column label="Subject">
                         <template slot-scope="scope">
                             <div>{{ scope.row.subject }}</div>
                         </template>
                     </el-table-column>
                     
-                    <el-table-column label="From">
+                    <el-table-column label="To">
                         <template slot-scope="scope">
-                            <span v-html="scope.row.from"></span>
+                            <span v-html="scope.row.to"></span>
                         </template>
                     </el-table-column>
                     
@@ -92,16 +56,26 @@
 
                     <!-- <el-table-column prop="retries" label="Retries" width="200px" /> -->
 
-                    <el-table-column label="Actions" width="160px" align="right">
+                    <el-table-column label="Actions" width="190px" align="right">
                         <template slot-scope="scope">
                             <el-button
                                 size="mini"
                                 type="success"
                                 icon="el-icon-refresh"
-                                @click="handleRetry(scope.row)"
-                                :plain="scope.row.status!=0"
-                                :disabled="scope.row.status!='failed'"
-                            />
+                                @click="handleRetry(scope.row, 'retry')"
+                                :plain="true"
+                                v-if="scope.row.status == 'failed'"
+                            >Retry</el-button>
+                            <el-button
+                                size="mini"
+                                type="success"
+                                icon="el-icon-refresh-right"
+                                @click="handleRetry(scope.row, 'resend')"
+                                v-if="scope.row.status == 'sent'"
+                            >
+                                Resend
+                                <span v-if="scope.row.resent_count > 0">({{scope.row.resent_count}})</span>
+                            </el-button>
 
                             <el-button
                                 size="mini"
@@ -129,12 +103,10 @@
 
             <LogViewer :logViewerProps="logViewerProps" />
         </div>
-
-        <div v-else>
-            <div class="header">Email Logs</div>
+        <div v-if="!isLogsOn">
             <div class="content">
                 <el-alert :closable="false" show-icon center>
-                    Email Logging is currently turned off.
+                    Email Logging is currently turned off. Only Failed and resent emails will be shown here
                     <el-button type="text" @click="turnOnEmailLogging">Turn On</el-button>.
                 </el-alert>
             </div>
@@ -142,7 +114,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/babel">
     import Confirm from '@/Pieces/Confirm';
     import Pagination from '@/Pieces/Pagination';
     import LogFilter from './LogFilter';
@@ -185,6 +157,9 @@
             };
         },
         methods: {
+            tableRowClassName({ row }) {
+                return 'row_type_' + row.status;
+            },
             pageChanged() {
                 this.$router.push({
                     name: 'logs',
@@ -192,9 +167,9 @@
                         search: this.query,
                         filterBy: this.filterBy,
                         filterValue: this.filterByValue,
-                        page: this.pagination.current_page
+                        page: this.pagination.current_page,
+                        per_page: this.pagination.per_page
                     }
-
                 }).catch(e => {
                     if (e.name !== 'NavigationDuplicated') {
                         console.log(e.message);
@@ -282,11 +257,15 @@
                     return this.handleDelete(this.selectedLogs);
                 }
             },
-            handleRetry(row) {
+            handleRetry(row, type) {
                 this.loading = true;
-                this.$post('logs/retry', { id: row.id }).then(res => {
+                this.$post('logs/retry', {
+                    id: row.id,
+                    type: type
+                }).then(res => {
                     row.status = res.data.email.status;
                     row.retries = res.data.email.retries;
+                    row.resent_count = res.data.email.resent_count;
                     row.updated_at = res.data.email.updated_at;
                     this.$notify.success({
                         offset: 19,
@@ -374,11 +353,13 @@
                 immediate: true,
                 handler: function(to, from) {
                     const currentPage = this.pagination.current_page;
+                    const perPage = this.pagination.per_page;
                     this.query = to.query.search || this.query;
                     this.filterBy = to.query.filterBy || this.filterBy;
                     this.filterBy = to.query.filterBy || this.filterBy;
                     this.filterByValue = to.query.filterValue || this.filterByValue;
                     this.pagination.current_page = Number(to.query.page) || currentPage;
+                    this.pagination.per_page = Number(to.query.per_page) || perPage;
                     this.fetch();
                 }
             }
@@ -426,27 +407,3 @@
         }
     };
 </script>
-
-<style>
-    .logs .successful {
-        color:#409EFF;
-        font-size:20px;
-    }
-    
-    .logs .unsuccessful {
-        color:#F56C6C;
-        font-size:20px;
-    }
-    
-    .logs .resent {
-        color:#a4da89;
-        font-size:20px;
-    }
-
-    .logs .dont-show {
-        color: #409EFF;
-        margin-left: 10px;
-        cursor: pointer;
-        vertical-align: top;
-    }
-</style>

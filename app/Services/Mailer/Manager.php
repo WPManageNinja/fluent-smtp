@@ -2,6 +2,7 @@
 
 namespace FluentMail\App\Services\Mailer;
 
+use FluentMail\App\Models\Logger;
 use FluentMail\App\Models\Settings;
 use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Core\Application;
@@ -20,8 +21,6 @@ class Manager
     
     protected static $wpConfigSettings = [];
 
-    protected static $providerNamespace = 'FluentMail\App\Services\Mailer\Providers';
-
     public function __construct(Application $app = null)
     {
         $this->app = $app ?: fluentMail();
@@ -34,8 +33,6 @@ class Manager
         $this->loadConfigAndSettings();
 
         $this->app->addCustomFilter('active_driver', [$this, 'activeDriver']);
-
-        $this->app->addCustomFilter('is_plugin_inactive', [$this, 'isPluginInactive']);
 
         $this->app->addAction('fluent_mail_delete_email_logs', [$this, 'maybeDeleteLogs']);
     }
@@ -68,17 +65,12 @@ class Manager
 
                 $options = array_merge(
                     $provider['options'],
-                    Arr::get($databaseSettings, $optionKey, []),
+                    Arr::get($databaseSettings, $optionKey, [])
                 );
                 
                 Arr::set(static::$config, $optionKey, $options);
 
-                // $this->validate(static::$config, $key);
-
-                static::$config['providers'][$key]['is_ready'] = true;
-
             } catch (ValidationException $e) {
-                static::$config['providers'][$key]['is_ready'] = !$e->errors();
                 continue;
             }
         }
@@ -89,37 +81,26 @@ class Manager
         return static::$config;
     }
 
-    public function getConfig($key = null)
+    public function getConfig($key = null, $default = null)
     {
-        return $key ? Arr::get(static::$config, $key) : static::$config;
+        return $key ? Arr::get(static::$config, $key, $default) : static::$config;
     }
 
-    public function getSettings($key = null)
+    public function getSettings($key = null, $default = null)
     {
-        return $key ? Arr::get(static::$settings, $key) : static::$settings;
+        return $key ? Arr::get(static::$settings, $key, $default) : static::$settings;
     }
 
-    public function getWPConfig($key = null)
+    public function getWPConfig($key = null, $default = null)
     {
-        return $key ? Arr::get(static::$wpConfigSettings, $key) : static::$wpConfigSettings;
-    }
-
-    public function getOriginalConfig($key)
-    {
-        $config = require(__DIR__ . '/Providers/config.php');
-
-        return $config['providers'][$key];
+        return $key ? Arr::get(
+            static::$wpConfigSettings, $key, $default
+        ) : static::$wpConfigSettings;
     }
 
     public function activeDriver($phpMailer)
     {
         return fluentMailgetConnection($phpMailer->From);
-        // return fluentMail(Factory::class)->get($phpMailer->From);
-    }
-
-    public function isPluginInactive()
-    {
-        return $this->getSettings('misc.is_inactive') == 'yes';
     }
 
     public function maybeDeleteLogs()
@@ -127,10 +108,9 @@ class Manager
         $logSettings = $this->getSettings('misc');
 
         if (isset($logSettings['on']) && $logSettings['on'] == 'yes') {
-
             if ($logSettings['interval'] != 'never') {
                 $this->app
-                    ->make(\FluentMail\App\Models\Logger::class)
+                    ->make(Logger::class)
                     ->deleteLogsOlderThan($logSettings['log_saved_interval_days']);
             }
         }

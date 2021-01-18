@@ -1,0 +1,294 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: FluentSMTP\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-18 15:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.5.0; wp-5.6\n"
+"X-Domain: fluent-smtp"
+
+#: app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php:20
+msgid "Access key is required."
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:32
+msgid "Amazon Ses"
+msgstr ""
+
+#: app/Services/Mailer/Providers/SparkPost/ValidatorTrait.php:20
+#: app/Services/Mailer/Providers/SendGrid/ValidatorTrait.php:20
+#: app/Services/Mailer/Providers/SendInBlue/ValidatorTrait.php:19
+#: app/Services/Mailer/Providers/PepiPost/ValidatorTrait.php:20
+#: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:19
+msgid "Api key is required."
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:57
+msgid "Asia Pacific (Mumbai)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:58
+msgid "Asia Pacific (Seoul)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:59
+msgid "Asia Pacific (Singapore)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:60
+msgid "Asia Pacific (Sydney)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:61
+msgid "Asia Pacific (Tokyo)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:64
+msgid "AWS GovCloud (US)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:51
+msgid "Canada (Central)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:23
+msgid "Domain name is required."
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:139
+msgid "Email delivered successfully."
+msgstr ""
+
+#: app/Http/Controllers/LoggerController.php:70
+msgid "Email sent successfully."
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:55
+msgid "EU (Frankfurt)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:52
+msgid "EU (Ireland)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:53
+msgid "EU (London)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:54
+msgid "Europe (Paris)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:56
+msgid "Europe (Stockholm)"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:20
+msgid "Fluent SMTP"
+msgstr ""
+
+#. Name of the plugin
+msgid "FluentSMTP"
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:89
+msgid "General Settings has been updated"
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:213
+msgid "Go to Fluent Forms Dashboard"
+msgstr ""
+
+#: app/Hooks/filters.php:8
+msgid "Go to Fluent SMTP Settings page"
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:217
+msgid "Go to FluentCRM Dashboard"
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:221
+msgid "Go to Ninja Tables Dashboard"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://fluentsmtp.com"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://wpmanageninja.com"
+msgstr ""
+
+#: app/Services/Mailer/ValidatorTrait.php:20
+msgid "Invalid email address."
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:70
+msgid "Mailgun"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:63
+msgid "Middle East (Bahrain)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:133
+msgid "PepiPost"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:148
+msgid "PHP Mail"
+msgstr ""
+
+#: app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php:28
+msgid "Please define FLUENTMAIL_AWS_ACCESS_KEY_ID in wp-config.php file."
+msgstr ""
+
+#: app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php:32
+msgid "Please define FLUENTMAIL_AWS_SECRET_ACCESS_KEY in wp-config.php file."
+msgstr ""
+
+#: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:27
+msgid "Please define FLUENTMAIL_MAILGUN_API_KEY in wp-config.php file."
+msgstr ""
+
+#: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:31
+msgid "Please define FLUENTMAIL_MAILGUN_DOMAIN in wp-config.php file."
+msgstr ""
+
+#: app/Services/Mailer/Providers/PepiPost/ValidatorTrait.php:24
+msgid "Please define FLUENTMAIL_PEPIPOST_API_KEY in wp-config.php file."
+msgstr ""
+
+#: app/Services/Mailer/Providers/SendGrid/ValidatorTrait.php:24
+msgid "Please define FLUENTMAIL_SENDGRID_API_KEY in wp-config.php file."
+msgstr ""
+
+#: app/Services/Mailer/Providers/SendInBlue/ValidatorTrait.php:23
+msgid "Please define FLUENTMAIL_SENDINBLUE_API_KEY in wp-config.php file."
+msgstr ""
+
+#: app/Services/Mailer/Providers/SparkPost/ValidatorTrait.php:24
+msgid "Please define FLUENTMAIL_SPARKPOST_API_KEY in wp-config.php file."
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:234
+msgid "Plugin has been successfully installed."
+msgstr ""
+
+#: app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php:24
+msgid "Secret key is required."
+msgstr ""
+
+#: app/Services/Mailer/ValidatorTrait.php:16
+msgid "Sender email is required."
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:88
+msgid "SendGrid"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:103
+msgid "SendInBlue"
+msgstr ""
+
+#: app/Hooks/filters.php:9
+msgid "Settings"
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:112
+msgid "Settings saved successfully."
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:9
+msgid "SMTP"
+msgstr ""
+
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:17
+msgid "SMTP host is required."
+msgstr ""
+
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:30
+msgid "SMTP password is required."
+msgstr ""
+
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:21
+msgid "SMTP port is required."
+msgstr ""
+
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:26
+msgid "SMTP username is required."
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:187
+msgid "Sorry no connection found. Please reload the page and try again"
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:227
+msgid "Sorry, You can not install this plugin"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:62
+msgid "South America (São Paulo)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:118
+msgid "SparkPost"
+msgstr ""
+
+#: app/Functions/pluggable.php:426
+msgid ""
+"The <strong>FluentSMTP</strong> plugin depends on\n"
+"                                <a target=\"_blank\" href=\"https:"
+"//developer.wordpress.org/reference/functions/wp_mail/\">wp_mail</a> "
+"pluggable function and\n"
+"                                plugin is not able to extend it. Please "
+"check if another plugin is using this and disable it for <strong>Fluent "
+"Mail</strong> to work!"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:159
+msgid ""
+"The Default option does not use SMTP or any Email Service Providers so it "
+"will not improve email delivery on your site."
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:128
+msgid "The email field is required."
+msgstr ""
+
+#. Description of the plugin
+msgid "The Ultimate SMTP Connection Plugin for WordPress."
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:47
+msgid "US East (N. Virginia)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:48
+msgid "US East (Ohio)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:49
+msgid "US West (N. California)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:50
+msgid "US West (Oregon)"
+msgstr ""
+
+#. Author of the plugin
+msgid "WPManageNinja Team"
+msgstr ""
+
+#: app/Http/Controllers/Controller.php:51
+msgid "You do not have permission to do this action"
+msgstr ""

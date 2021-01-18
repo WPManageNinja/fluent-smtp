@@ -5,4 +5,5 @@ mix
     .js('resources/admin/start.js', 'assets/admin/js/fluent-mail-admin-app.js')
     .sass('resources/scss/fluent-mail-admin.scss', 'assets/admin/css/fluent-mail-admin.css')
     .copy('node_modules/element-ui/lib/theme-chalk/fonts', 'assets/admin/css/fonts')
-    .copy('resources/images', 'assets/images');
+    .copy('resources/images', 'assets/images')
+    .copy('resources/libs', 'assets/libs');

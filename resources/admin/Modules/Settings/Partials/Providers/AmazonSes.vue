@@ -1,6 +1,10 @@
 <template>
     <div>
-        <el-row :gutter="20">
+        <el-radio-group size="mini" v-model="connection.key_store">
+            <el-radio-button label="db">Store Access Keys in DB</el-radio-button>
+            <el-radio-button label="wp_config">Access Keys in Config File</el-radio-button>
+        </el-radio-group>
+        <el-row v-if="connection.key_store == 'db'" :gutter="20">
             <el-col :span="12">
                 <el-form-item for="access_key">
                     <label for="access_key">
@@ -13,16 +17,8 @@
                     />
 
                     <error :error="errors.get('access_key')" />
-
-                    <span class="small-help-text">
-                        Follow this link to get an Access Key from AWS:
-                        <a target="_blank" href="#">
-                            Get a Access Key.
-                        </a>
-                    </span>
                 </el-form-item>
             </el-col>
-
             <el-col :span="12">
                 <el-form-item>
                     <label for="ses-key">
@@ -35,16 +31,20 @@
                     />
 
                     <error :error="errors.get('secret_key')" />
-
-                    <span class="small-help-text">
-                        Follow this link to get a Secret Key from AWS:
-                        <a target="_blank" href="#">
-                            Get a Secret Key.
-                        </a>
-                    </span>
                 </el-form-item>
             </el-col>
         </el-row>
+        <div class="fss_condesnippet_wrapper" v-else-if="connection.key_store == 'wp_config'">
+            <el-form-item>
+                <label>Simply copy the following snippet and replace the stars with the corresponding credential. Then simply paste to wp-config.php file of your WordPress installation</label>
+                <div class="code_snippet">
+                    <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_AWS_ACCESS_KEY_ID', '********************' );
+define( 'FLUENTMAIL_AWS_SECRET_ACCESS_KEY', '********************' );</textarea>
+                </div>
+                <error :error="errors.get('access_key')" />
+                <error :error="errors.get('secret_key')" />
+            </el-form-item>
+        </div>
 
         <el-form-item>
             <label for="ses-region">
@@ -65,6 +65,10 @@
                     :value="value">
                 </el-option>
             </el-select>
+            <span
+                class="el-form-item__error"
+                style="margin-top: 10px;"
+            >{{ errors.errors.api_error }}</span>
         </el-form-item>
     </div>
 </template>
@@ -79,6 +83,14 @@
         components: {
             InputPassword,
             Error
+        },
+        watch: {
+            'connection.key_store'(value) {
+                if (value === 'wp_config') {
+                    this.connection.access_key = '';
+                    this.connection.secret_key = '';
+                }
+            }
         },
         data() {
             return {

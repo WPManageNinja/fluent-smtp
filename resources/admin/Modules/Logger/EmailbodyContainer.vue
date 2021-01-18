@@ -9,7 +9,7 @@
             allowFullScreen
             mozallowfullscreen
             webkitallowfullscreen
-            style="width:100%;"
+            style="width:100%;height: 400px;"
         ></iframe>
     </div>
 </template>

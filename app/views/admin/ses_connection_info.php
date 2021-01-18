@@ -39,4 +39,5 @@
             </td>
         </tr>
     </table>
+    <p><a href="https://aws.amazon.com/ses/extendedaccessrequest/" target="_blank" rel="nofollow">Increase Sending Limits</a></p>
 </div>

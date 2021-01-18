@@ -56,11 +56,11 @@
                     {
                         route: 'logs',
                         title: 'Email Logs'
+                    },
+                    {
+                        route: 'support',
+                        title: 'Support'
                     }
-                    // {
-                    //     route: 'global-settings',
-                    //     title: 'Global Settings'
-                    // }
                 ];
             },
             setMenus() {
@@ -74,12 +74,12 @@
         computed: {
             brandLogo() {
                 const src = this.appVars.brand_logo;
-                return `<img style="width:40px;" src="${src}" />`;
+                return `<img style="width:140px;" src="${src}" />`;
             }
         },
         created() {
-            this.logo = `<div class='logo'>${this.brandLogo} Dashboard</div>`;
-            jQuery('.notice').remove();
+            jQuery('.update-nag,.notice, #wpbody-content > .updated, #wpbody-content > .error').remove();
+            this.logo = `<div class='logo'>${this.brandLogo}</div>`;
             this.setMenus();
         }
     };

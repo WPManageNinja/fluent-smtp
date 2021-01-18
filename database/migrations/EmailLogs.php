@@ -31,6 +31,8 @@ class EmailLogs
                 `response` TEXT NULL,
                 `extra` TEXT NULL,
                 `retries` INT UNSIGNED NULL DEFAULT 0,
+                `resent_count` INT UNSIGNED NULL DEFAULT 0,
+                `source` VARCHAR(255) NULL,
                 `created_at` TIMESTAMP NULL,
                 `updated_at` TIMESTAMP NULL
             ) $charsetCollate;";

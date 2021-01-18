@@ -1,6 +1,7 @@
 <?php
 
 $app->get('/', 'DashboardController@index');
+$app->get('sending_stats', 'DashboardController@getSendingStats');
 
 $app->get('/settings', 'SettingsController@index');
 $app->post('/settings/validate', 'SettingsController@validate');
@@ -15,3 +16,6 @@ $app->get('/logs', 'LoggerController@get');
 $app->get('/logs/show', 'LoggerController@show');
 $app->post('/logs/retry', 'LoggerController@retry');
 $app->post('/logs/delete', 'LoggerController@delete');
+
+
+$app->post('install_plugin', 'SettingsController@installPlugin');

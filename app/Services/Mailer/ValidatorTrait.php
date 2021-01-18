@@ -13,11 +13,11 @@ trait ValidatorTrait
         $errors = [];
 
         if (!($email = Arr::get($connection, 'sender_email'))) {
-            $errors['sender_email']['required'] = 'Sender email is required.';
+            $errors['sender_email']['required'] = __('Sender email is required.', 'fluent-smtp');
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors['sender_email']['email'] = 'Invalid email address.';
+            $errors['sender_email']['email'] = __('Invalid email address.', 'fluent-smtp');
         }
 
         if ($errors) {

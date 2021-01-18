@@ -26,7 +26,7 @@ class Request
         $this->files = $this->prepareFiles($files);
         $this->request = array_merge(
             $this->get = $this->clean($get),
-            $this->post = $this->clean($post),
+            $this->post = $this->clean($post)
         );
     }
 

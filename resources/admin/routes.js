@@ -3,7 +3,7 @@ import Connections from './Modules/Settings/Connections';
 import Connection from './Modules/Settings/Connection';
 import Logs from './Modules/Logger/Logs';
 import Test from './Modules/Test/Test';
-import Misc from './Modules/Misc/Misc';
+import Support from './Modules/Misc/Support';
 
 export default [
     {
@@ -30,12 +30,12 @@ export default [
         meta: {},
         component: Test
     },
-    // {
-    //     name: 'global-settings',
-    //     path: '/global-settings',
-    //     meta: {},
-    //     component: Misc
-    // },
+    {
+        name: 'support',
+        path: '/support',
+        meta: {},
+        component: Support
+    },
     {
         name: 'logs',
         path: '/logs',

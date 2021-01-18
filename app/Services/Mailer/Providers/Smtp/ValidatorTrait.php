@@ -14,20 +14,20 @@ trait ValidatorTrait
         $errors = [];
 
         if (! Arr::get($connection, 'host')) {
-            $errors['host']['required'] = 'SMTP host is required.';
+            $errors['host']['required'] = __('SMTP host is required.', 'fluent-smtp');
         }
 
         if (! Arr::get($connection, 'port')) {
-            $errors['port']['required'] = 'SMTP port is required.';
+            $errors['port']['required'] = __('SMTP port is required.', 'fluent-smtp');
         }
 
         if (Arr::get($connection, 'auth') == 'yes') {
             if ( !Arr::get($connection, 'username')) {
-                $errors['username']['required'] = 'SMTP username is required.';
+                $errors['username']['required'] = __('SMTP username is required.', 'fluent-smtp');
             }
 
             if ( !Arr::get($connection, 'password')) {
-                $errors['password']['required'] = 'SMTP password is required.';
+                $errors['password']['required'] = __('SMTP password is required.', 'fluent-smtp');
             }
         }
 

@@ -53,7 +53,7 @@ class LoggerController extends Controller
 
         try {
             $this->app->addAction('wp_mail_failed', function($response) use ($logger, $request) {
-                
+
                 $log = $logger->find($id = $request->get('id'));
                 $log['retries'] = $log['retries'] + 1;
                 $logger->updateLog($log, ['id' => $id]);
@@ -64,10 +64,10 @@ class LoggerController extends Controller
                 ], $response->get_error_code());
             });
 
-            if ($email = $logger->resendEmailFromLog($request->get('id'))) {
+            if ($email = $logger->resendEmailFromLog($request->get('id'), $request->get('type'))) {
                 return $this->sendSuccess([
                     'email' => $email,
-                    'message' => 'Email sent successfully.'
+                    'message' => __('Email sent successfully.', 'fluent-smtp')
                 ]);
             }
 

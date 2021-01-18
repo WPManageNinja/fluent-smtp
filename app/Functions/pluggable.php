@@ -416,6 +416,9 @@ if ( ! function_exists( 'wp_mail' ) ) :
 else:
     if (!wp_doing_ajax()):
         add_action('admin_notices', function() {
+            if(!current_user_can('manage_options')) {
+                return;
+            }
             ?>
                 <div class="notice notice-warning is-dismissible">
                     <p>

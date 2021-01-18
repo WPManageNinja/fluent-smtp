@@ -63,7 +63,7 @@ class Logger extends Model
         $result = $this->db->get_results($query);
 
         if ($this->db->num_rows) {
-            $total = (int) $this->db->get_var(
+            $total = (int)$this->db->get_var(
                 $this->db->prepare(
                     "SELECT COUNT(id) FROM `{$this->table}` {$where}", $args
                 )
@@ -75,7 +75,7 @@ class Logger extends Model
         $result = $this->formatResult($result);
 
         return [
-            'data' => $result,
+            'data'  => $result,
             'total' => $total
         ];
     }
@@ -97,7 +97,7 @@ class Logger extends Model
                 }
             }
         }
-        
+
         $args = [1];
         $andWhere = $orWhere = '';
         $whereClause = "WHERE 1 = '%d'";
@@ -147,9 +147,9 @@ class Logger extends Model
         $result = is_array($result) ? $result : func_get_args();
 
         foreach ($result as $key => $row) {
-            $result[$key] = array_map('maybe_unserialize', (array) $row);
-            $result[$key]['id'] = (int) $result[$key]['id'];
-            $result[$key]['retries'] = (int) $result[$key]['retries'];
+            $result[$key] = array_map('maybe_unserialize', (array)$row);
+            $result[$key]['id'] = (int)$result[$key]['id'];
+            $result[$key]['retries'] = (int)$result[$key]['retries'];
             $result[$key]['from'] = htmlspecialchars($result[$key]['from']);
         }
 
@@ -164,7 +164,7 @@ class Logger extends Model
             } else {
                 $header = htmlspecialchars($header);
             }
-            
+
             $headers[$key] = $header;
         }
 
@@ -193,7 +193,7 @@ class Logger extends Model
         }
 
         $placeHolders = array_fill(0, count($id), '%d');
-        
+
         $query = $this->db->prepare(
             "DELETE FROM {$this->table} WHERE id IN (" . implode(',', $placeHolders) . ")",
             $id
@@ -209,12 +209,12 @@ class Logger extends Model
                 $data['filter_by'] = 'created_at';
             }
         }
-        
+
         $id = $data['id'];
 
         $dir = isset($data['dir']) ? $data['dir'] : null;
 
-        list($where, $args)  = $this->buildWhere($data);
+        list($where, $args) = $this->buildWhere($data);
 
         $args = array_merge($args, [$id]);
 
@@ -239,7 +239,7 @@ class Logger extends Model
         }
 
         $result = $this->db->get_results($query);
-        
+
         if (count($result) > 1) {
             $next = true;
             $prev = true;
@@ -254,7 +254,7 @@ class Logger extends Model
         }
 
         return [
-            'log' => $result ? $this->formatResult($result[0])[0] : null,
+            'log'  => $result ? $this->formatResult($result[0])[0] : null,
             'next' => $next,
             'prev' => $prev
         ];
@@ -270,13 +270,13 @@ class Logger extends Model
         $row = $this->db->get_row($query, ARRAY_A);
 
         $row['extra'] = maybe_unserialize($row['extra']);
-        
+
         $row['response'] = maybe_unserialize($row['response']);
 
         return $row;
     }
 
-    public function resendEmailFromLog($id)
+    public function resendEmailFromLog($id, $type = 'retry')
     {
         $email = $this->find($id);
 
@@ -284,7 +284,7 @@ class Logger extends Model
         $email['headers'] = maybe_unserialize($email['headers']);
         $email['attachments'] = maybe_unserialize($email['attachments']);
         $email['extra'] = maybe_unserialize($email['extra']);
-        
+
         $headers = [];
 
         foreach ($email['headers'] as $key => $value) {
@@ -292,7 +292,10 @@ class Logger extends Model
                 $values = [];
                 $value = array_filter($value);
                 foreach ($value as $v) {
-                    $values[] = $value;
+                    if (is_array($v) && isset($v['email'])) {
+                        $v = $v['email'];
+                    }
+                    $values[] = $v;
                 }
                 if ($values) {
                     $headers[] = "{$key}: " . implode(';', $values);
@@ -318,7 +321,11 @@ class Logger extends Model
         }
 
         try {
-            define('FLUENTMAIL_LOG_OFF', true) && wp_mail(
+            if (!defined('FLUENTMAIL_LOG_OFF')) {
+                define('FLUENTMAIL_LOG_OFF', true);
+            }
+
+            wp_mail(
                 $to,
                 $email['subject'],
                 $email['body'],
@@ -326,60 +333,29 @@ class Logger extends Model
                 $email['attachments']
             );
 
-            $email['retries'] = $email['retries'] + 1;
-            $email['status'] = 'resent'; // 2: (retried and sent)
-            $email['updated_at'] = current_time('mysql');
-
-            if ($this->updateLog([
-                'status' => 'resent',
-                'retries' => $email['retries'],
-                'updated_at' => $email['updated_at']
-            ], ['id' => $id])) {
-                return $email;
+            $updateData = [
+                'status' => 'sent',
+                'updated_at' =>  current_time('mysql'),
+            ];
+            
+            if ($type == 'resend') {
+                $updateData['resent_count'] = intval($email['resent_count']) + 1;
+            } else {
+                $updateData['retries'] = intval($email['retries']) + 1;
             }
 
+            if ($this->updateLog($updateData, ['id' => $id])) {
+                $email = $this->find($id);
+                $email['to'] = maybe_unserialize($email['to']);
+                $email['headers'] = maybe_unserialize($email['headers']);
+                $email['attachments'] = maybe_unserialize($email['attachments']);
+                $email['extra'] = maybe_unserialize($email['extra']);
+                return $email;
+            }
         } catch (\PHPMailer\PHPMailer\Exception $e) {
             throw $e;
         }
-
-        // try {
-        //     $email = $this->find($id);
-        //     $email['from'] = $email['from'];
-        //     $email['to'] = maybe_unserialize($email['to']);
-        //     $email['body'] = maybe_unserialize($email['body']);
-        //     $email['headers'] = maybe_unserialize($email['headers']);
-        //     $email['attachments'] = maybe_unserialize($email['attachments']);
-        //     $email['extra'] = maybe_unserialize($email['extra']);
-
-        //     return $this->retry($email);
-
-        // } catch (Exception $e) {
-        //     throw $e;
-        // }
     }
-
-    // protected function retry($email)
-    // {
-    //     define('FLUENTMAIL_LOG_OFF', true);
-
-    //     (new EmailQueueProcessor)->sendEmail($email);
-
-    //     $email['status'] = 'resent';
-    //     $email['updated_at'] = current_time('mysql');
-    //     $email['retries'] = $email['retries'] + 1;
-
-    //     $email['to'] = maybe_serialize($email['to']);
-    //     $email['from'] = maybe_serialize($email['from']);
-    //     $email['body'] = maybe_serialize($email['body']);
-    //     $email['headers'] = maybe_serialize($email['headers']);
-    //     $email['response'] = maybe_serialize($email['response']);
-    //     $email['attachments'] = maybe_serialize($email['attachments']);
-    //     $email['extra'] = maybe_serialize($email['extra']);
-
-    //     if ($this->updateLog($email, ['id' => $email['id']])) {
-    //         return $email;
-    //     }
-    // }
 
     public function updateLog($data, $where)
     {
@@ -389,31 +365,21 @@ class Logger extends Model
     public function getStats()
     {
         $succeeded = $this->db->get_var("select COUNT(id) from {$this->table} where status='sent'");
-        
-        $resent = $this->db->get_var("select COUNT(id) from {$this->table} where status='resent'");
-
         $failed = $this->db->get_var("select COUNT(id) from {$this->table} where status='failed'");
-        
 
         return [
-            'successful' => $succeeded,
-            'unsuccessful' => $failed,
-            'resent' => $resent
+            'sent'   => $succeeded,
+            'failed' => $failed
         ];
     }
 
-    public function deleteLogsOlderThan($interval)
+    public function deleteLogsOlderThan($days)
     {
         try {
-            $intervals = [
-                'day' => 'INTERVAL +1 DAY',
-                'week' => 'INTERVAL +1 WEEK',
-                'month' => 'INTERVAL +1 MONTH'
-            ];
 
-            $interval = $intervals[$interval];
+            $date = date('Y-m-d', current_time('timestamp') - $days * DAY_IN_SECONDS);
 
-            $query = "DELETE FROM {$this->table} WHERE `created_at` < NOW() - {$interval}";
+            $query = "DELETE FROM {$this->table} WHERE `created_at` < $date";
 
             return $this->db->query($query);
 
@@ -427,12 +393,12 @@ class Logger extends Model
     public function hasPendingEmails()
     {
         $status = 'pending';
-        
+
         $query = $this->db->prepare(
             "SELECT count(*) as total FROM `{$this->table}` WHERE status = '%s'",
             $status
         );
-        
+
         $col = $this->db->get_col($query);
 
         return reset($col);

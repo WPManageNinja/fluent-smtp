@@ -1,10 +1,7 @@
 <template>
     <div class="dashboard">
-        <div class="header">
-            Dashboard
-        </div>
-        <div class="content">
-            <div v-if="is_new" class="fss_connection_intro">
+        <div v-if="is_new" class="content">
+            <div class="fss_connection_intro">
                 <div class="fss_intro">
                     <h1>Welcome to FluentSMTP & SES</h1>
                     <p>Thank you for installing FluentSMTP - The ultimate SMTP & Email Service Connection Plugin for WordPress</p>
@@ -17,9 +14,62 @@
                     :providers="settings.providers">
                 </connection-wizard>
             </div>
-            <div v-else>
-                <h1>Dashboard Data will be shown here</h1>
-            </div>
+        </div>
+        <div v-else>
+            <el-row :gutter="20">
+                <el-col :sm="24" :md="16">
+                    <div class="header">
+                        Sending Stats
+                        <span class="fss_to_right">
+                            <el-date-picker
+                                size="small"
+                                v-model="date_range"
+                                type="daterange"
+                                :picker-options="pickerOptions"
+                                range-separator="To"
+                                start-placeholder="Start date"
+                                end-placeholder="End date"
+                                value-format="yyyy-MM-dd"
+                            ></el-date-picker>
+                            <el-button size="small" @click="filterReport" type="primary" plain>Apply</el-button>
+                        </span>
+                    </div>
+                    <div class="content">
+                        <emails-chart v-if="showing_chart" :date_range="date_range" />
+                    </div>
+                </el-col>
+                <el-col :sm="24" :md="8">
+                    <div class="header">
+                        Quick Overview
+                    </div>
+                    <div class="content" v-loading="loading">
+                        <ul class="fss_dash_lists">
+                            <li v-if="settings_stat.log_enabled == 'yes'">
+                                Total Email Sent (Logged): <span>{{stats.sent}}</span>
+                            </li>
+                            <li style="color: red" v-if="stats.failed > 0">
+                                Email Failed: <span>{{stats.failed}}</span>
+                            </li>
+                            <li>
+                                Active Connections: <span>{{settings_stat.connection_counts}}</span>
+                            </li>
+                            <li>
+                                Active Senders: <span>{{settings_stat.active_senders}}</span>
+                            </li>
+                            <li>
+                                Save Email Logs:
+                                <span style="text-transform: capitalize;">
+                                    {{settings_stat.log_enabled}}
+                                </span>
+                            </li>
+                            <li v-if="settings_stat.log_enabled == 'yes'">
+                                Delete Logs:
+                                <span>After {{settings_stat.auto_delete_days}} Days</span>
+                            </li>
+                        </ul>
+                    </div>
+                </el-col>
+            </el-row>
         </div>
     </div>
 </template>
@@ -27,16 +77,56 @@
 <script type="text/babel">
     import isEmpty from 'lodash/isEmpty';
     import ConnectionWizard from '../Settings/ConnectionWizard';
+    import EmailsChart from './Charts/Emails';
 
     export default {
         name: 'Dashboard',
         components: {
-            ConnectionWizard
+            ConnectionWizard,
+            EmailsChart
         },
         data() {
             return {
-                stats: [],
-                new_connection: {}
+                stats: {},
+                new_connection: {},
+                settings_stat: {},
+                date_range: '',
+                showing_chart: true,
+                pickerOptions: {
+                    disabledDate: function (date) {
+                        const now = new Date();
+                        return date > now;
+                    },
+                    shortcuts: [
+                        {
+                            text: 'Last week',
+                            onClick(picker) {
+                                const end = new Date();
+                                const start = new Date();
+                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                                picker.$emit('pick', [start, end]);
+                            }
+                        },
+                        {
+                            text: 'Last month',
+                            onClick(picker) {
+                                const end = new Date();
+                                const start = new Date();
+                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                                picker.$emit('pick', [start, end]);
+                            }
+                        },
+                        {
+                            text: 'Last 3 months',
+                            onClick(picker) {
+                                const end = new Date();
+                                const start = new Date();
+                                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                                picker.$emit('pick', [start, end]);
+                            }
+                        }
+                    ]
+                }
             };
         },
         computed: {
@@ -49,30 +139,17 @@
                 this.loading = true;
                 this.$get('/').then(res => {
                     this.stats = res.stats;
+                    this.settings_stat = res.settings_stat;
                 }).fail(error => {
                     console.log(error);
                 }).always(() => {
                     this.loading = false;
                 });
             },
-            gotoSettings(mailer) {
-                this.$router.push({
-                    name: 'settings',
-                    query: {
-                        name: mailer.key
-                    }
-                });
-            },
-            gotoLogs(key) {
-                if (Number(this.stats[key]) === 0) return;
-                const val = key === 'successful' ? 'sent' : (key === 'unsuccessful' ? 'failed' : 'resent');
-                this.$router.push({
-                    name: 'logs',
-                    query: {
-                        page: 1,
-                        filterBy: 'status',
-                        filterValue: val
-                    }
+            filterReport() {
+                this.showing_chart = false;
+                this.$nextTick(() => {
+                    this.showing_chart = true;
                 });
             }
         },
@@ -81,63 +158,3 @@
         }
     };
 </script>
-
-<style>
-    .fluent-mail-app .dashboard .content .mailer-block {
-        display: inline-block;
-        width: 140px;
-        margin: 0 5px;
-        position: relative;
-        /*float: left;*/
-    }
-
-    .fluent-mail-app .dashboard .content .fluent-mail-mailer-image {
-        background: #fff;
-        text-align: center;
-        cursor: auto;
-        border: 1px solid #ccc;
-        box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-        border-radius: 4px;
-        height: 76px;
-        position: relative;
-        margin-bottom: 10px;
-        -webkit-transition: all 0.2s ease-in-out;
-        -moz-transition: all 0.2s ease-in-out;
-        -ms-transition: all 0.2s ease-in-out;
-        transition: all 0.2s ease-in-out;
-        cursor: pointer;
-    }
-
-    .fluent-mail-app .dashboard .content .fluent-mail-mailer-image:hover {
-        box-shadow: 0 0 5px 5px #ccc;
-    }
-
-    .fluent-mail-app .dashboard .content .fluent-mail-mailer-image img {
-        max-width: 90%;
-        max-height: 40px;
-        display: block;
-        position: relative;
-        top: 20px !important;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        opacity: 0.7;
-        -webkit-transition: all 0.2s ease-in-out;
-        -moz-transition: all 0.2s ease-in-out;
-        -ms-transition: all 0.2s ease-in-out;
-        transition: all 0.2s ease-in-out;
-    }
-
-    .fluent-mail-app .dashboard .content .email-stat {
-        padding: 20px;
-        font-weight: 700;
-        font-size: 15px;
-        font-weight: 500;
-        cursor: pointer;
-        text-align: center;
-    }
-
-    .fluent-mail-app .dashboard .content .email-stat:hover {
-        background: #ecf5ff;
-        opacity: .7;
-    }
-</style>

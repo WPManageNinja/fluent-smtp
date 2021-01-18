@@ -8,7 +8,13 @@
             <el-form ref="form" :model="form" label-position="left" label-width="120px">
 
                 <el-form-item for="email" label="From">
-                    <el-input id="email" v-model="form.from" />
+                    <el-select placeholder="Select Email or Type" :allow-create="true" :filterable="true" v-model="form.from">
+                        <el-option
+                            v-for="(emailHash, email) in sender_emails"
+                            :key="email" :label="email"
+                            :value="email"
+                        ></el-option>
+                    </el-select>
 
                     <span class="small-help-text" style="display:block;margin-top:-10px">
                         Enter the sender email address (optional).
@@ -129,14 +135,13 @@
             },
             maybeEnabled() {
                 return !isEmpty(this.settings.connections);
+            },
+            sender_emails() {
+                return this.settings.mappings;
             }
         },
         created() {
-            // if (this.settings.mailer) {
-            //     const key = this.mailerSettings.mailer;
-            //     this.form.email = this.settings.user_email;
-            //     this.form.from = this.settings.providers[key].options.sender_email;
-            // }
+            this.form.email = this.settings.user_email;
         }
     };
 </script>

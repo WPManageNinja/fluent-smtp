@@ -23,6 +23,10 @@ class Handler extends BaseHandler
     {
         if ($this->preSend()) {
             $this->mail = new PHPMailer(true);
+            
+            if ($this->getSetting('auto_tls') == 'no') {
+                $this->mail->SMTPAutoTLS = false;
+            }
 
             return $this->postSend();
         }

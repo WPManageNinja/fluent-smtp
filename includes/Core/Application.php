@@ -26,7 +26,7 @@ final class Application extends Container
         $this->registerFrameworkComponents();
         $this->requireCommonFilesForRequest($this);
 
-        // load_plugin_textdomain('fluentMail', false, 'fluent-mail/language/');
+        load_plugin_textdomain('fluent-smtp', false, 'fluent-smtp/language/');
     }
 
     private function setApplicationInstance()
@@ -44,13 +44,12 @@ final class Application extends Container
         $this['path.hooks'] = FLUENTMAIL_PLUGIN_PATH . 'app/Hooks/';
         $this['path.models'] = FLUENTMAIL_PLUGIN_PATH . 'app/models/';
         $this['path.includes'] = FLUENTMAIL_PLUGIN_PATH . 'includes/';
-        $this['path.resources'] = FLUENTMAIL_PLUGIN_PATH . 'resources/';
         $this['path.controllers'] = FLUENTMAIL_PLUGIN_PATH . 'app/Http/controllers/';
-        $this['path.views'] = FLUENTMAIL_PLUGIN_PATH . 'resources/views/';
-        $this['path.admin.css'] = FLUENTMAIL_PLUGIN_PATH . 'resources/admin/css/';
-        $this['path.admin.js'] = FLUENTMAIL_PLUGIN_PATH . 'resources/admin/js/';
-        $this['path.public.css'] = FLUENTMAIL_PLUGIN_PATH . 'resources/public/css/';
-        $this['path.public.js'] = FLUENTMAIL_PLUGIN_PATH . 'resources/public/js/';
+        $this['path.views'] = FLUENTMAIL_PLUGIN_PATH . 'app/views/';
+        $this['path.admin.css'] = FLUENTMAIL_PLUGIN_PATH . 'assets/admin/css/';
+        $this['path.admin.js'] = FLUENTMAIL_PLUGIN_PATH . 'assets/admin/js/';
+        $this['path.public.css'] = FLUENTMAIL_PLUGIN_PATH . 'assets/public/css/';
+        $this['path.public.js'] = FLUENTMAIL_PLUGIN_PATH . 'assets/public/js/';
         $this['path.assets'] = FLUENTMAIL_PLUGIN_PATH . 'assets/';
 
         // Urls

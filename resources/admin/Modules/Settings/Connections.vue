@@ -7,7 +7,10 @@
                         <span style="float:left;">
                             Active Email Connections
                         </span>
-                        <span style="float:right;color:#46A0FC;cursor:pointer;" @click="addConnection">
+                        <span
+                            style="float:right;color:#46A0FC;cursor:pointer;"
+                            @click="addConnection"
+                        >
                             <i class="el-icon-plus"></i> Add Another Connection
                         </span>
                     </div>
@@ -47,6 +50,9 @@
                                 </template>
                             </el-table-column>
                         </el-table>
+                        <el-alert :closable="false" style="margin-top: 20px" type="info" v-if="connections.length > 1">
+                            Your emails will be routed automatically based on From email address. No additional configaration is required.
+                        </el-alert>
                     </div>
                 </div>
                 <div v-if="showing_connection" class="fss_content_box">
@@ -101,6 +107,7 @@
                 const settings = await this.$get('settings');
                 this.settings.mappings = settings.data.settings.mappings;
                 this.settings.connections = settings.data.settings.connections;
+                
                 if (isEmpty(this.settings.connections)) {
                     this.$router.push({
                         name: 'dashboard',
@@ -120,11 +127,12 @@
                 });
             },
             async deleteConnection(connection) {
-                const connections = await this.$post('settings/delete', {
+                const result = await this.$post('settings/delete', {
                     key: connection.unique_key
                 });
 
-                this.settings.connections = connections.data;
+                this.settings.connections = result.data.connections;
+                this.settings.misc.default_connection = result.data.misc.default_connection;
 
                 this.$notify.success({
                     title: 'Great!',

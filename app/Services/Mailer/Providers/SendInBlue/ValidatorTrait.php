@@ -12,9 +12,16 @@ trait ValidatorTrait
     public function validateProviderInformation($connection)
     {
         $errors = [];
+        $keyStoreType = $connection['key_store'];
 
-        if (! Arr::get($connection, 'api_key')) {
-            $errors['api_key']['required'] = 'Api key is required.';
+        if($keyStoreType == 'db') {
+            if (! Arr::get($connection, 'api_key')) {
+                $errors['api_key']['required'] = __('Api key is required.', 'fluent-smtp');
+            }
+        } else if($keyStoreType == 'wp_config') {
+            if(!defined('FLUENTMAIL_SENDINBLUE_API_KEY') || !FLUENTMAIL_SENDINBLUE_API_KEY) {
+                $errors['api_key']['required'] = __('Please define FLUENTMAIL_SENDINBLUE_API_KEY in wp-config.php file.', 'fluent-smtp');
+            }
         }
 
         if ($errors) {

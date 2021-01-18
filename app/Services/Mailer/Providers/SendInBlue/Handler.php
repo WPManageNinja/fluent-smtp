@@ -38,17 +38,20 @@ class Handler extends BaseHandler
     {
         $body = [
             'sender' => $this->getFrom(),
-            'replyTo' => $this->getReplyTo(),
             'subject' => $this->getSubject(),
             'htmlContent' => $this->getBody(),
             'headers' => $this->getCustomEmailHeaders()
         ];
+
+        if ($replyTo = $this->getReplyTo()) {
+            $body['replyTo'] = $replyTo;
+        }
         
         $recipients = $this->setRecipients();
 
         $body = array_merge($body, $recipients);
 
-        if (isset($this->params['attachments'])) {
+        if (!empty($this->getParam('attachments'))) {
             $body['attachment'] = $this->getAttachments();
         }
 
@@ -64,9 +67,21 @@ class Handler extends BaseHandler
         return $this->handleResponse($this->response);
     }
 
+    public function setSettings($settings)
+    {
+        if($settings['key_store'] == 'wp_config') {
+            $settings['api_key'] = defined('FLUENTMAIL_SENDGRID_API_KEY') ? FLUENTMAIL_SENDGRID_API_KEY : '';
+        }
+        $this->settings = $settings;
+        return $this;
+    }
+
     protected function getFrom()
     {
-        return $this->getParam('from');
+        return [
+            'name' => $this->getParam('sender_name'),
+            'email' => $this->getParam('sender_email')
+        ];
     }
 
     protected function getReplyTo()
@@ -93,7 +108,7 @@ class Handler extends BaseHandler
                 : $recipient['email'];
            }, $recipient);
 
-            $this->params['formatted'][$key] = implode(', ', $array);
+            $this->attributes['formatted'][$key] = implode(', ', $array);
         }
 
         return $recipients;
@@ -116,7 +131,7 @@ class Handler extends BaseHandler
 
     protected function getBody()
     {
-        return $this->getParam('body.html');
+        return $this->getParam('message');
     }
 
     protected function getAttachments()

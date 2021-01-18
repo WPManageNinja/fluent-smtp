@@ -14,6 +14,8 @@ class BaseHandler
     use ValidatorTrait;
 
     protected $app = null;
+    
+    protected $params = [];
 
     protected $manager = null;
     
@@ -47,15 +49,10 @@ class BaseHandler
 
     protected function preSend()
     {
+        $this->attributes = [];
+        
         if ($this->isForced('from_name')) {
             $this->phpMailer->FromName = $this->getSetting('sender_name');
-        }
-
-        /*
-         * @todo: Need to implement in SMTP not globally
-         */
-        if ($this->getSetting('auto_tls') == 'no') {
-            $this->phpMailer->SMTPAutoTLS = false;
         }
 
         $title = ucwords($this->getSetting('provider'));
@@ -111,7 +108,7 @@ class BaseHandler
             'bcc' => $this->setRecipientsArray($this->phpMailer->getBccAddresses())
         ];
 
-        return $this->params = [
+        return array_merge($this->attributes, [
             'from' => $from,
             'to' => $recipients['to'],
             'subject' => $this->phpMailer->Subject,
@@ -124,7 +121,7 @@ class BaseHandler
                 'bcc' => $recipients['bcc'],
                 'content-type' => $contentType
             ]
-        ];
+        ]);
     }
 
     protected function setFrom()
@@ -134,11 +131,15 @@ class BaseHandler
         $overrideName = $this->getSetting('force_from_name');
 
         if ($name && ($overrideName == 'yes' || $this->phpMailer->FromName == 'WordPress')) {
+            $this->attributes['sender_name'] = $name;
+            $this->attributes['sender_email'] = $email;
             $from = $name . ' <' . $email . '>';
         } elseif ($this->phpMailer->FromName) {
+            $this->attributes['sender_email'] = $email;
+            $this->attributes['sender_name'] = $this->phpMailer->FromName;
             $from = $this->phpMailer->FromName . ' <' . $email . '>';
         } else {
-            $from = $email;
+            $from = $this->attributes['sender_email'] = $email;
         }
 
         return $from;
@@ -301,9 +302,14 @@ class BaseHandler
             return false;
         }
 
-        $isLogOn = $this->manager->getConfig('misc.log_emails');
+        if (!$status) {
+            return true;
+        }
 
-        return ($status && $isLogOn == 'yes') || !$status;
+        $miscSettings = $this->manager->getConfig('misc');
+        $isLogOn = $miscSettings['log_emails'] == 'yes';
+
+        return apply_filters('fluentmail_will_log_email', $isLogOn, $miscSettings);
     }
 
     protected function fireWPMailFailedAction($data)

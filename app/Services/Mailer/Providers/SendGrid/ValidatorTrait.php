@@ -8,13 +8,21 @@ use FluentMail\App\Services\Mailer\ValidatorTrait as BaseValidatorTrait;
 trait ValidatorTrait
 {
     use BaseValidatorTrait;
-    
+
     public function validateProviderInformation($connection)
     {
         $errors = [];
 
-        if (! Arr::get($connection, 'api_key')) {
-            $errors['api_key']['required'] = 'Api key is required.';
+        $keyStoreType = $connection['key_store'];
+
+        if($keyStoreType == 'db') {
+            if (! Arr::get($connection, 'api_key')) {
+                $errors['api_key']['required'] = __('Api key is required.', 'fluent-smtp');
+            }
+        } else if($keyStoreType == 'wp_config') {
+            if(!defined('FLUENTMAIL_SENDGRID_API_KEY') || !FLUENTMAIL_SENDGRID_API_KEY) {
+                $errors['api_key']['required'] = __('Please define FLUENTMAIL_SENDGRID_API_KEY in wp-config.php file.', 'fluent-smtp');
+            }
         }
 
         if ($errors) {

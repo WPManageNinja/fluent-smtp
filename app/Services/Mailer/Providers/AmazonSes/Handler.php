@@ -9,6 +9,8 @@ use FluentMail\Includes\Core\Application;
 use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\App\Services\Mailer\BaseHandler;
 use FluentMail\App\Services\Mailer\Providers\AmazonSes\ValidatorTrait;
+use FluentMail\App\Services\Mailer\Providers\AmazonSes\SimpleEmailService;
+use FluentMail\App\Services\Mailer\Providers\AmazonSes\SimpleEmailServiceMessage;
 
 class Handler extends BaseHandler
 {
@@ -42,8 +44,8 @@ class Handler extends BaseHandler
         $this->client->addBCC($this->getBlindCarbonCopy());
         $this->client->setSubject($this->getSubject());
 
-        if($this->phpMailer->ContentType == 'text/plain') {
-            if(!$text) {
+        if ($this->phpMailer->ContentType == 'text/plain') {
+            if (!$text) {
                 $text = $html;
             }
             $this->client->setMessageFromString($text);
@@ -51,9 +53,7 @@ class Handler extends BaseHandler
             $this->client->setMessageFromString($text, $html);
         }
 
-        $this->client;
-
-        if (isset($this->params['attachments'])) {
+        if (!empty($this->getParam('attachments'))) {
             foreach ($this->getAttachments() as $attachment) {
                 $this->client->addAttachmentFromData(
                     $attachment['name'], $attachment['content'], $attachment['type']
@@ -61,20 +61,15 @@ class Handler extends BaseHandler
             }
         }
 
-
         foreach ($this->getCustomEmailHeaders() as $header) {
             $this->client->addCustomHeader($header);
         }
 
-        $ses = new SimpleEmailService(
-            $this->getSetting('access_key'),
-            $this->getSetting('secret_key'),
-            $this->getRegion(),
-            static::TRIGGER_ERROR
-        );
+        $connectionSettings = $this->filterConnectionVars($this->getSetting());
+
+        $ses = fluentMailSesConnection($connectionSettings);
 
         $this->response = $ses->sendEmail($this->client, static::RAW_REQUEST);
-
 
         return $this->handleResponse($this->response);
     }
@@ -140,7 +135,7 @@ class Handler extends BaseHandler
     {
         $attachments = [];
 
-        foreach ($this->params['attachments'] as $attachment) {
+        foreach ($this->getParam('attachments') as $attachment) {
             $file = false;
 
             try {
@@ -261,6 +256,8 @@ class Handler extends BaseHandler
 
     public function getValidSenders($config)
     {
+        $config = $this->filterConnectionVars($config);
+
         $region = 'email.' . $config['region'] . '.amazonaws.com';
 
         $ses = new SimpleEmailService(
@@ -281,6 +278,8 @@ class Handler extends BaseHandler
 
     public function getConnectionInfo($connection)
     {
+        $connection = $this->filterConnectionVars($connection);
+
         $validSenders = $this->getValidSenders($connection);
         $stats = $this->getStats($connection);
         return (string) fluentMail('view')->make('admin.ses_connection_info', [
@@ -301,5 +300,15 @@ class Handler extends BaseHandler
             static::TRIGGER_ERROR
         );
         return $ses->getSendQuota();
+    }
+
+    private function filterConnectionVars($connection)
+    {
+        if($connection['key_store'] == 'wp_config') {
+            $connection['access_key'] = defined('FLUENTMAIL_AWS_ACCESS_KEY_ID') ? FLUENTMAIL_AWS_ACCESS_KEY_ID : '';
+            $connection['secret_key'] = defined('FLUENTMAIL_AWS_SECRET_ACCESS_KEY') ? FLUENTMAIL_AWS_SECRET_ACCESS_KEY : '';
+        }
+
+        return $connection;
     }
 }

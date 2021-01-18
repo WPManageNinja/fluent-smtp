@@ -48,7 +48,7 @@ abstract class Controller
         $permission = 'manage_options';
         if(!current_user_can($permission)) {
             wp_send_json_error([
-                'message' => 'You do not have permission to do this action'
+                'message' => __('You do not have permission to do this action', 'fluent-smtp')
             ]);
             die();
         }

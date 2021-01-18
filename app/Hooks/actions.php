@@ -1,19 +1,21 @@
 <?php
 
-use FluentMail\App\Services\Mailer\Manager;
-
-//$app->addAction('shutdown', 'ShutdownHandler@handle');
-//$app->addAction('wp_ajax_send_emails', 'ShutdownHandler@sendEmails');
-//$app->addAction('wp_ajax_nopriv_send_emails', 'ShutdownHandler@sendEmails');
-
 $app->addCustomAction('handle_exception', 'ExceptionHandler@handle');
 
 $app->addAction('admin_menu', 'AdminMenuHandler@addFluentMailMenu');
 
-$app->addCustomAction('validate-by-provider', 'ProviderValidator@handle', 10, 2);
+$app->addAction('admin_notices', 'AdminMenuHandler@maybeAdminNotice');
 
-$app->addAction('init', function() use ($app) {
-    $manager = $app->make(Manager::class);
-    $app->instance(Manager::class, $manager);
-    $app->alias(Manager::class, 'manager');
+$app->addAction('fluentmail_do_daily_scheduled_tasks', function () {
+    $manager = fluentMail(\FluentMail\App\Services\Mailer\Manager::class);
+    $logSaveDays = $manager->getSettings('misc.log_saved_interval_days');
+    $logSaveDays = intval($logSaveDays);
+    if($logSaveDays) {
+        (new \FluentMail\App\Models\Logger())->deleteLogsOlderThan($logSaveDays);
+    }
+
+    $day = date('d');
+    if($day == '01') {
+        // this is a monthly cron
+    }
 });

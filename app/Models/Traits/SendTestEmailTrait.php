@@ -28,6 +28,10 @@ trait SendTestEmailTrait
             $headers[] = 'From: ' . $data['from'];
         }
 
+        if(!defined('FLUENTMAIL_TEST_EMAIL')) {
+            define('FLUENTMAIL_TEST_EMAIL', true);
+        }
+
         return wp_mail($to, $subject, $body, $headers);
     }
 }

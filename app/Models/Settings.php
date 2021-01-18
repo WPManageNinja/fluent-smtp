@@ -32,6 +32,7 @@ class Settings
 
         $key = $inputs['connection_key'];
 
+
         if (isset($connections[$key])) {
             $mappings = array_filter($mappings, function($mappingKey) use ($key) {
                 return $mappingKey != $key;
@@ -39,25 +40,50 @@ class Settings
             unset($connections[$key]);
         }
 
+        $primaryEmails = [];
+        foreach ($connections as $connection) {
+            $primaryEmails[] = $connection['provider_settings']['sender_email'];
+        }
+
         $uniqueKey = $this->generateUniqueKey($email);
 
         $extraMappings = $inputs['valid_senders'];
+
+        foreach ($extraMappings as $emailIndex => $email) {
+            if(in_array($email, $primaryEmails)) {
+                unset($extraMappings[$emailIndex]);
+            }
+        }
+
         $extraMappings[] = $email;
         $extraMappings = array_unique($extraMappings);
         $extraMappings = array_fill_keys($extraMappings, $uniqueKey);
 
         $mappings = array_merge($mappings, $extraMappings);
 
+        $providers = fluentMail(Manager::class)->getConfig('providers');
+        
+        $title = $providers[$inputs['connection']['provider']]['title'];
+
         $connections[$uniqueKey] = [
-            'title' => (isset($inputs['connection_name'])) ? $inputs['connection_name'] : 'Default',
+            'title' => $title,
             'provider_settings' => $inputs['connection']
         ];
 
-
         $settings['mappings'] = $mappings;
+
         $settings['connections'] = $connections;
 
-        $misc = $this->getMisc($settings);
+        $misc = $this->getMisc();
+
+        if(!$misc) {
+            $misc = [
+                'log_emails' => 'yes',
+                'log_saved_interval_days' => '14',
+                'disable_fluentcrm_logs' => 'no',
+                'default_connection' => ''
+            ];
+        }
 
         if(empty($misc['default_connection']) || $misc['default_connection'] == $key) {
             $misc['default_connection'] = $uniqueKey;
@@ -95,9 +121,15 @@ class Settings
             unset($settings['connections'][$key]);
         }
 
+        if (Arr::get($settings, 'misc.default_connection') == $key) {
+            $default = Arr::get($settings, 'mappings', []);
+            $default = reset($default);
+            Arr::set($settings, 'misc.default_connection', $default ?: '');
+        }
+
         update_option($this->optionName, $settings);
 
-        return Arr::get($settings, 'connections', []);
+        return $settings;
     }
 
     public function getDefaults()
@@ -162,6 +194,7 @@ class Settings
                 return $connections[$mappings[$email]];
             }
         }
+        
         return [];
     }
 

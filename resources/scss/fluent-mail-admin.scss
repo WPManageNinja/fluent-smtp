@@ -98,3 +98,178 @@
         padding: 12px 10px;
     }
 }
+
+ul.fss_log_items li {
+    display: inline-block;
+    width: 48%;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ebeef4;
+    padding: 10px 0px;
+    > div {
+        display: inline-block;
+    }
+    .item_header {
+        font-weight: 500;
+        padding-right: 10px;
+        min-width: 42px;
+    }
+}
+
+.el-table .el-table__row.row_type_failed, .el-table .el-table__row--striped.el-table__row.row_type_failed {
+    background: rgb(253, 226, 226) !important;
+    td {
+        background: transparent;
+    }
+}
+
+.fluent-mail-app .dashboard .content .mailer-block {
+    display: inline-block;
+    width: 140px;
+    margin: 0 5px;
+    position: relative;
+    /*float: left;*/
+}
+
+.fluent-mail-app .dashboard .content .fluent-mail-mailer-image {
+    background: #fff;
+    text-align: center;
+    cursor: auto;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    border-radius: 4px;
+    height: 76px;
+    position: relative;
+    margin-bottom: 10px;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.fluent-mail-app .dashboard .content .fluent-mail-mailer-image:hover {
+    box-shadow: 0 0 5px 5px #ccc;
+}
+
+.fluent-mail-app .dashboard .content .fluent-mail-mailer-image img {
+    max-width: 90%;
+    max-height: 40px;
+    display: block;
+    position: relative;
+    top: 20px !important;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.7;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+}
+
+.fluent-mail-app .dashboard .content .email-stat {
+    padding: 20px;
+    font-weight: 700;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+}
+
+.fluent-mail-app .dashboard .content .email-stat:hover {
+    background: #ecf5ff;
+    opacity: .7;
+}
+
+.logs .successful {
+    color:#409EFF;
+    font-size:20px;
+}
+
+.logs .unsuccessful {
+    color:#F56C6C;
+    font-size:20px;
+}
+
+.logs .resent {
+    color:#a4da89;
+    font-size:20px;
+}
+
+.logs .dont-show {
+    color: #409EFF;
+    margin-left: 10px;
+    cursor: pointer;
+    vertical-align: top;
+}
+
+ul.fss_dash_lists {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+        font-size: 15px;
+        padding: 0px 10px;
+        color: #697485;
+        border-bottom: 1px solid #e3e8ed;
+        line-height: 40px;
+        span {
+            float: right;
+            padding-right: 10px;
+        }
+        &:hover {
+            background: #f7fafc;
+            border-bottom: 1px solid black;
+        }
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+}
+.fss_to_right {
+    float: right;
+}
+.fss_plugin_block {
+    margin: 0px -20px;
+    padding: 20px;
+    border-bottom: 1px solid #e3e8ed;
+    .fss_plugin_title {
+        text-align: center;
+        h3,p {
+            margin: 0;
+            padding: 0;
+        }
+        h3 {
+            color: #697386;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        p {
+            font-weight: 500;
+            font-size: 14px;
+        }
+    }
+    .fss_install_btn {
+        text-align: center;
+    }
+    &:last-child {
+        margin-bottom: -20px;
+    }
+    .fss_fluentcrm_btn {
+        background: #7743e6 !important;
+        border-color: #7743e6 !important;
+    }
+}
+
+.install_success {
+    text-align: center;
+    a {
+        text-decoration: none;
+    }
+}
+
+.fss_condesnippet_wrapper {
+    span.el-form-item__error {
+        display: block;
+        position: relative !important;
+    }
+}
