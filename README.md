@@ -4,6 +4,8 @@
 
 #####[Get it on WordPress.org](https://wordpress.org/plugins/fluent-smtp/) | [FaceBook Community](https://www.facebook.com/groups/fluentcrm) | [Docs](https://fluentsmtp.com/docs)
 
+![FluentSMTP Banner](https://ps.w.org/fluent-smtp/assets/banner-1544x500.png)
+
 Are you having problems with your WordPress not sending emails? This is the plugin that will solve your email deliverability problem.
 FluentSMTP is the ultimate WP Mail Plugin that connects with your Email Service Provider natively and makes sure your emails are delivered 💯.
 
