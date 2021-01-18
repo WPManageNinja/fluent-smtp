@@ -20,7 +20,7 @@ Our goal is to send your WordPress emails delivery fast, secure, and make sure y
 
 Fluent SMTP plugin fixes your email delivery issue by connecting WordPress Mail with your email service providers. These integrations are native so it will send the emails super fast.
 
-Connect as many Email Service Providers as you want and FluentCRM will route your transactional and marketing emails automatically. This is one of the unique features that FluentCRM has.
+Connect as many Email Service Providers as you want and FluentSMTP will route your transactional and marketing emails automatically. This is one of the unique features that FluentSMTP has.
 
 == 🎉 Available Email Service Connections ==
 * Amazon SES
@@ -137,7 +137,7 @@ Fluent SMTP is built by professionals and security and scalability in mind. Flue
 == 👉 Credits 👈 ==
 Fluent SMTP is built by <a href="https://wpmanageninja.com">WPManageNinja LLC</a>. And yes, It's built by the creator of popular plugins like <a href="https://wordpress.org/plugins/fluentform">FluentForms</a>, <a href="https://wordpress.org/plugins/fluent-crm">FluentCRM</a>, <a href="https://wordpress.org/plugins/ninja-tables/">Ninja Tables</a>.
 
-Fluent SMTP is a 100% free and opensource plugin and we never release a pro version. It does not mean, It will have lack features. Our aim is to provide the ultimate SMTP/Email Service connection plugin for your WordPress Mails. We wrote <a href="https://fluentsmtp.com/why-we-build-fluentsmtp-plugin/">an article about why we made this plugin</a> and our plan about Fluent SMTP.
+Fluent SMTP is a 100% free and opensource plugin and we will never release a pro version. It does not mean, It will have lack features. Our aim is to provide the ultimate SMTP/Email Service connection plugin for your WordPress Mails. We wrote <a href="https://fluentsmtp.com/why-we-build-fluentsmtp-plugin/">an article about why we made this plugin</a> and our plan about Fluent SMTP.
 
 The full source code is hosted in Github and you are welcomed to contribute to the development of this awesome WP Mail Plugin.
 👉 <a href="https://github.com/WPManageNinja/fluent-smtp">View on Github</a> 👈
