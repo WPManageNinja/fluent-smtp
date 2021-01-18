@@ -2,7 +2,7 @@
 
 ---
 
-#####[Get it on WordPress.org](https://wordpress.org/plugins/fluent-smtp/) | [FaceBook Community](https://www.facebook.com/groups/fluentcrm) | [Docs](https://fluentsmtp.com/docs)
+**[Get it on WordPress.org](https://wordpress.org/plugins/fluent-smtp/) | [FaceBook Community](https://www.facebook.com/groups/fluentcrm) | [Docs](https://fluentsmtp.com/docs)**
 
 ![FluentSMTP Banner](https://ps.w.org/fluent-smtp/assets/banner-1544x500.png)
 
