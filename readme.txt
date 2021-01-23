@@ -203,7 +203,7 @@ Thank you so much. We really appreciate it. Please check <a href="https://github
 
 = I found a bug, where I can report? =
 
-Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in our support portal</a>. If you ware a developer please <a href="https://github.com/WPManageNinja/fluent-smtp">create a github issue</a>.
+Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in our support portal</a>. If you are a developer please <a href="https://github.com/WPManageNinja/fluent-smtp">create a github issue</a>.
 
 == Screenshots ==
 1. FluentSMTP Dashboard
