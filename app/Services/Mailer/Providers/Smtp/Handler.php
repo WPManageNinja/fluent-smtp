@@ -2,18 +2,10 @@
 
 namespace FluentMail\App\Services\Mailer\Providers\Smtp;
 
-require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
-require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
-require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
-
 use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Core\Application;
 use FluentMail\App\Services\Mailer\BaseHandler;
 use FluentMail\App\Services\Mailer\Providers\Smtp\ValidatorTrait;
-
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 class Handler extends BaseHandler
 {
@@ -22,33 +14,31 @@ class Handler extends BaseHandler
     public function send()
     {
         if ($this->preSend()) {
-            $this->mail = new PHPMailer(true);
-            
             if ($this->getSetting('auto_tls') == 'no') {
-                $this->mail->SMTPAutoTLS = false;
+                $this->phpMailer->SMTPAutoTLS = false;
             }
 
             return $this->postSend();
         }
 
-        $this->handleFailure(new Exception('Something went wrong!', 0));
+        $this->handleFailure(new \Exception('Something went wrong!', 0));
     }
 
     protected function postSend()
     {
         try {
-            $this->mail->isSMTP();
-            $this->mail->Host = $this->getSetting('host');
-            $this->mail->Port = $this->getSetting('port');
+            $this->phpMailer->isSMTP();
+            $this->phpMailer->Host = $this->getSetting('host');
+            $this->phpMailer->Port = $this->getSetting('port');
 
             if ($this->getSetting('auth') == 'yes') {
-                $this->mail->SMTPAuth = true;
-                $this->mail->Username = $this->getSetting('username');
-                $this->mail->Password = $this->getSetting('password');
+                $this->phpMailer->SMTPAuth = true;
+                $this->phpMailer->Username = $this->getSetting('username');
+                $this->phpMailer->Password = $this->getSetting('password');
             }
 
             if (($encryption = $this->getSetting('encryption')) != 'none') {
-                $this->mail->SMTPSecure = $encryption;
+                $this->phpMailer->SMTPSecure = $encryption;
             }
 
             $fromEmail = $this->phpMailer->From;
@@ -68,61 +58,62 @@ class Handler extends BaseHandler
                     $fromName = $customFrom;
                 }
 
-                $this->mail->setFrom($fromEmail, $fromName);
+                $this->phpMailer->setFrom($fromEmail, $fromName);
             } else {
-                $this->mail->setFrom($fromEmail);
+                $this->phpMailer->setFrom($fromEmail);
             }
 
             foreach ($this->getParam('to') as $to) {
                 if (isset($to['name'])) {
-                    $this->mail->addAddress($to['email'], $to['name']);
+                    $this->phpMailer->addAddress($to['email'], $to['name']);
                 } else {
-                    $this->mail->addAddress($to['email']);
+                    $this->phpMailer->addAddress($to['email']);
                 }
             }
 
             foreach ($this->getParam('headers.reply-to') as $replyTo) {
                 if (isset($replyTo['name'])) {
-                    $this->mail->addReplyTo($replyTo['email'], $replyTo['name']);
+                    $this->phpMailer->addReplyTo($replyTo['email'], $replyTo['name']);
                 } else {
-                    $this->mail->addReplyTo($replyTo['email']);
+                    $this->phpMailer->addReplyTo($replyTo['email']);
                 }
             }
 
             foreach ($this->getParam('headers.cc') as $cc) {
                 if (isset($cc['name'])) {
-                    $this->mail->addCC($cc['email'], $cc['name']);
+                    $this->phpMailer->addCC($cc['email'], $cc['name']);
                 } else {
-                    $this->mail->addCC($cc['email']);
+                    $this->phpMailer->addCC($cc['email']);
                 }
             }
 
             foreach ($this->getParam('headers.bcc') as $bcc) {
                 if (isset($bcc['name'])) {
-                    $this->mail->addBCC($bcc['email'], $bcc['name']);
+                    $this->phpMailer->addBCC($bcc['email'], $bcc['name']);
                 } else {
-                    $this->mail->addBCC($bcc['email']);
+                    $this->phpMailer->addBCC($bcc['email']);
                 }
             }
 
             if ($attachments = $this->getParam('attachments')) {
                 foreach ($attachments as $attachment) {
-                    $this->mail->addAttachment($attachment[0], $attachment[7]);
+                    $this->phpMailer->addAttachment($attachment[0], $attachment[7]);
                 }
             }
 
             if ($this->getParam('headers.content-type') == 'text/html') {
-                $this->mail->isHTML(true);
+                $this->phpMailer->isHTML(true);
             }
 
-            $this->mail->Subject = $this->getSubject();
-            $this->mail->Body = $this->getParam('message');
+            $this->phpMailer->Subject = $this->getSubject();
+            
+            $this->phpMailer->Body = $this->getParam('message');
 
-            $this->mail->send();
+            $this->phpMailer->send();
 
             return $this->handleSuccess();
 
-        } catch(Exception $e) {
+        } catch(\PHPMailer\PHPMailer\Exception $e) {
             return $this->handleFailure($e);
         }
     }
