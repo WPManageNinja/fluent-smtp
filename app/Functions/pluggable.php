@@ -189,17 +189,6 @@ if ( ! function_exists( 'wp_mail' ) ) :
         $phpmailer->clearCustomHeaders();
         $phpmailer->clearReplyTos();
 
-        // Set "From" name and email.
-
-        // If we don't have a name from the input headers.
-        if ( ! isset( $from_name ) ) {
-            $defaultConnection = fluentMailDefaultConnection();
-            if (!empty($defaultConnection['sender_name'])) {
-                $from_name = $defaultConnection['sender_name'];
-            } else {
-                $from_name = 'WordPress';
-            }
-        }
 
         /*
          * If we don't have an email from the input headers, default to wordpress@$sitename
@@ -208,9 +197,9 @@ if ( ! function_exists( 'wp_mail' ) ) :
          * another option, but some hosts may refuse to relay mail from an unknown domain.
          * See https://core.trac.wordpress.org/ticket/5007.
          */
+        $defaultConnection = false;
         if ( ! isset( $from_email ) ) {
             $defaultConnection = fluentMailDefaultConnection();
-
             if (!empty($defaultConnection['sender_email'])) {
                 $from_email = $defaultConnection['sender_email'];
             } else {
@@ -220,6 +209,21 @@ if ( ! function_exists( 'wp_mail' ) ) :
                     $sitename = substr( $sitename, 4 );
                 }
                 $from_email = 'wordpress@' . $sitename;
+            }
+        }
+
+        // Set "From" name and email.
+        // If we don't have a name from the input headers.
+        if ( ! isset( $from_name ) ) {
+            if($defaultConnection && !empty($defaultConnection['sender_name'])) {
+                $from_name = $defaultConnection['sender_name'];
+            } else {
+                $provider = fluentMailGetProvider($from_email);
+                if ($provider && !empty($provider->getSetting('sender_name'))) {
+                    $from_name = $provider->getSetting('sender_name');
+                } else {
+                    $from_name = 'WordPress';
+                }
             }
         }
 
