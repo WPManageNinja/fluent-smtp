@@ -53,6 +53,8 @@ class SettingsController extends Controller
         try {
             $data = $request->except(['action', 'nonce']);
 
+            $data = wp_unslash($data);
+
             $provider = $factory->make($data['connection']['provider']);
 
             $connection = $data['connection'];
