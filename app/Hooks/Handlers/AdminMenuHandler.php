@@ -103,9 +103,20 @@ class AdminMenuHandler
         if (!current_user_can('manage_options')) {
             return;
         }
+
         $connections = $this->app->make(Manager::class)->getConfig('connections');
 
-        if(empty($connections)) {
+        global $wp_version;
+
+        $requireUpdate = version_compare($wp_version,'5.5', '<');
+
+        if($requireUpdate) { ?>
+            <div class="notice notice-warning">
+                <p>
+                    <?php echo sprintf(__('WordPress version 5.5 or greater is required for FluentSMTP. You are using version %s currently. Please update your WordPress Core to use FluentSMTP Plugin.', 'fluent-smtp'), $wp_version); ?>
+                </p>
+            </div>
+        <?php } else if(empty($connections)) {
             ?>
             <div class="notice notice-warning">
                 <p>
@@ -119,5 +130,6 @@ class AdminMenuHandler
             </div>
             <?php
         }
+
     }
 }
