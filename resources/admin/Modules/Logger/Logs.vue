@@ -16,11 +16,18 @@
                     :haslogs="logs.length"
                 />
 
-                <LogSearch
-                    @on_search="onSearch"
-                    @on_search_change="onSearchChange"
-                    @reset-page="pagination.current_page=1"
-                />
+                <div style="float:right;">
+                    <el-input
+                        clearable
+                        size="small"
+                        v-model="query"
+                        @clear="query=''"
+                        @keyup.enter.native="fetch"
+                        placeholder="Type & press enter..."
+                    >
+                        <el-button slot="append" icon="el-icon-search" @click="fetch" />
+                    </el-input>
+                </div>
             </div>
 
             <div class="content">
@@ -118,7 +125,6 @@
     import Confirm from '@/Pieces/Confirm';
     import Pagination from '@/Pieces/Pagination';
     import LogFilter from './LogFilter';
-    import LogSearch from './LogSearch';
     import LogViewer from './LogViewer';
     import LogBulkAction from './BulkAction';
 
@@ -128,7 +134,6 @@
             Confirm,
             Pagination,
             LogFilter,
-            LogSearch,
             LogViewer,
             LogBulkAction
         },
@@ -246,9 +251,11 @@
                 this.query = query;
                 this.pagination.current_page = 1;
                 this.pageChanged();
+                this.fetch();
             },
             onSearchChange(query) {
                 this.query = query;
+                this.fetch();
             },
             handleBulkAction({ action }) {
                 if (action === 'deleteall') {

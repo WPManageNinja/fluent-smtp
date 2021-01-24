@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.0
 Tested up to: 5.6
-Stable tag: trunk
+Stable tag: 1.0.1
 Requires PHP: 5.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -216,7 +216,12 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 == Changelog ==
 
-= 1.0.0 (Date: September 29, 2020) =
+= 1.0.1 (Date: January 24, 2021) =
+* Fix UTF-8 issues
+* SendInBlue wp-config constant issue fixed
+* Fallback from name issue fixed
+
+= 1.0.0 (Date: January 18, 2021) =
 * Initial Launch
 * 349 git commits so far
 * 698 cup of coffee (Just kidding, We lost count)

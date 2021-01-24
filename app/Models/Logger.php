@@ -60,6 +60,7 @@ class Logger extends Model
             array_merge($args, [$perPage, $offset])
         );
 
+
         $result = $this->db->get_results($query);
 
         if ($this->db->num_rows) {
@@ -69,8 +70,6 @@ class Logger extends Model
                 )
             );
         }
-
-        $totalPages = ceil($total / $perPage);
 
         $result = $this->formatResult($result);
 
@@ -82,8 +81,6 @@ class Logger extends Model
 
     protected function buildWhere($data)
     {
-        $where = [];
-
         if (isset($data['filter_by_value'])) {
             $where[$data['filter_by']] = $data['filter_by_value'];
         }
@@ -121,13 +118,13 @@ class Logger extends Model
                 if (strpos($value, '|')) {
                     $nestedOr = '';
                     $values = explode('|', $value);
-                    foreach ($values as $value) {
-                        $args[] = '%' . $this->db->esc_like($value) . '%';
+                    foreach ($values as $itemValue) {
+                        $args[] = '%'.$this->db->esc_like($itemValue).'%';
                         $nestedOr .= " OR `{$key}` LIKE '%s'";
                     }
                     $orWhere .= ' OR (' . trim($nestedOr, 'OR ') . ')';
                 } else {
-                    $args[] = '%' . $this->db->esc_like($value) . '%';
+                    $args[] = '%'.$this->db->esc_like($value).'%';
                     $orWhere .= " OR `{$key}` LIKE '%s'";
                 }
             }
