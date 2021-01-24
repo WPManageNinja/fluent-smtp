@@ -220,6 +220,7 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 * Fix UTF-8 issues
 * SendInBlue wp-config constant issue fixed
 * Fallback from name issue fixed
+* Search for Email Logs has been fixed
 
 = 1.0.0 (Date: January 18, 2021) =
 * Initial Launch
