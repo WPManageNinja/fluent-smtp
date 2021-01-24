@@ -36,7 +36,10 @@ class BaseHandler
     public function setPhpMailer($phpMailer)
     {
         $this->phpMailer = $phpMailer;
-        $this->phpMailer->CharSet = 'UTF-8';
+
+        if(!$this->phpMailer->CharSet) {
+            $this->phpMailer->CharSet = 'UTF-8';
+        }
 
         return $this;
     }

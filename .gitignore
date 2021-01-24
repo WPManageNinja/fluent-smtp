@@ -2,7 +2,7 @@
 node_modules
 svn/*
 dist/
-assets/*
+assets
 !assets/index.php
 package-lock.json
 .DS_Store
