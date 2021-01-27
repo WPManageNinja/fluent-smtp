@@ -27,7 +27,8 @@ trait CoreTrait
                 $slug = FLUENTMAIL;
 
                 if (check_ajax_referer($slug, 'nonce', false)) {
-                    return $this->parseAjaxHandler($handler)();
+                    $method = $this->parseAjaxHandler($handler);
+                    return $method();
                 }
 
                 throw new ForbiddenException('Forbidden!', 401);
