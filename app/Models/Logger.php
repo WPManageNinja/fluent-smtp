@@ -81,6 +81,8 @@ class Logger extends Model
 
     protected function buildWhere($data)
     {
+        $where = [];
+        
         if (isset($data['filter_by_value'])) {
             $where[$data['filter_by']] = $data['filter_by_value'];
         }
