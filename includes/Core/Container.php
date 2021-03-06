@@ -600,7 +600,13 @@ class Container implements ArrayAccess, ContainerContract
      */
     protected function getParameterName($parameter)
     {
-        return $this->getParameterType($parameter)->getName();
+        $parameterType = $this->getParameterType($parameter);
+
+        if (property_exists($parameterType, 'name')) {
+            return $parameterType->name;
+        }
+
+        return $parameterType->getName();
     }
 
     /**
