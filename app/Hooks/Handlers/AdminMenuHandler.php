@@ -17,6 +17,16 @@ class AdminMenuHandler
 
     public function addFluentMailMenu()
     {
+        add_action('admin_menu', array($this, 'addMenu'));
+
+        if (isset($_GET['page']) && $_GET['page'] == 'fluent-mail' && is_admin()) {
+            add_action('admin_enqueue_scripts', array($this, 'enqueueAssets'));
+        }
+
+    }
+
+    public function addMenu()
+    {
         $title = $this->app->applyCustomFilters('admin-menu-title', __('Fluent SMTP', 'fluent-smtp'));
 
         add_submenu_page(
@@ -32,12 +42,42 @@ class AdminMenuHandler
 
     public function renderApp()
     {
-        $this->enqueueAssets();
         $this->app->view->render('admin.menu');
     }
 
-    private function enqueueAssets()
+    public function enqueueAssets()
     {
+
+        add_action('wp_print_scripts', function () {
+            $isSkip = apply_filters('fluentsmtp_skip_no_conflict', false);
+
+            if ($isSkip) {
+                return;
+            }
+
+            global $wp_scripts;
+            if (!$wp_scripts) {
+                return;
+            }
+
+            $themeUrl = content_url( 'themes' );
+            $pluginUrl = plugins_url();
+            foreach ($wp_scripts->queue as $script) {
+                $src = $wp_scripts->registered[$script]->src;
+                $isMatched = strpos($src, $pluginUrl) !== false && !strpos($src, 'fluent-smtp') !== false;
+                if(!$isMatched) {
+                    continue;
+                }
+
+                $isMatched = strpos($src, $themeUrl) !== false;
+
+                if ($isMatched) {
+                    wp_dequeue_script($wp_scripts->registered[$script]->handle);
+                }
+            }
+
+        }, 1);
+
         wp_enqueue_script(
             'fluent_mail_admin_app_boot',
             fluentMailMix('admin/js/boot.js'),

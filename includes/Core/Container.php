@@ -783,6 +783,7 @@ class Container implements ArrayAccess, ContainerContract
         $dependencies = [];
 
         foreach ($parameters as $parameter) {
+
             $dependency = $parameter->getClass();
 
             // If the class is null, it means the dependency is a string or some other

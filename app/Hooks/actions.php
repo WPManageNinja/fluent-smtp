@@ -1,8 +1,9 @@
 <?php
 
+(new \FluentMail\App\Hooks\Handlers\AdminMenuHandler($app))->addFluentMailMenu();
+
 $app->addCustomAction('handle_exception', 'ExceptionHandler@handle');
 
-$app->addAction('admin_menu', 'AdminMenuHandler@addFluentMailMenu');
 
 $app->addAction('admin_notices', 'AdminMenuHandler@maybeAdminNotice');
 

@@ -140,12 +140,19 @@ if (!function_exists('fluentMailGetProvider')) {
 
         $mappings = $manager->getSettings('mappings');
 
+        $connection = false;
+
         if (isset($mappings[$fromEmail])) {
             $connectionId = $mappings[$fromEmail];
             $connections = $manager->getSettings('connections');
-            $connection = $connections[$connectionId]['provider_settings'];
-        } else {
-            if ($connection = fluentMailDefaultConnection()) {
+            if(isset($connections[$connectionId])) {
+                $connection = $connections[$connectionId]['provider_settings'];
+            }
+        }
+
+        if(!$connection) {
+            $connection = fluentMailDefaultConnection();
+            if($connection) {
                 $connection['force_from_email_id'] = $connection['sender_email'];
             }
         }
