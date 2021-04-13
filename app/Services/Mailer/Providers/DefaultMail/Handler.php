@@ -32,7 +32,7 @@ class Handler extends BaseHandler
             'code' => 200,
             'message' => 'OK'
         ];
-        
+
         return $this->processResponse($data, true);
     }
 

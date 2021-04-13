@@ -2,23 +2,19 @@
 
 namespace FluentMail\App\Services\Mailer\Providers\Mailgun;
 
-use WP_Error as WPError;
 use FluentMail\Includes\Support\Arr;
-use FluentMail\Includes\Core\Application;
-use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\App\Services\Mailer\BaseHandler;
-use FluentMail\App\Services\Mailer\Providers\Mailgun\ValidatorTrait;
 
 class Handler extends BaseHandler
 {
     use ValidatorTrait;
 
     protected $emailSentCode = 200;
-    
+
     protected $url = null;
 
     const API_BASE_US = 'https://api.mailgun.net/v3/';
-    
+
     const API_BASE_EU = 'https://api.eu.mailgun.net/v3/';
 
     public function send()
@@ -28,7 +24,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        $this->handleFailure(new \Exception('Something went wrong!', 0));
+        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
     }
 
     protected function setUrl()
@@ -43,10 +39,10 @@ class Handler extends BaseHandler
     public function postSend()
     {
         $body = [
-            'from' => $this->getFrom(),
-            'subject' => $this->getSubject(),
-            'html' => $this->getBody(),
-            'h:X-Mailer' => 'FluentMail - Mailgun',
+            'from'           => $this->getFrom(),
+            'subject'        => $this->getSubject(),
+            'html'           => $this->getBody(),
+            'h:X-Mailer'     => 'FluentMail - Mailgun',
             'h:Content-Type' => $this->getHeader('content-type')
         ];
 
@@ -55,8 +51,8 @@ class Handler extends BaseHandler
         }
 
         $recipients = [
-            'to' => $this->getTo(),
-            'cc' => $this->getCarbonCopy(),
+            'to'  => $this->getTo(),
+            'cc'  => $this->getCarbonCopy(),
             'bcc' => $this->getBlindCarbonCopy()
         ];
 
@@ -65,24 +61,48 @@ class Handler extends BaseHandler
         }
 
         $params = [
-            'body' => $body,
+            'body'    => $body,
             'headers' => $this->getRequestHeaders()
         ];
 
         $params = array_merge($params, $this->getDefaultParams());
-        
+
         if (!empty($this->attributes['attachments'])) {
             $params = $this->getAttachments($params);
         }
-        
-        $this->response = wp_safe_remote_post($this->url, $params);
+
+        $response = wp_safe_remote_post($this->url, $params);
+
+        if (is_wp_error($response)) {
+            $returnResponse = new \WP_Error($response->get_error_code(), $response->get_error_message(), $response->get_error_messages());
+        } else {
+            $responseBody = wp_remote_retrieve_body($response);
+            $responseCode = wp_remote_retrieve_response_code($response);
+
+            $isOKCode = $responseCode == $this->emailSentCode;
+
+            if($isOKCode) {
+                $responseBody = \json_decode($responseBody, true);
+            }
+
+            if($isOKCode && isset($responseBody['id'])) {
+                $returnResponse = [
+                    'id' => Arr::get($responseBody,'id'),
+                    'message' => Arr::get($responseBody, 'message')
+                ];
+            } else {
+                $returnResponse = new \WP_Error($responseCode, $responseBody, []);
+            }
+        }
+
+        $this->response = $returnResponse;
 
         return $this->handleResponse($this->response);
     }
 
     public function setSettings($settings)
     {
-        if($settings['key_store'] == 'wp_config') {
+        if ($settings['key_store'] == 'wp_config') {
             $settings['api_key'] = defined('FLUENTMAIL_MAILGUN_API_KEY') ? FLUENTMAIL_MAILGUN_API_KEY : '';
             $settings['domain_name'] = defined('FLUENTMAIL_MAILGUN_DOMAIN') ? FLUENTMAIL_MAILGUN_DOMAIN : '';
         }
@@ -120,11 +140,11 @@ class Handler extends BaseHandler
 
     protected function getRecipients($recipients)
     {
-        $array = array_map(function($recipient) {
+        $array = array_map(function ($recipient) {
             return isset($recipient['name'])
-            ? $recipient['name'] . ' <' . $recipient['email'] . '>'
-            : $recipient['email'];
-       }, $recipients);
+                ? $recipient['name'] . ' <' . $recipient['email'] . '>'
+                : $recipient['email'];
+        }, $recipients);
 
         return implode(', ', $array);
     }
@@ -133,7 +153,6 @@ class Handler extends BaseHandler
     {
         return $this->getParam('message');
     }
-
 
     protected function getAttachments($params)
     {
@@ -149,8 +168,7 @@ class Handler extends BaseHandler
                     $fileName = basename($attachment[0]);
                     $file = file_get_contents($attachment[0]);
                 }
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $file = false;
             }
 
@@ -160,14 +178,14 @@ class Handler extends BaseHandler
 
             $data[] = [
                 'content' => $file,
-                'name' => $fileName,
+                'name'    => $fileName,
             ];
         }
 
         if (!empty($data)) {
             $boundary = hash('sha256', uniqid('', true));
 
-            foreach ($params['body'] as $key => $value ) {
+            foreach ($params['body'] as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $child_key => $child_value) {
                         $payload .= '--' . $boundary;
@@ -208,57 +226,9 @@ class Handler extends BaseHandler
     protected function getRequestHeaders()
     {
         $apiKey = $this->getSetting('api_key');
-        
+
         return [
             'Authorization' => 'Basic ' . base64_encode('api:' . $apiKey)
-        ];
-    }
-
-    public function isEmailSent()
-    {
-        $isSent = wp_remote_retrieve_response_code($this->response) == $this->emailSentCode;
-
-        if (
-            $isSent &&
-            isset($this->response['body']) &&
-            !array_key_exists('id', (array) json_decode($this->response['body'], true))
-        ) {
-            return false;
-        }
-
-        return $isSent;
-    }
-
-    public function handleSuccess()
-    {
-        $response = (array) json_decode($this->response['body'], true);
-
-        return $this->processResponse(['response' => $response], true);
-    }
-
-    public function handleFailure()
-    {
-        $response = $this->getResponseError();
-
-        $this->processResponse(['response' => $response], false);
-
-        $this->fireWPMailFailedAction($response);
-    }
-
-    protected function getResponseError()
-    {
-        $body = (array) json_decode($this->response['body'], true);
-
-        if (json_last_error()) {
-            $body = $this->response['body'];
-        } else {
-            $body = is_array($body) && isset($body['message']) ? $body['message'] : 'Unknown Error!';
-        }
-
-        return [
-            'message' => $this->response['response']['message'],
-            'code' => $this->response['response']['code'],
-            'errors' => [$body]
         ];
     }
 }
