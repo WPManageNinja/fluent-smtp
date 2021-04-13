@@ -19,11 +19,12 @@ return [
                 'return_path' => 'yes',
                 'host' => '',
                 'port' => '',
-                'auth' => 'no',
+                'auth' => 'yes',
                 'username' => '',
                 'password' => '',
                 'auto_tls' => 'yes',
-                'encryption' => 'none'
+                'encryption' => 'none',
+                'key_store' => 'db'
             ],
             'note' => '<a href="https://fluentsmtp.com/docs/set-up-fluent-smtp-with-any-host-or-mailer/">Read the documentation</a> for how to configure any SMTP with FluentSMTP.'
         ],

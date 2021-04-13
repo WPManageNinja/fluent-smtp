@@ -84,7 +84,12 @@
             </el-col>
         </el-row>
 
-        <el-row :gutter="20" :class="{ disabled: connection.auth==='no' }">
+        <el-radio-group size="mini" v-model="connection.key_store">
+            <el-radio-button value="db" label="db">Store Access Keys in DB</el-radio-button>
+            <el-radio-button value="wp_config" label="wp_config">Access Keys in Config File</el-radio-button>
+        </el-radio-group>
+
+        <el-row :gutter="20" v-if="connection.key_store == 'db'" :class="{ disabled: connection.auth==='no' }">
             <el-col :span="12">
                 <el-form-item>
                     <label for="username">
@@ -116,6 +121,18 @@
                 </el-form-item>
             </el-col>
         </el-row>
+
+        <div class="fss_condesnippet_wrapper" v-else-if="connection.key_store == 'wp_config'">
+            <el-form-item>
+                <label>Simply copy the following snippet and replace the stars with the corresponding credential. Then simply paste to wp-config.php file of your WordPress installation</label>
+                <div class="code_snippet">
+                    <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_SMTP_USERNAME', '********************' );
+define( 'FLUENTMAIL_SMTP_PASSWORD', '********************' );</textarea>
+                </div>
+                <error :error="errors.get('username')" />
+                <error :error="errors.get('password')" />
+            </el-form-item>
+        </div>
     </div>
 </template>
 
@@ -132,8 +149,16 @@
         },
         data() {
             return {
-                // ...
+                app_ready: false
             };
+        },
+        watch: {
+            'connection.key_store'(value) {
+                if (value === 'wp_config') {
+                    this.connection.password = '';
+                    this.connection.username = '';
+                }
+            }
         },
         computed: {
             isDisabledUsername() {
@@ -141,6 +166,11 @@
             },
             isDisabledPassword() {
                 return this.connection.auth === 'no';
+            }
+        },
+        mounted() {
+            if (!this.connection.key_store) {
+                this.$set(this.connection, 'key_store', 'db');
             }
         }
     };

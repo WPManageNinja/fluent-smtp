@@ -43,12 +43,6 @@ class FluentPHPMailer
         $this->phpMailer->{$key} = $value;
     }
 
-//    public static function __callStatic($method, $params)
-//    {
-//        return call_user_func_array([$this->phpMailer, $method], $params);
-//    }
-//
-
     public function __call($method, $params)
     {
         return call_user_func_array([$this->phpMailer, $method], $params);

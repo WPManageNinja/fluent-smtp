@@ -46,6 +46,7 @@ class BaseHandler
 
     public function setSettings($settings)
     {
+
         $this->settings = $settings;
 
         return $this;
