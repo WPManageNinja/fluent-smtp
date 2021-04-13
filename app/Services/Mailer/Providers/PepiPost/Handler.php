@@ -23,7 +23,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        $this->handleFailure(new Exception('Something went wrong!', 0));
+        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
     }
 
     public function postSend()
@@ -51,7 +51,30 @@ class Handler extends BaseHandler
 
         $params = array_merge($params, $this->getDefaultParams());
 
-        $this->response = wp_safe_remote_post($this->url, $params);
+        $response = wp_safe_remote_post($this->url, $params);
+
+        if (is_wp_error($response)) {
+            $returnResponse = new \WP_Error($response->get_error_code(), $response->get_error_message(), $response->get_error_messages());
+        } else {
+            $responseBody = wp_remote_retrieve_body($response);
+
+            $responseCode = wp_remote_retrieve_response_code($response);
+
+            $isOKCode = $responseCode == $this->emailSentCode;
+
+            $responseBody = \json_decode($responseBody, true);
+
+            if($isOKCode) {
+                $returnResponse = [
+                    'id' => Arr::get($responseBody,'data.message_id'),
+                    'message' => Arr::get($responseBody, 'message_id')
+                ];
+            } else {
+                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'error', 'Unknown Error'), $responseBody);
+            }
+        }
+
+        $this->response = $returnResponse;
 
         return $this->handleResponse($this->response);
     }
@@ -61,6 +84,7 @@ class Handler extends BaseHandler
         if($settings['key_store'] == 'wp_config') {
             $settings['api_key'] = defined('FLUENTMAIL_PEPIPOST_API_KEY') ? FLUENTMAIL_PEPIPOST_API_KEY : '';
         }
+
         $this->settings = $settings;
         return $this;
     }
@@ -173,7 +197,7 @@ class Handler extends BaseHandler
     protected function getRequestHeaders()
     {
         return [
-            'Content-Type' => 'application/json',
+            'content-type' => 'application/json',
             'api_key' => $this->getSetting('api_key')
         ];
     }

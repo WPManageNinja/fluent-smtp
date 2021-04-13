@@ -91,7 +91,7 @@ class Handler extends BaseHandler
                     'message' => Arr::get($responseBody, 'message')
                 ];
             } else {
-                $returnResponse = new \WP_Error($responseCode, $responseBody, []);
+                $returnResponse = new \WP_Error($responseCode, 'Mailgun API Error', $responseBody);
             }
         }
 
