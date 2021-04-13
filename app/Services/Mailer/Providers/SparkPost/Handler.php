@@ -23,7 +23,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        $this->handleFailure(new Exception('Something went wrong!', 0));
+        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
     }
 
     public function postSend()
@@ -66,7 +66,28 @@ class Handler extends BaseHandler
 
         $params = array_merge($params, $this->getDefaultParams());
 
-        $this->response = wp_safe_remote_post($this->url, $params);
+        $response = wp_safe_remote_post($this->url, $params);
+
+        if (is_wp_error($response)) {
+            $returnResponse = new \WP_Error($response->get_error_code(), $response->get_error_message(), $response->get_error_messages());
+        } else {
+            $responseBody = wp_remote_retrieve_body($response);
+            $responseCode = wp_remote_retrieve_response_code($response);
+
+            $isOKCode = $responseCode < 300;
+
+            $responseBody = \json_decode($responseBody, true);
+
+            if($isOKCode) {
+                $returnResponse = [
+                    'response' => $responseBody
+                ];
+            } else {
+                $returnResponse = new \WP_Error($responseCode, 'SparkPost API Error', $responseBody);
+            }
+        }
+
+        $this->response = $returnResponse;
 
         return $this->handleResponse($this->response);
     }
@@ -176,75 +197,6 @@ class Handler extends BaseHandler
         return [
             'Content-Type' => 'application/json',
             'Authorization' => $this->getSetting('api_key')
-        ];
-    }
-
-    public function isEmailSent()
-    {
-        $isSent = wp_remote_retrieve_response_code($this->response) == $this->emailSentCode;
-
-        if (
-            $isSent &&
-            isset($this->response['response']) &&
-            $this->response['response']['message'] != 'Accepted'
-        ) {
-            return false;
-        }
-
-        return $isSent;
-    }
-
-    protected function handleSuccess()
-    {
-        $response = (array) json_decode($this->response['body'], true);
-
-        return $this->processResponse(['response' => $response], true);
-    }
-
-    protected function handleFailure()
-    {
-        $response = $this->getResponseError();
-
-        $this->processResponse(['response' => $response], false);
-
-        $this->fireWPMailFailedAction($response);
-    }
-
-    public function getResponseError()
-    {
-        $response = $this->response;
-        
-        $body = (array) wp_remote_retrieve_body($response);
-
-        $body = json_decode($body[0], true);
-
-        $responseErrors = [];
-        
-        if (!empty($body['errors'])) {
-            $responseErrors = $body['errors'];
-        } elseif (!empty($body['error'])) {
-            $responseErrors = $body['error'];
-        }
-
-        $errors = [];
-
-        if (!empty($responseErrors) && is_array($responseErrors)) {
-            
-            foreach ($responseErrors as $error) {
-                if (array_key_exists('message', $error)) {
-                    $errors[] = $error['message'];
-                }
-            }
-        } else {
-            $errors = [$responseErrors];
-        }
-
-        $errors = array_map('esc_textarea', $errors);
-
-        return [
-            'message' => $response['response']['message'],
-            'code' => $response['response']['code'],
-            'errors' => $errors
         ];
     }
 }
