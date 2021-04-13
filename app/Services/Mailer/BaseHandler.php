@@ -250,32 +250,27 @@ class BaseHandler
 
     public function handleResponse($response)
     {
-        if (is_wp_error($response)) {
-            $message = 'Oops!';
-
+        if ( is_wp_error($response) ) {
             $code = $response->get_error_code();
 
             if (!is_numeric($code)) {
-                $message = ucwords(str_replace(['_', '-'], ' ', $code));
                 $code = 400;
             }
 
-            $response = [
+            $message = $response->get_error_message();
+
+            $errorResponse = [
                 'code'    => $code,
                 'message' => $message,
                 'errors'  => $response->get_error_messages()
             ];
 
-            $this->processResponse($response, false);
+            $this->processResponse($errorResponse, false);
 
-            $this->fireWPMailFailedAction($response);
+            throw new \PHPMailer\PHPMailer\Exception($message, $code);
 
         } else {
-            if ($this->isEmailSent()) {
-                return $this->handleSuccess();
-            } else {
-                return $this->handleFailure();
-            }
+            return $this->processResponse($response, true);
         }
     }
 
@@ -321,9 +316,14 @@ class BaseHandler
         $code = is_numeric($data['code']) ? $data['code'] : 400;
         $code = strlen($code) < 3 ? 400 : $code;
 
-        $this->app->doAction('wp_mail_failed', new \WP_Error(
-            $code, $data['message'], $data['errors']
-        ));
+        $mail_error_data['phpmailer_exception_code'] = $code;
+        $mail_error_data['errors'] = $data['errors'];
+
+        $error = new \WP_Error(
+            $code, $data['message'], $mail_error_data
+        );
+
+        $this->app->doAction('wp_mail_failed', $error);
     }
 
     protected function updatedLog($id, $data)

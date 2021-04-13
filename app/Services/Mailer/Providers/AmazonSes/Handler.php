@@ -2,15 +2,8 @@
 
 namespace FluentMail\App\Services\Mailer\Providers\AmazonSes;
 
-use WP_Error as WPError;
 use FluentMail\App\Models\Settings;
-use FluentMail\Includes\Support\Arr;
-use FluentMail\Includes\Core\Application;
-use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\App\Services\Mailer\BaseHandler;
-use FluentMail\App\Services\Mailer\Providers\AmazonSes\ValidatorTrait;
-use FluentMail\App\Services\Mailer\Providers\AmazonSes\SimpleEmailService;
-use FluentMail\App\Services\Mailer\Providers\AmazonSes\SimpleEmailServiceMessage;
 
 class Handler extends BaseHandler
 {
@@ -24,52 +17,23 @@ class Handler extends BaseHandler
 
     public function send()
     {
-        if ($this->preSend()) {
+        if ($this->preSend() && $this->phpMailer->preSend()) {
             $this->client = new SimpleEmailServiceMessage;
             return $this->postSend();
         }
 
-        $this->handleFailure(new Exception('Something went wrong!', 0));
+        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
     }
 
     public function postSend()
     {
-
-        list($text, $html) = $this->getBody();
-
-        $this->client->setFrom($this->getFrom());
-        $this->client->addReplyTo($this->getReplyTo());
-        $this->client->addTo($this->getTo());
-        $this->client->addCC($this->getCarbonCopy());
-        $this->client->addBCC($this->getBlindCarbonCopy());
-        $this->client->setSubject($this->getSubject());
-
-        if ($this->phpMailer->ContentType == 'text/plain') {
-            if (!$text) {
-                $text = $html;
-            }
-            $this->client->setMessageFromString($text);
-        } else {
-            $this->client->setMessageFromString($text, $html);
-        }
-
-        if (!empty($this->getParam('attachments'))) {
-            foreach ($this->getAttachments() as $attachment) {
-                $this->client->addAttachmentFromData(
-                    $attachment['name'], $attachment['content'], $attachment['type']
-                );
-            }
-        }
-
-        foreach ($this->getCustomEmailHeaders() as $header) {
-            $this->client->addCustomHeader($header);
-        }
+        $mime = chunk_split(base64_encode($this->phpMailer->getSentMIMEMessage()), 76, "\n");
 
         $connectionSettings = $this->filterConnectionVars($this->getSetting());
 
         $ses = fluentMailSesConnection($connectionSettings);
 
-        $this->response = $ses->sendEmail($this->client, static::RAW_REQUEST);
+        $this->response = $ses->sendRawEmail($mime);
 
         return $this->handleResponse($this->response);
     }
@@ -250,7 +214,7 @@ class Handler extends BaseHandler
         return [
             'errors' => $errors,
             'code' => $response['code'],
-            'message' => $error['Code']
+            'message' => (!empty($error['message'])) ? $error['message'] : 'Unknown error'
         ];
     }
 

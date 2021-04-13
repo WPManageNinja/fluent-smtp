@@ -62,11 +62,7 @@
                 </el-form-item>
             </el-form>
 
-            <el-alert v-if="debug_info" type="error" :title="debug_info.message" show-icon>
-                <div v-for="(error, key) in debug_info.errors" :key="key">
-                    {{ error }}
-                </div>
-            </el-alert>
+            <el-alert v-if="debug_info" type="error" :title="debug_info.message" show-icon />
         </div>
     </div>
 </template>

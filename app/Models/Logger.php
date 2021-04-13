@@ -42,41 +42,58 @@ class Logger extends Model
 
     public function get($data)
     {
-        foreach (['date', 'daterange'] as $field) {
-            if ($data['filter_by'] == $field) {
-                $data['filter_by'] = 'created_at';
+        $db = $this->getDb();
+        $page = isset($data['page']) ? intval($data['page']) : 1;
+        $perPage = isset($data['per_page']) ? intval($data['per_page']) : 15;
+        $offset = ($page - 1) * $perPage;
+
+        $query = $db->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
+            ->limit($page)
+            ->offset($offset)
+            ->orderBy('id', 'DESC');
+
+        $filterColumn = isset($data['filter_by']) ? sanitize_text_field($data['filter_by']) : false;
+        $filterValue = $data['filter_by_value'];
+
+        if($filterColumn && $filterValue) {
+            if($filterColumn == 'daterange' && is_array($filterValue)) {
+                $query->whereBetween('created_at', $filterValue[0], $filterValue[1]);
+            } else if($filterValue) {
+                $query->where($filterColumn, $filterValue);
             }
         }
 
-        $total = 0;
-        $page = intval($data['page']);
-        $perPage = intval($data['per_page']);
-        $offset = ($page - 1) * $perPage;
+        if(!empty($data['query'])) {
+            $search = trim(sanitize_text_field($data['query']));
+            $query->where(function ($q) use ($search) {
+                $searchColumns = $this->searchables;
 
-        list($where, $args) = $this->buildWhere($data);
+                $columnSearch = false;
+                if(strpos($search, ':')) {
+                    $searchArray = explode(':', $search);
+                    $column = array_shift($searchArray);
+                    if(in_array($column, $this->fillables)) {
+                        $columnSearch = true;
+                        $q->where($column, 'LIKE', '%'.trim(implode(':', $searchArray)).'%');
+                    }
+                }
 
-        $query = $this->db->prepare(
-            "SELECT * FROM `{$this->table}` {$where} ORDER BY id DESC LIMIT %d OFFSET %d",
-            array_merge($args, [$perPage, $offset])
-        );
+                if(!$columnSearch) {
+                    $firstColumn = array_shift($searchColumns);
+                    $q->where($firstColumn, 'LIKE', '%'.$search.'%');
+                    foreach ($searchColumns as $column) {
+                        $q->orWhere($column, 'LIKE', '%'.$search.'%');
+                    }
+                }
 
-
-        $result = $this->db->get_results($query);
-
-        if ($this->db->num_rows) {
-            $total = (int)$this->db->get_var(
-                $this->db->prepare(
-                    "SELECT COUNT(id) FROM `{$this->table}` {$where}", $args
-                )
-            );
+            });
         }
 
-        $result = $this->formatResult($result);
+        $result = $query->paginate();
 
-        return [
-            'data'  => $result,
-            'total' => $total
-        ];
+        $result['data'] = $this->formatResult($result['data']);
+
+        return $result;
     }
 
     protected function buildWhere($data)
@@ -177,9 +194,9 @@ class Logger extends Model
                 'created_at' => current_time('mysql')
             ]);
 
-            $this->db->insert($this->table, $data);
+            return $this->getDb()->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
+                ->insert($data);
 
-            return $this->db->insert_id;
         } catch (Exception $e) {
             return $e;
         }
@@ -191,14 +208,15 @@ class Logger extends Model
             return $this->db->query("TRUNCATE TABLE {$this->table}");
         }
 
-        $placeHolders = array_fill(0, count($id), '%d');
+        $ids = array_filter($id, 'is_int');
 
-        $query = $this->db->prepare(
-            "DELETE FROM {$this->table} WHERE id IN (" . implode(',', $placeHolders) . ")",
-            $id
-        );
+        if($ids) {
+            return $this->getDb()->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
+                ->whereIn('id', $ids)
+                ->delete();
+        }
 
-        return $this->db->query($query);
+        return false;
     }
 
     public function navigate($data)
@@ -261,18 +279,16 @@ class Logger extends Model
 
     public function find($id)
     {
-        $query = $this->db->prepare(
-            "SELECT * FROM `{$this->table}` WHERE `id` = %d",
-            [$id]
-        );
 
-        $row = $this->db->get_row($query, ARRAY_A);
+        $row = $this->getDb()->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
+            ->where('id', $id)
+            ->first();
 
-        $row['extra'] = maybe_unserialize($row['extra']);
+        $row->extra = maybe_unserialize($row->extra);
 
-        $row['response'] = maybe_unserialize($row['response']);
+        $row->response = maybe_unserialize($row->response);
 
-        return $row;
+        return (array) $row;
     }
 
     public function resendEmailFromLog($id, $type = 'retry')

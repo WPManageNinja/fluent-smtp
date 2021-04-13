@@ -153,7 +153,7 @@ class SettingsController extends Controller
         return $this->sendError([
             'message' => $response->get_error_message(),
             'errors' => $response->get_error_data()
-        ], $response->get_error_code());
+        ], 423);
     }
 
     public function validateConnection($provider, $connection)
