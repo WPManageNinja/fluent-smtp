@@ -3,7 +3,6 @@
 namespace FluentMail\App\Models;
 
 use Exception;
-use FluentMail\App\Services\Mailer\EmailQueueProcessor;
 
 class Logger extends Model
 {
@@ -208,7 +207,7 @@ class Logger extends Model
             return $this->db->query("TRUNCATE TABLE {$this->table}");
         }
 
-        $ids = array_filter($id, 'is_int');
+        $ids = array_filter($id, 'intval');
 
         if($ids) {
             return $this->getDb()->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')

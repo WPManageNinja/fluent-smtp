@@ -357,4 +357,18 @@ class SettingsController extends Controller
             }
         }
     }
+
+    public function subscribe()
+    {
+        $email = sanitize_text_field($_REQUEST['email']);
+        if(!is_email($email)) {
+            return $this->sendError([
+                'message' => 'Sorry! The provider email is not valid'
+            ], 423);
+        }
+
+        return $this->sendSuccess([
+            'message' => 'You are subscribed to plugin update and monthly tips'
+        ]);
+    }
 }

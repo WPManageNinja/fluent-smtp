@@ -273,3 +273,15 @@ ul.fss_dash_lists {
         position: relative !important;
     }
 }
+
+.fsmtp_subscribe {
+    input {
+        margin-bottom: 10px;
+    }
+    span.el-checkbox__label {white-space: initial;}
+
+    span.el-checkbox__input {
+        vertical-align: top;
+        margin-top: 5px;
+    }
+}

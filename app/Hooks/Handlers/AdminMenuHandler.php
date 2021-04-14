@@ -60,12 +60,12 @@ class AdminMenuHandler
                 return;
             }
 
-            $themeUrl = content_url( 'themes' );
+            $themeUrl = content_url('themes');
             $pluginUrl = plugins_url();
             foreach ($wp_scripts->queue as $script) {
                 $src = $wp_scripts->registered[$script]->src;
                 $isMatched = strpos($src, $pluginUrl) !== false && !strpos($src, 'fluent-smtp') !== false;
-                if(!$isMatched) {
+                if (!$isMatched) {
                     continue;
                 }
 
@@ -93,6 +93,8 @@ class AdminMenuHandler
             'fluent_mail_admin_app', fluentMailMix('admin/css/fluent-mail-admin.css'), [], FLUENTMAIL_PLUGIN_VERSION
         );
 
+        $user = get_user_by('ID', get_current_user_id());
+
         wp_localize_script('fluent_mail_admin_app_boot', 'FluentMailAdmin', [
             'slug'                   => FLUENTMAIL,
             'brand_logo'             => esc_url(fluentMailMix('images/logo.svg')),
@@ -100,6 +102,7 @@ class AdminMenuHandler
             'settings'               => $this->getMailerSettings(),
             'has_fluentcrm'          => defined('FLUENTCRM'),
             'has_fluentform'         => defined('FLUENTFORM'),
+            'user_email'             => $user->user_email,
             'has_ninja_tables'       => defined('NINJA_TABLES_VERSION'),
             'disable_recommendation' => apply_filters('fluentmail_disable_recommendation', false),
             'plugin_url'             => 'https://fluentsmtp.com/?utm_source=wp&utm_medium=install&utm_campaign=dashboard'
@@ -148,22 +151,23 @@ class AdminMenuHandler
 
         global $wp_version;
 
-        $requireUpdate = version_compare($wp_version,'5.5', '<');
+        $requireUpdate = version_compare($wp_version, '5.5', '<');
 
-        if($requireUpdate) { ?>
+        if ($requireUpdate) { ?>
             <div class="notice notice-warning">
                 <p>
                     <?php echo sprintf(__('WordPress version 5.5 or greater is required for FluentSMTP. You are using version %s currently. Please update your WordPress Core to use FluentSMTP Plugin.', 'fluent-smtp'), $wp_version); ?>
                 </p>
             </div>
-        <?php } else if(empty($connections)) {
+        <?php } else if (empty($connections)) {
             ?>
             <div class="notice notice-warning">
                 <p>
                     <?php _e('FluentSMTP requires to configure properly. Please configure FluentSMTP to make your email delivery works.', 'fluent-smtp'); ?>
                 </p>
                 <p>
-                    <a href="<?php echo admin_url('options-general.php?page=fluent-mail#/'); ?>" class="button button-primary">
+                    <a href="<?php echo admin_url('options-general.php?page=fluent-mail#/'); ?>"
+                       class="button button-primary">
                         <?php _e('Configure FluentSMTP', 'fluent-smtp'); ?>
                     </a>
                 </p>

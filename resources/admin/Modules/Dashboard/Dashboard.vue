@@ -39,34 +39,46 @@
                     </div>
                 </el-col>
                 <el-col :sm="24" :md="8">
-                    <div class="header">
-                        Quick Overview
+                    <div class="fsm_card">
+                        <div class="header">
+                            Quick Overview
+                        </div>
+                        <div class="content" v-loading="loading">
+                            <ul class="fss_dash_lists">
+                                <li v-if="settings_stat.log_enabled == 'yes'">
+                                    Total Email Sent (Logged): <span>{{stats.sent}}</span>
+                                </li>
+                                <li style="color: red" v-if="stats.failed > 0">
+                                    <router-link style="color: red"  :to="{ name: 'logs', query: { filterBy: 'status', filterValue: 'failed' } }">
+                                        Email Failed: <span>{{stats.failed}}</span>
+                                    </router-link>
+                                </li>
+                                <li>
+                                    Active Connections: <span>{{settings_stat.connection_counts}}</span>
+                                </li>
+                                <li>
+                                    Active Senders: <span>{{settings_stat.active_senders}}</span>
+                                </li>
+                                <li>
+                                    Save Email Logs:
+                                    <span style="text-transform: capitalize;">
+                                        {{settings_stat.log_enabled}}
+                                    </span>
+                                </li>
+                                <li v-if="settings_stat.log_enabled == 'yes'">
+                                    Delete Logs:
+                                    <span>After {{settings_stat.auto_delete_days}} Days</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="content" v-loading="loading">
-                        <ul class="fss_dash_lists">
-                            <li v-if="settings_stat.log_enabled == 'yes'">
-                                Total Email Sent (Logged): <span>{{stats.sent}}</span>
-                            </li>
-                            <li style="color: red" v-if="stats.failed > 0">
-                                Email Failed: <span>{{stats.failed}}</span>
-                            </li>
-                            <li>
-                                Active Connections: <span>{{settings_stat.connection_counts}}</span>
-                            </li>
-                            <li>
-                                Active Senders: <span>{{settings_stat.active_senders}}</span>
-                            </li>
-                            <li>
-                                Save Email Logs:
-                                <span style="text-transform: capitalize;">
-                                    {{settings_stat.log_enabled}}
-                                </span>
-                            </li>
-                            <li v-if="settings_stat.log_enabled == 'yes'">
-                                Delete Logs:
-                                <span>After {{settings_stat.auto_delete_days}} Days</span>
-                            </li>
-                        </ul>
+                    <div style="margin-top: 20px;" class="fsm_card">
+                        <div class="header">
+                            Subscribe To Updates
+                        </div>
+                        <div class="content">
+                            <email-subscriber />
+                        </div>
                     </div>
                 </el-col>
             </el-row>
@@ -78,12 +90,14 @@
     import isEmpty from 'lodash/isEmpty';
     import ConnectionWizard from '../Settings/ConnectionWizard';
     import EmailsChart from './Charts/Emails';
+    import EmailSubscriber from '../../Pieces/_Subscrbe';
 
     export default {
         name: 'Dashboard',
         components: {
             ConnectionWizard,
-            EmailsChart
+            EmailsChart,
+            EmailSubscriber
         },
         data() {
             return {
