@@ -47,7 +47,6 @@ class AdminMenuHandler
 
     public function enqueueAssets()
     {
-
         add_action('wp_print_scripts', function () {
             $isSkip = apply_filters('fluentsmtp_skip_no_conflict', false);
 
@@ -77,7 +76,7 @@ class AdminMenuHandler
             }
 
         }, 1);
-
+        
         wp_enqueue_script(
             'fluent_mail_admin_app_boot',
             fluentMailMix('admin/js/boot.js'),

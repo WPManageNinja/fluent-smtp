@@ -383,6 +383,15 @@ class SettingsController extends Controller
         ]);
     }
 
+    public function subscribeDismiss()
+    {
+        update_option('_fluentsmtp_dismissed_timestamp', time(), 'no');
+
+        return $this->sendSuccess([
+            'message' => 'success'
+        ]);
+    }
+
     private function pushData($optinEmail, $shareEssentials)
     {
         $user = get_user_by('ID', get_current_user_id());

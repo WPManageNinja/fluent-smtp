@@ -75,6 +75,9 @@
                     <div v-if="appVars.require_optin == 'yes' && stats.sent > 9" style="margin-top: 20px;" class="fsm_card">
                         <div class="header">
                             Subscribe To Updates
+                            <span class="header_action_right">
+                                <subscribe-dismiss />
+                            </span>
                         </div>
                         <div class="content">
                             <email-subscriber />
@@ -91,13 +94,15 @@
     import ConnectionWizard from '../Settings/ConnectionWizard';
     import EmailsChart from './Charts/Emails';
     import EmailSubscriber from '../../Pieces/_Subscrbe';
+    import SubscribeDismiss from '../../Pieces/_SubscribeDismiss';
 
     export default {
         name: 'Dashboard',
         components: {
             ConnectionWizard,
             EmailsChart,
-            EmailSubscriber
+            EmailSubscriber,
+            SubscribeDismiss
         },
         data() {
             return {
