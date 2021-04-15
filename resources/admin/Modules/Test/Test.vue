@@ -17,16 +17,16 @@
                         </el-select>
 
                         <span class="small-help-text" style="display:block;margin-top:-10px">
-                        Enter the sender email address (optional).
-                    </span>
+                            Enter the sender email address (optional).
+                        </span>
                     </el-form-item>
 
                     <el-form-item for="from" label="Send To">
                         <el-input id="from" v-model="form.email" />
 
                         <span class="small-help-text" style="display:block;margin-top:-10px">
-                        Enter email address where test email will be sent (By default, logged in user email will be used if email address is not provide).
-                    </span>
+                            Enter email address where test email will be sent (By default, logged in user email will be used if email address is not provide).
+                        </span>
                     </el-form-item>
 
                     <el-form-item for="isHtml" label="HTML">
@@ -39,8 +39,8 @@
                         />
 
                         <span class="small-help-text" style="display:block;margin-top:-10px">
-                        Send this email in HTML or in plain text format.
-                    </span>
+                            Send this email in HTML or in plain text format.
+                        </span>
                     </el-form-item>
 
                     <el-form-item align="left">
@@ -70,7 +70,7 @@
                 <div v-if="appVars.require_optin == 'yes'" style="margin-top: 10px;">
                     <email-subscriber />
                 </div>
-                <el-button @click="email_success = false" v-else>Run Another Test Email</el-button>
+                <el-button v-else @click="email_success = false" v-else>Run Another Test Email</el-button>
             </div>
         </div>
     </div>
