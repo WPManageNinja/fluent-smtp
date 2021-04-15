@@ -72,7 +72,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div v-if="appVars.require_optin == 'yes'" style="margin-top: 20px;" class="fsm_card">
+                    <div v-if="appVars.require_optin == 'yes' && stats.sent > 9" style="margin-top: 20px;" class="fsm_card">
                         <div class="header">
                             Subscribe To Updates
                         </div>
