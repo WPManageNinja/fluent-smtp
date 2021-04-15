@@ -367,8 +367,53 @@ class SettingsController extends Controller
             ], 423);
         }
 
+        $shareEssentials = 'no';
+
+        if($_REQUEST['share_essentials'] == 'yes') {
+            update_option('_fluentsmtp_sub_update', 'shared', 'no');
+            $shareEssentials = 'yes';
+        } else {
+            update_option('_fluentsmtp_sub_update', 'yes', 'no');
+        }
+
+        $this->pushData($email, $shareEssentials);
+
         return $this->sendSuccess([
             'message' => 'You are subscribed to plugin update and monthly tips'
         ]);
     }
+
+    private function pushData($optinEmail, $shareEssentials)
+    {
+        $user = get_user_by('ID', get_current_user_id());
+
+        $data = [
+            'answers'    => [
+                'website' => site_url(),
+                'email'   => $optinEmail,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'name'    => $user->display_name,
+                'essential' => $shareEssentials
+            ],
+            'questions'  => [
+                'website' => 'website',
+                'first_name' => 'first_name',
+                'last_name' => 'last_name',
+                'email'   => 'email',
+                'name'    => 'name',
+                'essential' => 'essential'
+            ],
+            'user'       => [
+                'email' => $optinEmail
+            ],
+            'fb_capture' => 1,
+            'form_id'    => 67
+        ];
+
+        $url = add_query_arg($data, 'https://wpmanageninja.com/');
+
+        wp_remote_post($url);
+    }
+
 }

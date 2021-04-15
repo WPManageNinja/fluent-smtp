@@ -103,6 +103,7 @@ class AdminMenuHandler
             'has_fluentcrm'          => defined('FLUENTCRM'),
             'has_fluentform'         => defined('FLUENTFORM'),
             'user_email'             => $user->user_email,
+            'require_optin'          => $this->isRequireOptin(),
             'has_ninja_tables'       => defined('NINJA_TABLES_VERSION'),
             'disable_recommendation' => apply_filters('fluentmail_disable_recommendation', false),
             'plugin_url'             => 'https://fluentsmtp.com/?utm_source=wp&utm_medium=install&utm_campaign=dashboard'
@@ -174,6 +175,20 @@ class AdminMenuHandler
             </div>
             <?php
         }
+    }
 
+    public function isRequireOptin()
+    {
+        $opted = get_option('_fluentsmtp_sub_update');
+        if($opted) {
+            return 'no';
+        }
+        // check if dismissed
+        $dismissedStamp  = get_option('_fluentsmtp_dismissed_timestamp');
+        if($dismissedStamp && (time() - $dismissedStamp) < 30 * 24 * 60 * 60) {
+            return 'no';
+        }
+
+        return 'yes';
     }
 }

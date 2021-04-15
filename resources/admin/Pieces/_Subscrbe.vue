@@ -7,7 +7,10 @@
             <div class="fsmtp_subscribe">
                 <el-input v-model="email" placeholder="Your Email Address"/>
                 <el-checkbox true-label="yes" false-label="no" v-model="share_details">
-                    Share Non-Sensitive Site Data. It will help us to improve the integrations (Optional)
+                    (Optional) Share Non-Sensitive Data. It will help us to improve the integrations
+                    <el-tooltip class="item" effect="dark" content="Access Data: Active SMTP Connection Provider, installed plugin names, php & mysql version" placement="top-end">
+                        <i class="el-icon el-icon-info"></i>
+                    </el-tooltip>
                 </el-checkbox>
                 <el-button style="margin-top: 10px;" v-loading="saving" :disabled="saving" @click="subscribeToEmail()" type="success" size="small">
                     Subscribe To Updates
@@ -41,10 +44,11 @@
                 this.saving = true;
                 this.$post('settings/subscribe', {
                     email: this.email,
-                    share_details: this.share_details
+                    share_essentials: this.share_details
                 })
                     .then(response => {
                         this.subscribed = true;
+                        this.appVars.require_optin = 'no';
                         this.$notify.success(response.data.message);
                     })
                     .catch((errors) => {

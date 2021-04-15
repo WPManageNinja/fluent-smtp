@@ -3,74 +3,88 @@
         <div class="header">
             Send Test Email
         </div>
-
         <div class="content">
-            <el-form ref="form" :model="form" label-position="left" label-width="120px">
+            <div class="test_form" v-if="!email_success">
+                <el-form ref="form" :model="form" label-position="left" label-width="120px">
 
-                <el-form-item for="email" label="From">
-                    <el-select placeholder="Select Email or Type" :allow-create="true" :filterable="true" v-model="form.from">
-                        <el-option
-                            v-for="(emailHash, email) in sender_emails"
-                            :key="email" :label="email"
-                            :value="email"
-                        ></el-option>
-                    </el-select>
+                    <el-form-item for="email" label="From">
+                        <el-select placeholder="Select Email or Type" :allow-create="true" :filterable="true" v-model="form.from">
+                            <el-option
+                                v-for="(emailHash, email) in sender_emails"
+                                :key="email" :label="email"
+                                :value="email"
+                            ></el-option>
+                        </el-select>
 
-                    <span class="small-help-text" style="display:block;margin-top:-10px">
+                        <span class="small-help-text" style="display:block;margin-top:-10px">
                         Enter the sender email address (optional).
                     </span>
-                </el-form-item>
-                
-                <el-form-item for="from" label="Send To">
-                    <el-input id="from" v-model="form.email" />
+                    </el-form-item>
 
-                    <span class="small-help-text" style="display:block;margin-top:-10px">
+                    <el-form-item for="from" label="Send To">
+                        <el-input id="from" v-model="form.email" />
+
+                        <span class="small-help-text" style="display:block;margin-top:-10px">
                         Enter email address where test email will be sent (By default, logged in user email will be used if email address is not provide).
                     </span>
-                </el-form-item>
+                    </el-form-item>
 
-                <el-form-item for="isHtml" label="HTML">
-                    <el-switch
-                        v-model="form.isHtml"
-                        active-color="#13ce66"
-                        inactive-color="#dcdfe6"
-                        active-text="On"
-                        inactive-text="Off"
-                    />
+                    <el-form-item for="isHtml" label="HTML">
+                        <el-switch
+                            v-model="form.isHtml"
+                            active-color="#13ce66"
+                            inactive-color="#dcdfe6"
+                            active-text="On"
+                            inactive-text="Off"
+                        />
 
-                    <span class="small-help-text" style="display:block;margin-top:-10px">
+                        <span class="small-help-text" style="display:block;margin-top:-10px">
                         Send this email in HTML or in plain text format.
                     </span>
-                </el-form-item>
+                    </el-form-item>
 
-                <el-form-item align="left">
-                    <el-button
-                        type="primary"
-                        size="small"
-                        icon="el-icon-s-promotion"
-                        :loading="loading"
-                        @click="sendEmail"
-                        :disabled="!maybeEnabled"
-                    >Send Test Email</el-button>
+                    <el-form-item align="left">
+                        <el-button
+                            type="primary"
+                            size="small"
+                            icon="el-icon-s-promotion"
+                            :loading="loading"
+                            @click="sendEmail"
+                            :disabled="!maybeEnabled"
+                        >Send Test Email</el-button>
 
-                    <el-alert
-                        v-if="!maybeEnabled"
-                        :closable="false"
-                        type="warning"
-                        style="display:inline;margin-left:20px;"
-                    >{{ inactiveMessage }}</el-alert>
-                </el-form-item>
-            </el-form>
-
-            <el-alert v-if="debug_info" type="error" :title="debug_info.message" show-icon />
+                        <el-alert
+                            v-if="!maybeEnabled"
+                            :closable="false"
+                            type="warning"
+                            style="display:inline;margin-left:20px;"
+                        >{{ inactiveMessage }}</el-alert>
+                    </el-form-item>
+                </el-form>
+                <el-alert v-if="debug_info" type="error" :title="debug_info.message" show-icon />
+            </div>
+            <div v-else class="success_wrapper">
+                <h1><i class="el-icon el-icon-success"></i></h1>
+                <h3>Test Email Has been successfully sent</h3>
+                <hr />
+                <div v-if="appVars.require_optin == 'yes'" style="margin-top: 10px;">
+                    <email-subscriber />
+                </div>
+                <el-button @click="email_success = false" v-else>Run Another Test Email</el-button>
+            </div>
         </div>
     </div>
 </template>
 
-<script>
+<script type="text/babel">
     import isEmpty from 'lodash/isEmpty'
+    import EmailSubscriber from '../../Pieces/_Subscrbe';
+
     export default {
         name: 'EmailTest',
+        components: {
+            EmailSubscriber
+        },
         data() {
             return {
                 loading: false,
@@ -79,7 +93,8 @@
                     from: '',
                     email: '',
                     isHtml: true
-                }
+                },
+                email_success: false
             };
         },
         methods: {
@@ -93,6 +108,7 @@
                         offset: 19,
                         message: res.data.message
                     });
+                    this.email_success = true;
                 }).fail(res => {
                     if (Number(res.status) === 504) {
                         return this.$notify.error({

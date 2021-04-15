@@ -2,286 +2,323 @@
 @import "./variables";
 
 .fluent-mail-app {
-    max-width: 100%;
-    display: block;
-    width: 100%;
+  max-width: 100%;
+  display: block;
+  width: 100%;
 
-    & .fluent-mail-main-menu-items {
-        margin-bottom: 20px;
-        background: white;
-        margin-left: -20px;
+  & .fluent-mail-main-menu-items {
+    margin-bottom: 20px;
+    background: white;
+    margin-left: -20px;
 
-        & .fluent-mail-navigation {
-            margin-left: -20px;
-        }
+    & .fluent-mail-navigation {
+      margin-left: -20px;
+    }
+  }
+
+  & .fluent-mail-body {
+    margin-right: 20px;
+
+    & .header {
+      display: block;
+      width: auto;
+      border-bottom: 1px solid #e3e8ee;
+      clear: both;
+      overflow: hidden;
+      margin: 0;
+      padding: 10px 15px;
+      background-color: #f7fafc;
+      font-weight: 700;
+      color: #697386;
     }
 
-    & .fluent-mail-body {
-        margin-right: 20px;
-
-        & .header {
-            display: block;
-            width: auto;
-            border-bottom: 1px solid #e3e8ee;
-            clear: both;
-            overflow: hidden;
-            margin: 0;
-            padding: 10px 15px;
-            background-color: #f7fafc;
-            font-weight: 700;
-            color: #697386;
-        }
-
-        & .content {
-            padding: 20px;
-            background-color: #fff;
-        }
+    & .content {
+      padding: 20px;
+      background-color: #fff;
     }
+  }
 
-    & .fluent-mail-navigation.el-menu--horizontal.el-menu .el-menu-item.is-active {
-        background: #ecf5ff;
-    }
+  & .fluent-mail-navigation.el-menu--horizontal.el-menu .el-menu-item.is-active {
+    background: #ecf5ff;
+  }
 
-    & .logo {
-        margin-left:20px;
-    }
-    
-    & .pager-wrap {
-        margin-top:20px;
-        text-align:right;
-    }
+  & .logo {
+    margin-left: 20px;
+  }
+
+  & .pager-wrap {
+    margin-top: 20px;
+    text-align: right;
+  }
 }
 
 .fss_config_section {
-    background: #f7fafc;
-    padding: 20px;
-    margin-bottom: 30px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 2px 2px #dcdfe5;
+  background: #f7fafc;
+  padding: 20px;
+  margin-bottom: 30px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 2px 2px #dcdfe5;
 }
 
 .fss_connection_intro {
-    max-width: 1160px;
-    margin: 0 auto;
-    padding: 30px;
-    background: #eff4f7;
-    border-radius: 5px;
-    .fss_config_section {
-        background: white;
-    }
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 30px;
+  background: #eff4f7;
+  border-radius: 5px;
+
+  .fss_config_section {
+    background: white;
+  }
 }
 
 .fss_intro {
-    text-align: center;
-    margin-bottom: 45px;
-    border-bottom: 1px solid #e3e8ed;
-    padding-bottom: 20px;
+  text-align: center;
+  margin-bottom: 45px;
+  border-bottom: 1px solid #e3e8ed;
+  padding-bottom: 20px;
 }
 
 .fss_compact_form {
-    label.el-form-item__label {
-        line-height: 100%;
-        padding-bottom: 5px !important;
-        font-weight: 500;
-    }
+  label.el-form-item__label {
+    line-height: 100%;
+    padding-bottom: 5px !important;
+    font-weight: 500;
+  }
 }
 
 .fss_content_box {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .fss_connection_info {
-    th {
-        font-weight: 500;
-    }
-    th,td {
-        padding: 12px 10px;
-    }
+  th {
+    font-weight: 500;
+  }
+
+  th, td {
+    padding: 12px 10px;
+  }
 }
 
 ul.fss_log_items li {
+  display: inline-block;
+  width: 48%;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ebeef4;
+  padding: 10px 0px;
+
+  > div {
     display: inline-block;
-    width: 48%;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #ebeef4;
-    padding: 10px 0px;
-    > div {
-        display: inline-block;
-    }
-    .item_header {
-        font-weight: 500;
-        padding-right: 10px;
-        min-width: 42px;
-    }
+  }
+
+  .item_header {
+    font-weight: 500;
+    padding-right: 10px;
+    min-width: 42px;
+  }
 }
 
 .el-table .el-table__row.row_type_failed, .el-table .el-table__row--striped.el-table__row.row_type_failed {
-    background: rgb(253, 226, 226) !important;
-    td {
-        background: transparent;
-    }
+  background: rgb(253, 226, 226) !important;
+
+  td {
+    background: transparent;
+  }
 }
 
 .fluent-mail-app .dashboard .content .mailer-block {
-    display: inline-block;
-    width: 140px;
-    margin: 0 5px;
-    position: relative;
-    /*float: left;*/
+  display: inline-block;
+  width: 140px;
+  margin: 0 5px;
+  position: relative;
+  /*float: left;*/
 }
 
 .fluent-mail-app .dashboard .content .fluent-mail-mailer-image {
-    background: #fff;
-    text-align: center;
-    cursor: auto;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
-    border-radius: 4px;
-    height: 76px;
-    position: relative;
-    margin-bottom: 10px;
-    -webkit-transition: all 0.2s ease-in-out;
-    -moz-transition: all 0.2s ease-in-out;
-    -ms-transition: all 0.2s ease-in-out;
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
+  background: #fff;
+  text-align: center;
+  cursor: auto;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+  border-radius: 4px;
+  height: 76px;
+  position: relative;
+  margin-bottom: 10px;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .fluent-mail-app .dashboard .content .fluent-mail-mailer-image:hover {
-    box-shadow: 0 0 5px 5px #ccc;
+  box-shadow: 0 0 5px 5px #ccc;
 }
 
 .fluent-mail-app .dashboard .content .fluent-mail-mailer-image img {
-    max-width: 90%;
-    max-height: 40px;
-    display: block;
-    position: relative;
-    top: 20px !important;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0.7;
-    -webkit-transition: all 0.2s ease-in-out;
-    -moz-transition: all 0.2s ease-in-out;
-    -ms-transition: all 0.2s ease-in-out;
-    transition: all 0.2s ease-in-out;
+  max-width: 90%;
+  max-height: 40px;
+  display: block;
+  position: relative;
+  top: 20px !important;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.7;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .fluent-mail-app .dashboard .content .email-stat {
-    padding: 20px;
-    font-weight: 700;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    text-align: center;
+  padding: 20px;
+  font-weight: 700;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
 }
 
 .fluent-mail-app .dashboard .content .email-stat:hover {
-    background: #ecf5ff;
-    opacity: .7;
+  background: #ecf5ff;
+  opacity: .7;
 }
 
 .logs .successful {
-    color:#409EFF;
-    font-size:20px;
+  color: #409EFF;
+  font-size: 20px;
 }
 
 .logs .unsuccessful {
-    color:#F56C6C;
-    font-size:20px;
+  color: #F56C6C;
+  font-size: 20px;
 }
 
 .logs .resent {
-    color:#a4da89;
-    font-size:20px;
+  color: #a4da89;
+  font-size: 20px;
 }
 
 .logs .dont-show {
-    color: #409EFF;
-    margin-left: 10px;
-    cursor: pointer;
-    vertical-align: top;
+  color: #409EFF;
+  margin-left: 10px;
+  cursor: pointer;
+  vertical-align: top;
 }
 
 ul.fss_dash_lists {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    li {
-        font-size: 15px;
-        padding: 0px 10px;
-        color: #697485;
-        border-bottom: 1px solid #e3e8ed;
-        line-height: 40px;
-        span {
-            float: right;
-            padding-right: 10px;
-        }
-        &:hover {
-            background: #f7fafc;
-            border-bottom: 1px solid black;
-        }
-        &:last-child {
-            border-bottom: 0;
-        }
-    }
-}
-.fss_to_right {
-    float: right;
-}
-.fss_plugin_block {
-    margin: 0px -20px;
-    padding: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    font-size: 15px;
+    padding: 0px 10px;
+    color: #697485;
     border-bottom: 1px solid #e3e8ed;
-    .fss_plugin_title {
-        text-align: center;
-        h3,p {
-            margin: 0;
-            padding: 0;
-        }
-        h3 {
-            color: #697386;
-            margin-bottom: 5px;
-            font-size: 18px;
-        }
-        p {
-            font-weight: 500;
-            font-size: 14px;
-        }
+    line-height: 40px;
+
+    span {
+      float: right;
+      padding-right: 10px;
     }
-    .fss_install_btn {
-        text-align: center;
+
+    &:hover {
+      background: #f7fafc;
+      border-bottom: 1px solid black;
     }
+
     &:last-child {
-        margin-bottom: -20px;
+      border-bottom: 0;
     }
-    .fss_fluentcrm_btn {
-        background: #7743e6 !important;
-        border-color: #7743e6 !important;
+  }
+}
+
+.fss_to_right {
+  float: right;
+}
+
+.fss_plugin_block {
+  margin: 0px -20px;
+  padding: 20px;
+  border-bottom: 1px solid #e3e8ed;
+
+  .fss_plugin_title {
+    text-align: center;
+
+    h3, p {
+      margin: 0;
+      padding: 0;
     }
+
+    h3 {
+      color: #697386;
+      margin-bottom: 5px;
+      font-size: 18px;
+    }
+
+    p {
+      font-weight: 500;
+      font-size: 14px;
+    }
+  }
+
+  .fss_install_btn {
+    text-align: center;
+  }
+
+  &:last-child {
+    margin-bottom: -20px;
+  }
+
+  .fss_fluentcrm_btn {
+    background: #7743e6 !important;
+    border-color: #7743e6 !important;
+  }
 }
 
 .install_success {
-    text-align: center;
-    a {
-        text-decoration: none;
-    }
+  text-align: center;
+
+  a {
+    text-decoration: none;
+  }
 }
 
 .fss_condesnippet_wrapper {
-    span.el-form-item__error {
-        display: block;
-        position: relative !important;
-    }
+  span.el-form-item__error {
+    display: block;
+    position: relative !important;
+  }
 }
 
 .fsmtp_subscribe {
-    input {
-        margin-bottom: 10px;
-    }
-    span.el-checkbox__label {white-space: initial;}
+  text-align: left;
+  input {
+    margin-bottom: 10px;
+  }
 
-    span.el-checkbox__input {
-        vertical-align: top;
-        margin-top: 5px;
-    }
+  span.el-checkbox__label {
+    white-space: initial;
+    font-weight: normal;
+  }
+
+  span.el-checkbox__input {
+    vertical-align: top;
+    margin-top: 5px;
+  }
+}
+
+.success_wrapper {
+  margin: 0 auto;
+  max-width: 600px;
+  text-align: center;
+  background: #e6eaec;
+  padding: 20px;
+  border-radius: 10px;
+  h1 {
+    font-size: 40px;
+    margin: 0;
+  }
 }
