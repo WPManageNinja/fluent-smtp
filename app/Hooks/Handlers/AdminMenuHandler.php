@@ -76,7 +76,7 @@ class AdminMenuHandler
             }
 
         }, 1);
-        
+
         wp_enqueue_script(
             'fluent_mail_admin_app_boot',
             fluentMailMix('admin/js/boot.js'),

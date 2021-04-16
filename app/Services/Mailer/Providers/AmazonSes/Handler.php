@@ -161,11 +161,13 @@ class Handler extends BaseHandler
 
         $validSenders = $ses->listVerifiedEmailAddresses();
 
+        $addresses = [];
+
         if($validSenders && isset($validSenders['Addresses'])) {
-            return $validSenders['Addresses'];
+            $addresses = $validSenders['Addresses'];
         }
 
-        return [];
+        return apply_filters('fluentsmtp_ses_valid_senders', $addresses, $config);
     }
 
     public function getConnectionInfo($connection)
