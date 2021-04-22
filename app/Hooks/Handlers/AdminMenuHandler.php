@@ -23,6 +23,8 @@ class AdminMenuHandler
             add_action('admin_enqueue_scripts', array($this, 'enqueueAssets'));
         }
 
+        add_action('admin_bar_menu', array($this, 'addSimulationBar'), 999);
+
     }
 
     public function addMenu()
@@ -173,6 +175,29 @@ class AdminMenuHandler
                 </p>
             </div>
             <?php
+        }
+    }
+
+    public function addSimulationBar($adminBar)
+    {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+
+        $misc = $this->app->make(Manager::class)->getConfig('misc');
+
+        if(!empty($misc['simulate_emails']) && $misc['simulate_emails'] =='yes' ) {
+            $args = [
+                'parent' => 'top-secondary',
+                'id'     => 'fluentsmtp_simulated',
+                'title'  => __('Email Disabled', 'fluent-smtp'),
+                'href'   => admin_url('options-general.php?page=fluent-mail#/connections'),
+                'meta'   => false
+            ];
+
+            echo '<style>li#wp-admin-bar-fluentsmtp_simulated a {background: red; color: white;}</style>';
+
+            $adminBar->add_node($args);
         }
     }
 

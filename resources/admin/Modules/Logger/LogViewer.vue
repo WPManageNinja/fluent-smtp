@@ -86,7 +86,7 @@
                             <span v-html="log.subject"></span>
                         </div>
                     </li>
-                    <li v-if="log.extra.provider">
+                    <li v-if="log.extra.provider && settings.providers[log.extra.provider]">
                         <div class="item_header">Mailer:</div>
                         <div class="item_content">
                             <span>{{ settings.providers[log.extra.provider].title }}</span>

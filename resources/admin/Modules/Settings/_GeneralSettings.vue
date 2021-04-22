@@ -36,6 +36,15 @@
                 </el-select>
             </el-form-item>
 
+            <el-form-item label="Email Simulation">
+                <el-checkbox
+                    v-model="settings.misc.simulate_emails"
+                    true-label="yes"
+                    false-label="no"
+                >Disable sending all emails. If you enable this, no email will be sent.</el-checkbox>
+                <p style="color: red;" v-if="settings.misc.simulate_emails == 'yes'">No Emails will be sent from your WordPress.</p>
+            </el-form-item>
+
             <el-button
                 v-loading="saving"
                 @click="saveMiscSettings()"

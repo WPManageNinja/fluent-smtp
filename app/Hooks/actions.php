@@ -4,7 +4,6 @@
 
 $app->addCustomAction('handle_exception', 'ExceptionHandler@handle');
 
-
 $app->addAction('admin_notices', 'AdminMenuHandler@maybeAdminNotice');
 
 $app->addAction('fluentmail_do_daily_scheduled_tasks', function () {

@@ -138,6 +138,13 @@ if (!function_exists('fluentMailGetProvider')) {
 
         $manager = fluentMail(Manager::class);
 
+        $misc = $manager->getSettings('misc');
+
+        if(!empty($misc['simulate_emails']) && $misc['simulate_emails'] =='yes' ) {
+            $providers[$fromEmail] = new FluentMail\App\Services\Mailer\Providers\Simulator\Handler();
+            return $providers[$fromEmail];
+        }
+
         $mappings = $manager->getSettings('mappings');
 
         $connection = false;

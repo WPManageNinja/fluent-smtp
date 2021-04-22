@@ -132,6 +132,9 @@ export default class FluentMail {
     }
 
     escapeHtml(text) {
+        if (!text) {
+            return text;
+        }
         const map = {
             '&': '&amp;',
             '<': '&lt;',

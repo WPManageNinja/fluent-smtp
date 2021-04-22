@@ -270,6 +270,14 @@
                     id: row.id,
                     type: type
                 }).then(res => {
+                    if (!res.data.email) {
+                        this.$notify.error({
+                            offset: 19,
+                            title: 'Oops!!',
+                            message: res.data.message
+                        });
+                        return false;
+                    }
                     row.status = res.data.email.status;
                     row.retries = res.data.email.retries;
                     row.resent_count = res.data.email.resent_count;
