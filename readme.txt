@@ -29,7 +29,7 @@ Connect as many Email Service Providers as you want and FluentSMTP will route yo
 * SendInBlue
 * PepiPost
 * SparkPost
-* gmail via SMTP
+* Gmail via SMTP
 * Zoho via SMTP
 * Outlook via SMTP
 * All Other SMTP
@@ -139,8 +139,8 @@ Fluent SMTP is built by <a href="https://wpmanageninja.com">WPManageNinja LLC</a
 
 Fluent SMTP is a 100% free and opensource plugin and we will never release a pro version. It does not mean, It will have lack features. Our aim is to provide the ultimate SMTP/Email Service connection plugin for your WordPress Mails. We wrote <a href="https://fluentsmtp.com/why-we-build-fluentsmtp-plugin/">an article about why we made this plugin</a> and our plan about Fluent SMTP.
 
-The full source code is hosted in Github and you are welcomed to contribute to the development of this awesome WP Mail Plugin.
-👉 <a href="https://github.com/WPManageNinja/fluent-smtp">View on Github</a> 👈
+The full source code is hosted in GitHub and you are welcomed to contribute to the development of this awesome WP Mail Plugin.
+👉 <a href="https://github.com/WPManageNinja/fluent-smtp">View on GitHub</a> 👈
 
 == What's Next ==
 If you like this plugin, then consider checking out our other plugins:

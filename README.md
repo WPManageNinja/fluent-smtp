@@ -2,7 +2,7 @@
 
 ---
 
-**[Get it on WordPress.org](https://wordpress.org/plugins/fluent-smtp/) | [FaceBook Community](https://www.facebook.com/groups/fluentcrm) | [Docs](https://fluentsmtp.com/docs)**
+**[Get it on WordPress.org](https://wordpress.org/plugins/fluent-smtp/) | [Facebook Community](https://www.facebook.com/groups/fluentcrm) | [Docs](https://fluentsmtp.com/docs)**
 
 ![FluentSMTP Banner](https://ps.w.org/fluent-smtp/assets/banner-1544x500.png)
 
@@ -22,7 +22,7 @@ Connect as many Email Service Providers as you want and FluentCRM will route you
 - SendInBlue
 - PepiPost
 - SparkPost
-- gmail via SMTP
+- Gmail via SMTP
 - Zoho via SMTP
 - Outlook via SMTP
 - All Other SMTP
@@ -49,7 +49,7 @@ Please check `app/Http/routes.php` to see all the endpoints.
 
 All the email connect drivers are at: `app/Services/Mailer/Providers`
 
-#### Build Javascript source
+#### Build JavaScript source
 
 - Clone this project
 - open the project in terminal

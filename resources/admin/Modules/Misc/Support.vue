@@ -21,8 +21,8 @@
                                 <li>WordPress API</li>
                             </ul>
                             <p>
-                                If you find an issue or have a suggestion please <a target="_blank" rel="nofollow" href="https://github.com/WPManageNinja/fluent-smtp/issues">open an issue on Github</a>.
-                                <br/>If you are a developer and would like to contribute to the project, Please <a target="_blank" rel="nofollow" href="https://github.com/WPManageNinja/fluent-smtp/">contribute on Github</a>.
+                                If you find an issue or have a suggestion please <a target="_blank" rel="nofollow" href="https://github.com/WPManageNinja/fluent-smtp/issues">open an issue on GitHub</a>.
+                                <br/>If you are a developer and would like to contribute to the project, Please <a target="_blank" rel="nofollow" href="https://github.com/WPManageNinja/fluent-smtp/">contribute on GitHub</a>.
                             </p>
                             <p>Please <a target="_blank" rel="noopener" href="http://fluentsmtp.com/docs">read the documentation here</a></p>
                         </div>
