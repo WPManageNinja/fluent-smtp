@@ -128,11 +128,11 @@ if (!function_exists('fluentMailgetConnection')) {
 }
 
 if (!function_exists('fluentMailGetProvider')) {
-    function fluentMailGetProvider($fromEmail)
+    function fluentMailGetProvider($fromEmail, $cacheClear = false)
     {
         static $providers = [];
 
-        if (isset($providers[$fromEmail])) {
+        if (isset($providers[$fromEmail]) && !$cacheClear) {
             return $providers[$fromEmail];
         }
 
@@ -200,3 +200,4 @@ if (!function_exists('fluentMailSesConnection')) {
         return $drivers[$connection['sender_email']];
     }
 }
+

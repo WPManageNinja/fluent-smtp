@@ -5,6 +5,7 @@ namespace FluentMail\App\Http\Controllers;
 use Exception;
 use FluentMail\App\Models\Settings;
 use FluentMail\Includes\Request\Request;
+use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Support\ValidationException;
 use FluentMail\App\Services\Mailer\Providers\Factory;
 
@@ -62,6 +63,8 @@ class SettingsController extends Controller
             $provider->checkConnection($connection);
 
             $data['valid_senders'] =  $provider->getValidSenders($connection);
+
+            $data = apply_filters('fluentmail_saving_connection_data', $data, $data['connection']['provider']);
 
             $settings->store($data);
 
@@ -423,6 +426,57 @@ class SettingsController extends Controller
         $url = add_query_arg($data, 'https://wpmanageninja.com/');
 
         wp_remote_post($url);
+    }
+
+    public function getGmailAuthUrl(Request $request)
+    {
+        $connection = wp_unslash($request->get('connection'));
+
+        $clientId = Arr::get($connection, 'client_id');
+        $clientSecret = Arr::get($connection, 'client_secret');
+
+        if(Arr::get($connection, 'key_store') == 'wp_config') {
+            if(defined('FLUENTMAIL_GMAIL_CLIENT_ID')) {
+                $clientId = FLUENTMAIL_GMAIL_CLIENT_ID;
+            } else {
+                return $this->sendError([
+                    'client_id' => [
+                        'required' => 'Please define FLUENTMAIL_GMAIL_CLIENT_ID in your wp-config.php file'
+                    ]
+                ]);
+            }
+            if(defined('FLUENTMAIL_GMAIL_CLIENT_SECRET')) {
+                $clientSecret = FLUENTMAIL_GMAIL_CLIENT_SECRET;
+            } else {
+                return $this->sendError([
+                    'client_secret' => [
+                        'required' => 'Please define FLUENTMAIL_GMAIL_CLIENT_SECRET in your wp-config.php file'
+                    ]
+                ]);
+            }
+        }
+
+        if(!$clientId) {
+            return $this->sendError([
+                'client_id' => [
+                    'required' => 'Please provide application client id'
+                ]
+            ]);
+        }
+
+        if(!$clientSecret) {
+            return $this->sendError([
+                'client_secret' => [
+                    'required' => 'Please provide application client secret'
+                ]
+            ]);
+        }
+
+        $authUrl = 'https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force&client_id=' . $clientId . '&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth/gmail.compose';
+
+        return $this->sendSuccess([
+            'auth_url' => $authUrl
+        ]);
     }
 
 }

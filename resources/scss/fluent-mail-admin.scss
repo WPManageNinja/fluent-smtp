@@ -327,3 +327,19 @@ span.header_action_right {
   float: right;
   cursor: pointer;
 }
+
+.fss_connection_wizard {
+  .con_gmail .el-radio-button__inner img {
+    max-width: 186px !important;
+  }
+
+  .con_gmail.is-active .el-radio-button__inner {
+    background: #eff4f7 !important;
+    border-color: #ea4435;
+    box-shadow: -1px 0 0 0 #ea4435;
+  }
+  .fss_connections .el-radio-button__inner {
+    padding: 12px 12px;
+  }
+}
+

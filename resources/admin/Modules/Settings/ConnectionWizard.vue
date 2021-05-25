@@ -2,9 +2,9 @@
     <div class="fss_connection_wizard">
         <el-form :data="connection" label-position="top">
             <el-form-item label="Connection Provider">
-                <el-radio-group v-model="connection.provider">
-                    <el-radio-button v-for="(provider, providerName) in providers" :key="providerName" :label="providerName">
-                        <img :title="provider.title" style="width:100px;height:32px;" :src="provider.image" />
+                <el-radio-group class="fss_connections" v-model="connection.provider">
+                    <el-radio-button :class="'con_'+providerName" v-for="(provider, providerName) in providers" :key="providerName" :label="providerName">
+                        <img :title="provider.title" style="max-width:80px;height:32px;" :src="provider.image" />
                     </el-radio-button>
                 </el-radio-group>
             </el-form-item>
@@ -89,6 +89,7 @@
     import AmazonSes from './Partials/Providers/AmazonSes';
     import sparkpost from './Partials/Providers/SparkPost';
     import smtp from './Partials/Providers/Smtp';
+    import gmail from './Partials/Providers/Gmail';
     import Errors from '@/Bits/Errors';
     import Error from '@/Pieces/Error';
 
@@ -103,6 +104,7 @@
             sendinblue,
             sparkpost,
             smtp,
+            gmail,
             Error
         },
         data() {

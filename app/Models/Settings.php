@@ -204,4 +204,12 @@ class Settings
         $settings['misc'] = $misc;
         $this->saveGlobalSettings($settings);
     }
+
+    public function updateConnection($fromEmail, $connection)
+    {
+        $key = $this->generateUniqueKey($fromEmail);
+        $settings = $this->getSettings();
+        $settings['connections'][$key]['provider_settings'] = $connection;
+        $this->saveGlobalSettings($settings);
+    }
 }

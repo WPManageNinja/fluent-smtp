@@ -144,6 +144,26 @@ return [
             ],
             'note' => '<a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure PepiPost with FluentSMTP.'
         ],
+        'gmail' => [
+            'key' => 'gmail',
+            'title' => __('Gmail/Google Workspace', 'fluent-smtp'),
+            'image' => fluentMailAssetUrl('images/gmail-logo.png'),
+            'provider' => 'Gmail',
+            'options' => [
+                'sender_name' => '',
+                'sender_email' => '',
+                'force_from_name' => 'no',
+                'force_from_email' => 'yes',
+                'return_path' => 'yes',
+                'key_store' => 'db',
+                'client_id' => '',
+                'client_secret' => '',
+                'auth_token' => '',
+                'access_token' => '',
+                'refresh_token' => ''
+            ],
+            'note' => __('Gmail/Google Workspace is not recommended for sending mass marketing emails.', 'fluent-smtp')
+        ],
         'default' => [
             'key' => 'default',
             'title' => __('PHP Mail', 'fluent-smtp'),
