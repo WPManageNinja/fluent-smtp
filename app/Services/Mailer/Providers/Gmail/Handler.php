@@ -253,7 +253,8 @@ class Handler extends BaseHandler
 
         $client->setAccessToken($data['access_token']);
 
-        if ($client->isAccessTokenExpired()) {
+        // check if expired or will be expired in 50 seconds
+        if ( ($data['expire_stamp'] - 50) < time()) {
             $newTokens = $client->refreshToken($data['refresh_token']);
             $this->saveNewTokens($data, $newTokens);
             $newToken = $client->getAccessToken();
