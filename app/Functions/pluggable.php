@@ -1,6 +1,6 @@
 <?php
 
-if ( ! function_exists( 'wp_mail' ) ) :
+if (! function_exists( 'wp_mail' ) ) :
     /**
      * Sends an email, similar to PHP's mail function.
      *
@@ -418,23 +418,26 @@ if ( ! function_exists( 'wp_mail' ) ) :
         }
     }
 else:
-    if (!wp_doing_ajax()):
+    if (! (defined( 'DOING_AJAX' ) && DOING_AJAX) ):
         add_action('admin_notices', function() {
             if(!current_user_can('manage_options')) {
                 return;
             }
+            $details = new ReflectionFunction('wp_mail');
+            $hints = $details->getFileName() . ':' . $details->getStartLine();
             ?>
                 <div class="notice notice-warning is-dismissible">
                     <p>
                         <?php
-                            _e(
-                                'The <strong>FluentSMTP</strong> plugin depends on
-                                <a target="_blank" href="https://developer.wordpress.org/reference/functions/wp_mail/">wp_mail</a> pluggable function and
-                                plugin is not able to extend it. Please check if another plugin is using this and disable it for <strong>Fluent Mail</strong> to work!',
-                                'fluent-smtp'
+                            echo sprintf(
+                                __('The <strong>FluentSMTP</strong> plugin depends on
+                                <a target="_blank" href="%1s">wp_mail</a> pluggable function and
+                                plugin is not able to extend it. Please check if another plugin is using this and disable it for <strong>FluentSMTP</strong> to work!',
+                                'fluent-smtp'), 'https://developer.wordpress.org/reference/functions/wp_mail/'
                             );
                         ?>
                     </p>
+                    <p style="color: red;"><?php _e('Possible Conflict: ', 'fluent-smtp'); ?><?php echo $hints;?></p>
                 </div>
             <?php
         });
