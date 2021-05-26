@@ -250,6 +250,7 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 * PHP 8 compatibility issue fixed
 * Bulk Send Emails from logs
 * Added Email Simulator
+* Amazon API Fix
 
 = 1.1.1 (Date: April 26, 2021) =
 * Database Warning Issue Fixed
