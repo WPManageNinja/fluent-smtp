@@ -18,6 +18,7 @@ $app->post('settings/gmail_auth_url', 'SettingsController@getGmailAuthUrl');
 $app->get('/logs', 'LoggerController@get');
 $app->get('/logs/show', 'LoggerController@show');
 $app->post('/logs/retry', 'LoggerController@retry');
+$app->post('/logs/retry-bulk', 'LoggerController@retryBulk');
 $app->post('/logs/delete', 'LoggerController@delete');
 
 

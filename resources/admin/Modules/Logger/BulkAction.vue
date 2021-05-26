@@ -15,6 +15,7 @@
                         label="Delete Selected"
                         v-if="selected.length"
                     />
+                    <el-option v-if="is_failed_selected" value="resend_selected" label="Resend Selected Emails" />
                 </el-select>
             </el-col>
 
@@ -37,8 +38,14 @@
         props: ['selected', 'haslogs'],
         data() {
             return {
-                action: ''
+                action: '',
+                resending: false
             };
+        },
+        computed: {
+            is_failed_selected() {
+                return !!this.selected.length;
+            }
         },
         methods: {
             applyBulkAction() {

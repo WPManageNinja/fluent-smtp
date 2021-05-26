@@ -47,9 +47,9 @@ class Handler extends BaseHandler
             }
 
             if (isset($this->phpMailer->FromName)) {
-                
+
                 $fromName = $this->phpMailer->FromName;
-                
+
                 if (
                     $this->getSetting('force_from_name') == 'yes' &&
                     $customFrom = $this->getSetting('sender_name')

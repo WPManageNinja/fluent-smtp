@@ -14,6 +14,8 @@
                     @on-bulk-action="handleBulkAction"
                     :selected="selectedLogs"
                     :haslogs="logs.length"
+                    :filterBy="filterBy"
+                    :filterByValue="filterByValue"
                 />
 
                 <div style="float:right;">
@@ -262,6 +264,8 @@
                     return this.handleDelete('all');
                 } else if (action === 'deleteselected') {
                     return this.handleDelete(this.selectedLogs);
+                } else if (action === 'resend_selected') {
+                    return this.handleResendBulk(this.selectedLogs);
                 }
             },
             handleRetry(row, type) {
@@ -361,6 +365,38 @@
             turnOnEmailLogging() {
                 this.form.log_emails = 'yes';
                 this.saveMisc();
+            },
+            handleResendBulk(selectedIds) {
+                if (selectedIds.length > 20) {
+                    this.$notify.error({
+                        offset: 19,
+                        title: 'Oops!!',
+                        message: 'Sorry, You can not resend more than 20 emails at once'
+                    });
+                    return false;
+                }
+
+                this.loading = true;
+                this.$post('logs/retry-bulk', {
+                    log_ids: selectedIds
+                }).then(res => {
+                    this.$notify.success({
+                        offset: 19,
+                        title: 'Result',
+                        message: res.data.message
+                    });
+                    this.selectedLogs = [];
+                    this.fetch();
+                })
+                    .fail(error => {
+                        this.$notify.error({
+                            offset: 19,
+                            title: 'Oops!!',
+                            message: error.responseJSON.data.message
+                        });
+                    }).always(() => {
+                        this.loading = false;
+                    });
             }
         },
         watch: {
@@ -389,7 +425,6 @@
                         log.created_at,
                         'DD-MM-YYYY h:mm:ss A'
                     );
-
                     return log;
                 });
             },

@@ -339,7 +339,7 @@ class Logger extends Model
                 define('FLUENTMAIL_LOG_OFF', true);
             }
 
-            wp_mail(
+            $result = wp_mail(
                 $to,
                 $email['subject'],
                 $email['body'],
@@ -351,7 +351,11 @@ class Logger extends Model
                 'status' => 'sent',
                 'updated_at' =>  current_time('mysql'),
             ];
-            
+
+            if(!$result && $type == 'check_realtime' && $email['status'] == 'failed') {
+                $updateData['status'] = 'failed';
+            }
+
             if ($type == 'resend') {
                 $updateData['resent_count'] = intval($email['resent_count']) + 1;
             } else {
