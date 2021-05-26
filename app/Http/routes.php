@@ -23,3 +23,4 @@ $app->post('/logs/delete', 'LoggerController@delete');
 
 
 $app->post('install_plugin', 'SettingsController@installPlugin');
+$app->get('docs', 'DashboardController@getDocs');

@@ -60,6 +60,10 @@
                     {
                         route: 'support',
                         title: 'Support'
+                    },
+                    {
+                        route: 'docs',
+                        title: 'Docs'
                     }
                 ];
             },
