@@ -84,55 +84,57 @@
             </el-col>
         </el-row>
 
-        <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button value="db" label="db">Store Access Keys in DB</el-radio-button>
-            <el-radio-button value="wp_config" label="wp_config">Access Keys in Config File</el-radio-button>
-        </el-radio-group>
+        <template v-if="connection.auth == 'yes'">
+            <el-radio-group size="mini" v-model="connection.key_store">
+                <el-radio-button value="db" label="db">Store Access Keys in DB</el-radio-button>
+                <el-radio-button value="wp_config" label="wp_config">Access Keys in Config File</el-radio-button>
+            </el-radio-group>
 
-        <el-row :gutter="20" v-if="connection.key_store == 'db'" :class="{ disabled: connection.auth==='no' }">
-            <el-col :span="12">
+            <el-row :gutter="20" v-if="connection.key_store == 'db'" :class="{ disabled: connection.auth==='no' }">
+                <el-col :span="12">
+                    <el-form-item>
+                        <label for="username">
+                            SMTP Username
+                        </label>
+
+                        <InputPassword
+                            id="username"
+                            v-model="connection.username"
+                            :disabled="isDisabledUsername"
+                        />
+
+                        <error :error="errors.get('username')" />
+                    </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                    <el-form-item>
+                        <label for="smtp-password">
+                            SMTP Password
+                        </label>
+
+                        <InputPassword
+                            id="smtp-password"
+                            v-model="connection.password"
+                            :disabled="isDisabledPassword"
+                        />
+                        <error :error="errors.get('password')" />
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
+            <div class="fss_condesnippet_wrapper" v-else-if="connection.key_store == 'wp_config'">
                 <el-form-item>
-                    <label for="username">
-                        SMTP Username
-                    </label>
-
-                    <InputPassword
-                        id="username"
-                        v-model="connection.username"
-                        :disabled="isDisabledUsername"
-                    />
-
+                    <label>Simply copy the following snippet and replace the stars with the corresponding credential. Then simply paste to wp-config.php file of your WordPress installation</label>
+                    <div class="code_snippet">
+                        <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_SMTP_USERNAME', '********************' );
+define( 'FLUENTMAIL_SMTP_PASSWORD', '********************' );</textarea>
+                    </div>
                     <error :error="errors.get('username')" />
-                </el-form-item>
-            </el-col>
-
-            <el-col :span="12">
-                <el-form-item>
-                    <label for="smtp-password">
-                        SMTP Password
-                    </label>
-
-                    <InputPassword
-                        id="smtp-password"
-                        v-model="connection.password"
-                        :disabled="isDisabledPassword"
-                    />
                     <error :error="errors.get('password')" />
                 </el-form-item>
-            </el-col>
-        </el-row>
-
-        <div class="fss_condesnippet_wrapper" v-else-if="connection.key_store == 'wp_config'">
-            <el-form-item>
-                <label>Simply copy the following snippet and replace the stars with the corresponding credential. Then simply paste to wp-config.php file of your WordPress installation</label>
-                <div class="code_snippet">
-                    <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_SMTP_USERNAME', '********************' );
-define( 'FLUENTMAIL_SMTP_PASSWORD', '********************' );</textarea>
-                </div>
-                <error :error="errors.get('username')" />
-                <error :error="errors.get('password')" />
-            </el-form-item>
-        </div>
+            </div>
+        </template>
     </div>
 </template>
 
