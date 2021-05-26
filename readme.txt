@@ -2,8 +2,8 @@
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.5
-Tested up to: 5.7.1
-Stable tag: 1.1.1
+Tested up to: 5.7.2
+Stable tag: 1.2.0
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -22,14 +22,17 @@ Fluent SMTP plugin fixes your email delivery issue by connecting WordPress Mail 
 
 Connect as many Email Service Providers as you want and FluentSMTP will route your transactional and marketing emails automatically. This is one of the unique features that FluentSMTP has.
 
+[youtube https://www.youtube.com/watch?v=Je0OPk1NnjI]
+
 == 🎉 Available Email Service Connections ==
 * Amazon SES
+* Gmail OAuth API Connection
+* Google WorkSpace OAuth API Connection
 * SendGrid
 * MailGun
 * SendInBlue
 * PepiPost
 * SparkPost
-* Gmail via SMTP
 * Zoho via SMTP
 * Outlook via SMTP
 * All Other SMTP
@@ -49,7 +52,6 @@ Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin in the m
 Most importantly, This is plugin is free and always will be free.
 👉 <a href="https://fluentsmtp.com/why-we-build-fluentsmtp-plugin/">Read Why it's 100% free (always)</a> 👈
 
-
 == How does Fluent SMTP works ==
 Fluent SMTP improves your WordPress mail by intercepting the <code>wp_mail</code> and then connect with your email service providers and make sure the deliverability. It uses a direct email service API to send emails faster and securely. It means emails are sent using the provider’s direct API. For your native SMTP connections, It uses the proper host, port, and credentials to send your WP Mails.
 
@@ -59,6 +61,10 @@ Fluent SMTP also logs (optional) your emails so you can check anytime and see yo
 With Fluent SMTP SES Connection, you get the powerful, low-cost, high deliverability managed infrastructure from Amazon. With the support of Fluent SMTP, it's super easy to set up and configure Amazon SES API and send all your WordPress emails. The integration is with amazon's latest SES API so your emails will be delivered faster and the right way.
 
 Fluent SMTP optimizes the API connection so it creates CURL-Tunneling to send your emails even faster. With Amazon SES connection, You can send emails faster than any other plugins.
+
+== 🎉 GMail or Google Workspace (Native API Connection) ==
+Fluent SMTP - WP Mail Plugin provides you options to connect with your gmail or Google Workspace emails and send emails over their API. It's fast and secure.
+[youtube https://www.youtube.com/watch?v=_d78bscNaX8]
 
 == 🎉 SendGrid API Connection ==
 SendGrid is the leading email sending service provider. You can rely on their globally distributed, cloud-based architecture for sending your WordPress Emails.
@@ -88,8 +94,7 @@ Pepipost is a complete sending partner with a user-friendly dashboard and many e
 
 With Fluent SMTP connection, You can set up your PepiPost email service connection in less than a minute. With a direct API connection so it's faster than their SMTP connection.
 
-Read about <a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/
-">PepiPost API connection documentation here</a>
+Read about <a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/">PepiPost API connection documentation here</a>
 
 == 🎉 SparkPost Email API Connection ==
 SparkPost is a great email sending service with lots of analytics features.
@@ -141,6 +146,28 @@ Fluent SMTP is a 100% free and opensource plugin and we will never release a pro
 
 The full source code is hosted in GitHub and you are welcomed to contribute to the development of this awesome WP Mail Plugin.
 👉 <a href="https://github.com/WPManageNinja/fluent-smtp">View on GitHub</a> 👈
+
+= Compatible With.. =
+* [Fluent Forms - The Fastest Form Builder Plugin](https://wordpress.org/plugins/fluentform/)
+* [Woocommerce](https://wordpress.org/plugins/woocommerce/)
+* [Elementor Forms](https://elementor.com/features/form-widget/)
+* [Contact Form 7](https://wordpress.org/plugins/contact-form-7/)
+* [Gravity Forms](http://www.gravityforms.com)
+* [Contact Form by WPForms](https://wordpress.org/plugins/wpforms-lite/)
+* [Forminator – Contact Form](https://wordpress.org/plugins/forminator/)
+* [Ninja Forms Contact Form](https://wordpress.org/plugins/ninja-forms/)
+* [Form Maker by 10Web](https://wordpress.org/plugins/form-maker/)
+* [Formidable Form Builder](https://wordpress.org/plugins/formidable/)
+* [GiveWP – Donation Plugin](https://wordpress.org/plugins/give/)
+* [Fast Secure Contact Form](https://wordpress.org/plugins/si-contact-form/)
+* [Visual Forms Builder](https://wordpress.org/plugins/visual-form-builder/)
+* [Contact Form Builder](https://wordpress.org/plugins/contact-form-builder/)
+* [PlanSo Forms](https://wordpress.org/plugins/planso-forms/)
+* [FluentCRM](https://wordpress.org/plugins/fluent-crm)
+* [SendPress Newsletters](https://wordpress.org/plugins/sendpress/)
+* [WP HTML Mail](https://wordpress.org/plugins/wp-html-mail/)
+* [Email Templates](https://wordpress.org/plugins/email-templates/)
+* .. and every other plugin that uses the WordPress API [wp_mail](https://codex.wordpress.org/Function_Reference/wp_mail) to send mail!
 
 == What's Next ==
 If you like this plugin, then consider checking out our other plugins:
@@ -216,8 +243,16 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 == Changelog ==
 
+= 1.2.0 (Date: May 26, 2021) =
+* Added GMail and Google Workspace API Connection
+* Added Built-in Docs
+* UI Improvements
+* PHP 8 compatibility issue fixed
+* Bulk Send Emails from logs
+* Added Email Simulator
+
 = 1.1.1 (Date: April 26, 2021) =
-* Database Warnning Issue Fixed
+* Database Warning Issue Fixed
 
 = 1.1.0 (Date: April 25, 2021) =
 * Fix Error Handling Issues

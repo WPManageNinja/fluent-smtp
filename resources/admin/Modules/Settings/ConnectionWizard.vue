@@ -75,6 +75,9 @@
                 <p v-if="providers[connection.provider].note" style="padding: 20px 0px;" v-html="providers[connection.provider].note"></p>
                 <el-button v-loading="saving" @click="saveConnectionSettings()" type="success">Save Connection Settings</el-button>
             </template>
+            <div v-else>
+                <h3 style="text-align: center;">Please select your email service provider</h3>
+            </div>
             <p v-if="saving">Validating Data. Please wait</p>
             <el-alert style="margin-top: 20px" v-if="has_error" type="error">Credential Verification Failed. Please check your inputs</el-alert>
         </el-form>

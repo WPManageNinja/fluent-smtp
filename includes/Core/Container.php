@@ -816,8 +816,6 @@ class Container implements ArrayAccess, ContainerContract
 
         foreach ($parameters as $parameter) {
 
-            $dependency = $parameter->getClass();
-            
             if ($dependency = $this->getParameterType($parameter)) {
                 $dependency = $dependency->getName();
                 if ($dependency && in_array($dependency, $types)) {

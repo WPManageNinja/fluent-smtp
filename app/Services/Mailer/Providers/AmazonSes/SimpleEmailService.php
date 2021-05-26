@@ -319,14 +319,15 @@ class SimpleEmailService
     public function listVerifiedEmailAddresses()
     {
         $ses_request = $this->getRequestHandler('GET');
-        $ses_request->setParameter('Action', 'ListVerifiedEmailAddresses');
+        $ses_request->setParameter('Action', 'ListIdentities');
 
         $ses_response = $ses_request->getResponse();
+
         if ($ses_response->error === false && $ses_response->code !== 200) {
             $ses_response->error = array('code' => $ses_response->code, 'message' => 'Unexpected HTTP status');
         }
         if ($ses_response->error !== false) {
-            $this->__triggerError('listVerifiedEmailAddresses', $ses_response->error);
+            $this->__triggerError('ListIdentities', $ses_response->error);
             return false;
         }
 
@@ -336,7 +337,7 @@ class SimpleEmailService
         }
 
         $addresses = array();
-        foreach ($ses_response->body->ListVerifiedEmailAddressesResult->VerifiedEmailAddresses->member as $address) {
+        foreach ($ses_response->body->ListIdentitiesResult->Identities->member as $address) {
             $addresses[] = (string)$address;
         }
 

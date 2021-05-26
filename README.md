@@ -22,6 +22,8 @@ Connect as many Email Service Providers as you want and FluentCRM will route you
 - SendInBlue
 - PepiPost
 - SparkPost
+- Gmail OAuth API Connection
+- Google WorkSpace OAuth API Connection
 - Gmail via SMTP
 - Zoho via SMTP
 - Outlook via SMTP
@@ -37,7 +39,7 @@ Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin in the m
 * Email Logs
 * Resend Any Emails
 * In Details Reporting
-* Super fast UI powered by VueJS
+* Super-fast UI powered by VueJS
 
 Most importantly, This is plugin is free and always will be free.
 👉 <a href="https://fluentsmtp.com/why-we-build-fluentsmtp-plugin/">Read Why it's 100% free (always)</a> 👈

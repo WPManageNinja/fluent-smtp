@@ -1,6 +1,7 @@
 <template>
     <div>
         <h3>GMail/Google Workspace API Settings</h3>
+        <p>Please <a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">check the documentation first</a> or <b><a target="_blank" rel="nofollow" href="https://www.youtube.com/watch?v=_d78bscNaX8">Watch the video tutorial</a></b> to create API keys at Google</p>
         <el-radio-group size="mini" v-model="connection.key_store">
             <el-radio-button value="db" label="db">Store Application Keys in DB</el-radio-button>
             <el-radio-button value="wp_config" label="wp_config">Application Keys in Config File</el-radio-button>
@@ -73,6 +74,7 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
         <div style="text-align: center;" v-else>
             <h3>Your Gmail/Google Workspace Authentication has been enabled. No further action is needed. If you want to re-authenticate, <a @click.prevent="connection.access_token = ''" href="#">click here</a></h3>
         </div>
+
     </div>
 </template>
 
