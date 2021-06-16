@@ -131,7 +131,7 @@ return [
         ],
         'pepipost' => [
             'key' => 'pepipost',
-            'title' => __('PepiPost', 'fluent-smtp'),
+            'title' => __('Pepipost', 'fluent-smtp'),
             'image' => fluentMailAssetUrl('images/pepipost-logo.png'),
             'provider' => 'PepiPost',
             'options' => [
@@ -142,7 +142,7 @@ return [
                 'api_key' => '',
                 'key_store' => 'db'
             ],
-            'note' => '<a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure PepiPost with FluentSMTP.'
+            'note' => '<a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure Pepipost with FluentSMTP.'
         ],
         'gmail' => [
             'key' => 'gmail',

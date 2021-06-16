@@ -31,7 +31,7 @@ Connect as many Email Service Providers as you want and FluentSMTP will route yo
 * SendGrid
 * Mailgun
 * Sendinblue
-* PepiPost
+* Pepipost
 * SparkPost
 * Zoho via SMTP
 * Outlook via SMTP
@@ -89,12 +89,12 @@ If you use Sendinblue then with the help of Fluent SMTP, You can easily connect 
 
 Read about <a href="https://fluentsmtp.com/docs/setting-up-sendinblue-mailer-in-fluent-smtp/">Sendinblue connection documentation here</a>
 
-== 🎉 PepiPost Email API Connection ==
+== 🎉 Pepipost Email API Connection ==
 Pepipost is a complete sending partner with a user-friendly dashboard and many extensive functions such as statistics and real-time information.
 
-With Fluent SMTP connection, You can set up your PepiPost email service connection in less than a minute. With a direct API connection so it's faster than their SMTP connection.
+With Fluent SMTP connection, You can set up your Pepipost email service connection in less than a minute. With a direct API connection so it's faster than their SMTP connection.
 
-Read about <a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/">PepiPost API connection documentation here</a>
+Read about <a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/">Pepipost API connection documentation here</a>
 
 == 🎉 SparkPost Email API Connection ==
 SparkPost is a great email sending service with lots of analytics features.
@@ -220,9 +220,9 @@ Yes, when you create your connection you can choose how you want to store your c
 
  Yes, FluentSMTP let you connect your SparkPost email sending service via API Key.
 
-= Can I send WordPress mails with PepiPost? =
+= Can I send WordPress mails with Pepipost? =
 
-Yes, FluentSMTP let you connect your PepiPost email sending service via secure API Key.
+Yes, FluentSMTP let you connect your Pepipost email sending service via secure API Key.
 
 = I am a developer, Where I can contribute to this project? =
 

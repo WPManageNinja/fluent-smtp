@@ -141,7 +141,7 @@ msgid "Middle East (Bahrain)"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:133
-msgid "PepiPost"
+msgid "Pepipost"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:148
