@@ -30,7 +30,7 @@ return [
         ],
         'ses' => [
             'key' => 'ses',
-            'title' => __('Amazon Ses', 'fluent-smtp'),
+            'title' => __('Amazon SES', 'fluent-smtp'),
             'image' => fluentMailAssetUrl('images/amazon.png'),
             'provider' => 'AmazonSes',
             'options' => [
@@ -82,7 +82,7 @@ return [
                 'key_store' => 'db',
                 'region' => 'us'
             ],
-            'note' => '<a href="https://fluentsmtp.com/docs/configure-mailgun-in-fluent-smtp-to-send-emails/">Read the documentation</a> for how to configure MailGun with FluentSMTP.'
+            'note' => '<a href="https://fluentsmtp.com/docs/configure-mailgun-in-fluent-smtp-to-send-emails/">Read the documentation</a> for how to configure Mailgun with FluentSMTP.'
         ],
         'sendgrid' => [
             'key' => 'sendgrid',
@@ -101,7 +101,7 @@ return [
         ],
         'sendinblue' => [
             'key' => 'sendinblue',
-            'title' => __('SendInBlue', 'fluent-smtp'),
+            'title' => __('Sendinblue', 'fluent-smtp'),
             'image' => fluentMailAssetUrl('images/sendinblue.svg'),
             'provider' => 'SendInBlue',
             'options' => [
@@ -112,7 +112,7 @@ return [
                 'api_key' => '',
                 'key_store' => 'db'
             ],
-            'note' => '<a href="https://fluentsmtp.com/docs/setting-up-sendinblue-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure SendInBlue with FluentSMTP.'
+            'note' => '<a href="https://fluentsmtp.com/docs/setting-up-sendinblue-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure Sendinblue with FluentSMTP.'
         ],
         'sparkpost' => [
             'key' => 'sparkpost',
@@ -131,7 +131,7 @@ return [
         ],
         'pepipost' => [
             'key' => 'pepipost',
-            'title' => __('PepiPost', 'fluent-smtp'),
+            'title' => __('Pepipost', 'fluent-smtp'),
             'image' => fluentMailAssetUrl('images/pepipost-logo.png'),
             'provider' => 'PepiPost',
             'options' => [
@@ -142,7 +142,7 @@ return [
                 'api_key' => '',
                 'key_store' => 'db'
             ],
-            'note' => '<a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure PepiPost with FluentSMTP.'
+            'note' => '<a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure Pepipost with FluentSMTP.'
         ],
         'gmail' => [
             'key' => 'gmail',

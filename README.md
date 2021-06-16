@@ -18,12 +18,12 @@ Connect as many Email Service Providers as you want and FluentCRM will route you
 #### 🎉 AVAILABLE EMAIL SERVICE CONNECTIONS
 - Amazon SES
 - SendGrid
-- MailGun
-- SendInBlue
-- PepiPost
+- Mailgun
+- Sendinblue
+- Pepipost
 - SparkPost
 - Gmail OAuth API Connection
-- Google WorkSpace OAuth API Connection
+- Google Workspace OAuth API Connection
 - Gmail via SMTP
 - Zoho via SMTP
 - Outlook via SMTP

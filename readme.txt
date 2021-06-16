@@ -1,4 +1,4 @@
-=== FluentSMTP - WordPress Mail SMTP, SES, SendGrid, MailGun Plugin ===
+=== FluentSMTP - WordPress Mail SMTP, SES, SendGrid, Mailgun Plugin ===
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.5
@@ -8,7 +8,7 @@ Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The Ultimate SMTP and SES Plugin for WordPress. Connect with any SMTP, SendGrid, Mailgun, SES, SendInBlue, and more.
+The Ultimate SMTP and SES Plugin for WordPress. Connect with any SMTP, SendGrid, Mailgun, SES, Sendinblue, and more.
 
 == Description ==
 
@@ -27,11 +27,11 @@ Connect as many Email Service Providers as you want and FluentSMTP will route yo
 == 🎉 Available Email Service Connections ==
 * Amazon SES
 * Gmail OAuth API Connection
-* Google WorkSpace OAuth API Connection
+* Google Workspace OAuth API Connection
 * SendGrid
-* MailGun
-* SendInBlue
-* PepiPost
+* Mailgun
+* Sendinblue
+* Pepipost
 * SparkPost
 * Zoho via SMTP
 * Outlook via SMTP
@@ -62,8 +62,8 @@ With Fluent SMTP SES Connection, you get the powerful, low-cost, high deliverabi
 
 Fluent SMTP optimizes the API connection so it creates CURL-Tunneling to send your emails even faster. With Amazon SES connection, You can send emails faster than any other plugins.
 
-== 🎉 GMail or Google Workspace (Native API Connection) ==
-Fluent SMTP - WP Mail Plugin provides you options to connect with your gmail or Google Workspace emails and send emails over their API. It's fast and secure.
+== 🎉 Gmail or Google Workspace (Native API Connection) ==
+Fluent SMTP - WP Mail Plugin provides you options to connect with your Gmail or Google Workspace emails and send emails over their API. It's fast and secure.
 [youtube https://www.youtube.com/watch?v=_d78bscNaX8]
 
 == 🎉 SendGrid API Connection ==
@@ -71,30 +71,30 @@ SendGrid is the leading email sending service provider. You can rely on their gl
 
 With Fluent SMTP, You can set up your SendGrid email service connection API in less than a minute. With this direct API connection, send your WordPress Mails fast and secure way.
 
-Read about <a href="https://fluentsmtp.com/docs/set-up-the-sendgrid-driver-in-fluent-smtp/">Sendgrid connection documentation here</a>
+Read about <a href="https://fluentsmtp.com/docs/set-up-the-sendgrid-driver-in-fluent-smtp/">SendGrid connection documentation here</a>
 
-== 🎉 MailGun Email API Connection ==
+== 🎉 Mailgun Email API Connection ==
 Mailgun is another leading email sending service provider and trusted by 225,000+ businesses. You can rely on their globally distributed, cloud-based architecture for sending your WordPress Emails.
 
 Get your message to the right person at the right time with global infrastructure and industry expertise you can rely on.
 
-With Fluent SMTP connection, You can set up your MailGun email service connection in less than a minute. This is also a direct API connection so it's faster than their SMTP connection.
+With Fluent SMTP connection, You can set up your Mailgun email service connection in less than a minute. This is also a direct API connection so it's faster than their SMTP connection.
 
 Read about <a href="https://fluentsmtp.com/docs/configure-mailgun-in-fluent-smtp-to-send-emails/">Mailgun connection documentation here</a>
 
-== 🎉 SendInBlue API Connection ==
+== 🎉 Sendinblue API Connection ==
 Sendinblue is a platform for growing businesses and it has a great transactional email service. They serve more than 80,000 companies around the world and send millions of emails every day.
 
-If you use SendInBlue then with the help of Fluent SMTP, You can easily connect with its API and send Your WordPress emails via an API connection.
+If you use Sendinblue then with the help of Fluent SMTP, You can easily connect with its API and send Your WordPress emails via an API connection.
 
-Read about <a href="https://fluentsmtp.com/docs/setting-up-sendinblue-mailer-in-fluent-smtp/">SendInBlue connection documentation here</a>
+Read about <a href="https://fluentsmtp.com/docs/setting-up-sendinblue-mailer-in-fluent-smtp/">Sendinblue connection documentation here</a>
 
-== 🎉 PepiPost Email API Connection ==
+== 🎉 Pepipost Email API Connection ==
 Pepipost is a complete sending partner with a user-friendly dashboard and many extensive functions such as statistics and real-time information.
 
-With Fluent SMTP connection, You can set up your PepiPost email service connection in less than a minute. With a direct API connection so it's faster than their SMTP connection.
+With Fluent SMTP connection, You can set up your Pepipost email service connection in less than a minute. With a direct API connection so it's faster than their SMTP connection.
 
-Read about <a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/">PepiPost API connection documentation here</a>
+Read about <a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/">Pepipost API connection documentation here</a>
 
 == 🎉 SparkPost Email API Connection ==
 SparkPost is a great email sending service with lots of analytics features.
@@ -206,23 +206,23 @@ Yes, when you create your connection you can choose how you want to store your c
 
  = Can I send WordPress mails with SendGrid? =
 
- Yes, FluentSMTP let you connect your SendGrid via API. It's faster and reliable than SendGrid SMTP. But if you prefer sendgrid SMTP connection, You can also connect with that too.
+ Yes, FluentSMTP let you connect your SendGrid via API. It's faster and reliable than SendGrid SMTP. But if you prefer SendGrid SMTP connection, You can also connect with that too.
 
- = Can I send WordPress mails with MailGun? =
+ = Can I send WordPress mails with Mailgun? =
 
- Yes, FluentSMTP let you connect your MailGun via API Key. It's faster and reliable than MailGun SMTP. But if you prefer MailGun SMTP connection, You can also connect with that too.
+ Yes, FluentSMTP let you connect your Mailgun via API Key. It's faster and reliable than Mailgun SMTP. But if you prefer Mailgun SMTP connection, You can also connect with that too.
 
- = Can I send WordPress mails with SendInBlue? =
+ = Can I send WordPress mails with Sendinblue? =
 
- Yes, FluentSMTP let you connect your SendInBlue email sending service via API Key. It's faster and reliable. But if you prefer SendInBlue SMTP connection, You can also connect with that too.
+ Yes, FluentSMTP let you connect your Sendinblue email sending service via API Key. It's faster and reliable. But if you prefer Sendinblue SMTP connection, You can also connect with that too.
 
  = Can I send WordPress mails with SparkPost? =
 
  Yes, FluentSMTP let you connect your SparkPost email sending service via API Key.
 
-= Can I send WordPress mails with PepiPost? =
+= Can I send WordPress mails with Pepipost? =
 
-Yes, FluentSMTP let you connect your PepiPost email sending service via secure API Key.
+Yes, FluentSMTP let you connect your Pepipost email sending service via secure API Key.
 
 = I am a developer, Where I can contribute to this project? =
 
@@ -244,7 +244,7 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 == Changelog ==
 
 = 1.2.0 (Date: May 26, 2021) =
-* Added GMail and Google Workspace API Connection
+* Added Gmail and Google Workspace API Connection
 * Added Built-in Docs
 * UI Improvements
 * PHP 8 compatibility issue fixed
@@ -264,7 +264,7 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 = 1.0.1 (Date: January 24, 2021) =
 * Fix UTF-8 issues
-* SendInBlue wp-config constant issue fixed
+* Sendinblue wp-config constant issue fixed
 * Fallback from name issue fixed
 * Search for Email Logs has been fixed
 

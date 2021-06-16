@@ -21,7 +21,7 @@ msgid "Access key is required."
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:32
-msgid "Amazon Ses"
+msgid "Amazon SES"
 msgstr ""
 
 #: app/Services/Mailer/Providers/SparkPost/ValidatorTrait.php:20
@@ -141,7 +141,7 @@ msgid "Middle East (Bahrain)"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:133
-msgid "PepiPost"
+msgid "Pepipost"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:148
@@ -197,7 +197,7 @@ msgid "SendGrid"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:103
-msgid "SendInBlue"
+msgid "Sendinblue"
 msgstr ""
 
 #: app/Hooks/filters.php:9
