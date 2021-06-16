@@ -71,7 +71,7 @@ SendGrid is the leading email sending service provider. You can rely on their gl
 
 With Fluent SMTP, You can set up your SendGrid email service connection API in less than a minute. With this direct API connection, send your WordPress Mails fast and secure way.
 
-Read about <a href="https://fluentsmtp.com/docs/set-up-the-sendgrid-driver-in-fluent-smtp/">Sendgrid connection documentation here</a>
+Read about <a href="https://fluentsmtp.com/docs/set-up-the-sendgrid-driver-in-fluent-smtp/">SendGrid connection documentation here</a>
 
 == 🎉 Mailgun Email API Connection ==
 Mailgun is another leading email sending service provider and trusted by 225,000+ businesses. You can rely on their globally distributed, cloud-based architecture for sending your WordPress Emails.
@@ -206,7 +206,7 @@ Yes, when you create your connection you can choose how you want to store your c
 
  = Can I send WordPress mails with SendGrid? =
 
- Yes, FluentSMTP let you connect your SendGrid via API. It's faster and reliable than SendGrid SMTP. But if you prefer sendgrid SMTP connection, You can also connect with that too.
+ Yes, FluentSMTP let you connect your SendGrid via API. It's faster and reliable than SendGrid SMTP. But if you prefer SendGrid SMTP connection, You can also connect with that too.
 
  = Can I send WordPress mails with Mailgun? =
 
