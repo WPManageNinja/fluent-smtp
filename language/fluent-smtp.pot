@@ -21,7 +21,7 @@ msgid "Access key is required."
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:32
-msgid "Amazon Ses"
+msgid "Amazon SES"
 msgstr ""
 
 #: app/Services/Mailer/Providers/SparkPost/ValidatorTrait.php:20

@@ -30,7 +30,7 @@ return [
         ],
         'ses' => [
             'key' => 'ses',
-            'title' => __('Amazon Ses', 'fluent-smtp'),
+            'title' => __('Amazon SES', 'fluent-smtp'),
             'image' => fluentMailAssetUrl('images/amazon.png'),
             'provider' => 'AmazonSes',
             'options' => [
