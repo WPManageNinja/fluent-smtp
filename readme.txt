@@ -27,7 +27,7 @@ Connect as many Email Service Providers as you want and FluentSMTP will route yo
 == 🎉 Available Email Service Connections ==
 * Amazon SES
 * Gmail OAuth API Connection
-* Google WorkSpace OAuth API Connection
+* Google Workspace OAuth API Connection
 * SendGrid
 * Mailgun
 * Sendinblue
@@ -62,8 +62,8 @@ With Fluent SMTP SES Connection, you get the powerful, low-cost, high deliverabi
 
 Fluent SMTP optimizes the API connection so it creates CURL-Tunneling to send your emails even faster. With Amazon SES connection, You can send emails faster than any other plugins.
 
-== 🎉 GMail or Google Workspace (Native API Connection) ==
-Fluent SMTP - WP Mail Plugin provides you options to connect with your gmail or Google Workspace emails and send emails over their API. It's fast and secure.
+== 🎉 Gmail or Google Workspace (Native API Connection) ==
+Fluent SMTP - WP Mail Plugin provides you options to connect with your Gmail or Google Workspace emails and send emails over their API. It's fast and secure.
 [youtube https://www.youtube.com/watch?v=_d78bscNaX8]
 
 == 🎉 SendGrid API Connection ==
@@ -244,7 +244,7 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 == Changelog ==
 
 = 1.2.0 (Date: May 26, 2021) =
-* Added GMail and Google Workspace API Connection
+* Added Gmail and Google Workspace API Connection
 * Added Built-in Docs
 * UI Improvements
 * PHP 8 compatibility issue fixed
