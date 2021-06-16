@@ -197,7 +197,7 @@ msgid "SendGrid"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:103
-msgid "SendInBlue"
+msgid "Sendinblue"
 msgstr ""
 
 #: app/Hooks/filters.php:9

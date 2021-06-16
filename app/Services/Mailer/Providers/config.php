@@ -101,7 +101,7 @@ return [
         ],
         'sendinblue' => [
             'key' => 'sendinblue',
-            'title' => __('SendInBlue', 'fluent-smtp'),
+            'title' => __('Sendinblue', 'fluent-smtp'),
             'image' => fluentMailAssetUrl('images/sendinblue.svg'),
             'provider' => 'SendInBlue',
             'options' => [
@@ -112,7 +112,7 @@ return [
                 'api_key' => '',
                 'key_store' => 'db'
             ],
-            'note' => '<a href="https://fluentsmtp.com/docs/setting-up-sendinblue-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure SendInBlue with FluentSMTP.'
+            'note' => '<a href="https://fluentsmtp.com/docs/setting-up-sendinblue-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure Sendinblue with FluentSMTP.'
         ],
         'sparkpost' => [
             'key' => 'sparkpost',
