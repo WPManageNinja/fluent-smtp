@@ -82,7 +82,7 @@ return [
                 'key_store' => 'db',
                 'region' => 'us'
             ],
-            'note' => '<a href="https://fluentsmtp.com/docs/configure-mailgun-in-fluent-smtp-to-send-emails/">Read the documentation</a> for how to configure MailGun with FluentSMTP.'
+            'note' => '<a href="https://fluentsmtp.com/docs/configure-mailgun-in-fluent-smtp-to-send-emails/">Read the documentation</a> for how to configure Mailgun with FluentSMTP.'
         ],
         'sendgrid' => [
             'key' => 'sendgrid',

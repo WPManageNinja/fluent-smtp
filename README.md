@@ -18,7 +18,7 @@ Connect as many Email Service Providers as you want and FluentCRM will route you
 #### 🎉 AVAILABLE EMAIL SERVICE CONNECTIONS
 - Amazon SES
 - SendGrid
-- MailGun
+- Mailgun
 - Sendinblue
 - PepiPost
 - SparkPost

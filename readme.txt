@@ -1,4 +1,4 @@
-=== FluentSMTP - WordPress Mail SMTP, SES, SendGrid, MailGun Plugin ===
+=== FluentSMTP - WordPress Mail SMTP, SES, SendGrid, Mailgun Plugin ===
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.5
@@ -29,7 +29,7 @@ Connect as many Email Service Providers as you want and FluentSMTP will route yo
 * Gmail OAuth API Connection
 * Google WorkSpace OAuth API Connection
 * SendGrid
-* MailGun
+* Mailgun
 * Sendinblue
 * PepiPost
 * SparkPost
@@ -73,12 +73,12 @@ With Fluent SMTP, You can set up your SendGrid email service connection API in l
 
 Read about <a href="https://fluentsmtp.com/docs/set-up-the-sendgrid-driver-in-fluent-smtp/">Sendgrid connection documentation here</a>
 
-== 🎉 MailGun Email API Connection ==
+== 🎉 Mailgun Email API Connection ==
 Mailgun is another leading email sending service provider and trusted by 225,000+ businesses. You can rely on their globally distributed, cloud-based architecture for sending your WordPress Emails.
 
 Get your message to the right person at the right time with global infrastructure and industry expertise you can rely on.
 
-With Fluent SMTP connection, You can set up your MailGun email service connection in less than a minute. This is also a direct API connection so it's faster than their SMTP connection.
+With Fluent SMTP connection, You can set up your Mailgun email service connection in less than a minute. This is also a direct API connection so it's faster than their SMTP connection.
 
 Read about <a href="https://fluentsmtp.com/docs/configure-mailgun-in-fluent-smtp-to-send-emails/">Mailgun connection documentation here</a>
 
@@ -208,9 +208,9 @@ Yes, when you create your connection you can choose how you want to store your c
 
  Yes, FluentSMTP let you connect your SendGrid via API. It's faster and reliable than SendGrid SMTP. But if you prefer sendgrid SMTP connection, You can also connect with that too.
 
- = Can I send WordPress mails with MailGun? =
+ = Can I send WordPress mails with Mailgun? =
 
- Yes, FluentSMTP let you connect your MailGun via API Key. It's faster and reliable than MailGun SMTP. But if you prefer MailGun SMTP connection, You can also connect with that too.
+ Yes, FluentSMTP let you connect your Mailgun via API Key. It's faster and reliable than Mailgun SMTP. But if you prefer Mailgun SMTP connection, You can also connect with that too.
 
  = Can I send WordPress mails with Sendinblue? =
 
