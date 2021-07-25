@@ -59,6 +59,15 @@ class SettingsController extends Controller
             $provider = $factory->make($data['connection']['provider']);
 
             $connection = $data['connection'];
+
+            $connection['sender_name'] = sanitize_text_field($connection['sender_name']);
+            $connection['sender_email'] = sanitize_email($connection['sender_email']);
+            if(isset($connection['force_from_email'])) {
+                $connection['force_from_email'] = sanitize_text_field($connection['force_from_email']);
+            }
+            $connection['return_path'] = sanitize_text_field($connection['return_path']);
+            $connection['provider'] = sanitize_text_field($connection['provider']);
+
             $this->validateConnection($provider, $connection);
             $provider->checkConnection($connection);
 
@@ -535,6 +544,50 @@ class SettingsController extends Controller
 
         return $this->sendSuccess([
             'auth_url' => (new \FluentMail\App\Services\Mailer\Providers\Outlook\API($clientId, $clientSecret))->getAuthUrl()
+        ]);
+    }
+
+    public function getNotificationSettings()
+    {
+        $this->verify();
+        $defaults = [
+            'enabled' => 'no',
+            'notify_email' => '{site_admin}',
+            'notify_days' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        ];
+
+        $settings = get_option('_fluent_smtp_notify_settings', []);
+
+        $settings = wp_parse_args($settings, $defaults);
+
+        return $this->sendSuccess([
+            'settings' => $settings
+        ]);
+    }
+
+    public function saveNotificationSettings(Request $request)
+    {
+        $this->verify();
+
+        $settings = $request->get('settings', []);
+
+        $settings = Arr::only($settings, ['enabled', 'notify_email', 'notify_days']);
+
+        $settings['notify_email'] = sanitize_text_field( $settings['notify_email']);
+        $settings['enabled'] = sanitize_text_field( $settings['enabled']);
+
+        $defaults = [
+            'enabled' => 'no',
+            'notify_email' => '{site_admin}',
+            'notify_days' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        ];
+
+        $settings = wp_parse_args($settings, $defaults);
+
+        update_option('_fluent_smtp_notify_settings', $settings, false);
+
+        return $this->sendSuccess([
+            'message' => 'Settings has been updated successfully'
         ]);
     }
 

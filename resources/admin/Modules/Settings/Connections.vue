@@ -70,12 +70,20 @@
                 </div>
             </el-col>
             <el-col :span="12">
-                <div class="fss_content_box">
-                    <div class="header">
+                <div :class="{ fss_box_active: active_settings == 'general' }" style="margin-bottom: 0px;" class="fss_content_box fss_box_action">
+                    <div @click="active_settings = 'general'" class="header">
                         General Settings
                     </div>
-                    <div class="content">
+                    <div v-if="active_settings == 'general'" class="content">
                         <general-settings />
+                    </div>
+                </div>
+                <div :class="{ fss_box_active: active_settings == 'notification' }" class="fss_content_box fss_box_action">
+                    <div @click="active_settings = 'notification'" class="header">
+                        Notification Settings
+                    </div>
+                    <div v-if="active_settings == 'notification'" class="content">
+                        <notification-settings />
                     </div>
                 </div>
             </el-col>
@@ -85,9 +93,9 @@
 
 <script>
     import Confirm from '@/Pieces/Confirm';
-    // import Pagination from '@/Pieces/Pagination';
     import isEmpty from 'lodash/isEmpty';
     import GeneralSettings from './_GeneralSettings'
+    import NotificationSettings from './_NotificationSettings'
     import ConnectionDetails from './ConnectionDetails'
 
     export default {
@@ -95,11 +103,13 @@
         components: {
             Confirm,
             GeneralSettings,
-            ConnectionDetails
+            ConnectionDetails,
+            NotificationSettings
         },
         data() {
             return {
-                showing_connection: ''
+                showing_connection: '',
+                active_settings: 'general'
             };
         },
         methods: {
@@ -107,7 +117,7 @@
                 const settings = await this.$get('settings');
                 this.settings.mappings = settings.data.settings.mappings;
                 this.settings.connections = settings.data.settings.connections;
-                
+
                 if (isEmpty(this.settings.connections)) {
                     this.$router.push({
                         name: 'dashboard',

@@ -200,6 +200,7 @@ if (! function_exists( 'wp_mail' ) ) :
         $defaultConnection = false;
         if ( ! isset( $from_email ) ) {
             $defaultConnection = fluentMailDefaultConnection();
+
             if (!empty($defaultConnection['sender_email'])) {
                 $from_email = $defaultConnection['sender_email'];
             } else {

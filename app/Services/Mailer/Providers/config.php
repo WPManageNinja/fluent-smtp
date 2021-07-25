@@ -171,7 +171,6 @@ return [
             'title'        => __('Outlook/Office365', 'fluent-smtp'),
             'image'        => fluentMailAssetUrl('images/microsoft.svg'),
             'provider'     => 'Outlook',
-            'callback_url' => rest_url('fluent-smtp/outlook_callback'),
             'options'      => [
                 'sender_name'     => '',
                 'sender_email'    => '',

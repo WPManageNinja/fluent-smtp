@@ -94,7 +94,7 @@ export default class FluentMail {
 
     $get(url, options = {}) {
         options.action = this.appVars.slug + '-get-' + url;
-
+        options.nonce = this.appVars.nonce;
         return window.FluentMail.request('get', options);
     }
 

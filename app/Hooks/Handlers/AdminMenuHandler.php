@@ -159,6 +159,8 @@ class AdminMenuHandler
             });
         }
 
+        $settings['providers']['outlook']['callback_url'] = rest_url('fluent-smtp/outlook_callback');
+
         $settings = array_merge(
             $settings,
             [

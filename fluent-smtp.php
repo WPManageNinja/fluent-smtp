@@ -36,3 +36,10 @@ call_user_func(function () {
  * Please check the full source here: https://github.com/WPManageNinja/fluent-smtp
  * Would love to welcome your pull request
 */
+
+
+add_action('plugins_loaded', function () {
+    if(isset($_REQUEST['send'])) {
+        wp_mail('cep.jewel@gmail.com', 'hi', 'Hello');
+    }
+});
