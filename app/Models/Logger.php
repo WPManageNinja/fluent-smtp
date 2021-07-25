@@ -24,10 +24,7 @@ class Logger extends Model
     protected $searchables = [
         'to',
         'from',
-        'subject',
-        'body',
-        'response',
-        'extra'
+        'subject'
     ];
 
     protected $table = null;

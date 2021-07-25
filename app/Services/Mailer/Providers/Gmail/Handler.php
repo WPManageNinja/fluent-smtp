@@ -5,7 +5,6 @@ namespace FluentMail\App\Services\Mailer\Providers\Gmail;
 use FluentMail\App\Models\Settings;
 use FluentMail\Includes\Support\Arr;
 use FluentMail\App\Services\Mailer\BaseHandler;
-use function Clue\StreamFilter\fun;
 
 class Handler extends BaseHandler
 {

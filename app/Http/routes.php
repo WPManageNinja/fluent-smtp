@@ -14,6 +14,7 @@ $app->post('/settings/subscribe', 'SettingsController@subscribe');
 $app->post('/settings/subscribe-dismiss', 'SettingsController@subscribeDismiss');
 $app->get('settings/connection_info', 'SettingsController@getConnectionInfo');
 $app->post('settings/gmail_auth_url', 'SettingsController@getGmailAuthUrl');
+$app->post('settings/outlook_auth_url', 'SettingsController@getOutlookAuthUrl');
 
 $app->get('/logs', 'LoggerController@get');
 $app->get('/logs/show', 'LoggerController@show');

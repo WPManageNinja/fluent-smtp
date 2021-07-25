@@ -74,6 +74,15 @@ class Settings
 
         $settings['connections'] = $connections;
 
+
+        if($settings['mappings'] && $settings['connections']) {
+            $validMappings = array_keys(Arr::get($settings, 'connections', []));
+
+            $settings['mappings'] = array_filter($settings['mappings'], function ($key) use ($validMappings) {
+                return in_array($key, $validMappings);
+            });
+        }
+
         $misc = $this->getMisc();
 
         if(!$misc) {

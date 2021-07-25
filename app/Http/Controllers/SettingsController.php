@@ -246,7 +246,6 @@ class SettingsController extends Controller
         }
     }
 
-
     private function backgroundInstaller($plugin_to_install)
     {
         if (!empty($plugin_to_install['repo-slug'])) {
@@ -363,6 +362,7 @@ class SettingsController extends Controller
 
     public function subscribe()
     {
+        $this->verify();
         $email = sanitize_text_field($_REQUEST['email']);
         if(!is_email($email)) {
             return $this->sendError([
@@ -388,6 +388,7 @@ class SettingsController extends Controller
 
     public function subscribeDismiss()
     {
+        $this->verify();
         update_option('_fluentsmtp_dismissed_timestamp', time(), 'no');
 
         return $this->sendSuccess([
@@ -430,6 +431,7 @@ class SettingsController extends Controller
 
     public function getGmailAuthUrl(Request $request)
     {
+        $this->verify();
         $connection = wp_unslash($request->get('connection'));
 
         $clientId = Arr::get($connection, 'client_id');
@@ -479,4 +481,63 @@ class SettingsController extends Controller
         ]);
     }
 
+    public function getOutlookAuthUrl(Request $request)
+    {
+        $this->verify();
+        $connection = wp_unslash($request->get('connection'));
+
+        $clientId = Arr::get($connection, 'client_id');
+        $clientSecret = Arr::get($connection, 'client_secret');
+
+        delete_option('_fluentsmtp_intended_outlook_info');
+
+        if(Arr::get($connection, 'key_store') == 'wp_config') {
+            if(defined('FLUENTMAIL_OUTLOOK_CLIENT_ID')) {
+                $clientId = FLUENTMAIL_OUTLOOK_CLIENT_ID;
+            } else {
+                return $this->sendError([
+                    'client_id' => [
+                        'required' => 'Please define FLUENTMAIL_OUTLOOK_CLIENT_ID in your wp-config.php file'
+                    ]
+                ]);
+            }
+            if(defined('FLUENTMAIL_OUTLOOK_CLIENT_SECRET')) {
+                $clientSecret = FLUENTMAIL_OUTLOOK_CLIENT_SECRET;
+            } else {
+                return $this->sendError([
+                    'client_secret' => [
+                        'required' => 'Please define FLUENTMAIL_OUTLOOK_CLIENT_SECRET in your wp-config.php file'
+                    ]
+                ]);
+            }
+        } else {
+            update_option('_fluentsmtp_intended_outlook_info', [
+                'client_id' => $clientId,
+                'client_secret' => $clientSecret
+            ]);
+        }
+
+        if(!$clientId) {
+            return $this->sendError([
+                'client_id' => [
+                    'required' => 'Please provide application client id'
+                ]
+            ]);
+        }
+
+        if(!$clientSecret) {
+            return $this->sendError([
+                'client_secret' => [
+                    'required' => 'Please provide application client secret'
+                ]
+            ]);
+        }
+
+        return $this->sendSuccess([
+            'auth_url' => (new \FluentMail\App\Services\Mailer\Providers\Outlook\API($clientId, $clientSecret))->getAuthUrl()
+        ]);
+    }
+
 }
+
+

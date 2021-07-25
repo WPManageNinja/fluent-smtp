@@ -42,12 +42,11 @@ class Handler extends BaseHandler
 
             $fromEmail = $this->phpMailer->From;
 
-            if (!fluentMailIsListedSenderEmail($fromEmail)) {
+            if ($this->isForcedEmail() && !fluentMailIsListedSenderEmail($fromEmail)) {
                 $fromEmail = $this->getSetting('sender_email');
             }
 
             if (isset($this->phpMailer->FromName)) {
-
                 $fromName = $this->phpMailer->FromName;
 
                 if (

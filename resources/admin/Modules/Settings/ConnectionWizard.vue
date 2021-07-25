@@ -21,7 +21,22 @@
                                     v-model="connection.sender_email"
                                 ></el-input>
                             </el-form-item>
-                            <div v-if="connection.return_path !== 'undefinded'">
+                            <div v-if="connection.force_from_email != undefined">
+                                <el-checkbox
+                                    true-label="yes"
+                                    false-label="no"
+                                    v-model="connection.force_from_email"
+                                >
+                                    Force From Email (Recommended Settings: Enable)
+                                    <el-tooltip effect="dark" placement="top-start">
+                                        <div slot="content">
+                                            If checked, the From Email setting above will be used for all emails (It will check if the from email is listed to available connections).
+                                        </div>
+                                        <i class="el-icon-info"></i>
+                                    </el-tooltip>
+                                </el-checkbox>
+                            </div>
+                            <div v-if="connection.return_path != undefined">
                                 <el-checkbox
                                     true-label="yes"
                                     false-label="no"
@@ -93,6 +108,7 @@
     import sparkpost from './Partials/Providers/SparkPost';
     import smtp from './Partials/Providers/Smtp';
     import gmail from './Partials/Providers/Gmail';
+    import outlook from './Partials/Providers/Outlook';
     import Errors from '@/Bits/Errors';
     import Error from '@/Pieces/Error';
 
@@ -108,6 +124,7 @@
             sparkpost,
             smtp,
             gmail,
+            outlook,
             Error
         },
         data() {

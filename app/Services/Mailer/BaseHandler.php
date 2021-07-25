@@ -60,11 +60,6 @@ class BaseHandler
             $this->phpMailer->FromName = $this->getSetting('sender_name');
         }
 
-        $title = ucwords($this->getSetting('provider'));
-        $this->phpMailer->addCustomHeader(
-            'X-Mailer', 'FluentMail - ' . $title
-        );
-
         if ($this->getSetting('return_path') == 'yes') {
             $this->phpMailer->Sender = $this->phpMailer->From;
         }
@@ -77,6 +72,11 @@ class BaseHandler
     protected function isForced($key)
     {
         return $this->getSetting("force_{$key}") == 'yes';
+    }
+
+    public function isForcedEmail()
+    {
+        return $this->getSetting("force_from_email") != 'no';
     }
 
     public function isActive()

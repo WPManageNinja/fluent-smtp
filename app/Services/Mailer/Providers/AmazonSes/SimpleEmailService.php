@@ -328,7 +328,7 @@ class SimpleEmailService
         }
         if ($ses_response->error !== false) {
             $this->__triggerError('ListIdentities', $ses_response->error);
-            return false;
+            return [];
         }
 
         $response = array();
@@ -338,7 +338,9 @@ class SimpleEmailService
 
         $addresses = array();
         foreach ($ses_response->body->ListIdentitiesResult->Identities->member as $address) {
-            $addresses[] = (string)$address;
+            if(is_email($address)) {
+                $addresses[] = (string)$address;
+            }
         }
 
         $response['Addresses'] = $addresses;
