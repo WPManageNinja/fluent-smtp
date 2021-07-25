@@ -16,5 +16,13 @@
             <th>Force Sender Name</th>
             <td><?php echo ucfirst($connection['force_from_name']); ?></td>
         </tr>
+        <?php if(isset($connection['extra_rows'])) : ?>
+        <?php foreach ($connection['extra_rows'] as $row): ?>
+        <tr>
+            <th><?php echo $row['title']; ?></th>
+            <td><?php echo $row['content']; ?></td>
+        </tr>
+        <?php endforeach; ?>
+        <?php endif; ?>
     </table>
 </div>

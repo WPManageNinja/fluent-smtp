@@ -133,7 +133,6 @@ ul.fss_log_items li {
   width: 140px;
   margin: 0 5px;
   position: relative;
-  /*float: left;*/
 }
 
 .fluent-mail-app .dashboard .content .fluent-mail-mailer-image {
@@ -186,26 +185,25 @@ ul.fss_log_items li {
   opacity: .7;
 }
 
-.logs .successful {
-  color: #409EFF;
-  font-size: 20px;
-}
-
-.logs .unsuccessful {
-  color: #F56C6C;
-  font-size: 20px;
-}
-
-.logs .resent {
-  color: #a4da89;
-  font-size: 20px;
-}
-
-.logs .dont-show {
-  color: #409EFF;
-  margin-left: 10px;
-  cursor: pointer;
-  vertical-align: top;
+.logs {
+  .successful {
+    color: #409EFF;
+    font-size: 20px;
+  }
+  .unsuccessful {
+    color: #F56C6C;
+    font-size: 20px;
+  }
+  .resent {
+    color: #a4da89;
+    font-size: 20px;
+  }
+  .dont-show {
+    color: #409EFF;
+    margin-left: 10px;
+    cursor: pointer;
+    vertical-align: top;
+  }
 }
 
 ul.fss_dash_lists {
@@ -350,3 +348,71 @@ span.header_action_right {
   }
 }
 
+
+.log-viewer {
+  .el-collapse-item__content {
+    padding-bottom: 0px;
+  }
+  .el-collapse-item__content .full-screen-text {
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    display: none;
+    cursor: pointer;
+    margin-top: -10px;
+    font-size: 12px;
+  }
+  .el-collapse-item__content .show {
+    display: inline-block;
+  }
+}
+
+*:fullscreen, *:-webkit-full-screen, *:-moz-full-screen {
+  background-color: white;
+}
+
+
+.log-viewer {
+  pre {
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+  }
+  .success {
+    color: #409EFF;
+  }
+  .fail {
+    color: #F56C6C;
+  }
+
+  .resent {
+    color: #409EFF;
+  }
+
+  .log-row {
+    margin: 15px 0;
+  }
+
+  .log-border {
+    border-bottom: 0;
+    border-color: #EBEEF5;
+  }
+  .nav {
+    margin: 20px 0 10px 0;
+    cursor: pointer;
+  }
+  .prev {
+    float: left;
+  }
+  .next {
+    float: right;
+    margin-right: 8px;
+  }
+}
+
+#fluent_mail_app .small-help-text,
+.fluent-mail-app .small-help-text {
+  font-size: 12px;
+  color: gray;
+}

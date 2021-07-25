@@ -67,27 +67,3 @@
         }
     };
 </script>
-
-<style>
-    .log-viewer .el-collapse-item__content {
-        padding-bottom: 0px;
-    }
-    
-    .log-viewer .el-collapse-item__content .full-screen-text {
-        left: 50%;
-        position: absolute;
-        transform: translateX(-50%);
-        display: none;
-        cursor: pointer;
-        margin-top: -10px;
-        font-size: 12px;
-    }
-
-    .log-viewer .el-collapse-item__content .show {
-        display: inline-block;
-    }
-
-    *:fullscreen, *:-webkit-full-screen, *:-moz-full-screen {
-        background-color: white;
-    }
-</style>

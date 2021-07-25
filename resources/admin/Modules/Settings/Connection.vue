@@ -43,11 +43,3 @@
         }
     };
 </script>
-
-<style>
-    #fluent_mail_app .small-help-text,
-    .fluent-mail-app .small-help-text {
-        font-size: 12px;
-        color: gray;
-    }
-</style>

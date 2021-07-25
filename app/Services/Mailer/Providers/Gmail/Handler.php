@@ -45,8 +45,6 @@ class Handler extends BaseHandler
 
     private function sendViaApi()
     {
-        require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
-
         $message = $this->phpMailer->getSentMIMEMessage();
 
         $data = $this->getSetting();
@@ -243,6 +241,8 @@ class Handler extends BaseHandler
             return $cachedServices[$senderEmail];
         }
 
+        require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
+
         $client = new \Google_Client();
         $client->setClientId($data['client_id']);
         $client->setClientSecret($data['client_secret']);
@@ -253,7 +253,7 @@ class Handler extends BaseHandler
         $client->setAccessToken($data['access_token']);
 
         // check if expired or will be expired in 50 seconds
-        if ( ($data['expire_stamp'] - 50) < time()) {
+        if ( ($data['expire_stamp'] - 100) < time() || $client->isAccessTokenExpired()) {
             $newTokens = $client->refreshToken($data['refresh_token']);
             $this->saveNewTokens($data, $newTokens);
             $newToken = $client->getAccessToken();
@@ -263,5 +263,34 @@ class Handler extends BaseHandler
         $cachedServices[$senderEmail] = $client;
 
         return $cachedServices[$senderEmail];
+    }
+
+    public function getConnectionInfo($connection)
+    {
+        if (Arr::get($connection, 'key_store') == 'wp_config') {
+            $connection['client_id'] = defined('FLUENTMAIL_GMAIL_CLIENT_ID') ? FLUENTMAIL_GMAIL_CLIENT_ID : '';
+            $connection['client_secret'] = defined('FLUENTMAIL_GMAIL_CLIENT_SECRET') ? FLUENTMAIL_GMAIL_CLIENT_SECRET : '';
+        }
+
+       // $this->getApiClient($connection);
+
+        $info = fluentMailgetConnection($connection['sender_email']);
+
+        $connection = $info->getSetting();
+
+        $extraRow = [
+            'title' => __('Token Validity', 'fluent-smtp'),
+            'content' => 'Valid ('. intval((($connection['expire_stamp'] - time()) / 60)) . 'm)'
+        ];
+
+        if( ($connection['expire_stamp']) < time() )  {
+            $extraRow['content'] = 'Invalid. Please re-authenticate';
+        }
+
+        $connection['extra_rows'] = [$extraRow];
+
+        return (string) fluentMail('view')->make('admin.general_connection_info', [
+            'connection' => $connection
+        ]);
     }
 }
