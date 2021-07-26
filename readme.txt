@@ -13,14 +13,13 @@ The Ultimate SMTP and SES Plugin for WordPress. Connect with any SMTP, SendGrid,
 == Description ==
 
 ###  WordPress Email SMTP Plugin For Any Email Service
-Are you having problems with your WordPress not sending emails? This is the plugin that will solve your email deliverability problem.
-FluentSMTP is the ultimate WP Mail Plugin that connects with your Email Service Provider natively and makes sure your emails are delivered 💯.
+Are you having problems with your WordPress emails not sending? Or looking to set the email address in which your emails are delivered from. This plugin will solve all your email deliverability problems. FluentSMTP is the ultimate WP Mail Plugin that connects with your Email Service Provider natively and makes sure your emails are delivered 💯.
 
-Our goal is to send your WordPress emails delivery fast, secure, and make sure your WordPress emails reach the email inbox.
+Our goal is to send your WordPress emails fast, secure, and reach the email inbox.
 
-Fluent SMTP plugin fixes your email delivery issue by connecting WordPress Mail with your email service providers. These integrations are native so it will send the emails super fast.
+Fluent SMTP plugin fixes your email delivery issue by connecting WordPress Mail with your email service providers. These integrations are native, so it will send the emails superfast.
 
-Connect as many Email Service Providers as you want and FluentSMTP will route your transactional and marketing emails automatically. This is one of the unique features that FluentSMTP has.
+Connect as many Email Service Providers as you want and FluentCRM will route your transactional and marketing emails automatically. This is one of the unique features that FluentCRM has to offer.
 
 [youtube https://www.youtube.com/watch?v=Je0OPk1NnjI]
 
@@ -39,7 +38,7 @@ Connect as many Email Service Providers as you want and FluentSMTP will route yo
 * More native integrations coming soon
 
 == 🎉 Fluent SMTP Features ==
-Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin in the market. We crafted this plugin for speed, reliability, scalability.
+Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin in the market. We crafted this plugin for speed, reliability and scalability.
 
 * Real-Time Email Delivery
 * Email Routing to multiple email connections
@@ -50,12 +49,12 @@ Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin in the m
 * Super fast UI powered by VueJS
 
 Most importantly, This is plugin is free and always will be free.
-👉 <a href="https://fluentsmtp.com/why-we-build-fluentsmtp-plugin/">Read Why it's 100% free (always)</a> 👈
+👉 <a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/">Read Why it's 100% free (always)</a> 👈
 
 == How does Fluent SMTP works ==
-Fluent SMTP improves your WordPress mail by intercepting the <code>wp_mail</code> and then connect with your email service providers and make sure the deliverability. It uses a direct email service API to send emails faster and securely. It means emails are sent using the provider’s direct API. For your native SMTP connections, It uses the proper host, port, and credentials to send your WP Mails.
+Fluent SMTP improves your WordPress mail by intercepting the <code>wp_mail</code> and then connecting with your email service providers to ensure deliverability. It uses a direct email service API to send emails faster and securely. It means emails are sent using the provider’s direct API. For your native SMTP connections, It uses the proper host, port, and credentials to send your WP Mails.
 
-Fluent SMTP also logs (optional) your emails so you can check anytime and see your site health. You can also resend your failed emails or resend any previous emails that you want.
+Fluent SMTP also logs (optional) your emails so you can check anytime and see your site health. You can also resend your failed emails or resend any previous emails that you need.
 
 == 🎉 AMAZON SES (Native API Connection) ==
 With Fluent SMTP SES Connection, you get the powerful, low-cost, high deliverability managed infrastructure from Amazon. With the support of Fluent SMTP, it's super easy to set up and configure Amazon SES API and send all your WordPress emails. The integration is with amazon's latest SES API so your emails will be delivered faster and the right way.
@@ -118,7 +117,7 @@ Read about <a href="https://fluentsmtp.com/docs/set-up-fluent-smtp-with-any-host
 
 == 🚀 MODERN. POWERFUL. SUPER FAST 🚀 ==
 
-* Build with VueJS as Single-page Application
+* Built with VueJS as a Single-page Application
 * Super fast and lean interface so anyone can use it without any learning curve
 * Super awesome Dashboard with charts, graphs, and stats to show how your emails are doing.
 
