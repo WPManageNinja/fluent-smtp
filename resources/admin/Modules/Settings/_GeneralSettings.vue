@@ -14,7 +14,16 @@
                 <el-checkbox v-model="settings.misc.disable_fluentcrm_logs" true-label="yes" false-label="no">Disable Logging for FluentCRM Emails (Recommeneded)</el-checkbox>
             </el-form-item>
             
-            <el-form-item v-if="settings.misc.log_emails == 'yes'" label="Delete Logs">
+            <el-form-item v-if="settings.misc.log_emails == 'yes'">
+                <label slot="label">
+                    Delete Logs
+                    <el-popover
+                        width="400"
+                        trigger="hover">
+                        <p>Select how many days, the logs will be saved. If you select 7 days, then logs older than 7 days will be deleted automatically.</p>
+                        <i slot="reference" class="el-icon el-icon-info"></i>
+                    </el-popover>
+                </label>
                 <el-select v-model="settings.misc.log_saved_interval_days">
                     <el-option
                         v-for="(logLabel, logValue) in logging_days"
@@ -25,15 +34,47 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="Default Connection">
+            <el-form-item>
+                <label slot="label">
+                    Default Connection
+                    <el-popover
+                        width="400"
+                        trigger="hover">
+                        <p>Select which connection will be used for sending transactional emails from your WordPress. If you use multiple connection then email will be routed based on source from email address</p>
+                        <i slot="reference" class="el-icon el-icon-info"></i>
+                    </el-popover>
+                </label>
                 <el-select v-model="settings.misc.default_connection">
                     <el-option
                         v-for="(connection, connectionId) in settings.connections"
                         :key="connectionId"
                         :value="connectionId"
+                        :disabled="settings.misc.fallback_connection == connectionId"
                         :label="connection.title +' - '+ connection.provider_settings.sender_email"
                     ></el-option>
                 </el-select>
+            </el-form-item>
+
+            <el-form-item>
+                <label slot="label">
+                    Fallback Connection
+                    <el-popover
+                        width="400"
+                        trigger="hover">
+                        <p>Fallback Connection will be used if an email is failed to send in one connection. Please select a different connection than the default connection</p>
+                        <i slot="reference" class="el-icon el-icon-info"></i>
+                    </el-popover>
+                </label>
+                <el-select clearable v-if="connectionsCount > 1" v-model="settings.misc.fallback_connection">
+                    <el-option
+                        v-for="(connection, connectionId) in settings.connections"
+                        :key="connectionId"
+                        :disabled="settings.misc.default_connection == connectionId"
+                        :value="connectionId"
+                        :label="connection.title +' - '+ connection.provider_settings.sender_email"
+                    ></el-option>
+                </el-select>
+                <p v-else style="color: #6d6b6b;margin: 0;">Please add another connection to use fallback feature</p>
             </el-form-item>
 
             <el-form-item label="Email Simulation">
@@ -70,6 +111,11 @@
                     365: 'After 1 Year',
                     730: 'After 2 Years'
                 }
+            }
+        },
+        computed: {
+            connectionsCount() {
+                return Object.keys(this.settings.connections).length;
             }
         },
         methods: {

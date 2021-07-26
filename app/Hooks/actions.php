@@ -24,7 +24,7 @@ add_action('rest_api_init', function () use ($app) {
             header("Content-Type: text/html");
             $app->view->render('admin.html_code', [
                 'title' => 'Your Access Code',
-                'body'  => '<p>Copy the following code and paste in the fluentSMTP settings</p><textarea readonly>'.sanitize_textarea_field($code).'</textarea>'
+                'body'  => '<p>Copy the following code and paste in the fluentSMTP settings</p><textarea readonly>' . sanitize_textarea_field($code) . '</textarea>'
             ]);
             die();
         },

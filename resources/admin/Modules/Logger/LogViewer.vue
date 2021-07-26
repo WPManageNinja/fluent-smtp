@@ -127,7 +127,7 @@
                             <hr><strong>Response
                             </strong><hr>
                             <el-row>
-                                <el-col><pre v-html="log.response"></pre></el-col>
+                                <el-col><pre>{{log.response}}</pre></el-col>
                             </el-row>
                             <hr>
 

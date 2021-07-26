@@ -53,7 +53,6 @@ class LoggerController extends Controller
 
         try {
             $this->app->addAction('wp_mail_failed', function($response) use ($logger, $request) {
-
                 $log = $logger->find($id = $request->get('id'));
                 $log['retries'] = $log['retries'] + 1;
                 $logger->updateLog($log, ['id' => $id]);

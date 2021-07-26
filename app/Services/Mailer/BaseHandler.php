@@ -27,6 +27,8 @@ class BaseHandler
 
     protected $response = null;
 
+    protected $existing_row_id = null;
+
     public function __construct(Application $app = null, Manager $manager = null)
     {
         $this->app = $app ?: fluentMail();
@@ -290,7 +292,29 @@ class BaseHandler
                 'extra'    => maybe_serialize($this->getExtraParams())
             ];
 
-            (new Logger)->add($data);
+            if($this->existing_row_id) {
+                $row = (new Logger())->find($this->existing_row_id);
+                if($row) {
+                    $row['response'] = (array) $row['response'];
+                    if($status) {
+                        $row['response']['fallback'] = 'Sent using fallback connection '.$this->attributes['from'];
+                        $row['response']['fallback_response'] = $response;
+                    } else {
+                        $row['response']['fallback'] = 'Tried to send using fallback but failed. '.$this->attributes['from'];
+                        $row['response']['fallback_response'] = $response;
+                    }
+
+                    $data['response'] = maybe_serialize( $row['response']);
+                    $data['retries'] = $row['retries'] + 1;
+                    (new Logger())->updateLog($data, ['id' => $row['id']]);
+                }
+            } else {
+                $logId = (new Logger)->add($data);
+                if(!$status) {
+                    // We have to fire an action for this failed job
+                    do_action('fluentmail_email_sending_failed', $logId, $this);
+                }
+            }
         }
 
         return $status;
@@ -298,6 +322,9 @@ class BaseHandler
 
     protected function shouldBeLogged($status)
     {
+        if($this->existing_row_id) {
+            return true;
+        }
         if (defined('FLUENTMAIL_LOG_OFF') && FLUENTMAIL_LOG_OFF) {
             return false;
         }
@@ -309,7 +336,7 @@ class BaseHandler
         $miscSettings = $this->manager->getConfig('misc');
         $isLogOn = $miscSettings['log_emails'] == 'yes';
 
-        return apply_filters('fluentmail_will_log_email', $isLogOn, $miscSettings);
+        return apply_filters('fluentmail_will_log_email', $isLogOn, $miscSettings, $this);
     }
 
     protected function fireWPMailFailedAction($data)
@@ -352,6 +379,16 @@ class BaseHandler
         return (string) fluentMail('view')->make('admin.general_connection_info', [
             'connection' => $connection
         ]);
+    }
+
+    public function getPhpMailer()
+    {
+        return $this->phpMailer;
+    }
+
+    public function setRowId($id)
+    {
+        $this->existing_row_id = $id;
     }
 
 }

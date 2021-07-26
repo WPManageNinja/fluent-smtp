@@ -14,11 +14,7 @@ class SchedulerHandler
     {
         add_action('init', array($this, 'initScheduler'));
         add_action($this->actionName, array($this, 'handleScheduledJobs'));
-
-        if(isset($_GET['send_digest'])) {
-            $this->sendDailyDigest();
-        }
-
+        add_action('fluentmail_email_sending_failed', array($this, 'maybeHandleFallbackConnection'), 10, 2);
     }
 
     public function initScheduler()
@@ -167,5 +163,35 @@ class SchedulerHandler
         $parts  = parse_url( site_url() );
         $url    = $parts['host'] . ( isset( $parts['path'] ) ? $parts['path'] : '' );
         return untrailingslashit( $url );
+    }
+
+    public function maybeHandleFallbackConnection($logId, $handler)
+    {
+        if(defined('FLUENTMAIL_EMAIL_TESTING')) {
+            return false;
+        }
+
+        $settings = (new \FluentMail\App\Models\Settings())->getSettings();
+
+        $fallbackConnectionId = \FluentMail\Includes\Support\Arr::get($settings, 'misc.fallback_connection');
+
+        if (!$fallbackConnectionId) {
+            return false;
+        }
+
+        $fallbackConnection = \FluentMail\Includes\Support\Arr::get($settings, 'connections.' . $fallbackConnectionId);
+
+        if(!$fallbackConnection) {
+            return false;
+        }
+
+        $phpMailer = $handler->getPhpMailer();
+
+        $fallbackSettings = $fallbackConnection['provider_settings'];
+        $phpMailer->setFrom($fallbackSettings['sender_email'], $phpMailer->FromName);
+
+        // Trap the fluentSMTPMail mailer here
+        $phpMailer = new \FluentMail\App\Services\Mailer\FluentPHPMailer($phpMailer);
+        return $phpMailer->sendViaFallback($logId);
     }
 }

@@ -21,9 +21,6 @@ class FluentPHPMailer
 
     public function send()
     {
-
-        $driver = fluentMailGetProvider($this->phpMailer->From);
-
         if ($driver = fluentMailGetProvider($this->phpMailer->From)) {
 
             if ($forceFromEmail = $driver->getSetting('force_from_email_id')) {
@@ -34,6 +31,16 @@ class FluentPHPMailer
         }
 
         return $this->phpMailer->send();
+    }
+
+    public function sendViaFallback($rowId)
+    {
+        $driver = fluentMailGetProvider($this->phpMailer->From);
+        if($driver) {
+            $driver->setRowId($rowId);
+            return $driver->setPhpMailer($this->phpMailer)->send();
+        }
+        return false;
     }
 
     public function __get($key)

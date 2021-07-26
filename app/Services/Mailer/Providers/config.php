@@ -54,7 +54,7 @@ return [
                 'eu-west-2'      => __('EU (London)', 'fluent-smtp'),
                 'eu-west-3'      => __('Europe (Paris)', 'fluent-smtp'),
                 'eu-central-1'   => __('EU (Frankfurt)', 'fluent-smtp'),
-                'eu-south-1' => __('Europe (Milan)', 'fluent-smtp'),
+                'eu-south-1'     => __('Europe (Milan)', 'fluent-smtp'),
                 'eu-north-1'     => __('Europe (Stockholm)', 'fluent-smtp'),
                 'ap-south-1'     => __('Asia Pacific (Mumbai)', 'fluent-smtp'),
                 'ap-northeast-2' => __('Asia Pacific (Seoul)', 'fluent-smtp'),
@@ -167,11 +167,11 @@ return [
             'note'     => __('Gmail/Google Workspace is not recommended for sending mass marketing emails.', 'fluent-smtp')
         ],
         'outlook'    => [
-            'key'          => 'outlook',
-            'title'        => __('Outlook/Office365', 'fluent-smtp'),
-            'image'        => fluentMailAssetUrl('images/microsoft.svg'),
-            'provider'     => 'Outlook',
-            'options'      => [
+            'key'      => 'outlook',
+            'title'    => __('Outlook/Office365', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/microsoft.svg'),
+            'provider' => 'Outlook',
+            'options'  => [
                 'sender_name'     => '',
                 'sender_email'    => '',
                 'force_from_name' => 'no',
@@ -183,7 +183,7 @@ return [
                 'access_token'    => '',
                 'refresh_token'   => ''
             ],
-            'note'         => __('Outlook/Office365 is not recommended for sending mass marketing emails.', 'fluent-smtp')
+            'note'     => __('Outlook/Office365 is not recommended for sending mass marketing emails.', 'fluent-smtp')
         ],
         'default'    => [
             'key'      => 'default',
@@ -205,6 +205,7 @@ return [
         'log_emails'              => 'yes',
         'log_saved_interval_days' => '14',
         'disable_fluentcrm_logs'  => 'no',
-        'default_connection'      => ''
+        'default_connection'      => '',
+        'fallback_connection'     => ''
     ]
 ];

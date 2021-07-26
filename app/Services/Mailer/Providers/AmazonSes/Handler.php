@@ -21,7 +21,7 @@ class Handler extends BaseHandler
             $this->client = new SimpleEmailServiceMessage;
             return $this->postSend();
         }
-
+        
         return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
     }
 
