@@ -45,6 +45,8 @@ class Handler extends BaseHandler
 
     private function sendViaApi()
     {
+        require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
+
         $message = $this->phpMailer->getSentMIMEMessage();
 
         $data = $this->getSetting();
@@ -161,6 +163,7 @@ class Handler extends BaseHandler
                     $con['connection']['access_token'] = $tokens['access_token'];
                     $con['connection']['auth_token'] = '';
                     $con['connection']['expire_stamp'] = time() + $tokens['expires_in'];
+                    $con['connection']['expires_in'] = $tokens['expires_in'];
 
                     return $con;
                 }, 10, 2);
@@ -226,6 +229,7 @@ class Handler extends BaseHandler
         $existingData['access_token'] = $tokens['access_token'];
         $existingData['refresh_token'] = $tokens['refresh_token'];
         $existingData['expire_stamp'] = $tokens['expires_in'] + time();
+        $existingData['expires_in'] = $tokens['expires_in'];
 
         (new Settings())->updateConnection($senderEmail, $existingData);
         fluentMailGetProvider($senderEmail, true); // we are clearing the static cache here
@@ -241,8 +245,6 @@ class Handler extends BaseHandler
             return $cachedServices[$senderEmail];
         }
 
-        require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
-
         $client = new \Google_Client();
         $client->setClientId($data['client_id']);
         $client->setClientSecret($data['client_secret']);
@@ -250,14 +252,19 @@ class Handler extends BaseHandler
         $client->setAccessType('offline');
         $client->setApprovalPrompt('force');
 
-        $client->setAccessToken($data['access_token']);
+        $tokens = [
+            'access_token' => $data['access_token'],
+            'refresh_token' =>  $data['refresh_token'],
+            'expires_in' => $data['expire_stamp'] - time()
+        ];
 
-        // check if expired or will be expired in 50 seconds
-        if ( ($data['expire_stamp'] - 100) < time() || $client->isAccessTokenExpired()) {
+        $client->setAccessToken($tokens);
+
+        // check if expired or will be expired in 120 seconds
+        if (($data['expire_stamp'] - 120) < time()) {
             $newTokens = $client->refreshToken($data['refresh_token']);
             $this->saveNewTokens($data, $newTokens);
-            $newToken = $client->getAccessToken();
-            $client->setAccessToken($newToken);
+            $client->setAccessToken($newTokens);
         }
 
         $cachedServices[$senderEmail] = $client;
@@ -272,24 +279,26 @@ class Handler extends BaseHandler
             $connection['client_secret'] = defined('FLUENTMAIL_GMAIL_CLIENT_SECRET') ? FLUENTMAIL_GMAIL_CLIENT_SECRET : '';
         }
 
-       // $this->getApiClient($connection);
+        require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
+
+         $this->getApiClient($connection);
 
         $info = fluentMailgetConnection($connection['sender_email']);
 
         $connection = $info->getSetting();
 
         $extraRow = [
-            'title' => __('Token Validity', 'fluent-smtp'),
-            'content' => 'Valid ('. intval((($connection['expire_stamp'] - time()) / 60)) . 'm)'
+            'title'   => __('Token Validity', 'fluent-smtp'),
+            'content' => 'Valid (' . intval((($connection['expire_stamp'] - time()) / 60)) . 'm)'
         ];
 
-        if( ($connection['expire_stamp']) < time() )  {
+        if (($connection['expire_stamp']) < time()) {
             $extraRow['content'] = 'Invalid. Please re-authenticate';
         }
 
         $connection['extra_rows'] = [$extraRow];
 
-        return (string) fluentMail('view')->make('admin.general_connection_info', [
+        return (string)fluentMail('view')->make('admin.general_connection_info', [
             'connection' => $connection
         ]);
     }

@@ -174,4 +174,31 @@ class Handler extends BaseHandler
 
         return $accessToken;
     }
+
+    public function getConnectionInfo($connection)
+    {
+        if (Arr::get($connection, 'key_store') == 'wp_config') {
+            $connection['client_id'] = defined('FLUENTMAIL_OUTLOOK_CLIENT_ID') ? FLUENTMAIL_OUTLOOK_CLIENT_ID : '';
+            $connection['client_secret'] = defined('FLUENTMAIL_OUTLOOK_CLIENT_SECRET') ? FLUENTMAIL_OUTLOOK_CLIENT_SECRET : '';
+        }
+
+        $this->getAccessToken($connection);
+        $info = fluentMailgetConnection($connection['sender_email']);
+        $connection = $info->getSetting();
+
+        $extraRow = [
+            'title'   => __('Token Validity', 'fluent-smtp'),
+            'content' => 'Valid (' . intval((($connection['expire_stamp'] - time()) / 60)) . 'm)'
+        ];
+
+        if (($connection['expire_stamp']) < time()) {
+            $extraRow['content'] = 'Invalid. Please re-authenticate';
+        }
+
+        $connection['extra_rows'] = [$extraRow];
+
+        return (string)fluentMail('view')->make('admin.general_connection_info', [
+            'connection' => $connection
+        ]);
+    }
 }
