@@ -219,15 +219,22 @@
                 log.headers['reply-to'] = this.formatAddresses(log.headers['reply-to']);
                 
                 const headers = {};
-                jQuery.each(log.headers, (k, v) => {
-                    k = k.split('-').map(s => this.ucFirst(s)).join('-');
-                    headers[k] = v;
-                });
+                if(log.headers) {
+                    jQuery.each(log.headers, (k, v) => {
+                        if(k) {
+                            k = k.split('-').map(s => this.ucFirst(s)).join('-');
+                            headers[k] = v;
+                        }
+                    });
+                }
                 log.headers = headers;
 
                 return log;
             },
             formatAddresses(addresses) {
+                if(!addresses) {
+                    return '';
+                }
                 const result = [];
                 jQuery.each(addresses, (i, val) => {
                     if (val.name) {
