@@ -109,7 +109,7 @@ class SettingsController extends Controller
         $this->verify();
 
         $settings = $settings->delete($request->get('key'));
-        
+
         return $this->sendSuccess($settings);
     }
 
@@ -142,7 +142,7 @@ class SettingsController extends Controller
                     'email_error' => __('The email field is required.', 'fluent-smtp')
                 ], 422);
             }
-            
+
             if (!defined('FLUENTMAIL_EMAIL_TESTING')) {
                 define('FLUENTMAIL_EMAIL_TESTING', true);
             }
@@ -236,7 +236,7 @@ class SettingsController extends Controller
             ]
         ];
 
-        if(!isset($UrlMaps[$pluginSlug])) {
+        if(!isset($UrlMaps[$pluginSlug]) || (defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)) {
             $this->sendError([
                 'message' => __('Sorry, You can not install this plugin', 'fluent-smtp')
             ]);
