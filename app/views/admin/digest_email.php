@@ -80,7 +80,7 @@
                             <tr>
                                 <td>
                                     <h3 style="margin: 5px 0; color: white;">Email Sending Health</h3>
-                                    <p style="margin: 0;color: white;"><?php echo $date_range; ?></p>
+                                    <p style="margin: 0;color: white;font-size: 12px;"><?php echo $date_range; ?></p>
                                 </td>
                                 <td style="text-align: right;">
                                     <img src="<?php echo esc_url(fluentMailMix('images/fluentsmtp-white.png')); ?>"
@@ -100,7 +100,7 @@
                                 <td>
                                     <h3 style="font-size: 18px; font-weight: normal; margin: 0;"><?php echo $sent['title']; ?></h3>
                                     <?php if ($sent['subject_items']): ?>
-                                        <p style="margin: 4px 0 0 0;"><?php echo $sent['subtitle']; ?></p>
+                                        <p style="margin: 4px 0 0 0;font-size: 12px;"><?php echo $sent['subtitle']; ?></p>
                                     <?php endif; ?>
                                 </td>
                             </tr>
