@@ -405,44 +405,56 @@ class Logger extends Model
         }
     }
 
-    public function hasPendingEmails()
+    public function getTotalCountStat($status, $startDate, $endDate)
     {
-        $status = 'pending';
-
         $query = $this->db->prepare(
-            "SELECT count(*) as total FROM `{$this->table}` WHERE status = '%s'",
+            "SELECT COUNT(*)
+			FROM {$this->table}
+			WHERE status = %s
+			AND created_at >= %s
+			AND created_at <= %s",
+            $status,
+            $startDate,
+            $endDate
+        );
+
+        return (int) $this->db->get_var( $query );
+    }
+
+    public function getSubjectCountStat($status, $startDate, $endDate)
+    {
+        $query = $this->db->prepare(
+            "SELECT COUNT(DISTINCT(subject))
+			FROM {$this->table}
+			WHERE status = %s
+			AND created_at >= %s
+			AND created_at <= %s",
+            $status,
+            $startDate,
+            $endDate
+        );
+
+        return (int) $this->db->get_var( $query );
+    }
+
+    public function getSubjectStat($status, $statDate, $endDate, $limit = 5)
+    {
+        $query = $this->db->prepare(
+            "SELECT subject,
+			COUNT(DISTINCT id) AS emails_sent
+			FROM {$this->table}
+			WHERE created_at >= %s
+			AND created_at <= %s
+			AND status = %s
+			GROUP BY subject
+			ORDER BY emails_sent DESC
+			LIMIT {$limit}",
+            $statDate,
+            $endDate,
             $status
         );
 
-        $col = $this->db->get_col($query);
-
-        return reset($col);
+        return $this->db->get_results( $query, ARRAY_A );
     }
 
-    public function getPendingEmails($limit = 10, $order = 'ASC', $exclude = [])
-    {
-        return $this->getEmails($limit, $order, 'pending', $exclude);
-    }
-
-    public function getEmails($limit = 10, $order = 'ASC', $status = null, $exclude = [])
-    {
-        $where = '';
-
-        if (!$status) {
-            $where = "WHERE `status` != '{$status}'";
-        } else {
-            $where = "WHERE `status` = '{$status}'";
-        }
-
-        if (is_array($exclude) && $exclude) {
-            $ids = implode(',', $exclude);
-            $where .= " AND id NOT IN ({$ids})";
-        }
-
-        $orderBy = "ORDER BY `created_at` {$order}";
-
-        $query = "SELECT * FROM `{$this->table}` {$where} {$orderBy} LIMIT %d";
-        $query = $this->db->prepare($query, $limit);
-        return $this->db->get_results($query);
-    }
 }

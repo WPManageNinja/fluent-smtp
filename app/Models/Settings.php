@@ -221,4 +221,17 @@ class Settings
         $settings['connections'][$key]['provider_settings'] = $connection;
         $this->saveGlobalSettings($settings);
     }
+
+    public function notificationSettings()
+    {
+        $defaults = [
+            'enabled' => 'no',
+            'notify_email' => '{site_admin}',
+            'notify_days' => ['Mon']
+        ];
+
+        $settings = get_option('_fluent_smtp_notify_settings', []);
+
+        return wp_parse_args($settings, $defaults);
+    }
 }

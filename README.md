@@ -26,7 +26,7 @@ Connect as many Email Service Providers as you want and FluentCRM will route you
 - Google Workspace OAuth API Connection
 - Gmail via SMTP
 - Zoho via SMTP
-- Outlook via SMTP
+- Outlook OAuth API Connection
 - All Other SMTP
 - More native integrations coming soon
 
@@ -51,13 +51,18 @@ Please check `app/Http/routes.php` to see all the endpoints.
 
 All the email connect drivers are at: `app/Services/Mailer/Providers`
 
+**Thanks to our contributors**
+
+![GitHub Contributors Image](https://contrib.rocks/image?repo=WPManageNinja/fluent-smtp)
+
+
 #### Build JavaScript source
 
 - Clone this project
 - open the project in terminal
 - run `npm install`
-- then `npm run watch` for development
-- `npm run production` to build the project
+- then `npx run watch` for development
+- `npx run --production` to build the project
 
 All the VueJS source are at: `resources/admin` folder
 

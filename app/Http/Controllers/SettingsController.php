@@ -550,18 +550,8 @@ class SettingsController extends Controller
     public function getNotificationSettings()
     {
         $this->verify();
-        $defaults = [
-            'enabled' => 'no',
-            'notify_email' => '{site_admin}',
-            'notify_days' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        ];
-
-        $settings = get_option('_fluent_smtp_notify_settings', []);
-
-        $settings = wp_parse_args($settings, $defaults);
-
         return $this->sendSuccess([
-            'settings' => $settings
+            'settings' => (new Settings())->notificationSettings()
         ]);
     }
 
