@@ -43,15 +43,15 @@ class AdminMenuHandler
         );
 
 
-        if(defined('WPFORMS_VERSION')) {
+        if (defined('WPFORMS_VERSION')) {
             // As user is using FluentSMTP we want to remove other SMTP suggestions which will create conflicts
             // and FluentSMTP will not work in that case, So we are removing from that menu
             global $submenu;
-            if(Arr::get($submenu, 'wpforms-overview.7.2') == 'wpforms-smtp') {
+            if (Arr::get($submenu, 'wpforms-overview.7.2') == 'wpforms-smtp') {
                 unset($submenu['wpforms-overview'][7]);
             } else {
                 foreach ($submenu['wpforms-overview'] as $itemIndex => $item) {
-                    if(isset($item[2]) && $item[2] == 'wpforms-smtp') {
+                    if (isset($item[2]) && $item[2] == 'wpforms-smtp') {
                         unset($submenu['wpforms-overview'][$itemIndex]);
                     }
                 }
@@ -126,7 +126,8 @@ class AdminMenuHandler
             'user_email'             => $user->user_email,
             'require_optin'          => $this->isRequireOptin(),
             'has_ninja_tables'       => defined('NINJA_TABLES_VERSION'),
-            'disable_recommendation' => $disable_recommendation ? true : apply_filters('fluentmail_disable_recommendation', false),
+            'disable_recommendation' => apply_filters('fluentmail_disable_recommendation', false),
+            'disable_installation'   => $disable_recommendation,
             'plugin_url'             => 'https://fluentsmtp.com/?utm_source=wp&utm_medium=install&utm_campaign=dashboard'
         ]);
 
@@ -153,7 +154,7 @@ class AdminMenuHandler
     {
         $settings = $this->app->make(Manager::class)->getMailerConfigAndSettings(true);
 
-        if($settings['mappings'] && $settings['connections']) {
+        if ($settings['mappings'] && $settings['connections']) {
             $validMappings = array_keys(Arr::get($settings, 'connections', []));
 
             $settings['mappings'] = array_filter($settings['mappings'], function ($key) use ($validMappings) {
@@ -216,7 +217,7 @@ class AdminMenuHandler
 
         $misc = $this->app->make(Manager::class)->getConfig('misc');
 
-        if(!empty($misc['simulate_emails']) && $misc['simulate_emails'] =='yes' ) {
+        if (!empty($misc['simulate_emails']) && $misc['simulate_emails'] == 'yes') {
             $args = [
                 'parent' => 'top-secondary',
                 'id'     => 'fluentsmtp_simulated',
@@ -234,12 +235,12 @@ class AdminMenuHandler
     public function isRequireOptin()
     {
         $opted = get_option('_fluentsmtp_sub_update');
-        if($opted) {
+        if ($opted) {
             return 'no';
         }
         // check if dismissed
-        $dismissedStamp  = get_option('_fluentsmtp_dismissed_timestamp');
-        if($dismissedStamp && (time() - $dismissedStamp) < 30 * 24 * 60 * 60) {
+        $dismissedStamp = get_option('_fluentsmtp_dismissed_timestamp');
+        if ($dismissedStamp && (time() - $dismissedStamp) < 30 * 24 * 60 * 60) {
             return 'no';
         }
 
