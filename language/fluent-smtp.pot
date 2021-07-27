@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FluentSMTP\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-18 15:18+0000\n"
+"POT-Creation-Date: 2021-07-27 07:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -20,7 +20,39 @@ msgstr ""
 msgid "Access key is required."
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:32
+#: app/Hooks/Handlers/AdminMenuHandler.php:383
+msgid "Actions"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:352
+msgid "Active Connections:"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:405
+msgid "Active Email Connections"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:353
+msgid "Active Senders:"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:406
+msgid "Add Another Connection"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:412
+msgid "Add Connection"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:67
+msgid "Africa (Cape Town)"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:296
+msgid "All"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:33
 msgid "Amazon SES"
 msgstr ""
 
@@ -28,83 +60,324 @@ msgstr ""
 #: app/Services/Mailer/Providers/SendGrid/ValidatorTrait.php:20
 #: app/Services/Mailer/Providers/SendInBlue/ValidatorTrait.php:19
 #: app/Services/Mailer/Providers/PepiPost/ValidatorTrait.php:20
+#: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:19
 #: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:19
 msgid "Api key is required."
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:57
-msgid "Asia Pacific (Mumbai)"
+#: app/Services/Mailer/Providers/Gmail/Handler.php:115
+#: app/Services/Mailer/Providers/Outlook/Handler.php:84
+msgid "Application Client Secret key is required."
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:58
-msgid "Asia Pacific (Seoul)"
+#: app/Services/Mailer/Providers/Gmail/Handler.php:111
+#: app/Services/Mailer/Providers/Outlook/Handler.php:80
+msgid "Application Cluent ID is required."
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:362
+msgid "Apply"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:344
+msgid "Are you sure to delete this?"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:59
-msgid "Asia Pacific (Singapore)"
+msgid "Asia Pacific (Mumbai)"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:60
-msgid "Asia Pacific (Sydney)"
+msgid "Asia Pacific (Seoul)"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:61
+msgid "Asia Pacific (Singapore)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:62
+msgid "Asia Pacific (Sydney)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:63
 msgid "Asia Pacific (Tokyo)"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:64
+#: app/Hooks/Handlers/AdminMenuHandler.php:389
+msgid "Attachments"
+msgstr ""
+
+#: app/views/admin/digest_email.php:180
+msgid "Awesome! no failures! 🎉"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:66
 msgid "AWS GovCloud (US)"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:51
+#: app/Hooks/Handlers/AdminMenuHandler.php:364
+msgid "Bulk Action"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:361
+msgid "By Date"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:52
 msgid "Canada (Central)"
 msgstr ""
 
+#: app/Hooks/Handlers/AdminMenuHandler.php:342
+msgid "cancel"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:68
+msgid "China (Ningxia)"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:409
+msgid "Close"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:207
+msgid "Configure FluentSMTP"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:343
+msgid "confirm"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:408
+msgid "Connection Details"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:402
+msgid "Credential Verification Failed. Please check your inputs"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:312
+#: app/Hooks/Handlers/AdminMenuHandler.php:369
+msgid "Date"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:370
+msgid "Date Range"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:382
+msgid "Date-Time"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:356
+msgid "Days"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:426
+msgid "Default Connection"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:365
+msgid "Delete All"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:424
+msgid "Delete Logs"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:355
+msgid "Delete Logs:"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:422
+msgid "Disable Logging for FluentCRM Emails"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:432
+msgid "Disable sending all emails. If you enable this, no email will be sent."
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:341
+msgid "Docs"
+msgstr ""
+
+#: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:23
 #: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:23
 msgid "Domain name is required."
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:139
+#: app/Hooks/Handlers/AdminMenuHandler.php:413
+msgid "Edit Connection"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:418
+msgid "Email Address"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:388
+msgid "Email Body"
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:153
 msgid "Email delivered successfully."
 msgstr ""
 
-#: app/Http/Controllers/LoggerController.php:70
+#: app/Hooks/Handlers/AdminMenuHandler.php:227
+msgid "Email Disabled"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:351
+msgid "Email Failed:"
+msgstr ""
+
+#: app/Hooks/Handlers/SchedulerHandler.php:126
+msgid "Email Failures"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:339
+msgid "Email Logs"
+msgstr ""
+
+#: app/Http/Controllers/LoggerController.php:69
 msgid "Email sent successfully."
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:55
-msgid "EU (Frankfurt)"
+#: app/Hooks/Handlers/AdminMenuHandler.php:431
+msgid "Email Simulation"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:52
-msgid "EU (Ireland)"
+#: app/Hooks/Handlers/AdminMenuHandler.php:338
+msgid "Email Test"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:53
-msgid "EU (London)"
+#: app/Hooks/Handlers/SchedulerHandler.php:122
+#: app/views/admin/digest_email.php:115
+msgid "Emails Sent"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:54
-msgid "Europe (Paris)"
+#: app/Hooks/Handlers/AdminMenuHandler.php:415
+msgid "Enable Email Summary"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:416
+msgid "Enable Email Summary Notification"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:377
+msgid "End date"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:366
+msgid "Enter Full Screen"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:56
+msgid "EU (Frankfurt)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:53
+msgid "EU (Ireland)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:54
+msgid "EU (London)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:57
+msgid "Europe (Milan)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:55
+msgid "Europe (Paris)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:58
 msgid "Europe (Stockholm)"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:20
+#: app/Hooks/Handlers/AdminMenuHandler.php:314
+#: app/Hooks/Handlers/AdminMenuHandler.php:373
+msgid "Failed"
+msgstr ""
+
+#: app/views/admin/digest_email.php:165
+msgid "Failed Count"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:427
+msgid "Fallback Connection"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:429
+msgid ""
+"Fallback Connection will be used if an email is failed to send in one "
+"connection. Please select a different connection than the default connection"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:378
+msgid "Filter"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:367
+msgid "Filter By"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:35
+#: app/Hooks/Handlers/AdminMenuHandler.php:266
 msgid "Fluent SMTP"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:423
+msgid "FluentCRM Email Logging"
 msgstr ""
 
 #. Name of the plugin
 msgid "FluentSMTP"
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:89
+#. Author of the plugin
+msgid "FluentSMTP & WPManageNinja Team"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:202
+msgid ""
+"FluentSMTP requires to configure properly. Please configure FluentSMTP to "
+"make your email delivery works."
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:395
+msgid "Force From Email (Recommended Settings: Enable)"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:399
+msgid "Force Sender Name"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:394
+msgid "From Email"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:398
+msgid "From Name"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:410
+msgid "General Settings"
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:103
 msgid "General Settings has been updated"
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:213
+#: app/Services/Mailer/Providers/config.php:147
+msgid "Gmail/Google Workspace"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:162
+msgid ""
+"Gmail/Google Workspace is not recommended for sending mass marketing emails."
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:227
 msgid "Go to Fluent Forms Dashboard"
 msgstr ""
 
@@ -112,40 +385,107 @@ msgstr ""
 msgid "Go to Fluent SMTP Settings page"
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:217
+#: app/Http/Controllers/SettingsController.php:231
 msgid "Go to FluentCRM Dashboard"
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:221
+#: app/Http/Controllers/SettingsController.php:235
 msgid "Go to Ninja Tables Dashboard"
 msgstr ""
 
 #. URI of the plugin
+#. Author URI of the plugin
 msgid "https://fluentsmtp.com"
 msgstr ""
 
-#. Author URI of the plugin
-msgid "https://wpmanageninja.com"
+#: app/Hooks/Handlers/AdminMenuHandler.php:396
+msgid ""
+"If checked, the From Email setting above will be used for all emails (It "
+"will check if the from email is listed to available connections)."
+msgstr ""
+
+#: app/views/admin/digest_email.php:133
+msgid "If this is unusual you should probably check if your site is broken."
 msgstr ""
 
 #: app/Services/Mailer/ValidatorTrait.php:20
 msgid "Invalid email address."
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:70
+#: app/Hooks/Handlers/AdminMenuHandler.php:360
+msgid "Last 3 months"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:290
+msgid "Last 7 days"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:359
+msgid "Last month"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:358
+msgid "Last week"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:421
+msgid "Log All Emails for Reporting"
+msgstr ""
+
+#: app/views/admin/digest_email.php:131
+msgid "Looks like no email has been sent to the time period"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:74
 msgid "Mailgun"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:63
+#: app/Services/Mailer/Providers/config.php:65
 msgid "Middle East (Bahrain)"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:390
+msgid "Next"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:433
+msgid "No Emails will be sent from your WordPress."
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:419
+msgid "Notification Days"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:417
+msgid "Notification Email Addresses"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:411
+msgid "Notification Settings"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:166
+msgid "Outlook/Office365"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:181
+msgid "Outlook/Office365 is not recommended for sending mass marketing emails."
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:133
 msgid "Pepipost"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:148
+#: app/Services/Mailer/Providers/config.php:185
 msgid "PHP Mail"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:430
+msgid "Please add another connection to use fallback feature"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:347
+msgid "Please configure your first email service provider connection"
 msgstr ""
 
 #: app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php:28
@@ -156,12 +496,30 @@ msgstr ""
 msgid "Please define FLUENTMAIL_AWS_SECRET_ACCESS_KEY in wp-config.php file."
 msgstr ""
 
+#: app/Services/Mailer/Providers/Gmail/Handler.php:119
+msgid "Please define FLUENTMAIL_GMAIL_CLIENT_ID in wp-config.php file."
+msgstr ""
+
+#: app/Services/Mailer/Providers/Gmail/Handler.php:125
+msgid "Please define FLUENTMAIL_GMAIL_CLIENT_SECRET in wp-config.php file."
+msgstr ""
+
+#: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:27
 #: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:27
 msgid "Please define FLUENTMAIL_MAILGUN_API_KEY in wp-config.php file."
 msgstr ""
 
+#: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:31
 #: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:31
 msgid "Please define FLUENTMAIL_MAILGUN_DOMAIN in wp-config.php file."
+msgstr ""
+
+#: app/Services/Mailer/Providers/Outlook/Handler.php:88
+msgid "Please define FLUENTMAIL_OUTLOOK_CLIENT_ID in wp-config.php file."
+msgstr ""
+
+#: app/Services/Mailer/Providers/Outlook/Handler.php:94
+msgid "Please define FLUENTMAIL_OUTLOOK_CLIENT_SECRET in wp-config.php file."
 msgstr ""
 
 #: app/Services/Mailer/Providers/PepiPost/ValidatorTrait.php:24
@@ -176,35 +534,145 @@ msgstr ""
 msgid "Please define FLUENTMAIL_SENDINBLUE_API_KEY in wp-config.php file."
 msgstr ""
 
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:33
+msgid "Please define FLUENTMAIL_SMTP_PASSWORD in wp-config.php file."
+msgstr ""
+
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:29
+msgid "Please define FLUENTMAIL_SMTP_USERNAME in wp-config.php file."
+msgstr ""
+
 #: app/Services/Mailer/Providers/SparkPost/ValidatorTrait.php:24
 msgid "Please define FLUENTMAIL_SPARKPOST_API_KEY in wp-config.php file."
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:234
+#: app/Services/Mailer/Providers/Gmail/Handler.php:172
+#: app/Services/Mailer/Providers/Outlook/Handler.php:131
+msgid "Please Provide Auth Token."
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:401
+msgid "Please select your email service provider"
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:248
 msgid "Plugin has been successfully installed."
+msgstr ""
+
+#: app/Functions/pluggable.php:468
+msgid "Possible Conflict: "
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:391
+msgid "Prev"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:407
+msgid "Provider"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:349
+msgid "Quick Overview"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:385
+msgid "Resend"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:363
+msgid "Resend Selected Emails"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:387
+msgid "Resent Count"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:384
+msgid "Retry"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:400
+msgid "Save Connection Settings"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:354
+msgid "Save Email Logs:"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:420
+msgid "Save Settings"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:392
+msgid "Search Results for"
 msgstr ""
 
 #: app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php:24
 msgid "Secret key is required."
 msgstr ""
 
+#: app/Http/Controllers/Controller.php:59
+msgid "Security Failed. Please reload the page"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:371
+msgid "Select"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:374
+msgid "Select date"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:375
+msgid "Select date and time"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:425
+msgid ""
+"Select how many days, the logs will be saved. If you select 7 days, then "
+"logs older than 7 days will be deleted automatically."
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:428
+msgid ""
+"Select which connection will be used for sending transactional emails from "
+"your WordPress. If you use multiple connection then email will be routed "
+"based on source from email address"
+msgstr ""
+
 #: app/Services/Mailer/ValidatorTrait.php:16
 msgid "Sender email is required."
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:88
+#: app/Hooks/Handlers/AdminMenuHandler.php:393
+msgid "Sender Settings"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:91
 msgid "SendGrid"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:103
+#: app/Services/Mailer/Providers/config.php:105
 msgid "Sendinblue"
 msgstr ""
 
-#: app/Hooks/filters.php:9
+#: app/Hooks/Handlers/AdminMenuHandler.php:348
+msgid "Sending Stats"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:313
+msgid "Sent"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:397
+msgid "Set the return-path to match the From Email"
+msgstr ""
+
+#: app/Hooks/filters.php:9 app/Hooks/Handlers/AdminMenuHandler.php:337
 msgid "Settings"
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:112
+#: app/Http/Controllers/SettingsController.php:126
 msgid "Settings saved successfully."
 msgstr ""
 
@@ -212,56 +680,87 @@ msgstr ""
 msgid "SMTP"
 msgstr ""
 
-#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:17
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:19
 msgid "SMTP host is required."
 msgstr ""
 
-#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:30
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:41
 msgid "SMTP password is required."
 msgstr ""
 
-#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:21
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:23
 msgid "SMTP port is required."
 msgstr ""
 
-#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:26
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:37
 msgid "SMTP username is required."
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:187
+#: app/Http/Controllers/SettingsController.php:201
 msgid "Sorry no connection found. Please reload the page and try again"
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:227
+#: app/Http/Controllers/SettingsController.php:241
 msgid "Sorry, You can not install this plugin"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:62
+#: app/Services/Mailer/Providers/config.php:64
 msgid "South America (São Paulo)"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:118
+#: app/Services/Mailer/Providers/config.php:119
 msgid "SparkPost"
 msgstr ""
 
-#: app/Functions/pluggable.php:426
-msgid ""
-"The <strong>FluentSMTP</strong> plugin depends on\n"
-"                                <a target=\"_blank\" href=\"https:"
-"//developer.wordpress.org/reference/functions/wp_mail/\">wp_mail</a> "
-"pluggable function and\n"
-"                                plugin is not able to extend it. Please "
-"check if another plugin is using this and disable it for <strong>Fluent "
-"Mail</strong> to work!"
+#: app/Hooks/Handlers/AdminMenuHandler.php:376
+msgid "Start date"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:159
+#: app/Hooks/Handlers/AdminMenuHandler.php:368
+msgid "Status"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:380
+#: app/views/admin/digest_email.php:114 app/views/admin/digest_email.php:164
+msgid "Subject"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:357
+msgid "Subscribe To Updates"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:372
+msgid "Successful"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:340
+msgid "Support"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:346
+msgid ""
+"Thank you for installing FluentSMTP - The ultimate SMTP & Email Service "
+"Connection Plugin for WordPress"
+msgstr ""
+
+#: app/Functions/pluggable.php:461
+#, php-format
+msgid ""
+"The <strong>FluentSMTP</strong> plugin depends on\n"
+"                                <a target=\"_blank\" href=\"%1s\">wp_mail</a>"
+" pluggable function and\n"
+"                                plugin is not able to extend it. Please "
+"check if another plugin is using this and disable it for <strong>"
+"FluentSMTP</strong> to work!"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:196
 msgid ""
 "The Default option does not use SMTP or any Email Service Providers so it "
 "will not improve email delivery on your site."
 msgstr ""
 
-#: app/Http/Controllers/SettingsController.php:128
+#: app/Http/Controllers/SettingsController.php:142
 msgid "The email field is required."
 msgstr ""
 
@@ -269,26 +768,83 @@ msgstr ""
 msgid "The Ultimate SMTP Connection Plugin for WordPress."
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:47
-msgid "US East (N. Virginia)"
+#: app/Hooks/Handlers/AdminMenuHandler.php:381
+msgid "To"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:283
+msgid "Today"
+msgstr ""
+
+#: app/Services/Mailer/Providers/Gmail/Handler.php:291
+#: app/Services/Mailer/Providers/Outlook/Handler.php:190
+msgid "Token Validity"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:350
+msgid "Total Email Sent (Logged):"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:386
+msgid "Turn On"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:379
+msgid "Type & press enter..."
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:48
-msgid "US East (Ohio)"
+msgid "US East (N. Virginia)"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:49
-msgid "US West (N. California)"
+msgid "US East (Ohio)"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:50
+msgid "US West (N. California)"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:51
 msgid "US West (Oregon)"
 msgstr ""
 
-#. Author of the plugin
-msgid "WPManageNinja Team"
+#: app/Hooks/Handlers/AdminMenuHandler.php:404
+msgid "Validating Data. Please wait"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:329
+msgid "View All"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:345
+msgid "Welcome to FluentSMTP"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:403
+msgid ""
+"When checked, the From Name setting above will be used for all emails, "
+"ignoring values set by other plugins."
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:195
+#, php-format
+msgid ""
+"WordPress version 5.5 or greater is required for FluentSMTP. You are using "
+"version %s currently. Please update your WordPress Core to use FluentSMTP "
+"Plugin."
 msgstr ""
 
 #: app/Http/Controllers/Controller.php:51
 msgid "You do not have permission to do this action"
+msgstr ""
+
+#: app/views/admin/digest_email.php:182
+msgid "Your email sending health is perfect"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:414
+msgid ""
+"Your emails will be routed automatically based on From email address. No "
+"additional configuration is required."
 msgstr ""

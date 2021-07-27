@@ -124,7 +124,10 @@ export default class FluentMail {
                 slugify: self.slugify,
                 dayjs: dayjs,
                 escapeHtml: self.escapeHtml,
-                hasPro: () => Boolean(window.FluentMail.appVars.has_pro)
+                hasPro: () => Boolean(window.FluentMail.appVars.has_pro),
+                $t(string) {
+                    return window.FluentMailAdmin.trans[string] || string;
+                }
             }
         });
 

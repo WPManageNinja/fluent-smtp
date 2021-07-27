@@ -1,7 +1,7 @@
 <template>
     <div @mouseover="onMouseOver" @mouseleave="onMouseOut">
         <span ref="fullscreen" class="full-screen-text" @click="fullScreen">
-            Enter Full Screen
+            {{$t('Enter Full Screen')}}
         </span>
         <iframe
             ref="ifr"

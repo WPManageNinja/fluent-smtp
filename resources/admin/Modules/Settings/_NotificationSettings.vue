@@ -1,18 +1,18 @@
 <template>
     <div v-loading="loading" class="fss_general_settings">
         <el-form class="fss_compact_form" :data="notification_settings" label-position="top">
-            <el-form-item label="Enable Email Summary Notification">
+            <el-form-item :label="$t('Enable Email Summary Notification')">
                 <el-checkbox
                     v-model="notification_settings.enabled"
                     true-label="yes"
                     false-label="no"
-                >Enable Email Summary</el-checkbox>
+                >{{$t('Enable Email Summary')}}</el-checkbox>
             </el-form-item>
             <template v-if="notification_settings.enabled == 'yes'">
-                <el-form-item label="Email Address to send">
-                    <el-input size="small" v-model="notification_settings.notify_email" placeholder="Email Address" />
+                <el-form-item :label="$t('Notification Email Addresses')">
+                    <el-input size="small" v-model="notification_settings.notify_email" :placeholder="$t('Email Address')" />
                 </el-form-item>
-                <el-form-item label="Notification Days">
+                <el-form-item :label="$t('Notification Days')">
                     <el-checkbox-group v-model="notification_settings.notify_days">
                         <el-checkbox v-for="(day, dayLabel) in sending_days" :key="day" :value="day" :label="dayLabel"></el-checkbox>
                     </el-checkbox-group>
@@ -22,7 +22,7 @@
                 v-loading="saving"
                 @click="saveSettings()"
                 type="success"
-            >Save Settings</el-button>
+            >{{$t('Save Settings')}}</el-button>
         </el-form>
     </div>
 </template>

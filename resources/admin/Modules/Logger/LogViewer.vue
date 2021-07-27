@@ -28,7 +28,7 @@
                                     @click="handleRetry(log, 'retry')"
                                     :plain="true"
                                     v-if="log.status == 'failed'"
-                                >Retry</el-button>
+                                >{{$t('Retry')}}</el-button>
 
                                 <el-button
                                     size="mini"
@@ -37,13 +37,13 @@
                                     @click="handleRetry(log, 'resend')"
                                     v-if="log.status == 'sent'"
                                 >
-                                    Resend
+                                    {{$t('Resend')}}
                                 </el-button>
                             </span>
                         </div>
                     </li>
                     <li>
-                        <div class="item_header">Date-Time:</div>
+                        <div class="item_header">{{$t('Date-Time')}}:</div>
                         <div class="item_content">{{ log.created_at }}</div>
                     </li>
                     <li>
@@ -75,13 +75,13 @@
                         </div>
                     </li>
                     <li v-if="log.resent_count > 0">
-                        <div class="item_header">Resent Count:</div>
+                        <div class="item_header">{{$t('Resent Count')}}:</div>
                         <div class="item_content">
                             <span v-html="log.resent_count"></span>
                         </div>
                     </li>
                     <li>
-                        <div class="item_header">Subject:</div>
+                        <div class="item_header">{{$t('Subject')}}:</div>
                         <div class="item_content">
                             <span v-html="log.subject"></span>
                         </div>
@@ -97,7 +97,7 @@
                 <el-collapse v-model="activeName" style="margin-top:10px;">
                     <el-collapse-item name="email_body">
                         <template slot="title">
-                            <strong style="color:#606266">Email Body</strong>
+                            <strong style="color:#606266">{{$t('Email Body')}}</strong>
                         </template>
                         <hr class="log-border">
                         <EmailbodyContainer :content="log.body" />
@@ -106,7 +106,7 @@
                     <el-collapse-item name="attachments">
                         <template slot="title">
                             <strong style="color:#606266">
-                                Attachments ({{getAttachments(log).length}})
+                                {{$t('Attachments')}} ({{getAttachments(log).length}})
                             </strong>
                         </template>
                         <hr class="log-border">
@@ -149,7 +149,7 @@
                             :disabled="!prev"
                             @click="navigate('prev')"
                         >
-                            <i class="el-icon-arrow-left"></i> Prev
+                            <i class="el-icon-arrow-left"></i> {{$t('Prev')}}
                         </el-button>
                     </el-col>
                     <el-col :span="12">
@@ -159,7 +159,7 @@
                             :disabled="!next"
                             @click="navigate('next')"
                         >
-                            Next <i class="el-icon-arrow-right"></i>
+                            {{$t('Next')}} <i class="el-icon-arrow-right"></i>
                         </el-button>
                     </el-col>
                 </el-row>

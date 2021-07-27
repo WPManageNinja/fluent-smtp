@@ -3,7 +3,6 @@
 namespace FluentMail\App\Hooks\Handlers;
 
 use FluentMail\App\Models\Logger;
-use FluentMail\App\Models\Settings;
 use FluentMail\Includes\Core\Application;
 use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\Includes\Support\Arr;
@@ -27,7 +26,7 @@ class AdminMenuHandler
 
         add_action('admin_bar_menu', array($this, 'addSimulationBar'), 999);
 
-        add_action( 'admin_init', array($this, 'initAdminWidget'));
+        add_action('admin_init', array($this, 'initAdminWidget'));
 
     }
 
@@ -131,7 +130,8 @@ class AdminMenuHandler
             'has_ninja_tables'       => defined('NINJA_TABLES_VERSION'),
             'disable_recommendation' => apply_filters('fluentmail_disable_recommendation', false),
             'disable_installation'   => $disable_recommendation,
-            'plugin_url'             => 'https://fluentsmtp.com/?utm_source=wp&utm_medium=install&utm_campaign=dashboard'
+            'plugin_url'             => 'https://fluentsmtp.com/?utm_source=wp&utm_medium=install&utm_campaign=dashboard',
+            'trans'                  => $this->getTrans()
         ]);
 
         do_action('fluent_mail_loading_app');
@@ -254,19 +254,19 @@ class AdminMenuHandler
     public function initAdminWidget()
     {
         // This widget should be displayed for certain high-level users only.
-        if ( ! current_user_can( 'manage_options' ) || apply_filters('fluent_mail_disable_dashboard_widget', false) ) {
+        if (!current_user_can('manage_options') || apply_filters('fluent_mail_disable_dashboard_widget', false)) {
             return;
         }
 
-        add_action( 'wp_dashboard_setup',function () {
+        add_action('wp_dashboard_setup', function () {
             $widget_key = 'fluentsmtp_reports_widget';
 
             wp_add_dashboard_widget(
                 $widget_key,
-                esc_html__( 'Fluent SMTP', 'fluent-smtp' ),
-                [ $this, 'dashWidgetContent' ]
+                esc_html__('Fluent SMTP', 'fluent-smtp'),
+                [$this, 'dashWidgetContent']
             );
-        } );
+        });
 
     }
 
@@ -280,21 +280,21 @@ class AdminMenuHandler
         $allTime = $logModel->getStats();
 
         $stats['today'] = [
-            'title' => __('Today', 'fluent-smtp'),
-            'sent' => ($allTime['sent']) ? $logModel->getTotalCountStat('sent',$startToday) : 0,
-            'failed' => ($allTime['failed']) ? $logModel->getTotalCountStat('failed',$startToday) : 0
+            'title'  => __('Today', 'fluent-smtp'),
+            'sent'   => ($allTime['sent']) ? $logModel->getTotalCountStat('sent', $startToday) : 0,
+            'failed' => ($allTime['failed']) ? $logModel->getTotalCountStat('failed', $startToday) : 0
         ];
 
         $lastWeek = date('Y-m-d 00:00:01', strtotime('-7 days'));
         $stats['week'] = [
-            'title' => __('Last 7 days', 'fluent-smtp'),
-            'sent' => ($allTime['sent']) ? $logModel->getTotalCountStat('sent', $lastWeek) : 0,
+            'title'  => __('Last 7 days', 'fluent-smtp'),
+            'sent'   => ($allTime['sent']) ? $logModel->getTotalCountStat('sent', $lastWeek) : 0,
             'failed' => ($allTime['failed']) ? $logModel->getTotalCountStat('sent', $lastWeek) : 0,
         ];
 
         $stats['all_time'] = [
-            'title' => __('All', 'fluent-smtp'),
-            'sent' => $allTime['sent'],
+            'title'  => __('All', 'fluent-smtp'),
+            'sent'   => $allTime['sent'],
             'failed' => $allTime['failed'],
         ];
 
@@ -308,24 +308,129 @@ class AdminMenuHandler
         <div class="fsmtp_dash_wrapper">
             <table class="fsmtp_dash_table wp-list-table widefat fixed striped">
                 <thead>
-                    <tr>
-                        <th><?php _e('Date', 'fluent-smtp'); ?></th>
-                        <th><?php _e('Sent', 'fluent-smtp'); ?></th>
-                        <th><?php _e('Failed', 'fluent-smtp'); ?></th>
-                    </tr>
+                <tr>
+                    <th><?php _e('Date', 'fluent-smtp'); ?></th>
+                    <th><?php _e('Sent', 'fluent-smtp'); ?></th>
+                    <th><?php _e('Failed', 'fluent-smtp'); ?></th>
+                </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($stats as $stat): ?>
+                <?php foreach ($stats as $stat): ?>
                     <tr>
                         <td><?php echo $stat['title']; ?></td>
                         <td><?php echo $stat['sent']; ?></td>
                         <td class="<?php echo ($stat['failed']) ? 'fstmp_failed' : ''; ?>"><?php echo $stat['failed']; ?></td>
                     </tr>
-                    <?php endforeach; ?>
+                <?php endforeach; ?>
                 </tbody>
             </table>
-            <a style="text-decoration: none; padding-top: 10px; display: block" href="<?php echo admin_url('options-general.php?page=fluent-mail#/'); ?>" class=""><?php _e('View All', 'fluent-smtp'); ?></a>
+            <a style="text-decoration: none; padding-top: 10px; display: block"
+               href="<?php echo admin_url('options-general.php?page=fluent-mail#/'); ?>"
+               class=""><?php _e('View All', 'fluent-smtp'); ?></a>
         </div>
         <?php
+    }
+
+    public function getTrans()
+    {
+        return [
+            'Settings'                                              => __('Settings', 'fluent-smtp'),
+            'Email Test'                                            => __('Email Test', 'fluent-smtp'),
+            'Email Logs'                                            => __('Email Logs', 'fluent-smtp'),
+            'Support'                                               => __('Support', 'fluent-smtp'),
+            'Docs'                                                  => __('Docs', 'fluent-smtp'),
+            'cancel'                                                => __('cancel', 'fluent-smtp'),
+            'confirm'                                               => __('confirm', 'fluent-smtp'),
+            'confirm_msg'                                           => __('Are you sure to delete this?', 'fluent-smtp'),
+            'wizard_title'                                          => __('Welcome to FluentSMTP', 'fluent-smtp'),
+            'wizard_sub'                                            => __('Thank you for installing FluentSMTP - The ultimate SMTP & Email Service Connection Plugin for WordPress', 'fluent-smtp'),
+            'wizard_instruction'                                    => __('Please configure your first email service provider connection', 'fluent-smtp'),
+            'Sending Stats'                                         => __('Sending Stats', 'fluent-smtp'),
+            'Quick Overview'                                        => __('Quick Overview', 'fluent-smtp'),
+            'Total Email Sent (Logged):'                            => __('Total Email Sent (Logged):', 'fluent-smtp'),
+            'Email Failed:'                                         => __('Email Failed:', 'fluent-smtp'),
+            'Active Connections:'                                   => __('Active Connections:', 'fluent-smtp'),
+            'Active Senders:'                                       => __('Active Senders:', 'fluent-smtp'),
+            'Save Email Logs:'                                      => __('Save Email Logs:', 'fluent-smtp'),
+            'Delete Logs:'                                          => __('Delete Logs:', 'fluent-smtp'),
+            'Days'                                                  => __('Days', 'fluent-smtp'),
+            'Subscribe To Updates'                                  => __('Subscribe To Updates', 'fluent-smtp'),
+            'Last week'                                             => __('Last week', 'fluent-smtp'),
+            'Last month'                                            => __('Last month', 'fluent-smtp'),
+            'Last 3 months'                                         => __('Last 3 months', 'fluent-smtp'),
+            'By Date'                                               => __('By Date', 'fluent-smtp'),
+            'Apply'                                                 => __('Apply', 'fluent-smtp'),
+            'Resend Selected Emails'                                => __('Resend Selected Emails', 'fluent-smtp'),
+            'Bulk Action'                                           => __('Bulk Action', 'fluent-smtp'),
+            'Delete All'                                            => __('Delete All', 'fluent-smtp'),
+            'Enter Full Screen'                                     => __('Enter Full Screen', 'fluent-smtp'),
+            'Filter By'                                             => __('Filter By', 'fluent-smtp'),
+            'Status'                                                => __('Status', 'fluent-smtp'),
+            'Date'                                                  => __('Date', 'fluent-smtp'),
+            'Date Range'                                            => __('Date Range', 'fluent-smtp'),
+            'Select'                                                => __('Select', 'fluent-smtp'),
+            'Successful'                                            => __('Successful', 'fluent-smtp'),
+            'Failed'                                                => __('Failed', 'fluent-smtp'),
+            'Select date'                                           => __('Select date', 'fluent-smtp'),
+            'Select date and time'                                  => __('Select date and time', 'fluent-smtp'),
+            'Start date'                                            => __('Start date', 'fluent-smtp'),
+            'End date'                                              => __('End date', 'fluent-smtp'),
+            'Filter'                                                => __('Filter', 'fluent-smtp'),
+            'Type & press enter...'                                 => __('Type & press enter...', 'fluent-smtp'),
+            'Subject'                                               => __('Subject', 'fluent-smtp'),
+            'To'                                                    => __('To', 'fluent-smtp'),
+            'Date-Time'                                             => __('Date-Time', 'fluent-smtp'),
+            'Actions'                                               => __('Actions', 'fluent-smtp'),
+            'Retry'                                                 => __('Retry', 'fluent-smtp'),
+            'Resend'                                                => __('Resend', 'fluent-smtp'),
+            'Turn On'                                               => __('Turn On', 'fluent-smtp'),
+            'Resent Count'                                          => __('Resent Count', 'fluent-smtp'),
+            'Email Body'                                            => __('Email Body', 'fluent-smtp'),
+            'Attachments'                                           => __('Attachments', 'fluent-smtp'),
+            'Next'                                                  => __('Next', 'fluent-smtp'),
+            'Prev'                                                  => __('Prev', 'fluent-smtp'),
+            'Search Results for'                                    => __('Search Results for', 'fluent-smtp'),
+            'Sender Settings'                                       => __('Sender Settings', 'fluent-smtp'),
+            'From Email'                                            => __('From Email', 'fluent-smtp'),
+            'Force From Email (Recommended Settings: Enable)'       => __('Force From Email (Recommended Settings: Enable)', 'fluent-smtp'),
+            'from_email_tooltip'                                    => __('If checked, the From Email setting above will be used for all emails (It will check if the from email is listed to available connections).', 'fluent-smtp'),
+            'Set the return-path to match the From Email'           => __('Set the return-path to match the From Email', 'fluent-smtp'),
+            'From Name'                                             => __('From Name', 'fluent-smtp'),
+            'Force Sender Name'                                     => __('Force Sender Name', 'fluent-smtp'),
+            'Save Connection Settings'                              => __('Save Connection Settings', 'fluent-smtp'),
+            'save_connection_error_1'                               => __('Please select your email service provider', 'fluent-smtp'),
+            'save_connection_error_2'                               => __('Credential Verification Failed. Please check your inputs', 'fluent-smtp'),
+            'force_sender_tooltip'                                  => __('When checked, the From Name setting above will be used for all emails, ignoring values set by other plugins.', 'fluent-smtp'),
+            'Validating Data. Please wait'                          => __('Validating Data. Please wait', 'fluent-smtp'),
+            'Active Email Connections'                              => __('Active Email Connections', 'fluent-smtp'),
+            'Add Another Connection'                                => __('Add Another Connection', 'fluent-smtp'),
+            'Provider'                                              => __('Provider', 'fluent-smtp'),
+            'Connection Details'                                    => __('Connection Details', 'fluent-smtp'),
+            'Close'                                                 => __('Close', 'fluent-smtp'),
+            'General Settings'                                      => __('General Settings', 'fluent-smtp'),
+            'Notification Settings'                                 => __('Notification Settings', 'fluent-smtp'),
+            'Add Connection'                                        => __('Add Connection', 'fluent-smtp'),
+            'Edit Connection'                                       => __('Edit Connection', 'fluent-smtp'),
+            'routing_info'                                          => __('Your emails will be routed automatically based on From email address. No additional configuration is required.', 'fluent-smtp'),
+            'Enable Email Summary'                                  => __('Enable Email Summary', 'fluent-smtp'),
+            'Enable Email Summary Notification'                     => __('Enable Email Summary Notification', 'fluent-smtp'),
+            'Notification Email Addresses'                          => __('Notification Email Addresses', 'fluent-smtp'),
+            'Email Address'                                         => __('Email Address', 'fluent-smtp'),
+            'Notification Days'                                     => __('Notification Days', 'fluent-smtp'),
+            'Save Settings'                                         => __('Save Settings', 'fluent-smtp'),
+            'Log All Emails for Reporting'                          => __('Log All Emails for Reporting', 'fluent-smtp'),
+            'Disable Logging for FluentCRM Emails'                  => __('Disable Logging for FluentCRM Emails', 'fluent-smtp'),
+            'FluentCRM Email Logging'                               => __('FluentCRM Email Logging', 'fluent-smtp'),
+            'Delete Logs'                                           => __('Delete Logs', 'fluent-smtp'),
+            'delete_logs_info'                                      => __('Select how many days, the logs will be saved. If you select 7 days, then logs older than 7 days will be deleted automatically.', 'fluent-smtp'),
+            'Default Connection'                                    => __('Default Connection', 'fluent-smtp'),
+            'Fallback Connection'                                   => __('Fallback Connection', 'fluent-smtp'),
+            'default_connection_popover'                            => __('Select which connection will be used for sending transactional emails from your WordPress. If you use multiple connection then email will be routed based on source from email address', 'fluent-smtp'),
+            'fallback_connection_popover'                           => __('Fallback Connection will be used if an email is failed to send in one connection. Please select a different connection than the default connection', 'fluent-smtp'),
+            'Please add another connection to use fallback feature' => __('Please add another connection to use fallback feature', 'fluent-smtp'),
+            'Email Simulation'                                      => __('Email Simulation', 'fluent-smtp'),
+            'Email_Simulation_Label'                                => __('Disable sending all emails. If you enable this, no email will be sent.', 'fluent-smtp'),
+            'Email_Simulation_Yes'                                  => __('No Emails will be sent from your WordPress.', 'fluent-smtp'),
+        ];
     }
 }

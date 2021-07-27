@@ -6,7 +6,7 @@
             v-model="query"
             @clear="query=''"
             @keyup.enter.native="search"
-            placeholder="Type & press enter..."
+            :placeholder="$t('Type & press enter...')"
         >
             <el-button slot="append" icon="el-icon-search" @click="search" />
         </el-input>

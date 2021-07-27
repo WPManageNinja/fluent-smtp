@@ -6,12 +6,12 @@
                     clearable
                     size="small"
                     v-model="filterBy"
-                    placeholder="Filter By"
+                    :placeholder="$t('Filter By')"
                     @clear="clearFilterValue"
                 >
-                    <el-option label="Status" value="status" />
-                    <el-option label="Date" value="date" />
-                    <el-option label="Date Range" value="daterange" />
+                    <el-option :label="$t('Status')" value="status" />
+                    <el-option :label="$t('Date')" value="date" />
+                    <el-option :label="$t('Date Range')" value="daterange" />
                 </el-select>
             </el-col>
 
@@ -21,12 +21,12 @@
                     size="small"
                     v-model="filterValue"
                     :disabled="!filterBy"
-                    placeholder="Select"
+                    :placeholder="$t('Select')"
                     v-if="!filterBy || filterBy==='status'"
                     style="width:100%"
                 >
-                    <el-option label="Successful" value="sent" />
-                    <el-option label="Failed" value="failed" />
+                    <el-option :label="$t('Successful')" value="sent" />
+                    <el-option :label="$t('Failed')" value="failed" />
                 </el-select>
 
                 <el-date-picker
@@ -36,7 +36,7 @@
                     size="small"
                     v-model="filterValue"
                     type="date"
-                    placeholder="Select date"
+                    :placeholder="$t('Select date')"
                     style="width:100%"
                 />
 
@@ -47,10 +47,10 @@
                     size="small"
                     v-model="filterValue"
                     type="daterange"
-                    placeholder="Select date and time"
+                    :placeholder="$t('Select date and time')"
                     range-separator="To"
-                    start-placeholder="Start date"
-                    end-placeholder="End date"
+                    :start-placeholder="$t('Start date')"
+                    :end-placeholder="$t('End date')"
                     style="width:100%"
                 />
             </el-col>
@@ -62,7 +62,7 @@
                     type="primary"
                     :disabled="!filterValue"
                     @click="applyFilter"
-                >Filter</el-button>
+                >{{$t('Filter')}}</el-button>
             </el-col>
         </el-row>
     </div>

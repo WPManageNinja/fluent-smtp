@@ -43,7 +43,7 @@
             setupChartItems() {
                 const labels = [];
                 const ItemValues = {
-                    label: 'By Date',
+                    label: this.$t('By Date'),
                     yAxisID: 'byDate',
                     backgroundColor: 'rgba(81, 52, 178, 0.5)',
                     borderColor: '#b175eb',

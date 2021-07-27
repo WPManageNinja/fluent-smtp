@@ -36,7 +36,7 @@
         created() {
             const key = this.$route.query.connection_key;
             if (key && key !== '0') {
-                this.title = 'Edit Connection';
+                this.title = this.$t('Edit Connection');
                 this.provider = this.settings.connections[key].provider_settings;
                 this.provider_key = key;
             }

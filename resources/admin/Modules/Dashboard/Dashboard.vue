@@ -3,10 +3,10 @@
         <div v-if="is_new" class="content">
             <div class="fss_connection_intro">
                 <div class="fss_intro">
-                    <h1>Welcome to FluentSMTP & SES</h1>
-                    <p>Thank you for installing FluentSMTP - The ultimate SMTP & Email Service Connection Plugin for WordPress</p>
+                    <h1>{{ $t('wizard_title') }}</h1>
+                    <p>{{ $t('wizard_sub') }}</p>
                 </div>
-                <h2>Please configure your first email service provider connection</h2>
+                <h2>{{ $t('wizard_instruction') }}</h2>
                 <connection-wizard
                     :connection="new_connection"
                     :is_new="true"
@@ -19,7 +19,7 @@
             <el-row :gutter="20">
                 <el-col :sm="24" :md="16">
                     <div class="header">
-                        Sending Stats
+                        {{$t('Sending Stats')}}
                         <span class="fss_to_right">
                             <el-date-picker
                                 size="small"
@@ -41,33 +41,33 @@
                 <el-col :sm="24" :md="8">
                     <div class="fsm_card">
                         <div class="header">
-                            Quick Overview
+                            {{$t('Quick Overview')}}
                         </div>
                         <div class="content" v-if="!loading">
                             <ul class="fss_dash_lists">
                                 <li v-if="settings_stat.log_enabled == 'yes'">
-                                    Total Email Sent (Logged): <span>{{stats.sent}}</span>
+                                    {{$t('Total Email Sent (Logged):')}} <span>{{stats.sent}}</span>
                                 </li>
                                 <li style="color: red" v-if="stats.failed > 0">
                                     <router-link style="color: red"  :to="{ name: 'logs', query: { filterBy: 'status', filterValue: 'failed' } }">
-                                        Email Failed: <span>{{stats.failed}}</span>
+                                        {{$t('Email Failed:')}} <span>{{stats.failed}}</span>
                                     </router-link>
                                 </li>
                                 <li>
-                                    Active Connections: <span>{{settings_stat.connection_counts}}</span>
+                                    {{$t('Active Connections:')}} <span>{{settings_stat.connection_counts}}</span>
                                 </li>
                                 <li>
-                                    Active Senders: <span>{{settings_stat.active_senders}}</span>
+                                    {{$t('Active Senders:')}} <span>{{settings_stat.active_senders}}</span>
                                 </li>
                                 <li>
-                                    Save Email Logs:
+                                    {{$t('Save Email Logs:')}}
                                     <span style="text-transform: capitalize;">
                                         {{settings_stat.log_enabled}}
                                     </span>
                                 </li>
                                 <li v-if="settings_stat.log_enabled == 'yes'">
-                                    Delete Logs:
-                                    <span>After {{settings_stat.auto_delete_days}} Days</span>
+                                    {{$t('Delete Logs:')}}
+                                    <span>After {{settings_stat.auto_delete_days}} {{$t('Days')}}</span>
                                 </li>
                             </ul>
                         </div>
@@ -75,7 +75,7 @@
                     </div>
                     <div v-if="appVars.require_optin == 'yes' && stats.sent > 9" style="margin-top: 20px;" class="fsm_card">
                         <div class="header">
-                            Subscribe To Updates
+                            {{$t('Subscribe To Updates')}}
                             <span class="header_action_right">
                                 <subscribe-dismiss />
                             </span>
@@ -119,7 +119,7 @@
                     },
                     shortcuts: [
                         {
-                            text: 'Last week',
+                            text: this.$t('Last week'),
                             onClick(picker) {
                                 const end = new Date();
                                 const start = new Date();
@@ -128,7 +128,7 @@
                             }
                         },
                         {
-                            text: 'Last month',
+                            text: this.$t('Last month'),
                             onClick(picker) {
                                 const end = new Date();
                                 const start = new Date();
@@ -137,7 +137,7 @@
                             }
                         },
                         {
-                            text: 'Last 3 months',
+                            text: this.$t('Last 3 months'),
                             onClick(picker) {
                                 const end = new Date();
                                 const start = new Date();

@@ -7,20 +7,20 @@
                     v-model="settings.misc.log_emails"
                     true-label="yes"
                     false-label="no"
-                >Log All Emails for Reporting</el-checkbox>
+                >{{$t('Log All Emails for Reporting')}}</el-checkbox>
             </el-form-item>
 
-            <el-form-item v-if="settings.misc.log_emails == 'yes' && !!appVars.has_fluentcrm" label="FluentCRM Email Logging">
-                <el-checkbox v-model="settings.misc.disable_fluentcrm_logs" true-label="yes" false-label="no">Disable Logging for FluentCRM Emails (Recommeneded)</el-checkbox>
+            <el-form-item v-if="settings.misc.log_emails == 'yes' && !!appVars.has_fluentcrm" :label="$t('FluentCRM Email Logging')">
+                <el-checkbox v-model="settings.misc.disable_fluentcrm_logs" true-label="yes" false-label="no">{{$t('Disable Logging for FluentCRM Emails')}}</el-checkbox>
             </el-form-item>
             
             <el-form-item v-if="settings.misc.log_emails == 'yes'">
                 <label slot="label">
-                    Delete Logs
+                    {{$t('Delete Logs')}}
                     <el-popover
                         width="400"
                         trigger="hover">
-                        <p>Select how many days, the logs will be saved. If you select 7 days, then logs older than 7 days will be deleted automatically.</p>
+                        <p>{{$t('delete_logs_info')}}</p>
                         <i slot="reference" class="el-icon el-icon-info"></i>
                     </el-popover>
                 </label>
@@ -36,11 +36,11 @@
 
             <el-form-item>
                 <label slot="label">
-                    Default Connection
+                    {{$t('Default Connection')}}
                     <el-popover
                         width="400"
                         trigger="hover">
-                        <p>Select which connection will be used for sending transactional emails from your WordPress. If you use multiple connection then email will be routed based on source from email address</p>
+                        <p>{{$t('default_connection_popover')}}</p>
                         <i slot="reference" class="el-icon el-icon-info"></i>
                     </el-popover>
                 </label>
@@ -61,7 +61,7 @@
                     <el-popover
                         width="400"
                         trigger="hover">
-                        <p>Fallback Connection will be used if an email is failed to send in one connection. Please select a different connection than the default connection</p>
+                        <p>{{$t('fallback_connection_popover')}}</p>
                         <i slot="reference" class="el-icon el-icon-info"></i>
                     </el-popover>
                 </label>
@@ -74,23 +74,23 @@
                         :label="connection.title +' - '+ connection.provider_settings.sender_email"
                     ></el-option>
                 </el-select>
-                <p v-else style="color: #6d6b6b;margin: 0;">Please add another connection to use fallback feature</p>
+                <p v-else style="color: #6d6b6b;margin: 0;">{{$t('Please add another connection to use fallback feature')}}</p>
             </el-form-item>
 
-            <el-form-item label="Email Simulation">
+            <el-form-item :label="$t('Email Simulation')">
                 <el-checkbox
                     v-model="settings.misc.simulate_emails"
                     true-label="yes"
                     false-label="no"
-                >Disable sending all emails. If you enable this, no email will be sent.</el-checkbox>
-                <p style="color: red;" v-if="settings.misc.simulate_emails == 'yes'">No Emails will be sent from your WordPress.</p>
+                >{{$t('Email_Simulation_Label')}}</el-checkbox>
+                <p style="color: red;" v-if="settings.misc.simulate_emails == 'yes'">{{$t('Email_Simulation_Yes')}}</p>
             </el-form-item>
 
             <el-button
                 v-loading="saving"
                 @click="saveMiscSettings()"
                 type="success"
-            >Save Settings</el-button>
+            >{{$t('Save Settings')}}</el-button>
         </el-form>
     </div>
 </template>

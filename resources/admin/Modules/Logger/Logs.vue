@@ -2,7 +2,7 @@
     <div class="logs">
         <div>
             <div class="header">
-                <div style="float:left;margin-top:6px;">Email Logs</div>
+                <div style="float:left;margin-top:6px;">{{$t('Email Logs')}}</div>
                 
                 <LogFilter
                     @on-filter="onFilter"
@@ -25,7 +25,7 @@
                         v-model="query"
                         @clear="query=''"
                         @keyup.enter.native="fetch"
-                        placeholder="Type & press enter..."
+                        :placeholder="$t('Type & press enter...')"
                     >
                         <el-button slot="append" icon="el-icon-search" @click="fetch" />
                     </el-input>
@@ -42,29 +42,27 @@
                     @selection-change="handleSelectionChange"
                 >
                     <el-table-column type="selection" width="55" />
-                    <el-table-column label="Subject">
+                    <el-table-column :label="$t('Subject')">
                         <template slot-scope="scope">
                             <div>{{ scope.row.subject }}</div>
                         </template>
                     </el-table-column>
                     
-                    <el-table-column label="To">
+                    <el-table-column :label="$t('To')">
                         <template slot-scope="scope">
                             <span v-html="scope.row.to"></span>
                         </template>
                     </el-table-column>
                     
-                    <el-table-column label="Status" width="120" align="center">
+                    <el-table-column :label="$t('Status')" width="120" align="center">
                         <template slot-scope="scope">
                             {{ scope.row.status }}
                         </template>
                     </el-table-column>
 
-                    <el-table-column prop="created_at" label="Date-Time" width="200px" />
+                    <el-table-column prop="created_at" :label="$t('Date-Time')" width="200px" />
 
-                    <!-- <el-table-column prop="retries" label="Retries" width="200px" /> -->
-
-                    <el-table-column label="Actions" width="190px" align="right">
+                    <el-table-column :label="$t('Actions')" width="190px" align="right">
                         <template slot-scope="scope">
                             <el-button
                                 size="mini"
@@ -73,7 +71,7 @@
                                 @click="handleRetry(scope.row, 'retry')"
                                 :plain="true"
                                 v-if="scope.row.status == 'failed'"
-                            >Retry</el-button>
+                            >{{ $t('Retry') }}</el-button>
                             <el-button
                                 size="mini"
                                 type="success"
@@ -81,7 +79,7 @@
                                 @click="handleRetry(scope.row, 'resend')"
                                 v-if="scope.row.status == 'sent'"
                             >
-                                Resend
+                                {{$t('Resend')}}
                                 <span v-if="scope.row.resent_count > 0">({{scope.row.resent_count}})</span>
                             </el-button>
 
@@ -116,7 +114,7 @@
             <div class="content">
                 <el-alert :closable="false" show-icon center>
                     Email Logging is currently turned off. Only Failed and resent emails will be shown here
-                    <el-button type="text" @click="turnOnEmailLogging">Turn On</el-button>.
+                    <el-button type="text" @click="turnOnEmailLogging">{{$t('Turn On')}}</el-button>.
                 </el-alert>
             </div>
         </div>

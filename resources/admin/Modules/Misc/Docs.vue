@@ -18,7 +18,7 @@
             <div v-if="search" class="search_result">
                 <div class="fc_doc_items">
                     <div class="fc_doc_header">
-                        <h3>Search Results for: {{ search }}</h3>
+                        <h3>{{$t('Search Results for')}}: {{ search }}</h3>
                     </div>
                     <div class="fc_doc_lists">
                         <ul v-if="search_items.length">

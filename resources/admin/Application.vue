@@ -47,7 +47,7 @@
                 return [
                     {
                         route: 'connections',
-                        title: 'Settings'
+                        title: this.$t('Settings')
                     },
                     {
                         route: 'test',
