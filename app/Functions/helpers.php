@@ -159,7 +159,7 @@ if (!function_exists('fluentMailGetProvider')) {
 
         if(!$connection) {
             $connection = fluentMailDefaultConnection();
-            if($connection) {
+            if($connection && \FluentMail\Includes\Support\Arr::get($connection, 'force_from_email') != 'no') {
                 $connection['force_from_email_id'] = $connection['sender_email'];
             }
         }

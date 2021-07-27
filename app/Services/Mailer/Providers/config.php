@@ -78,7 +78,6 @@ return [
                 'sender_name'      => '',
                 'sender_email'     => '',
                 'force_from_name'  => 'no',
-                'force_from_email' => 'yes',
                 'return_path'      => 'yes',
                 'api_key'          => '',
                 'domain_name'      => '',
@@ -96,7 +95,6 @@ return [
                 'sender_name'      => '',
                 'sender_email'     => '',
                 'force_from_name'  => 'no',
-                'force_from_email' => 'yes',
                 'api_key'          => '',
                 'key_store'        => 'db'
             ],
@@ -111,7 +109,6 @@ return [
                 'sender_name'      => '',
                 'sender_email'     => '',
                 'force_from_name'  => 'no',
-                'force_from_email' => 'yes',
                 'api_key'          => '',
                 'key_store'        => 'db'
             ],
@@ -126,7 +123,6 @@ return [
                 'sender_name'      => '',
                 'sender_email'     => '',
                 'force_from_name'  => 'no',
-                'force_from_email' => 'yes',
                 'api_key'          => '',
                 'key_store'        => 'db'
             ],
@@ -141,7 +137,6 @@ return [
                 'sender_name'      => '',
                 'sender_email'     => '',
                 'force_from_name'  => 'no',
-                'force_from_email' => 'yes',
                 'api_key'          => '',
                 'key_store'        => 'db'
             ],

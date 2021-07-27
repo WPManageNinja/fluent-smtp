@@ -22,11 +22,9 @@ class FluentPHPMailer
     public function send()
     {
         if ($driver = fluentMailGetProvider($this->phpMailer->From)) {
-
             if ($forceFromEmail = $driver->getSetting('force_from_email_id')) {
                 $this->phpMailer->From = $forceFromEmail;
             }
-
             return $driver->setPhpMailer($this->phpMailer)->send();
         }
 
