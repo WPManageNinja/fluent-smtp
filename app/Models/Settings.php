@@ -133,7 +133,6 @@ class Settings
         $settings['mappings'] = $mappings;
         $settings['connections'] = $connections;
 
-
         if (Arr::get($settings, 'misc.default_connection') == $key) {
             $default = Arr::get($settings, 'mappings', []);
             $default = reset($default);
@@ -143,7 +142,7 @@ class Settings
         if (Arr::get($settings, 'misc.fallback_connection') == $key) {
             Arr::set($settings, 'misc.fallback_connection', '');
         }
-        
+
         update_option($this->optionName, $settings);
 
         return $settings;

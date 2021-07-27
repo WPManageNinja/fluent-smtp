@@ -1,4 +1,4 @@
-=== FluentSMTP - WordPress Mail SMTP, SES, SendGrid, Mailgun Plugin ===
+=== FluentSMTP - WordPress Mail SMTP, SES, SendGrid, Mailgun and Any SMTP Plugin ===
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.5
@@ -8,11 +8,11 @@ Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The Ultimate SMTP and SES Plugin for WordPress. Connect with any SMTP, SendGrid, Mailgun, SES, Sendinblue, and more.
+The Ultimate SMTP and SES Plugin for WordPress. Connect with any SMTP, SendGrid, Mailgun, SES, Sendinblue, PepiPost, Google, Microsoft and more.
 
 == Description ==
 
-###  WordPress Email SMTP Plugin For Any Email Service
+###  WordPress Mail SMTP Plugin For Any Email Services
 Are you having problems with your WordPress emails not sending? Or looking to set the email address in which your emails are delivered from. This plugin will solve all your email deliverability problems. FluentSMTP is the ultimate WP Mail Plugin that connects with your Email Service Provider natively and makes sure your emails are delivered 💯.
 
 Our goal is to send your WordPress emails fast, secure, and reach the email inbox.
@@ -44,6 +44,7 @@ Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin in the m
 * Email Routing to multiple email connections
 * Connect with Any Email Service Providers
 * Email Logs
+* Fallback Email Connection
 * Resend Any Emails
 * In Details Reporting
 * Super fast UI powered by VueJS
@@ -103,6 +104,8 @@ Read about <a href="https://fluentsmtp.com/docs/configure-sparkpost-in-fluent-sm
 
 == 🎉 Outlook / Office365 API Connection ==
 Fluent SMTP - WP Mail Plugin provides you options to connect with your Outlook or Office 365 emails and send emails over their API. It's fast and secure. Using oAuth2 authentication system for the connection, You can easily setup the connection and send your emails with Office 365 / Outlook emails.
+
+Read the documentation for <a href="https://fluentsmtp.com/docs/setup-outlook-with-fluentsmtp/">connecting Office 365 Email with WordPress</a>
 
 == 🎉 Other SMTP ==
 Fluent SMTP plugin works with all major email services that offer SMTP connections such as Gmail, Yahoo, Microsoft Live, Zoho Mail, YandexMail,  and any other email sending services.
@@ -170,6 +173,24 @@ The full source code is hosted in GitHub and you are welcomed to contribute to t
 * [WP HTML Mail](https://wordpress.org/plugins/wp-html-mail/)
 * [Email Templates](https://wordpress.org/plugins/email-templates/)
 * .. and every other plugin that uses the WordPress API [wp_mail](https://codex.wordpress.org/Function_Reference/wp_mail) to send mail!
+
+== Easy Migration from WP Mail SMTP by WPForms ==
+If you currently using <b>WP Mail SMTP by WPForms</b> plugin and want to migrate to FluentSMTP then that is super easy. Within few second you can migrate from "WP Mail SMTP by WPForms".
+
+* Just install FluentSMTP plugin to your site
+* Go to Settings -> FluentSMTP
+* It will automatically show previous configuration from "WP Mail SMTP by WPForms"
+* Click "Import From WP Mail SMTP" Button and that's it
+* Disable "WP Mail SMTP by WPForms" and enjoy FluentSMTP
+
+== Once Click Migration from Easy WP SMTP ==
+If you currently using <b>Easy WP SMTP</b> plugin and want to migrate to FluentSMTP then that is super easy. Within few second you can migrate from "Easy WP SMTP".
+
+* Just install FluentSMTP plugin to your site
+* Go to Settings -> FluentSMTP
+* It will automatically show previous configuration from "Easy WP SMTP"
+* Click "Import From Easy WP SMTP" Button and that's it
+* Disable "Easy WP SMTP" and enjoy FluentSMTP
 
 == What's Next ==
 If you like this plugin, then consider checking out our other plugins:
