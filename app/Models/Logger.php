@@ -51,34 +51,34 @@ class Logger extends Model
         $filterColumn = isset($data['filter_by']) ? sanitize_text_field($data['filter_by']) : false;
         $filterValue = $data['filter_by_value'];
 
-        if($filterColumn && $filterValue) {
-            if($filterColumn == 'daterange' && is_array($filterValue)) {
+        if ($filterColumn && $filterValue) {
+            if ($filterColumn == 'daterange' && is_array($filterValue)) {
                 $query->whereBetween('created_at', $filterValue[0], $filterValue[1]);
-            } else if($filterValue) {
+            } else if ($filterValue) {
                 $query->where($filterColumn, $filterValue);
             }
         }
 
-        if(!empty($data['query'])) {
+        if (!empty($data['query'])) {
             $search = trim(sanitize_text_field($data['query']));
             $query->where(function ($q) use ($search) {
                 $searchColumns = $this->searchables;
 
                 $columnSearch = false;
-                if(strpos($search, ':')) {
+                if (strpos($search, ':')) {
                     $searchArray = explode(':', $search);
                     $column = array_shift($searchArray);
-                    if(in_array($column, $this->fillables)) {
+                    if (in_array($column, $this->fillables)) {
                         $columnSearch = true;
-                        $q->where($column, 'LIKE', '%'.trim(implode(':', $searchArray)).'%');
+                        $q->where($column, 'LIKE', '%' . trim(implode(':', $searchArray)) . '%');
                     }
                 }
 
-                if(!$columnSearch) {
+                if (!$columnSearch) {
                     $firstColumn = array_shift($searchColumns);
-                    $q->where($firstColumn, 'LIKE', '%'.$search.'%');
+                    $q->where($firstColumn, 'LIKE', '%' . $search . '%');
                     foreach ($searchColumns as $column) {
-                        $q->orWhere($column, 'LIKE', '%'.$search.'%');
+                        $q->orWhere($column, 'LIKE', '%' . $search . '%');
                     }
                 }
 
@@ -95,7 +95,7 @@ class Logger extends Model
     protected function buildWhere($data)
     {
         $where = [];
-        
+
         if (isset($data['filter_by_value'])) {
             $where[$data['filter_by']] = $data['filter_by_value'];
         }
@@ -134,12 +134,12 @@ class Logger extends Model
                     $nestedOr = '';
                     $values = explode('|', $value);
                     foreach ($values as $itemValue) {
-                        $args[] = '%'.$this->db->esc_like($itemValue).'%';
+                        $args[] = '%' . $this->db->esc_like($itemValue) . '%';
                         $nestedOr .= " OR `{$key}` LIKE '%s'";
                     }
                     $orWhere .= ' OR (' . trim($nestedOr, 'OR ') . ')';
                 } else {
-                    $args[] = '%'.$this->db->esc_like($value).'%';
+                    $args[] = '%' . $this->db->esc_like($value) . '%';
                     $orWhere .= " OR `{$key}` LIKE '%s'";
                 }
             }
@@ -206,7 +206,7 @@ class Logger extends Model
 
         $ids = array_filter($id, 'intval');
 
-        if($ids) {
+        if ($ids) {
             return $this->getDb()->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
                 ->whereIn('id', $ids)
                 ->delete();
@@ -284,7 +284,7 @@ class Logger extends Model
 
         $row->response = maybe_unserialize($row->response);
 
-        return (array) $row;
+        return (array)$row;
     }
 
     public function resendEmailFromLog($id, $type = 'retry')
@@ -345,11 +345,11 @@ class Logger extends Model
             );
 
             $updateData = [
-                'status' => 'sent',
-                'updated_at' =>  current_time('mysql'),
+                'status'     => 'sent',
+                'updated_at' => current_time('mysql'),
             ];
 
-            if(!$result && $type == 'check_realtime' && $email['status'] == 'failed') {
+            if (!$result && $type == 'check_realtime' && $email['status'] == 'failed') {
                 $updateData['status'] = 'failed';
             }
 
@@ -405,20 +405,31 @@ class Logger extends Model
         }
     }
 
-    public function getTotalCountStat($status, $startDate, $endDate)
+    public function getTotalCountStat($status, $startDate, $endDate = false)
     {
-        $query = $this->db->prepare(
-            "SELECT COUNT(*)
-			FROM {$this->table}
-			WHERE status = %s
-			AND created_at >= %s
-			AND created_at <= %s",
-            $status,
-            $startDate,
-            $endDate
-        );
+        if ($endDate) {
+            $query = $this->db->prepare(
+                "SELECT COUNT(*)
+                FROM {$this->table}
+                WHERE status = %s
+                AND created_at >= %s
+                AND created_at <= %s",
+                $status,
+                $startDate,
+                $endDate
+            );
+        } else {
+            $query = $this->db->prepare(
+                "SELECT COUNT(*)
+                FROM {$this->table}
+                WHERE status = %s
+                AND created_at >= %s",
+                $status,
+                $startDate
+            );
+        }
 
-        return (int) $this->db->get_var( $query );
+        return (int)$this->db->get_var($query);
     }
 
     public function getSubjectCountStat($status, $startDate, $endDate)
@@ -434,7 +445,7 @@ class Logger extends Model
             $endDate
         );
 
-        return (int) $this->db->get_var( $query );
+        return (int)$this->db->get_var($query);
     }
 
     public function getSubjectStat($status, $statDate, $endDate, $limit = 5)
@@ -454,7 +465,7 @@ class Logger extends Model
             $status
         );
 
-        return $this->db->get_results( $query, ARRAY_A );
+        return $this->db->get_results($query, ARRAY_A);
     }
 
 }

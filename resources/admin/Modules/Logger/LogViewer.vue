@@ -268,18 +268,6 @@
 
                     if (this.logViewerProps.log) {
                         log = { ...this.logViewerProps.log };
-
-                        if (!this.moment(log.created_at, 'DD-MM-YYYY h:mm:ss A', true).isValid()) {
-                            log.created_at = this.$dateFormat(
-                                log.created_at, 'DD-MM-YYYY h:mm:ss A'
-                            );
-                        }
-
-                        if (!this.moment(log.updated_at, 'DD-MM-YYYY h:mm:ss A', true).isValid()) {
-                            log.updated_at = this.$dateFormat(
-                                log.updated_at, 'DD-MM-YYYY h:mm:ss A'
-                            );
-                        }
                     }
 
                     return log;

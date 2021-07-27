@@ -43,7 +43,7 @@
                         <div class="header">
                             Quick Overview
                         </div>
-                        <div class="content" v-loading="loading">
+                        <div class="content" v-if="!loading">
                             <ul class="fss_dash_lists">
                                 <li v-if="settings_stat.log_enabled == 'yes'">
                                     Total Email Sent (Logged): <span>{{stats.sent}}</span>
@@ -71,6 +71,7 @@
                                 </li>
                             </ul>
                         </div>
+                        <el-skeleton v-else class="content" :rows="8"></el-skeleton>
                     </div>
                     <div v-if="appVars.require_optin == 'yes' && stats.sent > 9" style="margin-top: 20px;" class="fsm_card">
                         <div class="header">
@@ -145,7 +146,8 @@
                             }
                         }
                     ]
-                }
+                },
+                loading: true
             };
         },
         computed: {

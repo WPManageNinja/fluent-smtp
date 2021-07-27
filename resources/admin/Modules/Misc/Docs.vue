@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <div class="doc_body">
+        <div v-if="!fetching" class="doc_body">
             <div class="doc_each_items" v-for="(docItems, docIndex) in doc_cats" :key="docIndex">
                 <div class="fc_doc_items">
                     <div class="fc_doc_header">
@@ -47,6 +47,9 @@
                 </div>
             </div>
         </div>
+
+        <el-skeleton v-else class="doc_body content" :rows="8"></el-skeleton>
+
     </div>
 </template>
 

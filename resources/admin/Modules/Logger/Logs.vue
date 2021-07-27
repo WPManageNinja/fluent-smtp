@@ -32,8 +32,7 @@
                 </div>
             </div>
 
-            <div class="content">
-
+            <div v-if="!loading" class="content">
                 <el-table
                     stripe
                     :data="emailLogs"
@@ -109,6 +108,7 @@
                     <pagination :pagination="pagination" @fetch="pageChanged" />
                 </div>
             </div>
+            <el-skeleton v-else class="content" :rows="15"></el-skeleton>
 
             <LogViewer :logViewerProps="logViewerProps" />
         </div>
