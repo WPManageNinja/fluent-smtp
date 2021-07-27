@@ -114,6 +114,8 @@ class AdminMenuHandler
 
         $user = get_user_by('ID', get_current_user_id());
 
+        $disable_recommendation = defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS;
+
         wp_localize_script('fluent_mail_admin_app_boot', 'FluentMailAdmin', [
             'slug'                   => FLUENTMAIL,
             'brand_logo'             => esc_url(fluentMailMix('images/logo.svg')),
@@ -124,7 +126,7 @@ class AdminMenuHandler
             'user_email'             => $user->user_email,
             'require_optin'          => $this->isRequireOptin(),
             'has_ninja_tables'       => defined('NINJA_TABLES_VERSION'),
-            'disable_recommendation' => apply_filters('fluentmail_disable_recommendation', false),
+            'disable_recommendation' => $disable_recommendation ? true : apply_filters('fluentmail_disable_recommendation', false),
             'plugin_url'             => 'https://fluentsmtp.com/?utm_source=wp&utm_medium=install&utm_campaign=dashboard'
         ]);
 
