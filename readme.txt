@@ -19,7 +19,7 @@ Our goal is to send your WordPress emails fast, secure, and reach the email inbo
 
 Fluent SMTP plugin fixes your email delivery issue by connecting WordPress Mail with your email service providers. These integrations are native, so it will send the emails superfast.
 
-Connect as many Email Service Providers as you want and FluentCRM will route your transactional and marketing emails automatically. This is one of the unique features that FluentCRM has to offer.
+Connect as many Email Service Providers as you want and FluentSMTP will route your transactional and marketing emails automatically. This is one of the unique features that FluentSMTP has to offer.
 
 [youtube https://www.youtube.com/watch?v=Je0OPk1NnjI]
 
