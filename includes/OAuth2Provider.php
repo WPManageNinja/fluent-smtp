@@ -147,7 +147,11 @@ class OAuth2Provider
     {
         // Converting bytes to hex will always double length. Hence, we can reduce
         // the amount of bytes by half to produce the correct length.
-        return bin2hex(random_bytes($length / 2));
+        $state = bin2hex(random_bytes($length / 2));
+
+        update_option('_fluentmail_last_generated_state', $state);
+
+        return $state;
     }
 
 

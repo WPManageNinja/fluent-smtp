@@ -8,14 +8,6 @@ $app->addCustomAction('handle_exception', 'ExceptionHandler@handle');
 
 $app->addAction('admin_notices', 'AdminMenuHandler@maybeAdminNotice');
 
-$app->addAction('fluentmail_do_daily_scheduled_tasks', function () {
-
-    $day = date('d');
-    if ($day == '01') {
-        // this is a monthly cron
-    }
-});
-
 add_action('rest_api_init', function () use ($app) {
     register_rest_route('fluent-smtp', '/outlook_callback/', array(
         'methods'             => 'GET',
@@ -29,6 +21,10 @@ add_action('rest_api_init', function () use ($app) {
             die();
         },
         'permission_callback' => function () {
+            $state = $_REQUEST['state'];
+            if($state != get_option('_fluentmail_last_generated_state')) {
+                return false;
+            }
             return true;
         }
     ));
