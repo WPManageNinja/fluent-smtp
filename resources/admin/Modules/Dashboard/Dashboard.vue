@@ -6,13 +6,22 @@
                     <h1>{{ $t('wizard_title') }}</h1>
                     <p>{{ $t('wizard_sub') }}</p>
                 </div>
-                <h2>{{ $t('wizard_instruction') }}</h2>
-                <connection-wizard
-                    :connection="new_connection"
-                    :is_new="true"
-                    :connection_key="false"
-                    :providers="settings.providers">
-                </connection-wizard>
+
+                <div v-if="recommended && !skip_recommended" class="fsmtp_recommened">
+                    <h2>{{recommended.title}}</h2>
+                    <p>{{recommended.subtitle}}</p>
+                    <el-button @click="setRecommendation()" type="primary">{{recommended.button_text}}</el-button>
+                    <el-button @click="skip_recommended = true" type="info">Skip</el-button>
+                </div>
+                <template v-else>
+                    <h2>{{ $t('wizard_instruction') }}</h2>
+                    <connection-wizard
+                        :connection="new_connection"
+                        :is_new="true"
+                        :connection_key="false"
+                        :providers="settings.providers">
+                    </connection-wizard>
+                </template>
             </div>
         </div>
         <div v-else>
@@ -147,12 +156,19 @@
                         }
                     ]
                 },
-                loading: true
+                loading: true,
+                skip_recommended: false
             };
         },
         computed: {
             is_new() {
                 return isEmpty(this.settings.connections);
+            },
+            recommended() {
+                if(!this.is_new) {
+                    return false;
+                }
+                return this.appVars.recommended;
             }
         },
         methods: {
@@ -172,6 +188,10 @@
                 this.$nextTick(() => {
                     this.showing_chart = true;
                 });
+            },
+            setRecommendation() {
+                this.new_connection = JSON.parse(JSON.stringify(this.recommended.settings));
+                this.skip_recommended = true;
             }
         },
         created() {

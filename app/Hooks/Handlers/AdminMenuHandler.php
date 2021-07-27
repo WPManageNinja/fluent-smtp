@@ -3,6 +3,7 @@
 namespace FluentMail\App\Hooks\Handlers;
 
 use FluentMail\App\Models\Logger;
+use FluentMail\App\Services\Converter;
 use FluentMail\Includes\Core\Application;
 use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\Includes\Support\Arr;
@@ -118,11 +119,18 @@ class AdminMenuHandler
 
         $disable_recommendation = defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS;
 
+        $settings = $this->getMailerSettings();
+
+        $recommendedSettings = false;
+        if (empty($settings['connections'])) {
+            $recommendedSettings = (new Converter())->getSuggestedConnection();
+        }
+
         wp_localize_script('fluent_mail_admin_app_boot', 'FluentMailAdmin', [
             'slug'                   => FLUENTMAIL,
             'brand_logo'             => esc_url(fluentMailMix('images/logo.svg')),
             'nonce'                  => wp_create_nonce(FLUENTMAIL),
-            'settings'               => $this->getMailerSettings(),
+            'settings'               => $settings,
             'has_fluentcrm'          => defined('FLUENTCRM'),
             'has_fluentform'         => defined('FLUENTFORM'),
             'user_email'             => $user->user_email,
@@ -131,7 +139,8 @@ class AdminMenuHandler
             'disable_recommendation' => apply_filters('fluentmail_disable_recommendation', false),
             'disable_installation'   => $disable_recommendation,
             'plugin_url'             => 'https://fluentsmtp.com/?utm_source=wp&utm_medium=install&utm_campaign=dashboard',
-            'trans'                  => $this->getTrans()
+            'trans'                  => $this->getTrans(),
+            'recommended'            => $recommendedSettings
         ]);
 
         do_action('fluent_mail_loading_app');
