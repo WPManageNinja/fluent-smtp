@@ -9,7 +9,6 @@ class Converter
     public function getSuggestedConnection()
     {
         $wpMailSmtp = $this->maybeWPMailSmtp();
-
         if($wpMailSmtp) {
             return $wpMailSmtp;
         }

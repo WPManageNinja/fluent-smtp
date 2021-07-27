@@ -24,16 +24,16 @@ Connect as many Email Service Providers as you want and FluentSMTP will route yo
 [youtube https://www.youtube.com/watch?v=Je0OPk1NnjI]
 
 == 🎉 Available Email Service Connections ==
-* Amazon SES
+* Amazon SES API Connection
 * Gmail OAuth API Connection
 * Google Workspace OAuth API Connection
-* SendGrid
-* Mailgun
-* Sendinblue
-* Pepipost
-* SparkPost
+* Outlook OAuth API Connection
+* SendGrid API
+* Mailgun API
+* Sendinblue API
+* Pepipost API
+* SparkPost API
 * Zoho via SMTP
-* Outlook via SMTP
 * All Other SMTP
 * More native integrations coming soon
 
@@ -101,8 +101,11 @@ With Fluent SMTP, You can set up your SparkPost email service connection with yo
 
 Read about <a href="https://fluentsmtp.com/docs/configure-sparkpost-in-fluent-smtp-to-send-emails/">SparkPost connection documentation here</a>
 
+== 🎉 Outlook / Office365 API Connection ==
+Fluent SMTP - WP Mail Plugin provides you options to connect with your Outlook or Office 365 emails and send emails over their API. It's fast and secure. Using oAuth2 authentication system for the connection, You can easily setup the connection and send your emails with Office 365 / Outlook emails.
+
 == 🎉 Other SMTP ==
-Fluent SMTP plugin works with all major email services that offer SMTP connections such as Gmail, Yahoo, Outlook, Microsoft Live, Zoho Mail, YandexMail,  and any other email sending services.
+Fluent SMTP plugin works with all major email services that offer SMTP connections such as Gmail, Yahoo, Microsoft Live, Zoho Mail, YandexMail,  and any other email sending services.
 
 You can set the following options:
 
@@ -241,6 +244,16 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.0.0 (Date: July 27, 2021) =
+* Added Outlook / Office 365 API Connection
+* Improvements of Amazon SES Connection
+* Ability to disable force From Email for supported connections
+* Added Fallback Connection feature
+* Added One-Click migration from WP Mail SMTP Plugin
+* Added One-Click migration from WP Easy SMTP Plugin
+* UI Improvements
+* Added nonce and sanitization for connection inputs
 
 = 1.2.0 (Date: May 26, 2021) =
 * Added Gmail and Google Workspace API Connection

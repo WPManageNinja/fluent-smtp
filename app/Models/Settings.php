@@ -118,17 +118,21 @@ class Settings
     {
         $settings = $this->getSettings();
 
-        $item = array_filter($settings['mappings'], function($k) use ($key) {
-            return $k == $key;
-        });
 
-        $values = array_keys($item);
-        $email = reset($values);
+        $mappings = $settings['mappings'];
+        $connections = $settings['connections'];
 
-        if ($email) {
-            unset($settings['mappings'][$email]);
-            unset($settings['connections'][$key]);
+        unset($connections[$key]);
+
+        foreach ($mappings as $mapKey => $mapValue) {
+            if($mapValue == $key) {
+                unset($mappings[$mapKey]);
+            }
         }
+
+        $settings['mappings'] = $mappings;
+        $settings['connections'] = $connections;
+
 
         if (Arr::get($settings, 'misc.default_connection') == $key) {
             $default = Arr::get($settings, 'mappings', []);
@@ -136,6 +140,10 @@ class Settings
             Arr::set($settings, 'misc.default_connection', $default ?: '');
         }
 
+        if (Arr::get($settings, 'misc.fallback_connection') == $key) {
+            Arr::set($settings, 'misc.fallback_connection', '');
+        }
+        
         update_option($this->optionName, $settings);
 
         return $settings;
