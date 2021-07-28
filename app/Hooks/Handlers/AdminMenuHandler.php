@@ -126,6 +126,11 @@ class AdminMenuHandler
             $recommendedSettings = (new Converter())->getSuggestedConnection();
         }
 
+        $displayName = trim($user->first_name . ' ' . $user->last_name);
+        if (!$displayName) {
+            $displayName = $user->display_name;
+        }
+
         wp_localize_script('fluent_mail_admin_app_boot', 'FluentMailAdmin', [
             'slug'                   => FLUENTMAIL,
             'brand_logo'             => esc_url(fluentMailMix('images/logo.svg')),
@@ -134,6 +139,7 @@ class AdminMenuHandler
             'has_fluentcrm'          => defined('FLUENTCRM'),
             'has_fluentform'         => defined('FLUENTFORM'),
             'user_email'             => $user->user_email,
+            'user_display_name'      => $displayName,
             'require_optin'          => $this->isRequireOptin(),
             'has_ninja_tables'       => defined('NINJA_TABLES_VERSION'),
             'disable_recommendation' => apply_filters('fluentmail_disable_recommendation', false),

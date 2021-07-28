@@ -61,10 +61,10 @@ class SettingsController extends Controller
             $connection = $data['connection'];
 
             foreach ($connection as $index => $value) {
-                if($index == 'sender_email') {
+                if ($index == 'sender_email') {
                     $connection['sender_email'] = sanitize_email($connection['sender_email']);
                 }
-                if(is_string($value) && $value) {
+                if (is_string($value) && $value) {
                     $connection[$index] = sanitize_text_field($value);
                 }
             }
@@ -74,17 +74,17 @@ class SettingsController extends Controller
             $this->validateConnection($provider, $connection);
             $provider->checkConnection($connection);
 
-            $data['valid_senders'] =  $provider->getValidSenders($connection);
+            $data['valid_senders'] = $provider->getValidSenders($connection);
 
             $data = apply_filters('fluentmail_saving_connection_data', $data, $data['connection']['provider']);
 
             $settings->store($data);
 
             return $this->sendSuccess([
-                'message' => 'Settings saved successfully.',
+                'message'     => 'Settings saved successfully.',
                 'connections' => $settings->getConnections(),
-                'mappings' => $settings->getMappings(),
-                'misc' => $settings->getMisc()
+                'mappings'    => $settings->getMappings(),
+                'misc'        => $settings->getMisc()
             ]);
 
         } catch (ValidationException $e) {
@@ -125,7 +125,7 @@ class SettingsController extends Controller
         );
 
         return $this->sendSuccess([
-            'form' => $data,
+            'form'    => $data,
             'message' => __('Settings saved successfully.', 'fluent-smtp')
         ]);
     }
@@ -167,7 +167,7 @@ class SettingsController extends Controller
     {
         return $this->sendError([
             'message' => $response->get_error_message(),
-            'errors' => $response->get_error_data()
+            'errors'  => $response->get_error_data()
         ], 423);
     }
 
@@ -221,25 +221,25 @@ class SettingsController extends Controller
         $plugin = [
             'name'      => $pluginSlug,
             'repo-slug' => $pluginSlug,
-            'file'      => $pluginSlug.'.php'
+            'file'      => $pluginSlug . '.php'
         ];
 
         $UrlMaps = [
-            'fluentform' => [
+            'fluentform'   => [
                 'admin_url' => admin_url('admin.php?page=fluent_forms'),
-                'title' => __('Go to Fluent Forms Dashboard', 'fluent-smtp')
+                'title'     => __('Go to Fluent Forms Dashboard', 'fluent-smtp')
             ],
-            'fluent-crm' => [
+            'fluent-crm'   => [
                 'admin_url' => admin_url('admin.php?page=fluentcrm-admin'),
-                'title' => __('Go to FluentCRM Dashboard', 'fluent-smtp')
+                'title'     => __('Go to FluentCRM Dashboard', 'fluent-smtp')
             ],
             'ninja-tables' => [
                 'admin_url' => admin_url('admin.php?page=ninja_tables#/'),
-                'title' => __('Go to Ninja Tables Dashboard', 'fluent-smtp')
+                'title'     => __('Go to Ninja Tables Dashboard', 'fluent-smtp')
             ]
         ];
 
-        if(!isset($UrlMaps[$pluginSlug]) || (defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)) {
+        if (!isset($UrlMaps[$pluginSlug]) || (defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)) {
             $this->sendError([
                 'message' => __('Sorry, You can not install this plugin', 'fluent-smtp')
             ]);
@@ -249,7 +249,7 @@ class SettingsController extends Controller
             $this->backgroundInstaller($plugin);
             $this->send([
                 'message' => __('Plugin has been successfully installed.', 'fluent-smtp'),
-                'info' => $UrlMaps[$pluginSlug]
+                'info'    => $UrlMaps[$pluginSlug]
             ]);
         } catch (\Exception $exception) {
             $this->sendError([
@@ -376,7 +376,14 @@ class SettingsController extends Controller
     {
         $this->verify();
         $email = sanitize_text_field($_REQUEST['email']);
-        if(!is_email($email)) {
+
+        $displayName = '';
+
+        if (isset($_REQUEST['display_name'])) {
+            $displayName = sanitize_text_field($_REQUEST['display_name']);
+        }
+
+        if (!is_email($email)) {
             return $this->sendError([
                 'message' => 'Sorry! The provider email is not valid'
             ], 423);
@@ -384,14 +391,14 @@ class SettingsController extends Controller
 
         $shareEssentials = 'no';
 
-        if($_REQUEST['share_essentials'] == 'yes') {
+        if ($_REQUEST['share_essentials'] == 'yes') {
             update_option('_fluentsmtp_sub_update', 'shared', 'no');
             $shareEssentials = 'yes';
         } else {
             update_option('_fluentsmtp_sub_update', 'yes', 'no');
         }
 
-        $this->pushData($email, $shareEssentials);
+        $this->pushData($email, $shareEssentials, $displayName);
 
         return $this->sendSuccess([
             'message' => 'You are subscribed to plugin update and monthly tips'
@@ -408,37 +415,29 @@ class SettingsController extends Controller
         ]);
     }
 
-    private function pushData($optinEmail, $shareEssentials)
+    private function pushData($optinEmail, $shareEssentials, $displayName = '')
     {
         $user = get_user_by('ID', get_current_user_id());
 
-        $data = [
-            'answers'    => [
-                'website' => site_url(),
-                'email'   => $optinEmail,
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'name'    => $user->display_name,
-                'essential' => $shareEssentials
-            ],
-            'questions'  => [
-                'website' => 'website',
-                'first_name' => 'first_name',
-                'last_name' => 'last_name',
-                'email'   => 'email',
-                'name'    => 'name',
-                'essential' => 'essential'
-            ],
-            'user'       => [
-                'email' => $optinEmail
-            ],
-            'fb_capture' => 1,
-            'form_id'    => 67
-        ];
+        $url = 'https://fluentsmtp.com/wp-admin/?fluentcrm=1&route=contact&hash=6012116c-90d8-42a5-a65b-3649aa34b356';
 
-        $url = add_query_arg($data, 'https://wpmanageninja.com/');
 
-        wp_remote_post($url);
+        if (!$displayName) {
+            $displayName = trim($user->first_name . ' ' . $user->last_name);
+            if (!$displayName) {
+                $displayName = $user->display_name;
+            }
+        }
+
+        wp_remote_post($url, [
+            'body' => json_encode([
+                'full_name'       => $displayName,
+                'email'           => $optinEmail,
+                'source'          => 'smtp',
+                'optin_website'   => site_url(),
+                'share_essential' => $shareEssentials
+            ])
+        ]);
     }
 
     public function getGmailAuthUrl(Request $request)
@@ -449,8 +448,8 @@ class SettingsController extends Controller
         $clientId = Arr::get($connection, 'client_id');
         $clientSecret = Arr::get($connection, 'client_secret');
 
-        if(Arr::get($connection, 'key_store') == 'wp_config') {
-            if(defined('FLUENTMAIL_GMAIL_CLIENT_ID')) {
+        if (Arr::get($connection, 'key_store') == 'wp_config') {
+            if (defined('FLUENTMAIL_GMAIL_CLIENT_ID')) {
                 $clientId = FLUENTMAIL_GMAIL_CLIENT_ID;
             } else {
                 return $this->sendError([
@@ -459,7 +458,7 @@ class SettingsController extends Controller
                     ]
                 ]);
             }
-            if(defined('FLUENTMAIL_GMAIL_CLIENT_SECRET')) {
+            if (defined('FLUENTMAIL_GMAIL_CLIENT_SECRET')) {
                 $clientSecret = FLUENTMAIL_GMAIL_CLIENT_SECRET;
             } else {
                 return $this->sendError([
@@ -470,7 +469,7 @@ class SettingsController extends Controller
             }
         }
 
-        if(!$clientId) {
+        if (!$clientId) {
             return $this->sendError([
                 'client_id' => [
                     'required' => 'Please provide application client id'
@@ -478,7 +477,7 @@ class SettingsController extends Controller
             ]);
         }
 
-        if(!$clientSecret) {
+        if (!$clientSecret) {
             return $this->sendError([
                 'client_secret' => [
                     'required' => 'Please provide application client secret'
@@ -503,8 +502,8 @@ class SettingsController extends Controller
 
         delete_option('_fluentsmtp_intended_outlook_info');
 
-        if(Arr::get($connection, 'key_store') == 'wp_config') {
-            if(defined('FLUENTMAIL_OUTLOOK_CLIENT_ID')) {
+        if (Arr::get($connection, 'key_store') == 'wp_config') {
+            if (defined('FLUENTMAIL_OUTLOOK_CLIENT_ID')) {
                 $clientId = FLUENTMAIL_OUTLOOK_CLIENT_ID;
             } else {
                 return $this->sendError([
@@ -513,7 +512,7 @@ class SettingsController extends Controller
                     ]
                 ]);
             }
-            if(defined('FLUENTMAIL_OUTLOOK_CLIENT_SECRET')) {
+            if (defined('FLUENTMAIL_OUTLOOK_CLIENT_SECRET')) {
                 $clientSecret = FLUENTMAIL_OUTLOOK_CLIENT_SECRET;
             } else {
                 return $this->sendError([
@@ -524,12 +523,12 @@ class SettingsController extends Controller
             }
         } else {
             update_option('_fluentsmtp_intended_outlook_info', [
-                'client_id' => $clientId,
+                'client_id'     => $clientId,
                 'client_secret' => $clientSecret
             ]);
         }
 
-        if(!$clientId) {
+        if (!$clientId) {
             return $this->sendError([
                 'client_id' => [
                     'required' => 'Please provide application client id'
@@ -537,7 +536,7 @@ class SettingsController extends Controller
             ]);
         }
 
-        if(!$clientSecret) {
+        if (!$clientSecret) {
             return $this->sendError([
                 'client_secret' => [
                     'required' => 'Please provide application client secret'
@@ -566,13 +565,13 @@ class SettingsController extends Controller
 
         $settings = Arr::only($settings, ['enabled', 'notify_email', 'notify_days']);
 
-        $settings['notify_email'] = sanitize_text_field( $settings['notify_email']);
-        $settings['enabled'] = sanitize_text_field( $settings['enabled']);
+        $settings['notify_email'] = sanitize_text_field($settings['notify_email']);
+        $settings['enabled'] = sanitize_text_field($settings['enabled']);
 
         $defaults = [
-            'enabled' => 'no',
+            'enabled'      => 'no',
             'notify_email' => '{site_admin}',
-            'notify_days' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            'notify_days'  => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         ];
 
         $settings = wp_parse_args($settings, $defaults);

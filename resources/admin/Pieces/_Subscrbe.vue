@@ -5,7 +5,15 @@
                 Subscribe with your email to know about this plugin updates, releases and useful tips.
             </p>
             <div class="fsmtp_subscribe">
-                <el-input v-model="email" placeholder="Your Email Address"/>
+                <el-form label-position="right" label-width="100px">
+                    <el-form-item style="margin-bottom: 0px;" label="Your Name">
+                        <el-input size="small" v-model="formData.display_name" placeholder="Your Name" />
+                    </el-form-item>
+                    <el-form-item style="margin-bottom: 0px;" label="Your Email">
+                        <el-input size="small" v-model="formData.email" placeholder="Your Email Address"/>
+                    </el-form-item>
+                </el-form>
+
                 <el-checkbox true-label="yes" false-label="no" v-model="share_details">
                     (Optional) Share Non-Sensitive Data. It will help us to improve the integrations
                     <el-tooltip class="item" effect="dark" content="Access Data: Active SMTP Connection Provider, installed plugin names, php & mysql version" placement="top-end">
@@ -18,7 +26,7 @@
             </div>
         </template>
         <div style="text-align: center;" v-else>
-            <p>Awesome! You are subscribed. We will only send you updates emails and some tips as monthly basis.</p>
+            <p>Awesome! Please check your email inbox and confirm your subscription.</p>
         </div>
     </div>
 </template>
@@ -28,7 +36,10 @@
         name: 'SubscriberForm',
         data() {
             return {
-                email: window.FluentMailAdmin.user_email,
+                formData: {
+                    email: window.FluentMailAdmin.user_email,
+                    display_name: window.FluentMailAdmin.user_display_name
+                },
                 share_details: 'no',
                 saving: false,
                 subscribed: false
@@ -36,19 +47,24 @@
         },
         methods: {
             subscribeToEmail() {
-                if (!this.email) {
+                if (!this.formData.email) {
                     this.$notify.error('Please Provide an email');
                     return false;
                 }
 
                 this.saving = true;
                 this.$post('settings/subscribe', {
-                    email: this.email,
+                    email: this.formData.email,
+                    display_name: this.formData.display_name,
                     share_essentials: this.share_details
                 })
                     .then(response => {
                         this.subscribed = true;
-                        this.appVars.require_optin = 'no';
+
+                        setTimeout(() => {
+                            this.appVars.require_optin = 'no';
+                        }, 15000);
+
                         this.$notify.success(response.data.message);
                     })
                     .catch((errors) => {

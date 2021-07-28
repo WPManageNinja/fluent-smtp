@@ -266,6 +266,11 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 == Changelog ==
 
+= 2.0.1 (Date: July 28, 2021) =
+* Added Postmark API Connection
+* Fix Dashboard Stat Number
+* Fix Sanitization Issue
+
 = 2.0.0 (Date: July 27, 2021) =
 * Added Outlook / Office 365 API Connection
 * Improvements of Amazon SES Connection
