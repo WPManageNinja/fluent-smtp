@@ -75,14 +75,14 @@ return [
             'image'    => fluentMailAssetUrl('images/mailgun.svg'),
             'provider' => 'Mailgun',
             'options'  => [
-                'sender_name'      => '',
-                'sender_email'     => '',
-                'force_from_name'  => 'no',
-                'return_path'      => 'yes',
-                'api_key'          => '',
-                'domain_name'      => '',
-                'key_store'        => 'db',
-                'region'           => 'us'
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'return_path'     => 'yes',
+                'api_key'         => '',
+                'domain_name'     => '',
+                'key_store'       => 'db',
+                'region'          => 'us'
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/configure-mailgun-in-fluent-smtp-to-send-emails/">Read the documentation</a> for how to configure Mailgun with FluentSMTP.'
         ],
@@ -92,11 +92,11 @@ return [
             'image'    => fluentMailAssetUrl('images/sendgrid.svg'),
             'provider' => 'SendGrid',
             'options'  => [
-                'sender_name'      => '',
-                'sender_email'     => '',
-                'force_from_name'  => 'no',
-                'api_key'          => '',
-                'key_store'        => 'db'
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'api_key'         => '',
+                'key_store'       => 'db'
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-sendgrid-driver-in-fluent-smtp/">Read the documentation</a> for how to configure sendgrid with FluentSMTP.'
         ],
@@ -106,11 +106,11 @@ return [
             'image'    => fluentMailAssetUrl('images/sendinblue.svg'),
             'provider' => 'SendInBlue',
             'options'  => [
-                'sender_name'      => '',
-                'sender_email'     => '',
-                'force_from_name'  => 'no',
-                'api_key'          => '',
-                'key_store'        => 'db'
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'api_key'         => '',
+                'key_store'       => 'db'
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/setting-up-sendinblue-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure Sendinblue with FluentSMTP.'
         ],
@@ -120,11 +120,11 @@ return [
             'image'    => fluentMailAssetUrl('images/sparkpost.png'),
             'provider' => 'SparkPost',
             'options'  => [
-                'sender_name'      => '',
-                'sender_email'     => '',
-                'force_from_name'  => 'no',
-                'api_key'          => '',
-                'key_store'        => 'db'
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'api_key'         => '',
+                'key_store'       => 'db'
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/configure-sparkpost-in-fluent-smtp-to-send-emails/">Read the documentation</a> for how to configure SparkPost with FluentSMTP.'
         ],
@@ -134,13 +134,30 @@ return [
             'image'    => fluentMailAssetUrl('images/pepipost-logo.png'),
             'provider' => 'PepiPost',
             'options'  => [
-                'sender_name'      => '',
-                'sender_email'     => '',
-                'force_from_name'  => 'no',
-                'api_key'          => '',
-                'key_store'        => 'db'
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'api_key'         => '',
+                'key_store'       => 'db'
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure Pepipost with FluentSMTP.'
+        ],
+        'postmark'   => [
+            'key'      => 'postmark',
+            'title'    => __('Postmark', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/postmark.svg'),
+            'provider' => 'Postmark',
+            'options'  => [
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'track_opens'     => 'no',
+                'track_links'     => 'no',
+                'api_key'         => '',
+                'message_stream'  => 'outbound',
+                'key_store'       => 'db'
+            ],
+            'note'     => '<a href="https://fluentsmtp.com/docs/configure-postmark-in-fluent-smtp-to-send-emails/">Read the documentation</a> for how to configure Postmark with FluentSMTP.'
         ],
         'gmail'      => [
             'key'      => 'gmail',

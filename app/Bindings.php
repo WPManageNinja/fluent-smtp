@@ -12,6 +12,7 @@ $singletons = [
     'sendinblue' => 'FluentMail\App\Services\Mailer\Providers\SendInBlue\Handler',
     'gmail' => 'FluentMail\App\Services\Mailer\Providers\Gmail\Handler',
     'outlook' => 'FluentMail\App\Services\Mailer\Providers\Outlook\Handler',
+    'postmark' => 'FluentMail\App\Services\Mailer\Providers\Postmark\Handler',
 ];
 
 foreach ($singletons as $key => $className) {

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h3>Outlook/Office365 API Settings</h3>
-        <p>Please <a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/setup-outlook-emails-with-fluentsmtp/">check the documentation first</a> or <b><a target="_blank" rel="nofollow" href="https://www.youtube.com/watch?v=_d78bscNaX8">Watch the video tutorial</a></b> to create API keys at Google</p>
+        <p>Please <a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/setup-outlook-with-fluentsmtp/">check the documentation first to create API keys at Microsoft</a></p>
         <el-radio-group size="mini" v-model="connection.key_store">
             <el-radio-button value="db" label="db">Store Application Keys in DB</el-radio-button>
             <el-radio-button value="wp_config" label="wp_config">Application Keys in Config File</el-radio-button>

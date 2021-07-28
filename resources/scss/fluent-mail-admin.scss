@@ -338,7 +338,7 @@ span.header_action_right {
     box-shadow: -1px 0 0 0 #ea4435;
   }
   .fss_connections .el-radio-button__inner {
-    padding: 12px 12px;
+    padding: 12px 6px;
   }
 
   .con_outlook.is-active .el-radio-button__inner {
@@ -346,8 +346,22 @@ span.header_action_right {
     border-color: #ea4435;
     box-shadow: -1px 0 0 0 #ea4435;
   }
+
+  .con_postmark.is-active .el-radio-button__inner {
+    background: #ffde00;
+    border-color: #ffde00;
+    box-shadow: -1px 0 0 0 #ffde00;
+  }
 }
 
+.fsmtp_compact {
+  margin-top: 30px;
+  .el-form-item > label {
+    line-height: 100%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+}
 
 .log-viewer {
   .el-collapse-item__content {

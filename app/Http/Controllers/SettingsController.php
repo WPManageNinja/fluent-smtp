@@ -60,13 +60,16 @@ class SettingsController extends Controller
 
             $connection = $data['connection'];
 
-            $connection['sender_name'] = sanitize_text_field($connection['sender_name']);
-            $connection['sender_email'] = sanitize_email($connection['sender_email']);
-            if(isset($connection['force_from_email'])) {
-                $connection['force_from_email'] = sanitize_text_field($connection['force_from_email']);
+            foreach ($connection as $index => $value) {
+                if($index == 'sender_email') {
+                    $connection['sender_email'] = sanitize_email($connection['sender_email']);
+                }
+                if(is_string($value) && $value) {
+                    $connection[$index] = sanitize_text_field($value);
+                }
             }
-            $connection['return_path'] = sanitize_text_field($connection['return_path']);
-            $connection['provider'] = sanitize_text_field($connection['provider']);
+
+            $data['connection'] = $connection;
 
             $this->validateConnection($provider, $connection);
             $provider->checkConnection($connection);

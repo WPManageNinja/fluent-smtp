@@ -109,6 +109,7 @@
     import smtp from './Partials/Providers/Smtp';
     import gmail from './Partials/Providers/Gmail';
     import outlook from './Partials/Providers/Outlook';
+    import postmark from './Partials/Providers/PostMark';
     import Errors from '@/Bits/Errors';
     import Error from '@/Pieces/Error';
 
@@ -125,6 +126,7 @@
             smtp,
             gmail,
             outlook,
+            postmark,
             Error
         },
         data() {

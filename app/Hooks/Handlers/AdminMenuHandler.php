@@ -298,7 +298,7 @@ class AdminMenuHandler
         $stats['week'] = [
             'title'  => __('Last 7 days', 'fluent-smtp'),
             'sent'   => ($allTime['sent']) ? $logModel->getTotalCountStat('sent', $lastWeek) : 0,
-            'failed' => ($allTime['failed']) ? $logModel->getTotalCountStat('sent', $lastWeek) : 0,
+            'failed' => ($allTime['failed']) ? $logModel->getTotalCountStat('failed', $lastWeek) : 0,
         ];
 
         $stats['all_time'] = [
