@@ -212,10 +212,14 @@
             },
             formatLog(log) {
                 log.to = this.formatAddresses(log.to);
-                log.headers.cc = this.formatAddresses(log.headers.cc);
-                log.headers.bcc = this.formatAddresses(log.headers.bcc);
-                log.headers['reply-to'] = this.formatAddresses(log.headers['reply-to']);
-                
+                if(log.headers) {
+                    log.headers.cc = this.formatAddresses(log.headers.cc);
+                    log.headers.bcc = this.formatAddresses(log.headers.bcc);
+                    log.headers['reply-to'] = this.formatAddresses(log.headers['reply-to']);
+                } else {
+                    log.headers = {};
+                }
+
                 const headers = {};
                 if(log.headers) {
                     jQuery.each(log.headers, (k, v) => {

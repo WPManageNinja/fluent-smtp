@@ -50,7 +50,7 @@
                         <div class="item_header">From:</div>
                         <div class="item_content"><span v-html="log.from"></span></div>
                     </li>
-                    <li v-if="log.headers['Reply-To']">
+                    <li v-if="log.headers && log.headers['Reply-To']">
                         <div class="item_header">Reply To:</div>
                         <div class="item_content">
                             <span v-html="log.headers['Reply-To']"></span>
@@ -62,18 +62,20 @@
                             <span v-html="log.to"></span>
                         </div>
                     </li>
-                    <li v-if="log.headers.Cc">
-                        <div class="item_header">CC:</div>
-                        <div class="item_content">
-                            <span v-html="log.headers.Cc"></span>
-                        </div>
-                    </li>
-                    <li v-if="log.headers.Bcc">
-                        <div class="item_header">BCC:</div>
-                        <div class="item_content">
-                            <span v-html="log.headers.Bcc"></span>
-                        </div>
-                    </li>
+                    <template v-if="log.headers">
+                        <li v-if="log.headers.Cc">
+                            <div class="item_header">CC:</div>
+                            <div class="item_content">
+                                <span v-html="log.headers.Cc"></span>
+                            </div>
+                        </li>
+                        <li v-if="log.headers.Bcc">
+                            <div class="item_header">BCC:</div>
+                            <div class="item_content">
+                                <span v-html="log.headers.Bcc"></span>
+                            </div>
+                        </li>
+                    </template>
                     <li v-if="log.resent_count > 0">
                         <div class="item_header">{{$t('Resent Count')}}:</div>
                         <div class="item_content">
@@ -86,7 +88,7 @@
                             <span v-html="log.subject"></span>
                         </div>
                     </li>
-                    <li v-if="log.extra.provider && settings.providers[log.extra.provider]">
+                    <li v-if="log.extra && log.extra.provider && settings.providers[log.extra.provider]">
                         <div class="item_header">Mailer:</div>
                         <div class="item_content">
                             <span>{{ settings.providers[log.extra.provider].title }}</span>
@@ -235,7 +237,7 @@
                 this.activeName = 'email_body'
             },
             getAttachmentName(name) {
-                if (!name) return;
+                if (!name || !name[0]) return;
                 name = name[0].replace(/\\/g, '/');
 
                 return name.split('/').pop();
@@ -268,6 +270,17 @@
 
                     if (this.logViewerProps.log) {
                         log = { ...this.logViewerProps.log };
+                        if(!log.headers) {
+                            log.headers = {};
+                        }
+
+                        if(!log.response) {
+                            log.response = {};
+                        }
+
+                        if(!log.extra) {
+                            log.extra = {};
+                        }
                     }
 
                     return log;
