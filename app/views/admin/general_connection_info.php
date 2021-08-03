@@ -14,7 +14,7 @@
         </tr>
         <tr>
             <th>Force Sender Name</th>
-            <td><?php echo $connection['force_from_name']; ?></td>
+            <td><?php echo ucfirst($connection['force_from_name']); ?></td>
         </tr>
         <?php if(isset($connection['extra_rows'])) : ?>
         <?php foreach ($connection['extra_rows'] as $row): ?>
