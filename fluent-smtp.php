@@ -24,12 +24,46 @@ register_deactivation_hook(
     __FILE__, array('FluentMail\Includes\Deactivator', 'handle')
 );
 
-call_user_func(function () {
+function fluentSmtpInit()
+{
     $application = new FluentMail\Includes\Core\Application;
     add_action('plugins_loaded', function () use ($application) {
         do_action('fluentMail_loaded', $application);
     });
-});
+}
+
+fluentSmtpInit();
+
+if (! function_exists( 'wp_mail' ) ) :
+    function wp_mail( $to, $subject, $message, $headers = '', $attachments = array() ) {
+        return fluentMail_wp_mail($to, $subject, $message, $headers, $attachments);
+    }
+else:
+    if (! (defined( 'DOING_AJAX' ) && DOING_AJAX) ):
+        add_action('admin_notices', function() {
+            if(!current_user_can('manage_options')) {
+                return;
+            }
+            $details = new ReflectionFunction('wp_mail');
+            $hints = $details->getFileName() . ':' . $details->getStartLine();
+            ?>
+            <div class="notice notice-warning is-dismissible">
+                <p>
+                    <?php
+                    echo sprintf(
+                        __('The <strong>FluentSMTP</strong> plugin depends on
+                                <a target="_blank" href="%1s">wp_mail</a> pluggable function and
+                                plugin is not able to extend it. Please check if another plugin is using this and disable it for <strong>FluentSMTP</strong> to work!',
+                            'fluent-smtp'), 'https://developer.wordpress.org/reference/functions/wp_mail/'
+                    );
+                    ?>
+                </p>
+                <p style="color: red;"><?php _e('Possible Conflict: ', 'fluent-smtp'); ?><?php echo $hints;?></p>
+            </div>
+            <?php
+        });
+    endif;
+endif;
 
 /*
  * Thanks for checking the source code

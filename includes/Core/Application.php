@@ -93,9 +93,6 @@ final class Application extends Container
      */
     private function requireCommonFilesForRequest($app)
     {
-        // Require Pluggable Functions
-        require_once($app['path.app'] . '/Functions/pluggable.php');
-
         // Require Application Bindings
         require_once($app['path.app'] . '/Bindings.php');
 

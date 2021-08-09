@@ -26,3 +26,4 @@ spl_autoload_register(function($class) {
 
     require(trailingslashit($path) . trim($file, '/') . '.php');
 });
+
