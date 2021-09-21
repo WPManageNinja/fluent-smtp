@@ -110,6 +110,7 @@
     import gmail from './Partials/Providers/Gmail';
     import outlook from './Partials/Providers/Outlook';
     import postmark from './Partials/Providers/PostMark';
+    import elasticmail from './Partials/Providers/ElasticMail';
     import Errors from '@/Bits/Errors';
     import Error from '@/Pieces/Error';
 
@@ -127,6 +128,7 @@
             gmail,
             outlook,
             postmark,
+            elasticmail,
             Error
         },
         data() {

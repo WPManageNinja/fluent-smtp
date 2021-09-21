@@ -189,9 +189,7 @@ class Handler extends BaseHandler
 
     protected function getCustomEmailHeaders()
     {
-        return [
-            'X-Mailer' => 'FluentMail - PepiPost'
-        ];
+        return [];
     }
 
     protected function getRequestHeaders()

@@ -2,8 +2,8 @@
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.5
-Tested up to: 5.8.0
-Stable tag: 2.0.1
+Tested up to: 5.8
+Stable tag: 2.0.2
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -265,6 +265,13 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.0.2 (Date: September 21, 2021) =
+* Fixed Scheduled Database Cleanup
+* Improvement on wp_mail loading and sending emails
+* Pepipost Driver Improvement
+* SendGrid Driver Improvement
+* SendinBlue Drive Improvement
 
 = 2.0.1 (Date: July 28, 2021) =
 * Added Postmark API Connection

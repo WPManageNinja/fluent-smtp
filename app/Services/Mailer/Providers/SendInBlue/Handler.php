@@ -39,9 +39,15 @@ class Handler extends BaseHandler
         $body = [
             'sender' => $this->getFrom(),
             'subject' => $this->getSubject(),
-            'htmlContent' => $this->getBody(),
-            'headers' => $this->getCustomEmailHeaders()
+            'htmlContent' => $this->getBody()
         ];
+
+        $contentType = $this->getParam('headers.content-type');
+
+        if($contentType == 'text/plain') {
+            $body['textContent'] = $this->getBody();
+            unset($body['htmlContent']);
+        }
 
         if ($replyTo = $this->getReplyTo()) {
             $body['replyTo'] = $replyTo;
@@ -177,15 +183,12 @@ class Handler extends BaseHandler
 
     protected function getCustomEmailHeaders()
     {
-        return [
-            'X-Mailer' => 'FluentMail - SendInBlue'
-        ];
+        return [];
     }
 
     protected function getRequestHeaders()
     {
         return [
-            'X-Mailer' => 'FluentMail-SendInBlue',
             'Api-Key' => $this->getSetting('api_key'),
             'Content-Type' => 'application/json',
             'Accept' => 'application/json'

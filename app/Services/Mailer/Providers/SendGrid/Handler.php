@@ -32,8 +32,7 @@ class Handler extends BaseHandler
             'from' => $this->getFrom(),
             'personalizations' => $this->getRecipients(),
             'subject' => $this->getSubject(),
-            'content' => $this->getBody(),
-            'headers' => $this->getCustomEmailHeaders()
+            'content' => $this->getBody()
         ];
 
         if ($replyTo = $this->getReplyTo()) {
@@ -95,7 +94,6 @@ class Handler extends BaseHandler
         if ($replyTo = $this->getParam('headers.reply-to')) {
             return reset($replyTo);
         }
-
     }
 
     protected function getRecipients()
@@ -183,9 +181,7 @@ class Handler extends BaseHandler
 
     protected function getCustomEmailHeaders()
     {
-        return [
-            'X-Mailer' => 'FluentMail - SendGrid'
-        ];
+        return [];
     }
 
     protected function getRequestHeaders()

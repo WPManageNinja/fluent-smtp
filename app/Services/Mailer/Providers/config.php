@@ -4,7 +4,7 @@ return [
     'connections' => [],
     'mappings'    => [],
     'providers'   => [
-        'smtp'       => [
+        'smtp'        => [
             'key'      => 'smtp',
             'title'    => __('SMTP', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/smtp.svg'),
@@ -28,7 +28,7 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/set-up-fluent-smtp-with-any-host-or-mailer/">Read the documentation</a> for how to configure any SMTP with FluentSMTP.'
         ],
-        'ses'        => [
+        'ses'         => [
             'key'      => 'ses',
             'title'    => __('Amazon SES', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/amazon.png'),
@@ -69,7 +69,7 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/set-up-amazon-ses-in-fluent-smtp/">Read the documentation</a> for how to configure Amazon SES with FluentSMTP.'
         ],
-        'mailgun'    => [
+        'mailgun'     => [
             'key'      => 'mailgun',
             'title'    => __('Mailgun', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/mailgun.svg'),
@@ -86,7 +86,7 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/configure-mailgun-in-fluent-smtp-to-send-emails/">Read the documentation</a> for how to configure Mailgun with FluentSMTP.'
         ],
-        'sendgrid'   => [
+        'sendgrid'    => [
             'key'      => 'sendgrid',
             'title'    => __('SendGrid', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/sendgrid.svg'),
@@ -100,7 +100,7 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-sendgrid-driver-in-fluent-smtp/">Read the documentation</a> for how to configure sendgrid with FluentSMTP.'
         ],
-        'sendinblue' => [
+        'sendinblue'  => [
             'key'      => 'sendinblue',
             'title'    => __('Sendinblue', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/sendinblue.svg'),
@@ -114,7 +114,7 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/setting-up-sendinblue-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure Sendinblue with FluentSMTP.'
         ],
-        'sparkpost'  => [
+        'sparkpost'   => [
             'key'      => 'sparkpost',
             'title'    => __('SparkPost', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/sparkpost.png'),
@@ -128,7 +128,7 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/configure-sparkpost-in-fluent-smtp-to-send-emails/">Read the documentation</a> for how to configure SparkPost with FluentSMTP.'
         ],
-        'pepipost'   => [
+        'pepipost'    => [
             'key'      => 'pepipost',
             'title'    => __('Pepipost', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/pepipost-logo.png'),
@@ -142,7 +142,7 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/">Read the documentation</a> for how to configure Pepipost with FluentSMTP.'
         ],
-        'postmark'   => [
+        'postmark'    => [
             'key'      => 'postmark',
             'title'    => __('Postmark', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/postmark.svg'),
@@ -159,7 +159,22 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/configure-postmark-in-fluent-smtp-to-send-emails/">Read the documentation</a> for how to configure Postmark with FluentSMTP.'
         ],
-        'gmail'      => [
+//        'elasticmail' => [
+//            'key'      => 'elasticmail',
+//            'title'    => __('Elastic Mail', 'fluent-smtp'),
+//            'image'    => fluentMailAssetUrl('images/elastic_mail.svg'),
+//            'provider' => 'ElasticMail',
+//            'options'  => [
+//                'sender_name'     => '',
+//                'sender_email'    => '',
+//                'force_from_name' => 'no',
+//                'api_key'         => '',
+//                'mail_type'       => 'transactional',
+//                'key_store'       => 'db'
+//            ],
+//            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-elastic-mail-driver-in-fluent-smtp/">Read the documentation</a> for how to configure sendgrid with FluentSMTP.'
+//        ],
+        'gmail'       => [
             'key'      => 'gmail',
             'title'    => __('Gmail/Google Workspace', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/gmail-logo.png'),
@@ -178,7 +193,7 @@ return [
             ],
             'note'     => __('Gmail/Google Workspace is not recommended for sending mass marketing emails.', 'fluent-smtp')
         ],
-        'outlook'    => [
+        'outlook'     => [
             'key'      => 'outlook',
             'title'    => __('Outlook/Office365', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/microsoft.svg'),
@@ -197,7 +212,7 @@ return [
             ],
             'note'     => __('Outlook/Office365 is not recommended for sending mass marketing emails.', 'fluent-smtp')
         ],
-        'default'    => [
+        'default'     => [
             'key'      => 'default',
             'title'    => __('PHP Mail', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/default.svg'),

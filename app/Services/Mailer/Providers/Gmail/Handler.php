@@ -57,7 +57,6 @@ class Handler extends BaseHandler
         $googleClient = $this->getApiClient($data);
         $googleService = new \Google_Service_Gmail($googleClient);
 
-
         $result = array();
         try {
             $googleClient->setDefer(true);
