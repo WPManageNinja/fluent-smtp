@@ -25,7 +25,7 @@
                         <el-input id="from" v-model="form.email" />
 
                         <span class="small-help-text" style="display:block;margin-top:-10px">
-                            Enter email address where test email will be sent (By default, logged in user email will be used if email address is not provide).
+                            Enter email address where test email will be sent (By default, logged in user email will be used if email address is not provided).
                         </span>
                     </el-form-item>
 
