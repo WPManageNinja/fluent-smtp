@@ -44,7 +44,7 @@ trait ValidatorTrait
         $connection = $this->filterConnectionVars($connection);
         $region = 'email.' . $connection['region'] . '.amazonaws.com';
 
-        set_error_handler(function ($errno, $errstr, $errfile, $errline , $errcontex) {
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) {
             throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
         });
 

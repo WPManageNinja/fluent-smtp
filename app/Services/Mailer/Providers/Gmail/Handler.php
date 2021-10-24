@@ -45,7 +45,9 @@ class Handler extends BaseHandler
 
     private function sendViaApi()
     {
-        require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
+        if(!class_exists('\Google_Service_Gmail_Message')) {
+            require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
+        }
 
         $message = $this->phpMailer->getSentMIMEMessage();
 
@@ -277,8 +279,10 @@ class Handler extends BaseHandler
             $connection['client_id'] = defined('FLUENTMAIL_GMAIL_CLIENT_ID') ? FLUENTMAIL_GMAIL_CLIENT_ID : '';
             $connection['client_secret'] = defined('FLUENTMAIL_GMAIL_CLIENT_SECRET') ? FLUENTMAIL_GMAIL_CLIENT_SECRET : '';
         }
-
-        require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
+        
+        if(!class_exists('\Google_Client')) {
+            require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
+        }
 
          $this->getApiClient($connection);
 

@@ -393,7 +393,7 @@ class Logger extends Model
         try {
 
             $date = date('Y-m-d H:i:s', current_time('timestamp') - $days * DAY_IN_SECONDS);
-            $query = $this->db->prepare("DELETE FROM %s WHERE `created_at` < %s", $this->table, $date);
+            $query = $this->db->prepare("DELETE FROM {$this->table} WHERE `created_at` < %s", $date);
             return $this->db->query($query);
 
         } catch (Exception $e) {

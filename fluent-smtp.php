@@ -36,7 +36,7 @@ fluentSmtpInit();
 
 if (! function_exists( 'wp_mail' ) ) :
     function wp_mail( $to, $subject, $message, $headers = '', $attachments = array() ) {
-        return fluentMail_wp_mail($to, $subject, $message, $headers, $attachments);
+        return fluentMailSend($to, $subject, $message, $headers, $attachments);
     }
 else:
     if (! (defined( 'DOING_AJAX' ) && DOING_AJAX) ):
