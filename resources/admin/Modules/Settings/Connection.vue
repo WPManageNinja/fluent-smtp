@@ -10,6 +10,7 @@
                     :connection="provider"
                     :connection_key="provider_key"
                     :providers="settings.providers"
+                    :connections="settings.connections"
                 />
             </div>
         </div>

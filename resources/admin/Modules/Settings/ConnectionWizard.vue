@@ -20,6 +20,7 @@
                                     :placeholder="$t('From Email')"
                                     v-model="connection.sender_email"
                                 ></el-input>
+                                <p style="color: red;" v-if="is_conflicted">Another connection with same email address exist. This connection will replace that connection</p>
                             </el-form-item>
                             <div v-if="connection.force_from_email != undefined">
                                 <el-checkbox
@@ -113,10 +114,11 @@
     import elasticmail from './Partials/Providers/ElasticMail';
     import Errors from '@/Bits/Errors';
     import Error from '@/Pieces/Error';
+    import each from 'lodash/each';
 
     export default {
         name: 'ConnectionWizard',
-        props: ['connection', 'is_new', 'providers', 'connection_key'],
+        props: ['connection', 'is_new', 'providers', 'connection_key', 'connections'],
         components: {
             ses: AmazonSes,
             mailgun,
@@ -137,6 +139,22 @@
                 errors: new Errors(),
                 api_error: '',
                 has_error: false
+            }
+        },
+        computed: {
+            is_conflicted() {
+                if (!this.connections) {
+                    return false;
+                }
+
+                let isConflicted = false;
+                each(this.connections, (existingConnection, connectionKey) => {
+                    if(this.connection_key != connectionKey && existingConnection.provider_settings.sender_email == this.connection.sender_email) {
+                        isConflicted = true;
+                    }
+                });
+
+                return isConflicted;
             }
         },
         watch: {
