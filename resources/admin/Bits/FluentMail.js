@@ -82,6 +82,8 @@ locale.use(lang);
 
 import Router from 'vue-router';
 import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+
 import {
     applyFilters,
     addFilter,
@@ -100,6 +102,7 @@ export default class FluentMail {
         this.removeAllActions = removeAllActions;
         this.appVars = window.FluentMailAdmin;
         this.Vue = this.extendVueConstructor();
+        // dayjs.extend(localizedFormat);
     }
 
     extendVueConstructor() {
@@ -122,7 +125,7 @@ export default class FluentMail {
                 ucFirst: self.ucFirst,
                 ucWords: self.ucWords,
                 slugify: self.slugify,
-                dayjs: dayjs,
+                dayjs: dayjs.extend(localizedFormat),
                 escapeHtml: self.escapeHtml,
                 hasPro: () => Boolean(window.FluentMail.appVars.has_pro),
                 $t(string) {

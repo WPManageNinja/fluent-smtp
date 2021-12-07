@@ -1,41 +1,42 @@
 {
-  "name": "fluent-smtp",
-  "version": "1.0.0",
-  "description": "---",
-  "main": ".eslintrc.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/WPManageNinja/fluent-smtp.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/WPManageNinja/fluent-smtp/issues"
-  },
-  "homepage": "https://github.com/WPManageNinja/fluent-smtp#readme",
-  "devDependencies": {
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@wordpress/hooks": "^3.2.0",
-    "babel-plugin-import": "^1.13.3",
-    "laravel-mix": "^6.0.25",
-    "resolve-url-loader": "^4.0.0",
-    "sass": "^1.36.0",
-    "sass-loader": "^12.1.0",
-    "vue-loader": "^15.9.7",
-    "vue-template-compiler": "^2.6.14"
-  },
-  "dependencies": {
-    "chart.js": "^3.4.1",
-    "css-loader": "^5.2.7",
-    "dayjs": "^1.10.6",
-    "element-ui": "^2.15.3",
-    "lodash": "^4.17.21",
-    "vue": "^2.6.14",
-    "vue-chartjs": "^3.5.1",
-    "vue-router": "^3.5.2"
-  }
+    "name": "fluent-smtp",
+    "version": "1.0.0",
+    "description": "---",
+    "main": ".eslintrc.js",
+    "scripts": {
+        "start": "webpack --mode=development --node-env=dev --progress --watch",
+        "prod": "webpack --mode=production --node-env=prod --progress"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/WPManageNinja/fluent-smtp.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/WPManageNinja/fluent-smtp/issues"
+    },
+    "homepage": "https://github.com/WPManageNinja/fluent-smtp#readme",
+    "devDependencies": {
+        "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+        "@wordpress/hooks": "^3.2.0",
+        "babel-plugin-import": "^1.13.3",
+        "laravel-mix": "^6.0.25",
+        "resolve-url-loader": "^4.0.0",
+        "sass": "^1.36.0",
+        "sass-loader": "^12.1.0",
+        "vue-loader": "^15.9.7",
+        "vue-template-compiler": "^2.6.14"
+    },
+    "dependencies": {
+        "chart.js": "^3.4.1",
+        "css-loader": "^5.2.7",
+        "dayjs": "^1.10.6",
+        "element-ui": "^2.15.3",
+        "lodash": "^4.17.21",
+        "vue": "^2.6.14",
+        "vue-chartjs": "^3.5.1",
+        "vue-router": "^3.5.2"
+    }
 }

@@ -3,7 +3,7 @@
         <div>
             <div class="header">
                 <div style="float:left;margin-top:6px;">{{$t('Email Logs')}}</div>
-                
+
                 <LogFilter
                     @on-filter="onFilter"
                     @on-filter-change="onFilterChange"
@@ -47,13 +47,13 @@
                             <div>{{ scope.row.subject }}</div>
                         </template>
                     </el-table-column>
-                    
+
                     <el-table-column :label="$t('To')">
                         <template slot-scope="scope">
                             <span v-html="scope.row.to"></span>
                         </template>
                     </el-table-column>
-                    
+
                     <el-table-column :label="$t('Status')" width="120" align="center">
                         <template slot-scope="scope">
                             {{ scope.row.status }}
@@ -322,7 +322,7 @@
                     const logViewer = this.$children.find(
                         c => c.$options._componentTag === 'LogViewer'
                     );
-                    
+
                     logViewer && logViewer.navigate();
                 });
             },
@@ -432,7 +432,7 @@
                 return this.logs.map(log => {
                     log.created_at = this.$dateFormat(
                         log.created_at,
-                        'DD-MM-YYYY h:mm:ss A'
+                        'L LT'
                     );
                     return log;
                 });
@@ -446,7 +446,7 @@
         },
         created() {
             const currentPage = this.$route.query.page;
-            
+
             if (currentPage) {
                 this.pagination.current_page = Number(currentPage);
             }
