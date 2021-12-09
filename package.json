@@ -4,8 +4,8 @@
     "description": "---",
     "main": ".eslintrc.js",
     "scripts": {
-        "start": "webpack --mode=development --node-env=dev --progress --watch",
-        "prod": "webpack --mode=production --node-env=prod --progress"
+        "start": "webpack --mode=development --node-env=development --progress --watch",
+        "prod": "webpack --mode=production --node-env=production --progress"
     },
     "repository": {
         "type": "git",

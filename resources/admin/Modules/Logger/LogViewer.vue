@@ -102,9 +102,9 @@
                             <strong style="color:#606266">{{$t('Email Body')}}</strong>
                         </template>
                         <hr class="log-border">
-                        <EmailbodyContainer :content="log.body" />
+                        <EmailbodyContainer><div v-html="log.body"></div></EmailbodyContainer>
                     </el-collapse-item>
-                    
+
                     <el-collapse-item name="attachments">
                         <template slot="title">
                             <strong style="color:#606266">
@@ -195,7 +195,7 @@
                     filter_by: this.logViewerProps.filterBy,
                     filter_by_value: this.logViewerProps.filterByValue
                 };
-                
+
                 this.loading = true;
 
                 this.$get('logs/show', data).then(res => {
@@ -224,7 +224,7 @@
                 }
 
                 const attachments = [];
-                
+
                 log.attachments.forEach((attachment, key) => {
                     attachments[key] = attachment;
                 });
@@ -292,4 +292,3 @@
         }
     };
 </script>
-

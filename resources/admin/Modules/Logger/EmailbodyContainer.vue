@@ -1,69 +1,68 @@
 <template>
-    <div @mouseover="onMouseOver" @mouseleave="onMouseOut">
-        <span ref="fullscreen" class="full-screen-text" @click="fullScreen">
-            {{$t('Enter Full Screen')}}
-        </span>
-        <iframe
-            ref="ifr"
-            frameborder="0"
-            allowFullScreen
-            mozallowfullscreen
-            webkitallowfullscreen
-            style="width:100%;height: 400px;"
-        ></iframe>
+    <div class="email-body-container">
+        <div class="msg-body"><slot></slot></div>
+        <el-button size="small" icon="el-icon-full-screen" class="fullscreen-toggle" type="primary" @click="fullscreen=!fullscreen">{{ $t(fullscreenLabel) }}</el-button>
     </div>
 </template>
+
+<style lang="scss" scoped>
+
+.email-body-container {
+    background: white;
+    background-color: #eee;
+    border-radius: 0.25rem;
+    padding: 1rem;
+
+    > .fullscreen-toggle {
+        margin-left: auto;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease-in-out;
+    }
+
+    &:hover {
+        > .fullscreen-toggle {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    }
+
+    p {
+        margin: 0 0 1rem 0;
+        padding: 0;
+    }
+}
+</style>
 
 <script>
     export default {
         name: 'EmailbodyContainer',
-        props: ['content'],
+
         data() {
             return {
-                // ...
-            };
+                fullscreen: document.fullscreenElement != null
+            }
         },
-        methods: {
-            setBody(body) {
-                this.$nextTick(() => {
-                    const ifr = this.$refs.ifr;
-                    const doc = ifr.contentDocument || ifr.contentWindow.document;
-                    doc.body.innerHTML = body;
-                });
-            },
-            onMouseOver() {
-                this.$refs.fullscreen.classList.add('show');
-            },
-            onMouseOut() {
-                this.$refs.fullscreen.classList.remove('show');
-            },
-            fullScreen() {
-                const d = document;
-                const iframe = this.$refs.ifr;
 
-                if (
-                    d.fullscreenEnabled ||
-                    d.webkitFullscreenEnabled ||
-                    d.mozFullScreenEnabled ||
-                    d.msFullscreenEnabled
-                ) {
-                    if (iframe.requestFullscreen) {
-                        iframe.requestFullscreen();
-                    } else if (iframe.webkitRequestFullscreen) {
-                        iframe.webkitRequestFullscreen();
-                    } else if (iframe.mozRequestFullScreen) {
-                        iframe.mozRequestFullScreen();
-                    } else if (iframe.msRequestFullscreen) {
-                        iframe.msRequestFullscreen();
-                    }
+        computed: {
+            fullscreenLabel() {
+                return this.fullscreen ? 'Exit Full Screen' : 'Enter Full Screen';
+            }
+        },
+
+        watch: {
+            fullscreen(flag) {
+                if (document.fullscreenEnabled && flag != (document.fullscreenElement != null)) {
+                    flag ? (this.$el || document.body).requestFullscreen() : document.exitFullscreen();
                 }
             }
         },
-        watch: {
-            content: {
-                immediate: true,
-                handler: 'setBody'
-            }
-        }
-    };
+
+        created() {
+            document.addEventListener('fullscreenchange', () => {
+                this.fullscreen = document.fullscreenElement != null;
+            });
+        },
+
+    }
 </script>
