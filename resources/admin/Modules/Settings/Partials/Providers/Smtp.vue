@@ -10,7 +10,7 @@
                     <error :error="errors.get('host')" />
                 </el-form-item>
             </el-col>
-            
+
             <el-col :span="12">
                 <el-form-item>
                     <label for="port">
@@ -58,7 +58,7 @@
                     </el-switch>
 
                     <span class="small-help-text">
-                        (By default, the TLS encryption would be used if the server supports it. On some srvers, it could be a problem and may need to be disabled.)
+                        (By default, the TLS encryption would be used if the server supports it. On some servers, it could be a problem and may need to be disabled.)
                     </span>
                 </el-form-item>
             </el-col>
