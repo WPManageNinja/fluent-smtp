@@ -86,6 +86,7 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/configure-mailgun-in-fluent-smtp-to-send-emails/">Read the documentation</a> for how to configure Mailgun with FluentSMTP.'
         ],
+        
         'sendgrid'    => [
             'key'      => 'sendgrid',
             'title'    => __('SendGrid', 'fluent-smtp'),
@@ -211,6 +212,21 @@ return [
                 'refresh_token'   => ''
             ],
             'note'     => __('Outlook/Office365 is not recommended for sending mass marketing emails.', 'fluent-smtp')
+        ],
+        'kirimemail'     => [
+            'key'      => 'kirimemail',
+            'title'    => __('Kirim Email', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/ke-logo.svg'),
+            'provider' => 'Kirimemailt',
+            'options'  => [
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'api_key'         => '',
+                'domain_name'     => '',
+                'key_store'       => 'db',
+            ],
+            'note'     => '<a href="https://docs.kirim.email/en/kb/integrate-kirim-email-transactional-with-other-platforms/">Read the documentation</a> for how to configure Kirim.Email, with FluentSMTP.'
         ],
         'default'     => [
             'key'      => 'default',

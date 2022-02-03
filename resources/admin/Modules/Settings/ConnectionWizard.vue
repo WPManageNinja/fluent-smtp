@@ -102,6 +102,7 @@
 
 <script type="text/babel">
     import mailgun from './Partials/Providers/MailGun';
+    import kirimemail from './Partials/Providers/KirimEmail';
     import pepipost from './Partials/Providers/PepiPost';
     import sendgrid from './Partials/Providers/SendGrid';
     import sendinblue from './Partials/Providers/SendInBlue';
@@ -131,6 +132,7 @@
             outlook,
             postmark,
             elasticmail,
+            kirimemail,
             Error
         },
         data() {
