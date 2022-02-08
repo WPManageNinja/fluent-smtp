@@ -22,6 +22,7 @@ Connect as many Email Service Providers as you want and FluentCRM will route you
 - Sendinblue
 - Pepipost
 - SparkPost
+- Kirim Email
 - Gmail OAuth API Connection
 - Google Workspace OAuth API Connection
 - Gmail via SMTP
