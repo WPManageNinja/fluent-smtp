@@ -38,13 +38,18 @@ class Handler extends BaseHandler
 
     public function postSend()
     {
+        $content_type = $this->getHeader('content-type');
         $body = [
             'from'           => $this->getFrom(),
             'subject'        => $this->getSubject(),
-            'html'           => $this->getBody(),
             'h:X-Mailer'     => 'FluentMail - Mailgun',
-            'h:Content-Type' => $this->getHeader('content-type')
+            'h:Content-Type' => $content_type
         ];
+        if (stripos($content_type, 'html') === false) {
+            $body['text'] = $this->getBody();
+        } else {
+            $body['html'] = $this->getBody();
+        }
 
         if ($replyTo = $this->getReplyTo()) {
             $body['h:Reply-To'] = $replyTo;
