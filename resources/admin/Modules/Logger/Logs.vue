@@ -70,7 +70,7 @@
 
                     <el-table-column prop="created_at" :label="$t('Date-Time')" width="200px">
                         <template slot-scope="scope">
-                            {{ $dateFormat(scope.row.created_at, 'L LT') }}
+                            {{ $dateFormat(scope.row.created_at, 'DD MMM YYYY LT') }}
                         </template>
                     </el-table-column>
 

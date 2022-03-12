@@ -68,6 +68,11 @@ class AdminMenuHandler
 
     public function renderApp()
     {
+        $emailReportHookName = 'fluentmail_do_daily_scheduled_tasks';
+        if (!wp_next_scheduled($emailReportHookName)) {
+            wp_schedule_event(time(), 'daily', $emailReportHookName);
+        }
+        
         $this->app->view->render('admin.menu');
     }
 
@@ -259,7 +264,6 @@ class AdminMenuHandler
 
         return 'yes';
     }
-
 
     public function initAdminWidget()
     {
