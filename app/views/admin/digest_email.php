@@ -80,7 +80,7 @@
                             <tr>
                                 <td>
                                     <h3 style="margin: 5px 0; color: white;">Email Sending Health</h3>
-                                    <p style="margin: 0;color: white;font-size: 12px;"><?php echo $date_range; ?></p>
+                                    <p style="margin: 0;color: white;font-size: 12px;"><?php echo esc_html($date_range); ?></p>
                                 </td>
                                 <td style="text-align: right;">
                                     <img src="<?php echo esc_url(fluentMailMix('images/fluentsmtp-white.png')); ?>"
@@ -98,9 +98,9 @@
                         <table width="100%">
                             <tr>
                                 <td>
-                                    <h3 style="font-size: 18px; font-weight: normal; margin: 0;"><?php echo $sent['title']; ?></h3>
+                                    <h3 style="font-size: 18px; font-weight: normal; margin: 0;"><?php echo esc_html($sent['title']); ?></h3>
                                     <?php if ($sent['subject_items']): ?>
-                                        <p style="margin: 4px 0 0 0;font-size: 12px;"><?php echo $sent['subtitle']; ?></p>
+                                        <p style="margin: 4px 0 0 0;font-size: 12px;"><?php echo esc_html($sent['subtitle']); ?></p>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -150,9 +150,9 @@
                         <table width="100%">
                             <tr>
                                 <td>
-                                    <h3 style="font-size: 18px; font-weight: normal; margin: 0;"><?php echo $fail['title']; ?></h3>
+                                    <h3 style="font-size: 18px; font-weight: normal; margin: 0;"><?php echo esc_html($fail['title']); ?></h3>
                                     <?php if ($fail['subject_items']): ?>
-                                        <p style="margin: 4px 0 0 0;"><?php echo $fail['subtitle']; ?></p>
+                                        <p style="margin: 4px 0 0 0;"><?php echo esc_html($fail['subtitle']); ?></p>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -197,7 +197,7 @@
                         <table width="100%">
                             <tr>
                                 <td>
-                                    <p style="font-size: 10px; line-height: 12px; color: white;">You received this email because the Email Sending Health Report is enabled in your FluentSMTP settings. Simply turn it off to stop these emails at <?php echo $domain_name; ?>.</p>
+                                    <p style="font-size: 10px; line-height: 12px; color: white;">You received this email because the Email Sending Health Report is enabled in your FluentSMTP settings. Simply turn it off to stop these emails at <?php echo esc_html($domain_name); ?>.</p>
                                 </td>
                                 <td style="text-align: right;width: 100px; padding-left: 15px;">
                                     <img src="<?php echo esc_url(fluentMailMix('images/fluentsmtp-white.png')); ?>"

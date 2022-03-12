@@ -59,7 +59,7 @@ else:
                     );
                     ?>
                 </p>
-                <p style="color: red;"><?php _e('Possible Conflict: ', 'fluent-smtp'); ?><?php echo $hints; ?></p>
+                <p style="color: red;"><?php _e('Possible Conflict: ', 'fluent-smtp'); ?><?php echo $hints; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
             </div>
             <?php
         });

@@ -161,14 +161,6 @@ class AdminMenuHandler
             FLUENTMAIL_PLUGIN_VERSION,
             true
         );
-
-        wp_enqueue_script(
-            'fluent_mail_admin_app_vendor',
-            fluentMailMix('admin/js/vendor.js'),
-            ['fluent_mail_admin_app_boot'],
-            FLUENTMAIL_PLUGIN_VERSION,
-            true
-        );
     }
 
     protected function getMailerSettings()
@@ -335,9 +327,9 @@ class AdminMenuHandler
                 <tbody>
                 <?php foreach ($stats as $stat): ?>
                     <tr>
-                        <td><?php echo $stat['title']; ?></td>
-                        <td><?php echo $stat['sent']; ?></td>
-                        <td class="<?php echo ($stat['failed']) ? 'fstmp_failed' : ''; ?>"><?php echo $stat['failed']; ?></td>
+                        <td><?php echo $stat['title']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
+                        <td><?php echo $stat['sent']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
+                        <td class="<?php echo ($stat['failed']) ? 'fstmp_failed' : ''; ?>"><?php echo $stat['failed']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
