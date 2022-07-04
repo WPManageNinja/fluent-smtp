@@ -141,7 +141,7 @@ class Handler extends BaseHandler
             $body = [
                 'code'          => $authToken,
                 'grant_type'    => 'authorization_code',
-                'redirect_uri'  => 'urn:ietf:wg:oauth:2.0:oob',
+                'redirect_uri'  => apply_filters('fluentsmtp_gapi_callback', 'https://fluentsmtp.com/gapi/'), // 'urn:ietf:wg:oauth:2.0:oob'
                 'client_id'     => $clientId,
                 'client_secret' => $clientSecret
             ];
@@ -164,7 +164,7 @@ class Handler extends BaseHandler
                     $con['connection']['auth_token'] = '';
                     $con['connection']['expire_stamp'] = time() + $tokens['expires_in'];
                     $con['connection']['expires_in'] = $tokens['expires_in'];
-
+                    $con['connection']['version'] = 2;
                     return $con;
                 }, 10, 2);
             }

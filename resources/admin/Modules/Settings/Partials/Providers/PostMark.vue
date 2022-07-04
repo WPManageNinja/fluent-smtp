@@ -36,7 +36,7 @@
         </span>
 
         <el-row class="fsmtp_compact" :gutter="30">
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item label="Track Opens">
                     <el-checkbox
                         true-label="yes"
@@ -56,7 +56,7 @@
                     <el-input type="text" size="small" v-model="connection.message_stream" />
                 </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item label="Track Links">
                     <el-checkbox
                         true-label="yes"

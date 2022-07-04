@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item>
                     <label for="sender_email">
                         Sender Email <error :error="schema.errors.get('sender_email')" />
@@ -24,7 +24,7 @@
                 </el-form-item>
             </el-col>
         
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item>
                     <label for="sender_name">Sender Name</label>
 
@@ -45,7 +45,7 @@
         </el-row>
 
         <el-row>
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <!-- <el-checkbox
                     v-model="schema.provider.options.force_from_email"
                     true-label="yes"
@@ -61,7 +61,7 @@
                 &nbsp;
             </el-col>
             
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-checkbox
                     v-model="schema.provider.options.force_from_name"
                     true-label="yes"
