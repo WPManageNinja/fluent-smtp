@@ -1,68 +1,73 @@
 <template>
-    <div class="email-body-container">
-        <div class="msg-body"><slot></slot></div>
-        <el-button size="small" icon="el-icon-full-screen" class="fullscreen-toggle" type="primary" @click="fullscreen=!fullscreen">{{ $t(fullscreenLabel) }}</el-button>
+    <div @mouseover="onMouseOver" @mouseleave="onMouseOut">
+        <iframe
+            ref="ifr"
+            frameborder="0"
+            allowFullScreen
+            mozallowfullscreen
+            webkitallowfullscreen
+            style="width:100%;height: 400px;"
+        ></iframe>
+        <el-button size="small" type="primary" icon="el-icon-full-screen" ref="fullscreen" @click="fullScreen">
+            {{$t('Enter Full Screen')}}
+        </el-button>
+
     </div>
 </template>
 
-<style lang="scss" scoped>
-
-.email-body-container {
-    background: white;
-    background-color: #eee;
-    border-radius: 0.25rem;
-    padding: 1rem;
-
-    > .fullscreen-toggle {
-        margin-left: auto;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.25s ease-in-out;
-    }
-
-    &:hover {
-        > .fullscreen-toggle {
-            opacity: 1;
-            pointer-events: auto;
-        }
-    }
-
-    p {
-        margin: 0 0 1rem 0;
-        padding: 0;
-    }
-}
-</style>
-
 <script>
-    export default {
-        name: 'EmailbodyContainer',
-
-        data() {
-            return {
-                fullscreen: document.fullscreenElement != null
+export default {
+    name: 'EmailbodyContainer',
+    props: ['content'],
+    data() {
+        return {
+            // ...
+        };
+    },
+    methods: {
+        setBody(body) {
+            if(!body) {
+                body = ' ';
             }
-        },
-
-        computed: {
-            fullscreenLabel() {
-                return this.fullscreen ? 'Exit Full Screen' : 'Enter Full Screen';
-            }
-        },
-
-        watch: {
-            fullscreen(flag) {
-                if (document.fullscreenEnabled && flag != (document.fullscreenElement != null)) {
-                    flag ? (this.$el || document.body).requestFullscreen() : document.exitFullscreen();
-                }
-            }
-        },
-
-        created() {
-            document.addEventListener('fullscreenchange', () => {
-                this.fullscreen = document.fullscreenElement != null;
+            
+            this.$nextTick(() => {
+                const ifr = this.$refs.ifr;
+                const doc = ifr.contentDocument || ifr.contentWindow.document;
+                doc.body.innerHTML = body;
             });
         },
-
+        onMouseOver() {
+            this.$refs.fullscreen.classList.add('show');
+        },
+        onMouseOut() {
+            this.$refs.fullscreen.classList.remove('show');
+        },
+        fullScreen() {
+            const d = document;
+            const iframe = this.$refs.ifr;
+            if (
+                d.fullscreenEnabled ||
+                d.webkitFullscreenEnabled ||
+                d.mozFullScreenEnabled ||
+                d.msFullscreenEnabled
+            ) {
+                if (iframe.requestFullscreen) {
+                    iframe.requestFullscreen();
+                } else if (iframe.webkitRequestFullscreen) {
+                    iframe.webkitRequestFullscreen();
+                } else if (iframe.mozRequestFullScreen) {
+                    iframe.mozRequestFullScreen();
+                } else if (iframe.msRequestFullscreen) {
+                    iframe.msRequestFullscreen();
+                }
+            }
+        }
+    },
+    watch: {
+        content: {
+            immediate: true,
+            handler: 'setBody'
+        }
     }
+};
 </script>

@@ -108,7 +108,7 @@
                             <strong style="color:#606266">{{$t('Email Body')}}</strong>
                         </template>
                         <hr class="log-border">
-                        <EmailbodyContainer><div v-html="log.body"></div></EmailbodyContainer>
+                        <EmailbodyContainer :content="log.body" />
                     </el-collapse-item>
 
                     <el-collapse-item name="attachments">
@@ -133,7 +133,7 @@
                         </template>
                         <div>
                             <hr><strong>Response
-                            </strong><hr>
+                        </strong><hr>
                             <el-row>
                                 <el-col><pre>{{log.response}}</pre></el-col>
                             </el-row>
@@ -177,124 +177,112 @@
 </template>
 
 <script>
-    import EmailbodyContainer from './EmailbodyContainer';
-
-    export default {
-        name: 'LogViewer',
-        props: ['logViewerProps'],
-        components: { EmailbodyContainer },
-        data() {
-            return {
-                activeName: 'email_body',
-                loading: false,
-                next: false,
-                prev: false,
-                retrying: false
+import EmailbodyContainer from './EmailbodyContainer';
+export default {
+    name: 'LogViewer',
+    props: ['logViewerProps'],
+    components: { EmailbodyContainer },
+    data() {
+        return {
+            activeName: 'email_body',
+            loading: false,
+            next: false,
+            prev: false,
+            retrying: false
+        };
+    },
+    methods: {
+        navigate(dir) {
+            const data = {
+                dir: dir,
+                id: this.log.id,
+                query: this.logViewerProps.query,
+                filter_by: this.logViewerProps.filterBy,
+                filter_by_value: this.logViewerProps.filterByValue
             };
-        },
-        methods: {
-            navigate(dir) {
-                const data = {
-                    dir: dir,
-                    id: this.log.id,
-                    query: this.logViewerProps.query,
-                    filter_by: this.logViewerProps.filterBy,
-                    filter_by_value: this.logViewerProps.filterByValue
-                };
 
-                this.loading = true;
-
-                this.$get('logs/show', data).then(res => {
-                    if (!dir) {
-                        this.next = res.data.next.length;
-                        this.prev = res.data.prev.length;
-                        return;
-                    }
-
-                    this.logViewerProps.log = res.data.log;
-                    this.next = res.data.next;
-                    this.prev = res.data.prev;
-                }).fail(error => {
-                    console.log(error);
-                }).always(() => {
-                    this.loading = false;
-                });
-            },
-            getAttachments(log) {
-                if (!log) return [];
-
-                if (!log.attachments) return [];
-
-                if (!Array.isArray(log.attachments)) {
-                    return [log.attachments];
+            this.loading = true;
+            this.$get('logs/show', data).then(res => {
+                if (!dir) {
+                    this.next = res.data.next.length;
+                    this.prev = res.data.prev.length;
+                    return;
                 }
-
-                const attachments = [];
-
-                log.attachments.forEach((attachment, key) => {
-                    attachments[key] = attachment;
-                });
-
-                return attachments;
-            },
-            closed() {
-                this.next = true;
-                this.prev = true;
-                this.activeName = 'email_body'
-            },
-            getAttachmentName(name) {
-                if (!name || !name[0]) return;
-                name = name[0].replace(/\\/g, '/');
-
-                return name.split('/').pop();
-            },
-            handleRetry(log, type) {
-                this.retrying = true;
-                this.$post('logs/retry', {
-                    id: log.id,
-                    type: type
-                }).then(res => {
-                    this.logViewerProps.retries = res.data.email.retries;
-                    this.logViewerProps.log.status = res.data.email.status;
-                    this.logViewerProps.log.updated_at = res.data.email.updated_at;
-                    this.logViewerProps.log.resent_count = res.data.email.resent_count;
-                }).fail(error => {
-                    this.$notify.error({
-                        offset: 19,
-                        title: 'Oops!!',
-                        message: error.responseJSON.data.message
-                    });
-                }).always(() => {
-                    this.retrying = false;
-                });
+                this.logViewerProps.log = res.data.log;
+                this.next = res.data.next;
+                this.prev = res.data.prev;
+            }).fail(error => {
+                console.log(error);
+            }).always(() => {
+                this.loading = false;
+            });
+        },
+        getAttachments(log) {
+            if (!log) return [];
+            if (!log.attachments) return [];
+            if (!Array.isArray(log.attachments)) {
+                return [log.attachments];
             }
+            const attachments = [];
+
+            log.attachments.forEach((attachment, key) => {
+                attachments[key] = attachment;
+            });
+            return attachments;
         },
-        computed: {
-            log: {
-                get() {
-                    let log;
-
-                    if (this.logViewerProps.log) {
-                        log = { ...this.logViewerProps.log };
-                        if(!log.headers) {
-                            log.headers = {};
-                        }
-
-                        if(!log.response) {
-                            log.response = {};
-                        }
-
-                        if(!log.extra) {
-                            log.extra = {};
-                        }
+        closed() {
+            this.next = true;
+            this.prev = true;
+            this.activeName = 'email_body'
+        },
+        getAttachmentName(name) {
+            if (!name || !name[0]) return;
+            name = name[0].replace(/\\/g, '/');
+            return name.split('/').pop();
+        },
+        handleRetry(log, type) {
+            this.retrying = true;
+            this.$post('logs/retry', {
+                id: log.id,
+                type: type
+            }).then(res => {
+                this.logViewerProps.retries = res.data.email.retries;
+                this.logViewerProps.log.status = res.data.email.status;
+                this.logViewerProps.log.updated_at = res.data.email.updated_at;
+                this.logViewerProps.log.resent_count = res.data.email.resent_count;
+            }).fail(error => {
+                this.$notify.error({
+                    offset: 19,
+                    title: 'Oops!!',
+                    message: error.responseJSON.data.message
+                });
+            }).always(() => {
+                this.retrying = false;
+            });
+        }
+    },
+    computed: {
+        log: {
+            get() {
+                let log;
+                if (this.logViewerProps.log) {
+                    log = { ...this.logViewerProps.log };
+                    if(!log.headers) {
+                        log.headers = {};
                     }
-
-                    return log;
-                },
-                set(log) {
-                    this.logViewerProps.log = log;
+                    if(!log.response) {
+                        log.response = {};
+                    }
+                    if(!log.extra) {
+                        log.extra = {};
+                    }
                 }
+                return log;
+            },
+            set(log) {
+                this.logViewerProps.log = log;
             }
         }
-    };
+    }
+};
 </script>
