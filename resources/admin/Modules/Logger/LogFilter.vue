@@ -2,17 +2,11 @@
     <div style="float:left;margin-left:10px;">
         <el-row :gutter="10" style="margin-right:-20px;">
             <el-col :span="10">
-                <el-select
-                    clearable
-                    size="small"
-                    v-model="filter_query.status"
-                    :placeholder="$t('Select Status')"
-                    style="width:100%"
-                >
-                    <el-option :label="$t('All Statuses')" value=""/>
-                    <el-option :label="$t('Successful')" value="sent"/>
-                    <el-option :label="$t('Failed')" value="failed"/>
-                </el-select>
+                <el-radio-group @change="applyFilter()" v-model="filter_query.status" size="small">
+                    <el-radio-button label="">{{ $t('All Statuses') }}</el-radio-button>
+                    <el-radio-button label="sent">{{ $t('Successful') }}</el-radio-button>
+                    <el-radio-button label="failed">{{ $t('Failed') }}</el-radio-button>
+                </el-radio-group>
             </el-col>
 
             <el-col :span="10">

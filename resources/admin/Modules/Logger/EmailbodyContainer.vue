@@ -29,7 +29,7 @@ export default {
             if(!body) {
                 body = ' ';
             }
-            
+
             this.$nextTick(() => {
                 const ifr = this.$refs.ifr;
                 const doc = ifr.contentDocument || ifr.contentWindow.document;
