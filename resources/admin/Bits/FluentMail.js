@@ -102,7 +102,6 @@ export default class FluentMail {
         this.removeAllActions = removeAllActions;
         this.appVars = window.FluentMailAdmin;
         this.Vue = this.extendVueConstructor();
-        // dayjs.extend(localizedFormat);
     }
 
     extendVueConstructor() {
