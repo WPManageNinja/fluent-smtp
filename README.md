@@ -61,8 +61,8 @@ All the email connect drivers are at: `app/Services/Mailer/Providers`
 - Clone this project
 - open the project in terminal
 - run `npm install`
-- then `npx run watch` for development
-- `npx run --production` to build the project
+- then `npx mix watch` for development
+- `npx mix --production` to build the project
 
 All the VueJS source are at: `resources/admin` folder
 
