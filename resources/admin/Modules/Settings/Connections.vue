@@ -20,6 +20,7 @@
                             <el-table-column :label="$t('Provider')">
                                 <template slot-scope="scope">
                                     {{ settings.providers[scope.row.provider].title }}
+                                    <span style="color: red;" v-if="scope.row.provider == 'gmail' && !scope.row.version">(Re Authentication Required)</span>
                                 </template>
                             </el-table-column>
 
