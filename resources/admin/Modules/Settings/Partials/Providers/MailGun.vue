@@ -7,7 +7,7 @@
         </el-radio-group>
 
         <el-row v-if="connection.key_store == 'db'" :gutter="20">
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item>
                     <label for="key">
                         Private API Key
@@ -30,7 +30,7 @@
                 </el-form-item>
             </el-col>
 
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item for="domain">
                     <label for="domain">
                         Domain Name

@@ -8,7 +8,7 @@
         </el-radio-group>
 
         <el-row :gutter="20" v-if="connection.key_store == 'db'">
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item>
                     <label for="client_id">
                         Application Client ID
@@ -23,7 +23,7 @@
                 </el-form-item>
             </el-col>
 
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item>
                     <label for="client_secret">
                         Application Client Secret

@@ -42,9 +42,9 @@
 </head>
 <body>
     <div class="fsmtp_wrap">
-        <div class="fsmtp_title"><?php echo $title; ?></div>
+        <div class="fsmtp_title"><?php echo esc_html($title); ?></div>
         <div class="fsmtp_body">
-            <?php echo $body; ?>
+            <?php echo $body; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>
         </div>
     </div>
 </body>

@@ -12,7 +12,7 @@
                 <div class="fss_config_section">
                     <h3 class="fs_config_title">{{$t('Sender Settings')}}</h3>
                     <el-row :gutter="20">
-                        <el-col :span="12">
+                        <el-col :md="12" :sm="24">
                             <el-form-item :label="$t('From Email')">
                                 <error :error="errors.get('sender_email')" />
                                 <el-input
@@ -55,7 +55,7 @@
                                 </el-checkbox>
                             </div>
                         </el-col>
-                        <el-col :span="12">
+                        <el-col :md="12" :sm="24">
                             <el-form-item :label="$t('From Name')">
                                 <el-input
                                     type="text"

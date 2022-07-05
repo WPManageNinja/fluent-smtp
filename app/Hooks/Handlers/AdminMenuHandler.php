@@ -68,6 +68,11 @@ class AdminMenuHandler
 
     public function renderApp()
     {
+        $emailReportHookName = 'fluentmail_do_daily_scheduled_tasks';
+        if (!wp_next_scheduled($emailReportHookName)) {
+            wp_schedule_event(time(), 'daily', $emailReportHookName);
+        }
+
         $this->app->view->render('admin.menu');
     }
 
@@ -157,14 +162,6 @@ class AdminMenuHandler
         wp_enqueue_script(
             'fluent_mail_admin_app',
             fluentMailMix('admin/js/fluent-mail-admin-app.js'),
-            ['fluent_mail_admin_app_boot'],
-            FLUENTMAIL_PLUGIN_VERSION,
-            true
-        );
-
-        wp_enqueue_script(
-            'fluent_mail_admin_app_vendor',
-            fluentMailMix('admin/js/vendor.js'),
             ['fluent_mail_admin_app_boot'],
             FLUENTMAIL_PLUGIN_VERSION,
             true
@@ -268,7 +265,6 @@ class AdminMenuHandler
         return 'yes';
     }
 
-
     public function initAdminWidget()
     {
         // This widget should be displayed for certain high-level users only.
@@ -335,9 +331,9 @@ class AdminMenuHandler
                 <tbody>
                 <?php foreach ($stats as $stat): ?>
                     <tr>
-                        <td><?php echo $stat['title']; ?></td>
-                        <td><?php echo $stat['sent']; ?></td>
-                        <td class="<?php echo ($stat['failed']) ? 'fstmp_failed' : ''; ?>"><?php echo $stat['failed']; ?></td>
+                        <td><?php echo $stat['title']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
+                        <td><?php echo $stat['sent']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
+                        <td class="<?php echo ($stat['failed']) ? 'fstmp_failed' : ''; ?>"><?php echo $stat['failed']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

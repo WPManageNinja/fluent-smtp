@@ -20,7 +20,7 @@
         </div>
 
         <div class="fluent-mail-body">
-            <router-view :key="$route.fullPath"></router-view>
+            <router-view :key="$route.name"></router-view>
         </div>
     </div>
 </template>

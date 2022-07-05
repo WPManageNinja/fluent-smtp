@@ -27,7 +27,7 @@ class View
 	 */
 	public function render($path, $data = [])
 	{
-		echo $this->make($path, $data);
+		echo $this->make($path, $data); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**

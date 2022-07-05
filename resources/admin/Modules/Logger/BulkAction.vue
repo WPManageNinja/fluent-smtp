@@ -7,9 +7,7 @@
                     v-model="action"
                     size="small"
                     :tplaceholder="$t('Bulk Action')"
-                    :disabled="!haslogs"
                 >
-                    <el-option value="deleteall" :label="$t('Delete All')" />
                     <el-option
                         value="deleteselected"
                         label="Delete Selected"
@@ -35,7 +33,7 @@
 <script>
     export default {
         name: 'BulkAction',
-        props: ['selected', 'haslogs'],
+        props: ['selected'],
         data() {
             return {
                 action: '',

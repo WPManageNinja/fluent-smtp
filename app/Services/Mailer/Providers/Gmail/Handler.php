@@ -45,7 +45,7 @@ class Handler extends BaseHandler
 
     private function sendViaApi()
     {
-        if(!class_exists('\Google_Service_Gmail_Message')) {
+        if (!class_exists('\Google_Service_Gmail_Message')) {
             require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
         }
 
@@ -141,12 +141,11 @@ class Handler extends BaseHandler
             $body = [
                 'code'          => $authToken,
                 'grant_type'    => 'authorization_code',
-                'redirect_uri'  => 'urn:ietf:wg:oauth:2.0:oob',
+                'redirect_uri'  => apply_filters('fluentsmtp_gapi_callback', 'https://fluentsmtp.com/gapi/'), // 'urn:ietf:wg:oauth:2.0:oob'
                 'client_id'     => $clientId,
                 'client_secret' => $clientSecret
             ];
             $tokens = $this->makeRequest('https://accounts.google.com/o/oauth2/token', $body, 'POST');
-
             if (is_wp_error($tokens)) {
                 $errors['auth_token']['required'] = $tokens->get_error_message();
             } else {
@@ -165,7 +164,7 @@ class Handler extends BaseHandler
                     $con['connection']['auth_token'] = '';
                     $con['connection']['expire_stamp'] = time() + $tokens['expires_in'];
                     $con['connection']['expires_in'] = $tokens['expires_in'];
-
+                    $con['connection']['version'] = 2;
                     return $con;
                 }, 10, 2);
             }
@@ -254,9 +253,9 @@ class Handler extends BaseHandler
         $client->setApprovalPrompt('force');
 
         $tokens = [
-            'access_token' => $data['access_token'],
-            'refresh_token' =>  $data['refresh_token'],
-            'expires_in' => $data['expire_stamp'] - time()
+            'access_token'  => $data['access_token'],
+            'refresh_token' => $data['refresh_token'],
+            'expires_in'    => $data['expire_stamp'] - time()
         ];
 
         $client->setAccessToken($tokens);
@@ -279,12 +278,12 @@ class Handler extends BaseHandler
             $connection['client_id'] = defined('FLUENTMAIL_GMAIL_CLIENT_ID') ? FLUENTMAIL_GMAIL_CLIENT_ID : '';
             $connection['client_secret'] = defined('FLUENTMAIL_GMAIL_CLIENT_SECRET') ? FLUENTMAIL_GMAIL_CLIENT_SECRET : '';
         }
-        
-        if(!class_exists('\Google_Client')) {
+
+        if (!class_exists('\Google_Client')) {
             require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
         }
 
-         $this->getApiClient($connection);
+        $this->getApiClient($connection);
 
         $info = fluentMailgetConnection($connection['sender_email']);
 
@@ -292,7 +291,7 @@ class Handler extends BaseHandler
 
         $extraRow = [
             'title'   => __('Token Validity', 'fluent-smtp'),
-            'content' => 'Valid (' . intval((($connection['expire_stamp'] - time()) / 60)) . 'm)'
+            'content' => 'Valid (' . (int)(($connection['expire_stamp'] - time()) / 60) . 'm)'
         ];
 
         if (($connection['expire_stamp']) < time()) {

@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item>
                     <label for="host">
                         SMTP Host
@@ -10,8 +10,7 @@
                     <error :error="errors.get('host')" />
                 </el-form-item>
             </el-col>
-
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item>
                     <label for="port">
                         SMTP Port

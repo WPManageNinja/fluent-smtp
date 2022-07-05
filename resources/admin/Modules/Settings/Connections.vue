@@ -1,7 +1,7 @@
 <template>
     <div class="connections">
         <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <div class="fss_content_box">
                     <div class="header">
                         <span style="float:left;">
@@ -20,6 +20,7 @@
                             <el-table-column :label="$t('Provider')">
                                 <template slot-scope="scope">
                                     {{ settings.providers[scope.row.provider].title }}
+                                    <span style="color: red;" v-if="scope.row.provider == 'gmail' && !scope.row.version">(Re Authentication Required)</span>
                                 </template>
                             </el-table-column>
 
@@ -69,7 +70,7 @@
                     </div>
                 </div>
             </el-col>
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <div :class="{ fss_box_active: active_settings == 'general' }" style="margin-bottom: 0px;" class="fss_content_box fss_box_action">
                     <div @click="active_settings = 'general'" class="header">
                         {{$t('General Settings')}}

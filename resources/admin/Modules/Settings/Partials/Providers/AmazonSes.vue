@@ -5,7 +5,7 @@
             <el-radio-button label="wp_config">Access Keys in Config File</el-radio-button>
         </el-radio-group>
         <el-row v-if="connection.key_store == 'db'" :gutter="20">
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item for="access_key">
                     <label for="access_key">
                         Access Key
@@ -19,7 +19,7 @@
                     <error :error="errors.get('access_key')" />
                 </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col  :md="12" :sm="24">
                 <el-form-item>
                     <label for="ses-key">
                         Secret Key

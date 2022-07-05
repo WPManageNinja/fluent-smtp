@@ -39,28 +39,28 @@ class Logger extends Model
     public function get($data)
     {
         $db = $this->getDb();
-        $page = isset($data['page']) ? intval($data['page']) : 1;
-        $perPage = isset($data['per_page']) ? intval($data['per_page']) : 15;
+        $page = isset($data['page']) ? (int)$data['page'] : 1;
+        $perPage = isset($data['per_page']) ? (int)$data['per_page'] : 15;
         $offset = ($page - 1) * $perPage;
 
         $query = $db->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
-            ->limit($page)
+            ->limit($perPage)
             ->offset($offset)
             ->orderBy('id', 'DESC');
 
-        $filterColumn = isset($data['filter_by']) ? sanitize_text_field($data['filter_by']) : false;
-        $filterValue = $data['filter_by_value'];
-
-        if ($filterColumn && $filterValue) {
-            if ($filterColumn == 'daterange' && is_array($filterValue)) {
-                $query->whereBetween('created_at', $filterValue[0], $filterValue[1]);
-            } else if ($filterValue) {
-                $query->where($filterColumn, $filterValue);
-            }
+        if (!empty($data['status'])) {
+            $query->where('status', sanitize_text_field($data['status']));
         }
 
-        if (!empty($data['query'])) {
-            $search = trim(sanitize_text_field($data['query']));
+        if (!empty($data['date_range']) && is_array($data['date_range']) && count($data['date_range']) == 2) {
+            $dateRange = $data['date_range'];
+            $from = $dateRange[0] . ' 00:00:01';
+            $to = $dateRange[1] . ' 23:59:59';
+            $query->whereBetween('created_at', $from, $to);
+        }
+
+        if (!empty($data['search'])) {
+            $search = trim(sanitize_text_field($data['search']));
             $query->where(function ($q) use ($search) {
                 $searchColumns = $this->searchables;
 
@@ -84,9 +84,7 @@ class Logger extends Model
 
             });
         }
-
         $result = $query->paginate();
-
         $result['data'] = $this->formatResult($result['data']);
 
         return $result;

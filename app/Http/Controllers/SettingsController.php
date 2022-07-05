@@ -485,10 +485,19 @@ class SettingsController extends Controller
             ]);
         }
 
-        $authUrl = 'https://accounts.google.com/o/oauth2/auth?access_type=offline&approval_prompt=force&client_id=' . $clientId . '&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth/gmail.compose';
+        $authUrl = add_query_arg([
+            'response_type' => 'code',
+            'access_type' => 'offline',
+            'client_id' => $clientId,
+            'redirect_uri' => apply_filters('fluentsmtp_gapi_callback', 'https://fluentsmtp.com/gapi/'),
+            'state' => admin_url('options-general.php?page=fluent-mail&gapi=1'),
+            'scope' => 'https://mail.google.com/',
+            'approval_prompt' => 'force',
+            'include_granted_scopes' => 'true'
+        ], 'https://accounts.google.com/o/oauth2/auth');
 
         return $this->sendSuccess([
-            'auth_url' => $authUrl
+            'auth_url' => filter_var($authUrl, FILTER_SANITIZE_URL)
         ]);
     }
 

@@ -5,47 +5,23 @@
                 <el-select
                     clearable
                     size="small"
-                    v-model="filterBy"
-                    :placeholder="$t('Filter By')"
-                    @clear="clearFilterValue"
+                    v-model="filter_query.status"
+                    :placeholder="$t('Select Status')"
+                    style="width:100%"
                 >
-                    <el-option :label="$t('Status')" value="status" />
-                    <el-option :label="$t('Date')" value="date" />
-                    <el-option :label="$t('Date Range')" value="daterange" />
+                    <el-option :label="$t('All Statuses')" value=""/>
+                    <el-option :label="$t('Successful')" value="sent"/>
+                    <el-option :label="$t('Failed')" value="failed"/>
                 </el-select>
             </el-col>
 
             <el-col :span="10">
-                <el-select
-                    clearable
-                    size="small"
-                    v-model="filterValue"
-                    :disabled="!filterBy"
-                    :placeholder="$t('Select')"
-                    v-if="!filterBy || filterBy==='status'"
-                    style="width:100%"
-                >
-                    <el-option :label="$t('Successful')" value="sent" />
-                    <el-option :label="$t('Failed')" value="failed" />
-                </el-select>
-
                 <el-date-picker
-                    v-show="filterBy && filterBy==='date'"
                     format="dd-MM-yyyy"
                     value-format="yyyy-MM-dd"
                     size="small"
-                    v-model="filterValue"
-                    type="date"
-                    :placeholder="$t('Select date')"
-                    style="width:100%"
-                />
-
-                <el-date-picker
-                    v-show="filterBy && filterBy==='daterange'"
-                    format="dd-MM-yyyy"
-                    value-format="yyyy-MM-dd"
-                    size="small"
-                    v-model="filterValue"
+                    :picker-options="pickerOptions"
+                    v-model="filter_query.date_range"
                     type="daterange"
                     :placeholder="$t('Select date and time')"
                     range-separator="To"
@@ -60,63 +36,74 @@
                     plain
                     size="small"
                     type="primary"
-                    :disabled="!filterValue"
                     @click="applyFilter"
-                >{{$t('Filter')}}</el-button>
+                >{{ $t('Filter') }}
+                </el-button>
             </el-col>
         </el-row>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'LogFilter',
-        data() {
-            return {
-                filterBy: '',
-                filterValue: ''
-            };
-        },
-        methods: {
-            applyFilter() {
-                if (this.filterValue) {
-                    this.$emit('on-filter', this.filterBy, this.filterValue);
-                }
-            },
-            clearFilterValue() {
-                this.filterValue = '';
+export default {
+    name: 'LogFilter',
+    props: ['filter_query'],
+    data() {
+        return {
+            pickerOptions: {
+                disabledDate(time) {
+                    return time.getTime() > Date.now();
+                },
+                shortcuts: [
+                    {
+                        text: this.$t('Today'),
+                        onClick(picker) {
+                            const today = new Date();
+                            picker.$emit('pick', [today, today]);
+                        }
+                    },
+                    {
+                        text: this.$t('Last week'),
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: this.$t('Last month'),
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: this.$t('Last 3 months'),
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
             }
-        },
-        watch: {
-            filterBy: function(newValue, oldValue) {
-                if (newValue !== oldValue) {
-                    if (newValue && oldValue) {
-                        this.filterValue = '';
-                    }
-                }
-            },
-            filterValue: function(newValue, oldValue) {
-                if (newValue) {
-                    this.$emit('on-filter-change', this.filterBy, this.filterValue);
-                } else {
-                    this.$emit('reset-page');
-                    this.$emit('on-filter', this.filterBy, this.filterValue);
-                }
-
-                if (newValue !== oldValue) {
-                    this.$emit('reset-page');
-                }
-            }
-        },
-        mounted() {
-            const filterBy = this.$route.query.filterBy;
-            const filterValue = this.$route.query.filterValue;
-
-            if (filterBy) {
-                this.filterBy = filterBy;
-                this.filterValue = filterValue;
-                this.applyFilter();
-            }
+        };
+    },
+    methods: {
+        applyFilter() {
+            this.$emit('on-filter', this.filter_query);
         }
-    };    
+    },
+    mounted() {
+        const filterBy = this.$route.query.filterBy;
+        const filterValue = this.$route.query.filterValue;
+
+        if (filterBy) {
+            this.filterBy = filterBy;
+            this.filterValue = filterValue;
+            this.applyFilter();
+        }
+    }
+};
 </script>

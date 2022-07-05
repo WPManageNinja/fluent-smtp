@@ -94,6 +94,12 @@
                             <span>{{ settings.providers[log.extra.provider].title }}</span>
                         </div>
                     </li>
+                    <li v-else-if="log.extra && log.extra.provider">
+                        <div class="item_header">Mailer:</div>
+                        <div class="item_content">
+                            <span>{{ log.extra.provider }}</span>
+                        </div>
+                    </li>
                 </ul>
 
                 <el-collapse v-model="activeName" style="margin-top:10px;">

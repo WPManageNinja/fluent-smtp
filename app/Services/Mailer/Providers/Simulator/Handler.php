@@ -14,7 +14,7 @@ class Handler extends BaseHandler
             $logData = [
                 'to' => maybe_serialize($this->setRecipientsArray($this->phpMailer->getToAddresses())),
                 'from' => maybe_serialize($this->phpMailer->From),
-                'subject' => $this->phpMailer->Subject . ' (Simulated)',
+                'subject' => $this->phpMailer->Subject,
                 'body' => $this->phpMailer->Body,
                 'attachments' => maybe_serialize($this->phpMailer->getAttachments()),
                 'status'   => 'sent',

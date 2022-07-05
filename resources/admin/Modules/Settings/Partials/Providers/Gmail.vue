@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div v-if="connection_key && !connection.version" class="ff_smtp_warn">
+            Google API version has been upgraded. Please <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">read the doc and upgrade your API connection</a>.
+        </div>
         <h3>Gmail/Google Workspace API Settings</h3>
         <p>Please <a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">check the documentation first</a> or <b><a target="_blank" rel="nofollow" href="https://www.youtube.com/watch?v=_d78bscNaX8">Watch the video tutorial</a></b> to create API keys at Google</p>
         <el-radio-group size="mini" v-model="connection.key_store">
@@ -8,7 +11,7 @@
         </el-radio-group>
 
         <el-row :gutter="20" v-if="connection.key_store == 'db'">
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item>
                     <label for="client_id">
                         Application Client ID
@@ -23,7 +26,7 @@
                 </el-form-item>
             </el-col>
 
-            <el-col :span="12">
+            <el-col  :md="12" :sm="24">
                 <el-form-item>
                     <label for="client_secret">
                         Application Client Secret
@@ -49,11 +52,15 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
                 <error :error="errors.get('client_secret')" />
             </el-form-item>
         </div>
+        <el-form-item label="Authorized Redirect URI">
+            <el-input :readonly="true" v-model="AuthorizedRedirectURI" />
+        </el-form-item>
 
         <div v-if="!connection.access_token">
             <div style="text-align: center;">
                 <h3>Please authenticate with Google to get <b>Access Token</b></h3>
                 <el-button v-loading="gettingRedirect" @click="redirectToGoogle()" type="danger">Authenticate with Google & Get Access Token</el-button>
+
             </div>
             <el-row v-if="redirectUrl" :gutter="20">
                 <el-col :span="12">
@@ -91,9 +98,11 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
         },
         data() {
             return {
+                AuthorizedRedirectURI: 'https://fluentsmtp.com/gapi/',
                 app_ready: false,
                 gettingRedirect: false,
-                redirectUrl: ''
+                redirectUrl: '',
+                connection_key: this.$route.query.connection_key
             };
         },
         watch: {

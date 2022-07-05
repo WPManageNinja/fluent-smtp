@@ -1,9 +1,9 @@
-=== FluentSMTP - WordPress Mail SMTP, SES, SendGrid, Mailgun and Any SMTP Plugin ===
+=== FluentSMTP - WP Mail SMTP, Amazon SES, SendGrid, MailGun and Any SMTP Connector Plugin ===
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.5
-Tested up to: 5.8
-Stable tag: 2.1.0
+Tested up to: 5.9
+Stable tag: 2.1.1
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -37,13 +37,17 @@ Connect as many Email Service Providers as you want and FluentSMTP will route yo
 * All Other SMTP
 * More native integrations coming soon
 
+== Why FluentSMTP is Free? ==
+FluentSMTP plugin is 100% free and opensource. We will never monetize it. It's a part of our "Five for the Future" initiative by WordPress foundation.
+Our parent company <a title="WP Manage Ninja" href="https://wpmanageninja.com">WPManageNinja LLC</a> build products for WordPress businesses and have a very stable business model. We want to give something back to community and FluentSMTP is the part of that.
+
 == 🎉 Fluent SMTP Features ==
 Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin in the market. We crafted this plugin for speed, reliability and scalability.
 
 * Real-Time Email Delivery
 * Email Routing to multiple email connections
 * Connect with Any Email Service Providers
-* Email Logs
+* Email Logging and Resend features
 * Fallback Email Connection
 * Resend Any Emails
 * In Details Reporting
@@ -55,7 +59,8 @@ Most importantly, This is plugin is free and always will be free.
 == How does Fluent SMTP works ==
 Fluent SMTP improves your WordPress mail by intercepting the <code>wp_mail</code> and then connecting with your email service providers to ensure deliverability. It uses a direct email service API to send emails faster and securely. It means emails are sent using the provider’s direct API. For your native SMTP connections, It uses the proper host, port, and credentials to send your WP Mails.
 
-Fluent SMTP also logs (optional) your emails so you can check anytime and see your site health. You can also resend your failed emails or resend any previous emails that you need.
+== Email Logging and Debugging Feature ==
+Fluent SMTP also logs (optional) your emails so you can check anytime and see your site health. You can also resend your failed emails or resend any previous emails from email logs that you need.
 
 == 🎉 AMAZON SES (Native API Connection) ==
 With Fluent SMTP SES Connection, you get the powerful, low-cost, high deliverability managed infrastructure from Amazon. With the support of Fluent SMTP, it's super easy to set up and configure Amazon SES API and send all your WordPress emails. The integration is with amazon's latest SES API so your emails will be delivered faster and the right way.
@@ -139,6 +144,9 @@ Optionally, You can turn off this feature, and then only failed emails will be l
 
 == 🚀 Security 🚀 ==
 Fluent SMTP is built by professionals and security and scalability in mind. Fluent SMTP provides several options for you to keep your email sending secure and safe.
+
+== 🚀 One Click Migration From WP Mail SMTP by WPForms 🚀 ==
+If you use other WP SMTP plugin like "WP Mail SMTP by WPForms", you can just install Fluent SMTP Plugin and migrate the settings by a single click.
 
 * Ability to store your SMTP / API credentials on the wp-config.php file
 * Ability to auto-delete old email logs
@@ -265,6 +273,11 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.1.1 (Date: March 12, 2022) =
+* Improved Email Logging Screen
+* Improved UI and Settings
+* Fixed auto-delete old email logs
 
 = 2.1.0 (Date: October 24, 2021) =
 * Fix Cron Issues
