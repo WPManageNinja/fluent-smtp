@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.5
 Tested up to: 6.0
-Stable tag: 2.1.2
+Stable tag: 2.2.0
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -33,6 +33,7 @@ Connect as many Email Service Providers as you want and FluentSMTP will route yo
 * Sendinblue API
 * Pepipost API
 * SparkPost API
+* Elastic Mail API
 * Zoho via SMTP
 * All Other SMTP
 * More native integrations coming soon
@@ -107,6 +108,9 @@ With Fluent SMTP, You can set up your SparkPost email service connection with yo
 
 Read about <a href="https://fluentsmtp.com/docs/configure-sparkpost-in-fluent-smtp-to-send-emails/">SparkPost connection documentation here</a>
 
+== 🎉 Elastic Mail API Connection ==
+Elastic Mail is a great solution for sending transactional and marketing emails with a user-friendly dashboard and many extensive functions such as statistics and real-time information. Fluent SMTP plugin is fully compatible with their official API and you can use it to send your WordPress emails via Elastic Mail
+
 == 🎉 Outlook / Office365 API Connection ==
 Fluent SMTP - WP Mail Plugin provides you options to connect with your Outlook or Office 365 emails and send emails over their API. It's fast and secure. Using oAuth2 authentication system for the connection, You can easily setup the connection and send your emails with Office 365 / Outlook emails.
 
@@ -162,6 +166,7 @@ The full source code is hosted in GitHub and you are welcomed to contribute to t
 
 = Compatible With.. =
 * [Fluent Forms - The Fastest Form Builder Plugin](https://wordpress.org/plugins/fluentform/)
+* [FluentCRM - Email Marketing Automation, Email Newsletter and CRM Plugin for WordPress](https://wordpress.org/plugins/fluent-crm/)
 * [Woocommerce](https://wordpress.org/plugins/woocommerce/)
 * [Elementor Forms](https://elementor.com/features/form-widget/)
 * [Contact Form 7](https://wordpress.org/plugins/contact-form-7/)
@@ -179,6 +184,8 @@ The full source code is hosted in GitHub and you are welcomed to contribute to t
 * [FluentCRM](https://wordpress.org/plugins/fluent-crm)
 * [SendPress Newsletters](https://wordpress.org/plugins/sendpress/)
 * [WP HTML Mail](https://wordpress.org/plugins/wp-html-mail/)
+* [WPForms Lite](https://wordpress.org/plugins/wpforms-lite/)
+* [WP Forms Pro](https://wordpress.org/plugins/wpforms-lite/)
 * [Email Templates](https://wordpress.org/plugins/email-templates/)
 * .. and every other plugin that uses the WordPress API [wp_mail](https://codex.wordpress.org/Function_Reference/wp_mail) to send mail!
 
@@ -273,6 +280,11 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.2.0 (Date: Aug 21, 2022) =
+* Added Elastic Mail API
+* PHP 8.0 & 8.1 compatibility
+* UI Improvements
 
 = 2.1.2 (Date: July 05, 2022) =
 * Google/Gmail API Upgrade

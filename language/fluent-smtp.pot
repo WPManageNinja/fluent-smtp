@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FluentSMTP\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-12 14:01+0000\n"
+"POT-Creation-Date: 2022-08-20 18:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -57,7 +57,7 @@ msgid "Amazon SES"
 msgstr ""
 
 #: app/Services/Mailer/Providers/Postmark/ValidatorTrait.php:20
-#: app/Services/Mailer/Providers/ElasticMail/ValidatorTrait.php:20
+#: app/Services/Mailer/Providers/ElasticMail/ValidatorTrait.php:19
 #: app/Services/Mailer/Providers/SparkPost/ValidatorTrait.php:20
 #: app/Services/Mailer/Providers/SendGrid/ValidatorTrait.php:20
 #: app/Services/Mailer/Providers/SendInBlue/ValidatorTrait.php:19
@@ -209,6 +209,10 @@ msgstr ""
 
 #: app/Hooks/Handlers/AdminMenuHandler.php:427
 msgid "Edit Connection"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:164
+msgid "Elastic Mail"
 msgstr ""
 
 #: app/Hooks/Handlers/AdminMenuHandler.php:432
@@ -498,7 +502,7 @@ msgstr ""
 msgid "Please define FLUENTMAIL_AWS_SECRET_ACCESS_KEY in wp-config.php file."
 msgstr ""
 
-#: app/Services/Mailer/Providers/ElasticMail/ValidatorTrait.php:24
+#: app/Services/Mailer/Providers/ElasticMail/ValidatorTrait.php:23
 msgid "Please define FLUENTMAIL_ELASTICMAIL_API_KEY in wp-config.php file."
 msgstr ""
 
