@@ -2,11 +2,7 @@
     <div class="fss_connection_wizard">
         <el-form :data="connection" label-position="top">
             <el-form-item label="Connection Provider">
-                <el-radio-group class="fss_connections" v-model="connection.provider">
-                    <el-radio-button :class="'con_'+providerName" v-for="(provider, providerName) in providers" :key="providerName" :label="providerName">
-                        <img :title="provider.title" style="max-width:80px;height:32px;" :src="provider.image" />
-                    </el-radio-button>
-                </el-radio-group>
+                <connection-provider :providers="providers" :connection="connection" />
             </el-form-item>
             <template v-if="connection.provider">
                 <div class="fss_config_section">
@@ -115,6 +111,7 @@
     import Errors from '@/Bits/Errors';
     import Error from '@/Pieces/Error';
     import each from 'lodash/each';
+    import ConnectionProvider from './Partials/_ConnectionSelector';
 
     export default {
         name: 'ConnectionWizard',
@@ -131,7 +128,8 @@
             outlook,
             postmark,
             elasticmail,
-            Error
+            Error,
+            ConnectionProvider
         },
         data() {
             return {
