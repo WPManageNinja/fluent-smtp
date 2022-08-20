@@ -336,7 +336,6 @@ class Converter
                         }
                         break;
                 }
-
                 break;
 
             case 'pepipostapi':
@@ -344,6 +343,16 @@ class Converter
                     case 'api_key':
                         if (defined('WPMS_PEPIPOST_API_KEY') && WPMS_PEPIPOST_API_KEY) {
                             $value = WPMS_PEPIPOST_API_KEY;
+                        }
+                        break;
+                }
+                break;
+
+            case 'elasticmail':
+                switch ($key) {
+                    case 'api_key':
+                        if (defined('FLUENTMAIL_ELASTICMAIL_API_KEY') && FLUENTMAIL_ELASTICMAIL_API_KEY) {
+                            $value = FLUENTMAIL_ELASTICMAIL_API_KEY;
                         }
                         break;
                 }

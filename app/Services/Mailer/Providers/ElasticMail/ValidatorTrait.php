@@ -8,11 +8,10 @@ use FluentMail\App\Services\Mailer\ValidatorTrait as BaseValidatorTrait;
 trait ValidatorTrait
 {
     use BaseValidatorTrait;
-
+    
     public function validateProviderInformation($connection)
     {
         $errors = [];
-
         $keyStoreType = $connection['key_store'];
 
         if($keyStoreType == 'db') {

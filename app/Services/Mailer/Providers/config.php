@@ -159,21 +159,21 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/configure-postmark-in-fluent-smtp-to-send-emails/" target="_blank" rel="noopener">Read the documentation</a> for how to configure Postmark with FluentSMTP.'
         ],
-//        'elasticmail' => [
-//            'key'      => 'elasticmail',
-//            'title'    => __('Elastic Mail', 'fluent-smtp'),
-//            'image'    => fluentMailAssetUrl('images/elastic_mail.svg'),
-//            'provider' => 'ElasticMail',
-//            'options'  => [
-//                'sender_name'     => '',
-//                'sender_email'    => '',
-//                'force_from_name' => 'no',
-//                'api_key'         => '',
-//                'mail_type'       => 'transactional',
-//                'key_store'       => 'db'
-//            ],
-//            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-elastic-mail-driver-in-fluent-smtp/">Read the documentation</a> for how to configure sendgrid with FluentSMTP.'
-//        ],
+        'elasticmail' => [
+            'key'      => 'elasticmail',
+            'title'    => __('Elastic Mail', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/ee2.svg'),
+            'provider' => 'ElasticMail',
+            'options'  => [
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'api_key'         => '',
+                'mail_type'       => 'transactional',
+                'key_store'       => 'db'
+            ],
+            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-elastic-mail-driver-in-fluent-smtp/">Read the documentation</a> for how to configure sendgrid with FluentSMTP.'
+        ],
         'gmail'       => [
             'key'      => 'gmail',
             'title'    => __('Gmail/Google Workspace', 'fluent-smtp'),
