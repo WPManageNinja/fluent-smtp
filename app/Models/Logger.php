@@ -3,6 +3,7 @@
 namespace FluentMail\App\Models;
 
 use Exception;
+use FluentMail\Includes\Support\Arr;
 
 class Logger extends Model
 {
@@ -215,8 +216,9 @@ class Logger extends Model
 
     public function navigate($data)
     {
+        $filterBy = Arr::get($data, 'filter_by');
         foreach (['date', 'daterange', 'datetime', 'datetimerange'] as $field) {
-            if ($data['filter_by'] == $field) {
+            if ($filterBy == $field) {
                 $data['filter_by'] = 'created_at';
             }
         }
