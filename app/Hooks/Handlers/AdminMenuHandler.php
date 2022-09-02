@@ -214,7 +214,7 @@ class AdminMenuHandler
             ?>
             <div class="notice notice-warning">
                 <p>
-                    <?php _e('FluentSMTP requires to configure properly. Please configure FluentSMTP to make your email delivery works.', 'fluent-smtp'); ?>
+                    <?php _e('FluentSMTP needs to be configured for it to work.', 'fluent-smtp'); ?>
                 </p>
                 <p>
                     <a href="<?php echo admin_url('options-general.php?page=fluent-mail#/'); ?>"
