@@ -6,8 +6,8 @@ return [
     'providers'   => [
         'smtp'        => [
             'key'      => 'smtp',
-            'title'    => __('SMTP', 'fluent-smtp'),
-            'image'    => fluentMailAssetUrl('images/smtp.svg'),
+            'title'    => __('SMTP server', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-smtp.svg'),
             'provider' => 'Smtp',
             'need_pro' => 'no',
             'is_smtp'  => true,
@@ -31,7 +31,7 @@ return [
         'ses'         => [
             'key'      => 'ses',
             'title'    => __('Amazon SES', 'fluent-smtp'),
-            'image'    => fluentMailAssetUrl('images/amazon.png'),
+            'image'    => fluentMailAssetUrl('images/provider-aws-ses.svg'),
             'provider' => 'AmazonSes',
             'options'  => [
                 'sender_name'      => '',
@@ -72,7 +72,7 @@ return [
         'mailgun'     => [
             'key'      => 'mailgun',
             'title'    => __('Mailgun', 'fluent-smtp'),
-            'image'    => fluentMailAssetUrl('images/mailgun.svg'),
+            'image'    => fluentMailAssetUrl('images/provider-mailgun.svg'),
             'provider' => 'Mailgun',
             'options'  => [
                 'sender_name'     => '',
@@ -89,7 +89,7 @@ return [
         'sendgrid'    => [
             'key'      => 'sendgrid',
             'title'    => __('SendGrid', 'fluent-smtp'),
-            'image'    => fluentMailAssetUrl('images/sendgrid.svg'),
+            'image'    => fluentMailAssetUrl('images/provider-sendgrid.svg'),
             'provider' => 'SendGrid',
             'options'  => [
                 'sender_name'     => '',
@@ -103,7 +103,7 @@ return [
         'sendinblue'  => [
             'key'      => 'sendinblue',
             'title'    => __('Sendinblue', 'fluent-smtp'),
-            'image'    => fluentMailAssetUrl('images/sendinblue.svg'),
+            'image'    => fluentMailAssetUrl('images/provider-sendinblue.svg'),
             'provider' => 'SendInBlue',
             'options'  => [
                 'sender_name'     => '',
@@ -117,7 +117,7 @@ return [
         'sparkpost'   => [
             'key'      => 'sparkpost',
             'title'    => __('SparkPost', 'fluent-smtp'),
-            'image'    => fluentMailAssetUrl('images/sparkpost.png'),
+            'image'    => fluentMailAssetUrl('images/provider-sparkpost.svg'),
             'provider' => 'SparkPost',
             'options'  => [
                 'sender_name'     => '',
@@ -130,8 +130,8 @@ return [
         ],
         'pepipost'    => [
             'key'      => 'pepipost',
-            'title'    => __('Pepipost', 'fluent-smtp'),
-            'image'    => fluentMailAssetUrl('images/pepipost-logo.png'),
+            'title'    => __('Netcore Email API, formerly Pepipost', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-netcore.svg'),
             'provider' => 'PepiPost',
             'options'  => [
                 'sender_name'     => '',
@@ -145,7 +145,7 @@ return [
         'postmark'    => [
             'key'      => 'postmark',
             'title'    => __('Postmark', 'fluent-smtp'),
-            'image'    => fluentMailAssetUrl('images/postmark.svg'),
+            'image'    => fluentMailAssetUrl('images/provider-postmark.svg'),
             'provider' => 'Postmark',
             'options'  => [
                 'sender_name'     => '',
@@ -161,8 +161,8 @@ return [
         ],
         'elasticmail' => [
             'key'      => 'elasticmail',
-            'title'    => __('Elastic Mail', 'fluent-smtp'),
-            'image'    => fluentMailAssetUrl('images/ee2.svg'),
+            'title'    => __('Elastic Email', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-elastic-email.svg'),
             'provider' => 'ElasticMail',
             'options'  => [
                 'sender_name'     => '',
@@ -176,8 +176,8 @@ return [
         ],
         'gmail'       => [
             'key'      => 'gmail',
-            'title'    => __('Gmail/Google Workspace', 'fluent-smtp'),
-            'image'    => fluentMailAssetUrl('images/gmail-logo.png'),
+            'title'    => __('Gmail or Google Workspace', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-gmail-google-workspace.svg'),
             'provider' => 'Gmail',
             'options'  => [
                 'sender_name'     => '',
@@ -195,8 +195,8 @@ return [
         ],
         'outlook'     => [
             'key'      => 'outlook',
-            'title'    => __('Outlook/Office365', 'fluent-smtp'),
-            'image'    => fluentMailAssetUrl('images/microsoft.svg'),
+            'title'    => __('Outlook or Office 365', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-microsoft.svg'),
             'provider' => 'Outlook',
             'options'  => [
                 'sender_name'     => '',
@@ -214,8 +214,8 @@ return [
         ],
         'default'     => [
             'key'      => 'default',
-            'title'    => __('PHP Mail', 'fluent-smtp'),
-            'image'    => fluentMailAssetUrl('images/default.svg'),
+            'title'    => __('PHP mail()', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-php.svg'),
             'provider' => 'DefaultMail',
             'options'  => [
                 'sender_name'      => '',
