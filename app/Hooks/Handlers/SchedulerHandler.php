@@ -121,11 +121,11 @@ class SchedulerHandler
 
         $sentTitle = __('Emails Sent', 'fluent-smtp');
         if($sentCount) {
-            $sentTitle .= ' <span style="font-size: 12px; vertical-align: middle;">('.number_format_i18n($sentCount).')</span>';
+            $sentTitle .= '('.number_format_i18n($sentCount).')';
         }
         $failedTitle = __('Email Failures', 'fluent-smtp');
         if($failedCount) {
-            $failedTitle .= ' <span style="font-size: 12px; vertical-align: middle;">('.number_format_i18n($failedCount).')</span>';
+            $failedTitle .= '('.number_format_i18n($failedCount).')';
         }
 
         $reportingDate = date(get_option('date_format'), strtotime($startDate));
