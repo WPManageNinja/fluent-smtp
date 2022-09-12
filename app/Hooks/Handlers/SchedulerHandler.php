@@ -53,7 +53,7 @@ class SchedulerHandler
         }
 
         $sendTo = $settings['notify_email'];
-        $sendTo = str_replace('{admin_email}', get_option('admin_email'), $sendTo);
+        $sendTo = str_replace('{site_admin}', get_option('admin_email'), $sendTo);
 
         $sendToArray = explode(',', $sendTo);
 
