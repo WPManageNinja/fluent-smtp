@@ -26,8 +26,7 @@ use FluentMailLib\Google\Auth\Credentials\ServiceAccountCredentials;
 use FluentMailLib\Google\Auth\Credentials\UserRefreshCredentials;
 use FluentMailLib\GuzzleHttp\Client;
 use FluentMailLib\GuzzleHttp\ClientInterface;
-use FluentMailLib\GuzzleHttp\Ring\Client\StreamHandler;
-use FluentMailLib\GuzzleHttp\Psr7;
+use FluentMailLib\GuzzleHttp\Handler\StreamHandler;
 use FluentMailLib\Psr\Cache\CacheItemPoolInterface;
 use FluentMailLib\Psr\Http\Message\RequestInterface;
 use FluentMailLib\Psr\Log\LoggerInterface;
@@ -331,7 +330,7 @@ class Google_Client
     }
     /**
      * @param string|array $token
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function setAccessToken($token)
     {
@@ -565,7 +564,7 @@ class Google_Client
      * Verify an id_token. This method will verify the current id_token, if one
      * isn't provided.
      *
-     * @throws LogicException
+     * @throws \LogicException
      * @param string|null $idToken The token (id_token) that should be verified.
      * @return array|false Returns the token payload as an array if the verification was
      * successful, false otherwise.
