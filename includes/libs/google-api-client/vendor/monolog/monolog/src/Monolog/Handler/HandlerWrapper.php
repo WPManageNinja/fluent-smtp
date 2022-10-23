@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace FluentMailLib\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Formatter\FormatterInterface;
-
+use FluentMailLib\Monolog\Formatter\FormatterInterface;
 /**
  * This simple wrapper class can be used to extend handlers functionality.
  *
@@ -36,7 +34,6 @@ class HandlerWrapper implements HandlerInterface
      * @var HandlerInterface
      */
     protected $handler;
-
     /**
      * HandlerWrapper constructor.
      * @param HandlerInterface $handler
@@ -45,7 +42,6 @@ class HandlerWrapper implements HandlerInterface
     {
         $this->handler = $handler;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -53,7 +49,6 @@ class HandlerWrapper implements HandlerInterface
     {
         return $this->handler->isHandling($record);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -61,7 +56,6 @@ class HandlerWrapper implements HandlerInterface
     {
         return $this->handler->handle($record);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -69,17 +63,14 @@ class HandlerWrapper implements HandlerInterface
     {
         return $this->handler->handleBatch($records);
     }
-
     /**
      * {@inheritdoc}
      */
     public function pushProcessor($callback)
     {
         $this->handler->pushProcessor($callback);
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -87,17 +78,14 @@ class HandlerWrapper implements HandlerInterface
     {
         return $this->handler->popProcessor();
     }
-
     /**
      * {@inheritdoc}
      */
     public function setFormatter(FormatterInterface $formatter)
     {
         $this->handler->setFormatter($formatter);
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */

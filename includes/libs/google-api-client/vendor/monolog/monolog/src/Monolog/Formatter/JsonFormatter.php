@@ -8,12 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Monolog\Formatter;
+namespace FluentMailLib\Monolog\Formatter;
 
 use Exception;
 use Throwable;
-
 /**
  * Encodes whatever record data is passed to it as json
  *
@@ -25,25 +23,21 @@ class JsonFormatter extends NormalizerFormatter
 {
     const BATCH_MODE_JSON = 1;
     const BATCH_MODE_NEWLINES = 2;
-
     protected $batchMode;
     protected $appendNewline;
-
     /**
      * @var bool
      */
-    protected $includeStacktraces = false;
-
+    protected $includeStacktraces = \false;
     /**
      * @param int $batchMode
      * @param bool $appendNewline
      */
-    public function __construct($batchMode = self::BATCH_MODE_JSON, $appendNewline = true)
+    public function __construct($batchMode = self::BATCH_MODE_JSON, $appendNewline = \true)
     {
         $this->batchMode = $batchMode;
         $this->appendNewline = $appendNewline;
     }
-
     /**
      * The batch mode option configures the formatting style for
      * multiple records. By default, multiple records will be
@@ -57,7 +51,6 @@ class JsonFormatter extends NormalizerFormatter
     {
         return $this->batchMode;
     }
-
     /**
      * True if newlines are appended to every formatted record
      *
@@ -67,15 +60,13 @@ class JsonFormatter extends NormalizerFormatter
     {
         return $this->appendNewline;
     }
-
     /**
      * {@inheritdoc}
      */
     public function format(array $record)
     {
-        return $this->toJson($this->normalize($record), true) . ($this->appendNewline ? "\n" : '');
+        return $this->toJson($this->normalize($record), \true) . ($this->appendNewline ? "\n" : '');
     }
-
     /**
      * {@inheritdoc}
      */
@@ -84,21 +75,18 @@ class JsonFormatter extends NormalizerFormatter
         switch ($this->batchMode) {
             case static::BATCH_MODE_NEWLINES:
                 return $this->formatBatchNewlines($records);
-
             case static::BATCH_MODE_JSON:
             default:
                 return $this->formatBatchJson($records);
         }
     }
-
     /**
      * @param bool $include
      */
-    public function includeStacktraces($include = true)
+    public function includeStacktraces($include = \true)
     {
         $this->includeStacktraces = $include;
     }
-
     /**
      * Return a JSON-encoded array of records.
      *
@@ -107,9 +95,8 @@ class JsonFormatter extends NormalizerFormatter
      */
     protected function formatBatchJson(array $records)
     {
-        return $this->toJson($this->normalize($records), true);
+        return $this->toJson($this->normalize($records), \true);
     }
-
     /**
      * Use new lines to separate records instead of a
      * JSON-encoded array.
@@ -120,17 +107,14 @@ class JsonFormatter extends NormalizerFormatter
     protected function formatBatchNewlines(array $records)
     {
         $instance = $this;
-
         $oldNewline = $this->appendNewline;
-        $this->appendNewline = false;
-        array_walk($records, function (&$value, $key) use ($instance) {
+        $this->appendNewline = \false;
+        \array_walk($records, function (&$value, $key) use($instance) {
             $value = $instance->format($value);
         });
         $this->appendNewline = $oldNewline;
-
-        return implode("\n", $records);
+        return \implode("\n", $records);
     }
-
     /**
      * Normalizes given $data.
      *
@@ -140,9 +124,8 @@ class JsonFormatter extends NormalizerFormatter
      */
     protected function normalize($data)
     {
-        if (is_array($data) || $data instanceof \Traversable) {
+        if (\is_array($data) || $data instanceof \Traversable) {
             $normalized = array();
-
             $count = 1;
             foreach ($data as $key => $value) {
                 if ($count++ >= 1000) {
@@ -151,17 +134,13 @@ class JsonFormatter extends NormalizerFormatter
                 }
                 $normalized[$key] = $this->normalize($value);
             }
-
             return $normalized;
         }
-
         if ($data instanceof Exception || $data instanceof Throwable) {
             return $this->normalizeException($data);
         }
-
         return $data;
     }
-
     /**
      * Normalizes given exception with or without its own stack trace based on
      * `includeStacktraces` property.
@@ -174,21 +153,14 @@ class JsonFormatter extends NormalizerFormatter
     {
         // TODO 2.0 only check for Throwable
         if (!$e instanceof Exception && !$e instanceof Throwable) {
-            throw new \InvalidArgumentException('Exception/Throwable expected, got '.gettype($e).' / '.get_class($e));
+            throw new \InvalidArgumentException('Exception/Throwable expected, got ' . \gettype($e) . ' / ' . \get_class($e));
         }
-
-        $data = array(
-            'class' => get_class($e),
-            'message' => $e->getMessage(),
-            'code' => $e->getCode(),
-            'file' => $e->getFile().':'.$e->getLine(),
-        );
-
+        $data = array('class' => \get_class($e), 'message' => $e->getMessage(), 'code' => $e->getCode(), 'file' => $e->getFile() . ':' . $e->getLine());
         if ($this->includeStacktraces) {
             $trace = $e->getTrace();
             foreach ($trace as $frame) {
                 if (isset($frame['file'])) {
-                    $data['trace'][] = $frame['file'].':'.$frame['line'];
+                    $data['trace'][] = $frame['file'] . ':' . $frame['line'];
                 } elseif (isset($frame['function']) && $frame['function'] === '{closure}') {
                     // We should again normalize the frames, because it might contain invalid items
                     $data['trace'][] = $frame['function'];
@@ -198,11 +170,9 @@ class JsonFormatter extends NormalizerFormatter
                 }
             }
         }
-
         if ($previous = $e->getPrevious()) {
             $data['previous'] = $this->normalizeException($previous);
         }
-
         return $data;
     }
 }

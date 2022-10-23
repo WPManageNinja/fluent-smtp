@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,25 +17,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_ListSendAsResponse extends Google_Collection
 {
-  protected $collection_key = 'sendAs';
-  protected $sendAsType = 'Google_Service_Gmail_SendAs';
-  protected $sendAsDataType = 'array';
-
-  /**
-   * @param Google_Service_Gmail_SendAs
-   */
-  public function setSendAs($sendAs)
-  {
-    $this->sendAs = $sendAs;
-  }
-  /**
-   * @return Google_Service_Gmail_SendAs
-   */
-  public function getSendAs()
-  {
-    return $this->sendAs;
-  }
+    protected $collection_key = 'sendAs';
+    protected $sendAsType = 'Google_Service_Gmail_SendAs';
+    protected $sendAsDataType = 'array';
+    /**
+     * @param Google_Service_Gmail_SendAs
+     */
+    public function setSendAs($sendAs)
+    {
+        $this->sendAs = $sendAs;
+    }
+    /**
+     * @return Google_Service_Gmail_SendAs
+     */
+    public function getSendAs()
+    {
+        return $this->sendAs;
+    }
 }

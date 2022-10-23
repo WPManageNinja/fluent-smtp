@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,26 +17,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_MessagePartHeader extends Google_Model
 {
-  public $name;
-  public $value;
-
-  public function setName($name)
-  {
-    $this->name = $name;
-  }
-  public function getName()
-  {
-    return $this->name;
-  }
-  public function setValue($value)
-  {
-    $this->value = $value;
-  }
-  public function getValue()
-  {
-    return $this->value;
-  }
+    public $name;
+    public $value;
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+    public function getName()
+    {
+        return $this->name;
+    }
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
+    public function getValue()
+    {
+        return $this->value;
+    }
 }

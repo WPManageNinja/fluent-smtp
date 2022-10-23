@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,26 +17,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_ForwardingAddress extends Google_Model
 {
-  public $forwardingEmail;
-  public $verificationStatus;
-
-  public function setForwardingEmail($forwardingEmail)
-  {
-    $this->forwardingEmail = $forwardingEmail;
-  }
-  public function getForwardingEmail()
-  {
-    return $this->forwardingEmail;
-  }
-  public function setVerificationStatus($verificationStatus)
-  {
-    $this->verificationStatus = $verificationStatus;
-  }
-  public function getVerificationStatus()
-  {
-    return $this->verificationStatus;
-  }
+    public $forwardingEmail;
+    public $verificationStatus;
+    public function setForwardingEmail($forwardingEmail)
+    {
+        $this->forwardingEmail = $forwardingEmail;
+    }
+    public function getForwardingEmail()
+    {
+        return $this->forwardingEmail;
+    }
+    public function setVerificationStatus($verificationStatus)
+    {
+        $this->verificationStatus = $verificationStatus;
+    }
+    public function getVerificationStatus()
+    {
+        return $this->verificationStatus;
+    }
 }

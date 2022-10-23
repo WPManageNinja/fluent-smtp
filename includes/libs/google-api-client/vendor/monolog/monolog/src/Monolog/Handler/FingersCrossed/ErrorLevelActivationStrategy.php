@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace FluentMailLib\Monolog\Handler\FingersCrossed;
 
-namespace Monolog\Handler\FingersCrossed;
-
-use Monolog\Logger;
-
+use FluentMailLib\Monolog\Logger;
 /**
  * Error level based activation strategy.
  *
@@ -21,12 +19,10 @@ use Monolog\Logger;
 class ErrorLevelActivationStrategy implements ActivationStrategyInterface
 {
     private $actionLevel;
-
     public function __construct($actionLevel)
     {
         $this->actionLevel = Logger::toMonologLevel($actionLevel);
     }
-
     public function isHandlerActivated(array $record)
     {
         return $record['level'] >= $this->actionLevel;

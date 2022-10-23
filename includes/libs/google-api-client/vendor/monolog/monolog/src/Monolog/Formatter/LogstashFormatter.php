@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Monolog\Formatter;
+namespace FluentMailLib\Monolog\Formatter;
 
 /**
  * Serializes a log message to Logstash Event Format
@@ -23,32 +22,26 @@ class LogstashFormatter extends NormalizerFormatter
 {
     const V0 = 0;
     const V1 = 1;
-
     /**
      * @var string the name of the system for the Logstash log message, used to fill the @source field
      */
     protected $systemName;
-
     /**
      * @var string an application name for the Logstash log message, used to fill the @type field
      */
     protected $applicationName;
-
     /**
      * @var string a prefix for 'extra' fields from the Monolog record (optional)
      */
     protected $extraPrefix;
-
     /**
      * @var string a prefix for 'context' fields from the Monolog record (optional)
      */
     protected $contextPrefix;
-
     /**
      * @var int logstash format version to use
      */
     protected $version;
-
     /**
      * @param string $applicationName the application that sends the data, used as the "type" field of logstash
      * @param string $systemName      the system/machine name, used as the "source" field of logstash, defaults to the hostname of the machine
@@ -59,41 +52,32 @@ class LogstashFormatter extends NormalizerFormatter
     public function __construct($applicationName, $systemName = null, $extraPrefix = null, $contextPrefix = 'ctxt_', $version = self::V0)
     {
         // logstash requires a ISO 8601 format date with optional millisecond precision.
-        parent::__construct('Y-m-d\TH:i:s.uP');
-
-        $this->systemName = $systemName ?: gethostname();
+        parent::__construct('Y-m-d\\TH:i:s.uP');
+        $this->systemName = $systemName ?: \gethostname();
         $this->applicationName = $applicationName;
         $this->extraPrefix = $extraPrefix;
         $this->contextPrefix = $contextPrefix;
         $this->version = $version;
     }
-
     /**
      * {@inheritdoc}
      */
     public function format(array $record)
     {
         $record = parent::format($record);
-
         if ($this->version === self::V1) {
             $message = $this->formatV1($record);
         } else {
             $message = $this->formatV0($record);
         }
-
         return $this->toJson($message) . "\n";
     }
-
     protected function formatV0(array $record)
     {
         if (empty($record['datetime'])) {
-            $record['datetime'] = gmdate('c');
+            $record['datetime'] = \gmdate('c');
         }
-        $message = array(
-            '@timestamp' => $record['datetime'],
-            '@source' => $this->systemName,
-            '@fields' => array(),
-        );
+        $message = array('@timestamp' => $record['datetime'], '@source' => $this->systemName, '@fields' => array());
         if (isset($record['message'])) {
             $message['@message'] = $record['message'];
         }
@@ -123,20 +107,14 @@ class LogstashFormatter extends NormalizerFormatter
                 $message['@fields'][$this->contextPrefix . $key] = $val;
             }
         }
-
         return $message;
     }
-
     protected function formatV1(array $record)
     {
         if (empty($record['datetime'])) {
-            $record['datetime'] = gmdate('c');
+            $record['datetime'] = \gmdate('c');
         }
-        $message = array(
-            '@timestamp' => $record['datetime'],
-            '@version' => 1,
-            'host' => $this->systemName,
-        );
+        $message = array('@timestamp' => $record['datetime'], '@version' => 1, 'host' => $this->systemName);
         if (isset($record['message'])) {
             $message['message'] = $record['message'];
         }
@@ -160,7 +138,6 @@ class LogstashFormatter extends NormalizerFormatter
                 $message[$this->contextPrefix . $key] = $val;
             }
         }
-
         return $message;
     }
 }

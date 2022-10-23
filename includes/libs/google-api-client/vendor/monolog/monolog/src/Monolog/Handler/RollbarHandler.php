@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace FluentMailLib\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use RollbarNotifier;
+use FluentMailLib\RollbarNotifier;
 use Exception;
-use Monolog\Logger;
-
+use FluentMailLib\Monolog\Logger;
 /**
  * Sends errors to Rollbar
  *
@@ -39,39 +37,24 @@ class RollbarHandler extends AbstractProcessingHandler
      * @var RollbarNotifier
      */
     protected $rollbarNotifier;
-
-    protected $levelMap = array(
-        Logger::DEBUG     => 'debug',
-        Logger::INFO      => 'info',
-        Logger::NOTICE    => 'info',
-        Logger::WARNING   => 'warning',
-        Logger::ERROR     => 'error',
-        Logger::CRITICAL  => 'critical',
-        Logger::ALERT     => 'critical',
-        Logger::EMERGENCY => 'critical',
-    );
-
+    protected $levelMap = array(Logger::DEBUG => 'debug', Logger::INFO => 'info', Logger::NOTICE => 'info', Logger::WARNING => 'warning', Logger::ERROR => 'error', Logger::CRITICAL => 'critical', Logger::ALERT => 'critical', Logger::EMERGENCY => 'critical');
     /**
      * Records whether any log records have been added since the last flush of the rollbar notifier
      *
      * @var bool
      */
-    private $hasRecords = false;
-
-    protected $initialized = false;
-
+    private $hasRecords = \false;
+    protected $initialized = \false;
     /**
      * @param RollbarNotifier $rollbarNotifier RollbarNotifier object constructed with valid token
      * @param int             $level           The minimum logging level at which this handler will be triggered
      * @param bool            $bubble          Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct(RollbarNotifier $rollbarNotifier, $level = Logger::ERROR, $bubble = true)
+    public function __construct(RollbarNotifier $rollbarNotifier, $level = Logger::ERROR, $bubble = \true)
     {
         $this->rollbarNotifier = $rollbarNotifier;
-
         parent::__construct($level, $bubble);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -79,49 +62,33 @@ class RollbarHandler extends AbstractProcessingHandler
     {
         if (!$this->initialized) {
             // __destructor() doesn't get called on Fatal errors
-            register_shutdown_function(array($this, 'close'));
-            $this->initialized = true;
+            \register_shutdown_function(array($this, 'close'));
+            $this->initialized = \true;
         }
-
         $context = $record['context'];
         $payload = array();
         if (isset($context['payload'])) {
             $payload = $context['payload'];
             unset($context['payload']);
         }
-        $context = array_merge($context, $record['extra'], array(
-            'level' => $this->levelMap[$record['level']],
-            'monolog_level' => $record['level_name'],
-            'channel' => $record['channel'],
-            'datetime' => $record['datetime']->format('U'),
-        ));
-
+        $context = \array_merge($context, $record['extra'], array('level' => $this->levelMap[$record['level']], 'monolog_level' => $record['level_name'], 'channel' => $record['channel'], 'datetime' => $record['datetime']->format('U')));
         if (isset($context['exception']) && $context['exception'] instanceof Exception) {
             $payload['level'] = $context['level'];
             $exception = $context['exception'];
             unset($context['exception']);
-
             $this->rollbarNotifier->report_exception($exception, $context, $payload);
         } else {
-            $this->rollbarNotifier->report_message(
-                $record['message'],
-                $context['level'],
-                $context,
-                $payload
-            );
+            $this->rollbarNotifier->report_message($record['message'], $context['level'], $context, $payload);
         }
-
-        $this->hasRecords = true;
+        $this->hasRecords = \true;
     }
-
     public function flush()
     {
         if ($this->hasRecords) {
             $this->rollbarNotifier->flush();
-            $this->hasRecords = false;
+            $this->hasRecords = \false;
         }
     }
-
     /**
      * {@inheritdoc}
      */

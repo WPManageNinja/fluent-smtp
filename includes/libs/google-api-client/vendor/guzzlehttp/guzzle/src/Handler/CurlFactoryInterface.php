@@ -1,8 +1,8 @@
 <?php
-namespace GuzzleHttp\Handler;
 
-use Psr\Http\Message\RequestInterface;
+namespace FluentMailLib\GuzzleHttp\Handler;
 
+use FluentMailLib\Psr\Http\Message\RequestInterface;
 interface CurlFactoryInterface
 {
     /**
@@ -15,7 +15,6 @@ interface CurlFactoryInterface
      * @throws \RuntimeException when an option cannot be applied
      */
     public function create(RequestInterface $request, array $options);
-
     /**
      * Release an easy handle, allowing it to be reused or closed.
      *

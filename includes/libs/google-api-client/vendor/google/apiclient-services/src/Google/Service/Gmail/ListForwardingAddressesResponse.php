@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,25 +17,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_ListForwardingAddressesResponse extends Google_Collection
 {
-  protected $collection_key = 'forwardingAddresses';
-  protected $forwardingAddressesType = 'Google_Service_Gmail_ForwardingAddress';
-  protected $forwardingAddressesDataType = 'array';
-
-  /**
-   * @param Google_Service_Gmail_ForwardingAddress
-   */
-  public function setForwardingAddresses($forwardingAddresses)
-  {
-    $this->forwardingAddresses = $forwardingAddresses;
-  }
-  /**
-   * @return Google_Service_Gmail_ForwardingAddress
-   */
-  public function getForwardingAddresses()
-  {
-    return $this->forwardingAddresses;
-  }
+    protected $collection_key = 'forwardingAddresses';
+    protected $forwardingAddressesType = 'Google_Service_Gmail_ForwardingAddress';
+    protected $forwardingAddressesDataType = 'array';
+    /**
+     * @param Google_Service_Gmail_ForwardingAddress
+     */
+    public function setForwardingAddresses($forwardingAddresses)
+    {
+        $this->forwardingAddresses = $forwardingAddresses;
+    }
+    /**
+     * @return Google_Service_Gmail_ForwardingAddress
+     */
+    public function getForwardingAddresses()
+    {
+        return $this->forwardingAddresses;
+    }
 }

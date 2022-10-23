@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015 Google Inc.
  *
@@ -14,12 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+namespace FluentMailLib\Google\Auth\Credentials;
 
-namespace Google\Auth\Credentials;
-
-use Google\Auth\CredentialsLoader;
-use Google\Auth\OAuth2;
-
+use FluentMailLib\Google\Auth\CredentialsLoader;
+use FluentMailLib\Google\Auth\OAuth2;
 /**
  * Authenticates requests using Google's Service Account credentials via
  * JWT Access.
@@ -37,7 +36,6 @@ class ServiceAccountJwtAccessCredentials extends CredentialsLoader
      * @var OAuth2
      */
     protected $auth;
-
     /**
      * Create a new ServiceAccountJwtAccessCredentials.
      *
@@ -46,31 +44,23 @@ class ServiceAccountJwtAccessCredentials extends CredentialsLoader
      */
     public function __construct($jsonKey)
     {
-        if (is_string($jsonKey)) {
-            if (!file_exists($jsonKey)) {
+        if (\is_string($jsonKey)) {
+            if (!\file_exists($jsonKey)) {
                 throw new \InvalidArgumentException('file does not exist');
             }
-            $jsonKeyStream = file_get_contents($jsonKey);
-            if (!$jsonKey = json_decode($jsonKeyStream, true)) {
+            $jsonKeyStream = \file_get_contents($jsonKey);
+            if (!($jsonKey = \json_decode($jsonKeyStream, \true))) {
                 throw new \LogicException('invalid json for auth config');
             }
         }
-        if (!array_key_exists('client_email', $jsonKey)) {
-            throw new \InvalidArgumentException(
-                'json key is missing the client_email field');
+        if (!\array_key_exists('client_email', $jsonKey)) {
+            throw new \InvalidArgumentException('json key is missing the client_email field');
         }
-        if (!array_key_exists('private_key', $jsonKey)) {
-            throw new \InvalidArgumentException(
-                'json key is missing the private_key field');
+        if (!\array_key_exists('private_key', $jsonKey)) {
+            throw new \InvalidArgumentException('json key is missing the private_key field');
         }
-        $this->auth = new OAuth2([
-            'issuer' => $jsonKey['client_email'],
-            'sub' => $jsonKey['client_email'],
-            'signingAlgorithm' => 'RS256',
-            'signingKey' => $jsonKey['private_key'],
-        ]);
+        $this->auth = new OAuth2(['issuer' => $jsonKey['client_email'], 'sub' => $jsonKey['client_email'], 'signingAlgorithm' => 'RS256', 'signingKey' => $jsonKey['private_key']]);
     }
-
     /**
      * Updates metadata with the authorization token.
      *
@@ -80,20 +70,14 @@ class ServiceAccountJwtAccessCredentials extends CredentialsLoader
      *
      * @return array updated metadata hashmap
      */
-    public function updateMetadata(
-        $metadata,
-        $authUri = null,
-        callable $httpHandler = null
-    ) {
+    public function updateMetadata($metadata, $authUri = null, callable $httpHandler = null)
+    {
         if (empty($authUri)) {
             return $metadata;
         }
-
         $this->auth->setAudience($authUri);
-
         return parent::updateMetadata($metadata, $authUri, $httpHandler);
     }
-
     /**
      * Implements FetchAuthTokenInterface#fetchAuthToken.
      *
@@ -107,12 +91,9 @@ class ServiceAccountJwtAccessCredentials extends CredentialsLoader
         if (empty($audience)) {
             return null;
         }
-
         $access_token = $this->auth->toJwt();
-
         return array('access_token' => $access_token);
     }
-
     /**
      * @return string
      */
@@ -120,7 +101,6 @@ class ServiceAccountJwtAccessCredentials extends CredentialsLoader
     {
         return $this->auth->getCacheKey();
     }
-
     /**
      * @return array
      */

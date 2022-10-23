@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,35 +17,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_AutoForwarding extends Google_Model
 {
-  public $disposition;
-  public $emailAddress;
-  public $enabled;
-
-  public function setDisposition($disposition)
-  {
-    $this->disposition = $disposition;
-  }
-  public function getDisposition()
-  {
-    return $this->disposition;
-  }
-  public function setEmailAddress($emailAddress)
-  {
-    $this->emailAddress = $emailAddress;
-  }
-  public function getEmailAddress()
-  {
-    return $this->emailAddress;
-  }
-  public function setEnabled($enabled)
-  {
-    $this->enabled = $enabled;
-  }
-  public function getEnabled()
-  {
-    return $this->enabled;
-  }
+    public $disposition;
+    public $emailAddress;
+    public $enabled;
+    public function setDisposition($disposition)
+    {
+        $this->disposition = $disposition;
+    }
+    public function getDisposition()
+    {
+        return $this->disposition;
+    }
+    public function setEmailAddress($emailAddress)
+    {
+        $this->emailAddress = $emailAddress;
+    }
+    public function getEmailAddress()
+    {
+        return $this->emailAddress;
+    }
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+    }
+    public function getEnabled()
+    {
+        return $this->enabled;
+    }
 }

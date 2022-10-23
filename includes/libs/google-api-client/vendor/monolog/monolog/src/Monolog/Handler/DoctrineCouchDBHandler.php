@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace FluentMailLib\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Logger;
-use Monolog\Formatter\NormalizerFormatter;
-use Doctrine\CouchDB\CouchDBClient;
-
+use FluentMailLib\Monolog\Logger;
+use FluentMailLib\Monolog\Formatter\NormalizerFormatter;
+use FluentMailLib\Doctrine\CouchDB\CouchDBClient;
 /**
  * CouchDB handler for Doctrine CouchDB ODM
  *
@@ -23,13 +21,11 @@ use Doctrine\CouchDB\CouchDBClient;
 class DoctrineCouchDBHandler extends AbstractProcessingHandler
 {
     private $client;
-
-    public function __construct(CouchDBClient $client, $level = Logger::DEBUG, $bubble = true)
+    public function __construct(CouchDBClient $client, $level = Logger::DEBUG, $bubble = \true)
     {
         $this->client = $client;
         parent::__construct($level, $bubble);
     }
-
     /**
      * {@inheritDoc}
      */
@@ -37,9 +33,8 @@ class DoctrineCouchDBHandler extends AbstractProcessingHandler
     {
         $this->client->postDocument($record['formatted']);
     }
-
     protected function getDefaultFormatter()
     {
-        return new NormalizerFormatter;
+        return new NormalizerFormatter();
     }
 }

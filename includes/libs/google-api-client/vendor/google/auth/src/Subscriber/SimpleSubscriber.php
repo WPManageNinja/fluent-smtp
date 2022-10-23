@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015 Google Inc.
  *
@@ -14,13 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+namespace FluentMailLib\Google\Auth\Subscriber;
 
-namespace Google\Auth\Subscriber;
-
-use GuzzleHttp\Event\BeforeEvent;
-use GuzzleHttp\Event\RequestEvents;
-use GuzzleHttp\Event\SubscriberInterface;
-
+use FluentMailLib\GuzzleHttp\Event\BeforeEvent;
+use FluentMailLib\GuzzleHttp\Event\RequestEvents;
+use FluentMailLib\GuzzleHttp\Event\SubscriberInterface;
 /**
  * SimpleSubscriber is a Guzzle Subscriber that implements Google's Simple API
  * access.
@@ -33,7 +32,6 @@ class SimpleSubscriber implements SubscriberInterface
      * @var array
      */
     private $config;
-
     /**
      * Create a new Simple plugin.
      *
@@ -47,10 +45,8 @@ class SimpleSubscriber implements SubscriberInterface
         if (!isset($config['key'])) {
             throw new \InvalidArgumentException('requires a key to have been set');
         }
-
-        $this->config = array_merge([], $config);
+        $this->config = \array_merge([], $config);
     }
-
     /**
      * @return array
      */
@@ -58,7 +54,6 @@ class SimpleSubscriber implements SubscriberInterface
     {
         return ['before' => ['onBefore', RequestEvents::SIGN_REQUEST]];
     }
-
     /**
      * Updates the request query with the developer key if auth is set to simple.
      *

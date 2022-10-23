@@ -1,19 +1,18 @@
 <?php
-namespace GuzzleHttp;
 
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Exception\GuzzleException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
+namespace FluentMailLib\GuzzleHttp;
 
+use FluentMailLib\GuzzleHttp\Promise\PromiseInterface;
+use FluentMailLib\GuzzleHttp\Exception\GuzzleException;
+use FluentMailLib\Psr\Http\Message\RequestInterface;
+use FluentMailLib\Psr\Http\Message\ResponseInterface;
+use FluentMailLib\Psr\Http\Message\UriInterface;
 /**
  * Client interface for sending HTTP requests.
  */
 interface ClientInterface
 {
     const VERSION = '6.2.1';
-
     /**
      * Send an HTTP request.
      *
@@ -25,7 +24,6 @@ interface ClientInterface
      * @throws GuzzleException
      */
     public function send(RequestInterface $request, array $options = []);
-
     /**
      * Asynchronously send an HTTP request.
      *
@@ -36,7 +34,6 @@ interface ClientInterface
      * @return PromiseInterface
      */
     public function sendAsync(RequestInterface $request, array $options = []);
-
     /**
      * Create and send an HTTP request.
      *
@@ -52,7 +49,6 @@ interface ClientInterface
      * @throws GuzzleException
      */
     public function request($method, $uri, array $options = []);
-
     /**
      * Create and send an asynchronous HTTP request.
      *
@@ -68,7 +64,6 @@ interface ClientInterface
      * @return PromiseInterface
      */
     public function requestAsync($method, $uri, array $options = []);
-
     /**
      * Get a client configuration option.
      *

@@ -8,15 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace FluentMailLib\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Formatter\ElasticaFormatter;
-use Monolog\Logger;
-use Elastica\Client;
-use Elastica\Exception\ExceptionInterface;
-
+use FluentMailLib\Monolog\Formatter\FormatterInterface;
+use FluentMailLib\Monolog\Formatter\ElasticaFormatter;
+use FluentMailLib\Monolog\Logger;
+use FluentMailLib\Elastica\Client;
+use FluentMailLib\Elastica\Exception\ExceptionInterface;
 /**
  * Elastic Search handler
  *
@@ -39,32 +37,28 @@ class ElasticSearchHandler extends AbstractProcessingHandler
      * @var Client
      */
     protected $client;
-
     /**
      * @var array Handler config options
      */
     protected $options = array();
-
     /**
      * @param Client  $client  Elastica Client object
      * @param array   $options Handler configuration
      * @param int     $level   The minimum logging level at which this handler will be triggered
      * @param Boolean $bubble  Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct(Client $client, array $options = array(), $level = Logger::DEBUG, $bubble = true)
+    public function __construct(Client $client, array $options = array(), $level = Logger::DEBUG, $bubble = \true)
     {
         parent::__construct($level, $bubble);
         $this->client = $client;
-        $this->options = array_merge(
-            array(
-                'index'          => 'monolog',      // Elastic index name
-                'type'           => 'record',       // Elastic document type
-                'ignore_error'   => false,          // Suppress Elastica exceptions
-            ),
-            $options
-        );
+        $this->options = \array_merge(array(
+            'index' => 'monolog',
+            // Elastic index name
+            'type' => 'record',
+            // Elastic document type
+            'ignore_error' => \false,
+        ), $options);
     }
-
     /**
      * {@inheritDoc}
      */
@@ -72,7 +66,6 @@ class ElasticSearchHandler extends AbstractProcessingHandler
     {
         $this->bulkSend(array($record['formatted']));
     }
-
     /**
      * {@inheritdoc}
      */
@@ -83,7 +76,6 @@ class ElasticSearchHandler extends AbstractProcessingHandler
         }
         throw new \InvalidArgumentException('ElasticSearchHandler is only compatible with ElasticaFormatter');
     }
-
     /**
      * Getter options
      * @return array
@@ -92,7 +84,6 @@ class ElasticSearchHandler extends AbstractProcessingHandler
     {
         return $this->options;
     }
-
     /**
      * {@inheritDoc}
      */
@@ -100,7 +91,6 @@ class ElasticSearchHandler extends AbstractProcessingHandler
     {
         return new ElasticaFormatter($this->options['index'], $this->options['type']);
     }
-
     /**
      * {@inheritdoc}
      */
@@ -109,7 +99,6 @@ class ElasticSearchHandler extends AbstractProcessingHandler
         $documents = $this->getFormatter()->formatBatch($records);
         $this->bulkSend($documents);
     }
-
     /**
      * Use Elasticsearch bulk API to send list of documents
      * @param  array             $documents

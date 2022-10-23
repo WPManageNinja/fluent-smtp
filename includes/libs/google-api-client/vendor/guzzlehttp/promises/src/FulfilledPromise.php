@@ -1,5 +1,6 @@
 <?php
-namespace GuzzleHttp\Promise;
+
+namespace FluentMailLib\GuzzleHttp\Promise;
 
 /**
  * A promise that has been fulfilled.
@@ -10,30 +11,23 @@ namespace GuzzleHttp\Promise;
 class FulfilledPromise implements PromiseInterface
 {
     private $value;
-
     public function __construct($value)
     {
-        if (method_exists($value, 'then')) {
-            throw new \InvalidArgumentException(
-                'You cannot create a FulfilledPromise with a promise.');
+        if (\method_exists($value, 'then')) {
+            throw new \InvalidArgumentException('You cannot create a FulfilledPromise with a promise.');
         }
-
         $this->value = $value;
     }
-
-    public function then(
-        callable $onFulfilled = null,
-        callable $onRejected = null
-    ) {
+    public function then(callable $onFulfilled = null, callable $onRejected = null)
+    {
         // Return itself if there is no onFulfilled function.
         if (!$onFulfilled) {
             return $this;
         }
-
         $queue = queue();
         $p = new Promise([$queue, 'run']);
         $value = $this->value;
-        $queue->add(static function () use ($p, $value, $onFulfilled) {
+        $queue->add(static function () use($p, $value, $onFulfilled) {
             if ($p->getState() === self::PENDING) {
                 try {
                     $p->resolve($onFulfilled($value));
@@ -44,37 +38,30 @@ class FulfilledPromise implements PromiseInterface
                 }
             }
         });
-
         return $p;
     }
-
     public function otherwise(callable $onRejected)
     {
         return $this->then(null, $onRejected);
     }
-
-    public function wait($unwrap = true, $defaultDelivery = null)
+    public function wait($unwrap = \true, $defaultDelivery = null)
     {
         return $unwrap ? $this->value : null;
     }
-
     public function getState()
     {
         return self::FULFILLED;
     }
-
     public function resolve($value)
     {
         if ($value !== $this->value) {
             throw new \LogicException("Cannot resolve a fulfilled promise");
         }
     }
-
     public function reject($reason)
     {
         throw new \LogicException("Cannot reject a fulfilled promise");
     }
-
     public function cancel()
     {
         // pass

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015 Google Inc.
  *
@@ -14,8 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-namespace Google\Auth;
+namespace FluentMailLib\Google\Auth;
 
 /**
  * An interface implemented by objects that can fetch auth tokens.
@@ -30,7 +30,6 @@ interface FetchAuthTokenInterface
      * @return array a hash of auth tokens
      */
     public function fetchAuthToken(callable $httpHandler = null);
-
     /**
      * Obtains a key that can used to cache the results of #fetchAuthToken.
      *
@@ -39,7 +38,6 @@ interface FetchAuthTokenInterface
      * @return string a key that may be used to cache the auth token.
      */
     public function getCacheKey();
-
     /**
      * Returns an associative array with the token and
      * expiration time.

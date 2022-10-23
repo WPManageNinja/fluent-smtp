@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015 Google Inc.
  *
@@ -14,17 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-namespace Google\Auth\Credentials;
+namespace FluentMailLib\Google\Auth\Credentials;
 
 /*
  * The AppIdentityService class is automatically defined on App Engine,
  * so including this dependency is not necessary, and will result in a
  * PHP fatal error in the App Engine environment.
  */
-use google\appengine\api\app_identity\AppIdentityService;
-use Google\Auth\CredentialsLoader;
-
+use FluentMailLib\google\appengine\api\app_identity\AppIdentityService;
+use FluentMailLib\Google\Auth\CredentialsLoader;
 /**
  * AppIdentityCredentials supports authorization on Google App Engine.
  *
@@ -57,17 +56,14 @@ class AppIdentityCredentials extends CredentialsLoader
      * @array
      */
     protected $lastReceivedToken;
-
     /**
      * Array of OAuth2 scopes to be requested.
      */
     private $scope;
-
     public function __construct($scope = array())
     {
         $this->scope = $scope;
     }
-
     /**
      * Determines if this an App Engine instance, by accessing the
      * SERVER_SOFTWARE environment variable (prod) or the APPENGINE_RUNTIME
@@ -77,19 +73,16 @@ class AppIdentityCredentials extends CredentialsLoader
      */
     public static function onAppEngine()
     {
-        $appEngineProduction = isset($_SERVER['SERVER_SOFTWARE']) &&
-            0 === strpos($_SERVER['SERVER_SOFTWARE'], 'Google App Engine');
+        $appEngineProduction = isset($_SERVER['SERVER_SOFTWARE']) && 0 === \strpos($_SERVER['SERVER_SOFTWARE'], 'Google App Engine');
         if ($appEngineProduction) {
-            return true;
+            return \true;
         }
-        $appEngineDevAppServer = isset($_SERVER['APPENGINE_RUNTIME']) &&
-            $_SERVER['APPENGINE_RUNTIME'] == 'php';
+        $appEngineDevAppServer = isset($_SERVER['APPENGINE_RUNTIME']) && $_SERVER['APPENGINE_RUNTIME'] == 'php';
         if ($appEngineDevAppServer) {
-            return true;
+            return \true;
         }
-        return false;
+        return \false;
     }
-
     /**
      * Implements FetchAuthTokenInterface#fetchAuthToken.
      *
@@ -114,38 +107,25 @@ class AppIdentityCredentials extends CredentialsLoader
         if (!self::onAppEngine()) {
             return array();
         }
-
-        if (!class_exists('google\appengine\api\app_identity\AppIdentityService')) {
-            throw new \Exception(
-                'This class must be run in App Engine, or you must include the AppIdentityService '
-                . 'mock class defined in tests/mocks/AppIdentityService.php'
-            );
+        if (!\class_exists('FluentMailLib\\google\\appengine\\api\\app_identity\\AppIdentityService')) {
+            throw new \Exception('This class must be run in App Engine, or you must include the AppIdentityService ' . 'mock class defined in tests/mocks/AppIdentityService.php');
         }
-
         // AppIdentityService expects an array when multiple scopes are supplied
-        $scope = is_array($this->scope) ? $this->scope : explode(' ', $this->scope);
-
+        $scope = \is_array($this->scope) ? $this->scope : \explode(' ', $this->scope);
         $token = AppIdentityService::getAccessToken($scope);
         $this->lastReceivedToken = $token;
-
         return $token;
     }
-
     /**
      * @return array|null
      */
     public function getLastReceivedToken()
     {
         if ($this->lastReceivedToken) {
-            return [
-                'access_token' => $this->lastReceivedToken['access_token'],
-                'expires_at' => $this->lastReceivedToken['expiration_time'],
-            ];
+            return ['access_token' => $this->lastReceivedToken['access_token'], 'expires_at' => $this->lastReceivedToken['expiration_time']];
         }
-
         return null;
     }
-
     /**
      * Caching is handled by the underlying AppIdentityService, return empty string
      * to prevent caching.

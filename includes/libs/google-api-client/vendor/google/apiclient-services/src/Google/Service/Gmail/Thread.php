@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,52 +17,50 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_Thread extends Google_Collection
 {
-  protected $collection_key = 'messages';
-  public $historyId;
-  public $id;
-  protected $messagesType = 'Google_Service_Gmail_Message';
-  protected $messagesDataType = 'array';
-  public $snippet;
-
-  public function setHistoryId($historyId)
-  {
-    $this->historyId = $historyId;
-  }
-  public function getHistoryId()
-  {
-    return $this->historyId;
-  }
-  public function setId($id)
-  {
-    $this->id = $id;
-  }
-  public function getId()
-  {
-    return $this->id;
-  }
-  /**
-   * @param Google_Service_Gmail_Message
-   */
-  public function setMessages($messages)
-  {
-    $this->messages = $messages;
-  }
-  /**
-   * @return Google_Service_Gmail_Message
-   */
-  public function getMessages()
-  {
-    return $this->messages;
-  }
-  public function setSnippet($snippet)
-  {
-    $this->snippet = $snippet;
-  }
-  public function getSnippet()
-  {
-    return $this->snippet;
-  }
+    protected $collection_key = 'messages';
+    public $historyId;
+    public $id;
+    protected $messagesType = 'Google_Service_Gmail_Message';
+    protected $messagesDataType = 'array';
+    public $snippet;
+    public function setHistoryId($historyId)
+    {
+        $this->historyId = $historyId;
+    }
+    public function getHistoryId()
+    {
+        return $this->historyId;
+    }
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+    public function getId()
+    {
+        return $this->id;
+    }
+    /**
+     * @param Google_Service_Gmail_Message
+     */
+    public function setMessages($messages)
+    {
+        $this->messages = $messages;
+    }
+    /**
+     * @return Google_Service_Gmail_Message
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+    public function setSnippet($snippet)
+    {
+        $this->snippet = $snippet;
+    }
+    public function getSnippet()
+    {
+        return $this->snippet;
+    }
 }

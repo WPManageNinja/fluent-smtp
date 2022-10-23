@@ -1,6 +1,6 @@
 <?php
 
-namespace Psr\Log;
+namespace FluentMailLib\Psr\Log;
 
 /**
  * This is a simple Logger trait that classes unable to extend AbstractLogger
@@ -24,7 +24,6 @@ trait LoggerTrait
     {
         $this->log(LogLevel::EMERGENCY, $message, $context);
     }
-
     /**
      * Action must be taken immediately.
      *
@@ -40,7 +39,6 @@ trait LoggerTrait
     {
         $this->log(LogLevel::ALERT, $message, $context);
     }
-
     /**
      * Critical conditions.
      *
@@ -55,7 +53,6 @@ trait LoggerTrait
     {
         $this->log(LogLevel::CRITICAL, $message, $context);
     }
-
     /**
      * Runtime errors that do not require immediate action but should typically
      * be logged and monitored.
@@ -69,7 +66,6 @@ trait LoggerTrait
     {
         $this->log(LogLevel::ERROR, $message, $context);
     }
-
     /**
      * Exceptional occurrences that are not errors.
      *
@@ -85,7 +81,6 @@ trait LoggerTrait
     {
         $this->log(LogLevel::WARNING, $message, $context);
     }
-
     /**
      * Normal but significant events.
      *
@@ -98,7 +93,6 @@ trait LoggerTrait
     {
         $this->log(LogLevel::NOTICE, $message, $context);
     }
-
     /**
      * Interesting events.
      *
@@ -113,7 +107,6 @@ trait LoggerTrait
     {
         $this->log(LogLevel::INFO, $message, $context);
     }
-
     /**
      * Detailed debug information.
      *
@@ -126,7 +119,6 @@ trait LoggerTrait
     {
         $this->log(LogLevel::DEBUG, $message, $context);
     }
-
     /**
      * Logs with an arbitrary level.
      *
@@ -136,5 +128,5 @@ trait LoggerTrait
      *
      * @return void
      */
-    abstract public function log($level, $message, array $context = array());
+    public abstract function log($level, $message, array $context = array());
 }

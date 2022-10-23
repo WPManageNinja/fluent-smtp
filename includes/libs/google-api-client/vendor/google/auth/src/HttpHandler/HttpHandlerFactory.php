@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
  *
@@ -14,11 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace Google\Auth\HttpHandler;
+namespace FluentMailLib\Google\Auth\HttpHandler;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
-
+use FluentMailLib\GuzzleHttp\Client;
+use FluentMailLib\GuzzleHttp\ClientInterface;
 class HttpHandlerFactory
 {
     /**
@@ -34,7 +34,6 @@ class HttpHandlerFactory
     {
         $version = ClientInterface::VERSION;
         $client = $client ?: new Client();
-
         switch ($version[0]) {
             case '5':
                 return new Guzzle5HttpHandler($client);

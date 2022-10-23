@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,36 +17,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_WatchRequest extends Google_Collection
 {
-  protected $collection_key = 'labelIds';
-  public $labelFilterAction;
-  public $labelIds;
-  public $topicName;
-
-  public function setLabelFilterAction($labelFilterAction)
-  {
-    $this->labelFilterAction = $labelFilterAction;
-  }
-  public function getLabelFilterAction()
-  {
-    return $this->labelFilterAction;
-  }
-  public function setLabelIds($labelIds)
-  {
-    $this->labelIds = $labelIds;
-  }
-  public function getLabelIds()
-  {
-    return $this->labelIds;
-  }
-  public function setTopicName($topicName)
-  {
-    $this->topicName = $topicName;
-  }
-  public function getTopicName()
-  {
-    return $this->topicName;
-  }
+    protected $collection_key = 'labelIds';
+    public $labelFilterAction;
+    public $labelIds;
+    public $topicName;
+    public function setLabelFilterAction($labelFilterAction)
+    {
+        $this->labelFilterAction = $labelFilterAction;
+    }
+    public function getLabelFilterAction()
+    {
+        return $this->labelFilterAction;
+    }
+    public function setLabelIds($labelIds)
+    {
+        $this->labelIds = $labelIds;
+    }
+    public function getLabelIds()
+    {
+        return $this->labelIds;
+    }
+    public function setTopicName($topicName)
+    {
+        $this->topicName = $topicName;
+    }
+    public function getTopicName()
+    {
+        return $this->topicName;
+    }
 }

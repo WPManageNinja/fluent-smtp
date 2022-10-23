@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015 Google Inc.
  *
@@ -14,8 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-namespace Google\Auth\Credentials;
+namespace FluentMailLib\Google\Auth\Credentials;
 
 /**
  * Authenticates requests using IAM credentials.
@@ -24,36 +24,29 @@ class IAMCredentials
 {
     const SELECTOR_KEY = 'x-goog-iam-authority-selector';
     const TOKEN_KEY = 'x-goog-iam-authorization-token';
-
     /**
      * @var string
      */
     private $selector;
-
     /**
      * @var string
      */
     private $token;
-
     /**
      * @param $selector string the IAM selector
      * @param $token string the IAM token
      */
     public function __construct($selector, $token)
     {
-        if (!is_string($selector)) {
-            throw new \InvalidArgumentException(
-                'selector must be a string');
+        if (!\is_string($selector)) {
+            throw new \InvalidArgumentException('selector must be a string');
         }
-        if (!is_string($token)) {
-            throw new \InvalidArgumentException(
-                'token must be a string');
+        if (!\is_string($token)) {
+            throw new \InvalidArgumentException('token must be a string');
         }
-
         $this->selector = $selector;
         $this->token = $token;
     }
-
     /**
      * export a callback function which updates runtime metadata.
      *
@@ -63,7 +56,6 @@ class IAMCredentials
     {
         return array($this, 'updateMetadata');
     }
-
     /**
      * Updates metadata with the appropriate header metadata.
      *
@@ -75,15 +67,11 @@ class IAMCredentials
      *
      * @return array updated metadata hashmap
      */
-    public function updateMetadata(
-        $metadata,
-        $unusedAuthUri = null,
-        callable $httpHandler = null
-    ) {
+    public function updateMetadata($metadata, $unusedAuthUri = null, callable $httpHandler = null)
+    {
         $metadata_copy = $metadata;
         $metadata_copy[self::SELECTOR_KEY] = $this->selector;
         $metadata_copy[self::TOKEN_KEY] = $this->token;
-
         return $metadata_copy;
     }
 }

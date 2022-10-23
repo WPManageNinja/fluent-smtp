@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,18 +17,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_BatchDeleteMessagesRequest extends Google_Collection
 {
-  protected $collection_key = 'ids';
-  public $ids;
-
-  public function setIds($ids)
-  {
-    $this->ids = $ids;
-  }
-  public function getIds()
-  {
-    return $this->ids;
-  }
+    protected $collection_key = 'ids';
+    public $ids;
+    public function setIds($ids)
+    {
+        $this->ids = $ids;
+    }
+    public function getIds()
+    {
+        return $this->ids;
+    }
 }

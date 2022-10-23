@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,80 +17,78 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_VacationSettings extends Google_Model
 {
-  public $enableAutoReply;
-  public $endTime;
-  public $responseBodyHtml;
-  public $responseBodyPlainText;
-  public $responseSubject;
-  public $restrictToContacts;
-  public $restrictToDomain;
-  public $startTime;
-
-  public function setEnableAutoReply($enableAutoReply)
-  {
-    $this->enableAutoReply = $enableAutoReply;
-  }
-  public function getEnableAutoReply()
-  {
-    return $this->enableAutoReply;
-  }
-  public function setEndTime($endTime)
-  {
-    $this->endTime = $endTime;
-  }
-  public function getEndTime()
-  {
-    return $this->endTime;
-  }
-  public function setResponseBodyHtml($responseBodyHtml)
-  {
-    $this->responseBodyHtml = $responseBodyHtml;
-  }
-  public function getResponseBodyHtml()
-  {
-    return $this->responseBodyHtml;
-  }
-  public function setResponseBodyPlainText($responseBodyPlainText)
-  {
-    $this->responseBodyPlainText = $responseBodyPlainText;
-  }
-  public function getResponseBodyPlainText()
-  {
-    return $this->responseBodyPlainText;
-  }
-  public function setResponseSubject($responseSubject)
-  {
-    $this->responseSubject = $responseSubject;
-  }
-  public function getResponseSubject()
-  {
-    return $this->responseSubject;
-  }
-  public function setRestrictToContacts($restrictToContacts)
-  {
-    $this->restrictToContacts = $restrictToContacts;
-  }
-  public function getRestrictToContacts()
-  {
-    return $this->restrictToContacts;
-  }
-  public function setRestrictToDomain($restrictToDomain)
-  {
-    $this->restrictToDomain = $restrictToDomain;
-  }
-  public function getRestrictToDomain()
-  {
-    return $this->restrictToDomain;
-  }
-  public function setStartTime($startTime)
-  {
-    $this->startTime = $startTime;
-  }
-  public function getStartTime()
-  {
-    return $this->startTime;
-  }
+    public $enableAutoReply;
+    public $endTime;
+    public $responseBodyHtml;
+    public $responseBodyPlainText;
+    public $responseSubject;
+    public $restrictToContacts;
+    public $restrictToDomain;
+    public $startTime;
+    public function setEnableAutoReply($enableAutoReply)
+    {
+        $this->enableAutoReply = $enableAutoReply;
+    }
+    public function getEnableAutoReply()
+    {
+        return $this->enableAutoReply;
+    }
+    public function setEndTime($endTime)
+    {
+        $this->endTime = $endTime;
+    }
+    public function getEndTime()
+    {
+        return $this->endTime;
+    }
+    public function setResponseBodyHtml($responseBodyHtml)
+    {
+        $this->responseBodyHtml = $responseBodyHtml;
+    }
+    public function getResponseBodyHtml()
+    {
+        return $this->responseBodyHtml;
+    }
+    public function setResponseBodyPlainText($responseBodyPlainText)
+    {
+        $this->responseBodyPlainText = $responseBodyPlainText;
+    }
+    public function getResponseBodyPlainText()
+    {
+        return $this->responseBodyPlainText;
+    }
+    public function setResponseSubject($responseSubject)
+    {
+        $this->responseSubject = $responseSubject;
+    }
+    public function getResponseSubject()
+    {
+        return $this->responseSubject;
+    }
+    public function setRestrictToContacts($restrictToContacts)
+    {
+        $this->restrictToContacts = $restrictToContacts;
+    }
+    public function getRestrictToContacts()
+    {
+        return $this->restrictToContacts;
+    }
+    public function setRestrictToDomain($restrictToDomain)
+    {
+        $this->restrictToDomain = $restrictToDomain;
+    }
+    public function getRestrictToDomain()
+    {
+        return $this->restrictToDomain;
+    }
+    public function setStartTime($startTime)
+    {
+        $this->startTime = $startTime;
+    }
+    public function getStartTime()
+    {
+        return $this->startTime;
+    }
 }

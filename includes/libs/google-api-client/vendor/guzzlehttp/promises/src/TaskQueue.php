@@ -1,5 +1,6 @@
 <?php
-namespace GuzzleHttp\Promise;
+
+namespace FluentMailLib\GuzzleHttp\Promise;
 
 /**
  * A task queue that executes tasks in a FIFO order.
@@ -12,42 +13,37 @@ namespace GuzzleHttp\Promise;
  */
 class TaskQueue implements TaskQueueInterface
 {
-    private $enableShutdown = true;
+    private $enableShutdown = \true;
     private $queue = [];
-
-    public function __construct($withShutdown = true)
+    public function __construct($withShutdown = \true)
     {
         if ($withShutdown) {
-            register_shutdown_function(function () {
+            \register_shutdown_function(function () {
                 if ($this->enableShutdown) {
                     // Only run the tasks if an E_ERROR didn't occur.
-                    $err = error_get_last();
-                    if (!$err || ($err['type'] ^ E_ERROR)) {
+                    $err = \error_get_last();
+                    if (!$err || $err['type'] ^ \E_ERROR) {
                         $this->run();
                     }
                 }
             });
         }
     }
-
     public function isEmpty()
     {
         return !$this->queue;
     }
-
     public function add(callable $task)
     {
         $this->queue[] = $task;
     }
-
     public function run()
     {
         /** @var callable $task */
-        while ($task = array_shift($this->queue)) {
+        while ($task = \array_shift($this->queue)) {
             $task();
         }
     }
-
     /**
      * The task queue will be run and exhausted by default when the process
      * exits IFF the exit is not the result of a PHP E_ERROR error.
@@ -61,6 +57,6 @@ class TaskQueue implements TaskQueueInterface
      */
     public function disableShutdown()
     {
-        $this->enableShutdown = false;
+        $this->enableShutdown = \false;
     }
 }

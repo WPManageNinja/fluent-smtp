@@ -1,9 +1,9 @@
 <?php
-namespace GuzzleHttp\Cookie;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+namespace FluentMailLib\GuzzleHttp\Cookie;
 
+use FluentMailLib\Psr\Http\Message\RequestInterface;
+use FluentMailLib\Psr\Http\Message\ResponseInterface;
 /**
  * Stores HTTP cookies.
  *
@@ -27,18 +27,13 @@ interface CookieJarInterface extends \Countable, \IteratorAggregate
      * @return RequestInterface returns the modified request.
      */
     public function withCookieHeader(RequestInterface $request);
-
     /**
      * Extract cookies from an HTTP response and store them in the CookieJar.
      *
      * @param RequestInterface  $request  Request that was sent
      * @param ResponseInterface $response Response that was received
      */
-    public function extractCookies(
-        RequestInterface $request,
-        ResponseInterface $response
-    );
-
+    public function extractCookies(RequestInterface $request, ResponseInterface $response);
     /**
      * Sets a cookie in the cookie jar.
      *
@@ -47,7 +42,6 @@ interface CookieJarInterface extends \Countable, \IteratorAggregate
      * @return bool Returns true on success or false on failure
      */
     public function setCookie(SetCookie $cookie);
-
     /**
      * Remove cookies currently held in the cookie jar.
      *
@@ -65,7 +59,6 @@ interface CookieJarInterface extends \Countable, \IteratorAggregate
      * @return CookieJarInterface
      */
     public function clear($domain = null, $path = null, $name = null);
-
     /**
      * Discard all sessions cookies.
      *
@@ -74,7 +67,6 @@ interface CookieJarInterface extends \Countable, \IteratorAggregate
      * to RFC 2965.
      */
     public function clearSessionCookies();
-
     /**
      * Converts the cookie jar to an array.
      *

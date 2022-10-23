@@ -1,9 +1,9 @@
 <?php
-namespace GuzzleHttp\Handler;
 
-use GuzzleHttp\RequestOptions;
-use Psr\Http\Message\RequestInterface;
+namespace FluentMailLib\GuzzleHttp\Handler;
 
+use FluentMailLib\GuzzleHttp\RequestOptions;
+use FluentMailLib\Psr\Http\Message\RequestInterface;
 /**
  * Provides basic proxies for handlers.
  */
@@ -18,17 +18,12 @@ class Proxy
      *
      * @return callable Returns the composed handler.
      */
-    public static function wrapSync(
-        callable $default,
-        callable $sync
-    ) {
-        return function (RequestInterface $request, array $options) use ($default, $sync) {
-            return empty($options[RequestOptions::SYNCHRONOUS])
-                ? $default($request, $options)
-                : $sync($request, $options);
+    public static function wrapSync(callable $default, callable $sync)
+    {
+        return function (RequestInterface $request, array $options) use($default, $sync) {
+            return empty($options[RequestOptions::SYNCHRONOUS]) ? $default($request, $options) : $sync($request, $options);
         };
     }
-
     /**
      * Sends streaming requests to a streaming compatible handler while sending
      * all other requests to a default handler.
@@ -42,14 +37,10 @@ class Proxy
      *
      * @return callable Returns the composed handler.
      */
-    public static function wrapStreaming(
-        callable $default,
-        callable $streaming
-    ) {
-        return function (RequestInterface $request, array $options) use ($default, $streaming) {
-            return empty($options['stream'])
-                ? $default($request, $options)
-                : $streaming($request, $options);
+    public static function wrapStreaming(callable $default, callable $streaming)
+    {
+        return function (RequestInterface $request, array $options) use($default, $streaming) {
+            return empty($options['stream']) ? $default($request, $options) : $streaming($request, $options);
         };
     }
 }

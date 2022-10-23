@@ -1,18 +1,16 @@
 <?php
 
-namespace Google\Auth\HttpHandler;
+namespace FluentMailLib\Google\Auth\HttpHandler;
 
-use GuzzleHttp\ClientInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-
+use FluentMailLib\GuzzleHttp\ClientInterface;
+use FluentMailLib\Psr\Http\Message\RequestInterface;
+use FluentMailLib\Psr\Http\Message\ResponseInterface;
 class Guzzle6HttpHandler
 {
     /**
      * @var ClientInterface
      */
     private $client;
-
     /**
      * @param ClientInterface $client
      */
@@ -20,7 +18,6 @@ class Guzzle6HttpHandler
     {
         $this->client = $client;
     }
-
     /**
      * Accepts a PSR-7 request and an array of options and returns a PSR-7 response.
      *
@@ -33,7 +30,6 @@ class Guzzle6HttpHandler
     {
         return $this->client->send($request, $options);
     }
-
     /**
      * Accepts a PSR-7 request and an array of options and returns a PromiseInterface
      *

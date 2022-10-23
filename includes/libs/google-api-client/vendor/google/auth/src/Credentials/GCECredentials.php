@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015 Google Inc.
  *
@@ -14,16 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+namespace FluentMailLib\Google\Auth\Credentials;
 
-namespace Google\Auth\Credentials;
-
-use Google\Auth\CredentialsLoader;
-use Google\Auth\HttpHandler\HttpHandlerFactory;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Psr7\Request;
-
+use FluentMailLib\Google\Auth\CredentialsLoader;
+use FluentMailLib\Google\Auth\HttpHandler\HttpHandlerFactory;
+use FluentMailLib\GuzzleHttp\Exception\ClientException;
+use FluentMailLib\GuzzleHttp\Exception\RequestException;
+use FluentMailLib\GuzzleHttp\Exception\ServerException;
+use FluentMailLib\GuzzleHttp\Psr7\Request;
 /**
  * GCECredentials supports authorization on Google Compute Engine.
  *
@@ -58,36 +57,30 @@ class GCECredentials extends CredentialsLoader
      * when not on Compute Engine.
      */
     const METADATA_IP = '169.254.169.254';
-
     /**
      * The metadata path of the default token.
      */
     const TOKEN_URI_PATH = 'v1/instance/service-accounts/default/token';
-
     /**
      * The header whose presence indicates GCE presence.
      */
     const FLAVOR_HEADER = 'Metadata-Flavor';
-
     /**
      * Flag used to ensure that the onGCE test is only done once;.
      *
      * @var bool
      */
-    private $hasCheckedOnGce = false;
-
+    private $hasCheckedOnGce = \false;
     /**
      * Flag that stores the value of the onGCE check.
      *
      * @var bool
      */
-    private $isOnGce = false;
-
+    private $isOnGce = \false;
     /**
      * Result of fetchAuthToken.
      */
     protected $lastReceivedToken;
-
     /**
      * The full uri for accessing the default token.
      *
@@ -96,10 +89,8 @@ class GCECredentials extends CredentialsLoader
     public static function getTokenUri()
     {
         $base = 'http://' . self::METADATA_IP . '/computeMetadata/';
-
         return $base . self::TOKEN_URI_PATH;
     }
-
     /**
      * Determines if this an App Engine Flexible instance, by accessing the
      * GAE_VM environment variable.
@@ -110,7 +101,6 @@ class GCECredentials extends CredentialsLoader
     {
         return isset($_SERVER['GAE_VM']) && 'true' === $_SERVER['GAE_VM'];
     }
-
     /**
      * Determines if this a GCE instance, by accessing the expected metadata
      * host.
@@ -122,7 +112,7 @@ class GCECredentials extends CredentialsLoader
      */
     public static function onGce(callable $httpHandler = null)
     {
-        if (is_null($httpHandler)) {
+        if (\is_null($httpHandler)) {
             $httpHandler = HttpHandlerFactory::build();
         }
         $checkUri = 'http://' . self::METADATA_IP;
@@ -135,21 +125,16 @@ class GCECredentials extends CredentialsLoader
             // could lead to false negatives in the event that we are on GCE, but
             // the metadata resolution was particularly slow. The latter case is
             // "unlikely".
-            $resp = $httpHandler(
-                new Request('GET', $checkUri),
-                ['timeout' => 0.3]
-            );
-
+            $resp = $httpHandler(new Request('GET', $checkUri), ['timeout' => 0.3]);
             return $resp->getHeaderLine(self::FLAVOR_HEADER) == 'Google';
         } catch (ClientException $e) {
-            return false;
+            return \false;
         } catch (ServerException $e) {
-            return false;
+            return \false;
         } catch (RequestException $e) {
-            return false;
+            return \false;
         }
     }
-
     /**
      * Implements FetchAuthTokenInterface#fetchAuthToken.
      *
@@ -164,36 +149,27 @@ class GCECredentials extends CredentialsLoader
      */
     public function fetchAuthToken(callable $httpHandler = null)
     {
-        if (is_null($httpHandler)) {
+        if (\is_null($httpHandler)) {
             $httpHandler = HttpHandlerFactory::build();
         }
         if (!$this->hasCheckedOnGce) {
             $this->isOnGce = self::onGce($httpHandler);
         }
         if (!$this->isOnGce) {
-            return array();  // return an empty array with no access token
+            return array();
+            // return an empty array with no access token
         }
-        $resp = $httpHandler(
-            new Request(
-                'GET',
-                self::getTokenUri(),
-                [self::FLAVOR_HEADER => 'Google']
-            )
-        );
-        $body = (string)$resp->getBody();
-
+        $resp = $httpHandler(new Request('GET', self::getTokenUri(), [self::FLAVOR_HEADER => 'Google']));
+        $body = (string) $resp->getBody();
         // Assume it's JSON; if it's not throw an exception
-        if (null === $json = json_decode($body, true)) {
+        if (null === ($json = \json_decode($body, \true))) {
             throw new \Exception('Invalid JSON response');
         }
-
         // store this so we can retrieve it later
         $this->lastReceivedToken = $json;
-        $this->lastReceivedToken['expires_at'] = time() + $json['expires_in'];
-
+        $this->lastReceivedToken['expires_at'] = \time() + $json['expires_in'];
         return $json;
     }
-
     /**
      * @return string
      */
@@ -201,19 +177,14 @@ class GCECredentials extends CredentialsLoader
     {
         return self::cacheKey;
     }
-
     /**
      * @return array|null
      */
     public function getLastReceivedToken()
     {
         if ($this->lastReceivedToken) {
-            return [
-                'access_token' => $this->lastReceivedToken['access_token'],
-                'expires_at' => $this->lastReceivedToken['expires_at'],
-            ];
+            return ['access_token' => $this->lastReceivedToken['access_token'], 'expires_at' => $this->lastReceivedToken['expires_at']];
         }
-
         return null;
     }
 }

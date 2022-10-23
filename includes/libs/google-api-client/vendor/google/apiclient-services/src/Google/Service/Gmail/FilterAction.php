@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,36 +17,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_FilterAction extends Google_Collection
 {
-  protected $collection_key = 'removeLabelIds';
-  public $addLabelIds;
-  public $forward;
-  public $removeLabelIds;
-
-  public function setAddLabelIds($addLabelIds)
-  {
-    $this->addLabelIds = $addLabelIds;
-  }
-  public function getAddLabelIds()
-  {
-    return $this->addLabelIds;
-  }
-  public function setForward($forward)
-  {
-    $this->forward = $forward;
-  }
-  public function getForward()
-  {
-    return $this->forward;
-  }
-  public function setRemoveLabelIds($removeLabelIds)
-  {
-    $this->removeLabelIds = $removeLabelIds;
-  }
-  public function getRemoveLabelIds()
-  {
-    return $this->removeLabelIds;
-  }
+    protected $collection_key = 'removeLabelIds';
+    public $addLabelIds;
+    public $forward;
+    public $removeLabelIds;
+    public function setAddLabelIds($addLabelIds)
+    {
+        $this->addLabelIds = $addLabelIds;
+    }
+    public function getAddLabelIds()
+    {
+        return $this->addLabelIds;
+    }
+    public function setForward($forward)
+    {
+        $this->forward = $forward;
+    }
+    public function getForward()
+    {
+        return $this->forward;
+    }
+    public function setRemoveLabelIds($removeLabelIds)
+    {
+        $this->removeLabelIds = $removeLabelIds;
+    }
+    public function getRemoveLabelIds()
+    {
+        return $this->removeLabelIds;
+    }
 }

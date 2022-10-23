@@ -1,9 +1,9 @@
 <?php
-namespace GuzzleHttp\Handler;
 
-use GuzzleHttp\Psr7;
-use Psr\Http\Message\RequestInterface;
+namespace FluentMailLib\GuzzleHttp\Handler;
 
+use FluentMailLib\GuzzleHttp\Psr7;
+use FluentMailLib\Psr\Http\Message\RequestInterface;
 /**
  * HTTP handler that uses cURL easy handles as a transport layer.
  *
@@ -15,7 +15,6 @@ class CurlHandler
 {
     /** @var CurlFactoryInterface */
     private $factory;
-
     /**
      * Accepts an associative array of options:
      *
@@ -25,21 +24,16 @@ class CurlHandler
      */
     public function __construct(array $options = [])
     {
-        $this->factory = isset($options['handle_factory'])
-            ? $options['handle_factory']
-            : new CurlFactory(3);
+        $this->factory = isset($options['handle_factory']) ? $options['handle_factory'] : new CurlFactory(3);
     }
-
     public function __invoke(RequestInterface $request, array $options)
     {
         if (isset($options['delay'])) {
-            usleep($options['delay'] * 1000);
+            \usleep($options['delay'] * 1000);
         }
-
         $easy = $this->factory->create($request, $options);
-        curl_exec($easy->handle);
-        $easy->errno = curl_errno($easy->handle);
-
+        \curl_exec($easy->handle);
+        $easy->errno = \curl_errno($easy->handle);
         return CurlFactory::finish($this, $easy, $this->factory);
     }
 }

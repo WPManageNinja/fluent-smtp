@@ -1,5 +1,6 @@
 <?php
-namespace GuzzleHttp\Promise;
+
+namespace FluentMailLib\GuzzleHttp\Promise;
 
 /**
  * A promise represents the eventual result of an asynchronous operation.
@@ -15,7 +16,6 @@ interface PromiseInterface
     const PENDING = 'pending';
     const FULFILLED = 'fulfilled';
     const REJECTED = 'rejected';
-
     /**
      * Appends fulfillment and rejection handlers to the promise, and returns
      * a new promise resolving to the return value of the called handler.
@@ -25,11 +25,7 @@ interface PromiseInterface
      *
      * @return PromiseInterface
      */
-    public function then(
-        callable $onFulfilled = null,
-        callable $onRejected = null
-    );
-
+    public function then(callable $onFulfilled = null, callable $onRejected = null);
     /**
      * Appends a rejection handler callback to the promise, and returns a new
      * promise resolving to the return value of the callback if it is called,
@@ -41,7 +37,6 @@ interface PromiseInterface
      * @return PromiseInterface
      */
     public function otherwise(callable $onRejected);
-
     /**
      * Get the state of the promise ("pending", "rejected", or "fulfilled").
      *
@@ -51,7 +46,6 @@ interface PromiseInterface
      * @return string
      */
     public function getState();
-
     /**
      * Resolve the promise with the given value.
      *
@@ -59,7 +53,6 @@ interface PromiseInterface
      * @throws \RuntimeException if the promise is already resolved.
      */
     public function resolve($value);
-
     /**
      * Reject the promise with the given reason.
      *
@@ -67,14 +60,12 @@ interface PromiseInterface
      * @throws \RuntimeException if the promise is already resolved.
      */
     public function reject($reason);
-
     /**
      * Cancels the promise if possible.
      *
      * @link https://github.com/promises-aplus/cancellation-spec/issues/7
      */
     public function cancel();
-
     /**
      * Waits until the promise completes if possible.
      *
@@ -89,5 +80,5 @@ interface PromiseInterface
      * @throws \LogicException if the promise has no wait function or if the
      *                         promise does not settle after waiting.
      */
-    public function wait($unwrap = true);
+    public function wait($unwrap = \true);
 }

@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,44 +17,42 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_Profile extends Google_Model
 {
-  public $emailAddress;
-  public $historyId;
-  public $messagesTotal;
-  public $threadsTotal;
-
-  public function setEmailAddress($emailAddress)
-  {
-    $this->emailAddress = $emailAddress;
-  }
-  public function getEmailAddress()
-  {
-    return $this->emailAddress;
-  }
-  public function setHistoryId($historyId)
-  {
-    $this->historyId = $historyId;
-  }
-  public function getHistoryId()
-  {
-    return $this->historyId;
-  }
-  public function setMessagesTotal($messagesTotal)
-  {
-    $this->messagesTotal = $messagesTotal;
-  }
-  public function getMessagesTotal()
-  {
-    return $this->messagesTotal;
-  }
-  public function setThreadsTotal($threadsTotal)
-  {
-    $this->threadsTotal = $threadsTotal;
-  }
-  public function getThreadsTotal()
-  {
-    return $this->threadsTotal;
-  }
+    public $emailAddress;
+    public $historyId;
+    public $messagesTotal;
+    public $threadsTotal;
+    public function setEmailAddress($emailAddress)
+    {
+        $this->emailAddress = $emailAddress;
+    }
+    public function getEmailAddress()
+    {
+        return $this->emailAddress;
+    }
+    public function setHistoryId($historyId)
+    {
+        $this->historyId = $historyId;
+    }
+    public function getHistoryId()
+    {
+        return $this->historyId;
+    }
+    public function setMessagesTotal($messagesTotal)
+    {
+        $this->messagesTotal = $messagesTotal;
+    }
+    public function getMessagesTotal()
+    {
+        return $this->messagesTotal;
+    }
+    public function setThreadsTotal($threadsTotal)
+    {
+        $this->threadsTotal = $threadsTotal;
+    }
+    public function getThreadsTotal()
+    {
+        return $this->threadsTotal;
+    }
 }

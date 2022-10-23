@@ -8,11 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace FluentMailLib\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Logger;
-
+use FluentMailLib\Monolog\Logger;
 /**
  * Sends notifications through Slack's Slackbot
  *
@@ -26,19 +24,16 @@ class SlackbotHandler extends AbstractProcessingHandler
      * @var string
      */
     private $slackTeam;
-
     /**
      * Slackbot token
      * @var string
      */
     private $token;
-
     /**
      * Slack channel name
      * @var string
      */
     private $channel;
-
     /**
      * @param  string $slackTeam Slack team slug
      * @param  string $token     Slackbot token
@@ -46,15 +41,13 @@ class SlackbotHandler extends AbstractProcessingHandler
      * @param  int    $level     The minimum logging level at which this handler will be triggered
      * @param  bool   $bubble    Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct($slackTeam, $token, $channel, $level = Logger::CRITICAL, $bubble = true)
+    public function __construct($slackTeam, $token, $channel, $level = Logger::CRITICAL, $bubble = \true)
     {
         parent::__construct($level, $bubble);
-
         $this->slackTeam = $slackTeam;
         $this->token = $token;
         $this->channel = $channel;
     }
-
     /**
      * {@inheritdoc}
      *
@@ -62,19 +55,12 @@ class SlackbotHandler extends AbstractProcessingHandler
      */
     protected function write(array $record)
     {
-        $slackbotUrl = sprintf(
-            'https://%s.slack.com/services/hooks/slackbot?token=%s&channel=%s',
-            $this->slackTeam,
-            $this->token,
-            $this->channel
-        );
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $slackbotUrl);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $record['message']);
-
+        $slackbotUrl = \sprintf('https://%s.slack.com/services/hooks/slackbot?token=%s&channel=%s', $this->slackTeam, $this->token, $this->channel);
+        $ch = \curl_init();
+        \curl_setopt($ch, \CURLOPT_URL, $slackbotUrl);
+        \curl_setopt($ch, \CURLOPT_POST, \true);
+        \curl_setopt($ch, \CURLOPT_RETURNTRANSFER, \true);
+        \curl_setopt($ch, \CURLOPT_POSTFIELDS, $record['message']);
         Curl\Util::execute($ch);
     }
 }

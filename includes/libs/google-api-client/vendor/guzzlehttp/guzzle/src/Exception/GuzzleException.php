@@ -1,4 +1,7 @@
 <?php
-namespace GuzzleHttp\Exception;
 
-interface GuzzleException {}
+namespace FluentMailLib\GuzzleHttp\Exception;
+
+interface GuzzleException
+{
+}

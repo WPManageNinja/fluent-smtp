@@ -8,13 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace FluentMailLib\Monolog\Handler;
 
-namespace Monolog\Handler;
-
-use Monolog\Logger;
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Formatter\LineFormatter;
-
+use FluentMailLib\Monolog\Logger;
+use FluentMailLib\Monolog\Formatter\FormatterInterface;
+use FluentMailLib\Monolog\Formatter\LineFormatter;
 /**
  * Base Handler class providing the Handler structure
  *
@@ -23,24 +21,21 @@ use Monolog\Formatter\LineFormatter;
 abstract class AbstractHandler implements HandlerInterface
 {
     protected $level = Logger::DEBUG;
-    protected $bubble = true;
-
+    protected $bubble = \true;
     /**
      * @var FormatterInterface
      */
     protected $formatter;
     protected $processors = array();
-
     /**
      * @param int     $level  The minimum logging level at which this handler will be triggered
      * @param Boolean $bubble Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct($level = Logger::DEBUG, $bubble = true)
+    public function __construct($level = Logger::DEBUG, $bubble = \true)
     {
         $this->setLevel($level);
         $this->bubble = $bubble;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -48,7 +43,6 @@ abstract class AbstractHandler implements HandlerInterface
     {
         return $record['level'] >= $this->level;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -58,7 +52,6 @@ abstract class AbstractHandler implements HandlerInterface
             $this->handle($record);
         }
     }
-
     /**
      * Closes the handler.
      *
@@ -67,20 +60,17 @@ abstract class AbstractHandler implements HandlerInterface
     public function close()
     {
     }
-
     /**
      * {@inheritdoc}
      */
     public function pushProcessor($callback)
     {
-        if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), '.var_export($callback, true).' given');
+        if (!\is_callable($callback)) {
+            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), ' . \var_export($callback, \true) . ' given');
         }
-        array_unshift($this->processors, $callback);
-
+        \array_unshift($this->processors, $callback);
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -89,20 +79,16 @@ abstract class AbstractHandler implements HandlerInterface
         if (!$this->processors) {
             throw new \LogicException('You tried to pop from an empty processor stack.');
         }
-
-        return array_shift($this->processors);
+        return \array_shift($this->processors);
     }
-
     /**
      * {@inheritdoc}
      */
     public function setFormatter(FormatterInterface $formatter)
     {
         $this->formatter = $formatter;
-
         return $this;
     }
-
     /**
      * {@inheritdoc}
      */
@@ -111,10 +97,8 @@ abstract class AbstractHandler implements HandlerInterface
         if (!$this->formatter) {
             $this->formatter = $this->getDefaultFormatter();
         }
-
         return $this->formatter;
     }
-
     /**
      * Sets minimum logging level at which this handler will be triggered.
      *
@@ -124,10 +108,8 @@ abstract class AbstractHandler implements HandlerInterface
     public function setLevel($level)
     {
         $this->level = Logger::toMonologLevel($level);
-
         return $this;
     }
-
     /**
      * Gets minimum logging level at which this handler will be triggered.
      *
@@ -137,7 +119,6 @@ abstract class AbstractHandler implements HandlerInterface
     {
         return $this->level;
     }
-
     /**
      * Sets the bubbling behavior.
      *
@@ -148,10 +129,8 @@ abstract class AbstractHandler implements HandlerInterface
     public function setBubble($bubble)
     {
         $this->bubble = $bubble;
-
         return $this;
     }
-
     /**
      * Gets the bubbling behavior.
      *
@@ -162,7 +141,6 @@ abstract class AbstractHandler implements HandlerInterface
     {
         return $this->bubble;
     }
-
     public function __destruct()
     {
         try {
@@ -173,7 +151,6 @@ abstract class AbstractHandler implements HandlerInterface
             // do nothing
         }
     }
-
     /**
      * Gets the default formatter.
      *

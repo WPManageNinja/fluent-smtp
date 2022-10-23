@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
-namespace Monolog\Processor;
+namespace FluentMailLib\Monolog\Processor;
 
 /**
  * Injects url/method and remote IP of the current web request in all records
@@ -22,7 +21,6 @@ class WebProcessor
      * @var array|\ArrayAccess
      */
     protected $serverData;
-
     /**
      * Default fields
      *
@@ -30,14 +28,7 @@ class WebProcessor
      *
      * @var array
      */
-    protected $extraFields = array(
-        'url'         => 'REQUEST_URI',
-        'ip'          => 'REMOTE_ADDR',
-        'http_method' => 'REQUEST_METHOD',
-        'server'      => 'SERVER_NAME',
-        'referrer'    => 'HTTP_REFERER',
-    );
-
+    protected $extraFields = array('url' => 'REQUEST_URI', 'ip' => 'REMOTE_ADDR', 'http_method' => 'REQUEST_METHOD', 'server' => 'SERVER_NAME', 'referrer' => 'HTTP_REFERER');
     /**
      * @param array|\ArrayAccess $serverData  Array or object w/ ArrayAccess that provides access to the $_SERVER data
      * @param array|null         $extraFields Field names and the related key inside $serverData to be added. If not provided it defaults to: url, ip, http_method, server, referrer
@@ -45,17 +36,16 @@ class WebProcessor
     public function __construct($serverData = null, array $extraFields = null)
     {
         if (null === $serverData) {
-            $this->serverData = &$_SERVER;
-        } elseif (is_array($serverData) || $serverData instanceof \ArrayAccess) {
+            $this->serverData =& $_SERVER;
+        } elseif (\is_array($serverData) || $serverData instanceof \ArrayAccess) {
             $this->serverData = $serverData;
         } else {
             throw new \UnexpectedValueException('$serverData must be an array or object implementing ArrayAccess.');
         }
-
         if (null !== $extraFields) {
             if (isset($extraFields[0])) {
-                foreach (array_keys($this->extraFields) as $fieldName) {
-                    if (!in_array($fieldName, $extraFields)) {
+                foreach (\array_keys($this->extraFields) as $fieldName) {
+                    if (!\in_array($fieldName, $extraFields)) {
                         unset($this->extraFields[$fieldName]);
                     }
                 }
@@ -64,7 +54,6 @@ class WebProcessor
             }
         }
     }
-
     /**
      * @param  array $record
      * @return array
@@ -76,12 +65,9 @@ class WebProcessor
         if (!isset($this->serverData['REQUEST_URI'])) {
             return $record;
         }
-
         $record['extra'] = $this->appendExtraFields($record['extra']);
-
         return $record;
     }
-
     /**
      * @param  string $extraName
      * @param  string $serverName
@@ -90,10 +76,8 @@ class WebProcessor
     public function addExtraField($extraName, $serverName)
     {
         $this->extraFields[$extraName] = $serverName;
-
         return $this;
     }
-
     /**
      * @param  array $extra
      * @return array
@@ -103,11 +87,9 @@ class WebProcessor
         foreach ($this->extraFields as $extraName => $serverName) {
             $extra[$extraName] = isset($this->serverData[$serverName]) ? $this->serverData[$serverName] : null;
         }
-
         if (isset($this->serverData['UNIQUE_ID'])) {
             $extra['unique_id'] = $this->serverData['UNIQUE_ID'];
         }
-
         return $extra;
     }
 }

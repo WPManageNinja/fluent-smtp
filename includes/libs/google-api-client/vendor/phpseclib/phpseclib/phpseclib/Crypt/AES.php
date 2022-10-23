@@ -46,8 +46,7 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  * @link      http://phpseclib.sourceforge.net
  */
-
-namespace phpseclib\Crypt;
+namespace FluentMailLib\phpseclib\Crypt;
 
 /**
  * Pure-PHP implementation of AES.
@@ -71,7 +70,6 @@ class AES extends Rijndael
     {
         return;
     }
-
     /**
      * Sets the key length
      *
@@ -93,7 +91,6 @@ class AES extends Rijndael
         }
         parent::setKeyLength($length);
     }
-
     /**
      * Sets the key.
      *
@@ -107,10 +104,9 @@ class AES extends Rijndael
     function setKey($key)
     {
         parent::setKey($key);
-
         if (!$this->explicit_key_length) {
-            $length = strlen($key);
-            switch (true) {
+            $length = \strlen($key);
+            switch (\true) {
                 case $length <= 16:
                     $this->key_length = 16;
                     break;

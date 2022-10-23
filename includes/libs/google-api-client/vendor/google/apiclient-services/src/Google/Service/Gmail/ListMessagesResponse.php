@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,43 +17,41 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_ListMessagesResponse extends Google_Collection
 {
-  protected $collection_key = 'messages';
-  protected $messagesType = 'Google_Service_Gmail_Message';
-  protected $messagesDataType = 'array';
-  public $nextPageToken;
-  public $resultSizeEstimate;
-
-  /**
-   * @param Google_Service_Gmail_Message
-   */
-  public function setMessages($messages)
-  {
-    $this->messages = $messages;
-  }
-  /**
-   * @return Google_Service_Gmail_Message
-   */
-  public function getMessages()
-  {
-    return $this->messages;
-  }
-  public function setNextPageToken($nextPageToken)
-  {
-    $this->nextPageToken = $nextPageToken;
-  }
-  public function getNextPageToken()
-  {
-    return $this->nextPageToken;
-  }
-  public function setResultSizeEstimate($resultSizeEstimate)
-  {
-    $this->resultSizeEstimate = $resultSizeEstimate;
-  }
-  public function getResultSizeEstimate()
-  {
-    return $this->resultSizeEstimate;
-  }
+    protected $collection_key = 'messages';
+    protected $messagesType = 'Google_Service_Gmail_Message';
+    protected $messagesDataType = 'array';
+    public $nextPageToken;
+    public $resultSizeEstimate;
+    /**
+     * @param Google_Service_Gmail_Message
+     */
+    public function setMessages($messages)
+    {
+        $this->messages = $messages;
+    }
+    /**
+     * @return Google_Service_Gmail_Message
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+    public function setNextPageToken($nextPageToken)
+    {
+        $this->nextPageToken = $nextPageToken;
+    }
+    public function getNextPageToken()
+    {
+        return $this->nextPageToken;
+    }
+    public function setResultSizeEstimate($resultSizeEstimate)
+    {
+        $this->resultSizeEstimate = $resultSizeEstimate;
+    }
+    public function getResultSizeEstimate()
+    {
+        return $this->resultSizeEstimate;
+    }
 }

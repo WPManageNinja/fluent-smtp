@@ -1,10 +1,10 @@
 <?php
-namespace GuzzleHttp\Promise;
+
+namespace FluentMailLib\GuzzleHttp\Promise;
 
 use Exception;
 use Generator;
 use Throwable;
-
 /**
  * Creates a promise that is resolved using a generator that yields values or
  * promises (somewhat similar to C#'s async keyword).
@@ -46,17 +46,14 @@ final class Coroutine implements PromiseInterface
      * @var PromiseInterface|null
      */
     private $currentPromise;
-
     /**
      * @var Generator
      */
     private $generator;
-
     /**
      * @var Promise
      */
     private $result;
-
     public function __construct(callable $generatorFn)
     {
         $this->generator = $generatorFn();
@@ -67,51 +64,39 @@ final class Coroutine implements PromiseInterface
         });
         $this->nextCoroutine($this->generator->current());
     }
-
-    public function then(
-        callable $onFulfilled = null,
-        callable $onRejected = null
-    ) {
+    public function then(callable $onFulfilled = null, callable $onRejected = null)
+    {
         return $this->result->then($onFulfilled, $onRejected);
     }
-
     public function otherwise(callable $onRejected)
     {
         return $this->result->otherwise($onRejected);
     }
-
-    public function wait($unwrap = true)
+    public function wait($unwrap = \true)
     {
         return $this->result->wait($unwrap);
     }
-
     public function getState()
     {
         return $this->result->getState();
     }
-
     public function resolve($value)
     {
         $this->result->resolve($value);
     }
-
     public function reject($reason)
     {
         $this->result->reject($reason);
     }
-
     public function cancel()
     {
         $this->currentPromise->cancel();
         $this->result->cancel();
     }
-
     private function nextCoroutine($yielded)
     {
-        $this->currentPromise = promise_for($yielded)
-            ->then([$this, '_handleSuccess'], [$this, '_handleFailure']);
+        $this->currentPromise = promise_for($yielded)->then([$this, '_handleSuccess'], [$this, '_handleFailure']);
     }
-
     /**
      * @internal
      */
@@ -131,7 +116,6 @@ final class Coroutine implements PromiseInterface
             $this->result->reject($throwable);
         }
     }
-
     /**
      * @internal
      */

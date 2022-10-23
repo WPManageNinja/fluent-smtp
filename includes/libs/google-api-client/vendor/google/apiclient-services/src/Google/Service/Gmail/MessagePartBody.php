@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,35 +17,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_MessagePartBody extends Google_Model
 {
-  public $attachmentId;
-  public $data;
-  public $size;
-
-  public function setAttachmentId($attachmentId)
-  {
-    $this->attachmentId = $attachmentId;
-  }
-  public function getAttachmentId()
-  {
-    return $this->attachmentId;
-  }
-  public function setData($data)
-  {
-    $this->data = $data;
-  }
-  public function getData()
-  {
-    return $this->data;
-  }
-  public function setSize($size)
-  {
-    $this->size = $size;
-  }
-  public function getSize()
-  {
-    return $this->size;
-  }
+    public $attachmentId;
+    public $data;
+    public $size;
+    public function setAttachmentId($attachmentId)
+    {
+        $this->attachmentId = $attachmentId;
+    }
+    public function getAttachmentId()
+    {
+        return $this->attachmentId;
+    }
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
+    public function getData()
+    {
+        return $this->data;
+    }
+    public function setSize($size)
+    {
+        $this->size = $size;
+    }
+    public function getSize()
+    {
+        return $this->size;
+    }
 }

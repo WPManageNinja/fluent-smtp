@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,105 +17,103 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_Label extends Google_Model
 {
-  protected $colorType = 'Google_Service_Gmail_LabelColor';
-  protected $colorDataType = '';
-  public $id;
-  public $labelListVisibility;
-  public $messageListVisibility;
-  public $messagesTotal;
-  public $messagesUnread;
-  public $name;
-  public $threadsTotal;
-  public $threadsUnread;
-  public $type;
-
-  /**
-   * @param Google_Service_Gmail_LabelColor
-   */
-  public function setColor(Google_Service_Gmail_LabelColor $color)
-  {
-    $this->color = $color;
-  }
-  /**
-   * @return Google_Service_Gmail_LabelColor
-   */
-  public function getColor()
-  {
-    return $this->color;
-  }
-  public function setId($id)
-  {
-    $this->id = $id;
-  }
-  public function getId()
-  {
-    return $this->id;
-  }
-  public function setLabelListVisibility($labelListVisibility)
-  {
-    $this->labelListVisibility = $labelListVisibility;
-  }
-  public function getLabelListVisibility()
-  {
-    return $this->labelListVisibility;
-  }
-  public function setMessageListVisibility($messageListVisibility)
-  {
-    $this->messageListVisibility = $messageListVisibility;
-  }
-  public function getMessageListVisibility()
-  {
-    return $this->messageListVisibility;
-  }
-  public function setMessagesTotal($messagesTotal)
-  {
-    $this->messagesTotal = $messagesTotal;
-  }
-  public function getMessagesTotal()
-  {
-    return $this->messagesTotal;
-  }
-  public function setMessagesUnread($messagesUnread)
-  {
-    $this->messagesUnread = $messagesUnread;
-  }
-  public function getMessagesUnread()
-  {
-    return $this->messagesUnread;
-  }
-  public function setName($name)
-  {
-    $this->name = $name;
-  }
-  public function getName()
-  {
-    return $this->name;
-  }
-  public function setThreadsTotal($threadsTotal)
-  {
-    $this->threadsTotal = $threadsTotal;
-  }
-  public function getThreadsTotal()
-  {
-    return $this->threadsTotal;
-  }
-  public function setThreadsUnread($threadsUnread)
-  {
-    $this->threadsUnread = $threadsUnread;
-  }
-  public function getThreadsUnread()
-  {
-    return $this->threadsUnread;
-  }
-  public function setType($type)
-  {
-    $this->type = $type;
-  }
-  public function getType()
-  {
-    return $this->type;
-  }
+    protected $colorType = 'Google_Service_Gmail_LabelColor';
+    protected $colorDataType = '';
+    public $id;
+    public $labelListVisibility;
+    public $messageListVisibility;
+    public $messagesTotal;
+    public $messagesUnread;
+    public $name;
+    public $threadsTotal;
+    public $threadsUnread;
+    public $type;
+    /**
+     * @param Google_Service_Gmail_LabelColor
+     */
+    public function setColor(Google_Service_Gmail_LabelColor $color)
+    {
+        $this->color = $color;
+    }
+    /**
+     * @return Google_Service_Gmail_LabelColor
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+    public function getId()
+    {
+        return $this->id;
+    }
+    public function setLabelListVisibility($labelListVisibility)
+    {
+        $this->labelListVisibility = $labelListVisibility;
+    }
+    public function getLabelListVisibility()
+    {
+        return $this->labelListVisibility;
+    }
+    public function setMessageListVisibility($messageListVisibility)
+    {
+        $this->messageListVisibility = $messageListVisibility;
+    }
+    public function getMessageListVisibility()
+    {
+        return $this->messageListVisibility;
+    }
+    public function setMessagesTotal($messagesTotal)
+    {
+        $this->messagesTotal = $messagesTotal;
+    }
+    public function getMessagesTotal()
+    {
+        return $this->messagesTotal;
+    }
+    public function setMessagesUnread($messagesUnread)
+    {
+        $this->messagesUnread = $messagesUnread;
+    }
+    public function getMessagesUnread()
+    {
+        return $this->messagesUnread;
+    }
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+    public function getName()
+    {
+        return $this->name;
+    }
+    public function setThreadsTotal($threadsTotal)
+    {
+        $this->threadsTotal = $threadsTotal;
+    }
+    public function getThreadsTotal()
+    {
+        return $this->threadsTotal;
+    }
+    public function setThreadsUnread($threadsUnread)
+    {
+        $this->threadsUnread = $threadsUnread;
+    }
+    public function getThreadsUnread()
+    {
+        return $this->threadsUnread;
+    }
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+    public function getType()
+    {
+        return $this->type;
+    }
 }

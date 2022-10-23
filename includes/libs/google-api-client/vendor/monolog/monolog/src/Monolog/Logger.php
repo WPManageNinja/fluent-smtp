@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace FluentMailLib\Monolog;
 
-namespace Monolog;
-
-use Monolog\Handler\HandlerInterface;
-use Monolog\Handler\StreamHandler;
-use Psr\Log\LoggerInterface;
-use Psr\Log\InvalidArgumentException;
-
+use FluentMailLib\Monolog\Handler\HandlerInterface;
+use FluentMailLib\Monolog\Handler\StreamHandler;
+use FluentMailLib\Psr\Log\LoggerInterface;
+use FluentMailLib\Psr\Log\InvalidArgumentException;
 /**
  * Monolog log channel
  *
@@ -30,19 +28,16 @@ class Logger implements LoggerInterface
      * Detailed debug information
      */
     const DEBUG = 100;
-
     /**
      * Interesting events
      *
      * Examples: User logs in, SQL logs.
      */
     const INFO = 200;
-
     /**
      * Uncommon events
      */
     const NOTICE = 250;
-
     /**
      * Exceptional occurrences that are not errors
      *
@@ -50,19 +45,16 @@ class Logger implements LoggerInterface
      * undesirable things that are not necessarily wrong.
      */
     const WARNING = 300;
-
     /**
      * Runtime errors
      */
     const ERROR = 400;
-
     /**
      * Critical conditions
      *
      * Example: Application component unavailable, unexpected exception.
      */
     const CRITICAL = 500;
-
     /**
      * Action must be taken immediately
      *
@@ -70,12 +62,10 @@ class Logger implements LoggerInterface
      * This should trigger the SMS alerts and wake you up.
      */
     const ALERT = 550;
-
     /**
      * Urgent alert.
      */
     const EMERGENCY = 600;
-
     /**
      * Monolog API version
      *
@@ -85,40 +75,26 @@ class Logger implements LoggerInterface
      * @var int
      */
     const API = 1;
-
     /**
      * Logging levels from syslog protocol defined in RFC 5424
      *
      * @var array $levels Logging levels
      */
-    protected static $levels = array(
-        self::DEBUG     => 'DEBUG',
-        self::INFO      => 'INFO',
-        self::NOTICE    => 'NOTICE',
-        self::WARNING   => 'WARNING',
-        self::ERROR     => 'ERROR',
-        self::CRITICAL  => 'CRITICAL',
-        self::ALERT     => 'ALERT',
-        self::EMERGENCY => 'EMERGENCY',
-    );
-
+    protected static $levels = array(self::DEBUG => 'DEBUG', self::INFO => 'INFO', self::NOTICE => 'NOTICE', self::WARNING => 'WARNING', self::ERROR => 'ERROR', self::CRITICAL => 'CRITICAL', self::ALERT => 'ALERT', self::EMERGENCY => 'EMERGENCY');
     /**
      * @var \DateTimeZone
      */
     protected static $timezone;
-
     /**
      * @var string
      */
     protected $name;
-
     /**
      * The handler stack
      *
      * @var HandlerInterface[]
      */
     protected $handlers;
-
     /**
      * Processors that will process all log records
      *
@@ -127,12 +103,10 @@ class Logger implements LoggerInterface
      * @var callable[]
      */
     protected $processors;
-
     /**
      * @var bool
      */
-    protected $microsecondTimestamps = true;
-
+    protected $microsecondTimestamps = \true;
     /**
      * @param string             $name       The logging channel
      * @param HandlerInterface[] $handlers   Optional stack of handlers, the first one in the array is called first, etc.
@@ -144,7 +118,6 @@ class Logger implements LoggerInterface
         $this->handlers = $handlers;
         $this->processors = $processors;
     }
-
     /**
      * @return string
      */
@@ -152,7 +125,6 @@ class Logger implements LoggerInterface
     {
         return $this->name;
     }
-
     /**
      * Return a new cloned instance with the name changed
      *
@@ -162,10 +134,8 @@ class Logger implements LoggerInterface
     {
         $new = clone $this;
         $new->name = $name;
-
         return $new;
     }
-
     /**
      * Pushes a handler on to the stack.
      *
@@ -174,11 +144,9 @@ class Logger implements LoggerInterface
      */
     public function pushHandler(HandlerInterface $handler)
     {
-        array_unshift($this->handlers, $handler);
-
+        \array_unshift($this->handlers, $handler);
         return $this;
     }
-
     /**
      * Pops a handler from the stack
      *
@@ -189,10 +157,8 @@ class Logger implements LoggerInterface
         if (!$this->handlers) {
             throw new \LogicException('You tried to pop from an empty handler stack.');
         }
-
-        return array_shift($this->handlers);
+        return \array_shift($this->handlers);
     }
-
     /**
      * Set handlers, replacing all existing ones.
      *
@@ -204,13 +170,11 @@ class Logger implements LoggerInterface
     public function setHandlers(array $handlers)
     {
         $this->handlers = array();
-        foreach (array_reverse($handlers) as $handler) {
+        foreach (\array_reverse($handlers) as $handler) {
             $this->pushHandler($handler);
         }
-
         return $this;
     }
-
     /**
      * @return HandlerInterface[]
      */
@@ -218,7 +182,6 @@ class Logger implements LoggerInterface
     {
         return $this->handlers;
     }
-
     /**
      * Adds a processor on to the stack.
      *
@@ -227,14 +190,12 @@ class Logger implements LoggerInterface
      */
     public function pushProcessor($callback)
     {
-        if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), '.var_export($callback, true).' given');
+        if (!\is_callable($callback)) {
+            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), ' . \var_export($callback, \true) . ' given');
         }
-        array_unshift($this->processors, $callback);
-
+        \array_unshift($this->processors, $callback);
         return $this;
     }
-
     /**
      * Removes the processor on top of the stack and returns it.
      *
@@ -245,10 +206,8 @@ class Logger implements LoggerInterface
         if (!$this->processors) {
             throw new \LogicException('You tried to pop from an empty processor stack.');
         }
-
-        return array_shift($this->processors);
+        return \array_shift($this->processors);
     }
-
     /**
      * @return callable[]
      */
@@ -256,7 +215,6 @@ class Logger implements LoggerInterface
     {
         return $this->processors;
     }
-
     /**
      * Control the use of microsecond resolution timestamps in the 'datetime'
      * member of new records.
@@ -274,7 +232,6 @@ class Logger implements LoggerInterface
     {
         $this->microsecondTimestamps = (bool) $micro;
     }
-
     /**
      * Adds a log record.
      *
@@ -288,62 +245,42 @@ class Logger implements LoggerInterface
         if (!$this->handlers) {
             $this->pushHandler(new StreamHandler('php://stderr', static::DEBUG));
         }
-
         $levelName = static::getLevelName($level);
-
         // check if any handler will handle this message so we can return early and save cycles
         $handlerKey = null;
-        reset($this->handlers);
-        while ($handler = current($this->handlers)) {
+        \reset($this->handlers);
+        while ($handler = \current($this->handlers)) {
             if ($handler->isHandling(array('level' => $level))) {
-                $handlerKey = key($this->handlers);
+                $handlerKey = \key($this->handlers);
                 break;
             }
-
-            next($this->handlers);
+            \next($this->handlers);
         }
-
         if (null === $handlerKey) {
-            return false;
+            return \false;
         }
-
         if (!static::$timezone) {
-            static::$timezone = new \DateTimeZone(date_default_timezone_get() ?: 'UTC');
+            static::$timezone = new \DateTimeZone(\date_default_timezone_get() ?: 'UTC');
         }
-
         // php7.1+ always has microseconds enabled, so we do not need this hack
-        if ($this->microsecondTimestamps && PHP_VERSION_ID < 70100) {
-            $ts = \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)), static::$timezone);
+        if ($this->microsecondTimestamps && \PHP_VERSION_ID < 70100) {
+            $ts = \DateTime::createFromFormat('U.u', \sprintf('%.6F', \microtime(\true)), static::$timezone);
         } else {
             $ts = new \DateTime(null, static::$timezone);
         }
         $ts->setTimezone(static::$timezone);
-
-        $record = array(
-            'message' => (string) $message,
-            'context' => $context,
-            'level' => $level,
-            'level_name' => $levelName,
-            'channel' => $this->name,
-            'datetime' => $ts,
-            'extra' => array(),
-        );
-
+        $record = array('message' => (string) $message, 'context' => $context, 'level' => $level, 'level_name' => $levelName, 'channel' => $this->name, 'datetime' => $ts, 'extra' => array());
         foreach ($this->processors as $processor) {
-            $record = call_user_func($processor, $record);
+            $record = \call_user_func($processor, $record);
         }
-
-        while ($handler = current($this->handlers)) {
-            if (true === $handler->handle($record)) {
+        while ($handler = \current($this->handlers)) {
+            if (\true === $handler->handle($record)) {
                 break;
             }
-
-            next($this->handlers);
+            \next($this->handlers);
         }
-
-        return true;
+        return \true;
     }
-
     /**
      * Adds a log record at the DEBUG level.
      *
@@ -355,7 +292,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::DEBUG, $message, $context);
     }
-
     /**
      * Adds a log record at the INFO level.
      *
@@ -367,7 +303,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::INFO, $message, $context);
     }
-
     /**
      * Adds a log record at the NOTICE level.
      *
@@ -379,7 +314,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::NOTICE, $message, $context);
     }
-
     /**
      * Adds a log record at the WARNING level.
      *
@@ -391,7 +325,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::WARNING, $message, $context);
     }
-
     /**
      * Adds a log record at the ERROR level.
      *
@@ -403,7 +336,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::ERROR, $message, $context);
     }
-
     /**
      * Adds a log record at the CRITICAL level.
      *
@@ -415,7 +347,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::CRITICAL, $message, $context);
     }
-
     /**
      * Adds a log record at the ALERT level.
      *
@@ -427,7 +358,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::ALERT, $message, $context);
     }
-
     /**
      * Adds a log record at the EMERGENCY level.
      *
@@ -439,7 +369,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::EMERGENCY, $message, $context);
     }
-
     /**
      * Gets all supported logging levels.
      *
@@ -447,9 +376,8 @@ class Logger implements LoggerInterface
      */
     public static function getLevels()
     {
-        return array_flip(static::$levels);
+        return \array_flip(static::$levels);
     }
-
     /**
      * Gets the name of the logging level.
      *
@@ -459,12 +387,10 @@ class Logger implements LoggerInterface
     public static function getLevelName($level)
     {
         if (!isset(static::$levels[$level])) {
-            throw new InvalidArgumentException('Level "'.$level.'" is not defined, use one of: '.implode(', ', array_keys(static::$levels)));
+            throw new InvalidArgumentException('Level "' . $level . '" is not defined, use one of: ' . \implode(', ', \array_keys(static::$levels)));
         }
-
         return static::$levels[$level];
     }
-
     /**
      * Converts PSR-3 levels to Monolog ones if necessary
      *
@@ -473,13 +399,11 @@ class Logger implements LoggerInterface
      */
     public static function toMonologLevel($level)
     {
-        if (is_string($level) && defined(__CLASS__.'::'.strtoupper($level))) {
-            return constant(__CLASS__.'::'.strtoupper($level));
+        if (\is_string($level) && \defined(__CLASS__ . '::' . \strtoupper($level))) {
+            return \constant(__CLASS__ . '::' . \strtoupper($level));
         }
-
         return $level;
     }
-
     /**
      * Checks whether the Logger has a handler that listens on the given level
      *
@@ -488,19 +412,14 @@ class Logger implements LoggerInterface
      */
     public function isHandling($level)
     {
-        $record = array(
-            'level' => $level,
-        );
-
+        $record = array('level' => $level);
         foreach ($this->handlers as $handler) {
             if ($handler->isHandling($record)) {
-                return true;
+                return \true;
             }
         }
-
-        return false;
+        return \false;
     }
-
     /**
      * Adds a log record at an arbitrary level.
      *
@@ -514,10 +433,8 @@ class Logger implements LoggerInterface
     public function log($level, $message, array $context = array())
     {
         $level = static::toMonologLevel($level);
-
         return $this->addRecord($level, $message, $context);
     }
-
     /**
      * Adds a log record at the DEBUG level.
      *
@@ -531,7 +448,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::DEBUG, $message, $context);
     }
-
     /**
      * Adds a log record at the INFO level.
      *
@@ -545,7 +461,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::INFO, $message, $context);
     }
-
     /**
      * Adds a log record at the NOTICE level.
      *
@@ -559,7 +474,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::NOTICE, $message, $context);
     }
-
     /**
      * Adds a log record at the WARNING level.
      *
@@ -573,7 +487,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::WARNING, $message, $context);
     }
-
     /**
      * Adds a log record at the WARNING level.
      *
@@ -587,7 +500,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::WARNING, $message, $context);
     }
-
     /**
      * Adds a log record at the ERROR level.
      *
@@ -601,7 +513,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::ERROR, $message, $context);
     }
-
     /**
      * Adds a log record at the ERROR level.
      *
@@ -615,7 +526,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::ERROR, $message, $context);
     }
-
     /**
      * Adds a log record at the CRITICAL level.
      *
@@ -629,7 +539,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::CRITICAL, $message, $context);
     }
-
     /**
      * Adds a log record at the CRITICAL level.
      *
@@ -643,7 +552,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::CRITICAL, $message, $context);
     }
-
     /**
      * Adds a log record at the ALERT level.
      *
@@ -657,7 +565,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::ALERT, $message, $context);
     }
-
     /**
      * Adds a log record at the EMERGENCY level.
      *
@@ -671,7 +578,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::EMERGENCY, $message, $context);
     }
-
     /**
      * Adds a log record at the EMERGENCY level.
      *
@@ -685,7 +591,6 @@ class Logger implements LoggerInterface
     {
         return $this->addRecord(static::EMERGENCY, $message, $context);
     }
-
     /**
      * Set the timezone to be used for the timestamp of log records.
      *

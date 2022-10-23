@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,43 +17,41 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_ListHistoryResponse extends Google_Collection
 {
-  protected $collection_key = 'history';
-  protected $historyType = 'Google_Service_Gmail_History';
-  protected $historyDataType = 'array';
-  public $historyId;
-  public $nextPageToken;
-
-  /**
-   * @param Google_Service_Gmail_History
-   */
-  public function setHistory($history)
-  {
-    $this->history = $history;
-  }
-  /**
-   * @return Google_Service_Gmail_History
-   */
-  public function getHistory()
-  {
-    return $this->history;
-  }
-  public function setHistoryId($historyId)
-  {
-    $this->historyId = $historyId;
-  }
-  public function getHistoryId()
-  {
-    return $this->historyId;
-  }
-  public function setNextPageToken($nextPageToken)
-  {
-    $this->nextPageToken = $nextPageToken;
-  }
-  public function getNextPageToken()
-  {
-    return $this->nextPageToken;
-  }
+    protected $collection_key = 'history';
+    protected $historyType = 'Google_Service_Gmail_History';
+    protected $historyDataType = 'array';
+    public $historyId;
+    public $nextPageToken;
+    /**
+     * @param Google_Service_Gmail_History
+     */
+    public function setHistory($history)
+    {
+        $this->history = $history;
+    }
+    /**
+     * @return Google_Service_Gmail_History
+     */
+    public function getHistory()
+    {
+        return $this->history;
+    }
+    public function setHistoryId($historyId)
+    {
+        $this->historyId = $historyId;
+    }
+    public function getHistoryId()
+    {
+        return $this->historyId;
+    }
+    public function setNextPageToken($nextPageToken)
+    {
+        $this->nextPageToken = $nextPageToken;
+    }
+    public function getNextPageToken()
+    {
+        return $this->nextPageToken;
+    }
 }

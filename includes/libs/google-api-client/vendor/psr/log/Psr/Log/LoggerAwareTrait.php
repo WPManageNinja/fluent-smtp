@@ -1,6 +1,6 @@
 <?php
 
-namespace Psr\Log;
+namespace FluentMailLib\Psr\Log;
 
 /**
  * Basic Implementation of LoggerAwareInterface.
@@ -13,7 +13,6 @@ trait LoggerAwareTrait
      * @var LoggerInterface
      */
     protected $logger;
-
     /**
      * Sets a logger.
      *

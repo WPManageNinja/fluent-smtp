@@ -1,6 +1,6 @@
 <?php
 
-namespace Psr\Cache;
+namespace FluentMailLib\Psr\Cache;
 
 /**
  * Exception interface for invalid cache arguments.

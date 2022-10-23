@@ -1,4 +1,7 @@
 <?php
+
+namespace FluentMailLib;
+
 /*
  * Copyright 2014 Google Inc.
  *
@@ -14,26 +17,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 class Google_Service_Gmail_WatchResponse extends Google_Model
 {
-  public $expiration;
-  public $historyId;
-
-  public function setExpiration($expiration)
-  {
-    $this->expiration = $expiration;
-  }
-  public function getExpiration()
-  {
-    return $this->expiration;
-  }
-  public function setHistoryId($historyId)
-  {
-    $this->historyId = $historyId;
-  }
-  public function getHistoryId()
-  {
-    return $this->historyId;
-  }
+    public $expiration;
+    public $historyId;
+    public function setExpiration($expiration)
+    {
+        $this->expiration = $expiration;
+    }
+    public function getExpiration()
+    {
+        return $this->expiration;
+    }
+    public function setHistoryId($historyId)
+    {
+        $this->historyId = $historyId;
+    }
+    public function getHistoryId()
+    {
+        return $this->historyId;
+    }
 }

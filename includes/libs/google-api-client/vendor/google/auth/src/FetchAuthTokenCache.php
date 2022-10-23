@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2010 Google Inc.
  *
@@ -14,11 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+namespace FluentMailLib\Google\Auth;
 
-namespace Google\Auth;
-
-use Psr\Cache\CacheItemPoolInterface;
-
+use FluentMailLib\Psr\Cache\CacheItemPoolInterface;
 /**
  * A class to implement caching for any object implementing
  * FetchAuthTokenInterface
@@ -26,35 +25,24 @@ use Psr\Cache\CacheItemPoolInterface;
 class FetchAuthTokenCache implements FetchAuthTokenInterface
 {
     use CacheTrait;
-
     /**
      * @var FetchAuthTokenInterface
      */
     private $fetcher;
-
     /**
      * @var array
      */
     private $cacheConfig;
-
     /**
      * @var CacheItemPoolInterface
      */
     private $cache;
-
-    public function __construct(
-        FetchAuthTokenInterface $fetcher,
-        array $cacheConfig = null,
-        CacheItemPoolInterface $cache
-    ) {
+    public function __construct(FetchAuthTokenInterface $fetcher, array $cacheConfig = null, CacheItemPoolInterface $cache)
+    {
         $this->fetcher = $fetcher;
         $this->cache = $cache;
-        $this->cacheConfig = array_merge([
-            'lifetime' => 1500,
-            'prefix' => '',
-        ], (array) $cacheConfig);
+        $this->cacheConfig = \array_merge(['lifetime' => 1500, 'prefix' => ''], (array) $cacheConfig);
     }
-
     /**
      * Implements FetchAuthTokenInterface#fetchAuthToken.
      *
@@ -80,16 +68,12 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface
         if (!empty($cached)) {
             return ['access_token' => $cached];
         }
-
         $auth_token = $this->fetcher->fetchAuthToken($httpHandler);
-
         if (isset($auth_token['access_token'])) {
             $this->setCachedValue($cacheKey, $auth_token['access_token']);
         }
-
         return $auth_token;
     }
-
     /**
      * @return string
      */
@@ -97,7 +81,6 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface
     {
         return $this->getFullCacheKey($this->fetcher->getCacheKey());
     }
-
     /**
      * @return array|null
      */
