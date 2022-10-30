@@ -40,22 +40,12 @@ class ScopedAccessTokenMiddleware
     const DEFAULT_CACHE_LIFETIME = 1500;
 
     /**
-     * @var CacheItemPoolInterface
-     */
-    private $cache;
-
-    /**
-     * @var array configuration
-     */
-    private $cacheConfig;
-
-    /**
      * @var callable
      */
     private $tokenFunc;
 
     /**
-     * @var array|string
+     * @var array<string>|string
      */
     private $scopes;
 
@@ -63,8 +53,8 @@ class ScopedAccessTokenMiddleware
      * Creates a new ScopedAccessTokenMiddleware.
      *
      * @param callable $tokenFunc a token generator function
-     * @param array|string $scopes the token authentication scopes
-     * @param array $cacheConfig configuration for the cache when it's present
+     * @param array<string>|string $scopes the token authentication scopes
+     * @param array<mixed> $cacheConfig configuration for the cache when it's present
      * @param CacheItemPoolInterface $cache an implementation of CacheItemPoolInterface
      */
     public function __construct(
@@ -76,7 +66,8 @@ class ScopedAccessTokenMiddleware
         $this->tokenFunc = $tokenFunc;
         if (!(is_string($scopes) || is_array($scopes))) {
             throw new \InvalidArgumentException(
-                'wants scope should be string or array');
+                'wants scope should be string or array'
+            );
         }
         $this->scopes = $scopes;
 
@@ -119,7 +110,6 @@ class ScopedAccessTokenMiddleware
      *   $res = $client->get('myproject/taskqueues/myqueue');
      *
      * @param callable $handler
-     *
      * @return \Closure
      */
     public function __invoke(callable $handler)

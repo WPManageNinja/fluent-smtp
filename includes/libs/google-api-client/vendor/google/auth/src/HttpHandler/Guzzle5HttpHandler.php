@@ -25,6 +25,9 @@ use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @deprecated
+ */
 class Guzzle5HttpHandler
 {
     /**
@@ -45,7 +48,6 @@ class Guzzle5HttpHandler
      *
      * @param RequestInterface $request
      * @param array $options
-     *
      * @return ResponseInterface
      */
     public function __invoke(RequestInterface $request, array $options = [])
@@ -62,7 +64,6 @@ class Guzzle5HttpHandler
      *
      * @param RequestInterface $request
      * @param array $options
-     *
      * @return Promise
      */
     public function async(RequestInterface $request, array $options = [])
