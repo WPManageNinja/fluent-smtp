@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Firebase\\JWT\\": "src"
+            "FluentMail\\Firebase\\JWT\\": "src"
         }
     },
     "require-dev": {

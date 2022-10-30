@@ -53,10 +53,10 @@
         "ext-openssl": "Required to send log messages using SSL"
     },
     "autoload": {
-        "psr-4": {"Monolog\\": "src/Monolog"}
+        "psr-4": {"FluentMail\\Monolog\\": "src/Monolog"}
     },
     "autoload-dev": {
-        "psr-4": {"Monolog\\": "tests/Monolog"}
+        "psr-4": {"FluentMail\\Monolog\\": "tests/Monolog"}
     },
     "provide": {
         "psr/log-implementation": "1.0.0 || 2.0.0 || 3.0.0"

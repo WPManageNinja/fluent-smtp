@@ -30,12 +30,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Google\\Auth\\": "src"
+      "FluentMail\\Google\\Auth\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Google\\Auth\\Tests\\": "tests"
+      "FluentMail\\Google\\Auth\\Tests\\": "tests"
     }
   }
 }

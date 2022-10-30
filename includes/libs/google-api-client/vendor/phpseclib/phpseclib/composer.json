@@ -70,12 +70,12 @@
             "phpseclib/bootstrap.php"
         ],
         "psr-4": {
-            "phpseclib3\\": "phpseclib/"
+            "FluentMail\\phpseclib3\\": "phpseclib/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "phpseclib3\\Tests\\": "tests/"
+            "FluentMail\\phpseclib3\\Tests\\": "tests/"
         }
     },
     "config": {

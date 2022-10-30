@@ -45,12 +45,12 @@
   },
   "autoload": {
     "psr-4": {
-      "ParagonIE\\ConstantTime\\": "src/"
+      "FluentMail\\ParagonIE\\ConstantTime\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "ParagonIE\\ConstantTime\\Tests\\": "tests/"
+      "FluentMail\\ParagonIE\\ConstantTime\\Tests\\": "tests/"
     }
   }
 }

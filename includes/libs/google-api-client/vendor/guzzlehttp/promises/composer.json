@@ -33,13 +33,13 @@
     },
     "autoload": {
         "psr-4": {
-            "GuzzleHttp\\Promise\\": "src/"
+            "FluentMail\\GuzzleHttp\\Promise\\": "src/"
         },
         "files": ["src/functions_include.php"]
     },
     "autoload-dev": {
         "psr-4": {
-            "GuzzleHttp\\Promise\\Tests\\": "tests/"
+            "FluentMail\\GuzzleHttp\\Promise\\Tests\\": "tests/"
         }
     },
     "scripts": {

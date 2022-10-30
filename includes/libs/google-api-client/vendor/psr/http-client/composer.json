@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Psr\\Http\\Client\\": "src/"
+            "FluentMail\\Psr\\Http\\Client\\": "src/"
         }
     },
     "extra": {

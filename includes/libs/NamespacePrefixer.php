@@ -83,6 +83,7 @@ class NamespacePrefixer
 		'Firebase',
 		'Psr',
 		'phpseclib',
+		'ParagonIE',
 		'Monolog',
 		'JWT'
 	])->in(__DIR__ . '/google-api-client/vendor')

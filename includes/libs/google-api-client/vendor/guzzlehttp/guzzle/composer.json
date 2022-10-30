@@ -91,7 +91,7 @@
     },
     "autoload": {
         "psr-4": {
-            "GuzzleHttp\\": "src/"
+            "FluentMail\\GuzzleHttp\\": "src/"
         },
         "files": [
             "src/functions_include.php"
@@ -99,7 +99,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "GuzzleHttp\\Tests\\": "tests/"
+            "FluentMail\\GuzzleHttp\\Tests\\": "tests/"
         }
     }
 }

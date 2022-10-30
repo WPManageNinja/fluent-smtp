@@ -13,9 +13,9 @@
 
 namespace FluentMail\phpseclib3\Common\Functions;
 
-use ParagonIE\ConstantTime\Base64;
-use ParagonIE\ConstantTime\Base64UrlSafe;
-use ParagonIE\ConstantTime\Hex;
+use FluentMail\ParagonIE\ConstantTime\Base64;
+use FluentMail\ParagonIE\ConstantTime\Base64UrlSafe;
+use FluentMail\ParagonIE\ConstantTime\Hex;
 use FluentMail\phpseclib3\Math\BigInteger;
 use FluentMail\phpseclib3\Math\Common\FiniteField;
 
