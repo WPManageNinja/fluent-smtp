@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ToolResults\Resource;
+namespace FluentMail\Google\Service\ToolResults\Resource;
 
-use Google\Service\ToolResults\PerfMetricsSummary;
+use FluentMail\Google\Service\ToolResults\PerfMetricsSummary;
 
 /**
  * The "perfMetricsSummary" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\ServiceManagement\Resource;
+namespace FluentMail\Google\Service\ServiceManagement\Resource;
 
-use Google\Service\ServiceManagement\ListServiceRolloutsResponse;
-use Google\Service\ServiceManagement\Operation;
-use Google\Service\ServiceManagement\Rollout;
+use FluentMail\Google\Service\ServiceManagement\ListServiceRolloutsResponse;
+use FluentMail\Google\Service\ServiceManagement\Operation;
+use FluentMail\Google\Service\ServiceManagement\Rollout;
 
 /**
  * The "rollouts" collection of methods.

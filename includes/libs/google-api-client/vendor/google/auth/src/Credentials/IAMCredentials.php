@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace Google\Auth\Credentials;
+namespace FluentMail\Google\Auth\Credentials;
 
 /**
  * Authenticates requests using IAM credentials.

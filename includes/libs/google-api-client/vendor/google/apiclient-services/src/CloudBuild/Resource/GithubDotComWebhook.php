@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudBuild\Resource;
+namespace FluentMail\Google\Service\CloudBuild\Resource;
 
-use Google\Service\CloudBuild\CloudbuildEmpty;
-use Google\Service\CloudBuild\HttpBody;
+use FluentMail\Google\Service\CloudBuild\CloudbuildEmpty;
+use FluentMail\Google\Service\CloudBuild\HttpBody;
 
 /**
  * The "githubDotComWebhook" collection of methods.

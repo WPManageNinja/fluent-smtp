@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Contactcenterinsights\Resource;
+namespace FluentMail\Google\Service\Contactcenterinsights\Resource;
 
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ListPhraseMatchersResponse;
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1PhraseMatcher;
-use Google\Service\Contactcenterinsights\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ListPhraseMatchersResponse;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1PhraseMatcher;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleProtobufEmpty;
 
 /**
  * The "phraseMatchers" collection of methods.

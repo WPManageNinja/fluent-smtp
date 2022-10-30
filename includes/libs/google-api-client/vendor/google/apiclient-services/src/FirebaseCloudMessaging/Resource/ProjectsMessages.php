@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseCloudMessaging\Resource;
+namespace FluentMail\Google\Service\FirebaseCloudMessaging\Resource;
 
-use Google\Service\FirebaseCloudMessaging\Message;
-use Google\Service\FirebaseCloudMessaging\SendMessageRequest;
+use FluentMail\Google\Service\FirebaseCloudMessaging\Message;
+use FluentMail\Google\Service\FirebaseCloudMessaging\SendMessageRequest;
 
 /**
  * The "messages" collection of methods.

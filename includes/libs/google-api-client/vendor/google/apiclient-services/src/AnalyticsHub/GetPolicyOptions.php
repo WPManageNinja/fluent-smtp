@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsHub;
+namespace FluentMail\Google\Service\AnalyticsHub;
 
 class GetPolicyOptions extends \Google\Model
 {

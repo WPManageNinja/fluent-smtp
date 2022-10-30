@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Connectors\Resource;
+namespace FluentMail\Google\Service\Connectors\Resource;
 
-use Google\Service\Connectors\ConnectorsEmpty;
-use Google\Service\Connectors\Entity;
-use Google\Service\Connectors\ListEntitiesResponse;
-use Google\Service\Connectors\UpdateEntitiesWithConditionsResponse;
+use FluentMail\Google\Service\Connectors\ConnectorsEmpty;
+use FluentMail\Google\Service\Connectors\Entity;
+use FluentMail\Google\Service\Connectors\ListEntitiesResponse;
+use FluentMail\Google\Service\Connectors\UpdateEntitiesWithConditionsResponse;
 
 /**
  * The "entities" collection of methods.

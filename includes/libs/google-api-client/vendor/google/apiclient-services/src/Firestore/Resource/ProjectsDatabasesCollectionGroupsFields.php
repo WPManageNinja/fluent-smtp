@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Firestore\Resource;
+namespace FluentMail\Google\Service\Firestore\Resource;
 
-use Google\Service\Firestore\GoogleFirestoreAdminV1Field;
-use Google\Service\Firestore\GoogleFirestoreAdminV1ListFieldsResponse;
-use Google\Service\Firestore\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Firestore\GoogleFirestoreAdminV1Field;
+use FluentMail\Google\Service\Firestore\GoogleFirestoreAdminV1ListFieldsResponse;
+use FluentMail\Google\Service\Firestore\GoogleLongrunningOperation;
 
 /**
  * The "fields" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Appengine\Resource;
+namespace FluentMail\Google\Service\Appengine\Resource;
 
-use Google\Service\Appengine\ListVersionsResponse;
-use Google\Service\Appengine\Operation;
-use Google\Service\Appengine\Version;
+use FluentMail\Google\Service\Appengine\ListVersionsResponse;
+use FluentMail\Google\Service\Appengine\Operation;
+use FluentMail\Google\Service\Appengine\Version;
 
 /**
  * The "versions" collection of methods.

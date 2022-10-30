@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PlayIntegrity;
+namespace FluentMail\Google\Service\PlayIntegrity;
 
 class DeviceIntegrity extends \Google\Collection
 {

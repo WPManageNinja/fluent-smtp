@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Calendar\Resource;
+namespace FluentMail\Google\Service\Calendar\Resource;
 
-use Google\Service\Calendar\FreeBusyRequest;
-use Google\Service\Calendar\FreeBusyResponse;
+use FluentMail\Google\Service\Calendar\FreeBusyRequest;
+use FluentMail\Google\Service\Calendar\FreeBusyResponse;
 
 /**
  * The "freebusy" collection of methods.

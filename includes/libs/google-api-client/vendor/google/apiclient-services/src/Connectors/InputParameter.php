@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Connectors;
+namespace FluentMail\Google\Service\Connectors;
 
 class InputParameter extends \Google\Model
 {

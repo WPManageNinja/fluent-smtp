@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring;
+namespace FluentMail\Google\Service\Monitoring;
 
 class SendNotificationChannelVerificationCodeRequest extends \Google\Model
 {

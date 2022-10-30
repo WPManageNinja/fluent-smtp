@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\RecommendationsAI;
+namespace FluentMail\Google\Service\RecommendationsAI;
 
 class GoogleCloudRecommendationengineV1beta1ProductCatalogItem extends \Google\Collection
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryConnectionService;
+namespace FluentMail\Google\Service\BigQueryConnectionService;
 
 class SetIamPolicyRequest extends \Google\Model
 {

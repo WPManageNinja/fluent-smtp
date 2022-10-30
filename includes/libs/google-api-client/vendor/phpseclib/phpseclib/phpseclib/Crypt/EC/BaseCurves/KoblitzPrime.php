@@ -26,10 +26,10 @@
  * @link      http://pear.php.net/package/Math_BigInteger
  */
 
-namespace phpseclib3\Crypt\EC\BaseCurves;
+namespace FluentMail\phpseclib3\Crypt\EC\BaseCurves;
 
-use phpseclib3\Math\BigInteger;
-use phpseclib3\Math\PrimeField;
+use FluentMail\phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Math\PrimeField;
 
 /**
  * Curves over y^2 = x^3 + b

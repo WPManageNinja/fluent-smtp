@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution;
+namespace FluentMail\Google\Service\Baremetalsolution;
 
 class AllowedClient extends \Google\Model
 {

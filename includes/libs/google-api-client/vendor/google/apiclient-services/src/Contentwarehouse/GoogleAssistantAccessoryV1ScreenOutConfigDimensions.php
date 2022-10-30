@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Contentwarehouse;
+namespace FluentMail\Google\Service\Contentwarehouse;
 
 class GoogleAssistantAccessoryV1ScreenOutConfigDimensions extends \Google\Model
 {

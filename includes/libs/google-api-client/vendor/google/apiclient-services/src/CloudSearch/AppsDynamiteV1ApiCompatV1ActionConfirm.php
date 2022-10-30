@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch;
+namespace FluentMail\Google\Service\CloudSearch;
 
 class AppsDynamiteV1ApiCompatV1ActionConfirm extends \Google\Model
 {

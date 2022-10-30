@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudAsset\Resource;
+namespace FluentMail\Google\Service\CloudAsset\Resource;
 
-use Google\Service\CloudAsset\Operation;
+use FluentMail\Google\Service\CloudAsset\Operation;
 
 /**
  * The "operations" collection of methods.

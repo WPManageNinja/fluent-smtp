@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Ideahub\Resource;
+namespace FluentMail\Google\Service\Ideahub\Resource;
 
-use Google\Service\Ideahub\GoogleSearchIdeahubV1betaIdeaActivity;
+use FluentMail\Google\Service\Ideahub\GoogleSearchIdeahubV1betaIdeaActivity;
 
 /**
  * The "ideaActivities" collection of methods.

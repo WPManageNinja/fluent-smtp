@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
-use Google\Service\Monitoring\Group;
-use Google\Service\Monitoring\ListGroupsResponse;
-use Google\Service\Monitoring\MonitoringEmpty;
+use FluentMail\Google\Service\Monitoring\Group;
+use FluentMail\Google\Service\Monitoring\ListGroupsResponse;
+use FluentMail\Google\Service\Monitoring\MonitoringEmpty;
 
 /**
  * The "groups" collection of methods.

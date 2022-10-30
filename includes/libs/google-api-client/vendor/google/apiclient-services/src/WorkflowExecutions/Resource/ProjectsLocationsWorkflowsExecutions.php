@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\WorkflowExecutions\Resource;
+namespace FluentMail\Google\Service\WorkflowExecutions\Resource;
 
-use Google\Service\WorkflowExecutions\CancelExecutionRequest;
-use Google\Service\WorkflowExecutions\Execution;
-use Google\Service\WorkflowExecutions\ListExecutionsResponse;
+use FluentMail\Google\Service\WorkflowExecutions\CancelExecutionRequest;
+use FluentMail\Google\Service\WorkflowExecutions\Execution;
+use FluentMail\Google\Service\WorkflowExecutions\ListExecutionsResponse;
 
 /**
  * The "executions" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\Customer as CustomerModel;
+use FluentMail\Google\Service\Directory\Customer as CustomerModel;
 
 /**
  * The "customers" collection of methods.

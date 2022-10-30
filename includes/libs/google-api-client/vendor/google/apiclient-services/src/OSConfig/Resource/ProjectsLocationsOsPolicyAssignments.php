@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\OSConfig\Resource;
+namespace FluentMail\Google\Service\OSConfig\Resource;
 
-use Google\Service\OSConfig\ListOSPolicyAssignmentRevisionsResponse;
-use Google\Service\OSConfig\ListOSPolicyAssignmentsResponse;
-use Google\Service\OSConfig\OSPolicyAssignment;
-use Google\Service\OSConfig\Operation;
+use FluentMail\Google\Service\OSConfig\ListOSPolicyAssignmentRevisionsResponse;
+use FluentMail\Google\Service\OSConfig\ListOSPolicyAssignmentsResponse;
+use FluentMail\Google\Service\OSConfig\OSPolicyAssignment;
+use FluentMail\Google\Service\OSConfig\Operation;
 
 /**
  * The "osPolicyAssignments" collection of methods.

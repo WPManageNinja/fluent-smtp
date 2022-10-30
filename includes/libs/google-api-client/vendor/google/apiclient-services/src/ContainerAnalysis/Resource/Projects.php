@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ContainerAnalysis\Resource;
+namespace FluentMail\Google\Service\ContainerAnalysis\Resource;
 
 /**
  * The "projects" collection of methods.

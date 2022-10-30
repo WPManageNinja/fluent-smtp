@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CivicInfo\Resource;
+namespace FluentMail\Google\Service\CivicInfo\Resource;
 
-use Google\Service\CivicInfo\RepresentativeInfoData;
-use Google\Service\CivicInfo\RepresentativeInfoResponse;
+use FluentMail\Google\Service\CivicInfo\RepresentativeInfoData;
+use FluentMail\Google\Service\CivicInfo\RepresentativeInfoResponse;
 
 /**
  * The "representatives" collection of methods.

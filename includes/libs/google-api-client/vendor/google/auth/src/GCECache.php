@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-namespace Google\Auth;
+namespace FluentMail\Google\Auth;
 
-use Google\Auth\Credentials\GCECredentials;
-use Psr\Cache\CacheItemPoolInterface;
+use FluentMail\Google\Auth\Credentials\GCECredentials;
+use FluentMail\Psr\Cache\CacheItemPoolInterface;
 
 /**
  * A class to implement caching for calls to GCECredentials::onGce. This class

@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
-use Google\Service\Monitoring\GetNotificationChannelVerificationCodeRequest;
-use Google\Service\Monitoring\GetNotificationChannelVerificationCodeResponse;
-use Google\Service\Monitoring\ListNotificationChannelsResponse;
-use Google\Service\Monitoring\MonitoringEmpty;
-use Google\Service\Monitoring\NotificationChannel;
-use Google\Service\Monitoring\SendNotificationChannelVerificationCodeRequest;
-use Google\Service\Monitoring\VerifyNotificationChannelRequest;
+use FluentMail\Google\Service\Monitoring\GetNotificationChannelVerificationCodeRequest;
+use FluentMail\Google\Service\Monitoring\GetNotificationChannelVerificationCodeResponse;
+use FluentMail\Google\Service\Monitoring\ListNotificationChannelsResponse;
+use FluentMail\Google\Service\Monitoring\MonitoringEmpty;
+use FluentMail\Google\Service\Monitoring\NotificationChannel;
+use FluentMail\Google\Service\Monitoring\SendNotificationChannelVerificationCodeRequest;
+use FluentMail\Google\Service\Monitoring\VerifyNotificationChannelRequest;
 
 /**
  * The "notificationChannels" collection of methods.

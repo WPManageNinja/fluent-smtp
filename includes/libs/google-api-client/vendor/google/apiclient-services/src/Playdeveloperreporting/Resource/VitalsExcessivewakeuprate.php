@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Playdeveloperreporting\Resource;
+namespace FluentMail\Google\Service\Playdeveloperreporting\Resource;
 
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1ExcessiveWakeupRateMetricSet;
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryExcessiveWakeupRateMetricSetRequest;
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryExcessiveWakeupRateMetricSetResponse;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1ExcessiveWakeupRateMetricSet;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryExcessiveWakeupRateMetricSetRequest;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryExcessiveWakeupRateMetricSetResponse;
 
 /**
  * The "excessivewakeuprate" collection of methods.

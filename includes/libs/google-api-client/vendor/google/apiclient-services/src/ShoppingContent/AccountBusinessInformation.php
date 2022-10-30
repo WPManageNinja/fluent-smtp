@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent;
+namespace FluentMail\Google\Service\ShoppingContent;
 
 class AccountBusinessInformation extends \Google\Model
 {

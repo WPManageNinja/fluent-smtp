@@ -1,12 +1,12 @@
 <?php
 
-namespace GuzzleHttp;
+namespace FluentMail\GuzzleHttp;
 
-use GuzzleHttp\Promise as P;
-use GuzzleHttp\Promise\EachPromise;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Promise\PromisorInterface;
-use Psr\Http\Message\RequestInterface;
+use FluentMail\GuzzleHttp\Promise as P;
+use FluentMail\GuzzleHttp\Promise\EachPromise;
+use FluentMail\GuzzleHttp\Promise\PromiseInterface;
+use FluentMail\GuzzleHttp\Promise\PromisorInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
 
 /**
  * Sends an iterator of requests concurrently using a capped pool size.

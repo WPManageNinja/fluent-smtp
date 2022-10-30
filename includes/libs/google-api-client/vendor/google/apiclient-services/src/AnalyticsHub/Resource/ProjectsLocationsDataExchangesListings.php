@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsHub\Resource;
+namespace FluentMail\Google\Service\AnalyticsHub\Resource;
 
-use Google\Service\AnalyticsHub\AnalyticshubEmpty;
-use Google\Service\AnalyticsHub\GetIamPolicyRequest;
-use Google\Service\AnalyticsHub\ListListingsResponse;
-use Google\Service\AnalyticsHub\Listing;
-use Google\Service\AnalyticsHub\Policy;
-use Google\Service\AnalyticsHub\SetIamPolicyRequest;
-use Google\Service\AnalyticsHub\SubscribeListingRequest;
-use Google\Service\AnalyticsHub\SubscribeListingResponse;
-use Google\Service\AnalyticsHub\TestIamPermissionsRequest;
-use Google\Service\AnalyticsHub\TestIamPermissionsResponse;
+use FluentMail\Google\Service\AnalyticsHub\AnalyticshubEmpty;
+use FluentMail\Google\Service\AnalyticsHub\GetIamPolicyRequest;
+use FluentMail\Google\Service\AnalyticsHub\ListListingsResponse;
+use FluentMail\Google\Service\AnalyticsHub\Listing;
+use FluentMail\Google\Service\AnalyticsHub\Policy;
+use FluentMail\Google\Service\AnalyticsHub\SetIamPolicyRequest;
+use FluentMail\Google\Service\AnalyticsHub\SubscribeListingRequest;
+use FluentMail\Google\Service\AnalyticsHub\SubscribeListingResponse;
+use FluentMail\Google\Service\AnalyticsHub\TestIamPermissionsRequest;
+use FluentMail\Google\Service\AnalyticsHub\TestIamPermissionsResponse;
 
 /**
  * The "listings" collection of methods.

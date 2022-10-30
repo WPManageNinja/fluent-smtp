@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\ListProposalsResponse;
-use Google\Service\AdExchangeBuyerII\PauseProposalDealsRequest;
-use Google\Service\AdExchangeBuyerII\Proposal;
-use Google\Service\AdExchangeBuyerII\ResumeProposalDealsRequest;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListProposalsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\PauseProposalDealsRequest;
+use FluentMail\Google\Service\AdExchangeBuyerII\Proposal;
+use FluentMail\Google\Service\AdExchangeBuyerII\ResumeProposalDealsRequest;
 
 /**
  * The "finalizedProposals" collection of methods.

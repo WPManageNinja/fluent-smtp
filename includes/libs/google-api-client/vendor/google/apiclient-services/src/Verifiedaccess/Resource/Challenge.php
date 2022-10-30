@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Verifiedaccess\Resource;
+namespace FluentMail\Google\Service\Verifiedaccess\Resource;
 
-use Google\Service\Verifiedaccess\Challenge as ChallengeModel;
-use Google\Service\Verifiedaccess\VerifiedaccessEmpty;
-use Google\Service\Verifiedaccess\VerifyChallengeResponseRequest;
-use Google\Service\Verifiedaccess\VerifyChallengeResponseResult;
+use FluentMail\Google\Service\Verifiedaccess\Challenge as ChallengeModel;
+use FluentMail\Google\Service\Verifiedaccess\VerifiedaccessEmpty;
+use FluentMail\Google\Service\Verifiedaccess\VerifyChallengeResponseRequest;
+use FluentMail\Google\Service\Verifiedaccess\VerifyChallengeResponseResult;
 
 /**
  * The "challenge" collection of methods.

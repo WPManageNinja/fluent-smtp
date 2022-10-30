@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Container\Resource;
+namespace FluentMail\Google\Service\Container\Resource;
 
-use Google\Service\Container\GetOpenIDConfigResponse;
+use FluentMail\Google\Service\Container\GetOpenIDConfigResponse;
 
 /**
  * The "well-known" collection of methods.

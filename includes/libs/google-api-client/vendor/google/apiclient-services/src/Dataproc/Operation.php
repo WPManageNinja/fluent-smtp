@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dataproc;
+namespace FluentMail\Google\Service\Dataproc;
 
 class Operation extends \Google\Model
 {

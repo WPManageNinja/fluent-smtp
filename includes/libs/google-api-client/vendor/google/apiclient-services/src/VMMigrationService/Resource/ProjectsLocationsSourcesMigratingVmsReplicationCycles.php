@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\VMMigrationService\Resource;
+namespace FluentMail\Google\Service\VMMigrationService\Resource;
 
-use Google\Service\VMMigrationService\ListReplicationCyclesResponse;
-use Google\Service\VMMigrationService\ReplicationCycle;
+use FluentMail\Google\Service\VMMigrationService\ListReplicationCyclesResponse;
+use FluentMail\Google\Service\VMMigrationService\ReplicationCycle;
 
 /**
  * The "replicationCycles" collection of methods.

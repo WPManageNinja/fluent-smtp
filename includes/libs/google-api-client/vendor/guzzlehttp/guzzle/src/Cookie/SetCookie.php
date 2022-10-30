@@ -1,6 +1,6 @@
 <?php
 
-namespace GuzzleHttp\Cookie;
+namespace FluentMail\GuzzleHttp\Cookie;
 
 /**
  * Set-Cookie object

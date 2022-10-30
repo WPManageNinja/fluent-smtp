@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Appengine;
+namespace FluentMail\Google\Service\Appengine;
 
 class Volume extends \Google\Model
 {

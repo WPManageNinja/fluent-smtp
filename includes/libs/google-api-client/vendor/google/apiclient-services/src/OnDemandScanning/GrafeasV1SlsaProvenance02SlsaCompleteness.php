@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\OnDemandScanning;
+namespace FluentMail\Google\Service\OnDemandScanning;
 
 class GrafeasV1SlsaProvenance02SlsaCompleteness extends \Google\Model
 {

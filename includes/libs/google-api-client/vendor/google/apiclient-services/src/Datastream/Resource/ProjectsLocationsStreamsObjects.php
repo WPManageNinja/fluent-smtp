@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Datastream\Resource;
+namespace FluentMail\Google\Service\Datastream\Resource;
 
-use Google\Service\Datastream\ListStreamObjectsResponse;
-use Google\Service\Datastream\LookupStreamObjectRequest;
-use Google\Service\Datastream\StartBackfillJobRequest;
-use Google\Service\Datastream\StartBackfillJobResponse;
-use Google\Service\Datastream\StopBackfillJobRequest;
-use Google\Service\Datastream\StopBackfillJobResponse;
-use Google\Service\Datastream\StreamObject;
+use FluentMail\Google\Service\Datastream\ListStreamObjectsResponse;
+use FluentMail\Google\Service\Datastream\LookupStreamObjectRequest;
+use FluentMail\Google\Service\Datastream\StartBackfillJobRequest;
+use FluentMail\Google\Service\Datastream\StartBackfillJobResponse;
+use FluentMail\Google\Service\Datastream\StopBackfillJobRequest;
+use FluentMail\Google\Service\Datastream\StopBackfillJobResponse;
+use FluentMail\Google\Service\Datastream\StreamObject;
 
 /**
  * The "objects" collection of methods.

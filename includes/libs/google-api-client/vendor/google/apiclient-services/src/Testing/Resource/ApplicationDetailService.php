@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Testing\Resource;
+namespace FluentMail\Google\Service\Testing\Resource;
 
-use Google\Service\Testing\FileReference;
-use Google\Service\Testing\GetApkDetailsResponse;
+use FluentMail\Google\Service\Testing\FileReference;
+use FluentMail\Google\Service\Testing\GetApkDetailsResponse;
 
 /**
  * The "applicationDetailService" collection of methods.

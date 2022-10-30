@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
 /**
  * The "projects" collection of methods.

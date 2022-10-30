@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
 /**
  * The "youtube" collection of methods.

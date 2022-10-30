@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseRules;
+namespace FluentMail\Google\Service\FirebaseRules;
 
 class Release extends \Google\Model
 {

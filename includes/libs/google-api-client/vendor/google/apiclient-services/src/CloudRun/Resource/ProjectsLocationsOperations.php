@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudRun\Resource;
+namespace FluentMail\Google\Service\CloudRun\Resource;
 
-use Google\Service\CloudRun\GoogleLongrunningListOperationsResponse;
-use Google\Service\CloudRun\GoogleLongrunningOperation;
-use Google\Service\CloudRun\GoogleProtobufEmpty;
+use FluentMail\Google\Service\CloudRun\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\CloudRun\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudRun\GoogleProtobufEmpty;
 
 /**
  * The "operations" collection of methods.

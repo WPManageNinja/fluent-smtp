@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\ListBidResponsesWithoutBidsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListBidResponsesWithoutBidsResponse;
 
 /**
  * The "bidResponsesWithoutBids" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1Export;
-use Google\Service\Apigee\GoogleCloudApigeeV1ExportRequest;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListExportsResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1Export;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ExportRequest;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListExportsResponse;
 
 /**
  * The "exports" collection of methods.

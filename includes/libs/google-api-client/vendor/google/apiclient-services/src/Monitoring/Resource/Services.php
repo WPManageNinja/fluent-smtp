@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
-use Google\Service\Monitoring\ListServicesResponse;
-use Google\Service\Monitoring\MonitoringEmpty;
-use Google\Service\Monitoring\Service;
+use FluentMail\Google\Service\Monitoring\ListServicesResponse;
+use FluentMail\Google\Service\Monitoring\MonitoringEmpty;
+use FluentMail\Google\Service\Monitoring\Service;
 
 /**
  * The "services" collection of methods.

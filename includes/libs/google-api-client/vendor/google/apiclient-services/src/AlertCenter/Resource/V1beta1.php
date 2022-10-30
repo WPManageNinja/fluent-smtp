@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AlertCenter\Resource;
+namespace FluentMail\Google\Service\AlertCenter\Resource;
 
-use Google\Service\AlertCenter\Settings;
+use FluentMail\Google\Service\AlertCenter\Settings;
 
 /**
  * The "v1beta1" collection of methods.

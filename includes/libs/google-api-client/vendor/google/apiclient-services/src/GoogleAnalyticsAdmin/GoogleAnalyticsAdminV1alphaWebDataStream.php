@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\GoogleAnalyticsAdmin;
+namespace FluentMail\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1alphaWebDataStream extends \Google\Model
 {

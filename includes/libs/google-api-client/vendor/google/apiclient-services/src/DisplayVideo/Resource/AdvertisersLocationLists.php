@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\ListLocationListsResponse;
-use Google\Service\DisplayVideo\LocationList;
+use FluentMail\Google\Service\DisplayVideo\ListLocationListsResponse;
+use FluentMail\Google\Service\DisplayVideo\LocationList;
 
 /**
  * The "locationLists" collection of methods.

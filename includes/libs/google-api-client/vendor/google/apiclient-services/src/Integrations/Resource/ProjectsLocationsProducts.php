@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Integrations\Resource;
+namespace FluentMail\Google\Service\Integrations\Resource;
 
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCreateBundleRequest;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCreateBundleResponse;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListTaskEntitiesResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCreateBundleRequest;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCreateBundleResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListTaskEntitiesResponse;
 
 /**
  * The "products" collection of methods.

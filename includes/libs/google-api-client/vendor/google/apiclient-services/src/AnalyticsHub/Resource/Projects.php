@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsHub\Resource;
+namespace FluentMail\Google\Service\AnalyticsHub\Resource;
 
 /**
  * The "projects" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudBuild\Resource;
+namespace FluentMail\Google\Service\CloudBuild\Resource;
 
-use Google\Service\CloudBuild\ListGitLabRepositoriesResponse;
+use FluentMail\Google\Service\CloudBuild\ListGitLabRepositoriesResponse;
 
 /**
  * The "repos" collection of methods.

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\SslCertificate;
-use Google\Service\Compute\SslCertificateAggregatedList;
-use Google\Service\Compute\SslCertificateList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\SslCertificate;
+use FluentMail\Google\Service\Compute\SslCertificateAggregatedList;
+use FluentMail\Google\Service\Compute\SslCertificateList;
 
 /**
  * The "sslCertificates" collection of methods.

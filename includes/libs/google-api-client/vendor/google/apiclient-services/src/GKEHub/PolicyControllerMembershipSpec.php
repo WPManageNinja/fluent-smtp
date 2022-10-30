@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\GKEHub;
+namespace FluentMail\Google\Service\GKEHub;
 
 class PolicyControllerMembershipSpec extends \Google\Model
 {

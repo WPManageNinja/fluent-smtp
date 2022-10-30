@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\GoogleAnalyticsAdmin\Resource;
+namespace FluentMail\Google\Service\GoogleAnalyticsAdmin\Resource;
 
-use Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaArchiveCustomDimensionRequest;
-use Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaCustomDimension;
-use Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListCustomDimensionsResponse;
-use Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaArchiveCustomDimensionRequest;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaCustomDimension;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListCustomDimensionsResponse;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
 
 /**
  * The "customDimensions" collection of methods.

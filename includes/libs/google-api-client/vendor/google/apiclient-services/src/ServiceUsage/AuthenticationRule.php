@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ServiceUsage;
+namespace FluentMail\Google\Service\ServiceUsage;
 
 class AuthenticationRule extends \Google\Collection
 {

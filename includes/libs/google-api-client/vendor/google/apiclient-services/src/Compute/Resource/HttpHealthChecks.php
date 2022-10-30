@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\HttpHealthCheck;
-use Google\Service\Compute\HttpHealthCheckList;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\HttpHealthCheck;
+use FluentMail\Google\Service\Compute\HttpHealthCheckList;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "httpHealthChecks" collection of methods.

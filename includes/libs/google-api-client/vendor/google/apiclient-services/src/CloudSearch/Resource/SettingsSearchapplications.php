@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
-use Google\Service\CloudSearch\ListSearchApplicationsResponse;
-use Google\Service\CloudSearch\Operation;
-use Google\Service\CloudSearch\ResetSearchApplicationRequest;
-use Google\Service\CloudSearch\SearchApplication;
+use FluentMail\Google\Service\CloudSearch\ListSearchApplicationsResponse;
+use FluentMail\Google\Service\CloudSearch\Operation;
+use FluentMail\Google\Service\CloudSearch\ResetSearchApplicationRequest;
+use FluentMail\Google\Service\CloudSearch\SearchApplication;
 
 /**
  * The "searchapplications" collection of methods.

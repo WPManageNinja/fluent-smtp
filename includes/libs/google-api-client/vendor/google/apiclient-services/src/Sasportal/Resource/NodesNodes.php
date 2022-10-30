@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Sasportal\Resource;
+namespace FluentMail\Google\Service\Sasportal\Resource;
 
-use Google\Service\Sasportal\SasPortalEmpty;
-use Google\Service\Sasportal\SasPortalListNodesResponse;
-use Google\Service\Sasportal\SasPortalMoveNodeRequest;
-use Google\Service\Sasportal\SasPortalNode;
-use Google\Service\Sasportal\SasPortalOperation;
+use FluentMail\Google\Service\Sasportal\SasPortalEmpty;
+use FluentMail\Google\Service\Sasportal\SasPortalListNodesResponse;
+use FluentMail\Google\Service\Sasportal\SasPortalMoveNodeRequest;
+use FluentMail\Google\Service\Sasportal\SasPortalNode;
+use FluentMail\Google\Service\Sasportal\SasPortalOperation;
 
 /**
  * The "nodes" collection of methods.

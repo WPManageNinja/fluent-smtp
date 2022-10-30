@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyer\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyer\Resource;
 
-use Google\Service\AdExchangeBuyer\UpdatePrivateAuctionProposalRequest;
+use FluentMail\Google\Service\AdExchangeBuyer\UpdatePrivateAuctionProposalRequest;
 
 /**
  * The "marketplaceprivateauction" collection of methods.

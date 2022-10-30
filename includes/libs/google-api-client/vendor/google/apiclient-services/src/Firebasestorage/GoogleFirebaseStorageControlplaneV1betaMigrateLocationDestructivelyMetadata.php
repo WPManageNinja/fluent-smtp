@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Firebasestorage;
+namespace FluentMail\Google\Service\Firebasestorage;
 
 class GoogleFirebaseStorageControlplaneV1betaMigrateLocationDestructivelyMetadata extends \Google\Model
 {

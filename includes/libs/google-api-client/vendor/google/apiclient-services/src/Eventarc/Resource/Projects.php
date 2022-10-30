@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Eventarc\Resource;
+namespace FluentMail\Google\Service\Eventarc\Resource;
 
 /**
  * The "projects" collection of methods.

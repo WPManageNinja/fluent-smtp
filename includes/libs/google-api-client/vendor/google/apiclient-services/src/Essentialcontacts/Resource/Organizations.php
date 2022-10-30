@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Essentialcontacts\Resource;
+namespace FluentMail\Google\Service\Essentialcontacts\Resource;
 
 /**
  * The "organizations" collection of methods.

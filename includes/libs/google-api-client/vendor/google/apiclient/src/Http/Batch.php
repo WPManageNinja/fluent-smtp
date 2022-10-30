@@ -15,15 +15,15 @@
  * limitations under the License.
  */
 
-namespace Google\Http;
+namespace FluentMail\Google\Http;
 
-use Google\Client;
-use Google\Service\Exception as GoogleServiceException;
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use FluentMail\Google\Client;
+use FluentMail\Google\Service\Exception as GoogleServiceException;
+use FluentMail\GuzzleHttp\Psr7;
+use FluentMail\GuzzleHttp\Psr7\Request;
+use FluentMail\GuzzleHttp\Psr7\Response;
+use FluentMail\Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\ResponseInterface;
 
 /**
  * Class to handle batched requests to the Google API service.

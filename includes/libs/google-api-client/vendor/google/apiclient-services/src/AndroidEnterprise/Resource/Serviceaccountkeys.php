@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise\Resource;
+namespace FluentMail\Google\Service\AndroidEnterprise\Resource;
 
-use Google\Service\AndroidEnterprise\ServiceAccountKey;
-use Google\Service\AndroidEnterprise\ServiceAccountKeysListResponse;
+use FluentMail\Google\Service\AndroidEnterprise\ServiceAccountKey;
+use FluentMail\Google\Service\AndroidEnterprise\ServiceAccountKeysListResponse;
 
 /**
  * The "serviceaccountkeys" collection of methods.

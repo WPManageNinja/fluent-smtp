@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Logging;
+namespace FluentMail\Google\Service\Logging;
 
 class CopyLogEntriesRequest extends \Google\Model
 {

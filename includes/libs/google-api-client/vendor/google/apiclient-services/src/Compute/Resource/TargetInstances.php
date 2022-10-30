@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\TargetInstance;
-use Google\Service\Compute\TargetInstanceAggregatedList;
-use Google\Service\Compute\TargetInstanceList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\TargetInstance;
+use FluentMail\Google\Service\Compute\TargetInstanceAggregatedList;
+use FluentMail\Google\Service\Compute\TargetInstanceList;
 
 /**
  * The "targetInstances" collection of methods.

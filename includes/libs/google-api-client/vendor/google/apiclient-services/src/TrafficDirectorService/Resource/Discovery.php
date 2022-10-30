@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\TrafficDirectorService\Resource;
+namespace FluentMail\Google\Service\TrafficDirectorService\Resource;
 
-use Google\Service\TrafficDirectorService\ClientStatusRequest;
-use Google\Service\TrafficDirectorService\ClientStatusResponse;
+use FluentMail\Google\Service\TrafficDirectorService\ClientStatusRequest;
+use FluentMail\Google\Service\TrafficDirectorService\ClientStatusResponse;
 
 /**
  * The "discovery" collection of methods.

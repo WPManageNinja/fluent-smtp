@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseManagement\Resource;
+namespace FluentMail\Google\Service\FirebaseManagement\Resource;
 
-use Google\Service\FirebaseManagement\AddFirebaseRequest;
-use Google\Service\FirebaseManagement\AddGoogleAnalyticsRequest;
-use Google\Service\FirebaseManagement\AdminSdkConfig;
-use Google\Service\FirebaseManagement\AnalyticsDetails;
-use Google\Service\FirebaseManagement\FirebaseEmpty;
-use Google\Service\FirebaseManagement\FirebaseProject;
-use Google\Service\FirebaseManagement\ListFirebaseProjectsResponse;
-use Google\Service\FirebaseManagement\Operation;
-use Google\Service\FirebaseManagement\RemoveAnalyticsRequest;
-use Google\Service\FirebaseManagement\SearchFirebaseAppsResponse;
+use FluentMail\Google\Service\FirebaseManagement\AddFirebaseRequest;
+use FluentMail\Google\Service\FirebaseManagement\AddGoogleAnalyticsRequest;
+use FluentMail\Google\Service\FirebaseManagement\AdminSdkConfig;
+use FluentMail\Google\Service\FirebaseManagement\AnalyticsDetails;
+use FluentMail\Google\Service\FirebaseManagement\FirebaseEmpty;
+use FluentMail\Google\Service\FirebaseManagement\FirebaseProject;
+use FluentMail\Google\Service\FirebaseManagement\ListFirebaseProjectsResponse;
+use FluentMail\Google\Service\FirebaseManagement\Operation;
+use FluentMail\Google\Service\FirebaseManagement\RemoveAnalyticsRequest;
+use FluentMail\Google\Service\FirebaseManagement\SearchFirebaseAppsResponse;
 
 /**
  * The "projects" collection of methods.

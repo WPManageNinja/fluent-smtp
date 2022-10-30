@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseRules;
+namespace FluentMail\Google\Service\FirebaseRules;
 
 class TestResult extends \Google\Collection
 {

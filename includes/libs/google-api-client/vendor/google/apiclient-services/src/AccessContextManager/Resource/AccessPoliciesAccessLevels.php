@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\AccessContextManager\Resource;
+namespace FluentMail\Google\Service\AccessContextManager\Resource;
 
-use Google\Service\AccessContextManager\AccessLevel;
-use Google\Service\AccessContextManager\ListAccessLevelsResponse;
-use Google\Service\AccessContextManager\Operation;
-use Google\Service\AccessContextManager\ReplaceAccessLevelsRequest;
-use Google\Service\AccessContextManager\TestIamPermissionsRequest;
-use Google\Service\AccessContextManager\TestIamPermissionsResponse;
+use FluentMail\Google\Service\AccessContextManager\AccessLevel;
+use FluentMail\Google\Service\AccessContextManager\ListAccessLevelsResponse;
+use FluentMail\Google\Service\AccessContextManager\Operation;
+use FluentMail\Google\Service\AccessContextManager\ReplaceAccessLevelsRequest;
+use FluentMail\Google\Service\AccessContextManager\TestIamPermissionsRequest;
+use FluentMail\Google\Service\AccessContextManager\TestIamPermissionsResponse;
 
 /**
  * The "accessLevels" collection of methods.

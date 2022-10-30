@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudRetail\Resource;
+namespace FluentMail\Google\Service\CloudRetail\Resource;
 
-use Google\Service\CloudRetail\GoogleCloudRetailV2ImportCompletionDataRequest;
-use Google\Service\CloudRetail\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2ImportCompletionDataRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleLongrunningOperation;
 
 /**
  * The "completionData" collection of methods.

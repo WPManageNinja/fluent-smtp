@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\CloudIdentity\Resource;
+namespace FluentMail\Google\Service\CloudIdentity\Resource;
 
-use Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1ApproveDeviceUserRequest;
-use Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1BlockDeviceUserRequest;
-use Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1CancelWipeDeviceUserRequest;
-use Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1DeviceUser;
-use Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1ListDeviceUsersResponse;
-use Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1LookupSelfDeviceUsersResponse;
-use Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1WipeDeviceUserRequest;
-use Google\Service\CloudIdentity\Operation;
+use FluentMail\Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1ApproveDeviceUserRequest;
+use FluentMail\Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1BlockDeviceUserRequest;
+use FluentMail\Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1CancelWipeDeviceUserRequest;
+use FluentMail\Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1DeviceUser;
+use FluentMail\Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1ListDeviceUsersResponse;
+use FluentMail\Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1LookupSelfDeviceUsersResponse;
+use FluentMail\Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1WipeDeviceUserRequest;
+use FluentMail\Google\Service\CloudIdentity\Operation;
 
 /**
  * The "deviceUsers" collection of methods.

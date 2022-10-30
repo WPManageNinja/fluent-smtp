@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-namespace Google\Auth\Credentials;
+namespace FluentMail\Google\Auth\Credentials;
 
-use Google\Auth\CredentialsLoader;
-use Google\Auth\GetQuotaProjectInterface;
-use Google\Auth\HttpHandler\HttpClientCache;
-use Google\Auth\HttpHandler\HttpHandlerFactory;
-use Google\Auth\Iam;
-use Google\Auth\ProjectIdProviderInterface;
-use Google\Auth\SignBlobInterface;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Psr7\Request;
+use FluentMail\Google\Auth\CredentialsLoader;
+use FluentMail\Google\Auth\GetQuotaProjectInterface;
+use FluentMail\Google\Auth\HttpHandler\HttpClientCache;
+use FluentMail\Google\Auth\HttpHandler\HttpHandlerFactory;
+use FluentMail\Google\Auth\Iam;
+use FluentMail\Google\Auth\ProjectIdProviderInterface;
+use FluentMail\Google\Auth\SignBlobInterface;
+use FluentMail\GuzzleHttp\Exception\ClientException;
+use FluentMail\GuzzleHttp\Exception\ConnectException;
+use FluentMail\GuzzleHttp\Exception\RequestException;
+use FluentMail\GuzzleHttp\Exception\ServerException;
+use FluentMail\GuzzleHttp\Psr7\Request;
 use InvalidArgumentException;
 
 /**
@@ -37,10 +37,10 @@ use InvalidArgumentException;
  * It can be used to authorize requests using the AuthTokenMiddleware, but will
  * only succeed if being run on GCE:
  *
- *   use Google\Auth\Credentials\GCECredentials;
- *   use Google\Auth\Middleware\AuthTokenMiddleware;
- *   use GuzzleHttp\Client;
- *   use GuzzleHttp\HandlerStack;
+ *   use FluentMail\Google\Auth\Credentials\GCECredentials;
+ *   use FluentMail\Google\Auth\Middleware\AuthTokenMiddleware;
+ *   use FluentMail\GuzzleHttp\Client;
+ *   use FluentMail\GuzzleHttp\HandlerStack;
  *
  *   $gce = new GCECredentials();
  *   $middleware = new AuthTokenMiddleware($gce);

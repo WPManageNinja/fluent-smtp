@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CertificateManager\Resource;
+namespace FluentMail\Google\Service\CertificateManager\Resource;
 
-use Google\Service\CertificateManager\DnsAuthorization;
-use Google\Service\CertificateManager\ListDnsAuthorizationsResponse;
-use Google\Service\CertificateManager\Operation;
+use FluentMail\Google\Service\CertificateManager\DnsAuthorization;
+use FluentMail\Google\Service\CertificateManager\ListDnsAuthorizationsResponse;
+use FluentMail\Google\Service\CertificateManager\Operation;
 
 /**
  * The "dnsAuthorizations" collection of methods.

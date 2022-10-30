@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-namespace Google\Auth\Credentials;
+namespace FluentMail\Google\Auth\Credentials;
 
 /*
  * The AppIdentityService class is automatically defined on App Engine,
  * so including this dependency is not necessary, and will result in a
  * PHP fatal error in the App Engine environment.
  */
-use google\appengine\api\app_identity\AppIdentityService;
-use Google\Auth\CredentialsLoader;
-use Google\Auth\ProjectIdProviderInterface;
-use Google\Auth\SignBlobInterface;
+use FluentMail\google\appengine\api\app_identity\AppIdentityService;
+use FluentMail\Google\Auth\CredentialsLoader;
+use FluentMail\Google\Auth\ProjectIdProviderInterface;
+use FluentMail\Google\Auth\SignBlobInterface;
 
 /**
  * @deprecated
@@ -37,10 +37,10 @@ use Google\Auth\SignBlobInterface;
  *
  * Example:
  * ```
- * use Google\Auth\Credentials\AppIdentityCredentials;
- * use Google\Auth\Middleware\AuthTokenMiddleware;
- * use GuzzleHttp\Client;
- * use GuzzleHttp\HandlerStack;
+ * use FluentMail\Google\Auth\Credentials\AppIdentityCredentials;
+ * use FluentMail\Google\Auth\Middleware\AuthTokenMiddleware;
+ * use FluentMail\GuzzleHttp\Client;
+ * use FluentMail\GuzzleHttp\HandlerStack;
  *
  * $gae = new AppIdentityCredentials('https://www.googleapis.com/auth/books');
  * $middleware = new AuthTokenMiddleware($gae);

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Testing;
+namespace FluentMail\Google\Service\Testing;
 
 class TestSetup extends \Google\Collection
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting;
+namespace FluentMail\Google\Service\Dfareporting;
 
 class ThirdPartyTrackingUrl extends \Google\Model
 {

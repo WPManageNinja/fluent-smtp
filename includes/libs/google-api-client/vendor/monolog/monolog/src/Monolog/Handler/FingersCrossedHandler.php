@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy;
-use Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
-use Monolog\Logger;
-use Monolog\ResettableInterface;
-use Monolog\Formatter\FormatterInterface;
-use Psr\Log\LogLevel;
+use FluentMail\Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy;
+use FluentMail\Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\ResettableInterface;
+use FluentMail\Monolog\Formatter\FormatterInterface;
+use FluentMail\Psr\Log\LogLevel;
 
 /**
  * Buffers all records until a certain level is reached

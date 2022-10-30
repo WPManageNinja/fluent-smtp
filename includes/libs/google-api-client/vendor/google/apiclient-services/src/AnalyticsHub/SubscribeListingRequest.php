@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsHub;
+namespace FluentMail\Google\Service\AnalyticsHub;
 
 class SubscribeListingRequest extends \Google\Model
 {

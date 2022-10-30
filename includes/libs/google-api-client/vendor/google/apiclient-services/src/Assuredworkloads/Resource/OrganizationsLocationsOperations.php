@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Assuredworkloads\Resource;
+namespace FluentMail\Google\Service\Assuredworkloads\Resource;
 
-use Google\Service\Assuredworkloads\GoogleLongrunningListOperationsResponse;
-use Google\Service\Assuredworkloads\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Assuredworkloads\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\Assuredworkloads\GoogleLongrunningOperation;
 
 /**
  * The "operations" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\NetworkServices;
+namespace FluentMail\Google\Service\NetworkServices;
 
 class Location extends \Google\Model
 {

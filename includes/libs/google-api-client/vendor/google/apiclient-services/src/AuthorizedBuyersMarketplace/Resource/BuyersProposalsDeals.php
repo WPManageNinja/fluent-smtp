@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\AuthorizedBuyersMarketplace\Resource;
+namespace FluentMail\Google\Service\AuthorizedBuyersMarketplace\Resource;
 
-use Google\Service\AuthorizedBuyersMarketplace\BatchUpdateDealsRequest;
-use Google\Service\AuthorizedBuyersMarketplace\BatchUpdateDealsResponse;
-use Google\Service\AuthorizedBuyersMarketplace\Deal;
-use Google\Service\AuthorizedBuyersMarketplace\ListDealsResponse;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\BatchUpdateDealsRequest;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\BatchUpdateDealsResponse;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\Deal;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\ListDealsResponse;
 
 /**
  * The "deals" collection of methods.

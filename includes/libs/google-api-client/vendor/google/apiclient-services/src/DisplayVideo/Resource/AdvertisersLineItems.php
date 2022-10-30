@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\BulkEditAssignedTargetingOptionsRequest;
-use Google\Service\DisplayVideo\BulkEditAssignedTargetingOptionsResponse;
-use Google\Service\DisplayVideo\BulkListAssignedTargetingOptionsResponse;
-use Google\Service\DisplayVideo\BulkUpdateLineItemsRequest;
-use Google\Service\DisplayVideo\BulkUpdateLineItemsResponse;
-use Google\Service\DisplayVideo\DisplayvideoEmpty;
-use Google\Service\DisplayVideo\GenerateDefaultLineItemRequest;
-use Google\Service\DisplayVideo\LineItem;
-use Google\Service\DisplayVideo\ListLineItemsResponse;
+use FluentMail\Google\Service\DisplayVideo\BulkEditAssignedTargetingOptionsRequest;
+use FluentMail\Google\Service\DisplayVideo\BulkEditAssignedTargetingOptionsResponse;
+use FluentMail\Google\Service\DisplayVideo\BulkListAssignedTargetingOptionsResponse;
+use FluentMail\Google\Service\DisplayVideo\BulkUpdateLineItemsRequest;
+use FluentMail\Google\Service\DisplayVideo\BulkUpdateLineItemsResponse;
+use FluentMail\Google\Service\DisplayVideo\DisplayvideoEmpty;
+use FluentMail\Google\Service\DisplayVideo\GenerateDefaultLineItemRequest;
+use FluentMail\Google\Service\DisplayVideo\LineItem;
+use FluentMail\Google\Service\DisplayVideo\ListLineItemsResponse;
 
 /**
  * The "lineItems" collection of methods.

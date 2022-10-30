@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Compute;
+namespace FluentMail\Google\Service\Compute;
 
 class Subsetting extends \Google\Model
 {

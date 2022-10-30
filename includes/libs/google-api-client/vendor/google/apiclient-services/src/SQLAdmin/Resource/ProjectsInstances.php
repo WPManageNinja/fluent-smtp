@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\SQLAdmin\Resource;
+namespace FluentMail\Google\Service\SQLAdmin\Resource;
 
-use Google\Service\SQLAdmin\Operation;
-use Google\Service\SQLAdmin\SqlInstancesRescheduleMaintenanceRequestBody;
-use Google\Service\SQLAdmin\SqlInstancesStartExternalSyncRequest;
-use Google\Service\SQLAdmin\SqlInstancesVerifyExternalSyncSettingsRequest;
-use Google\Service\SQLAdmin\SqlInstancesVerifyExternalSyncSettingsResponse;
+use FluentMail\Google\Service\SQLAdmin\Operation;
+use FluentMail\Google\Service\SQLAdmin\SqlInstancesRescheduleMaintenanceRequestBody;
+use FluentMail\Google\Service\SQLAdmin\SqlInstancesStartExternalSyncRequest;
+use FluentMail\Google\Service\SQLAdmin\SqlInstancesVerifyExternalSyncSettingsRequest;
+use FluentMail\Google\Service\SQLAdmin\SqlInstancesVerifyExternalSyncSettingsResponse;
 
 /**
  * The "instances" collection of methods.

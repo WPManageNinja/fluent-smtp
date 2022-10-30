@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Webmasters;
+namespace FluentMail\Google\Service\Webmasters;
 
 class ApiDataRow extends \Google\Collection
 {

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Games\Resource;
+namespace FluentMail\Google\Service\Games\Resource;
 
-use Google\Service\Games\AchievementDefinitionsListResponse;
+use FluentMail\Google\Service\Games\AchievementDefinitionsListResponse;
 
 /**
  * The "achievementDefinitions" collection of methods.

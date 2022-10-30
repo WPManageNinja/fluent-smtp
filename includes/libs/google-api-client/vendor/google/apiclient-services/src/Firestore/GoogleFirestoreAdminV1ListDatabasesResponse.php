@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Firestore;
+namespace FluentMail\Google\Service\Firestore;
 
 class GoogleFirestoreAdminV1ListDatabasesResponse extends \Google\Collection
 {

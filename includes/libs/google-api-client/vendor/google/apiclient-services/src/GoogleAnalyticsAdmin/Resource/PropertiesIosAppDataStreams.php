@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\GoogleAnalyticsAdmin\Resource;
+namespace FluentMail\Google\Service\GoogleAnalyticsAdmin\Resource;
 
-use Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaIosAppDataStream;
-use Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListIosAppDataStreamsResponse;
-use Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaIosAppDataStream;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListIosAppDataStreamsResponse;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
 
 /**
  * The "iosAppDataStreams" collection of methods.

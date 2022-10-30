@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudRedis;
+namespace FluentMail\Google\Service\CloudRedis;
 
 class RedisEmpty extends \Google\Model
 {

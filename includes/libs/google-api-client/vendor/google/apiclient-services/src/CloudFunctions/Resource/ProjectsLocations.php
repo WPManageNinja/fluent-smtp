@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudFunctions\Resource;
+namespace FluentMail\Google\Service\CloudFunctions\Resource;
 
-use Google\Service\CloudFunctions\ListLocationsResponse;
+use FluentMail\Google\Service\CloudFunctions\ListLocationsResponse;
 
 /**
  * The "locations" collection of methods.

@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseDynamicLinks\Resource;
+namespace FluentMail\Google\Service\FirebaseDynamicLinks\Resource;
 
-use Google\Service\FirebaseDynamicLinks\DynamicLinkStats;
-use Google\Service\FirebaseDynamicLinks\GetIosPostInstallAttributionRequest;
-use Google\Service\FirebaseDynamicLinks\GetIosPostInstallAttributionResponse;
-use Google\Service\FirebaseDynamicLinks\GetIosReopenAttributionRequest;
-use Google\Service\FirebaseDynamicLinks\GetIosReopenAttributionResponse;
+use FluentMail\Google\Service\FirebaseDynamicLinks\DynamicLinkStats;
+use FluentMail\Google\Service\FirebaseDynamicLinks\GetIosPostInstallAttributionRequest;
+use FluentMail\Google\Service\FirebaseDynamicLinks\GetIosPostInstallAttributionResponse;
+use FluentMail\Google\Service\FirebaseDynamicLinks\GetIosReopenAttributionRequest;
+use FluentMail\Google\Service\FirebaseDynamicLinks\GetIosReopenAttributionResponse;
 
 /**
  * The "v1" collection of methods.

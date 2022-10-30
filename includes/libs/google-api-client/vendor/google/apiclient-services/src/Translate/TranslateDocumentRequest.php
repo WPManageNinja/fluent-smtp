@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Translate;
+namespace FluentMail\Google\Service\Translate;
 
 class TranslateDocumentRequest extends \Google\Model
 {

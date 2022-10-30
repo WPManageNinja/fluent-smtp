@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudFunctions;
+namespace FluentMail\Google\Service\CloudFunctions;
 
 class Expr extends \Google\Model
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessPlaceActions;
+namespace FluentMail\Google\Service\MyBusinessPlaceActions;
 
 class Money extends \Google\Model
 {

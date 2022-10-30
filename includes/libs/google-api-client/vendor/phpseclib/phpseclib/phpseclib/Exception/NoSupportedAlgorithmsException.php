@@ -11,7 +11,7 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Exception;
+namespace FluentMail\phpseclib3\Exception;
 
 /**
  * NoSupportedAlgorithmsException

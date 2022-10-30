@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace Google\Auth\HttpHandler;
+namespace FluentMail\Google\Auth\HttpHandler;
 
 use Exception;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Message\ResponseInterface as Guzzle5ResponseInterface;
-use GuzzleHttp\Promise\Promise;
-use GuzzleHttp\Promise\RejectedPromise;
-use GuzzleHttp\Psr7\Response;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use FluentMail\GuzzleHttp\ClientInterface;
+use FluentMail\GuzzleHttp\Message\ResponseInterface as Guzzle5ResponseInterface;
+use FluentMail\GuzzleHttp\Promise\Promise;
+use FluentMail\GuzzleHttp\Promise\RejectedPromise;
+use FluentMail\GuzzleHttp\Psr7\Response;
+use FluentMail\Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\ResponseInterface;
 
 /**
  * @deprecated

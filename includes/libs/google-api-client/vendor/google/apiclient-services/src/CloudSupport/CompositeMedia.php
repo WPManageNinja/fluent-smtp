@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudSupport;
+namespace FluentMail\Google\Service\CloudSupport;
 
 class CompositeMedia extends \Google\Model
 {

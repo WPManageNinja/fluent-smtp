@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\DeviceTierConfig;
-use Google\Service\AndroidPublisher\ListDeviceTierConfigsResponse;
+use FluentMail\Google\Service\AndroidPublisher\DeviceTierConfig;
+use FluentMail\Google\Service\AndroidPublisher\ListDeviceTierConfigsResponse;
 
 /**
  * The "deviceTierConfigs" collection of methods.

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudMachineLearningEngine\Resource;
+namespace FluentMail\Google\Service\CloudMachineLearningEngine\Resource;
 
-use Google\Service\CloudMachineLearningEngine\GoogleApiHttpBody;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ExplainRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1GetConfigResponse;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1PredictRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleApiHttpBody;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ExplainRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1GetConfigResponse;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1PredictRequest;
 
 /**
  * The "projects" collection of methods.

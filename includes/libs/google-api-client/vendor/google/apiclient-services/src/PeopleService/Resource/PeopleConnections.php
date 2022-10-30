@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\PeopleService\Resource;
+namespace FluentMail\Google\Service\PeopleService\Resource;
 
-use Google\Service\PeopleService\ListConnectionsResponse;
+use FluentMail\Google\Service\PeopleService\ListConnectionsResponse;
 
 /**
  * The "connections" collection of methods.

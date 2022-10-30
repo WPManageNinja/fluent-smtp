@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\GoogleAnalyticsAdmin\Resource;
+namespace FluentMail\Google\Service\GoogleAnalyticsAdmin\Resource;
 
-use Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListMeasurementProtocolSecretsResponse;
-use Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret;
-use Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListMeasurementProtocolSecretsResponse;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
 
 /**
  * The "measurementProtocolSecrets" collection of methods.

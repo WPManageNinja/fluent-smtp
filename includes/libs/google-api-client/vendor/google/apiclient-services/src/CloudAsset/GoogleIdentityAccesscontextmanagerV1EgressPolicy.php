@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudAsset;
+namespace FluentMail\Google\Service\CloudAsset;
 
 class GoogleIdentityAccesscontextmanagerV1EgressPolicy extends \Google\Model
 {

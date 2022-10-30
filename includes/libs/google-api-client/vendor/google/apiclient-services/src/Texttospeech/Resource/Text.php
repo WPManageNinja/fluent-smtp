@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Texttospeech\Resource;
+namespace FluentMail\Google\Service\Texttospeech\Resource;
 
-use Google\Service\Texttospeech\SynthesizeSpeechRequest;
-use Google\Service\Texttospeech\SynthesizeSpeechResponse;
+use FluentMail\Google\Service\Texttospeech\SynthesizeSpeechRequest;
+use FluentMail\Google\Service\Texttospeech\SynthesizeSpeechResponse;
 
 /**
  * The "text" collection of methods.

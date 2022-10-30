@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Texttospeech\Resource;
+namespace FluentMail\Google\Service\Texttospeech\Resource;
 
-use Google\Service\Texttospeech\ImportDataRequest;
-use Google\Service\Texttospeech\Operation;
+use FluentMail\Google\Service\Texttospeech\ImportDataRequest;
+use FluentMail\Google\Service\Texttospeech\Operation;
 
 /**
  * The "datasets" collection of methods.

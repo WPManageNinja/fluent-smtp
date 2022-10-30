@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\AccountLabel;
-use Google\Service\ShoppingContent\ListAccountLabelsResponse;
+use FluentMail\Google\Service\ShoppingContent\AccountLabel;
+use FluentMail\Google\Service\ShoppingContent\ListAccountLabelsResponse;
 
 /**
  * The "labels" collection of methods.

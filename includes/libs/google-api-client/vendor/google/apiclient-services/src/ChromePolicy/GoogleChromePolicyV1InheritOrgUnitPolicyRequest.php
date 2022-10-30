@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ChromePolicy;
+namespace FluentMail\Google\Service\ChromePolicy;
 
 class GoogleChromePolicyV1InheritOrgUnitPolicyRequest extends \Google\Model
 {

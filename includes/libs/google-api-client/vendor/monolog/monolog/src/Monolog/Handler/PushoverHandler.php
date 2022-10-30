@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Logger;
-use Monolog\Utils;
-use Psr\Log\LogLevel;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\Utils;
+use FluentMail\Psr\Log\LogLevel;
 
 /**
  * Sends notifications through the pushover api to mobile phones

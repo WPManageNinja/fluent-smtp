@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\RecommendationsAI\Resource;
+namespace FluentMail\Google\Service\RecommendationsAI\Resource;
 
 /**
  * The "eventStores" collection of methods.

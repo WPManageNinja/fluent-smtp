@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Libraryagent;
+namespace FluentMail\Google\Service\Libraryagent;
 
 class GoogleExampleLibraryagentV1ListBooksResponse extends \Google\Collection
 {

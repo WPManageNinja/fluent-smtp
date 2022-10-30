@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\RemoteBuildExecution\Resource;
+namespace FluentMail\Google\Service\RemoteBuildExecution\Resource;
 
-use Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2WaitExecutionRequest;
-use Google\Service\RemoteBuildExecution\GoogleLongrunningOperation;
+use FluentMail\Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2WaitExecutionRequest;
+use FluentMail\Google\Service\RemoteBuildExecution\GoogleLongrunningOperation;
 
 /**
  * The "operations" collection of methods.

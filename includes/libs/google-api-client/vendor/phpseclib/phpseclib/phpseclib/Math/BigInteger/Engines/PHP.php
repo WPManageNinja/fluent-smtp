@@ -11,10 +11,10 @@
  * @link      http://pear.php.net/package/Math_BigInteger
  */
 
-namespace phpseclib3\Math\BigInteger\Engines;
+namespace FluentMail\phpseclib3\Math\BigInteger\Engines;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Exception\BadConfigurationException;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Exception\BadConfigurationException;
 
 /**
  * Pure-PHP Engine.

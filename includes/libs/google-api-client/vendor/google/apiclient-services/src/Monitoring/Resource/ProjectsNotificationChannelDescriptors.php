@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
-use Google\Service\Monitoring\ListNotificationChannelDescriptorsResponse;
-use Google\Service\Monitoring\NotificationChannelDescriptor;
+use FluentMail\Google\Service\Monitoring\ListNotificationChannelDescriptorsResponse;
+use FluentMail\Google\Service\Monitoring\NotificationChannelDescriptor;
 
 /**
  * The "notificationChannelDescriptors" collection of methods.

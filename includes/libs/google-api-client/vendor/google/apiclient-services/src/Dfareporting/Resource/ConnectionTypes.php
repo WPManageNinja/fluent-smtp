@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\ConnectionType;
-use Google\Service\Dfareporting\ConnectionTypesListResponse;
+use FluentMail\Google\Service\Dfareporting\ConnectionType;
+use FluentMail\Google\Service\Dfareporting\ConnectionTypesListResponse;
 
 /**
  * The "connectionTypes" collection of methods.

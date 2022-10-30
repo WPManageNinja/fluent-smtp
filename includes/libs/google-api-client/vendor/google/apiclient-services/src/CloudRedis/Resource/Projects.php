@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudRedis\Resource;
+namespace FluentMail\Google\Service\CloudRedis\Resource;
 
 /**
  * The "projects" collection of methods.

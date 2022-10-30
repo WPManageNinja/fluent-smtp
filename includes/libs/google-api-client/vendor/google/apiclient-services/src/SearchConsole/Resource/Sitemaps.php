@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\SearchConsole\Resource;
+namespace FluentMail\Google\Service\SearchConsole\Resource;
 
-use Google\Service\SearchConsole\SitemapsListResponse;
-use Google\Service\SearchConsole\WmxSitemap;
+use FluentMail\Google\Service\SearchConsole\SitemapsListResponse;
+use FluentMail\Google\Service\SearchConsole\WmxSitemap;
 
 /**
  * The "sitemaps" collection of methods.

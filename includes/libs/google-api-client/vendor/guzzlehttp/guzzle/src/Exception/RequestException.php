@@ -1,13 +1,13 @@
 <?php
 
-namespace GuzzleHttp\Exception;
+namespace FluentMail\GuzzleHttp\Exception;
 
-use GuzzleHttp\BodySummarizer;
-use GuzzleHttp\BodySummarizerInterface;
-use Psr\Http\Client\RequestExceptionInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
+use FluentMail\GuzzleHttp\BodySummarizer;
+use FluentMail\GuzzleHttp\BodySummarizerInterface;
+use FluentMail\Psr\Http\Client\RequestExceptionInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\ResponseInterface;
+use FluentMail\Psr\Http\Message\UriInterface;
 
 /**
  * HTTP Request exception

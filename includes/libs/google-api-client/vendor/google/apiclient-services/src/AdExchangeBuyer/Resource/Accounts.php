@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyer\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyer\Resource;
 
-use Google\Service\AdExchangeBuyer\Account;
-use Google\Service\AdExchangeBuyer\AccountsList;
+use FluentMail\Google\Service\AdExchangeBuyer\Account;
+use FluentMail\Google\Service\AdExchangeBuyer\AccountsList;
 
 /**
  * The "accounts" collection of methods.

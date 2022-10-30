@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Pubsub;
+namespace FluentMail\Google\Service\Pubsub;
 
 class Subscription extends \Google\Model
 {

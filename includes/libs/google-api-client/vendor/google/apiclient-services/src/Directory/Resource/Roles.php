@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\Role;
-use Google\Service\Directory\Roles as RolesModel;
+use FluentMail\Google\Service\Directory\Role;
+use FluentMail\Google\Service\Directory\Roles as RolesModel;
 
 /**
  * The "roles" collection of methods.

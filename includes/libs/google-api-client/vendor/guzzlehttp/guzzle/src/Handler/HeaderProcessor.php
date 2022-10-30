@@ -1,8 +1,8 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace FluentMail\GuzzleHttp\Handler;
 
-use GuzzleHttp\Utils;
+use FluentMail\GuzzleHttp\Utils;
 
 /**
  * @internal

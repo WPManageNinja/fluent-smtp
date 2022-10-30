@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudDataplex;
+namespace FluentMail\Google\Service\CloudDataplex;
 
 class GoogleCloudDataplexV1OperationMetadata extends \Google\Model
 {

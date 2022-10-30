@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\NetworkEndpointGroup;
-use Google\Service\Compute\NetworkEndpointGroupAggregatedList;
-use Google\Service\Compute\NetworkEndpointGroupList;
-use Google\Service\Compute\NetworkEndpointGroupsAttachEndpointsRequest;
-use Google\Service\Compute\NetworkEndpointGroupsDetachEndpointsRequest;
-use Google\Service\Compute\NetworkEndpointGroupsListEndpointsRequest;
-use Google\Service\Compute\NetworkEndpointGroupsListNetworkEndpoints;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\TestPermissionsRequest;
-use Google\Service\Compute\TestPermissionsResponse;
+use FluentMail\Google\Service\Compute\NetworkEndpointGroup;
+use FluentMail\Google\Service\Compute\NetworkEndpointGroupAggregatedList;
+use FluentMail\Google\Service\Compute\NetworkEndpointGroupList;
+use FluentMail\Google\Service\Compute\NetworkEndpointGroupsAttachEndpointsRequest;
+use FluentMail\Google\Service\Compute\NetworkEndpointGroupsDetachEndpointsRequest;
+use FluentMail\Google\Service\Compute\NetworkEndpointGroupsListEndpointsRequest;
+use FluentMail\Google\Service\Compute\NetworkEndpointGroupsListNetworkEndpoints;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\TestPermissionsRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsResponse;
 
 /**
  * The "networkEndpointGroups" collection of methods.

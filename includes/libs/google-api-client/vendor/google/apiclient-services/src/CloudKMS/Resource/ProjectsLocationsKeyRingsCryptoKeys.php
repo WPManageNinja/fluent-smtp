@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\CloudKMS\Resource;
+namespace FluentMail\Google\Service\CloudKMS\Resource;
 
-use Google\Service\CloudKMS\CryptoKey;
-use Google\Service\CloudKMS\DecryptRequest;
-use Google\Service\CloudKMS\DecryptResponse;
-use Google\Service\CloudKMS\EncryptRequest;
-use Google\Service\CloudKMS\EncryptResponse;
-use Google\Service\CloudKMS\ListCryptoKeysResponse;
-use Google\Service\CloudKMS\Policy;
-use Google\Service\CloudKMS\SetIamPolicyRequest;
-use Google\Service\CloudKMS\TestIamPermissionsRequest;
-use Google\Service\CloudKMS\TestIamPermissionsResponse;
-use Google\Service\CloudKMS\UpdateCryptoKeyPrimaryVersionRequest;
+use FluentMail\Google\Service\CloudKMS\CryptoKey;
+use FluentMail\Google\Service\CloudKMS\DecryptRequest;
+use FluentMail\Google\Service\CloudKMS\DecryptResponse;
+use FluentMail\Google\Service\CloudKMS\EncryptRequest;
+use FluentMail\Google\Service\CloudKMS\EncryptResponse;
+use FluentMail\Google\Service\CloudKMS\ListCryptoKeysResponse;
+use FluentMail\Google\Service\CloudKMS\Policy;
+use FluentMail\Google\Service\CloudKMS\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudKMS\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudKMS\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudKMS\UpdateCryptoKeyPrimaryVersionRequest;
 
 /**
  * The "cryptoKeys" collection of methods.

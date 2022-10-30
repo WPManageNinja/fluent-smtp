@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CertificateAuthorityService;
+namespace FluentMail\Google\Service\CertificateAuthorityService;
 
 class EcKeyType extends \Google\Model
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise;
+namespace FluentMail\Google\Service\AndroidEnterprise;
 
 class Entitlement extends \Google\Model
 {

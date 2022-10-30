@@ -1,8 +1,8 @@
 <?php
 
-namespace GuzzleHttp\Cookie;
+namespace FluentMail\GuzzleHttp\Cookie;
 
-use GuzzleHttp\Utils;
+use FluentMail\GuzzleHttp\Utils;
 
 /**
  * Persists non-session cookies using a JSON formatted file

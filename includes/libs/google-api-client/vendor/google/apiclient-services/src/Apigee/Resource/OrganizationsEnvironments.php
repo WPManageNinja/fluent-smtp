@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1DebugMask;
-use Google\Service\Apigee\GoogleCloudApigeeV1Environment;
-use Google\Service\Apigee\GoogleCloudApigeeV1EnvironmentConfig;
-use Google\Service\Apigee\GoogleCloudApigeeV1Subscription;
-use Google\Service\Apigee\GoogleCloudApigeeV1TraceConfig;
-use Google\Service\Apigee\GoogleIamV1Policy;
-use Google\Service\Apigee\GoogleIamV1SetIamPolicyRequest;
-use Google\Service\Apigee\GoogleIamV1TestIamPermissionsRequest;
-use Google\Service\Apigee\GoogleIamV1TestIamPermissionsResponse;
-use Google\Service\Apigee\GoogleLongrunningOperation;
-use Google\Service\Apigee\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1DebugMask;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1Environment;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1EnvironmentConfig;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1Subscription;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1TraceConfig;
+use FluentMail\Google\Service\Apigee\GoogleIamV1Policy;
+use FluentMail\Google\Service\Apigee\GoogleIamV1SetIamPolicyRequest;
+use FluentMail\Google\Service\Apigee\GoogleIamV1TestIamPermissionsRequest;
+use FluentMail\Google\Service\Apigee\GoogleIamV1TestIamPermissionsResponse;
+use FluentMail\Google\Service\Apigee\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Apigee\GoogleProtobufEmpty;
 
 /**
  * The "environments" collection of methods.

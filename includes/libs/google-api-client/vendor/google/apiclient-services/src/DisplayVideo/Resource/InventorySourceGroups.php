@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\DisplayvideoEmpty;
-use Google\Service\DisplayVideo\InventorySourceGroup;
-use Google\Service\DisplayVideo\ListInventorySourceGroupsResponse;
+use FluentMail\Google\Service\DisplayVideo\DisplayvideoEmpty;
+use FluentMail\Google\Service\DisplayVideo\InventorySourceGroup;
+use FluentMail\Google\Service\DisplayVideo\ListInventorySourceGroupsResponse;
 
 /**
  * The "inventorySourceGroups" collection of methods.

@@ -1,6 +1,6 @@
 <?php
 
-namespace GuzzleHttp\Promise;
+namespace FluentMail\GuzzleHttp\Promise;
 
 /**
  * Get the global task queue used for promise resolution.

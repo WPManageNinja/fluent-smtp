@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AIPlatformNotebooks\Resource;
+namespace FluentMail\Google\Service\AIPlatformNotebooks\Resource;
 
-use Google\Service\AIPlatformNotebooks\ListLocationsResponse;
-use Google\Service\AIPlatformNotebooks\Location;
+use FluentMail\Google\Service\AIPlatformNotebooks\ListLocationsResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\Location;
 
 /**
  * The "locations" collection of methods.

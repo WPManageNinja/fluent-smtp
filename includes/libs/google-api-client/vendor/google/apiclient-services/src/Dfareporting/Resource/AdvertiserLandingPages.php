@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\AdvertiserLandingPagesListResponse;
-use Google\Service\Dfareporting\LandingPage;
+use FluentMail\Google\Service\Dfareporting\AdvertiserLandingPagesListResponse;
+use FluentMail\Google\Service\Dfareporting\LandingPage;
 
 /**
  * The "advertiserLandingPages" collection of methods.

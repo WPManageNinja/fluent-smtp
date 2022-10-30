@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\Domains as DomainsModel;
-use Google\Service\Directory\Domains2;
+use FluentMail\Google\Service\Directory\Domains as DomainsModel;
+use FluentMail\Google\Service\Directory\Domains2;
 
 /**
  * The "domains" collection of methods.

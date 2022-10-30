@@ -1,13 +1,13 @@
 <?php
 
-namespace GuzzleHttp;
+namespace FluentMail\GuzzleHttp;
 
-use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\TooManyRedirectsException;
-use GuzzleHttp\Promise\PromiseInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
+use FluentMail\GuzzleHttp\Exception\BadResponseException;
+use FluentMail\GuzzleHttp\Exception\TooManyRedirectsException;
+use FluentMail\GuzzleHttp\Promise\PromiseInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\ResponseInterface;
+use FluentMail\Psr\Http\Message\UriInterface;
 
 /**
  * Request redirect middleware.

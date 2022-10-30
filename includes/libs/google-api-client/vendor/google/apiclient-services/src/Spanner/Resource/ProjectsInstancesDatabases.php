@@ -15,22 +15,22 @@
  * the License.
  */
 
-namespace Google\Service\Spanner\Resource;
+namespace FluentMail\Google\Service\Spanner\Resource;
 
-use Google\Service\Spanner\CreateDatabaseRequest;
-use Google\Service\Spanner\Database;
-use Google\Service\Spanner\GetDatabaseDdlResponse;
-use Google\Service\Spanner\GetIamPolicyRequest;
-use Google\Service\Spanner\ListDatabasesResponse;
-use Google\Service\Spanner\Operation;
-use Google\Service\Spanner\Policy;
-use Google\Service\Spanner\RestoreDatabaseRequest;
-use Google\Service\Spanner\Scan;
-use Google\Service\Spanner\SetIamPolicyRequest;
-use Google\Service\Spanner\SpannerEmpty;
-use Google\Service\Spanner\TestIamPermissionsRequest;
-use Google\Service\Spanner\TestIamPermissionsResponse;
-use Google\Service\Spanner\UpdateDatabaseDdlRequest;
+use FluentMail\Google\Service\Spanner\CreateDatabaseRequest;
+use FluentMail\Google\Service\Spanner\Database;
+use FluentMail\Google\Service\Spanner\GetDatabaseDdlResponse;
+use FluentMail\Google\Service\Spanner\GetIamPolicyRequest;
+use FluentMail\Google\Service\Spanner\ListDatabasesResponse;
+use FluentMail\Google\Service\Spanner\Operation;
+use FluentMail\Google\Service\Spanner\Policy;
+use FluentMail\Google\Service\Spanner\RestoreDatabaseRequest;
+use FluentMail\Google\Service\Spanner\Scan;
+use FluentMail\Google\Service\Spanner\SetIamPolicyRequest;
+use FluentMail\Google\Service\Spanner\SpannerEmpty;
+use FluentMail\Google\Service\Spanner\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Spanner\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Spanner\UpdateDatabaseDdlRequest;
 
 /**
  * The "databases" collection of methods.

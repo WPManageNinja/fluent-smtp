@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Blogger\Resource;
+namespace FluentMail\Google\Service\Blogger\Resource;
 
-use Google\Service\Blogger\User;
+use FluentMail\Google\Service\Blogger\User;
 
 /**
  * The "users" collection of methods.

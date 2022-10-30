@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\RegionalInventory as RegionalInventoryModel;
-use Google\Service\ShoppingContent\RegionalinventoryCustomBatchRequest;
-use Google\Service\ShoppingContent\RegionalinventoryCustomBatchResponse;
+use FluentMail\Google\Service\ShoppingContent\RegionalInventory as RegionalInventoryModel;
+use FluentMail\Google\Service\ShoppingContent\RegionalinventoryCustomBatchRequest;
+use FluentMail\Google\Service\ShoppingContent\RegionalinventoryCustomBatchResponse;
 
 /**
  * The "regionalinventory" collection of methods.

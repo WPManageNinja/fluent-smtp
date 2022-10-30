@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ChromePolicy\Resource;
+namespace FluentMail\Google\Service\ChromePolicy\Resource;
 
 /**
  * The "customers" collection of methods.

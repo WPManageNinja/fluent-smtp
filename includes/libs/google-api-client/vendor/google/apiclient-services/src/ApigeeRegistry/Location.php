@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ApigeeRegistry;
+namespace FluentMail\Google\Service\ApigeeRegistry;
 
 class Location extends \Google\Model
 {

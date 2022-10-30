@@ -1,8 +1,8 @@
 <?php
 
-namespace GuzzleHttp;
+namespace FluentMail\GuzzleHttp;
 
-use Psr\Http\Message\MessageInterface;
+use FluentMail\Psr\Http\Message\MessageInterface;
 
 final class BodySummarizer implements BodySummarizerInterface
 {

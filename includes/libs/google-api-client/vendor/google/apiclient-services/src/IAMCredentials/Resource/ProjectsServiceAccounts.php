@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\IAMCredentials\Resource;
+namespace FluentMail\Google\Service\IAMCredentials\Resource;
 
-use Google\Service\IAMCredentials\GenerateAccessTokenRequest;
-use Google\Service\IAMCredentials\GenerateAccessTokenResponse;
-use Google\Service\IAMCredentials\GenerateIdTokenRequest;
-use Google\Service\IAMCredentials\GenerateIdTokenResponse;
-use Google\Service\IAMCredentials\SignBlobRequest;
-use Google\Service\IAMCredentials\SignBlobResponse;
-use Google\Service\IAMCredentials\SignJwtRequest;
-use Google\Service\IAMCredentials\SignJwtResponse;
+use FluentMail\Google\Service\IAMCredentials\GenerateAccessTokenRequest;
+use FluentMail\Google\Service\IAMCredentials\GenerateAccessTokenResponse;
+use FluentMail\Google\Service\IAMCredentials\GenerateIdTokenRequest;
+use FluentMail\Google\Service\IAMCredentials\GenerateIdTokenResponse;
+use FluentMail\Google\Service\IAMCredentials\SignBlobRequest;
+use FluentMail\Google\Service\IAMCredentials\SignBlobResponse;
+use FluentMail\Google\Service\IAMCredentials\SignJwtRequest;
+use FluentMail\Google\Service\IAMCredentials\SignJwtResponse;
 
 /**
  * The "serviceAccounts" collection of methods.

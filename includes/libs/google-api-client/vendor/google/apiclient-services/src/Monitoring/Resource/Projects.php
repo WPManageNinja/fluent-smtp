@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
 /**
  * The "projects" collection of methods.

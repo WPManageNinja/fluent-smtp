@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudOSLogin;
+namespace FluentMail\Google\Service\CloudOSLogin;
 
 class OsloginEmpty extends \Google\Model
 {

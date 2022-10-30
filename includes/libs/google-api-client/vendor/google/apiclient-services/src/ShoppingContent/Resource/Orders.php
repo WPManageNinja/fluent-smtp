@@ -15,47 +15,47 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\CaptureOrderRequest;
-use Google\Service\ShoppingContent\CaptureOrderResponse;
-use Google\Service\ShoppingContent\Order;
-use Google\Service\ShoppingContent\OrdersAcknowledgeRequest;
-use Google\Service\ShoppingContent\OrdersAcknowledgeResponse;
-use Google\Service\ShoppingContent\OrdersAdvanceTestOrderResponse;
-use Google\Service\ShoppingContent\OrdersCancelLineItemRequest;
-use Google\Service\ShoppingContent\OrdersCancelLineItemResponse;
-use Google\Service\ShoppingContent\OrdersCancelRequest;
-use Google\Service\ShoppingContent\OrdersCancelResponse;
-use Google\Service\ShoppingContent\OrdersCancelTestOrderByCustomerRequest;
-use Google\Service\ShoppingContent\OrdersCancelTestOrderByCustomerResponse;
-use Google\Service\ShoppingContent\OrdersCreateTestOrderRequest;
-use Google\Service\ShoppingContent\OrdersCreateTestOrderResponse;
-use Google\Service\ShoppingContent\OrdersCreateTestReturnRequest;
-use Google\Service\ShoppingContent\OrdersCreateTestReturnResponse;
-use Google\Service\ShoppingContent\OrdersGetByMerchantOrderIdResponse;
-use Google\Service\ShoppingContent\OrdersGetTestOrderTemplateResponse;
-use Google\Service\ShoppingContent\OrdersInStoreRefundLineItemRequest;
-use Google\Service\ShoppingContent\OrdersInStoreRefundLineItemResponse;
-use Google\Service\ShoppingContent\OrdersListResponse;
-use Google\Service\ShoppingContent\OrdersRefundItemRequest;
-use Google\Service\ShoppingContent\OrdersRefundItemResponse;
-use Google\Service\ShoppingContent\OrdersRefundOrderRequest;
-use Google\Service\ShoppingContent\OrdersRefundOrderResponse;
-use Google\Service\ShoppingContent\OrdersRejectReturnLineItemRequest;
-use Google\Service\ShoppingContent\OrdersRejectReturnLineItemResponse;
-use Google\Service\ShoppingContent\OrdersReturnRefundLineItemRequest;
-use Google\Service\ShoppingContent\OrdersReturnRefundLineItemResponse;
-use Google\Service\ShoppingContent\OrdersSetLineItemMetadataRequest;
-use Google\Service\ShoppingContent\OrdersSetLineItemMetadataResponse;
-use Google\Service\ShoppingContent\OrdersShipLineItemsRequest;
-use Google\Service\ShoppingContent\OrdersShipLineItemsResponse;
-use Google\Service\ShoppingContent\OrdersUpdateLineItemShippingDetailsRequest;
-use Google\Service\ShoppingContent\OrdersUpdateLineItemShippingDetailsResponse;
-use Google\Service\ShoppingContent\OrdersUpdateMerchantOrderIdRequest;
-use Google\Service\ShoppingContent\OrdersUpdateMerchantOrderIdResponse;
-use Google\Service\ShoppingContent\OrdersUpdateShipmentRequest;
-use Google\Service\ShoppingContent\OrdersUpdateShipmentResponse;
+use FluentMail\Google\Service\ShoppingContent\CaptureOrderRequest;
+use FluentMail\Google\Service\ShoppingContent\CaptureOrderResponse;
+use FluentMail\Google\Service\ShoppingContent\Order;
+use FluentMail\Google\Service\ShoppingContent\OrdersAcknowledgeRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersAcknowledgeResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersAdvanceTestOrderResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersCancelLineItemRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersCancelLineItemResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersCancelRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersCancelResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersCancelTestOrderByCustomerRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersCancelTestOrderByCustomerResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersCreateTestOrderRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersCreateTestOrderResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersCreateTestReturnRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersCreateTestReturnResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersGetByMerchantOrderIdResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersGetTestOrderTemplateResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersInStoreRefundLineItemRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersInStoreRefundLineItemResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersListResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersRefundItemRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersRefundItemResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersRefundOrderRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersRefundOrderResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersRejectReturnLineItemRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersRejectReturnLineItemResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersReturnRefundLineItemRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersReturnRefundLineItemResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersSetLineItemMetadataRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersSetLineItemMetadataResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersShipLineItemsRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersShipLineItemsResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersUpdateLineItemShippingDetailsRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersUpdateLineItemShippingDetailsResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersUpdateMerchantOrderIdRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersUpdateMerchantOrderIdResponse;
+use FluentMail\Google\Service\ShoppingContent\OrdersUpdateShipmentRequest;
+use FluentMail\Google\Service\ShoppingContent\OrdersUpdateShipmentResponse;
 
 /**
  * The "orders" collection of methods.

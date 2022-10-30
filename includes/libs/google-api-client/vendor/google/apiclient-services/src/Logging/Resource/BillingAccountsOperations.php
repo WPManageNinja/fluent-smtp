@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Logging\Resource;
+namespace FluentMail\Google\Service\Logging\Resource;
 
-use Google\Service\Logging\Operation;
+use FluentMail\Google\Service\Logging\Operation;
 
 /**
  * The "operations" collection of methods.

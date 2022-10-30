@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseManagement\Resource;
+namespace FluentMail\Google\Service\FirebaseManagement\Resource;
 
-use Google\Service\FirebaseManagement\FinalizeDefaultLocationRequest;
-use Google\Service\FirebaseManagement\Operation;
+use FluentMail\Google\Service\FirebaseManagement\FinalizeDefaultLocationRequest;
+use FluentMail\Google\Service\FirebaseManagement\Operation;
 
 /**
  * The "defaultLocation" collection of methods.

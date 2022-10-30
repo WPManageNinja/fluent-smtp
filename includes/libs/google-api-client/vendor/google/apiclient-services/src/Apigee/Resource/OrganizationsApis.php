@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleApiHttpBody;
-use Google\Service\Apigee\GoogleCloudApigeeV1ApiProxy;
-use Google\Service\Apigee\GoogleCloudApigeeV1ApiProxyRevision;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListApiProxiesResponse;
+use FluentMail\Google\Service\Apigee\GoogleApiHttpBody;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ApiProxy;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ApiProxyRevision;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListApiProxiesResponse;
 
 /**
  * The "apis" collection of methods.

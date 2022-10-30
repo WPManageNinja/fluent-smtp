@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudLocationListLocationsResponse;
-use Google\Service\Dialogflow\GoogleCloudLocationLocation;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudLocationListLocationsResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudLocationLocation;
 
 /**
  * The "locations" collection of methods.

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\ChromeOsDevice;
-use Google\Service\Directory\ChromeOsDeviceAction;
-use Google\Service\Directory\ChromeOsDevices as ChromeOsDevicesModel;
-use Google\Service\Directory\ChromeOsMoveDevicesToOu;
+use FluentMail\Google\Service\Directory\ChromeOsDevice;
+use FluentMail\Google\Service\Directory\ChromeOsDeviceAction;
+use FluentMail\Google\Service\Directory\ChromeOsDevices as ChromeOsDevicesModel;
+use FluentMail\Google\Service\Directory\ChromeOsMoveDevicesToOu;
 
 /**
  * The "chromeosdevices" collection of methods.

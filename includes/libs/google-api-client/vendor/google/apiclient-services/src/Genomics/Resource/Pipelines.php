@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Genomics\Resource;
+namespace FluentMail\Google\Service\Genomics\Resource;
 
-use Google\Service\Genomics\Operation;
-use Google\Service\Genomics\RunPipelineRequest;
+use FluentMail\Google\Service\Genomics\Operation;
+use FluentMail\Google\Service\Genomics\RunPipelineRequest;
 
 /**
  * The "pipelines" collection of methods.

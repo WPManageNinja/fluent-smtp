@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Processor;
+namespace FluentMail\Monolog\Processor;
 
 /**
  * Injects memory_get_usage in all records

@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\Logging\Resource;
+namespace FluentMail\Google\Service\Logging\Resource;
 
-use Google\Service\Logging\CopyLogEntriesRequest;
-use Google\Service\Logging\ListLogEntriesRequest;
-use Google\Service\Logging\ListLogEntriesResponse;
-use Google\Service\Logging\Operation;
-use Google\Service\Logging\TailLogEntriesRequest;
-use Google\Service\Logging\TailLogEntriesResponse;
-use Google\Service\Logging\WriteLogEntriesRequest;
-use Google\Service\Logging\WriteLogEntriesResponse;
+use FluentMail\Google\Service\Logging\CopyLogEntriesRequest;
+use FluentMail\Google\Service\Logging\ListLogEntriesRequest;
+use FluentMail\Google\Service\Logging\ListLogEntriesResponse;
+use FluentMail\Google\Service\Logging\Operation;
+use FluentMail\Google\Service\Logging\TailLogEntriesRequest;
+use FluentMail\Google\Service\Logging\TailLogEntriesResponse;
+use FluentMail\Google\Service\Logging\WriteLogEntriesRequest;
+use FluentMail\Google\Service\Logging\WriteLogEntriesResponse;
 
 /**
  * The "entries" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Logging;
+namespace FluentMail\Google\Service\Logging;
 
 class SourceReference extends \Google\Model
 {

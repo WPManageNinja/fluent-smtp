@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Networkconnectivity\Resource;
+namespace FluentMail\Google\Service\Networkconnectivity\Resource;
 
-use Google\Service\Networkconnectivity\GoogleLongrunningOperation;
-use Google\Service\Networkconnectivity\ListSpokesResponse;
-use Google\Service\Networkconnectivity\Policy;
-use Google\Service\Networkconnectivity\SetIamPolicyRequest;
-use Google\Service\Networkconnectivity\Spoke;
-use Google\Service\Networkconnectivity\TestIamPermissionsRequest;
-use Google\Service\Networkconnectivity\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Networkconnectivity\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Networkconnectivity\ListSpokesResponse;
+use FluentMail\Google\Service\Networkconnectivity\Policy;
+use FluentMail\Google\Service\Networkconnectivity\SetIamPolicyRequest;
+use FluentMail\Google\Service\Networkconnectivity\Spoke;
+use FluentMail\Google\Service\Networkconnectivity\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Networkconnectivity\TestIamPermissionsResponse;
 
 /**
  * The "spokes" collection of methods.

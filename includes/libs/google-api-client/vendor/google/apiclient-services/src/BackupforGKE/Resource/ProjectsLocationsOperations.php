@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\BackupforGKE\Resource;
+namespace FluentMail\Google\Service\BackupforGKE\Resource;
 
-use Google\Service\BackupforGKE\GkebackupEmpty;
-use Google\Service\BackupforGKE\GoogleLongrunningCancelOperationRequest;
-use Google\Service\BackupforGKE\GoogleLongrunningListOperationsResponse;
-use Google\Service\BackupforGKE\GoogleLongrunningOperation;
+use FluentMail\Google\Service\BackupforGKE\GkebackupEmpty;
+use FluentMail\Google\Service\BackupforGKE\GoogleLongrunningCancelOperationRequest;
+use FluentMail\Google\Service\BackupforGKE\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\BackupforGKE\GoogleLongrunningOperation;
 
 /**
  * The "operations" collection of methods.

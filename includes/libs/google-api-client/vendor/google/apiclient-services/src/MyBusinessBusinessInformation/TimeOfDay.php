@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessBusinessInformation;
+namespace FluentMail\Google\Service\MyBusinessBusinessInformation;
 
 class TimeOfDay extends \Google\Model
 {

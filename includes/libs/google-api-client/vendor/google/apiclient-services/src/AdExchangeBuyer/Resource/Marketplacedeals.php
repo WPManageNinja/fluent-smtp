@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyer\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyer\Resource;
 
-use Google\Service\AdExchangeBuyer\AddOrderDealsRequest;
-use Google\Service\AdExchangeBuyer\AddOrderDealsResponse;
-use Google\Service\AdExchangeBuyer\DeleteOrderDealsRequest;
-use Google\Service\AdExchangeBuyer\DeleteOrderDealsResponse;
-use Google\Service\AdExchangeBuyer\EditAllOrderDealsRequest;
-use Google\Service\AdExchangeBuyer\EditAllOrderDealsResponse;
-use Google\Service\AdExchangeBuyer\GetOrderDealsResponse;
+use FluentMail\Google\Service\AdExchangeBuyer\AddOrderDealsRequest;
+use FluentMail\Google\Service\AdExchangeBuyer\AddOrderDealsResponse;
+use FluentMail\Google\Service\AdExchangeBuyer\DeleteOrderDealsRequest;
+use FluentMail\Google\Service\AdExchangeBuyer\DeleteOrderDealsResponse;
+use FluentMail\Google\Service\AdExchangeBuyer\EditAllOrderDealsRequest;
+use FluentMail\Google\Service\AdExchangeBuyer\EditAllOrderDealsResponse;
+use FluentMail\Google\Service\AdExchangeBuyer\GetOrderDealsResponse;
 
 /**
  * The "marketplacedeals" collection of methods.

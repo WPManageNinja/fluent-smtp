@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudTasks\Resource;
+namespace FluentMail\Google\Service\CloudTasks\Resource;
 
-use Google\Service\CloudTasks\ListLocationsResponse;
-use Google\Service\CloudTasks\Location;
+use FluentMail\Google\Service\CloudTasks\ListLocationsResponse;
+use FluentMail\Google\Service\CloudTasks\Location;
 
 /**
  * The "locations" collection of methods.

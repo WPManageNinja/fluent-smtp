@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\AccountPermission;
-use Google\Service\Dfareporting\AccountPermissionsListResponse;
+use FluentMail\Google\Service\Dfareporting\AccountPermission;
+use FluentMail\Google\Service\Dfareporting\AccountPermissionsListResponse;
 
 /**
  * The "accountPermissions" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\TagManager\Resource;
+namespace FluentMail\Google\Service\TagManager\Resource;
 
-use Google\Service\TagManager\Account;
-use Google\Service\TagManager\ListAccountsResponse;
+use FluentMail\Google\Service\TagManager\Account;
+use FluentMail\Google\Service\TagManager\ListAccountsResponse;
 
 /**
  * The "accounts" collection of methods.

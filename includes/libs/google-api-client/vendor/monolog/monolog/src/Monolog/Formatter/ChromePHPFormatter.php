@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Formatter;
+namespace FluentMail\Monolog\Formatter;
 
-use Monolog\Logger;
+use FluentMail\Monolog\Logger;
 
 /**
  * Formats a log message according to the ChromePHP array format

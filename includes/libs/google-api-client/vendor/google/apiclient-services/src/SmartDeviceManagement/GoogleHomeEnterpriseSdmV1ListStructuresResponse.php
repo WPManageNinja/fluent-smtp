@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SmartDeviceManagement;
+namespace FluentMail\Google\Service\SmartDeviceManagement;
 
 class GoogleHomeEnterpriseSdmV1ListStructuresResponse extends \Google\Collection
 {

@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryConnectionService\Resource;
+namespace FluentMail\Google\Service\BigQueryConnectionService\Resource;
 
-use Google\Service\BigQueryConnectionService\BigqueryconnectionEmpty;
-use Google\Service\BigQueryConnectionService\Connection;
-use Google\Service\BigQueryConnectionService\ConnectionCredential;
-use Google\Service\BigQueryConnectionService\GetIamPolicyRequest;
-use Google\Service\BigQueryConnectionService\ListConnectionsResponse;
-use Google\Service\BigQueryConnectionService\Policy;
-use Google\Service\BigQueryConnectionService\SetIamPolicyRequest;
-use Google\Service\BigQueryConnectionService\TestIamPermissionsRequest;
-use Google\Service\BigQueryConnectionService\TestIamPermissionsResponse;
+use FluentMail\Google\Service\BigQueryConnectionService\BigqueryconnectionEmpty;
+use FluentMail\Google\Service\BigQueryConnectionService\Connection;
+use FluentMail\Google\Service\BigQueryConnectionService\ConnectionCredential;
+use FluentMail\Google\Service\BigQueryConnectionService\GetIamPolicyRequest;
+use FluentMail\Google\Service\BigQueryConnectionService\ListConnectionsResponse;
+use FluentMail\Google\Service\BigQueryConnectionService\Policy;
+use FluentMail\Google\Service\BigQueryConnectionService\SetIamPolicyRequest;
+use FluentMail\Google\Service\BigQueryConnectionService\TestIamPermissionsRequest;
+use FluentMail\Google\Service\BigQueryConnectionService\TestIamPermissionsResponse;
 
 /**
  * The "connections" collection of methods.

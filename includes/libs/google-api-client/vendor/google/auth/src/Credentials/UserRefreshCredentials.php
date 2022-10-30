@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-namespace Google\Auth\Credentials;
+namespace FluentMail\Google\Auth\Credentials;
 
-use Google\Auth\CredentialsLoader;
-use Google\Auth\GetQuotaProjectInterface;
-use Google\Auth\OAuth2;
+use FluentMail\Google\Auth\CredentialsLoader;
+use FluentMail\Google\Auth\GetQuotaProjectInterface;
+use FluentMail\Google\Auth\OAuth2;
 
 /**
  * Authenticates requests using User Refresh credentials.

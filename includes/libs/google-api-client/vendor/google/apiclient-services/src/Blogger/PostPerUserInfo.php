@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Blogger;
+namespace FluentMail\Google\Service\Blogger;
 
 class PostPerUserInfo extends \Google\Model
 {

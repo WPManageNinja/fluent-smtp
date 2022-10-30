@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudIdentity;
+namespace FluentMail\Google\Service\CloudIdentity;
 
 class CreateGroupMetadata extends \Google\Model
 {

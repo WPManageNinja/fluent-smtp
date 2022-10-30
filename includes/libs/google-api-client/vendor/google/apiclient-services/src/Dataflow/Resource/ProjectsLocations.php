@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dataflow\Resource;
+namespace FluentMail\Google\Service\Dataflow\Resource;
 
-use Google\Service\Dataflow\SendWorkerMessagesRequest;
-use Google\Service\Dataflow\SendWorkerMessagesResponse;
+use FluentMail\Google\Service\Dataflow\SendWorkerMessagesRequest;
+use FluentMail\Google\Service\Dataflow\SendWorkerMessagesResponse;
 
 /**
  * The "locations" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AndroidManagement\Resource;
+namespace FluentMail\Google\Service\AndroidManagement\Resource;
 
-use Google\Service\AndroidManagement\AndroidmanagementEmpty;
-use Google\Service\AndroidManagement\ListPoliciesResponse;
-use Google\Service\AndroidManagement\Policy;
+use FluentMail\Google\Service\AndroidManagement\AndroidmanagementEmpty;
+use FluentMail\Google\Service\AndroidManagement\ListPoliciesResponse;
+use FluentMail\Google\Service\AndroidManagement\Policy;
 
 /**
  * The "policies" collection of methods.

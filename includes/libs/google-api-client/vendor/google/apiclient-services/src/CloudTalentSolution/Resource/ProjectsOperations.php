@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudTalentSolution\Resource;
+namespace FluentMail\Google\Service\CloudTalentSolution\Resource;
 
-use Google\Service\CloudTalentSolution\Operation;
+use FluentMail\Google\Service\CloudTalentSolution\Operation;
 
 /**
  * The "operations" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\Adexchangebuyer2Empty;
-use Google\Service\AdExchangeBuyerII\FilterSet;
-use Google\Service\AdExchangeBuyerII\ListFilterSetsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\Adexchangebuyer2Empty;
+use FluentMail\Google\Service\AdExchangeBuyerII\FilterSet;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListFilterSetsResponse;
 
 /**
  * The "filterSets" collection of methods.

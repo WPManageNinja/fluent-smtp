@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\CloudSourceRepositories\Resource;
+namespace FluentMail\Google\Service\CloudSourceRepositories\Resource;
 
-use Google\Service\CloudSourceRepositories\ListReposResponse;
-use Google\Service\CloudSourceRepositories\Operation;
-use Google\Service\CloudSourceRepositories\Policy;
-use Google\Service\CloudSourceRepositories\Repo;
-use Google\Service\CloudSourceRepositories\SetIamPolicyRequest;
-use Google\Service\CloudSourceRepositories\SourcerepoEmpty;
-use Google\Service\CloudSourceRepositories\SyncRepoRequest;
-use Google\Service\CloudSourceRepositories\TestIamPermissionsRequest;
-use Google\Service\CloudSourceRepositories\TestIamPermissionsResponse;
-use Google\Service\CloudSourceRepositories\UpdateRepoRequest;
+use FluentMail\Google\Service\CloudSourceRepositories\ListReposResponse;
+use FluentMail\Google\Service\CloudSourceRepositories\Operation;
+use FluentMail\Google\Service\CloudSourceRepositories\Policy;
+use FluentMail\Google\Service\CloudSourceRepositories\Repo;
+use FluentMail\Google\Service\CloudSourceRepositories\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudSourceRepositories\SourcerepoEmpty;
+use FluentMail\Google\Service\CloudSourceRepositories\SyncRepoRequest;
+use FluentMail\Google\Service\CloudSourceRepositories\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudSourceRepositories\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudSourceRepositories\UpdateRepoRequest;
 
 /**
  * The "repos" collection of methods.

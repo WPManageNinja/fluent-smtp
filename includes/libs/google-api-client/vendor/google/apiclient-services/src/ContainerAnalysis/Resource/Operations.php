@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ContainerAnalysis\Resource;
+namespace FluentMail\Google\Service\ContainerAnalysis\Resource;
 
-use Google\Service\ContainerAnalysis\CancelOperationRequest;
-use Google\Service\ContainerAnalysis\ContaineranalysisEmpty;
-use Google\Service\ContainerAnalysis\ListOperationsResponse;
-use Google\Service\ContainerAnalysis\Operation;
+use FluentMail\Google\Service\ContainerAnalysis\CancelOperationRequest;
+use FluentMail\Google\Service\ContainerAnalysis\ContaineranalysisEmpty;
+use FluentMail\Google\Service\ContainerAnalysis\ListOperationsResponse;
+use FluentMail\Google\Service\ContainerAnalysis\Operation;
 
 /**
  * The "operations" collection of methods.

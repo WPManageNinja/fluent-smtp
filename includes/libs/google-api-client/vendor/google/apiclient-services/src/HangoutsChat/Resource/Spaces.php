@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\HangoutsChat\Resource;
+namespace FluentMail\Google\Service\HangoutsChat\Resource;
 
-use Google\Service\HangoutsChat\ListSpacesResponse;
-use Google\Service\HangoutsChat\Message;
-use Google\Service\HangoutsChat\Space;
+use FluentMail\Google\Service\HangoutsChat\ListSpacesResponse;
+use FluentMail\Google\Service\HangoutsChat\Message;
+use FluentMail\Google\Service\HangoutsChat\Space;
 
 /**
  * The "spaces" collection of methods.

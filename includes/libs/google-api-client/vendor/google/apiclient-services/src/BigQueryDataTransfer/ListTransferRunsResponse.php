@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryDataTransfer;
+namespace FluentMail\Google\Service\BigQueryDataTransfer;
 
 class ListTransferRunsResponse extends \Google\Collection
 {

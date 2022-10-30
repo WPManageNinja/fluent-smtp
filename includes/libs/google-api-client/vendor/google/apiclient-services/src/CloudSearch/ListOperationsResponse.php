@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch;
+namespace FluentMail\Google\Service\CloudSearch;
 
 class ListOperationsResponse extends \Google\Collection
 {

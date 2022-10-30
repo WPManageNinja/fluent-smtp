@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\LiveStream;
-use Google\Service\YouTube\LiveStreamListResponse;
+use FluentMail\Google\Service\YouTube\LiveStream;
+use FluentMail\Google\Service\YouTube\LiveStreamListResponse;
 
 /**
  * The "liveStreams" collection of methods.

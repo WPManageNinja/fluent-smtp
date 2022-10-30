@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\ImportGooGetArtifactsRequest;
-use Google\Service\ArtifactRegistry\Operation;
+use FluentMail\Google\Service\ArtifactRegistry\ImportGooGetArtifactsRequest;
+use FluentMail\Google\Service\ArtifactRegistry\Operation;
 
 /**
  * The "gooGetArtifacts" collection of methods.

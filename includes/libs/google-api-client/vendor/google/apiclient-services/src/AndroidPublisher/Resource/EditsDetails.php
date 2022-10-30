@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\AppDetails;
+use FluentMail\Google\Service\AndroidPublisher\AppDetails;
 
 /**
  * The "details" collection of methods.

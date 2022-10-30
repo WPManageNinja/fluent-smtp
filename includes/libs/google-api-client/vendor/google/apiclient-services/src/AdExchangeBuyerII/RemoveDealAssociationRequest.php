@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII;
+namespace FluentMail\Google\Service\AdExchangeBuyerII;
 
 class RemoveDealAssociationRequest extends \Google\Model
 {

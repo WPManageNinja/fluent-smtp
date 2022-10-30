@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\TPU\Resource;
+namespace FluentMail\Google\Service\TPU\Resource;
 
 /**
  * The "projects" collection of methods.

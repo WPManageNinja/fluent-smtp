@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\BillingProfile;
-use Google\Service\Dfareporting\BillingProfilesListResponse;
+use FluentMail\Google\Service\Dfareporting\BillingProfile;
+use FluentMail\Google\Service\Dfareporting\BillingProfilesListResponse;
 
 /**
  * The "billingProfiles" collection of methods.

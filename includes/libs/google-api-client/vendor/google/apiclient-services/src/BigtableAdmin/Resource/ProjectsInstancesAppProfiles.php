@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\BigtableAdmin\Resource;
+namespace FluentMail\Google\Service\BigtableAdmin\Resource;
 
-use Google\Service\BigtableAdmin\AppProfile;
-use Google\Service\BigtableAdmin\BigtableadminEmpty;
-use Google\Service\BigtableAdmin\ListAppProfilesResponse;
-use Google\Service\BigtableAdmin\Operation;
+use FluentMail\Google\Service\BigtableAdmin\AppProfile;
+use FluentMail\Google\Service\BigtableAdmin\BigtableadminEmpty;
+use FluentMail\Google\Service\BigtableAdmin\ListAppProfilesResponse;
+use FluentMail\Google\Service\BigtableAdmin\Operation;
 
 /**
  * The "appProfiles" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\PostalCode;
-use Google\Service\Dfareporting\PostalCodesListResponse;
+use FluentMail\Google\Service\Dfareporting\PostalCode;
+use FluentMail\Google\Service\Dfareporting\PostalCodesListResponse;
 
 /**
  * The "postalCodes" collection of methods.

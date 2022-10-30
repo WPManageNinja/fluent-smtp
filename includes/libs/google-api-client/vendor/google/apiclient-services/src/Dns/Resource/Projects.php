@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Dns\Resource;
+namespace FluentMail\Google\Service\Dns\Resource;
 
-use Google\Service\Dns\Project;
+use FluentMail\Google\Service\Dns\Project;
 
 /**
  * The "projects" collection of methods.

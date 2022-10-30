@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\AccountSummaries;
+use FluentMail\Google\Service\Analytics\AccountSummaries;
 
 /**
  * The "accountSummaries" collection of methods.

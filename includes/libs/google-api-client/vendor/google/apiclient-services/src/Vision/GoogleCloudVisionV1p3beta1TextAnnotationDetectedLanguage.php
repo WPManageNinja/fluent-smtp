@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Vision;
+namespace FluentMail\Google\Service\Vision;
 
 class GoogleCloudVisionV1p3beta1TextAnnotationDetectedLanguage extends \Google\Model
 {

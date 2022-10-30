@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\Bigquery\Resource;
+namespace FluentMail\Google\Service\Bigquery\Resource;
 
-use Google\Service\Bigquery\GetIamPolicyRequest;
-use Google\Service\Bigquery\ListRowAccessPoliciesResponse;
-use Google\Service\Bigquery\Policy;
-use Google\Service\Bigquery\SetIamPolicyRequest;
-use Google\Service\Bigquery\TestIamPermissionsRequest;
-use Google\Service\Bigquery\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Bigquery\GetIamPolicyRequest;
+use FluentMail\Google\Service\Bigquery\ListRowAccessPoliciesResponse;
+use FluentMail\Google\Service\Bigquery\Policy;
+use FluentMail\Google\Service\Bigquery\SetIamPolicyRequest;
+use FluentMail\Google\Service\Bigquery\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Bigquery\TestIamPermissionsResponse;
 
 /**
  * The "rowAccessPolicies" collection of methods.

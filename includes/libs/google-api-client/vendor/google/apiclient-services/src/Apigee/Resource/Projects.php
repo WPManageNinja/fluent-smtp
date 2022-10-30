@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1ProvisionOrganizationRequest;
-use Google\Service\Apigee\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ProvisionOrganizationRequest;
+use FluentMail\Google\Service\Apigee\GoogleLongrunningOperation;
 
 /**
  * The "projects" collection of methods.

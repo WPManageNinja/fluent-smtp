@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ChromeUXReport;
+namespace FluentMail\Google\Service\ChromeUXReport;
 
 class Percentiles extends \Google\Model
 {

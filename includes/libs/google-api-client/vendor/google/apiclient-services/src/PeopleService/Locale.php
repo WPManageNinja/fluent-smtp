@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PeopleService;
+namespace FluentMail\Google\Service\PeopleService;
 
 class Locale extends \Google\Model
 {

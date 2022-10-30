@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\OSConfig;
+namespace FluentMail\Google\Service\OSConfig;
 
 class Operation extends \Google\Model
 {

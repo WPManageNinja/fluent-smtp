@@ -1,6 +1,6 @@
 <?php
 
-namespace Firebase\JWT;
+namespace FluentMail\Firebase\JWT;
 
 use DomainException;
 use InvalidArgumentException;

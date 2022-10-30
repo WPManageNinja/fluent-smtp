@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\CustomMetric;
-use Google\Service\Analytics\CustomMetrics;
+use FluentMail\Google\Service\Analytics\CustomMetric;
+use FluentMail\Google\Service\Analytics\CustomMetrics;
 
 /**
  * The "customMetrics" collection of methods.

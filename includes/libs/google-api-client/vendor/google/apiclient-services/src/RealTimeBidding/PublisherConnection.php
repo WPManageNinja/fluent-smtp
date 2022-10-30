@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\RealTimeBidding;
+namespace FluentMail\Google\Service\RealTimeBidding;
 
 class PublisherConnection extends \Google\Model
 {

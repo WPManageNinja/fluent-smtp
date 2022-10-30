@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BusinessProfilePerformance;
+namespace FluentMail\Google\Service\BusinessProfilePerformance;
 
 class SearchKeywordCount extends \Google\Model
 {

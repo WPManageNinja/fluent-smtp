@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace Google\Auth\HttpHandler;
+namespace FluentMail\Google\Auth\HttpHandler;
 
-use GuzzleHttp\BodySummarizer;
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
+use FluentMail\GuzzleHttp\BodySummarizer;
+use FluentMail\GuzzleHttp\Client;
+use FluentMail\GuzzleHttp\ClientInterface;
+use FluentMail\GuzzleHttp\HandlerStack;
+use FluentMail\GuzzleHttp\Middleware;
 
 class HttpHandlerFactory
 {

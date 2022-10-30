@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdMob\Resource;
+namespace FluentMail\Google\Service\AdMob\Resource;
 
-use Google\Service\AdMob\GenerateMediationReportRequest;
-use Google\Service\AdMob\GenerateMediationReportResponse;
+use FluentMail\Google\Service\AdMob\GenerateMediationReportRequest;
+use FluentMail\Google\Service\AdMob\GenerateMediationReportResponse;
 
 /**
  * The "mediationReport" collection of methods.

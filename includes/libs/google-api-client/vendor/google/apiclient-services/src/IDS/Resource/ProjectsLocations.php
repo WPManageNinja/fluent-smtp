@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\IDS\Resource;
+namespace FluentMail\Google\Service\IDS\Resource;
 
-use Google\Service\IDS\ListLocationsResponse;
-use Google\Service\IDS\Location;
+use FluentMail\Google\Service\IDS\ListLocationsResponse;
+use FluentMail\Google\Service\IDS\Location;
 
 /**
  * The "locations" collection of methods.

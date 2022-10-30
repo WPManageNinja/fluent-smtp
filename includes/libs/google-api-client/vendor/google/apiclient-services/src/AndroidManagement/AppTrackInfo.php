@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AndroidManagement;
+namespace FluentMail\Google\Service\AndroidManagement;
 
 class AppTrackInfo extends \Google\Model
 {

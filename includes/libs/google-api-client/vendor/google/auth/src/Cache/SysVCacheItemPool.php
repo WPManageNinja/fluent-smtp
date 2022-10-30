@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-namespace Google\Auth\Cache;
+namespace FluentMail\Google\Auth\Cache;
 
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
+use FluentMail\Psr\Cache\CacheItemInterface;
+use FluentMail\Psr\Cache\CacheItemPoolInterface;
 
 /**
  * SystemV shared memory based CacheItemPool implementation.

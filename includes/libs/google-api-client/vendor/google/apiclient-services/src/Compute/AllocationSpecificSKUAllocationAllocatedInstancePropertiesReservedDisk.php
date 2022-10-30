@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Compute;
+namespace FluentMail\Google\Service\Compute;
 
 class AllocationSpecificSKUAllocationAllocatedInstancePropertiesReservedDisk extends \Google\Model
 {

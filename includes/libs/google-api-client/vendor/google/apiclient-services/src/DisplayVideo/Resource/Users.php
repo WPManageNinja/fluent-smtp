@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\BulkEditAssignedUserRolesRequest;
-use Google\Service\DisplayVideo\BulkEditAssignedUserRolesResponse;
-use Google\Service\DisplayVideo\DisplayvideoEmpty;
-use Google\Service\DisplayVideo\ListUsersResponse;
-use Google\Service\DisplayVideo\User;
+use FluentMail\Google\Service\DisplayVideo\BulkEditAssignedUserRolesRequest;
+use FluentMail\Google\Service\DisplayVideo\BulkEditAssignedUserRolesResponse;
+use FluentMail\Google\Service\DisplayVideo\DisplayvideoEmpty;
+use FluentMail\Google\Service\DisplayVideo\ListUsersResponse;
+use FluentMail\Google\Service\DisplayVideo\User;
 
 /**
  * The "users" collection of methods.

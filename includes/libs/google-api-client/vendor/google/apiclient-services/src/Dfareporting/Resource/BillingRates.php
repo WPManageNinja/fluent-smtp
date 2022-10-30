@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\BillingRatesListResponse;
+use FluentMail\Google\Service\Dfareporting\BillingRatesListResponse;
 
 /**
  * The "billingRates" collection of methods.

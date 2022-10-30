@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\SearchListResponse;
+use FluentMail\Google\Service\YouTube\SearchListResponse;
 
 /**
  * The "search" collection of methods.

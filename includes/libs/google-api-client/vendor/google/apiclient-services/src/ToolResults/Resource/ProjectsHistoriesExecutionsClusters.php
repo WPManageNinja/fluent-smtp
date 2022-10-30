@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ToolResults\Resource;
+namespace FluentMail\Google\Service\ToolResults\Resource;
 
-use Google\Service\ToolResults\ListScreenshotClustersResponse;
-use Google\Service\ToolResults\ScreenshotCluster;
+use FluentMail\Google\Service\ToolResults\ListScreenshotClustersResponse;
+use FluentMail\Google\Service\ToolResults\ScreenshotCluster;
 
 /**
  * The "clusters" collection of methods.

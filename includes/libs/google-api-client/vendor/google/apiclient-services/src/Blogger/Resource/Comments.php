@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Blogger\Resource;
+namespace FluentMail\Google\Service\Blogger\Resource;
 
-use Google\Service\Blogger\Comment;
-use Google\Service\Blogger\CommentList;
+use FluentMail\Google\Service\Blogger\Comment;
+use FluentMail\Google\Service\Blogger\CommentList;
 
 /**
  * The "comments" collection of methods.

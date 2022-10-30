@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\Product;
-use Google\Service\ShoppingContent\ProductsCustomBatchRequest;
-use Google\Service\ShoppingContent\ProductsCustomBatchResponse;
-use Google\Service\ShoppingContent\ProductsListResponse;
+use FluentMail\Google\Service\ShoppingContent\Product;
+use FluentMail\Google\Service\ShoppingContent\ProductsCustomBatchRequest;
+use FluentMail\Google\Service\ShoppingContent\ProductsCustomBatchResponse;
+use FluentMail\Google\Service\ShoppingContent\ProductsListResponse;
 
 /**
  * The "products" collection of methods.

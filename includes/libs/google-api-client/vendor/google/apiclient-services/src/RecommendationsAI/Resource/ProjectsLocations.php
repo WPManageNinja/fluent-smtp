@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\RecommendationsAI\Resource;
+namespace FluentMail\Google\Service\RecommendationsAI\Resource;
 
 /**
  * The "locations" collection of methods.

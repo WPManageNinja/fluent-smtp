@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\CustomDataSources;
+use FluentMail\Google\Service\Analytics\CustomDataSources;
 
 /**
  * The "customDataSources" collection of methods.

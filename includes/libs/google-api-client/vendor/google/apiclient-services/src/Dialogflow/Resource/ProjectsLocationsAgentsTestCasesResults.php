@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListTestCaseResultsResponse;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3TestCaseResult;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListTestCaseResultsResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3TestCaseResult;
 
 /**
  * The "results" collection of methods.

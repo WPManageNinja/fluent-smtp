@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\VMMigrationService\Resource;
+namespace FluentMail\Google\Service\VMMigrationService\Resource;
 
-use Google\Service\VMMigrationService\FetchInventoryResponse;
-use Google\Service\VMMigrationService\ListSourcesResponse;
-use Google\Service\VMMigrationService\Operation;
-use Google\Service\VMMigrationService\Source;
+use FluentMail\Google\Service\VMMigrationService\FetchInventoryResponse;
+use FluentMail\Google\Service\VMMigrationService\ListSourcesResponse;
+use FluentMail\Google\Service\VMMigrationService\Operation;
+use FluentMail\Google\Service\VMMigrationService\Source;
 
 /**
  * The "sources" collection of methods.

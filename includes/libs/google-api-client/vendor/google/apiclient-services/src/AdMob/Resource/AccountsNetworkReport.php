@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdMob\Resource;
+namespace FluentMail\Google\Service\AdMob\Resource;
 
-use Google\Service\AdMob\GenerateNetworkReportRequest;
-use Google\Service\AdMob\GenerateNetworkReportResponse;
+use FluentMail\Google\Service\AdMob\GenerateNetworkReportRequest;
+use FluentMail\Google\Service\AdMob\GenerateNetworkReportResponse;
 
 /**
  * The "networkReport" collection of methods.

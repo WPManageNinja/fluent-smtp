@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Playdeveloperreporting\Resource;
+namespace FluentMail\Google\Service\Playdeveloperreporting\Resource;
 
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1CrashRateMetricSet;
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryCrashRateMetricSetRequest;
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryCrashRateMetricSetResponse;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1CrashRateMetricSet;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryCrashRateMetricSetRequest;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryCrashRateMetricSetResponse;
 
 /**
  * The "crashrate" collection of methods.

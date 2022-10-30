@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1ListRatePlansResponse;
-use Google\Service\Apigee\GoogleCloudApigeeV1RatePlan;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListRatePlansResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1RatePlan;
 
 /**
  * The "rateplans" collection of methods.

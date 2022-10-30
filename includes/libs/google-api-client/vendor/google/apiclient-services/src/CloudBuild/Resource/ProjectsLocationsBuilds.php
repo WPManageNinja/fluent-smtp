@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\CloudBuild\Resource;
+namespace FluentMail\Google\Service\CloudBuild\Resource;
 
-use Google\Service\CloudBuild\ApproveBuildRequest;
-use Google\Service\CloudBuild\Build;
-use Google\Service\CloudBuild\CancelBuildRequest;
-use Google\Service\CloudBuild\ListBuildsResponse;
-use Google\Service\CloudBuild\Operation;
-use Google\Service\CloudBuild\RetryBuildRequest;
+use FluentMail\Google\Service\CloudBuild\ApproveBuildRequest;
+use FluentMail\Google\Service\CloudBuild\Build;
+use FluentMail\Google\Service\CloudBuild\CancelBuildRequest;
+use FluentMail\Google\Service\CloudBuild\ListBuildsResponse;
+use FluentMail\Google\Service\CloudBuild\Operation;
+use FluentMail\Google\Service\CloudBuild\RetryBuildRequest;
 
 /**
  * The "builds" collection of methods.

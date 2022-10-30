@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\Assuredworkloads\Resource;
+namespace FluentMail\Google\Service\Assuredworkloads\Resource;
 
-use Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1ListWorkloadsResponse;
-use Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1RestrictAllowedResourcesRequest;
-use Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1RestrictAllowedResourcesResponse;
-use Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1Workload;
-use Google\Service\Assuredworkloads\GoogleLongrunningOperation;
-use Google\Service\Assuredworkloads\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1ListWorkloadsResponse;
+use FluentMail\Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1RestrictAllowedResourcesRequest;
+use FluentMail\Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1RestrictAllowedResourcesResponse;
+use FluentMail\Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1Workload;
+use FluentMail\Google\Service\Assuredworkloads\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Assuredworkloads\GoogleProtobufEmpty;
 
 /**
  * The "workloads" collection of methods.

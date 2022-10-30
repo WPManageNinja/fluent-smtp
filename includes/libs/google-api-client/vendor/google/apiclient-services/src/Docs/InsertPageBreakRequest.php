@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Docs;
+namespace FluentMail\Google\Service\Docs;
 
 class InsertPageBreakRequest extends \Google\Model
 {

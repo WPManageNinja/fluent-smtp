@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessPlaceActions\Resource;
+namespace FluentMail\Google\Service\MyBusinessPlaceActions\Resource;
 
-use Google\Service\MyBusinessPlaceActions\ListPlaceActionTypeMetadataResponse;
+use FluentMail\Google\Service\MyBusinessPlaceActions\ListPlaceActionTypeMetadataResponse;
 
 /**
  * The "placeActionTypeMetadata" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CertificateManager;
+namespace FluentMail\Google\Service\CertificateManager;
 
 class Status extends \Google\Collection
 {

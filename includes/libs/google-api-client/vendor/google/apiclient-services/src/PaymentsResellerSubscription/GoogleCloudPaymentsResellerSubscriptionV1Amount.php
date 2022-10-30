@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PaymentsResellerSubscription;
+namespace FluentMail\Google\Service\PaymentsResellerSubscription;
 
 class GoogleCloudPaymentsResellerSubscriptionV1Amount extends \Google\Model
 {

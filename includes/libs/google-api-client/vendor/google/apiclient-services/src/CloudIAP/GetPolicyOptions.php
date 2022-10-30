@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudIAP;
+namespace FluentMail\Google\Service\CloudIAP;
 
 class GetPolicyOptions extends \Google\Model
 {

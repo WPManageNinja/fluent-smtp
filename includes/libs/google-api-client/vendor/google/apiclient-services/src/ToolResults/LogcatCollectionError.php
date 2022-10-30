@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ToolResults;
+namespace FluentMail\Google\Service\ToolResults;
 
 class LogcatCollectionError extends \Google\Model
 {

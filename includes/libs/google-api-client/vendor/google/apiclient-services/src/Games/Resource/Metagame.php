@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Games\Resource;
+namespace FluentMail\Google\Service\Games\Resource;
 
-use Google\Service\Games\CategoryListResponse;
-use Google\Service\Games\MetagameConfig;
+use FluentMail\Google\Service\Games\CategoryListResponse;
+use FluentMail\Google\Service\Games\MetagameConfig;
 
 /**
  * The "metagame" collection of methods.

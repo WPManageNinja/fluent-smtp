@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\Delegate;
-use Google\Service\Gmail\ListDelegatesResponse;
+use FluentMail\Google\Service\Gmail\Delegate;
+use FluentMail\Google\Service\Gmail\ListDelegatesResponse;
 
 /**
  * The "delegates" collection of methods.

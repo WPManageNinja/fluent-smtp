@@ -13,11 +13,11 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\DSA\Formats\Keys;
+namespace FluentMail\phpseclib3\Crypt\DSA\Formats\Keys;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Crypt\Common\Formats\Keys\OpenSSH as Progenitor;
-use phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Crypt\Common\Formats\Keys\OpenSSH as Progenitor;
+use FluentMail\phpseclib3\Math\BigInteger;
 
 /**
  * OpenSSH Formatted DSA Key Handler

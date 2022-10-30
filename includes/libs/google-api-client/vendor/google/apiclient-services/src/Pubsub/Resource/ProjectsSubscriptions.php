@@ -15,24 +15,24 @@
  * the License.
  */
 
-namespace Google\Service\Pubsub\Resource;
+namespace FluentMail\Google\Service\Pubsub\Resource;
 
-use Google\Service\Pubsub\AcknowledgeRequest;
-use Google\Service\Pubsub\DetachSubscriptionResponse;
-use Google\Service\Pubsub\ListSubscriptionsResponse;
-use Google\Service\Pubsub\ModifyAckDeadlineRequest;
-use Google\Service\Pubsub\ModifyPushConfigRequest;
-use Google\Service\Pubsub\Policy;
-use Google\Service\Pubsub\PubsubEmpty;
-use Google\Service\Pubsub\PullRequest;
-use Google\Service\Pubsub\PullResponse;
-use Google\Service\Pubsub\SeekRequest;
-use Google\Service\Pubsub\SeekResponse;
-use Google\Service\Pubsub\SetIamPolicyRequest;
-use Google\Service\Pubsub\Subscription;
-use Google\Service\Pubsub\TestIamPermissionsRequest;
-use Google\Service\Pubsub\TestIamPermissionsResponse;
-use Google\Service\Pubsub\UpdateSubscriptionRequest;
+use FluentMail\Google\Service\Pubsub\AcknowledgeRequest;
+use FluentMail\Google\Service\Pubsub\DetachSubscriptionResponse;
+use FluentMail\Google\Service\Pubsub\ListSubscriptionsResponse;
+use FluentMail\Google\Service\Pubsub\ModifyAckDeadlineRequest;
+use FluentMail\Google\Service\Pubsub\ModifyPushConfigRequest;
+use FluentMail\Google\Service\Pubsub\Policy;
+use FluentMail\Google\Service\Pubsub\PubsubEmpty;
+use FluentMail\Google\Service\Pubsub\PullRequest;
+use FluentMail\Google\Service\Pubsub\PullResponse;
+use FluentMail\Google\Service\Pubsub\SeekRequest;
+use FluentMail\Google\Service\Pubsub\SeekResponse;
+use FluentMail\Google\Service\Pubsub\SetIamPolicyRequest;
+use FluentMail\Google\Service\Pubsub\Subscription;
+use FluentMail\Google\Service\Pubsub\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Pubsub\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Pubsub\UpdateSubscriptionRequest;
 
 /**
  * The "subscriptions" collection of methods.

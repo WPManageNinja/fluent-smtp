@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Logging;
+namespace FluentMail\Google\Service\Logging;
 
 class MetricDescriptor extends \Google\Collection
 {

@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\IDS\Resource;
+namespace FluentMail\Google\Service\IDS\Resource;
 
-use Google\Service\IDS\Endpoint;
-use Google\Service\IDS\ListEndpointsResponse;
-use Google\Service\IDS\Operation;
-use Google\Service\IDS\Policy;
-use Google\Service\IDS\SetIamPolicyRequest;
-use Google\Service\IDS\TestIamPermissionsRequest;
-use Google\Service\IDS\TestIamPermissionsResponse;
+use FluentMail\Google\Service\IDS\Endpoint;
+use FluentMail\Google\Service\IDS\ListEndpointsResponse;
+use FluentMail\Google\Service\IDS\Operation;
+use FluentMail\Google\Service\IDS\Policy;
+use FluentMail\Google\Service\IDS\SetIamPolicyRequest;
+use FluentMail\Google\Service\IDS\TestIamPermissionsRequest;
+use FluentMail\Google\Service\IDS\TestIamPermissionsResponse;
 
 /**
  * The "endpoints" collection of methods.

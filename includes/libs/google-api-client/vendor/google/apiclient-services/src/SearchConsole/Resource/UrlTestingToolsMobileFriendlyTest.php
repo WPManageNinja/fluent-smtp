@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\SearchConsole\Resource;
+namespace FluentMail\Google\Service\SearchConsole\Resource;
 
-use Google\Service\SearchConsole\RunMobileFriendlyTestRequest;
-use Google\Service\SearchConsole\RunMobileFriendlyTestResponse;
+use FluentMail\Google\Service\SearchConsole\RunMobileFriendlyTestRequest;
+use FluentMail\Google\Service\SearchConsole\RunMobileFriendlyTestResponse;
 
 /**
  * The "mobileFriendlyTest" collection of methods.

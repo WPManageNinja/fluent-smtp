@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Safebrowsing\Resource;
+namespace FluentMail\Google\Service\Safebrowsing\Resource;
 
-use Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4FindFullHashesRequest;
-use Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4FindFullHashesResponse;
+use FluentMail\Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4FindFullHashesRequest;
+use FluentMail\Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4FindFullHashesResponse;
 
 /**
  * The "fullHashes" collection of methods.

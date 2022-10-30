@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\FreeListingsProgramStatus;
-use Google\Service\ShoppingContent\RequestReviewFreeListingsRequest;
+use FluentMail\Google\Service\ShoppingContent\FreeListingsProgramStatus;
+use FluentMail\Google\Service\ShoppingContent\RequestReviewFreeListingsRequest;
 
 /**
  * The "freelistingsprogram" collection of methods.

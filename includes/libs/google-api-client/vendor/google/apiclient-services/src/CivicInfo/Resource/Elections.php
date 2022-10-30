@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CivicInfo\Resource;
+namespace FluentMail\Google\Service\CivicInfo\Resource;
 
-use Google\Service\CivicInfo\ElectionsQueryResponse;
-use Google\Service\CivicInfo\VoterInfoResponse;
+use FluentMail\Google\Service\CivicInfo\ElectionsQueryResponse;
+use FluentMail\Google\Service\CivicInfo\VoterInfoResponse;
 
 /**
  * The "elections" collection of methods.

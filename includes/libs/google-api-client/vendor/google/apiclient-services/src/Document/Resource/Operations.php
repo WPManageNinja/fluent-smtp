@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Document\Resource;
+namespace FluentMail\Google\Service\Document\Resource;
 
-use Google\Service\Document\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Document\GoogleProtobufEmpty;
 
 /**
  * The "operations" collection of methods.

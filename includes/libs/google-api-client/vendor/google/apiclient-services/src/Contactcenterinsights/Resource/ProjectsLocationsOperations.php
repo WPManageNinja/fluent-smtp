@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Contactcenterinsights\Resource;
+namespace FluentMail\Google\Service\Contactcenterinsights\Resource;
 
-use Google\Service\Contactcenterinsights\GoogleLongrunningListOperationsResponse;
-use Google\Service\Contactcenterinsights\GoogleLongrunningOperation;
-use Google\Service\Contactcenterinsights\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleProtobufEmpty;
 
 /**
  * The "operations" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\UserProfile;
-use Google\Service\Dfareporting\UserProfileList;
+use FluentMail\Google\Service\Dfareporting\UserProfile;
+use FluentMail\Google\Service\Dfareporting\UserProfileList;
 
 /**
  * The "userProfiles" collection of methods.

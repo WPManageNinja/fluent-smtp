@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\InstanceGroup;
-use Google\Service\Compute\InstanceGroupAggregatedList;
-use Google\Service\Compute\InstanceGroupList;
-use Google\Service\Compute\InstanceGroupsAddInstancesRequest;
-use Google\Service\Compute\InstanceGroupsListInstances;
-use Google\Service\Compute\InstanceGroupsListInstancesRequest;
-use Google\Service\Compute\InstanceGroupsRemoveInstancesRequest;
-use Google\Service\Compute\InstanceGroupsSetNamedPortsRequest;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\InstanceGroup;
+use FluentMail\Google\Service\Compute\InstanceGroupAggregatedList;
+use FluentMail\Google\Service\Compute\InstanceGroupList;
+use FluentMail\Google\Service\Compute\InstanceGroupsAddInstancesRequest;
+use FluentMail\Google\Service\Compute\InstanceGroupsListInstances;
+use FluentMail\Google\Service\Compute\InstanceGroupsListInstancesRequest;
+use FluentMail\Google\Service\Compute\InstanceGroupsRemoveInstancesRequest;
+use FluentMail\Google\Service\Compute\InstanceGroupsSetNamedPortsRequest;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "instanceGroups" collection of methods.

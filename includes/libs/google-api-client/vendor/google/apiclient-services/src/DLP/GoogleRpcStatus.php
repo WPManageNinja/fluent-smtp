@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DLP;
+namespace FluentMail\Google\Service\DLP;
 
 class GoogleRpcStatus extends \Google\Collection
 {

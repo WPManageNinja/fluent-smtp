@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\CloudMachineLearningEngine\Resource;
+namespace FluentMail\Google\Service\CloudMachineLearningEngine\Resource;
 
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1AddTrialMeasurementRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1CheckTrialEarlyStoppingStateRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1CompleteTrialRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListOptimalTrialsRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListOptimalTrialsResponse;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListTrialsResponse;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1StopTrialRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1SuggestTrialsRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1Trial;
-use Google\Service\CloudMachineLearningEngine\GoogleLongrunningOperation;
-use Google\Service\CloudMachineLearningEngine\GoogleProtobufEmpty;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1AddTrialMeasurementRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1CheckTrialEarlyStoppingStateRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1CompleteTrialRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListOptimalTrialsRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListOptimalTrialsResponse;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListTrialsResponse;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1StopTrialRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1SuggestTrialsRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1Trial;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleProtobufEmpty;
 
 /**
  * The "trials" collection of methods.

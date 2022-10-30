@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\ListPackagesResponse;
-use Google\Service\ArtifactRegistry\Operation;
-use Google\Service\ArtifactRegistry\Package;
+use FluentMail\Google\Service\ArtifactRegistry\ListPackagesResponse;
+use FluentMail\Google\Service\ArtifactRegistry\Operation;
+use FluentMail\Google\Service\ArtifactRegistry\Package;
 
 /**
  * The "packages" collection of methods.

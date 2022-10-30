@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseManagement;
+namespace FluentMail\Google\Service\FirebaseManagement;
 
 class UndeleteWebAppRequest extends \Google\Model
 {

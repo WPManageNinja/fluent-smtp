@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Spanner\Resource;
+namespace FluentMail\Google\Service\Spanner\Resource;
 
-use Google\Service\Spanner\ListDatabaseRolesResponse;
-use Google\Service\Spanner\TestIamPermissionsRequest;
-use Google\Service\Spanner\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Spanner\ListDatabaseRolesResponse;
+use FluentMail\Google\Service\Spanner\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Spanner\TestIamPermissionsResponse;
 
 /**
  * The "databaseRoles" collection of methods.

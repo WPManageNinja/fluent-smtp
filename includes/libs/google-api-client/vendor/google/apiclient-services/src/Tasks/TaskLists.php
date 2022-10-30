@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Tasks;
+namespace FluentMail\Google\Service\Tasks;
 
 class TaskLists extends \Google\Collection
 {

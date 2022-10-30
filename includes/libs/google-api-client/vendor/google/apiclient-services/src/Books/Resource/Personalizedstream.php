@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\Discoveryclusters;
+use FluentMail\Google\Service\Books\Discoveryclusters;
 
 /**
  * The "personalizedstream" collection of methods.

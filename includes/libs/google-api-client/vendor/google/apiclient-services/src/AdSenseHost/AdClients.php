@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AdSenseHost;
+namespace FluentMail\Google\Service\AdSenseHost;
 
 class AdClients extends \Google\Collection
 {

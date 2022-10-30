@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Connectors\Resource;
+namespace FluentMail\Google\Service\Connectors\Resource;
 
-use Google\Service\Connectors\ExecuteSqlQueryRequest;
-use Google\Service\Connectors\ExecuteSqlQueryResponse;
+use FluentMail\Google\Service\Connectors\ExecuteSqlQueryRequest;
+use FluentMail\Google\Service\Connectors\ExecuteSqlQueryResponse;
 
 /**
  * The "connections" collection of methods.

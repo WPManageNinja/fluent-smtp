@@ -27,24 +27,24 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt;
+namespace FluentMail\phpseclib3\Crypt;
 
-use phpseclib3\Crypt\Common\AsymmetricKey;
-use phpseclib3\Crypt\EC\BaseCurves\Montgomery as MontgomeryCurve;
-use phpseclib3\Crypt\EC\BaseCurves\TwistedEdwards as TwistedEdwardsCurve;
-use phpseclib3\Crypt\EC\Curves\Curve25519;
-use phpseclib3\Crypt\EC\Curves\Ed25519;
-use phpseclib3\Crypt\EC\Curves\Ed448;
-use phpseclib3\Crypt\EC\Formats\Keys\PKCS1;
-use phpseclib3\Crypt\EC\Parameters;
-use phpseclib3\Crypt\EC\PrivateKey;
-use phpseclib3\Crypt\EC\PublicKey;
-use phpseclib3\Exception\UnsupportedAlgorithmException;
-use phpseclib3\Exception\UnsupportedCurveException;
-use phpseclib3\Exception\UnsupportedOperationException;
-use phpseclib3\File\ASN1;
-use phpseclib3\File\ASN1\Maps\ECParameters;
-use phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Crypt\Common\AsymmetricKey;
+use FluentMail\phpseclib3\Crypt\EC\BaseCurves\Montgomery as MontgomeryCurve;
+use FluentMail\phpseclib3\Crypt\EC\BaseCurves\TwistedEdwards as TwistedEdwardsCurve;
+use FluentMail\phpseclib3\Crypt\EC\Curves\Curve25519;
+use FluentMail\phpseclib3\Crypt\EC\Curves\Ed25519;
+use FluentMail\phpseclib3\Crypt\EC\Curves\Ed448;
+use FluentMail\phpseclib3\Crypt\EC\Formats\Keys\PKCS1;
+use FluentMail\phpseclib3\Crypt\EC\Parameters;
+use FluentMail\phpseclib3\Crypt\EC\PrivateKey;
+use FluentMail\phpseclib3\Crypt\EC\PublicKey;
+use FluentMail\phpseclib3\Exception\UnsupportedAlgorithmException;
+use FluentMail\phpseclib3\Exception\UnsupportedCurveException;
+use FluentMail\phpseclib3\Exception\UnsupportedOperationException;
+use FluentMail\phpseclib3\File\ASN1;
+use FluentMail\phpseclib3\File\ASN1\Maps\ECParameters;
+use FluentMail\phpseclib3\Math\BigInteger;
 
 /**
  * Pure-PHP implementation of EC.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\Project;
-use Google\Service\Dfareporting\ProjectsListResponse;
+use FluentMail\Google\Service\Dfareporting\Project;
+use FluentMail\Google\Service\Dfareporting\ProjectsListResponse;
 
 /**
  * The "projects" collection of methods.

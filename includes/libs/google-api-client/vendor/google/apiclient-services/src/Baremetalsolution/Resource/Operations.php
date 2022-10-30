@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
-use Google\Service\Baremetalsolution\BaremetalsolutionEmpty;
-use Google\Service\Baremetalsolution\CancelOperationRequest;
-use Google\Service\Baremetalsolution\ListOperationsResponse;
-use Google\Service\Baremetalsolution\Operation;
+use FluentMail\Google\Service\Baremetalsolution\BaremetalsolutionEmpty;
+use FluentMail\Google\Service\Baremetalsolution\CancelOperationRequest;
+use FluentMail\Google\Service\Baremetalsolution\ListOperationsResponse;
+use FluentMail\Google\Service\Baremetalsolution\Operation;
 
 /**
  * The "operations" collection of methods.

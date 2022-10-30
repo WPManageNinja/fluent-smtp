@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListContinuousTestResultsResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListContinuousTestResultsResponse;
 
 /**
  * The "continuousTestResults" collection of methods.

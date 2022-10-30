@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting;
+namespace FluentMail\Google\Service\Dfareporting;
 
 class TargetableRemarketingList extends \Google\Model
 {

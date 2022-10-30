@@ -1,12 +1,12 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace FluentMail\GuzzleHttp\Handler;
 
-use GuzzleHttp\Promise as P;
-use GuzzleHttp\Promise\Promise;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Utils;
-use Psr\Http\Message\RequestInterface;
+use FluentMail\GuzzleHttp\Promise as P;
+use FluentMail\GuzzleHttp\Promise\Promise;
+use FluentMail\GuzzleHttp\Promise\PromiseInterface;
+use FluentMail\GuzzleHttp\Utils;
+use FluentMail\Psr\Http\Message\RequestInterface;
 
 /**
  * Returns an asynchronous response using curl_multi_* functions.

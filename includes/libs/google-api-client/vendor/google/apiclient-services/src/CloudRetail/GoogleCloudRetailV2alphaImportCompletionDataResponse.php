@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudRetail;
+namespace FluentMail\Google\Service\CloudRetail;
 
 class GoogleCloudRetailV2alphaImportCompletionDataResponse extends \Google\Collection
 {

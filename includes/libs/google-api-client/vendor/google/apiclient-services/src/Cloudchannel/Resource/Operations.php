@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Cloudchannel\Resource;
+namespace FluentMail\Google\Service\Cloudchannel\Resource;
 
-use Google\Service\Cloudchannel\GoogleLongrunningCancelOperationRequest;
-use Google\Service\Cloudchannel\GoogleLongrunningListOperationsResponse;
-use Google\Service\Cloudchannel\GoogleLongrunningOperation;
-use Google\Service\Cloudchannel\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Cloudchannel\GoogleLongrunningCancelOperationRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Cloudchannel\GoogleProtobufEmpty;
 
 /**
  * The "operations" collection of methods.

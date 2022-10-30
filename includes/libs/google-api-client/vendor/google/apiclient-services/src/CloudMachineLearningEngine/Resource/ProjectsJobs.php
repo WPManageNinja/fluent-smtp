@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\CloudMachineLearningEngine\Resource;
+namespace FluentMail\Google\Service\CloudMachineLearningEngine\Resource;
 
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1CancelJobRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1Job;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListJobsResponse;
-use Google\Service\CloudMachineLearningEngine\GoogleIamV1Policy;
-use Google\Service\CloudMachineLearningEngine\GoogleIamV1SetIamPolicyRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleIamV1TestIamPermissionsRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleIamV1TestIamPermissionsResponse;
-use Google\Service\CloudMachineLearningEngine\GoogleProtobufEmpty;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1CancelJobRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1Job;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListJobsResponse;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleIamV1Policy;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleIamV1SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleIamV1TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleIamV1TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleProtobufEmpty;
 
 /**
  * The "jobs" collection of methods.

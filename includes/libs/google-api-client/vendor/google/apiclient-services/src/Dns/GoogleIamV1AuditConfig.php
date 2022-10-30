@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dns;
+namespace FluentMail\Google\Service\Dns;
 
 class GoogleIamV1AuditConfig extends \Google\Collection
 {

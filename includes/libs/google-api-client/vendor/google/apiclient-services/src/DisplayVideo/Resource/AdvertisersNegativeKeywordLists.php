@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\DisplayvideoEmpty;
-use Google\Service\DisplayVideo\ListNegativeKeywordListsResponse;
-use Google\Service\DisplayVideo\NegativeKeywordList;
+use FluentMail\Google\Service\DisplayVideo\DisplayvideoEmpty;
+use FluentMail\Google\Service\DisplayVideo\ListNegativeKeywordListsResponse;
+use FluentMail\Google\Service\DisplayVideo\NegativeKeywordList;
 
 /**
  * The "negativeKeywordLists" collection of methods.

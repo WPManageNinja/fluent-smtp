@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
-use Google\Service\Monitoring\AlertPolicy;
-use Google\Service\Monitoring\ListAlertPoliciesResponse;
-use Google\Service\Monitoring\MonitoringEmpty;
+use FluentMail\Google\Service\Monitoring\AlertPolicy;
+use FluentMail\Google\Service\Monitoring\ListAlertPoliciesResponse;
+use FluentMail\Google\Service\Monitoring\MonitoringEmpty;
 
 /**
  * The "alertPolicies" collection of methods.

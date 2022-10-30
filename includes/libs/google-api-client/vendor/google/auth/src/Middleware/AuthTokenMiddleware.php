@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-namespace Google\Auth\Middleware;
+namespace FluentMail\Google\Auth\Middleware;
 
-use Google\Auth\FetchAuthTokenInterface;
-use Google\Auth\GetQuotaProjectInterface;
-use Psr\Http\Message\RequestInterface;
+use FluentMail\Google\Auth\FetchAuthTokenInterface;
+use FluentMail\Google\Auth\GetQuotaProjectInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
 
 /**
  * AuthTokenMiddleware is a Guzzle Middleware that adds an Authorization header
@@ -69,10 +69,10 @@ class AuthTokenMiddleware
     /**
      * Updates the request with an Authorization header when auth is 'google_auth'.
      *
-     *   use Google\Auth\Middleware\AuthTokenMiddleware;
-     *   use Google\Auth\OAuth2;
-     *   use GuzzleHttp\Client;
-     *   use GuzzleHttp\HandlerStack;
+     *   use FluentMail\Google\Auth\Middleware\AuthTokenMiddleware;
+     *   use FluentMail\Google\Auth\OAuth2;
+     *   use FluentMail\GuzzleHttp\Client;
+     *   use FluentMail\GuzzleHttp\HandlerStack;
      *
      *   $config = [..<oauth config param>.];
      *   $oauth2 = new OAuth2($config)

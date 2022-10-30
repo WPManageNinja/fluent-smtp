@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudVideoIntelligence;
+namespace FluentMail\Google\Service\CloudVideoIntelligence;
 
 class GoogleCloudVideointelligenceV1p2beta1NormalizedVertex extends \Google\Model
 {

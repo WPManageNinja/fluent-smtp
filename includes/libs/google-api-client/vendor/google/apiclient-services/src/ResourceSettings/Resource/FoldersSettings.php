@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ResourceSettings\Resource;
+namespace FluentMail\Google\Service\ResourceSettings\Resource;
 
-use Google\Service\ResourceSettings\GoogleCloudResourcesettingsV1ListSettingsResponse;
-use Google\Service\ResourceSettings\GoogleCloudResourcesettingsV1Setting;
+use FluentMail\Google\Service\ResourceSettings\GoogleCloudResourcesettingsV1ListSettingsResponse;
+use FluentMail\Google\Service\ResourceSettings\GoogleCloudResourcesettingsV1Setting;
 
 /**
  * The "settings" collection of methods.

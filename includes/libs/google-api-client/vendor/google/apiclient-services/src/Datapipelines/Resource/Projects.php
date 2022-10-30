@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Datapipelines\Resource;
+namespace FluentMail\Google\Service\Datapipelines\Resource;
 
 /**
  * The "projects" collection of methods.

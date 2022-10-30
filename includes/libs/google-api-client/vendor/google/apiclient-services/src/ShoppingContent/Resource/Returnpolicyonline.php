@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\ListReturnPolicyOnlineResponse;
-use Google\Service\ShoppingContent\ReturnPolicyOnline as ReturnPolicyOnlineModel;
+use FluentMail\Google\Service\ShoppingContent\ListReturnPolicyOnlineResponse;
+use FluentMail\Google\Service\ShoppingContent\ReturnPolicyOnline as ReturnPolicyOnlineModel;
 
 /**
  * The "returnpolicyonline" collection of methods.

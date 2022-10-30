@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Docs\Resource;
+namespace FluentMail\Google\Service\Docs\Resource;
 
-use Google\Service\Docs\BatchUpdateDocumentRequest;
-use Google\Service\Docs\BatchUpdateDocumentResponse;
-use Google\Service\Docs\Document;
+use FluentMail\Google\Service\Docs\BatchUpdateDocumentRequest;
+use FluentMail\Google\Service\Docs\BatchUpdateDocumentResponse;
+use FluentMail\Google\Service\Docs\Document;
 
 /**
  * The "documents" collection of methods.

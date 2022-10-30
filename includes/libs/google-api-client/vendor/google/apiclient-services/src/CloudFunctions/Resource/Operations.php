@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudFunctions\Resource;
+namespace FluentMail\Google\Service\CloudFunctions\Resource;
 
-use Google\Service\CloudFunctions\ListOperationsResponse;
-use Google\Service\CloudFunctions\Operation;
+use FluentMail\Google\Service\CloudFunctions\ListOperationsResponse;
+use FluentMail\Google\Service\CloudFunctions\Operation;
 
 /**
  * The "operations" collection of methods.

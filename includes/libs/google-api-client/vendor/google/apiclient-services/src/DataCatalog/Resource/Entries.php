@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\DataCatalog\Resource;
+namespace FluentMail\Google\Service\DataCatalog\Resource;
 
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1Entry;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1Entry;
 
 /**
  * The "entries" collection of methods.

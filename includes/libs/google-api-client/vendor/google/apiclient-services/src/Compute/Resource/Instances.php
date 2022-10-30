@@ -15,40 +15,40 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\AccessConfig;
-use Google\Service\Compute\AttachedDisk;
-use Google\Service\Compute\BulkInsertInstanceResource;
-use Google\Service\Compute\DisplayDevice;
-use Google\Service\Compute\GuestAttributes;
-use Google\Service\Compute\Instance;
-use Google\Service\Compute\InstanceAggregatedList;
-use Google\Service\Compute\InstanceList;
-use Google\Service\Compute\InstanceListReferrers;
-use Google\Service\Compute\InstancesAddResourcePoliciesRequest;
-use Google\Service\Compute\InstancesGetEffectiveFirewallsResponse;
-use Google\Service\Compute\InstancesRemoveResourcePoliciesRequest;
-use Google\Service\Compute\InstancesSetLabelsRequest;
-use Google\Service\Compute\InstancesSetMachineResourcesRequest;
-use Google\Service\Compute\InstancesSetMachineTypeRequest;
-use Google\Service\Compute\InstancesSetMinCpuPlatformRequest;
-use Google\Service\Compute\InstancesSetServiceAccountRequest;
-use Google\Service\Compute\InstancesStartWithEncryptionKeyRequest;
-use Google\Service\Compute\Metadata;
-use Google\Service\Compute\NetworkInterface;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Policy;
-use Google\Service\Compute\Scheduling;
-use Google\Service\Compute\Screenshot;
-use Google\Service\Compute\SerialPortOutput;
-use Google\Service\Compute\ShieldedInstanceConfig;
-use Google\Service\Compute\ShieldedInstanceIdentity;
-use Google\Service\Compute\ShieldedInstanceIntegrityPolicy;
-use Google\Service\Compute\Tags;
-use Google\Service\Compute\TestPermissionsRequest;
-use Google\Service\Compute\TestPermissionsResponse;
-use Google\Service\Compute\ZoneSetPolicyRequest;
+use FluentMail\Google\Service\Compute\AccessConfig;
+use FluentMail\Google\Service\Compute\AttachedDisk;
+use FluentMail\Google\Service\Compute\BulkInsertInstanceResource;
+use FluentMail\Google\Service\Compute\DisplayDevice;
+use FluentMail\Google\Service\Compute\GuestAttributes;
+use FluentMail\Google\Service\Compute\Instance;
+use FluentMail\Google\Service\Compute\InstanceAggregatedList;
+use FluentMail\Google\Service\Compute\InstanceList;
+use FluentMail\Google\Service\Compute\InstanceListReferrers;
+use FluentMail\Google\Service\Compute\InstancesAddResourcePoliciesRequest;
+use FluentMail\Google\Service\Compute\InstancesGetEffectiveFirewallsResponse;
+use FluentMail\Google\Service\Compute\InstancesRemoveResourcePoliciesRequest;
+use FluentMail\Google\Service\Compute\InstancesSetLabelsRequest;
+use FluentMail\Google\Service\Compute\InstancesSetMachineResourcesRequest;
+use FluentMail\Google\Service\Compute\InstancesSetMachineTypeRequest;
+use FluentMail\Google\Service\Compute\InstancesSetMinCpuPlatformRequest;
+use FluentMail\Google\Service\Compute\InstancesSetServiceAccountRequest;
+use FluentMail\Google\Service\Compute\InstancesStartWithEncryptionKeyRequest;
+use FluentMail\Google\Service\Compute\Metadata;
+use FluentMail\Google\Service\Compute\NetworkInterface;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Policy;
+use FluentMail\Google\Service\Compute\Scheduling;
+use FluentMail\Google\Service\Compute\Screenshot;
+use FluentMail\Google\Service\Compute\SerialPortOutput;
+use FluentMail\Google\Service\Compute\ShieldedInstanceConfig;
+use FluentMail\Google\Service\Compute\ShieldedInstanceIdentity;
+use FluentMail\Google\Service\Compute\ShieldedInstanceIntegrityPolicy;
+use FluentMail\Google\Service\Compute\Tags;
+use FluentMail\Google\Service\Compute\TestPermissionsRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsResponse;
+use FluentMail\Google\Service\Compute\ZoneSetPolicyRequest;
 
 /**
  * The "instances" collection of methods.

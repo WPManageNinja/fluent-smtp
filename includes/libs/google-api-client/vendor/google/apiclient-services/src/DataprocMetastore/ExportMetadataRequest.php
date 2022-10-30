@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DataprocMetastore;
+namespace FluentMail\Google\Service\DataprocMetastore;
 
 class ExportMetadataRequest extends \Google\Model
 {

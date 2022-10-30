@@ -15,25 +15,25 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\InstanceGroupManager;
-use Google\Service\Compute\InstanceGroupManagerAggregatedList;
-use Google\Service\Compute\InstanceGroupManagerList;
-use Google\Service\Compute\InstanceGroupManagersAbandonInstancesRequest;
-use Google\Service\Compute\InstanceGroupManagersApplyUpdatesRequest;
-use Google\Service\Compute\InstanceGroupManagersCreateInstancesRequest;
-use Google\Service\Compute\InstanceGroupManagersDeleteInstancesRequest;
-use Google\Service\Compute\InstanceGroupManagersDeletePerInstanceConfigsReq;
-use Google\Service\Compute\InstanceGroupManagersListErrorsResponse;
-use Google\Service\Compute\InstanceGroupManagersListManagedInstancesResponse;
-use Google\Service\Compute\InstanceGroupManagersListPerInstanceConfigsResp;
-use Google\Service\Compute\InstanceGroupManagersPatchPerInstanceConfigsReq;
-use Google\Service\Compute\InstanceGroupManagersRecreateInstancesRequest;
-use Google\Service\Compute\InstanceGroupManagersSetInstanceTemplateRequest;
-use Google\Service\Compute\InstanceGroupManagersSetTargetPoolsRequest;
-use Google\Service\Compute\InstanceGroupManagersUpdatePerInstanceConfigsReq;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\InstanceGroupManager;
+use FluentMail\Google\Service\Compute\InstanceGroupManagerAggregatedList;
+use FluentMail\Google\Service\Compute\InstanceGroupManagerList;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersAbandonInstancesRequest;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersApplyUpdatesRequest;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersCreateInstancesRequest;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersDeleteInstancesRequest;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersDeletePerInstanceConfigsReq;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersListErrorsResponse;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersListManagedInstancesResponse;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersListPerInstanceConfigsResp;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersPatchPerInstanceConfigsReq;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersRecreateInstancesRequest;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersSetInstanceTemplateRequest;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersSetTargetPoolsRequest;
+use FluentMail\Google\Service\Compute\InstanceGroupManagersUpdatePerInstanceConfigsReq;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "instanceGroupManagers" collection of methods.

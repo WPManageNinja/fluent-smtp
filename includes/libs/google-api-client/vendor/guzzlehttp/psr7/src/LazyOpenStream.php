@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace GuzzleHttp\Psr7;
+namespace FluentMail\GuzzleHttp\Psr7;
 
-use Psr\Http\Message\StreamInterface;
+use FluentMail\Psr\Http\Message\StreamInterface;
 
 /**
  * Lazily reads or writes to a file that is opened only after an IO operation

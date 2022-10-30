@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Calendar\Resource;
+namespace FluentMail\Google\Service\Calendar\Resource;
 
-use Google\Service\Calendar\Channel;
+use FluentMail\Google\Service\Calendar\Channel;
 
 /**
  * The "channels" collection of methods.

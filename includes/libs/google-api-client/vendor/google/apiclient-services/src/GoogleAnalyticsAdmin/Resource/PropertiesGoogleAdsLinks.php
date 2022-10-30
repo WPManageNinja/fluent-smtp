@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\GoogleAnalyticsAdmin\Resource;
+namespace FluentMail\Google\Service\GoogleAnalyticsAdmin\Resource;
 
-use Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGoogleAdsLink;
-use Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListGoogleAdsLinksResponse;
-use Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGoogleAdsLink;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListGoogleAdsLinksResponse;
+use FluentMail\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
 
 /**
  * The "googleAdsLinks" collection of methods.

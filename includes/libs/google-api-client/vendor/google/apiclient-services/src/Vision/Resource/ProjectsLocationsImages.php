@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Vision\Resource;
+namespace FluentMail\Google\Service\Vision\Resource;
 
-use Google\Service\Vision\AsyncBatchAnnotateImagesRequest;
-use Google\Service\Vision\BatchAnnotateImagesRequest;
-use Google\Service\Vision\BatchAnnotateImagesResponse;
-use Google\Service\Vision\Operation;
+use FluentMail\Google\Service\Vision\AsyncBatchAnnotateImagesRequest;
+use FluentMail\Google\Service\Vision\BatchAnnotateImagesRequest;
+use FluentMail\Google\Service\Vision\BatchAnnotateImagesResponse;
+use FluentMail\Google\Service\Vision\Operation;
 
 /**
  * The "images" collection of methods.

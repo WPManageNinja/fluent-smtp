@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Attribute;
+namespace FluentMail\Monolog\Attribute;
 
 /**
  * A reusable attribute to help configure a class or a method as a processor.

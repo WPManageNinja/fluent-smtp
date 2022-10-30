@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\OSConfig\Resource;
+namespace FluentMail\Google\Service\OSConfig\Resource;
 
-use Google\Service\OSConfig\ListOperationsResponse;
-use Google\Service\OSConfig\OsconfigEmpty;
+use FluentMail\Google\Service\OSConfig\ListOperationsResponse;
+use FluentMail\Google\Service\OSConfig\OsconfigEmpty;
 
 /**
  * The "operations" collection of methods.

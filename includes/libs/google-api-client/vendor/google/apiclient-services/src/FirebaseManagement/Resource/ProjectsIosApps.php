@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseManagement\Resource;
+namespace FluentMail\Google\Service\FirebaseManagement\Resource;
 
-use Google\Service\FirebaseManagement\IosApp;
-use Google\Service\FirebaseManagement\IosAppConfig;
-use Google\Service\FirebaseManagement\ListIosAppsResponse;
-use Google\Service\FirebaseManagement\Operation;
-use Google\Service\FirebaseManagement\RemoveIosAppRequest;
-use Google\Service\FirebaseManagement\UndeleteIosAppRequest;
+use FluentMail\Google\Service\FirebaseManagement\IosApp;
+use FluentMail\Google\Service\FirebaseManagement\IosAppConfig;
+use FluentMail\Google\Service\FirebaseManagement\ListIosAppsResponse;
+use FluentMail\Google\Service\FirebaseManagement\Operation;
+use FluentMail\Google\Service\FirebaseManagement\RemoveIosAppRequest;
+use FluentMail\Google\Service\FirebaseManagement\UndeleteIosAppRequest;
 
 /**
  * The "iosApps" collection of methods.

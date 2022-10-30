@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dataproc;
+namespace FluentMail\Google\Service\Dataproc;
 
 class OrderedJob extends \Google\Collection
 {

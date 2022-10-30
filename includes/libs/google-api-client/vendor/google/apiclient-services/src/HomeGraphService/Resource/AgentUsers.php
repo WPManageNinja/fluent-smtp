@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\HomeGraphService\Resource;
+namespace FluentMail\Google\Service\HomeGraphService\Resource;
 
-use Google\Service\HomeGraphService\HomegraphEmpty;
+use FluentMail\Google\Service\HomeGraphService\HomegraphEmpty;
 
 /**
  * The "agentUsers" collection of methods.

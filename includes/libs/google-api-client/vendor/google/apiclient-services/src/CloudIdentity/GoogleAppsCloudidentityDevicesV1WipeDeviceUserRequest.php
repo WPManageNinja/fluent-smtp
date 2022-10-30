@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudIdentity;
+namespace FluentMail\Google\Service\CloudIdentity;
 
 class GoogleAppsCloudidentityDevicesV1WipeDeviceUserRequest extends \Google\Model
 {

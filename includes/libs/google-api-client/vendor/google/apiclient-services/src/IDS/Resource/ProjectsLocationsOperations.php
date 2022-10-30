@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\IDS\Resource;
+namespace FluentMail\Google\Service\IDS\Resource;
 
-use Google\Service\IDS\CancelOperationRequest;
-use Google\Service\IDS\IdsEmpty;
-use Google\Service\IDS\ListOperationsResponse;
-use Google\Service\IDS\Operation;
+use FluentMail\Google\Service\IDS\CancelOperationRequest;
+use FluentMail\Google\Service\IDS\IdsEmpty;
+use FluentMail\Google\Service\IDS\ListOperationsResponse;
+use FluentMail\Google\Service\IDS\Operation;
 
 /**
  * The "operations" collection of methods.

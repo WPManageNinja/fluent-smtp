@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Games\Resource;
+namespace FluentMail\Google\Service\Games\Resource;
 
-use Google\Service\Games\Player;
-use Google\Service\Games\PlayerListResponse;
-use Google\Service\Games\ScopedPlayerIds;
+use FluentMail\Google\Service\Games\Player;
+use FluentMail\Google\Service\Games\PlayerListResponse;
+use FluentMail\Google\Service\Games\ScopedPlayerIds;
 
 /**
  * The "players" collection of methods.

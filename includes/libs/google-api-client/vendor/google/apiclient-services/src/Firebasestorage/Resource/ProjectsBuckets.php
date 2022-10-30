@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Firebasestorage\Resource;
+namespace FluentMail\Google\Service\Firebasestorage\Resource;
 
-use Google\Service\Firebasestorage\AddFirebaseRequest;
-use Google\Service\Firebasestorage\Bucket;
-use Google\Service\Firebasestorage\FirebasestorageEmpty;
-use Google\Service\Firebasestorage\ListBucketsResponse;
-use Google\Service\Firebasestorage\RemoveFirebaseRequest;
+use FluentMail\Google\Service\Firebasestorage\AddFirebaseRequest;
+use FluentMail\Google\Service\Firebasestorage\Bucket;
+use FluentMail\Google\Service\Firebasestorage\FirebasestorageEmpty;
+use FluentMail\Google\Service\Firebasestorage\ListBucketsResponse;
+use FluentMail\Google\Service\Firebasestorage\RemoveFirebaseRequest;
 
 /**
  * The "buckets" collection of methods.

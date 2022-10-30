@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Integrations\Resource;
+namespace FluentMail\Google\Service\Integrations\Resource;
 
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaAuthConfig;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListAuthConfigsResponse;
-use Google\Service\Integrations\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaAuthConfig;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListAuthConfigsResponse;
+use FluentMail\Google\Service\Integrations\GoogleProtobufEmpty;
 
 /**
  * The "authConfigs" collection of methods.

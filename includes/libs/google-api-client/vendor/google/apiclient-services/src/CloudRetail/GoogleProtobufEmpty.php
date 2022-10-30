@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudRetail;
+namespace FluentMail\Google\Service\CloudRetail;
 
 class GoogleProtobufEmpty extends \Google\Model
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ChromeManagement\Resource;
+namespace FluentMail\Google\Service\ChromeManagement\Resource;
 
 /**
  * The "telemetry" collection of methods.

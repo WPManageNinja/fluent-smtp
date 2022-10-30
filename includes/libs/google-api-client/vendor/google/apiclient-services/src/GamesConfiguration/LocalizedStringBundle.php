@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\GamesConfiguration;
+namespace FluentMail\Google\Service\GamesConfiguration;
 
 class LocalizedStringBundle extends \Google\Collection
 {

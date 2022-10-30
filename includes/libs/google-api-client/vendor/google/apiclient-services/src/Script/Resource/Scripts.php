@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Script\Resource;
+namespace FluentMail\Google\Service\Script\Resource;
 
-use Google\Service\Script\ExecutionRequest;
-use Google\Service\Script\Operation;
+use FluentMail\Google\Service\Script\ExecutionRequest;
+use FluentMail\Google\Service\Script\Operation;
 
 /**
  * The "scripts" collection of methods.

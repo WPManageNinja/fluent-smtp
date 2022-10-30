@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PaymentsResellerSubscription\Resource;
+namespace FluentMail\Google\Service\PaymentsResellerSubscription\Resource;
 
 /**
  * The "partners" collection of methods.

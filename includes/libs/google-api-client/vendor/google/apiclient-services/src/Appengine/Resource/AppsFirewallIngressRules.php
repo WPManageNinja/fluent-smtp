@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Appengine\Resource;
+namespace FluentMail\Google\Service\Appengine\Resource;
 
-use Google\Service\Appengine\AppengineEmpty;
-use Google\Service\Appengine\BatchUpdateIngressRulesRequest;
-use Google\Service\Appengine\BatchUpdateIngressRulesResponse;
-use Google\Service\Appengine\FirewallRule;
-use Google\Service\Appengine\ListIngressRulesResponse;
+use FluentMail\Google\Service\Appengine\AppengineEmpty;
+use FluentMail\Google\Service\Appengine\BatchUpdateIngressRulesRequest;
+use FluentMail\Google\Service\Appengine\BatchUpdateIngressRulesResponse;
+use FluentMail\Google\Service\Appengine\FirewallRule;
+use FluentMail\Google\Service\Appengine\ListIngressRulesResponse;
 
 /**
  * The "ingressRules" collection of methods.

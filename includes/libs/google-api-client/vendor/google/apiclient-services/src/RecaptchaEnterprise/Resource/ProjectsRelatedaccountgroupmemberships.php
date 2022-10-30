@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\RecaptchaEnterprise\Resource;
+namespace FluentMail\Google\Service\RecaptchaEnterprise\Resource;
 
-use Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1SearchRelatedAccountGroupMembershipsRequest;
-use Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1SearchRelatedAccountGroupMembershipsResponse;
+use FluentMail\Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1SearchRelatedAccountGroupMembershipsRequest;
+use FluentMail\Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1SearchRelatedAccountGroupMembershipsResponse;
 
 /**
  * The "relatedaccountgroupmemberships" collection of methods.

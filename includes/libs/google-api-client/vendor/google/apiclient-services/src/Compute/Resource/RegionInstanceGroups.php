@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\InstanceGroup;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\RegionInstanceGroupList;
-use Google\Service\Compute\RegionInstanceGroupsListInstances;
-use Google\Service\Compute\RegionInstanceGroupsListInstancesRequest;
-use Google\Service\Compute\RegionInstanceGroupsSetNamedPortsRequest;
+use FluentMail\Google\Service\Compute\InstanceGroup;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupList;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupsListInstances;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupsListInstancesRequest;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupsSetNamedPortsRequest;
 
 /**
  * The "regionInstanceGroups" collection of methods.

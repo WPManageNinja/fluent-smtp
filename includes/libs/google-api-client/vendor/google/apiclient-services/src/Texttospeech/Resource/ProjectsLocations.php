@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Texttospeech\Resource;
+namespace FluentMail\Google\Service\Texttospeech\Resource;
 
 /**
  * The "locations" collection of methods.

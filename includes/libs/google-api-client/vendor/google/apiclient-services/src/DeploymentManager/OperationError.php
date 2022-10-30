@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DeploymentManager;
+namespace FluentMail\Google\Service\DeploymentManager;
 
 class OperationError extends \Google\Collection
 {

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Webmasters\Resource;
+namespace FluentMail\Google\Service\Webmasters\Resource;
 
-use Google\Service\Webmasters\SitemapsListResponse;
-use Google\Service\Webmasters\WmxSitemap;
+use FluentMail\Google\Service\Webmasters\SitemapsListResponse;
+use FluentMail\Google\Service\Webmasters\WmxSitemap;
 
 /**
  * The "sitemaps" collection of methods.

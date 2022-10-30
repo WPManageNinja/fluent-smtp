@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\ListNpmPackagesResponse;
-use Google\Service\ArtifactRegistry\NpmPackage;
+use FluentMail\Google\Service\ArtifactRegistry\ListNpmPackagesResponse;
+use FluentMail\Google\Service\ArtifactRegistry\NpmPackage;
 
 /**
  * The "npmPackages" collection of methods.

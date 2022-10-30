@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\ExchangedPeeringRoutesList;
-use Google\Service\Compute\Network;
-use Google\Service\Compute\NetworkList;
-use Google\Service\Compute\NetworksAddPeeringRequest;
-use Google\Service\Compute\NetworksGetEffectiveFirewallsResponse;
-use Google\Service\Compute\NetworksRemovePeeringRequest;
-use Google\Service\Compute\NetworksUpdatePeeringRequest;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\ExchangedPeeringRoutesList;
+use FluentMail\Google\Service\Compute\Network;
+use FluentMail\Google\Service\Compute\NetworkList;
+use FluentMail\Google\Service\Compute\NetworksAddPeeringRequest;
+use FluentMail\Google\Service\Compute\NetworksGetEffectiveFirewallsResponse;
+use FluentMail\Google\Service\Compute\NetworksRemovePeeringRequest;
+use FluentMail\Google\Service\Compute\NetworksUpdatePeeringRequest;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "networks" collection of methods.

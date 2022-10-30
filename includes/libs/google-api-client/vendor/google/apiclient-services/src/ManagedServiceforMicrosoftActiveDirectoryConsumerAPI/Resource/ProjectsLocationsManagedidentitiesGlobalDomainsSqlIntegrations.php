@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Resource;
+namespace FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Resource;
 
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\ListSqlIntegrationsResponse;
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\SqlIntegration;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\ListSqlIntegrationsResponse;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\SqlIntegration;
 
 /**
  * The "sqlIntegrations" collection of methods.

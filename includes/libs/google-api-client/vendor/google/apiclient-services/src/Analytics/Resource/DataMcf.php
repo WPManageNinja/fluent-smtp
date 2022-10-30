@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\McfData;
+use FluentMail\Google\Service\Analytics\McfData;
 
 /**
  * The "mcf" collection of methods.

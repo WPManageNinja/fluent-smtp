@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\EditGuaranteedOrderReadAccessorsRequest;
-use Google\Service\DisplayVideo\EditGuaranteedOrderReadAccessorsResponse;
-use Google\Service\DisplayVideo\GuaranteedOrder;
-use Google\Service\DisplayVideo\ListGuaranteedOrdersResponse;
+use FluentMail\Google\Service\DisplayVideo\EditGuaranteedOrderReadAccessorsRequest;
+use FluentMail\Google\Service\DisplayVideo\EditGuaranteedOrderReadAccessorsResponse;
+use FluentMail\Google\Service\DisplayVideo\GuaranteedOrder;
+use FluentMail\Google\Service\DisplayVideo\ListGuaranteedOrdersResponse;
 
 /**
  * The "guaranteedOrders" collection of methods.

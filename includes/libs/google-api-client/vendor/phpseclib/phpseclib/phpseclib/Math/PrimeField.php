@@ -13,10 +13,10 @@
  * @link      http://pear.php.net/package/Math_BigInteger
  */
 
-namespace phpseclib3\Math;
+namespace FluentMail\phpseclib3\Math;
 
-use phpseclib3\Math\Common\FiniteField;
-use phpseclib3\Math\PrimeField\Integer;
+use FluentMail\phpseclib3\Math\Common\FiniteField;
+use FluentMail\phpseclib3\Math\PrimeField\Integer;
 
 /**
  * Prime Finite Fields

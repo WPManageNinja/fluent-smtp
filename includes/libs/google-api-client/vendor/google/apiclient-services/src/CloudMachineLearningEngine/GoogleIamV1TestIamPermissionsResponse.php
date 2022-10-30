@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudMachineLearningEngine;
+namespace FluentMail\Google\Service\CloudMachineLearningEngine;
 
 class GoogleIamV1TestIamPermissionsResponse extends \Google\Collection
 {

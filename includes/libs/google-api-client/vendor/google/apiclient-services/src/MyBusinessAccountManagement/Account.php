@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessAccountManagement;
+namespace FluentMail\Google\Service\MyBusinessAccountManagement;
 
 class Account extends \Google\Model
 {

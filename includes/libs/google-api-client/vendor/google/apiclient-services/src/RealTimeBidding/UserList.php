@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\RealTimeBidding;
+namespace FluentMail\Google\Service\RealTimeBidding;
 
 class UserList extends \Google\Model
 {

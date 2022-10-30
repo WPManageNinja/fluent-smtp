@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Logging\Resource;
+namespace FluentMail\Google\Service\Logging\Resource;
 
-use Google\Service\Logging\ListLogMetricsResponse;
-use Google\Service\Logging\LogMetric;
-use Google\Service\Logging\LoggingEmpty;
+use FluentMail\Google\Service\Logging\ListLogMetricsResponse;
+use FluentMail\Google\Service\Logging\LogMetric;
+use FluentMail\Google\Service\Logging\LoggingEmpty;
 
 /**
  * The "metrics" collection of methods.

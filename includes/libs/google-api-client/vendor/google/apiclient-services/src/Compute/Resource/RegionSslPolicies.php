@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\SslPoliciesList;
-use Google\Service\Compute\SslPoliciesListAvailableFeaturesResponse;
-use Google\Service\Compute\SslPolicy;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\SslPoliciesList;
+use FluentMail\Google\Service\Compute\SslPoliciesListAvailableFeaturesResponse;
+use FluentMail\Google\Service\Compute\SslPolicy;
 
 /**
  * The "regionSslPolicies" collection of methods.

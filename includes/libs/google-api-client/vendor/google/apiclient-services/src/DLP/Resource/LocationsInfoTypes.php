@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\DLP\Resource;
+namespace FluentMail\Google\Service\DLP\Resource;
 
-use Google\Service\DLP\GooglePrivacyDlpV2ListInfoTypesResponse;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2ListInfoTypesResponse;
 
 /**
  * The "infoTypes" collection of methods.

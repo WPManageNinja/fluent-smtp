@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Storage\Resource;
+namespace FluentMail\Google\Service\Storage\Resource;
 
-use Google\Service\Storage\HmacKey;
-use Google\Service\Storage\HmacKeyMetadata;
-use Google\Service\Storage\HmacKeysMetadata;
+use FluentMail\Google\Service\Storage\HmacKey;
+use FluentMail\Google\Service\Storage\HmacKeyMetadata;
+use FluentMail\Google\Service\Storage\HmacKeysMetadata;
 
 /**
  * The "hmacKeys" collection of methods.

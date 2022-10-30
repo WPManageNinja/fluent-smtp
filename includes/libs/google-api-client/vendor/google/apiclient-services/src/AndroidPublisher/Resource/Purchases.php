@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
 /**
  * The "purchases" collection of methods.

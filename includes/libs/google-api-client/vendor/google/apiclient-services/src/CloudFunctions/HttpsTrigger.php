@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudFunctions;
+namespace FluentMail\Google\Service\CloudFunctions;
 
 class HttpsTrigger extends \Google\Model
 {

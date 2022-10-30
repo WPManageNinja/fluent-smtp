@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ChromeManagement;
+namespace FluentMail\Google\Service\ChromeManagement;
 
 class GoogleTypeDate extends \Google\Model
 {

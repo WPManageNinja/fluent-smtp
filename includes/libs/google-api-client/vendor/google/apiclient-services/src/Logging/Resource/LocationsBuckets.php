@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Logging\Resource;
+namespace FluentMail\Google\Service\Logging\Resource;
 
-use Google\Service\Logging\ListBucketsResponse;
-use Google\Service\Logging\LogBucket;
-use Google\Service\Logging\LoggingEmpty;
-use Google\Service\Logging\UndeleteBucketRequest;
+use FluentMail\Google\Service\Logging\ListBucketsResponse;
+use FluentMail\Google\Service\Logging\LogBucket;
+use FluentMail\Google\Service\Logging\LoggingEmpty;
+use FluentMail\Google\Service\Logging\UndeleteBucketRequest;
 
 /**
  * The "buckets" collection of methods.

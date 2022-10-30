@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\VideoFormat;
-use Google\Service\Dfareporting\VideoFormatsListResponse;
+use FluentMail\Google\Service\Dfareporting\VideoFormat;
+use FluentMail\Google\Service\Dfareporting\VideoFormatsListResponse;
 
 /**
  * The "videoFormats" collection of methods.

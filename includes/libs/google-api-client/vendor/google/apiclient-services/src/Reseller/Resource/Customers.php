@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Reseller\Resource;
+namespace FluentMail\Google\Service\Reseller\Resource;
 
-use Google\Service\Reseller\Customer;
+use FluentMail\Google\Service\Reseller\Customer;
 
 /**
  * The "customers" collection of methods.

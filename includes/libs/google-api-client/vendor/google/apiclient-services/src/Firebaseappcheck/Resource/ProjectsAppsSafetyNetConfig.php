@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Firebaseappcheck\Resource;
+namespace FluentMail\Google\Service\Firebaseappcheck\Resource;
 
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchGetSafetyNetConfigsResponse;
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1SafetyNetConfig;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchGetSafetyNetConfigsResponse;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1SafetyNetConfig;
 
 /**
  * The "safetyNetConfig" collection of methods.

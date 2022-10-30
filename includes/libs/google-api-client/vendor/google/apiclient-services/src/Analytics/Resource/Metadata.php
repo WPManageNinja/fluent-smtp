@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
 /**
  * The "metadata" collection of methods.

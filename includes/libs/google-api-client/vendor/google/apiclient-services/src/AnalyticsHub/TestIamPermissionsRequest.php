@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsHub;
+namespace FluentMail\Google\Service\AnalyticsHub;
 
 class TestIamPermissionsRequest extends \Google\Collection
 {

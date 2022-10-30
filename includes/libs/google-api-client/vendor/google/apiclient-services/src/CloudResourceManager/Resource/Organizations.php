@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\CloudResourceManager\Resource;
+namespace FluentMail\Google\Service\CloudResourceManager\Resource;
 
-use Google\Service\CloudResourceManager\GetIamPolicyRequest;
-use Google\Service\CloudResourceManager\Organization;
-use Google\Service\CloudResourceManager\Policy;
-use Google\Service\CloudResourceManager\SearchOrganizationsResponse;
-use Google\Service\CloudResourceManager\SetIamPolicyRequest;
-use Google\Service\CloudResourceManager\TestIamPermissionsRequest;
-use Google\Service\CloudResourceManager\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudResourceManager\GetIamPolicyRequest;
+use FluentMail\Google\Service\CloudResourceManager\Organization;
+use FluentMail\Google\Service\CloudResourceManager\Policy;
+use FluentMail\Google\Service\CloudResourceManager\SearchOrganizationsResponse;
+use FluentMail\Google\Service\CloudResourceManager\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudResourceManager\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudResourceManager\TestIamPermissionsResponse;
 
 /**
  * The "organizations" collection of methods.

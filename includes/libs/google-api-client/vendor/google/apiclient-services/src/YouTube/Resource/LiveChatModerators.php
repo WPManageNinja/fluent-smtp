@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\LiveChatModerator;
-use Google\Service\YouTube\LiveChatModeratorListResponse;
+use FluentMail\Google\Service\YouTube\LiveChatModerator;
+use FluentMail\Google\Service\YouTube\LiveChatModeratorListResponse;
 
 /**
  * The "liveChatModerators" collection of methods.

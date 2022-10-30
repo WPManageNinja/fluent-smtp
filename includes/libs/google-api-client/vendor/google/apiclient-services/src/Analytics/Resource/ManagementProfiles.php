@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\Profile;
-use Google\Service\Analytics\Profiles;
+use FluentMail\Google\Service\Analytics\Profile;
+use FluentMail\Google\Service\Analytics\Profiles;
 
 /**
  * The "profiles" collection of methods.

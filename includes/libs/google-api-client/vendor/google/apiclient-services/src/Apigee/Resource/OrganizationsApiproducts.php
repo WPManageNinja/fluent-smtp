@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1ApiProduct;
-use Google\Service\Apigee\GoogleCloudApigeeV1Attributes;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListApiProductsResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ApiProduct;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1Attributes;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListApiProductsResponse;
 
 /**
  * The "apiproducts" collection of methods.

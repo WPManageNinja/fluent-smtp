@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudShell;
+namespace FluentMail\Google\Service\CloudShell;
 
 class AuthorizeEnvironmentRequest extends \Google\Model
 {

@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\SASPortalTesting\Resource;
+namespace FluentMail\Google\Service\SASPortalTesting\Resource;
 
-use Google\Service\SASPortalTesting\SasPortalDeployment;
-use Google\Service\SASPortalTesting\SasPortalEmpty;
-use Google\Service\SASPortalTesting\SasPortalListDeploymentsResponse;
-use Google\Service\SASPortalTesting\SasPortalMoveDeploymentRequest;
-use Google\Service\SASPortalTesting\SasPortalOperation;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalDeployment;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalEmpty;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalListDeploymentsResponse;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalMoveDeploymentRequest;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalOperation;
 
 /**
  * The "deployments" collection of methods.

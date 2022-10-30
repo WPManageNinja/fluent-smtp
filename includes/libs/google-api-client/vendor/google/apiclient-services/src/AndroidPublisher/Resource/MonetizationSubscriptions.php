@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\ArchiveSubscriptionRequest;
-use Google\Service\AndroidPublisher\ListSubscriptionsResponse;
-use Google\Service\AndroidPublisher\Subscription;
+use FluentMail\Google\Service\AndroidPublisher\ArchiveSubscriptionRequest;
+use FluentMail\Google\Service\AndroidPublisher\ListSubscriptionsResponse;
+use FluentMail\Google\Service\AndroidPublisher\Subscription;
 
 /**
  * The "subscriptions" collection of methods.

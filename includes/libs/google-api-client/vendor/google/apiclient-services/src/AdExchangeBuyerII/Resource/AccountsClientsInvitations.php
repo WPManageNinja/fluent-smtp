@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\ClientUserInvitation;
-use Google\Service\AdExchangeBuyerII\ListClientUserInvitationsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\ClientUserInvitation;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListClientUserInvitationsResponse;
 
 /**
  * The "invitations" collection of methods.

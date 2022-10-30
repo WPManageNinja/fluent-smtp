@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\Seriesmembership as SeriesmembershipModel;
+use FluentMail\Google\Service\Books\Seriesmembership as SeriesmembershipModel;
 
 /**
  * The "membership" collection of methods.

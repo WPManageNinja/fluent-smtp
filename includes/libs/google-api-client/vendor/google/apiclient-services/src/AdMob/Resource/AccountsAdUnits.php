@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdMob\Resource;
+namespace FluentMail\Google\Service\AdMob\Resource;
 
-use Google\Service\AdMob\ListAdUnitsResponse;
+use FluentMail\Google\Service\AdMob\ListAdUnitsResponse;
 
 /**
  * The "adUnits" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Spanner\Resource;
+namespace FluentMail\Google\Service\Spanner\Resource;
 
-use Google\Service\Spanner\ListBackupOperationsResponse;
+use FluentMail\Google\Service\Spanner\ListBackupOperationsResponse;
 
 /**
  * The "backupOperations" collection of methods.

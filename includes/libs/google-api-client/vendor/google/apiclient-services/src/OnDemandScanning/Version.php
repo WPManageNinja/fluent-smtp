@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\OnDemandScanning;
+namespace FluentMail\Google\Service\OnDemandScanning;
 
 class Version extends \Google\Model
 {

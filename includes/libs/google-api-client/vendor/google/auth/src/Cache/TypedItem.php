@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-namespace Google\Auth\Cache;
+namespace FluentMail\Google\Auth\Cache;
 
-use Psr\Cache\CacheItemInterface;
+use FluentMail\Psr\Cache\CacheItemInterface;
 
 /**
  * A cache item.

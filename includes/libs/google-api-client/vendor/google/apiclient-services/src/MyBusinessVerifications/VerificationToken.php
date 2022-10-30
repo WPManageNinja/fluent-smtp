@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessVerifications;
+namespace FluentMail\Google\Service\MyBusinessVerifications;
 
 class VerificationToken extends \Google\Model
 {

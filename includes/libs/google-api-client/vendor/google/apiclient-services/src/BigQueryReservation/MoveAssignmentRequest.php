@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryReservation;
+namespace FluentMail\Google\Service\BigQueryReservation;
 
 class MoveAssignmentRequest extends \Google\Model
 {

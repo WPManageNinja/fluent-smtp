@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessQA;
+namespace FluentMail\Google\Service\MyBusinessQA;
 
 class Answer extends \Google\Model
 {

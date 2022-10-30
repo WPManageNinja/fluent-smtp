@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Logger;
-use Monolog\Formatter\LineFormatter;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\Formatter\LineFormatter;
 
 /**
  * NativeMailerHandler uses the mail() function to send the emails

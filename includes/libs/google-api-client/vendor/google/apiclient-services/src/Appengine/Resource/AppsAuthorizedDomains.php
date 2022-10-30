@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Appengine\Resource;
+namespace FluentMail\Google\Service\Appengine\Resource;
 
-use Google\Service\Appengine\ListAuthorizedDomainsResponse;
+use FluentMail\Google\Service\Appengine\ListAuthorizedDomainsResponse;
 
 /**
  * The "authorizedDomains" collection of methods.

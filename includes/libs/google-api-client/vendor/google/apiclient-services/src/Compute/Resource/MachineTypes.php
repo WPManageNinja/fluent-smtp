@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\MachineType;
-use Google\Service\Compute\MachineTypeAggregatedList;
-use Google\Service\Compute\MachineTypeList;
+use FluentMail\Google\Service\Compute\MachineType;
+use FluentMail\Google\Service\Compute\MachineTypeAggregatedList;
+use FluentMail\Google\Service\Compute\MachineTypeList;
 
 /**
  * The "machineTypes" collection of methods.

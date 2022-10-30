@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Formatter\FormatterInterface;
+use FluentMail\Monolog\Formatter\FormatterInterface;
 
 /**
  * Sampling handler

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\TrackCountryAvailability;
+use FluentMail\Google\Service\AndroidPublisher\TrackCountryAvailability;
 
 /**
  * The "countryavailability" collection of methods.

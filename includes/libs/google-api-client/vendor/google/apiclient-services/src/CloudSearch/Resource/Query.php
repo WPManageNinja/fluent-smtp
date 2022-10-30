@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
-use Google\Service\CloudSearch\SearchRequest;
-use Google\Service\CloudSearch\SearchResponse;
-use Google\Service\CloudSearch\SuggestRequest;
-use Google\Service\CloudSearch\SuggestResponse;
+use FluentMail\Google\Service\CloudSearch\SearchRequest;
+use FluentMail\Google\Service\CloudSearch\SearchResponse;
+use FluentMail\Google\Service\CloudSearch\SuggestRequest;
+use FluentMail\Google\Service\CloudSearch\SuggestResponse;
 
 /**
  * The "query" collection of methods.

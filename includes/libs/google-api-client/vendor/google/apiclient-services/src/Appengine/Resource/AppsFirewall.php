@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Appengine\Resource;
+namespace FluentMail\Google\Service\Appengine\Resource;
 
 /**
  * The "firewall" collection of methods.

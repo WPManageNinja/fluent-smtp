@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\Label;
-use Google\Service\Gmail\ListLabelsResponse;
+use FluentMail\Google\Service\Gmail\Label;
+use FluentMail\Google\Service\Gmail\ListLabelsResponse;
 
 /**
  * The "labels" collection of methods.

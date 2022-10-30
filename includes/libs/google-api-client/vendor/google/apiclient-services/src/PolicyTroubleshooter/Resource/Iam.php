@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\PolicyTroubleshooter\Resource;
+namespace FluentMail\Google\Service\PolicyTroubleshooter\Resource;
 
-use Google\Service\PolicyTroubleshooter\GoogleCloudPolicytroubleshooterV1TroubleshootIamPolicyRequest;
-use Google\Service\PolicyTroubleshooter\GoogleCloudPolicytroubleshooterV1TroubleshootIamPolicyResponse;
+use FluentMail\Google\Service\PolicyTroubleshooter\GoogleCloudPolicytroubleshooterV1TroubleshootIamPolicyRequest;
+use FluentMail\Google\Service\PolicyTroubleshooter\GoogleCloudPolicytroubleshooterV1TroubleshootIamPolicyResponse;
 
 /**
  * The "iam" collection of methods.

@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Vault\Resource;
+namespace FluentMail\Google\Service\Vault\Resource;
 
-use Google\Service\Vault\AddHeldAccountsRequest;
-use Google\Service\Vault\AddHeldAccountsResponse;
-use Google\Service\Vault\Hold;
-use Google\Service\Vault\ListHoldsResponse;
-use Google\Service\Vault\RemoveHeldAccountsRequest;
-use Google\Service\Vault\RemoveHeldAccountsResponse;
-use Google\Service\Vault\VaultEmpty;
+use FluentMail\Google\Service\Vault\AddHeldAccountsRequest;
+use FluentMail\Google\Service\Vault\AddHeldAccountsResponse;
+use FluentMail\Google\Service\Vault\Hold;
+use FluentMail\Google\Service\Vault\ListHoldsResponse;
+use FluentMail\Google\Service\Vault\RemoveHeldAccountsRequest;
+use FluentMail\Google\Service\Vault\RemoveHeldAccountsResponse;
+use FluentMail\Google\Service\Vault\VaultEmpty;
 
 /**
  * The "holds" collection of methods.

@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
 use Elastica\Document;
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Formatter\ElasticaFormatter;
-use Monolog\Logger;
+use FluentMail\Monolog\Formatter\FormatterInterface;
+use FluentMail\Monolog\Formatter\ElasticaFormatter;
+use FluentMail\Monolog\Logger;
 use Elastica\Client;
 use Elastica\Exception\ExceptionInterface;
 

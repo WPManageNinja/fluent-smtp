@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
-use Google\Service\CloudSearch\CustomerSettings;
-use Google\Service\CloudSearch\Operation;
+use FluentMail\Google\Service\CloudSearch\CustomerSettings;
+use FluentMail\Google\Service\CloudSearch\Operation;
 
 /**
  * The "settings" collection of methods.

@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\CloudRetail\Resource;
+namespace FluentMail\Google\Service\CloudRetail\Resource;
 
-use Google\Service\CloudRetail\GoogleCloudRetailV2AddControlRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2ListServingConfigsResponse;
-use Google\Service\CloudRetail\GoogleCloudRetailV2PredictRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2PredictResponse;
-use Google\Service\CloudRetail\GoogleCloudRetailV2RemoveControlRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2SearchRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2SearchResponse;
-use Google\Service\CloudRetail\GoogleCloudRetailV2ServingConfig;
-use Google\Service\CloudRetail\GoogleProtobufEmpty;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2AddControlRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2ListServingConfigsResponse;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2PredictRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2PredictResponse;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2RemoveControlRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2SearchRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2SearchResponse;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2ServingConfig;
+use FluentMail\Google\Service\CloudRetail\GoogleProtobufEmpty;
 
 /**
  * The "servingConfigs" collection of methods.

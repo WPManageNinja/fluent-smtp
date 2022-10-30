@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Formatter\LineFormatter;
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Logger;
+use FluentMail\Monolog\Formatter\LineFormatter;
+use FluentMail\Monolog\Formatter\FormatterInterface;
+use FluentMail\Monolog\Logger;
 
 /**
  * Logs to a Redis key using rpush

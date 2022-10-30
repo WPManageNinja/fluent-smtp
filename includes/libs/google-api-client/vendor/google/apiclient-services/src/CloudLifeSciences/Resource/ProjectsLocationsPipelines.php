@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudLifeSciences\Resource;
+namespace FluentMail\Google\Service\CloudLifeSciences\Resource;
 
-use Google\Service\CloudLifeSciences\Operation;
-use Google\Service\CloudLifeSciences\RunPipelineRequest;
+use FluentMail\Google\Service\CloudLifeSciences\Operation;
+use FluentMail\Google\Service\CloudLifeSciences\RunPipelineRequest;
 
 /**
  * The "pipelines" collection of methods.

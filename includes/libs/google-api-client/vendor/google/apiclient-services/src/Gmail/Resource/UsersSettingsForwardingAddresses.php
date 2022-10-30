@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\ForwardingAddress;
-use Google\Service\Gmail\ListForwardingAddressesResponse;
+use FluentMail\Google\Service\Gmail\ForwardingAddress;
+use FluentMail\Google\Service\Gmail\ListForwardingAddressesResponse;
 
 /**
  * The "forwardingAddresses" collection of methods.

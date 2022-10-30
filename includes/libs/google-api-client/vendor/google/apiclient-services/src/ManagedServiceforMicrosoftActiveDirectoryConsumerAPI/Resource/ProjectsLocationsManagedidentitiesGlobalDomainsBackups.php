@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Resource;
+namespace FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Resource;
 
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Backup;
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\ListBackupsResponse;
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Operation;
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Policy;
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\SetIamPolicyRequest;
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\TestIamPermissionsRequest;
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\TestIamPermissionsResponse;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Backup;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\ListBackupsResponse;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Operation;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Policy;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\SetIamPolicyRequest;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\TestIamPermissionsRequest;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\TestIamPermissionsResponse;
 
 /**
  * The "backups" collection of methods.

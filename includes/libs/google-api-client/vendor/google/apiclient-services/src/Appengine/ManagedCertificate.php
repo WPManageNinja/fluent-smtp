@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Appengine;
+namespace FluentMail\Google\Service\Appengine;
 
 class ManagedCertificate extends \Google\Model
 {

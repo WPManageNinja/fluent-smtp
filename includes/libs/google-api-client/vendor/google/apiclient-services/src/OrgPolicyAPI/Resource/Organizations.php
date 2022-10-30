@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\OrgPolicyAPI\Resource;
+namespace FluentMail\Google\Service\OrgPolicyAPI\Resource;
 
 /**
  * The "organizations" collection of methods.

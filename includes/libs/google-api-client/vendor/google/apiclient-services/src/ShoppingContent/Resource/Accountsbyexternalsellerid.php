@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\Account;
+use FluentMail\Google\Service\ShoppingContent\Account;
 
 /**
  * The "accountsbyexternalsellerid" collection of methods.

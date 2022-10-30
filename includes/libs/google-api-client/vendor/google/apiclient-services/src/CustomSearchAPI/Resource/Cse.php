@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CustomSearchAPI\Resource;
+namespace FluentMail\Google\Service\CustomSearchAPI\Resource;
 
-use Google\Service\CustomSearchAPI\Search;
+use FluentMail\Google\Service\CustomSearchAPI\Search;
 
 /**
  * The "cse" collection of methods.

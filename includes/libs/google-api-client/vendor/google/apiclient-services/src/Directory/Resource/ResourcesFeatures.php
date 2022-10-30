@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\Feature;
-use Google\Service\Directory\FeatureRename;
-use Google\Service\Directory\Features;
+use FluentMail\Google\Service\Directory\Feature;
+use FluentMail\Google\Service\Directory\FeatureRename;
+use FluentMail\Google\Service\Directory\Features;
 
 /**
  * The "features" collection of methods.

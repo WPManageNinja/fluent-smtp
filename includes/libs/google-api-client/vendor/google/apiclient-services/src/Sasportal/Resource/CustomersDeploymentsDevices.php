@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Sasportal\Resource;
+namespace FluentMail\Google\Service\Sasportal\Resource;
 
-use Google\Service\Sasportal\SasPortalCreateSignedDeviceRequest;
-use Google\Service\Sasportal\SasPortalDevice;
-use Google\Service\Sasportal\SasPortalListDevicesResponse;
+use FluentMail\Google\Service\Sasportal\SasPortalCreateSignedDeviceRequest;
+use FluentMail\Google\Service\Sasportal\SasPortalDevice;
+use FluentMail\Google\Service\Sasportal\SasPortalListDevicesResponse;
 
 /**
  * The "devices" collection of methods.

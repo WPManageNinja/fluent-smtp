@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\SettlementReport;
-use Google\Service\ShoppingContent\SettlementreportsListResponse;
+use FluentMail\Google\Service\ShoppingContent\SettlementReport;
+use FluentMail\Google\Service\ShoppingContent\SettlementreportsListResponse;
 
 /**
  * The "settlementreports" collection of methods.

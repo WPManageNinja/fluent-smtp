@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SmartDeviceManagement\Resource;
+namespace FluentMail\Google\Service\SmartDeviceManagement\Resource;
 
 /**
  * The "enterprises" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\ListCreativeStatusBreakdownByCreativeResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListCreativeStatusBreakdownByCreativeResponse;
 
 /**
  * The "creatives" collection of methods.

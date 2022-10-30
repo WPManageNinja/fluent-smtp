@@ -12,11 +12,11 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace phpseclib3\Math;
+namespace FluentMail\phpseclib3\Math;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Math\BinaryField\Integer;
-use phpseclib3\Math\Common\FiniteField;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Math\BinaryField\Integer;
+use FluentMail\phpseclib3\Math\Common\FiniteField;
 
 /**
  * Binary Finite Fields

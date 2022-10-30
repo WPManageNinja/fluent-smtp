@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\RemoteBuildExecution;
+namespace FluentMail\Google\Service\RemoteBuildExecution;
 
 class GoogleDevtoolsRemoteworkersV1test2CommandTaskInputs extends \Google\Collection
 {

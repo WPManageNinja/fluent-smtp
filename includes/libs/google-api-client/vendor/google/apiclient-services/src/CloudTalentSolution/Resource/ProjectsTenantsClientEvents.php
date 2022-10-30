@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudTalentSolution\Resource;
+namespace FluentMail\Google\Service\CloudTalentSolution\Resource;
 
-use Google\Service\CloudTalentSolution\ClientEvent;
+use FluentMail\Google\Service\CloudTalentSolution\ClientEvent;
 
 /**
  * The "clientEvents" collection of methods.

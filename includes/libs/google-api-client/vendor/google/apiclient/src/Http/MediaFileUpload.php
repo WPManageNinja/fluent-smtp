@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-namespace Google\Http;
+namespace FluentMail\Google\Http;
 
-use Google\Client;
-use Google\Exception as GoogleException;
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Uri;
-use Psr\Http\Message\RequestInterface;
+use FluentMail\Google\Client;
+use FluentMail\Google\Exception as GoogleException;
+use FluentMail\GuzzleHttp\Psr7;
+use FluentMail\GuzzleHttp\Psr7\Request;
+use FluentMail\GuzzleHttp\Psr7\Uri;
+use FluentMail\Psr\Http\Message\RequestInterface;
 
 /**
  * Manage large file uploads, which may be media but can be any type

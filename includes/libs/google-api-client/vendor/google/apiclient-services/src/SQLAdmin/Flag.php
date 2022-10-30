@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SQLAdmin;
+namespace FluentMail\Google\Service\SQLAdmin;
 
 class Flag extends \Google\Collection
 {

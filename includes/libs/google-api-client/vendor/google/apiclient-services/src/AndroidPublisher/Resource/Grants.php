@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\Grant;
+use FluentMail\Google\Service\AndroidPublisher\Grant;
 
 /**
  * The "grants" collection of methods.

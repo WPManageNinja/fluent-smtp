@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudSecurityToken\Resource;
+namespace FluentMail\Google\Service\CloudSecurityToken\Resource;
 
-use Google\Service\CloudSecurityToken\GoogleIdentityStsV1ExchangeTokenRequest;
-use Google\Service\CloudSecurityToken\GoogleIdentityStsV1ExchangeTokenResponse;
-use Google\Service\CloudSecurityToken\GoogleIdentityStsV1IntrospectTokenRequest;
-use Google\Service\CloudSecurityToken\GoogleIdentityStsV1IntrospectTokenResponse;
+use FluentMail\Google\Service\CloudSecurityToken\GoogleIdentityStsV1ExchangeTokenRequest;
+use FluentMail\Google\Service\CloudSecurityToken\GoogleIdentityStsV1ExchangeTokenResponse;
+use FluentMail\Google\Service\CloudSecurityToken\GoogleIdentityStsV1IntrospectTokenRequest;
+use FluentMail\Google\Service\CloudSecurityToken\GoogleIdentityStsV1IntrospectTokenResponse;
 
 /**
  * The "v1" collection of methods.

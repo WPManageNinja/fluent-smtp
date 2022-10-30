@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\ForwardingRule;
-use Google\Service\Compute\ForwardingRuleAggregatedList;
-use Google\Service\Compute\ForwardingRuleList;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\RegionSetLabelsRequest;
-use Google\Service\Compute\TargetReference;
+use FluentMail\Google\Service\Compute\ForwardingRule;
+use FluentMail\Google\Service\Compute\ForwardingRuleAggregatedList;
+use FluentMail\Google\Service\Compute\ForwardingRuleList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\RegionSetLabelsRequest;
+use FluentMail\Google\Service\Compute\TargetReference;
 
 /**
  * The "forwardingRules" collection of methods.

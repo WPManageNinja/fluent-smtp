@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudLifeSciences\Resource;
+namespace FluentMail\Google\Service\CloudLifeSciences\Resource;
 
 /**
  * The "projects" collection of methods.

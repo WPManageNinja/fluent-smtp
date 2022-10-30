@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\PolyService\Resource;
+namespace FluentMail\Google\Service\PolyService\Resource;
 
-use Google\Service\PolyService\Asset;
-use Google\Service\PolyService\ListAssetsResponse;
+use FluentMail\Google\Service\PolyService\Asset;
+use FluentMail\Google\Service\PolyService\ListAssetsResponse;
 
 /**
  * The "assets" collection of methods.

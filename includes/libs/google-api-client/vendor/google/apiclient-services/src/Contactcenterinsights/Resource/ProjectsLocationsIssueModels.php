@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\Contactcenterinsights\Resource;
+namespace FluentMail\Google\Service\Contactcenterinsights\Resource;
 
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1CalculateIssueModelStatsResponse;
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1DeployIssueModelRequest;
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1IssueModel;
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ListIssueModelsResponse;
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1UndeployIssueModelRequest;
-use Google\Service\Contactcenterinsights\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1CalculateIssueModelStatsResponse;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1DeployIssueModelRequest;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1IssueModel;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ListIssueModelsResponse;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1UndeployIssueModelRequest;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleLongrunningOperation;
 
 /**
  * The "issueModels" collection of methods.

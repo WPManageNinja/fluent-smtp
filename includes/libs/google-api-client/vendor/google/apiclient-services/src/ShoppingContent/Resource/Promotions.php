@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\Promotion;
+use FluentMail\Google\Service\ShoppingContent\Promotion;
 
 /**
  * The "promotions" collection of methods.

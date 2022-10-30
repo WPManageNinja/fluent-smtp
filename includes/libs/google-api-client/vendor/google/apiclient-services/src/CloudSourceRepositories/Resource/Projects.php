@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudSourceRepositories\Resource;
+namespace FluentMail\Google\Service\CloudSourceRepositories\Resource;
 
-use Google\Service\CloudSourceRepositories\ProjectConfig;
-use Google\Service\CloudSourceRepositories\UpdateProjectConfigRequest;
+use FluentMail\Google\Service\CloudSourceRepositories\ProjectConfig;
+use FluentMail\Google\Service\CloudSourceRepositories\UpdateProjectConfigRequest;
 
 /**
  * The "projects" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
-use Google\Service\Baremetalsolution\ListNfsSharesResponse;
-use Google\Service\Baremetalsolution\NfsShare;
-use Google\Service\Baremetalsolution\Operation;
+use FluentMail\Google\Service\Baremetalsolution\ListNfsSharesResponse;
+use FluentMail\Google\Service\Baremetalsolution\NfsShare;
+use FluentMail\Google\Service\Baremetalsolution\Operation;
 
 /**
  * The "nfsShares" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTubeAnalytics\Resource;
+namespace FluentMail\Google\Service\YouTubeAnalytics\Resource;
 
-use Google\Service\YouTubeAnalytics\QueryResponse;
+use FluentMail\Google\Service\YouTubeAnalytics\QueryResponse;
 
 /**
  * The "reports" collection of methods.

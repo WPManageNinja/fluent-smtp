@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Firebaseappcheck\Resource;
+namespace FluentMail\Google\Service\Firebaseappcheck\Resource;
 
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchGetPlayIntegrityConfigsResponse;
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1PlayIntegrityConfig;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchGetPlayIntegrityConfigsResponse;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1PlayIntegrityConfig;
 
 /**
  * The "playIntegrityConfig" collection of methods.

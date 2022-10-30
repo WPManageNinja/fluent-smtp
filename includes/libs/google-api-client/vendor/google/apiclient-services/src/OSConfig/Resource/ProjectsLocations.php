@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\OSConfig\Resource;
+namespace FluentMail\Google\Service\OSConfig\Resource;
 
 /**
  * The "locations" collection of methods.

@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\ServiceManagement\Resource;
+namespace FluentMail\Google\Service\ServiceManagement\Resource;
 
-use Google\Service\ServiceManagement\GetIamPolicyRequest;
-use Google\Service\ServiceManagement\Policy;
-use Google\Service\ServiceManagement\SetIamPolicyRequest;
-use Google\Service\ServiceManagement\TestIamPermissionsRequest;
-use Google\Service\ServiceManagement\TestIamPermissionsResponse;
+use FluentMail\Google\Service\ServiceManagement\GetIamPolicyRequest;
+use FluentMail\Google\Service\ServiceManagement\Policy;
+use FluentMail\Google\Service\ServiceManagement\SetIamPolicyRequest;
+use FluentMail\Google\Service\ServiceManagement\TestIamPermissionsRequest;
+use FluentMail\Google\Service\ServiceManagement\TestIamPermissionsResponse;
 
 /**
  * The "consumers" collection of methods.

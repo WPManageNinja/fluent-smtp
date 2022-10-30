@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
-use Google\Service\CloudHealthcare\HttpBody;
-use Google\Service\CloudHealthcare\Operation;
+use FluentMail\Google\Service\CloudHealthcare\HttpBody;
+use FluentMail\Google\Service\CloudHealthcare\Operation;
 
 /**
  * The "series" collection of methods.

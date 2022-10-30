@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\SslPolicyReference;
-use Google\Service\Compute\TargetSslProxiesSetBackendServiceRequest;
-use Google\Service\Compute\TargetSslProxiesSetCertificateMapRequest;
-use Google\Service\Compute\TargetSslProxiesSetProxyHeaderRequest;
-use Google\Service\Compute\TargetSslProxiesSetSslCertificatesRequest;
-use Google\Service\Compute\TargetSslProxy;
-use Google\Service\Compute\TargetSslProxyList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\SslPolicyReference;
+use FluentMail\Google\Service\Compute\TargetSslProxiesSetBackendServiceRequest;
+use FluentMail\Google\Service\Compute\TargetSslProxiesSetCertificateMapRequest;
+use FluentMail\Google\Service\Compute\TargetSslProxiesSetProxyHeaderRequest;
+use FluentMail\Google\Service\Compute\TargetSslProxiesSetSslCertificatesRequest;
+use FluentMail\Google\Service\Compute\TargetSslProxy;
+use FluentMail\Google\Service\Compute\TargetSslProxyList;
 
 /**
  * The "targetSslProxies" collection of methods.

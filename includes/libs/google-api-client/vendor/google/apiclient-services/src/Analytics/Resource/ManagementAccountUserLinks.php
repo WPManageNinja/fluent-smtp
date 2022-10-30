@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\EntityUserLink;
-use Google\Service\Analytics\EntityUserLinks;
+use FluentMail\Google\Service\Analytics\EntityUserLink;
+use FluentMail\Google\Service\Analytics\EntityUserLinks;
 
 /**
  * The "accountUserLinks" collection of methods.

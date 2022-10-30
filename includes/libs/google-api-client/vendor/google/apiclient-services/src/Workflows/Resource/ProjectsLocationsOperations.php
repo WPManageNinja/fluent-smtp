@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Workflows\Resource;
+namespace FluentMail\Google\Service\Workflows\Resource;
 
-use Google\Service\Workflows\ListOperationsResponse;
-use Google\Service\Workflows\Operation;
-use Google\Service\Workflows\WorkflowsEmpty;
+use FluentMail\Google\Service\Workflows\ListOperationsResponse;
+use FluentMail\Google\Service\Workflows\Operation;
+use FluentMail\Google\Service\Workflows\WorkflowsEmpty;
 
 /**
  * The "operations" collection of methods.

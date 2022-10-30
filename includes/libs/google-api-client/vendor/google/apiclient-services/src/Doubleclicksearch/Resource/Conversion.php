@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Doubleclicksearch\Resource;
+namespace FluentMail\Google\Service\Doubleclicksearch\Resource;
 
-use Google\Service\Doubleclicksearch\ConversionList;
-use Google\Service\Doubleclicksearch\UpdateAvailabilityRequest;
-use Google\Service\Doubleclicksearch\UpdateAvailabilityResponse;
+use FluentMail\Google\Service\Doubleclicksearch\ConversionList;
+use FluentMail\Google\Service\Doubleclicksearch\UpdateAvailabilityRequest;
+use FluentMail\Google\Service\Doubleclicksearch\UpdateAvailabilityResponse;
 
 /**
  * The "conversion" collection of methods.

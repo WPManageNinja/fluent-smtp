@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\DownloadAccesses;
-use Google\Service\Books\RequestAccessData;
-use Google\Service\Books\Usersettings;
-use Google\Service\Books\Volumes as VolumesModel;
+use FluentMail\Google\Service\Books\DownloadAccesses;
+use FluentMail\Google\Service\Books\RequestAccessData;
+use FluentMail\Google\Service\Books\Usersettings;
+use FluentMail\Google\Service\Books\Volumes as VolumesModel;
 
 /**
  * The "myconfig" collection of methods.

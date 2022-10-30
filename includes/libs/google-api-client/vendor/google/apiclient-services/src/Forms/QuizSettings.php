@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Forms;
+namespace FluentMail\Google\Service\Forms;
 
 class QuizSettings extends \Google\Model
 {

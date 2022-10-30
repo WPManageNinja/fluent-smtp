@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Datastream\Resource;
+namespace FluentMail\Google\Service\Datastream\Resource;
 
 /**
  * The "projects" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
-use Google\Service\CloudSearch\Media as MediaModel;
+use FluentMail\Google\Service\CloudSearch\Media as MediaModel;
 
 /**
  * The "media" collection of methods.

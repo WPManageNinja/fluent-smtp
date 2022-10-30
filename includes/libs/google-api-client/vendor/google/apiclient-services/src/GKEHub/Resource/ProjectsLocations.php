@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\GKEHub\Resource;
+namespace FluentMail\Google\Service\GKEHub\Resource;
 
-use Google\Service\GKEHub\ListLocationsResponse;
-use Google\Service\GKEHub\Location;
+use FluentMail\Google\Service\GKEHub\ListLocationsResponse;
+use FluentMail\Google\Service\GKEHub\Location;
 
 /**
  * The "locations" collection of methods.

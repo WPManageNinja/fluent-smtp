@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudTalentSolution;
+namespace FluentMail\Google\Service\CloudTalentSolution;
 
 class CommuteFilter extends \Google\Model
 {

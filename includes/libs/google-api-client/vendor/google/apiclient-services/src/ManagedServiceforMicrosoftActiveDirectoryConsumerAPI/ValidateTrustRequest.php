@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI;
+namespace FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI;
 
 class ValidateTrustRequest extends \Google\Model
 {

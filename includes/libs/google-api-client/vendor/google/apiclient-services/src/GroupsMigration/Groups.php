@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\GroupsMigration;
+namespace FluentMail\Google\Service\GroupsMigration;
 
 class Groups extends \Google\Model
 {

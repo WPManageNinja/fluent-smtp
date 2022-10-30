@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PolicyAnalyzer;
+namespace FluentMail\Google\Service\PolicyAnalyzer;
 
 class GoogleCloudPolicyanalyzerV1QueryActivityResponse extends \Google\Collection
 {

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\ListRegionsResponse;
-use Google\Service\ShoppingContent\Region;
+use FluentMail\Google\Service\ShoppingContent\ListRegionsResponse;
+use FluentMail\Google\Service\ShoppingContent\Region;
 
 /**
  * The "regions" collection of methods.

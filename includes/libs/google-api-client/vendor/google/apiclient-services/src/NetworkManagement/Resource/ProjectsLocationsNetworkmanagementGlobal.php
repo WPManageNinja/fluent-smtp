@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\NetworkManagement\Resource;
+namespace FluentMail\Google\Service\NetworkManagement\Resource;
 
 /**
  * The "global" collection of methods.

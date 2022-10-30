@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Logging\Resource;
+namespace FluentMail\Google\Service\Logging\Resource;
 
-use Google\Service\Logging\ListMonitoredResourceDescriptorsResponse;
+use FluentMail\Google\Service\Logging\ListMonitoredResourceDescriptorsResponse;
 
 /**
  * The "monitoredResourceDescriptors" collection of methods.

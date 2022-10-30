@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Area120Tables;
+namespace FluentMail\Google\Service\Area120Tables;
 
 class ListWorkspacesResponse extends \Google\Collection
 {

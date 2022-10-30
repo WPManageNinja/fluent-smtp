@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ChromePolicy;
+namespace FluentMail\Google\Service\ChromePolicy;
 
 class Proto2DescriptorProto extends \Google\Collection
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\VersionHistory;
+namespace FluentMail\Google\Service\VersionHistory;
 
 class Interval extends \Google\Model
 {

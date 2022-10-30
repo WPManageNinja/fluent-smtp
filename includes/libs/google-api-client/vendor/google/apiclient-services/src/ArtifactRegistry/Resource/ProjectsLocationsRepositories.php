@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\ListRepositoriesResponse;
-use Google\Service\ArtifactRegistry\Operation;
-use Google\Service\ArtifactRegistry\Policy;
-use Google\Service\ArtifactRegistry\Repository;
-use Google\Service\ArtifactRegistry\SetIamPolicyRequest;
-use Google\Service\ArtifactRegistry\TestIamPermissionsRequest;
-use Google\Service\ArtifactRegistry\TestIamPermissionsResponse;
+use FluentMail\Google\Service\ArtifactRegistry\ListRepositoriesResponse;
+use FluentMail\Google\Service\ArtifactRegistry\Operation;
+use FluentMail\Google\Service\ArtifactRegistry\Policy;
+use FluentMail\Google\Service\ArtifactRegistry\Repository;
+use FluentMail\Google\Service\ArtifactRegistry\SetIamPolicyRequest;
+use FluentMail\Google\Service\ArtifactRegistry\TestIamPermissionsRequest;
+use FluentMail\Google\Service\ArtifactRegistry\TestIamPermissionsResponse;
 
 /**
  * The "repositories" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ToolResults\Resource;
+namespace FluentMail\Google\Service\ToolResults\Resource;
 
-use Google\Service\ToolResults\Execution;
-use Google\Service\ToolResults\ListExecutionsResponse;
+use FluentMail\Google\Service\ToolResults\Execution;
+use FluentMail\Google\Service\ToolResults\ListExecutionsResponse;
 
 /**
  * The "executions" collection of methods.

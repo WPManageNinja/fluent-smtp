@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudIAP\Resource;
+namespace FluentMail\Google\Service\CloudIAP\Resource;
 
 /**
  * The "projects" collection of methods.

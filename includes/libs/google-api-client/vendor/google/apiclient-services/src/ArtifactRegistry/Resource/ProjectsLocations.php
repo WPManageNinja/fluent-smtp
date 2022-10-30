@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\ListLocationsResponse;
-use Google\Service\ArtifactRegistry\Location;
+use FluentMail\Google\Service\ArtifactRegistry\ListLocationsResponse;
+use FluentMail\Google\Service\ArtifactRegistry\Location;
 
 /**
  * The "locations" collection of methods.

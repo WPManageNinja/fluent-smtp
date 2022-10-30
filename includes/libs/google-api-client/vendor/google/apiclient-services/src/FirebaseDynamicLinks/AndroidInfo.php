@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseDynamicLinks;
+namespace FluentMail\Google\Service\FirebaseDynamicLinks;
 
 class AndroidInfo extends \Google\Model
 {

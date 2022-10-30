@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise\Resource;
+namespace FluentMail\Google\Service\AndroidEnterprise\Resource;
 
-use Google\Service\AndroidEnterprise\Permission;
+use FluentMail\Google\Service\AndroidEnterprise\Permission;
 
 /**
  * The "permissions" collection of methods.

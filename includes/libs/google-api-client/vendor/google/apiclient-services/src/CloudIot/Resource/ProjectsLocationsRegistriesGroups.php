@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\CloudIot\Resource;
+namespace FluentMail\Google\Service\CloudIot\Resource;
 
-use Google\Service\CloudIot\GetIamPolicyRequest;
-use Google\Service\CloudIot\Policy;
-use Google\Service\CloudIot\SetIamPolicyRequest;
-use Google\Service\CloudIot\TestIamPermissionsRequest;
-use Google\Service\CloudIot\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudIot\GetIamPolicyRequest;
+use FluentMail\Google\Service\CloudIot\Policy;
+use FluentMail\Google\Service\CloudIot\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudIot\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudIot\TestIamPermissionsResponse;
 
 /**
  * The "groups" collection of methods.

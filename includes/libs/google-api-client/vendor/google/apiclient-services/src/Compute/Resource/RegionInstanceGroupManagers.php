@@ -15,24 +15,24 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\InstanceGroupManager;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\RegionInstanceGroupManagerDeleteInstanceConfigReq;
-use Google\Service\Compute\RegionInstanceGroupManagerList;
-use Google\Service\Compute\RegionInstanceGroupManagerPatchInstanceConfigReq;
-use Google\Service\Compute\RegionInstanceGroupManagerUpdateInstanceConfigReq;
-use Google\Service\Compute\RegionInstanceGroupManagersAbandonInstancesRequest;
-use Google\Service\Compute\RegionInstanceGroupManagersApplyUpdatesRequest;
-use Google\Service\Compute\RegionInstanceGroupManagersCreateInstancesRequest;
-use Google\Service\Compute\RegionInstanceGroupManagersDeleteInstancesRequest;
-use Google\Service\Compute\RegionInstanceGroupManagersListErrorsResponse;
-use Google\Service\Compute\RegionInstanceGroupManagersListInstanceConfigsResp;
-use Google\Service\Compute\RegionInstanceGroupManagersListInstancesResponse;
-use Google\Service\Compute\RegionInstanceGroupManagersRecreateRequest;
-use Google\Service\Compute\RegionInstanceGroupManagersSetTargetPoolsRequest;
-use Google\Service\Compute\RegionInstanceGroupManagersSetTemplateRequest;
+use FluentMail\Google\Service\Compute\InstanceGroupManager;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagerDeleteInstanceConfigReq;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagerList;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagerPatchInstanceConfigReq;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagerUpdateInstanceConfigReq;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagersAbandonInstancesRequest;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagersApplyUpdatesRequest;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagersCreateInstancesRequest;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagersDeleteInstancesRequest;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagersListErrorsResponse;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagersListInstanceConfigsResp;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagersListInstancesResponse;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagersRecreateRequest;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagersSetTargetPoolsRequest;
+use FluentMail\Google\Service\Compute\RegionInstanceGroupManagersSetTemplateRequest;
 
 /**
  * The "regionInstanceGroupManagers" collection of methods.

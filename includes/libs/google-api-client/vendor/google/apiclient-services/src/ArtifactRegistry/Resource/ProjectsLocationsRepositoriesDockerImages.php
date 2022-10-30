@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\DockerImage;
-use Google\Service\ArtifactRegistry\ListDockerImagesResponse;
+use FluentMail\Google\Service\ArtifactRegistry\DockerImage;
+use FluentMail\Google\Service\ArtifactRegistry\ListDockerImagesResponse;
 
 /**
  * The "dockerImages" collection of methods.

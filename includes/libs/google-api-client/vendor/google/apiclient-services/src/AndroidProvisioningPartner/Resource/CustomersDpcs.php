@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidProvisioningPartner\Resource;
+namespace FluentMail\Google\Service\AndroidProvisioningPartner\Resource;
 
-use Google\Service\AndroidProvisioningPartner\CustomerListDpcsResponse;
+use FluentMail\Google\Service\AndroidProvisioningPartner\CustomerListDpcsResponse;
 
 /**
  * The "dpcs" collection of methods.

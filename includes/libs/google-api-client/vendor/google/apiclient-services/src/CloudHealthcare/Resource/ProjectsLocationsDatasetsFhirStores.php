@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
-use Google\Service\CloudHealthcare\DeidentifyFhirStoreRequest;
-use Google\Service\CloudHealthcare\ExportResourcesRequest;
-use Google\Service\CloudHealthcare\FhirStore;
-use Google\Service\CloudHealthcare\HealthcareEmpty;
-use Google\Service\CloudHealthcare\ImportResourcesRequest;
-use Google\Service\CloudHealthcare\ListFhirStoresResponse;
-use Google\Service\CloudHealthcare\Operation;
-use Google\Service\CloudHealthcare\Policy;
-use Google\Service\CloudHealthcare\SetIamPolicyRequest;
-use Google\Service\CloudHealthcare\TestIamPermissionsRequest;
-use Google\Service\CloudHealthcare\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudHealthcare\DeidentifyFhirStoreRequest;
+use FluentMail\Google\Service\CloudHealthcare\ExportResourcesRequest;
+use FluentMail\Google\Service\CloudHealthcare\FhirStore;
+use FluentMail\Google\Service\CloudHealthcare\HealthcareEmpty;
+use FluentMail\Google\Service\CloudHealthcare\ImportResourcesRequest;
+use FluentMail\Google\Service\CloudHealthcare\ListFhirStoresResponse;
+use FluentMail\Google\Service\CloudHealthcare\Operation;
+use FluentMail\Google\Service\CloudHealthcare\Policy;
+use FluentMail\Google\Service\CloudHealthcare\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudHealthcare\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudHealthcare\TestIamPermissionsResponse;
 
 /**
  * The "fhirStores" collection of methods.

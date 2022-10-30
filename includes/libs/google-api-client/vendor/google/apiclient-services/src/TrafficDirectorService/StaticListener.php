@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\TrafficDirectorService;
+namespace FluentMail\Google\Service\TrafficDirectorService;
 
 class StaticListener extends \Google\Model
 {

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudRetail\Resource;
+namespace FluentMail\Google\Service\CloudRetail\Resource;
 
-use Google\Service\CloudRetail\GoogleCloudRetailV2AddCatalogAttributeRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2AttributesConfig;
-use Google\Service\CloudRetail\GoogleCloudRetailV2RemoveCatalogAttributeRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2ReplaceCatalogAttributeRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2AddCatalogAttributeRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2AttributesConfig;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2RemoveCatalogAttributeRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2ReplaceCatalogAttributeRequest;
 
 /**
  * The "attributesConfig" collection of methods.

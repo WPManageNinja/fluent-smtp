@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Resource;
+namespace FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Resource;
 
 /**
  * The "projects" collection of methods.

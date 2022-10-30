@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudTrace\Resource;
+namespace FluentMail\Google\Service\CloudTrace\Resource;
 
-use Google\Service\CloudTrace\Span;
+use FluentMail\Google\Service\CloudTrace\Span;
 
 /**
  * The "spans" collection of methods.

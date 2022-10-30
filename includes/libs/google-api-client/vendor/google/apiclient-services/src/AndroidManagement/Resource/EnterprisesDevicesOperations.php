@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AndroidManagement\Resource;
+namespace FluentMail\Google\Service\AndroidManagement\Resource;
 
-use Google\Service\AndroidManagement\AndroidmanagementEmpty;
-use Google\Service\AndroidManagement\ListOperationsResponse;
-use Google\Service\AndroidManagement\Operation;
+use FluentMail\Google\Service\AndroidManagement\AndroidmanagementEmpty;
+use FluentMail\Google\Service\AndroidManagement\ListOperationsResponse;
+use FluentMail\Google\Service\AndroidManagement\Operation;
 
 /**
  * The "operations" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Contentwarehouse\Resource;
+namespace FluentMail\Google\Service\Contentwarehouse\Resource;
 
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1ListSynonymSetsResponse;
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1SynonymSet;
-use Google\Service\Contentwarehouse\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1ListSynonymSetsResponse;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1SynonymSet;
+use FluentMail\Google\Service\Contentwarehouse\GoogleProtobufEmpty;
 
 /**
  * The "synonymSets" collection of methods.

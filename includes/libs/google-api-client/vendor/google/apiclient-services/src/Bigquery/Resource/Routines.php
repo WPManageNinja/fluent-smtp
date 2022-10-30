@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Bigquery\Resource;
+namespace FluentMail\Google\Service\Bigquery\Resource;
 
-use Google\Service\Bigquery\ListRoutinesResponse;
-use Google\Service\Bigquery\Routine;
+use FluentMail\Google\Service\Bigquery\ListRoutinesResponse;
+use FluentMail\Google\Service\Bigquery\Routine;
 
 /**
  * The "routines" collection of methods.

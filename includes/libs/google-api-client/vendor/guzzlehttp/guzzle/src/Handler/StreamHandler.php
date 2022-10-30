@@ -1,19 +1,19 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace FluentMail\GuzzleHttp\Handler;
 
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Promise as P;
-use GuzzleHttp\Promise\FulfilledPromise;
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7;
-use GuzzleHttp\TransferStats;
-use GuzzleHttp\Utils;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UriInterface;
+use FluentMail\GuzzleHttp\Exception\ConnectException;
+use FluentMail\GuzzleHttp\Exception\RequestException;
+use FluentMail\GuzzleHttp\Promise as P;
+use FluentMail\GuzzleHttp\Promise\FulfilledPromise;
+use FluentMail\GuzzleHttp\Promise\PromiseInterface;
+use FluentMail\GuzzleHttp\Psr7;
+use FluentMail\GuzzleHttp\TransferStats;
+use FluentMail\GuzzleHttp\Utils;
+use FluentMail\Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\ResponseInterface;
+use FluentMail\Psr\Http\Message\StreamInterface;
+use FluentMail\Psr\Http\Message\UriInterface;
 
 /**
  * HTTP handler that uses PHP's HTTP stream wrapper.

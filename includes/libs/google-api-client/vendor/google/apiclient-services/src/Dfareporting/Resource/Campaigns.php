@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\Campaign;
-use Google\Service\Dfareporting\CampaignsListResponse;
+use FluentMail\Google\Service\Dfareporting\Campaign;
+use FluentMail\Google\Service\Dfareporting\CampaignsListResponse;
 
 /**
  * The "campaigns" collection of methods.

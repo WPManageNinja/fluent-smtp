@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Eventarc\Resource;
+namespace FluentMail\Google\Service\Eventarc\Resource;
 
-use Google\Service\Eventarc\ListProvidersResponse;
-use Google\Service\Eventarc\Provider;
+use FluentMail\Google\Service\Eventarc\ListProvidersResponse;
+use FluentMail\Google\Service\Eventarc\Provider;
 
 /**
  * The "providers" collection of methods.

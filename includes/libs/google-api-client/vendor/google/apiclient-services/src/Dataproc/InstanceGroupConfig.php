@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dataproc;
+namespace FluentMail\Google\Service\Dataproc;
 
 class InstanceGroupConfig extends \Google\Collection
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\TagManager;
+namespace FluentMail\Google\Service\TagManager;
 
 class ListVariablesResponse extends \Google\Collection
 {

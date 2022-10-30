@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Calendar\Resource;
+namespace FluentMail\Google\Service\Calendar\Resource;
 
-use Google\Service\Calendar\Acl as AclModel;
-use Google\Service\Calendar\AclRule;
-use Google\Service\Calendar\Channel;
+use FluentMail\Google\Service\Calendar\Acl as AclModel;
+use FluentMail\Google\Service\Calendar\AclRule;
+use FluentMail\Google\Service\Calendar\Channel;
 
 /**
  * The "acl" collection of methods.

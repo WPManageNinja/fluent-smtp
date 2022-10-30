@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\DataLabeling\Resource;
+namespace FluentMail\Google\Service\DataLabeling\Resource;
 
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1AnnotatedDataset;
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1ListAnnotatedDatasetsResponse;
-use Google\Service\DataLabeling\GoogleProtobufEmpty;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1AnnotatedDataset;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1ListAnnotatedDatasetsResponse;
+use FluentMail\Google\Service\DataLabeling\GoogleProtobufEmpty;
 
 /**
  * The "annotatedDatasets" collection of methods.

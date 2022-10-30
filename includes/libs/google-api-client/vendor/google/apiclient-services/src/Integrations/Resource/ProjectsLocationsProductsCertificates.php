@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Integrations\Resource;
+namespace FluentMail\Google\Service\Integrations\Resource;
 
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCertificate;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListCertificatesResponse;
-use Google\Service\Integrations\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCertificate;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListCertificatesResponse;
+use FluentMail\Google\Service\Integrations\GoogleProtobufEmpty;
 
 /**
  * The "certificates" collection of methods.

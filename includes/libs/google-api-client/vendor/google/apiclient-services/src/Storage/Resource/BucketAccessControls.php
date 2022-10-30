@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Storage\Resource;
+namespace FluentMail\Google\Service\Storage\Resource;
 
-use Google\Service\Storage\BucketAccessControl;
-use Google\Service\Storage\BucketAccessControls as BucketAccessControlsModel;
+use FluentMail\Google\Service\Storage\BucketAccessControl;
+use FluentMail\Google\Service\Storage\BucketAccessControls as BucketAccessControlsModel;
 
 /**
  * The "bucketAccessControls" collection of methods.

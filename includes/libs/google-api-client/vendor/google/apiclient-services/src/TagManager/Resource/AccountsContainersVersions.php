@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\TagManager\Resource;
+namespace FluentMail\Google\Service\TagManager\Resource;
 
-use Google\Service\TagManager\ContainerVersion;
-use Google\Service\TagManager\PublishContainerVersionResponse;
+use FluentMail\Google\Service\TagManager\ContainerVersion;
+use FluentMail\Google\Service\TagManager\PublishContainerVersionResponse;
 
 /**
  * The "versions" collection of methods.

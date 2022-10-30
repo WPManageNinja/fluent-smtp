@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Resource;
+namespace FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Resource;
 
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\CancelOperationRequest;
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\ListOperationsResponse;
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\ManagedidentitiesEmpty;
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Operation;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\CancelOperationRequest;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\ListOperationsResponse;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\ManagedidentitiesEmpty;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Operation;
 
 /**
  * The "operations" collection of methods.

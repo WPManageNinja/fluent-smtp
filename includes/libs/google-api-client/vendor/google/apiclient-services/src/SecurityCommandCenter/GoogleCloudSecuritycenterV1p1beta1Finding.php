@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter;
+namespace FluentMail\Google\Service\SecurityCommandCenter;
 
 class GoogleCloudSecuritycenterV1p1beta1Finding extends \Google\Model
 {

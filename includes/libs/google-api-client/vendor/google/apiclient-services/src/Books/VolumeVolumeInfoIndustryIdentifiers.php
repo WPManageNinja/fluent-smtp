@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Books;
+namespace FluentMail\Google\Service\Books;
 
 class VolumeVolumeInfoIndustryIdentifiers extends \Google\Model
 {

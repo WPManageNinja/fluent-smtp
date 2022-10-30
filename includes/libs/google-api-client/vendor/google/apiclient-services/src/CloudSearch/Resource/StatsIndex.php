@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
 /**
  * The "index" collection of methods.

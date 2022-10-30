@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudShell\Resource;
+namespace FluentMail\Google\Service\CloudShell\Resource;
 
 /**
  * The "users" collection of methods.

@@ -15,20 +15,20 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\NodeGroup;
-use Google\Service\Compute\NodeGroupAggregatedList;
-use Google\Service\Compute\NodeGroupList;
-use Google\Service\Compute\NodeGroupsAddNodesRequest;
-use Google\Service\Compute\NodeGroupsDeleteNodesRequest;
-use Google\Service\Compute\NodeGroupsListNodes;
-use Google\Service\Compute\NodeGroupsSetNodeTemplateRequest;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Policy;
-use Google\Service\Compute\TestPermissionsRequest;
-use Google\Service\Compute\TestPermissionsResponse;
-use Google\Service\Compute\ZoneSetPolicyRequest;
+use FluentMail\Google\Service\Compute\NodeGroup;
+use FluentMail\Google\Service\Compute\NodeGroupAggregatedList;
+use FluentMail\Google\Service\Compute\NodeGroupList;
+use FluentMail\Google\Service\Compute\NodeGroupsAddNodesRequest;
+use FluentMail\Google\Service\Compute\NodeGroupsDeleteNodesRequest;
+use FluentMail\Google\Service\Compute\NodeGroupsListNodes;
+use FluentMail\Google\Service\Compute\NodeGroupsSetNodeTemplateRequest;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Policy;
+use FluentMail\Google\Service\Compute\TestPermissionsRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsResponse;
+use FluentMail\Google\Service\Compute\ZoneSetPolicyRequest;
 
 /**
  * The "nodeGroups" collection of methods.

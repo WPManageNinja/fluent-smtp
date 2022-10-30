@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Libraryagent\Resource;
+namespace FluentMail\Google\Service\Libraryagent\Resource;
 
-use Google\Service\Libraryagent\GoogleExampleLibraryagentV1ListShelvesResponse;
-use Google\Service\Libraryagent\GoogleExampleLibraryagentV1Shelf;
+use FluentMail\Google\Service\Libraryagent\GoogleExampleLibraryagentV1ListShelvesResponse;
+use FluentMail\Google\Service\Libraryagent\GoogleExampleLibraryagentV1Shelf;
 
 /**
  * The "shelves" collection of methods.

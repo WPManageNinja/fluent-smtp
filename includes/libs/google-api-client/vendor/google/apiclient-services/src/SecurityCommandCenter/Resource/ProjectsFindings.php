@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter\Resource;
+namespace FluentMail\Google\Service\SecurityCommandCenter\Resource;
 
-use Google\Service\SecurityCommandCenter\BulkMuteFindingsRequest;
-use Google\Service\SecurityCommandCenter\Operation;
+use FluentMail\Google\Service\SecurityCommandCenter\BulkMuteFindingsRequest;
+use FluentMail\Google\Service\SecurityCommandCenter\Operation;
 
 /**
  * The "findings" collection of methods.

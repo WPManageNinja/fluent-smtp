@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\CloudTasks\Resource;
+namespace FluentMail\Google\Service\CloudTasks\Resource;
 
-use Google\Service\CloudTasks\CloudtasksEmpty;
-use Google\Service\CloudTasks\CreateTaskRequest;
-use Google\Service\CloudTasks\ListTasksResponse;
-use Google\Service\CloudTasks\RunTaskRequest;
-use Google\Service\CloudTasks\Task;
+use FluentMail\Google\Service\CloudTasks\CloudtasksEmpty;
+use FluentMail\Google\Service\CloudTasks\CreateTaskRequest;
+use FluentMail\Google\Service\CloudTasks\ListTasksResponse;
+use FluentMail\Google\Service\CloudTasks\RunTaskRequest;
+use FluentMail\Google\Service\CloudTasks\Task;
 
 /**
  * The "tasks" collection of methods.

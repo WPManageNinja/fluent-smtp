@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\MobileDevice;
-use Google\Service\Directory\MobileDeviceAction;
-use Google\Service\Directory\MobileDevices as MobileDevicesModel;
+use FluentMail\Google\Service\Directory\MobileDevice;
+use FluentMail\Google\Service\Directory\MobileDeviceAction;
+use FluentMail\Google\Service\Directory\MobileDevices as MobileDevicesModel;
 
 /**
  * The "mobiledevices" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudKMS;
+namespace FluentMail\Google\Service\CloudKMS;
 
 class Expr extends \Google\Model
 {

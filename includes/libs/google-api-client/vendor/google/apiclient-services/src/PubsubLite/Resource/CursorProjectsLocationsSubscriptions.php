@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\PubsubLite\Resource;
+namespace FluentMail\Google\Service\PubsubLite\Resource;
 
-use Google\Service\PubsubLite\CommitCursorRequest;
-use Google\Service\PubsubLite\CommitCursorResponse;
+use FluentMail\Google\Service\PubsubLite\CommitCursorRequest;
+use FluentMail\Google\Service\PubsubLite\CommitCursorResponse;
 
 /**
  * The "subscriptions" collection of methods.

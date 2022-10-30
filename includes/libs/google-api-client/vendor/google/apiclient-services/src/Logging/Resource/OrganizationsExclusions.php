@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Logging\Resource;
+namespace FluentMail\Google\Service\Logging\Resource;
 
-use Google\Service\Logging\ListExclusionsResponse;
-use Google\Service\Logging\LogExclusion;
-use Google\Service\Logging\LoggingEmpty;
+use FluentMail\Google\Service\Logging\ListExclusionsResponse;
+use FluentMail\Google\Service\Logging\LogExclusion;
+use FluentMail\Google\Service\Logging\LoggingEmpty;
 
 /**
  * The "exclusions" collection of methods.

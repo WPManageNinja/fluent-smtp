@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\IAMCredentials;
+namespace FluentMail\Google\Service\IAMCredentials;
 
 class SignJwtRequest extends \Google\Collection
 {

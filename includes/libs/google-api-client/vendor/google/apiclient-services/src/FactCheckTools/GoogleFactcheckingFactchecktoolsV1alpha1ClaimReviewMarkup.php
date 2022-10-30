@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FactCheckTools;
+namespace FluentMail\Google\Service\FactCheckTools;
 
 class GoogleFactcheckingFactchecktoolsV1alpha1ClaimReviewMarkup extends \Google\Collection
 {

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\GameServices\Resource;
+namespace FluentMail\Google\Service\GameServices\Resource;
 
-use Google\Service\GameServices\CancelOperationRequest;
-use Google\Service\GameServices\GameservicesEmpty;
-use Google\Service\GameServices\ListOperationsResponse;
-use Google\Service\GameServices\Operation;
+use FluentMail\Google\Service\GameServices\CancelOperationRequest;
+use FluentMail\Google\Service\GameServices\GameservicesEmpty;
+use FluentMail\Google\Service\GameServices\ListOperationsResponse;
+use FluentMail\Google\Service\GameServices\Operation;
 
 /**
  * The "operations" collection of methods.

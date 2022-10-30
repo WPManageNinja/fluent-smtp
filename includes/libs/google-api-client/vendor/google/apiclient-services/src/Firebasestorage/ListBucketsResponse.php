@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Firebasestorage;
+namespace FluentMail\Google\Service\Firebasestorage;
 
 class ListBucketsResponse extends \Google\Collection
 {

@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleApiHttpBody;
-use Google\Service\Apigee\GoogleCloudApigeeV1AsyncQuery;
-use Google\Service\Apigee\GoogleCloudApigeeV1AsyncQueryResultView;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListAsyncQueriesResponse;
-use Google\Service\Apigee\GoogleCloudApigeeV1Query;
+use FluentMail\Google\Service\Apigee\GoogleApiHttpBody;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1AsyncQuery;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1AsyncQueryResultView;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListAsyncQueriesResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1Query;
 
 /**
  * The "hostQueries" collection of methods.

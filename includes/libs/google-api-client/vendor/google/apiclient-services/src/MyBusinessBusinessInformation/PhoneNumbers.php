@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessBusinessInformation;
+namespace FluentMail\Google\Service\MyBusinessBusinessInformation;
 
 class PhoneNumbers extends \Google\Collection
 {

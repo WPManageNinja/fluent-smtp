@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\DataprocMetastore\Resource;
+namespace FluentMail\Google\Service\DataprocMetastore\Resource;
 
-use Google\Service\DataprocMetastore\ExportMetadataRequest;
-use Google\Service\DataprocMetastore\ListServicesResponse;
-use Google\Service\DataprocMetastore\Operation;
-use Google\Service\DataprocMetastore\Policy;
-use Google\Service\DataprocMetastore\RemoveIamPolicyRequest;
-use Google\Service\DataprocMetastore\RemoveIamPolicyResponse;
-use Google\Service\DataprocMetastore\RestoreServiceRequest;
-use Google\Service\DataprocMetastore\Service;
-use Google\Service\DataprocMetastore\SetIamPolicyRequest;
-use Google\Service\DataprocMetastore\TestIamPermissionsRequest;
-use Google\Service\DataprocMetastore\TestIamPermissionsResponse;
+use FluentMail\Google\Service\DataprocMetastore\ExportMetadataRequest;
+use FluentMail\Google\Service\DataprocMetastore\ListServicesResponse;
+use FluentMail\Google\Service\DataprocMetastore\Operation;
+use FluentMail\Google\Service\DataprocMetastore\Policy;
+use FluentMail\Google\Service\DataprocMetastore\RemoveIamPolicyRequest;
+use FluentMail\Google\Service\DataprocMetastore\RemoveIamPolicyResponse;
+use FluentMail\Google\Service\DataprocMetastore\RestoreServiceRequest;
+use FluentMail\Google\Service\DataprocMetastore\Service;
+use FluentMail\Google\Service\DataprocMetastore\SetIamPolicyRequest;
+use FluentMail\Google\Service\DataprocMetastore\TestIamPermissionsRequest;
+use FluentMail\Google\Service\DataprocMetastore\TestIamPermissionsResponse;
 
 /**
  * The "services" collection of methods.

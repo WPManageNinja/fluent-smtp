@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudBuild\Resource;
+namespace FluentMail\Google\Service\CloudBuild\Resource;
 
-use Google\Service\CloudBuild\CancelOperationRequest;
-use Google\Service\CloudBuild\CloudbuildEmpty;
-use Google\Service\CloudBuild\Operation;
+use FluentMail\Google\Service\CloudBuild\CancelOperationRequest;
+use FluentMail\Google\Service\CloudBuild\CloudbuildEmpty;
+use FluentMail\Google\Service\CloudBuild\Operation;
 
 /**
  * The "operations" collection of methods.

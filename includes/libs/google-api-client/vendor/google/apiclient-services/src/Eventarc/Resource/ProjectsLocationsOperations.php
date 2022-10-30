@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Eventarc\Resource;
+namespace FluentMail\Google\Service\Eventarc\Resource;
 
-use Google\Service\Eventarc\EventarcEmpty;
-use Google\Service\Eventarc\GoogleLongrunningCancelOperationRequest;
-use Google\Service\Eventarc\GoogleLongrunningListOperationsResponse;
-use Google\Service\Eventarc\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Eventarc\EventarcEmpty;
+use FluentMail\Google\Service\Eventarc\GoogleLongrunningCancelOperationRequest;
+use FluentMail\Google\Service\Eventarc\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\Eventarc\GoogleLongrunningOperation;
 
 /**
  * The "operations" collection of methods.

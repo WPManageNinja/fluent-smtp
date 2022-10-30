@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\BulkListInsertionOrderAssignedTargetingOptionsResponse;
-use Google\Service\DisplayVideo\DisplayvideoEmpty;
-use Google\Service\DisplayVideo\InsertionOrder;
-use Google\Service\DisplayVideo\ListInsertionOrdersResponse;
+use FluentMail\Google\Service\DisplayVideo\BulkListInsertionOrderAssignedTargetingOptionsResponse;
+use FluentMail\Google\Service\DisplayVideo\DisplayvideoEmpty;
+use FluentMail\Google\Service\DisplayVideo\InsertionOrder;
+use FluentMail\Google\Service\DisplayVideo\ListInsertionOrdersResponse;
 
 /**
  * The "insertionOrders" collection of methods.

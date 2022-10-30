@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseRules\Resource;
+namespace FluentMail\Google\Service\FirebaseRules\Resource;
 
-use Google\Service\FirebaseRules\FirebaserulesEmpty;
-use Google\Service\FirebaseRules\GetReleaseExecutableResponse;
-use Google\Service\FirebaseRules\ListReleasesResponse;
-use Google\Service\FirebaseRules\Release;
-use Google\Service\FirebaseRules\UpdateReleaseRequest;
+use FluentMail\Google\Service\FirebaseRules\FirebaserulesEmpty;
+use FluentMail\Google\Service\FirebaseRules\GetReleaseExecutableResponse;
+use FluentMail\Google\Service\FirebaseRules\ListReleasesResponse;
+use FluentMail\Google\Service\FirebaseRules\Release;
+use FluentMail\Google\Service\FirebaseRules\UpdateReleaseRequest;
 
 /**
  * The "releases" collection of methods.

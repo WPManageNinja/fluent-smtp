@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Contentwarehouse\Resource;
+namespace FluentMail\Google\Service\Contentwarehouse\Resource;
 
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1DocumentSchema;
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1ListDocumentSchemasResponse;
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1UpdateDocumentSchemaRequest;
-use Google\Service\Contentwarehouse\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1DocumentSchema;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1ListDocumentSchemasResponse;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1UpdateDocumentSchemaRequest;
+use FluentMail\Google\Service\Contentwarehouse\GoogleProtobufEmpty;
 
 /**
  * The "documentSchemas" collection of methods.

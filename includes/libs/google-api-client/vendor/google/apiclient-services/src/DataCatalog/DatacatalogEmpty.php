@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DataCatalog;
+namespace FluentMail\Google\Service\DataCatalog;
 
 class DatacatalogEmpty extends \Google\Model
 {

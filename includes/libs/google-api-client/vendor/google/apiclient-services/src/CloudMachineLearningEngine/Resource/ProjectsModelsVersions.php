@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudMachineLearningEngine\Resource;
+namespace FluentMail\Google\Service\CloudMachineLearningEngine\Resource;
 
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListVersionsResponse;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1SetDefaultVersionRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1Version;
-use Google\Service\CloudMachineLearningEngine\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListVersionsResponse;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1SetDefaultVersionRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1Version;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleLongrunningOperation;
 
 /**
  * The "versions" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
-use Google\Service\Baremetalsolution\ListLocationsResponse;
-use Google\Service\Baremetalsolution\Location;
+use FluentMail\Google\Service\Baremetalsolution\ListLocationsResponse;
+use FluentMail\Google\Service\Baremetalsolution\Location;
 
 /**
  * The "locations" collection of methods.

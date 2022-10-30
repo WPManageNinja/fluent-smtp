@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryReservation\Resource;
+namespace FluentMail\Google\Service\BigQueryReservation\Resource;
 
-use Google\Service\BigQueryReservation\BigqueryreservationEmpty;
-use Google\Service\BigQueryReservation\CapacityCommitment;
-use Google\Service\BigQueryReservation\ListCapacityCommitmentsResponse;
-use Google\Service\BigQueryReservation\MergeCapacityCommitmentsRequest;
-use Google\Service\BigQueryReservation\SplitCapacityCommitmentRequest;
-use Google\Service\BigQueryReservation\SplitCapacityCommitmentResponse;
+use FluentMail\Google\Service\BigQueryReservation\BigqueryreservationEmpty;
+use FluentMail\Google\Service\BigQueryReservation\CapacityCommitment;
+use FluentMail\Google\Service\BigQueryReservation\ListCapacityCommitmentsResponse;
+use FluentMail\Google\Service\BigQueryReservation\MergeCapacityCommitmentsRequest;
+use FluentMail\Google\Service\BigQueryReservation\SplitCapacityCommitmentRequest;
+use FluentMail\Google\Service\BigQueryReservation\SplitCapacityCommitmentResponse;
 
 /**
  * The "capacityCommitments" collection of methods.

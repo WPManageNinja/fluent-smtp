@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudRedis\Resource;
+namespace FluentMail\Google\Service\CloudRedis\Resource;
 
-use Google\Service\CloudRedis\ListOperationsResponse;
-use Google\Service\CloudRedis\Operation;
-use Google\Service\CloudRedis\RedisEmpty;
+use FluentMail\Google\Service\CloudRedis\ListOperationsResponse;
+use FluentMail\Google\Service\CloudRedis\Operation;
+use FluentMail\Google\Service\CloudRedis\RedisEmpty;
 
 /**
  * The "operations" collection of methods.

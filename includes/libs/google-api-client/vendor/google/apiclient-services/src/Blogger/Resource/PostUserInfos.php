@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Blogger\Resource;
+namespace FluentMail\Google\Service\Blogger\Resource;
 
-use Google\Service\Blogger\PostUserInfo;
-use Google\Service\Blogger\PostUserInfosList;
+use FluentMail\Google\Service\Blogger\PostUserInfo;
+use FluentMail\Google\Service\Blogger\PostUserInfosList;
 
 /**
  * The "postUserInfos" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\EntityAdWordsLink;
-use Google\Service\Analytics\EntityAdWordsLinks;
+use FluentMail\Google\Service\Analytics\EntityAdWordsLink;
+use FluentMail\Google\Service\Analytics\EntityAdWordsLinks;
 
 /**
  * The "webPropertyAdWordsLinks" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\Building;
-use Google\Service\Directory\Buildings;
+use FluentMail\Google\Service\Directory\Building;
+use FluentMail\Google\Service\Directory\Buildings;
 
 /**
  * The "buildings" collection of methods.

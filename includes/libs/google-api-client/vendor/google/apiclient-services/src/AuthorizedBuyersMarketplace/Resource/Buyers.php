@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AuthorizedBuyersMarketplace\Resource;
+namespace FluentMail\Google\Service\AuthorizedBuyersMarketplace\Resource;
 
 /**
  * The "buyers" collection of methods.

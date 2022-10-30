@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudFunctions;
+namespace FluentMail\Google\Service\CloudFunctions;
 
 class GoogleCloudFunctionsV2alphaOperationMetadata extends \Google\Collection
 {

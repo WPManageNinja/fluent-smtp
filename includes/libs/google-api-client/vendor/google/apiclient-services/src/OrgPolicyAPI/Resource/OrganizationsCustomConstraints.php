@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\OrgPolicyAPI\Resource;
+namespace FluentMail\Google\Service\OrgPolicyAPI\Resource;
 
-use Google\Service\OrgPolicyAPI\GoogleCloudOrgpolicyV2CustomConstraint;
-use Google\Service\OrgPolicyAPI\GoogleCloudOrgpolicyV2ListCustomConstraintsResponse;
-use Google\Service\OrgPolicyAPI\GoogleProtobufEmpty;
+use FluentMail\Google\Service\OrgPolicyAPI\GoogleCloudOrgpolicyV2CustomConstraint;
+use FluentMail\Google\Service\OrgPolicyAPI\GoogleCloudOrgpolicyV2ListCustomConstraintsResponse;
+use FluentMail\Google\Service\OrgPolicyAPI\GoogleProtobufEmpty;
 
 /**
  * The "customConstraints" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Reseller;
+namespace FluentMail\Google\Service\Reseller;
 
 class Seats extends \Google\Model
 {

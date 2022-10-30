@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\ListImpressionMetricsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListImpressionMetricsResponse;
 
 /**
  * The "impressionMetrics" collection of methods.

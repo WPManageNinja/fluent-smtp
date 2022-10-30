@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudAsset;
+namespace FluentMail\Google\Service\CloudAsset;
 
 class GoogleCloudAssetV1p7beta1Resource extends \Google\Model
 {

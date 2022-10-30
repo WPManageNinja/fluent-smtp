@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\GoogleBytestreamMedia;
+use FluentMail\Google\Service\DisplayVideo\GoogleBytestreamMedia;
 
 /**
  * The "media" collection of methods.

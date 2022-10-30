@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudProfiler;
+namespace FluentMail\Google\Service\CloudProfiler;
 
 class Profile extends \Google\Model
 {

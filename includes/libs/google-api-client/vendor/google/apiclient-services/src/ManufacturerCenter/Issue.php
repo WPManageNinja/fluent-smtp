@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ManufacturerCenter;
+namespace FluentMail\Google\Service\ManufacturerCenter;
 
 class Issue extends \Google\Model
 {

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Address;
-use Google\Service\Compute\AddressList;
-use Google\Service\Compute\GlobalSetLabelsRequest;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Address;
+use FluentMail\Google\Service\Compute\AddressList;
+use FluentMail\Google\Service\Compute\GlobalSetLabelsRequest;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "globalAddresses" collection of methods.

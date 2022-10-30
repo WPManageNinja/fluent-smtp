@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\TagManager;
+namespace FluentMail\Google\Service\TagManager;
 
 class CreateContainerVersionResponse extends \Google\Model
 {

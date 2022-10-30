@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudAsset\Resource;
+namespace FluentMail\Google\Service\CloudAsset\Resource;
 
-use Google\Service\CloudAsset\CloudassetEmpty;
-use Google\Service\CloudAsset\ListSavedQueriesResponse;
-use Google\Service\CloudAsset\SavedQuery;
+use FluentMail\Google\Service\CloudAsset\CloudassetEmpty;
+use FluentMail\Google\Service\CloudAsset\ListSavedQueriesResponse;
+use FluentMail\Google\Service\CloudAsset\SavedQuery;
 
 /**
  * The "savedQueries" collection of methods.

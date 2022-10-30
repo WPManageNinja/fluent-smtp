@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
-use Google\Service\CloudHealthcare\ExportMessagesRequest;
-use Google\Service\CloudHealthcare\HealthcareEmpty;
-use Google\Service\CloudHealthcare\Hl7V2Store;
-use Google\Service\CloudHealthcare\ImportMessagesRequest;
-use Google\Service\CloudHealthcare\ListHl7V2StoresResponse;
-use Google\Service\CloudHealthcare\Operation;
-use Google\Service\CloudHealthcare\Policy;
-use Google\Service\CloudHealthcare\SetIamPolicyRequest;
-use Google\Service\CloudHealthcare\TestIamPermissionsRequest;
-use Google\Service\CloudHealthcare\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudHealthcare\ExportMessagesRequest;
+use FluentMail\Google\Service\CloudHealthcare\HealthcareEmpty;
+use FluentMail\Google\Service\CloudHealthcare\Hl7V2Store;
+use FluentMail\Google\Service\CloudHealthcare\ImportMessagesRequest;
+use FluentMail\Google\Service\CloudHealthcare\ListHl7V2StoresResponse;
+use FluentMail\Google\Service\CloudHealthcare\Operation;
+use FluentMail\Google\Service\CloudHealthcare\Policy;
+use FluentMail\Google\Service\CloudHealthcare\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudHealthcare\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudHealthcare\TestIamPermissionsResponse;
 
 /**
  * The "hl7V2Stores" collection of methods.

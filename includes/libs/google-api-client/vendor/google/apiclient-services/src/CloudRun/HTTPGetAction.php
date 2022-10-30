@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudRun;
+namespace FluentMail\Google\Service\CloudRun;
 
 class HTTPGetAction extends \Google\Collection
 {

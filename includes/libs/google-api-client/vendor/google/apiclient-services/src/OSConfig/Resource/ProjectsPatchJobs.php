@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\OSConfig\Resource;
+namespace FluentMail\Google\Service\OSConfig\Resource;
 
-use Google\Service\OSConfig\CancelPatchJobRequest;
-use Google\Service\OSConfig\ExecutePatchJobRequest;
-use Google\Service\OSConfig\ListPatchJobsResponse;
-use Google\Service\OSConfig\PatchJob;
+use FluentMail\Google\Service\OSConfig\CancelPatchJobRequest;
+use FluentMail\Google\Service\OSConfig\ExecutePatchJobRequest;
+use FluentMail\Google\Service\OSConfig\ListPatchJobsResponse;
+use FluentMail\Google\Service\OSConfig\PatchJob;
 
 /**
  * The "patchJobs" collection of methods.

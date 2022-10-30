@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PostmasterTools;
+namespace FluentMail\Google\Service\PostmasterTools;
 
 class TrafficStats extends \Google\Collection
 {

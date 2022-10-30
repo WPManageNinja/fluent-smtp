@@ -1,12 +1,12 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace FluentMail\GuzzleHttp\Handler;
 
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Utils;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
+use FluentMail\GuzzleHttp\Psr7\Response;
+use FluentMail\GuzzleHttp\Utils;
+use FluentMail\Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\ResponseInterface;
+use FluentMail\Psr\Http\Message\StreamInterface;
 
 /**
  * Represents a cURL easy handle and the data it populates.

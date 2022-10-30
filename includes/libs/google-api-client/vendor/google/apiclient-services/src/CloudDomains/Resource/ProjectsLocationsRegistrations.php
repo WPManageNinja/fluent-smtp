@@ -15,28 +15,28 @@
  * the License.
  */
 
-namespace Google\Service\CloudDomains\Resource;
+namespace FluentMail\Google\Service\CloudDomains\Resource;
 
-use Google\Service\CloudDomains\AuthorizationCode;
-use Google\Service\CloudDomains\ConfigureContactSettingsRequest;
-use Google\Service\CloudDomains\ConfigureDnsSettingsRequest;
-use Google\Service\CloudDomains\ConfigureManagementSettingsRequest;
-use Google\Service\CloudDomains\ExportRegistrationRequest;
-use Google\Service\CloudDomains\ImportDomainRequest;
-use Google\Service\CloudDomains\ListRegistrationsResponse;
-use Google\Service\CloudDomains\Operation;
-use Google\Service\CloudDomains\Policy;
-use Google\Service\CloudDomains\RegisterDomainRequest;
-use Google\Service\CloudDomains\Registration;
-use Google\Service\CloudDomains\ResetAuthorizationCodeRequest;
-use Google\Service\CloudDomains\RetrieveImportableDomainsResponse;
-use Google\Service\CloudDomains\RetrieveRegisterParametersResponse;
-use Google\Service\CloudDomains\RetrieveTransferParametersResponse;
-use Google\Service\CloudDomains\SearchDomainsResponse;
-use Google\Service\CloudDomains\SetIamPolicyRequest;
-use Google\Service\CloudDomains\TestIamPermissionsRequest;
-use Google\Service\CloudDomains\TestIamPermissionsResponse;
-use Google\Service\CloudDomains\TransferDomainRequest;
+use FluentMail\Google\Service\CloudDomains\AuthorizationCode;
+use FluentMail\Google\Service\CloudDomains\ConfigureContactSettingsRequest;
+use FluentMail\Google\Service\CloudDomains\ConfigureDnsSettingsRequest;
+use FluentMail\Google\Service\CloudDomains\ConfigureManagementSettingsRequest;
+use FluentMail\Google\Service\CloudDomains\ExportRegistrationRequest;
+use FluentMail\Google\Service\CloudDomains\ImportDomainRequest;
+use FluentMail\Google\Service\CloudDomains\ListRegistrationsResponse;
+use FluentMail\Google\Service\CloudDomains\Operation;
+use FluentMail\Google\Service\CloudDomains\Policy;
+use FluentMail\Google\Service\CloudDomains\RegisterDomainRequest;
+use FluentMail\Google\Service\CloudDomains\Registration;
+use FluentMail\Google\Service\CloudDomains\ResetAuthorizationCodeRequest;
+use FluentMail\Google\Service\CloudDomains\RetrieveImportableDomainsResponse;
+use FluentMail\Google\Service\CloudDomains\RetrieveRegisterParametersResponse;
+use FluentMail\Google\Service\CloudDomains\RetrieveTransferParametersResponse;
+use FluentMail\Google\Service\CloudDomains\SearchDomainsResponse;
+use FluentMail\Google\Service\CloudDomains\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudDomains\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudDomains\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudDomains\TransferDomainRequest;
 
 /**
  * The "registrations" collection of methods.

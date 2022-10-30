@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\CloudIAP\Resource;
+namespace FluentMail\Google\Service\CloudIAP\Resource;
 
-use Google\Service\CloudIAP\GetIamPolicyRequest;
-use Google\Service\CloudIAP\IapSettings;
-use Google\Service\CloudIAP\Policy;
-use Google\Service\CloudIAP\SetIamPolicyRequest;
-use Google\Service\CloudIAP\TestIamPermissionsRequest;
-use Google\Service\CloudIAP\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudIAP\GetIamPolicyRequest;
+use FluentMail\Google\Service\CloudIAP\IapSettings;
+use FluentMail\Google\Service\CloudIAP\Policy;
+use FluentMail\Google\Service\CloudIAP\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudIAP\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudIAP\TestIamPermissionsResponse;
 
 /**
  * The "v1" collection of methods.

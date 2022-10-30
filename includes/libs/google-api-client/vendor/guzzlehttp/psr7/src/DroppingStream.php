@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace GuzzleHttp\Psr7;
+namespace FluentMail\GuzzleHttp\Psr7;
 
-use Psr\Http\Message\StreamInterface;
+use FluentMail\Psr\Http\Message\StreamInterface;
 
 /**
  * Stream decorator that begins dropping data once the size of the underlying

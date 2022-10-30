@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\GamesConfiguration\Resource;
+namespace FluentMail\Google\Service\GamesConfiguration\Resource;
 
-use Google\Service\GamesConfiguration\AchievementConfiguration;
-use Google\Service\GamesConfiguration\AchievementConfigurationListResponse;
+use FluentMail\Google\Service\GamesConfiguration\AchievementConfiguration;
+use FluentMail\Google\Service\GamesConfiguration\AchievementConfigurationListResponse;
 
 /**
  * The "achievementConfigurations" collection of methods.

@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\AssignedInventorySource;
-use Google\Service\DisplayVideo\BulkEditAssignedInventorySourcesRequest;
-use Google\Service\DisplayVideo\BulkEditAssignedInventorySourcesResponse;
-use Google\Service\DisplayVideo\DisplayvideoEmpty;
-use Google\Service\DisplayVideo\ListAssignedInventorySourcesResponse;
+use FluentMail\Google\Service\DisplayVideo\AssignedInventorySource;
+use FluentMail\Google\Service\DisplayVideo\BulkEditAssignedInventorySourcesRequest;
+use FluentMail\Google\Service\DisplayVideo\BulkEditAssignedInventorySourcesResponse;
+use FluentMail\Google\Service\DisplayVideo\DisplayvideoEmpty;
+use FluentMail\Google\Service\DisplayVideo\ListAssignedInventorySourcesResponse;
 
 /**
  * The "assignedInventorySources" collection of methods.

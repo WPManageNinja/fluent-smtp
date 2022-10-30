@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\Pubsub\Resource;
+namespace FluentMail\Google\Service\Pubsub\Resource;
 
-use Google\Service\Pubsub\ListTopicsResponse;
-use Google\Service\Pubsub\Policy;
-use Google\Service\Pubsub\PublishRequest;
-use Google\Service\Pubsub\PublishResponse;
-use Google\Service\Pubsub\PubsubEmpty;
-use Google\Service\Pubsub\SetIamPolicyRequest;
-use Google\Service\Pubsub\TestIamPermissionsRequest;
-use Google\Service\Pubsub\TestIamPermissionsResponse;
-use Google\Service\Pubsub\Topic;
-use Google\Service\Pubsub\UpdateTopicRequest;
+use FluentMail\Google\Service\Pubsub\ListTopicsResponse;
+use FluentMail\Google\Service\Pubsub\Policy;
+use FluentMail\Google\Service\Pubsub\PublishRequest;
+use FluentMail\Google\Service\Pubsub\PublishResponse;
+use FluentMail\Google\Service\Pubsub\PubsubEmpty;
+use FluentMail\Google\Service\Pubsub\SetIamPolicyRequest;
+use FluentMail\Google\Service\Pubsub\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Pubsub\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Pubsub\Topic;
+use FluentMail\Google\Service\Pubsub\UpdateTopicRequest;
 
 /**
  * The "topics" collection of methods.

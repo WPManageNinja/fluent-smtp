@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ChromeManagement\Resource;
+namespace FluentMail\Google\Service\ChromeManagement\Resource;
 
-use Google\Service\ChromeManagement\GoogleChromeManagementV1ListTelemetryDevicesResponse;
-use Google\Service\ChromeManagement\GoogleChromeManagementV1TelemetryDevice;
+use FluentMail\Google\Service\ChromeManagement\GoogleChromeManagementV1ListTelemetryDevicesResponse;
+use FluentMail\Google\Service\ChromeManagement\GoogleChromeManagementV1TelemetryDevice;
 
 /**
  * The "devices" collection of methods.

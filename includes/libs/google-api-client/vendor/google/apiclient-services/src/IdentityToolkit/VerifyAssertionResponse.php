@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\IdentityToolkit;
+namespace FluentMail\Google\Service\IdentityToolkit;
 
 class VerifyAssertionResponse extends \Google\Collection
 {

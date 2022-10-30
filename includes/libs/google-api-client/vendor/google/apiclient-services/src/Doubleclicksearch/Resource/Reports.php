@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Doubleclicksearch\Resource;
+namespace FluentMail\Google\Service\Doubleclicksearch\Resource;
 
-use Google\Service\Doubleclicksearch\IdMappingFile;
-use Google\Service\Doubleclicksearch\Report;
-use Google\Service\Doubleclicksearch\ReportRequest;
+use FluentMail\Google\Service\Doubleclicksearch\IdMappingFile;
+use FluentMail\Google\Service\Doubleclicksearch\Report;
+use FluentMail\Google\Service\Doubleclicksearch\ReportRequest;
 
 /**
  * The "reports" collection of methods.

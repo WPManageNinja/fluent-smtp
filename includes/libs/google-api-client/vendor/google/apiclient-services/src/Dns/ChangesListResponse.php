@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dns;
+namespace FluentMail\Google\Service\Dns;
 
 class ChangesListResponse extends \Google\Collection
 {

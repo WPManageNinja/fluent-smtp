@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter\Resource;
+namespace FluentMail\Google\Service\SecurityCommandCenter\Resource;
 
-use Google\Service\SecurityCommandCenter\GoogleCloudSecuritycenterV1MuteConfig;
-use Google\Service\SecurityCommandCenter\ListMuteConfigsResponse;
-use Google\Service\SecurityCommandCenter\SecuritycenterEmpty;
+use FluentMail\Google\Service\SecurityCommandCenter\GoogleCloudSecuritycenterV1MuteConfig;
+use FluentMail\Google\Service\SecurityCommandCenter\ListMuteConfigsResponse;
+use FluentMail\Google\Service\SecurityCommandCenter\SecuritycenterEmpty;
 
 /**
  * The "muteConfigs" collection of methods.

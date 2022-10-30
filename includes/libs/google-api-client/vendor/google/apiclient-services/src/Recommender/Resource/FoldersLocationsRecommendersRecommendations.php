@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Recommender\Resource;
+namespace FluentMail\Google\Service\Recommender\Resource;
 
-use Google\Service\Recommender\GoogleCloudRecommenderV1ListRecommendationsResponse;
-use Google\Service\Recommender\GoogleCloudRecommenderV1MarkRecommendationClaimedRequest;
-use Google\Service\Recommender\GoogleCloudRecommenderV1MarkRecommendationFailedRequest;
-use Google\Service\Recommender\GoogleCloudRecommenderV1MarkRecommendationSucceededRequest;
-use Google\Service\Recommender\GoogleCloudRecommenderV1Recommendation;
+use FluentMail\Google\Service\Recommender\GoogleCloudRecommenderV1ListRecommendationsResponse;
+use FluentMail\Google\Service\Recommender\GoogleCloudRecommenderV1MarkRecommendationClaimedRequest;
+use FluentMail\Google\Service\Recommender\GoogleCloudRecommenderV1MarkRecommendationFailedRequest;
+use FluentMail\Google\Service\Recommender\GoogleCloudRecommenderV1MarkRecommendationSucceededRequest;
+use FluentMail\Google\Service\Recommender\GoogleCloudRecommenderV1Recommendation;
 
 /**
  * The "recommendations" collection of methods.

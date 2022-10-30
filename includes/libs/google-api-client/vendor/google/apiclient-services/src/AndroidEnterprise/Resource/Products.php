@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise\Resource;
+namespace FluentMail\Google\Service\AndroidEnterprise\Resource;
 
-use Google\Service\AndroidEnterprise\AppRestrictionsSchema;
-use Google\Service\AndroidEnterprise\Product;
-use Google\Service\AndroidEnterprise\ProductPermissions;
-use Google\Service\AndroidEnterprise\ProductsApproveRequest;
-use Google\Service\AndroidEnterprise\ProductsGenerateApprovalUrlResponse;
-use Google\Service\AndroidEnterprise\ProductsListResponse;
+use FluentMail\Google\Service\AndroidEnterprise\AppRestrictionsSchema;
+use FluentMail\Google\Service\AndroidEnterprise\Product;
+use FluentMail\Google\Service\AndroidEnterprise\ProductPermissions;
+use FluentMail\Google\Service\AndroidEnterprise\ProductsApproveRequest;
+use FluentMail\Google\Service\AndroidEnterprise\ProductsGenerateApprovalUrlResponse;
+use FluentMail\Google\Service\AndroidEnterprise\ProductsListResponse;
 
 /**
  * The "products" collection of methods.

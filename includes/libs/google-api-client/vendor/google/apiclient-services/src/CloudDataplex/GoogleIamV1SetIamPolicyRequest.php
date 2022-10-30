@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudDataplex;
+namespace FluentMail\Google\Service\CloudDataplex;
 
 class GoogleIamV1SetIamPolicyRequest extends \Google\Model
 {

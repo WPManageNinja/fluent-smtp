@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\InvideoBranding;
+use FluentMail\Google\Service\YouTube\InvideoBranding;
 
 /**
  * The "watermarks" collection of methods.

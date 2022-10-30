@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\Creative;
-use Google\Service\Dfareporting\CreativesListResponse;
+use FluentMail\Google\Service\Dfareporting\Creative;
+use FluentMail\Google\Service\Dfareporting\CreativesListResponse;
 
 /**
  * The "creatives" collection of methods.

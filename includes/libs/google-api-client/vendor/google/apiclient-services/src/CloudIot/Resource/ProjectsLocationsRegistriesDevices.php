@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\CloudIot\Resource;
+namespace FluentMail\Google\Service\CloudIot\Resource;
 
-use Google\Service\CloudIot\CloudiotEmpty;
-use Google\Service\CloudIot\Device;
-use Google\Service\CloudIot\DeviceConfig;
-use Google\Service\CloudIot\ListDevicesResponse;
-use Google\Service\CloudIot\ModifyCloudToDeviceConfigRequest;
-use Google\Service\CloudIot\SendCommandToDeviceRequest;
-use Google\Service\CloudIot\SendCommandToDeviceResponse;
+use FluentMail\Google\Service\CloudIot\CloudiotEmpty;
+use FluentMail\Google\Service\CloudIot\Device;
+use FluentMail\Google\Service\CloudIot\DeviceConfig;
+use FluentMail\Google\Service\CloudIot\ListDevicesResponse;
+use FluentMail\Google\Service\CloudIot\ModifyCloudToDeviceConfigRequest;
+use FluentMail\Google\Service\CloudIot\SendCommandToDeviceRequest;
+use FluentMail\Google\Service\CloudIot\SendCommandToDeviceResponse;
 
 /**
  * The "devices" collection of methods.

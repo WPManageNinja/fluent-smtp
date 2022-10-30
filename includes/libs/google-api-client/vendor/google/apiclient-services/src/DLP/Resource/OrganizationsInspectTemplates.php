@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\DLP\Resource;
+namespace FluentMail\Google\Service\DLP\Resource;
 
-use Google\Service\DLP\GooglePrivacyDlpV2CreateInspectTemplateRequest;
-use Google\Service\DLP\GooglePrivacyDlpV2InspectTemplate;
-use Google\Service\DLP\GooglePrivacyDlpV2ListInspectTemplatesResponse;
-use Google\Service\DLP\GooglePrivacyDlpV2UpdateInspectTemplateRequest;
-use Google\Service\DLP\GoogleProtobufEmpty;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2CreateInspectTemplateRequest;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2InspectTemplate;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2ListInspectTemplatesResponse;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2UpdateInspectTemplateRequest;
+use FluentMail\Google\Service\DLP\GoogleProtobufEmpty;
 
 /**
  * The "inspectTemplates" collection of methods.

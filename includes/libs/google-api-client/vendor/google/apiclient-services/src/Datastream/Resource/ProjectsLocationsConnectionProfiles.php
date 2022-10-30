@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Datastream\Resource;
+namespace FluentMail\Google\Service\Datastream\Resource;
 
-use Google\Service\Datastream\ConnectionProfile;
-use Google\Service\Datastream\DiscoverConnectionProfileRequest;
-use Google\Service\Datastream\DiscoverConnectionProfileResponse;
-use Google\Service\Datastream\ListConnectionProfilesResponse;
-use Google\Service\Datastream\Operation;
+use FluentMail\Google\Service\Datastream\ConnectionProfile;
+use FluentMail\Google\Service\Datastream\DiscoverConnectionProfileRequest;
+use FluentMail\Google\Service\Datastream\DiscoverConnectionProfileResponse;
+use FluentMail\Google\Service\Datastream\ListConnectionProfilesResponse;
+use FluentMail\Google\Service\Datastream\Operation;
 
 /**
  * The "connectionProfiles" collection of methods.

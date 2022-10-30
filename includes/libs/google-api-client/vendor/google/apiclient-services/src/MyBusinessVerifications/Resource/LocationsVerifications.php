@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessVerifications\Resource;
+namespace FluentMail\Google\Service\MyBusinessVerifications\Resource;
 
-use Google\Service\MyBusinessVerifications\CompleteVerificationRequest;
-use Google\Service\MyBusinessVerifications\CompleteVerificationResponse;
-use Google\Service\MyBusinessVerifications\ListVerificationsResponse;
+use FluentMail\Google\Service\MyBusinessVerifications\CompleteVerificationRequest;
+use FluentMail\Google\Service\MyBusinessVerifications\CompleteVerificationResponse;
+use FluentMail\Google\Service\MyBusinessVerifications\ListVerificationsResponse;
 
 /**
  * The "verifications" collection of methods.

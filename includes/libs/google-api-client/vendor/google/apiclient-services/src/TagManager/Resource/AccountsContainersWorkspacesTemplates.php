@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\TagManager\Resource;
+namespace FluentMail\Google\Service\TagManager\Resource;
 
-use Google\Service\TagManager\CustomTemplate;
-use Google\Service\TagManager\ListTemplatesResponse;
-use Google\Service\TagManager\RevertTemplateResponse;
+use FluentMail\Google\Service\TagManager\CustomTemplate;
+use FluentMail\Google\Service\TagManager\ListTemplatesResponse;
+use FluentMail\Google\Service\TagManager\RevertTemplateResponse;
 
 /**
  * The "templates" collection of methods.

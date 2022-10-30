@@ -11,9 +11,9 @@
  * @link      http://pear.php.net/package/Math_BigInteger
  */
 
-namespace phpseclib3\Math\BigInteger\Engines\PHP;
+namespace FluentMail\phpseclib3\Math\BigInteger\Engines\PHP;
 
-use phpseclib3\Math\BigInteger\Engines\OpenSSL as Progenitor;
+use FluentMail\phpseclib3\Math\BigInteger\Engines\OpenSSL as Progenitor;
 
 /**
  * OpenSSL Modular Exponentiation Engine

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseCloudMessaging\Resource;
+namespace FluentMail\Google\Service\FirebaseCloudMessaging\Resource;
 
 /**
  * The "projects" collection of methods.

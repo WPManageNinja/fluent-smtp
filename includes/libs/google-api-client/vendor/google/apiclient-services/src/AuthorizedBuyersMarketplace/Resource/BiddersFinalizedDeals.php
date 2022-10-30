@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AuthorizedBuyersMarketplace\Resource;
+namespace FluentMail\Google\Service\AuthorizedBuyersMarketplace\Resource;
 
-use Google\Service\AuthorizedBuyersMarketplace\ListFinalizedDealsResponse;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\ListFinalizedDealsResponse;
 
 /**
  * The "finalizedDeals" collection of methods.

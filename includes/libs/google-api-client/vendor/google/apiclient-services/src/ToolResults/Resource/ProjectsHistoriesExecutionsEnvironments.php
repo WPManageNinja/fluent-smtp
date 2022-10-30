@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ToolResults\Resource;
+namespace FluentMail\Google\Service\ToolResults\Resource;
 
-use Google\Service\ToolResults\Environment;
-use Google\Service\ToolResults\ListEnvironmentsResponse;
+use FluentMail\Google\Service\ToolResults\Environment;
+use FluentMail\Google\Service\ToolResults\ListEnvironmentsResponse;
 
 /**
  * The "environments" collection of methods.

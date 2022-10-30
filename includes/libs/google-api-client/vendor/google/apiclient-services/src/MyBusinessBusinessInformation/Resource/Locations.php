@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessBusinessInformation\Resource;
+namespace FluentMail\Google\Service\MyBusinessBusinessInformation\Resource;
 
-use Google\Service\MyBusinessBusinessInformation\AssociateLocationRequest;
-use Google\Service\MyBusinessBusinessInformation\Attributes as AttributesModel;
-use Google\Service\MyBusinessBusinessInformation\ClearLocationAssociationRequest;
-use Google\Service\MyBusinessBusinessInformation\GoogleUpdatedLocation;
-use Google\Service\MyBusinessBusinessInformation\Location;
-use Google\Service\MyBusinessBusinessInformation\MybusinessbusinessinformationEmpty;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\AssociateLocationRequest;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\Attributes as AttributesModel;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\ClearLocationAssociationRequest;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\GoogleUpdatedLocation;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\Location;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\MybusinessbusinessinformationEmpty;
 
 /**
  * The "locations" collection of methods.

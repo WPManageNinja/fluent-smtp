@@ -40,9 +40,9 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt;
+namespace FluentMail\phpseclib3\Crypt;
 
-use phpseclib3\Crypt\Common\StreamCipher;
+use FluentMail\phpseclib3\Crypt\Common\StreamCipher;
 
 /**
  * Pure-PHP implementation of RC4.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PolyService\Resource;
+namespace FluentMail\Google\Service\PolyService\Resource;
 
 /**
  * The "users" collection of methods.

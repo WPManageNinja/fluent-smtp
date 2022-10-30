@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudRun\Resource;
+namespace FluentMail\Google\Service\CloudRun\Resource;
 
-use Google\Service\CloudRun\DomainMapping;
-use Google\Service\CloudRun\ListDomainMappingsResponse;
-use Google\Service\CloudRun\Status;
+use FluentMail\Google\Service\CloudRun\DomainMapping;
+use FluentMail\Google\Service\CloudRun\ListDomainMappingsResponse;
+use FluentMail\Google\Service\CloudRun\Status;
 
 /**
  * The "domainmappings" collection of methods.

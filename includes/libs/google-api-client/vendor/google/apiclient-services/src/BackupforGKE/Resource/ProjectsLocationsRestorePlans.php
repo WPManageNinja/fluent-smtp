@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\BackupforGKE\Resource;
+namespace FluentMail\Google\Service\BackupforGKE\Resource;
 
-use Google\Service\BackupforGKE\GoogleLongrunningOperation;
-use Google\Service\BackupforGKE\ListRestorePlansResponse;
-use Google\Service\BackupforGKE\Policy;
-use Google\Service\BackupforGKE\RestorePlan;
-use Google\Service\BackupforGKE\SetIamPolicyRequest;
-use Google\Service\BackupforGKE\TestIamPermissionsRequest;
-use Google\Service\BackupforGKE\TestIamPermissionsResponse;
+use FluentMail\Google\Service\BackupforGKE\GoogleLongrunningOperation;
+use FluentMail\Google\Service\BackupforGKE\ListRestorePlansResponse;
+use FluentMail\Google\Service\BackupforGKE\Policy;
+use FluentMail\Google\Service\BackupforGKE\RestorePlan;
+use FluentMail\Google\Service\BackupforGKE\SetIamPolicyRequest;
+use FluentMail\Google\Service\BackupforGKE\TestIamPermissionsRequest;
+use FluentMail\Google\Service\BackupforGKE\TestIamPermissionsResponse;
 
 /**
  * The "restorePlans" collection of methods.

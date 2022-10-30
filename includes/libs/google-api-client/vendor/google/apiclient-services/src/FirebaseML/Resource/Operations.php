@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseML\Resource;
+namespace FluentMail\Google\Service\FirebaseML\Resource;
 
-use Google\Service\FirebaseML\CancelOperationRequest;
-use Google\Service\FirebaseML\FirebasemlEmpty;
-use Google\Service\FirebaseML\ListOperationsResponse;
+use FluentMail\Google\Service\FirebaseML\CancelOperationRequest;
+use FluentMail\Google\Service\FirebaseML\FirebasemlEmpty;
+use FluentMail\Google\Service\FirebaseML\ListOperationsResponse;
 
 /**
  * The "operations" collection of methods.

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace Google\Auth;
+namespace FluentMail\Google\Auth;
 
 /**
  * Describes a class which supports signing arbitrary strings.

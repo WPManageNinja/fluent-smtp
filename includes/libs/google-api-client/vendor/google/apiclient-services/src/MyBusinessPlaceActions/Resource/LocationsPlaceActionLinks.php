@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessPlaceActions\Resource;
+namespace FluentMail\Google\Service\MyBusinessPlaceActions\Resource;
 
-use Google\Service\MyBusinessPlaceActions\ListPlaceActionLinksResponse;
-use Google\Service\MyBusinessPlaceActions\MybusinessplaceactionsEmpty;
-use Google\Service\MyBusinessPlaceActions\PlaceActionLink;
+use FluentMail\Google\Service\MyBusinessPlaceActions\ListPlaceActionLinksResponse;
+use FluentMail\Google\Service\MyBusinessPlaceActions\MybusinessplaceactionsEmpty;
+use FluentMail\Google\Service\MyBusinessPlaceActions\PlaceActionLink;
 
 /**
  * The "placeActionLinks" collection of methods.

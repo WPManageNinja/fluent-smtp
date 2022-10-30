@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\SslPolicyReference;
-use Google\Service\Compute\TargetHttpsProxiesSetCertificateMapRequest;
-use Google\Service\Compute\TargetHttpsProxiesSetQuicOverrideRequest;
-use Google\Service\Compute\TargetHttpsProxiesSetSslCertificatesRequest;
-use Google\Service\Compute\TargetHttpsProxy;
-use Google\Service\Compute\TargetHttpsProxyAggregatedList;
-use Google\Service\Compute\TargetHttpsProxyList;
-use Google\Service\Compute\UrlMapReference;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\SslPolicyReference;
+use FluentMail\Google\Service\Compute\TargetHttpsProxiesSetCertificateMapRequest;
+use FluentMail\Google\Service\Compute\TargetHttpsProxiesSetQuicOverrideRequest;
+use FluentMail\Google\Service\Compute\TargetHttpsProxiesSetSslCertificatesRequest;
+use FluentMail\Google\Service\Compute\TargetHttpsProxy;
+use FluentMail\Google\Service\Compute\TargetHttpsProxyAggregatedList;
+use FluentMail\Google\Service\Compute\TargetHttpsProxyList;
+use FluentMail\Google\Service\Compute\UrlMapReference;
 
 /**
  * The "targetHttpsProxies" collection of methods.

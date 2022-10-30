@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\ChromePolicy\Resource;
+namespace FluentMail\Google\Service\ChromePolicy\Resource;
 
-use Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1BatchDeleteGroupPoliciesRequest;
-use Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1BatchModifyGroupPoliciesRequest;
-use Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1ListGroupPriorityOrderingRequest;
-use Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1ListGroupPriorityOrderingResponse;
-use Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1UpdateGroupPriorityOrderingRequest;
-use Google\Service\ChromePolicy\GoogleProtobufEmpty;
+use FluentMail\Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1BatchDeleteGroupPoliciesRequest;
+use FluentMail\Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1BatchModifyGroupPoliciesRequest;
+use FluentMail\Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1ListGroupPriorityOrderingRequest;
+use FluentMail\Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1ListGroupPriorityOrderingResponse;
+use FluentMail\Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1UpdateGroupPriorityOrderingRequest;
+use FluentMail\Google\Service\ChromePolicy\GoogleProtobufEmpty;
 
 /**
  * The "groups" collection of methods.

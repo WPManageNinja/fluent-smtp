@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryDataTransfer\Resource;
+namespace FluentMail\Google\Service\BigQueryDataTransfer\Resource;
 
-use Google\Service\BigQueryDataTransfer\BigquerydatatransferEmpty;
-use Google\Service\BigQueryDataTransfer\ListTransferConfigsResponse;
-use Google\Service\BigQueryDataTransfer\ScheduleTransferRunsRequest;
-use Google\Service\BigQueryDataTransfer\ScheduleTransferRunsResponse;
-use Google\Service\BigQueryDataTransfer\StartManualTransferRunsRequest;
-use Google\Service\BigQueryDataTransfer\StartManualTransferRunsResponse;
-use Google\Service\BigQueryDataTransfer\TransferConfig;
+use FluentMail\Google\Service\BigQueryDataTransfer\BigquerydatatransferEmpty;
+use FluentMail\Google\Service\BigQueryDataTransfer\ListTransferConfigsResponse;
+use FluentMail\Google\Service\BigQueryDataTransfer\ScheduleTransferRunsRequest;
+use FluentMail\Google\Service\BigQueryDataTransfer\ScheduleTransferRunsResponse;
+use FluentMail\Google\Service\BigQueryDataTransfer\StartManualTransferRunsRequest;
+use FluentMail\Google\Service\BigQueryDataTransfer\StartManualTransferRunsResponse;
+use FluentMail\Google\Service\BigQueryDataTransfer\TransferConfig;
 
 /**
  * The "transferConfigs" collection of methods.

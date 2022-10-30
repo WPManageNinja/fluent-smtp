@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\CloudRetail\Resource;
+namespace FluentMail\Google\Service\CloudRetail\Resource;
 
-use Google\Service\CloudRetail\GoogleCloudRetailV2AddFulfillmentPlacesRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2AddLocalInventoriesRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2ImportProductsRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2ListProductsResponse;
-use Google\Service\CloudRetail\GoogleCloudRetailV2Product;
-use Google\Service\CloudRetail\GoogleCloudRetailV2RemoveFulfillmentPlacesRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2RemoveLocalInventoriesRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2SetInventoryRequest;
-use Google\Service\CloudRetail\GoogleLongrunningOperation;
-use Google\Service\CloudRetail\GoogleProtobufEmpty;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2AddFulfillmentPlacesRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2AddLocalInventoriesRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2ImportProductsRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2ListProductsResponse;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2Product;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2RemoveFulfillmentPlacesRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2RemoveLocalInventoriesRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2SetInventoryRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudRetail\GoogleProtobufEmpty;
 
 /**
  * The "products" collection of methods.

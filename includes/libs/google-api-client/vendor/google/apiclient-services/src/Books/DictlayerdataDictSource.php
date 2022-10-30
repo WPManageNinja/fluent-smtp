@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Books;
+namespace FluentMail\Google\Service\Books;
 
 class DictlayerdataDictSource extends \Google\Model
 {

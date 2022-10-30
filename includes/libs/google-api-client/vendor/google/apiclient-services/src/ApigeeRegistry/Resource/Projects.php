@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ApigeeRegistry\Resource;
+namespace FluentMail\Google\Service\ApigeeRegistry\Resource;
 
 /**
  * The "projects" collection of methods.

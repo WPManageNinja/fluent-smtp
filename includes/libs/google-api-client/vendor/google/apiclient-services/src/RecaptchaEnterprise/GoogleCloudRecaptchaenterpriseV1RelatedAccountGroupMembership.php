@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\RecaptchaEnterprise;
+namespace FluentMail\Google\Service\RecaptchaEnterprise;
 
 class GoogleCloudRecaptchaenterpriseV1RelatedAccountGroupMembership extends \Google\Model
 {

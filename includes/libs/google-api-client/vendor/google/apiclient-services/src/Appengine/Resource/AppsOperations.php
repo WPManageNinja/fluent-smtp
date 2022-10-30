@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Appengine\Resource;
+namespace FluentMail\Google\Service\Appengine\Resource;
 
-use Google\Service\Appengine\ListOperationsResponse;
-use Google\Service\Appengine\Operation;
+use FluentMail\Google\Service\Appengine\ListOperationsResponse;
+use FluentMail\Google\Service\Appengine\Operation;
 
 /**
  * The "operations" collection of methods.

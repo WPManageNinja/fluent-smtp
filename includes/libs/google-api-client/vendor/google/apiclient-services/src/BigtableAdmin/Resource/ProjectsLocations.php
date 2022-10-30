@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\BigtableAdmin\Resource;
+namespace FluentMail\Google\Service\BigtableAdmin\Resource;
 
-use Google\Service\BigtableAdmin\ListLocationsResponse;
-use Google\Service\BigtableAdmin\Location;
+use FluentMail\Google\Service\BigtableAdmin\ListLocationsResponse;
+use FluentMail\Google\Service\BigtableAdmin\Location;
 
 /**
  * The "locations" collection of methods.

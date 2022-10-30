@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\YouTubeReporting;
+namespace FluentMail\Google\Service\YouTubeReporting;
 
 class GdataDiffUploadRequest extends \Google\Model
 {

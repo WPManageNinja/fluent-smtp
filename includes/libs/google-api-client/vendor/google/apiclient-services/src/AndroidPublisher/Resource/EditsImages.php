@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\ImagesDeleteAllResponse;
-use Google\Service\AndroidPublisher\ImagesListResponse;
-use Google\Service\AndroidPublisher\ImagesUploadResponse;
+use FluentMail\Google\Service\AndroidPublisher\ImagesDeleteAllResponse;
+use FluentMail\Google\Service\AndroidPublisher\ImagesListResponse;
+use FluentMail\Google\Service\AndroidPublisher\ImagesUploadResponse;
 
 /**
  * The "images" collection of methods.

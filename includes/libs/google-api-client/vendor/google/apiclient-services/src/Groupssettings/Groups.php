@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Groupssettings;
+namespace FluentMail\Google\Service\Groupssettings;
 
 class Groups extends \Google\Model
 {

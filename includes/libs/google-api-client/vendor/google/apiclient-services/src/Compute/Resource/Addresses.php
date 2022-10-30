@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Address;
-use Google\Service\Compute\AddressAggregatedList;
-use Google\Service\Compute\AddressList;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\RegionSetLabelsRequest;
+use FluentMail\Google\Service\Compute\Address;
+use FluentMail\Google\Service\Compute\AddressAggregatedList;
+use FluentMail\Google\Service\Compute\AddressList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\RegionSetLabelsRequest;
 
 /**
  * The "addresses" collection of methods.

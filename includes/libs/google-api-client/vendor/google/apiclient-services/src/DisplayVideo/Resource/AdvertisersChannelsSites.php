@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\BulkEditSitesRequest;
-use Google\Service\DisplayVideo\BulkEditSitesResponse;
-use Google\Service\DisplayVideo\DisplayvideoEmpty;
-use Google\Service\DisplayVideo\ListSitesResponse;
-use Google\Service\DisplayVideo\ReplaceSitesRequest;
-use Google\Service\DisplayVideo\ReplaceSitesResponse;
-use Google\Service\DisplayVideo\Site;
+use FluentMail\Google\Service\DisplayVideo\BulkEditSitesRequest;
+use FluentMail\Google\Service\DisplayVideo\BulkEditSitesResponse;
+use FluentMail\Google\Service\DisplayVideo\DisplayvideoEmpty;
+use FluentMail\Google\Service\DisplayVideo\ListSitesResponse;
+use FluentMail\Google\Service\DisplayVideo\ReplaceSitesRequest;
+use FluentMail\Google\Service\DisplayVideo\ReplaceSitesResponse;
+use FluentMail\Google\Service\DisplayVideo\Site;
 
 /**
  * The "sites" collection of methods.

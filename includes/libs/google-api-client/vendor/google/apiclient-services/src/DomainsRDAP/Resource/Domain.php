@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\DomainsRDAP\Resource;
+namespace FluentMail\Google\Service\DomainsRDAP\Resource;
 
-use Google\Service\DomainsRDAP\HttpBody;
+use FluentMail\Google\Service\DomainsRDAP\HttpBody;
 
 /**
  * The "domain" collection of methods.

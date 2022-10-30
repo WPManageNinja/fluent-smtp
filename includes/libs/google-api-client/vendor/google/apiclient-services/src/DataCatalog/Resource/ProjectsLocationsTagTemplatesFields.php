@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\DataCatalog\Resource;
+namespace FluentMail\Google\Service\DataCatalog\Resource;
 
-use Google\Service\DataCatalog\DatacatalogEmpty;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1RenameTagTemplateFieldRequest;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1TagTemplateField;
+use FluentMail\Google\Service\DataCatalog\DatacatalogEmpty;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1RenameTagTemplateFieldRequest;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1TagTemplateField;
 
 /**
  * The "fields" collection of methods.

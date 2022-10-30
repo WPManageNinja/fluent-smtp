@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\CloudAsset\Resource;
+namespace FluentMail\Google\Service\CloudAsset\Resource;
 
-use Google\Service\CloudAsset\AnalyzeIamPolicyLongrunningRequest;
-use Google\Service\CloudAsset\AnalyzeIamPolicyResponse;
-use Google\Service\CloudAsset\AnalyzeMoveResponse;
-use Google\Service\CloudAsset\BatchGetAssetsHistoryResponse;
-use Google\Service\CloudAsset\ExportAssetsRequest;
-use Google\Service\CloudAsset\Operation;
-use Google\Service\CloudAsset\SearchAllIamPoliciesResponse;
-use Google\Service\CloudAsset\SearchAllResourcesResponse;
+use FluentMail\Google\Service\CloudAsset\AnalyzeIamPolicyLongrunningRequest;
+use FluentMail\Google\Service\CloudAsset\AnalyzeIamPolicyResponse;
+use FluentMail\Google\Service\CloudAsset\AnalyzeMoveResponse;
+use FluentMail\Google\Service\CloudAsset\BatchGetAssetsHistoryResponse;
+use FluentMail\Google\Service\CloudAsset\ExportAssetsRequest;
+use FluentMail\Google\Service\CloudAsset\Operation;
+use FluentMail\Google\Service\CloudAsset\SearchAllIamPoliciesResponse;
+use FluentMail\Google\Service\CloudAsset\SearchAllResourcesResponse;
 
 /**
  * The "v1" collection of methods.

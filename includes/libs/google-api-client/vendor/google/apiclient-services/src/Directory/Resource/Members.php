@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\Member;
-use Google\Service\Directory\Members as MembersModel;
-use Google\Service\Directory\MembersHasMember;
+use FluentMail\Google\Service\Directory\Member;
+use FluentMail\Google\Service\Directory\Members as MembersModel;
+use FluentMail\Google\Service\Directory\MembersHasMember;
 
 /**
  * The "members" collection of methods.

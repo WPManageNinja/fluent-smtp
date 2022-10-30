@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BackupforGKE;
+namespace FluentMail\Google\Service\BackupforGKE;
 
 class AuditConfig extends \Google\Collection
 {

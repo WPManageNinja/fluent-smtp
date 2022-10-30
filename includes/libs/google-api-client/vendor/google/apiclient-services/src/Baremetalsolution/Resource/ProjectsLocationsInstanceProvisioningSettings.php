@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
-use Google\Service\Baremetalsolution\FetchInstanceProvisioningSettingsResponse;
+use FluentMail\Google\Service\Baremetalsolution\FetchInstanceProvisioningSettingsResponse;
 
 /**
  * The "instanceProvisioningSettings" collection of methods.

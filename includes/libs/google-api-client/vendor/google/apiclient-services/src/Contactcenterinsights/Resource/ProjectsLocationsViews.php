@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Contactcenterinsights\Resource;
+namespace FluentMail\Google\Service\Contactcenterinsights\Resource;
 
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ListViewsResponse;
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1View;
-use Google\Service\Contactcenterinsights\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ListViewsResponse;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1View;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleProtobufEmpty;
 
 /**
  * The "views" collection of methods.

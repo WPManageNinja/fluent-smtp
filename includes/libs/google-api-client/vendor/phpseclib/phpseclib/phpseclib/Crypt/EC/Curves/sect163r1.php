@@ -11,10 +11,10 @@
  * @link      http://pear.php.net/package/Math_BigInteger
  */
 
-namespace phpseclib3\Crypt\EC\Curves;
+namespace FluentMail\phpseclib3\Crypt\EC\Curves;
 
-use phpseclib3\Crypt\EC\BaseCurves\Binary;
-use phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Crypt\EC\BaseCurves\Binary;
+use FluentMail\phpseclib3\Math\BigInteger;
 
 class sect163r1 extends Binary
 {

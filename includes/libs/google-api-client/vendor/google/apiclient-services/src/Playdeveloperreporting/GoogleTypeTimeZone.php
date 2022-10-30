@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Playdeveloperreporting;
+namespace FluentMail\Google\Service\Playdeveloperreporting;
 
 class GoogleTypeTimeZone extends \Google\Model
 {

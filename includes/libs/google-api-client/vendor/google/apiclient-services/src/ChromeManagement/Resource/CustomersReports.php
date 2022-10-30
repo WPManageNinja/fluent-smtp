@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\ChromeManagement\Resource;
+namespace FluentMail\Google\Service\ChromeManagement\Resource;
 
-use Google\Service\ChromeManagement\GoogleChromeManagementV1CountChromeDevicesReachingAutoExpirationDateResponse;
-use Google\Service\ChromeManagement\GoogleChromeManagementV1CountChromeDevicesThatNeedAttentionResponse;
-use Google\Service\ChromeManagement\GoogleChromeManagementV1CountChromeHardwareFleetDevicesResponse;
-use Google\Service\ChromeManagement\GoogleChromeManagementV1CountChromeVersionsResponse;
-use Google\Service\ChromeManagement\GoogleChromeManagementV1CountInstalledAppsResponse;
-use Google\Service\ChromeManagement\GoogleChromeManagementV1FindInstalledAppDevicesResponse;
+use FluentMail\Google\Service\ChromeManagement\GoogleChromeManagementV1CountChromeDevicesReachingAutoExpirationDateResponse;
+use FluentMail\Google\Service\ChromeManagement\GoogleChromeManagementV1CountChromeDevicesThatNeedAttentionResponse;
+use FluentMail\Google\Service\ChromeManagement\GoogleChromeManagementV1CountChromeHardwareFleetDevicesResponse;
+use FluentMail\Google\Service\ChromeManagement\GoogleChromeManagementV1CountChromeVersionsResponse;
+use FluentMail\Google\Service\ChromeManagement\GoogleChromeManagementV1CountInstalledAppsResponse;
+use FluentMail\Google\Service\ChromeManagement\GoogleChromeManagementV1FindInstalledAppDevicesResponse;
 
 /**
  * The "reports" collection of methods.

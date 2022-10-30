@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AndroidManagement\Resource;
+namespace FluentMail\Google\Service\AndroidManagement\Resource;
 
-use Google\Service\AndroidManagement\AndroidmanagementEmpty;
-use Google\Service\AndroidManagement\EnrollmentToken;
-use Google\Service\AndroidManagement\ListEnrollmentTokensResponse;
+use FluentMail\Google\Service\AndroidManagement\AndroidmanagementEmpty;
+use FluentMail\Google\Service\AndroidManagement\EnrollmentToken;
+use FluentMail\Google\Service\AndroidManagement\ListEnrollmentTokensResponse;
 
 /**
  * The "enrollmentTokens" collection of methods.

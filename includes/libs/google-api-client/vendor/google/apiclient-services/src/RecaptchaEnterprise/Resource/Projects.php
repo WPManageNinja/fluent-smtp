@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\RecaptchaEnterprise\Resource;
+namespace FluentMail\Google\Service\RecaptchaEnterprise\Resource;
 
 /**
  * The "projects" collection of methods.

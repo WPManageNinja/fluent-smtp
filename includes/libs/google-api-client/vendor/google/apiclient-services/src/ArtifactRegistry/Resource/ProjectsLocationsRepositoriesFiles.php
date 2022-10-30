@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\GoogleDevtoolsArtifactregistryV1File;
-use Google\Service\ArtifactRegistry\ListFilesResponse;
+use FluentMail\Google\Service\ArtifactRegistry\GoogleDevtoolsArtifactregistryV1File;
+use FluentMail\Google\Service\ArtifactRegistry\ListFilesResponse;
 
 /**
  * The "files" collection of methods.

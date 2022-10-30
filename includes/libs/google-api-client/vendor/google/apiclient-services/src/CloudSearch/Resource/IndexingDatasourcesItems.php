@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
-use Google\Service\CloudSearch\DeleteQueueItemsRequest;
-use Google\Service\CloudSearch\IndexItemRequest;
-use Google\Service\CloudSearch\Item;
-use Google\Service\CloudSearch\ListItemsResponse;
-use Google\Service\CloudSearch\Operation;
-use Google\Service\CloudSearch\PollItemsRequest;
-use Google\Service\CloudSearch\PollItemsResponse;
-use Google\Service\CloudSearch\PushItemRequest;
-use Google\Service\CloudSearch\StartUploadItemRequest;
-use Google\Service\CloudSearch\UnreserveItemsRequest;
-use Google\Service\CloudSearch\UploadItemRef;
+use FluentMail\Google\Service\CloudSearch\DeleteQueueItemsRequest;
+use FluentMail\Google\Service\CloudSearch\IndexItemRequest;
+use FluentMail\Google\Service\CloudSearch\Item;
+use FluentMail\Google\Service\CloudSearch\ListItemsResponse;
+use FluentMail\Google\Service\CloudSearch\Operation;
+use FluentMail\Google\Service\CloudSearch\PollItemsRequest;
+use FluentMail\Google\Service\CloudSearch\PollItemsResponse;
+use FluentMail\Google\Service\CloudSearch\PushItemRequest;
+use FluentMail\Google\Service\CloudSearch\StartUploadItemRequest;
+use FluentMail\Google\Service\CloudSearch\UnreserveItemsRequest;
+use FluentMail\Google\Service\CloudSearch\UploadItemRef;
 
 /**
  * The "items" collection of methods.

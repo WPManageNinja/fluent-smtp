@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\Cloudchannel\Resource;
+namespace FluentMail\Google\Service\Cloudchannel\Resource;
 
-use Google\Service\Cloudchannel\GoogleCloudChannelV1CheckCloudIdentityAccountsExistRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1CheckCloudIdentityAccountsExistResponse;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListSubscribersResponse;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListTransferableOffersRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListTransferableOffersResponse;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListTransferableSkusRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListTransferableSkusResponse;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1RegisterSubscriberRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1RegisterSubscriberResponse;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1UnregisterSubscriberRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1UnregisterSubscriberResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1CheckCloudIdentityAccountsExistRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1CheckCloudIdentityAccountsExistResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListSubscribersResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListTransferableOffersRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListTransferableOffersResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListTransferableSkusRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListTransferableSkusResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1RegisterSubscriberRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1RegisterSubscriberResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1UnregisterSubscriberRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1UnregisterSubscriberResponse;
 
 /**
  * The "accounts" collection of methods.

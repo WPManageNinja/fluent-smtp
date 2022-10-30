@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AccessContextManager;
+namespace FluentMail\Google\Service\AccessContextManager;
 
 class VpcAccessibleServices extends \Google\Collection
 {

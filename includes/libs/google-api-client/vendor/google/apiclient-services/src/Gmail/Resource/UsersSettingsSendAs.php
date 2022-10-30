@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\ListSendAsResponse;
-use Google\Service\Gmail\SendAs;
+use FluentMail\Google\Service\Gmail\ListSendAsResponse;
+use FluentMail\Google\Service\Gmail\SendAs;
 
 /**
  * The "sendAs" collection of methods.

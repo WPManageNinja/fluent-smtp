@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\Adexchangebuyer2Empty;
-use Google\Service\AdExchangeBuyerII\Creative;
-use Google\Service\AdExchangeBuyerII\ListCreativesResponse;
-use Google\Service\AdExchangeBuyerII\StopWatchingCreativeRequest;
-use Google\Service\AdExchangeBuyerII\WatchCreativeRequest;
+use FluentMail\Google\Service\AdExchangeBuyerII\Adexchangebuyer2Empty;
+use FluentMail\Google\Service\AdExchangeBuyerII\Creative;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListCreativesResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\StopWatchingCreativeRequest;
+use FluentMail\Google\Service\AdExchangeBuyerII\WatchCreativeRequest;
 
 /**
  * The "creatives" collection of methods.

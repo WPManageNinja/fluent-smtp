@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\CommentThread;
+use FluentMail\Google\Service\YouTube\CommentThread;
 
 /**
  * The "v3" collection of methods.

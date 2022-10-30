@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Localservices;
+namespace FluentMail\Google\Service\Localservices;
 
 class GoogleAdsHomeservicesLocalservicesV1DetailedLeadReport extends \Google\Model
 {

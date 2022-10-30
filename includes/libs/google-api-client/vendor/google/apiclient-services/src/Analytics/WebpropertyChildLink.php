@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Analytics;
+namespace FluentMail\Google\Service\Analytics;
 
 class WebpropertyChildLink extends \Google\Model
 {

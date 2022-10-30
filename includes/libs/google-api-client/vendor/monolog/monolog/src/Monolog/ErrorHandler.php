@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog;
+namespace FluentMail\Monolog;
 
-use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
+use FluentMail\Psr\Log\LoggerInterface;
+use FluentMail\Psr\Log\LogLevel;
 
 /**
  * Monolog error handler

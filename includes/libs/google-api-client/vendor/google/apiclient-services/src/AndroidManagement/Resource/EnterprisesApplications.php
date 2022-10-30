@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidManagement\Resource;
+namespace FluentMail\Google\Service\AndroidManagement\Resource;
 
-use Google\Service\AndroidManagement\Application;
+use FluentMail\Google\Service\AndroidManagement\Application;
 
 /**
  * The "applications" collection of methods.

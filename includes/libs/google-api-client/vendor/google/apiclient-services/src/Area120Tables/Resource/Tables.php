@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Area120Tables\Resource;
+namespace FluentMail\Google\Service\Area120Tables\Resource;
 
-use Google\Service\Area120Tables\ListTablesResponse;
-use Google\Service\Area120Tables\Table;
+use FluentMail\Google\Service\Area120Tables\ListTablesResponse;
+use FluentMail\Google\Service\Area120Tables\Table;
 
 /**
  * The "tables" collection of methods.

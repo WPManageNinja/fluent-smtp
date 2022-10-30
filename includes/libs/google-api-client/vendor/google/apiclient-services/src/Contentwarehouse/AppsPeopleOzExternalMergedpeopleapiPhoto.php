@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Contentwarehouse;
+namespace FluentMail\Google\Service\Contentwarehouse;
 
 class AppsPeopleOzExternalMergedpeopleapiPhoto extends \Google\Collection
 {

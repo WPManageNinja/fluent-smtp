@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AIPlatformNotebooks\Resource;
+namespace FluentMail\Google\Service\AIPlatformNotebooks\Resource;
 
-use Google\Service\AIPlatformNotebooks\Environment;
-use Google\Service\AIPlatformNotebooks\ListEnvironmentsResponse;
-use Google\Service\AIPlatformNotebooks\Operation;
+use FluentMail\Google\Service\AIPlatformNotebooks\Environment;
+use FluentMail\Google\Service\AIPlatformNotebooks\ListEnvironmentsResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\Operation;
 
 /**
  * The "environments" collection of methods.

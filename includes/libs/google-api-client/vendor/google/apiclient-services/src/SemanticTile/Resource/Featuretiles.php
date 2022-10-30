@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\SemanticTile\Resource;
+namespace FluentMail\Google\Service\SemanticTile\Resource;
 
-use Google\Service\SemanticTile\FeatureTile;
+use FluentMail\Google\Service\SemanticTile\FeatureTile;
 
 /**
  * The "featuretiles" collection of methods.

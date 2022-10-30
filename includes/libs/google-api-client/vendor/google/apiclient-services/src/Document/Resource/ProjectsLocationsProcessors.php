@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\Document\Resource;
+namespace FluentMail\Google\Service\Document\Resource;
 
-use Google\Service\Document\GoogleCloudDocumentaiV1BatchProcessRequest;
-use Google\Service\Document\GoogleCloudDocumentaiV1DisableProcessorRequest;
-use Google\Service\Document\GoogleCloudDocumentaiV1EnableProcessorRequest;
-use Google\Service\Document\GoogleCloudDocumentaiV1ListProcessorsResponse;
-use Google\Service\Document\GoogleCloudDocumentaiV1ProcessRequest;
-use Google\Service\Document\GoogleCloudDocumentaiV1ProcessResponse;
-use Google\Service\Document\GoogleCloudDocumentaiV1Processor;
-use Google\Service\Document\GoogleCloudDocumentaiV1SetDefaultProcessorVersionRequest;
-use Google\Service\Document\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Document\GoogleCloudDocumentaiV1BatchProcessRequest;
+use FluentMail\Google\Service\Document\GoogleCloudDocumentaiV1DisableProcessorRequest;
+use FluentMail\Google\Service\Document\GoogleCloudDocumentaiV1EnableProcessorRequest;
+use FluentMail\Google\Service\Document\GoogleCloudDocumentaiV1ListProcessorsResponse;
+use FluentMail\Google\Service\Document\GoogleCloudDocumentaiV1ProcessRequest;
+use FluentMail\Google\Service\Document\GoogleCloudDocumentaiV1ProcessResponse;
+use FluentMail\Google\Service\Document\GoogleCloudDocumentaiV1Processor;
+use FluentMail\Google\Service\Document\GoogleCloudDocumentaiV1SetDefaultProcessorVersionRequest;
+use FluentMail\Google\Service\Document\GoogleLongrunningOperation;
 
 /**
  * The "processors" collection of methods.

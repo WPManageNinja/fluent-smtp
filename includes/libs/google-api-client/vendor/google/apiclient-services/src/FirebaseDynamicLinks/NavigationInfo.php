@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseDynamicLinks;
+namespace FluentMail\Google\Service\FirebaseDynamicLinks;
 
 class NavigationInfo extends \Google\Model
 {

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Dataflow\Resource;
+namespace FluentMail\Google\Service\Dataflow\Resource;
 
-use Google\Service\Dataflow\ListJobMessagesResponse;
+use FluentMail\Google\Service\Dataflow\ListJobMessagesResponse;
 
 /**
  * The "messages" collection of methods.

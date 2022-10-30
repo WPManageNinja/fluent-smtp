@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\AIPlatformNotebooks\Resource;
+namespace FluentMail\Google\Service\AIPlatformNotebooks\Resource;
 
-use Google\Service\AIPlatformNotebooks\ListSchedulesResponse;
-use Google\Service\AIPlatformNotebooks\Operation;
-use Google\Service\AIPlatformNotebooks\Schedule;
-use Google\Service\AIPlatformNotebooks\TriggerScheduleRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\ListSchedulesResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\Operation;
+use FluentMail\Google\Service\AIPlatformNotebooks\Schedule;
+use FluentMail\Google\Service\AIPlatformNotebooks\TriggerScheduleRequest;
 
 /**
  * The "schedules" collection of methods.

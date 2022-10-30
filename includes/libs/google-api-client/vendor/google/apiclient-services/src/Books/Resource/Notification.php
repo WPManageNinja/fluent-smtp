@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\Notification as NotificationModel;
+use FluentMail\Google\Service\Books\Notification as NotificationModel;
 
 /**
  * The "notification" collection of methods.

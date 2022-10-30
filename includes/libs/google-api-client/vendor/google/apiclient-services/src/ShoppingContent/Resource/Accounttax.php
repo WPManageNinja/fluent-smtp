@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\AccountTax as AccountTaxModel;
-use Google\Service\ShoppingContent\AccounttaxCustomBatchRequest;
-use Google\Service\ShoppingContent\AccounttaxCustomBatchResponse;
-use Google\Service\ShoppingContent\AccounttaxListResponse;
+use FluentMail\Google\Service\ShoppingContent\AccountTax as AccountTaxModel;
+use FluentMail\Google\Service\ShoppingContent\AccounttaxCustomBatchRequest;
+use FluentMail\Google\Service\ShoppingContent\AccounttaxCustomBatchResponse;
+use FluentMail\Google\Service\ShoppingContent\AccounttaxListResponse;
 
 /**
  * The "accounttax" collection of methods.

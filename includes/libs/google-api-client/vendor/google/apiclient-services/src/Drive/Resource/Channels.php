@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Drive\Resource;
+namespace FluentMail\Google\Service\Drive\Resource;
 
-use Google\Service\Drive\Channel;
+use FluentMail\Google\Service\Drive\Channel;
 
 /**
  * The "channels" collection of methods.

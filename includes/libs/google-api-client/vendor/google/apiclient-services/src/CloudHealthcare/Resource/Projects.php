@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
 /**
  * The "projects" collection of methods.

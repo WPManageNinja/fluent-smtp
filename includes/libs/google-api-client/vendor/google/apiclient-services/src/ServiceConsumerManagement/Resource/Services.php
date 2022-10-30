@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ServiceConsumerManagement\Resource;
+namespace FluentMail\Google\Service\ServiceConsumerManagement\Resource;
 
-use Google\Service\ServiceConsumerManagement\SearchTenancyUnitsResponse;
+use FluentMail\Google\Service\ServiceConsumerManagement\SearchTenancyUnitsResponse;
 
 /**
  * The "services" collection of methods.

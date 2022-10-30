@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AdMob;
+namespace FluentMail\Google\Service\AdMob;
 
 class MediationReportSpec extends \Google\Collection
 {

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\TagManager\Resource;
+namespace FluentMail\Google\Service\TagManager\Resource;
 
-use Google\Service\TagManager\ListVariablesResponse;
-use Google\Service\TagManager\RevertVariableResponse;
-use Google\Service\TagManager\Variable;
+use FluentMail\Google\Service\TagManager\ListVariablesResponse;
+use FluentMail\Google\Service\TagManager\RevertVariableResponse;
+use FluentMail\Google\Service\TagManager\Variable;
 
 /**
  * The "variables" collection of methods.

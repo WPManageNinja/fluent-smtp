@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Appengine\Resource;
+namespace FluentMail\Google\Service\Appengine\Resource;
 
-use Google\Service\Appengine\AppengineEmpty;
-use Google\Service\Appengine\AuthorizedCertificate;
-use Google\Service\Appengine\ListAuthorizedCertificatesResponse;
+use FluentMail\Google\Service\Appengine\AppengineEmpty;
+use FluentMail\Google\Service\Appengine\AuthorizedCertificate;
+use FluentMail\Google\Service\Appengine\ListAuthorizedCertificatesResponse;
 
 /**
  * The "authorizedCertificates" collection of methods.

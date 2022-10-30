@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Games\Resource;
+namespace FluentMail\Google\Service\Games\Resource;
 
-use Google\Service\Games\Leaderboard;
-use Google\Service\Games\LeaderboardListResponse;
+use FluentMail\Google\Service\Games\Leaderboard;
+use FluentMail\Google\Service\Games\LeaderboardListResponse;
 
 /**
  * The "leaderboards" collection of methods.

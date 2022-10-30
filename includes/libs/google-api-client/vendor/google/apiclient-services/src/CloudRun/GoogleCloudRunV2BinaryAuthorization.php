@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudRun;
+namespace FluentMail\Google\Service\CloudRun;
 
 class GoogleCloudRunV2BinaryAuthorization extends \Google\Model
 {

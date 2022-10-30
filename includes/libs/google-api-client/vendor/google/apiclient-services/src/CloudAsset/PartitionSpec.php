@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudAsset;
+namespace FluentMail\Google\Service\CloudAsset;
 
 class PartitionSpec extends \Google\Model
 {

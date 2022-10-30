@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Sheets;
+namespace FluentMail\Google\Service\Sheets;
 
 class BubbleChartSpec extends \Google\Model
 {

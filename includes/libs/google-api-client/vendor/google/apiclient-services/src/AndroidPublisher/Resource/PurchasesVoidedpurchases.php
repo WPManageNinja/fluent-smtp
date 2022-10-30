@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\VoidedPurchasesListResponse;
+use FluentMail\Google\Service\AndroidPublisher\VoidedPurchasesListResponse;
 
 /**
  * The "voidedpurchases" collection of methods.

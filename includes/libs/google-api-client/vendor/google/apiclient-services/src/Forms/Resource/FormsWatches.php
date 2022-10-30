@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Forms\Resource;
+namespace FluentMail\Google\Service\Forms\Resource;
 
-use Google\Service\Forms\CreateWatchRequest;
-use Google\Service\Forms\FormsEmpty;
-use Google\Service\Forms\ListWatchesResponse;
-use Google\Service\Forms\RenewWatchRequest;
-use Google\Service\Forms\Watch;
+use FluentMail\Google\Service\Forms\CreateWatchRequest;
+use FluentMail\Google\Service\Forms\FormsEmpty;
+use FluentMail\Google\Service\Forms\ListWatchesResponse;
+use FluentMail\Google\Service\Forms\RenewWatchRequest;
+use FluentMail\Google\Service\Forms\Watch;
 
 /**
  * The "watches" collection of methods.

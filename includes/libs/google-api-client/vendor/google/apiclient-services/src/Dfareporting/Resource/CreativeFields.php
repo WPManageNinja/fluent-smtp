@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\CreativeField;
-use Google\Service\Dfareporting\CreativeFieldsListResponse;
+use FluentMail\Google\Service\Dfareporting\CreativeField;
+use FluentMail\Google\Service\Dfareporting\CreativeFieldsListResponse;
 
 /**
  * The "creativeFields" collection of methods.

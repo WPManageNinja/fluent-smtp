@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Networkconnectivity;
+namespace FluentMail\Google\Service\Networkconnectivity;
 
 class MetricValueSet extends \Google\Collection
 {

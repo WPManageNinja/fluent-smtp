@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Sasportal\Resource;
+namespace FluentMail\Google\Service\Sasportal\Resource;
 
-use Google\Service\Sasportal\SasPortalGenerateSecretRequest;
-use Google\Service\Sasportal\SasPortalGenerateSecretResponse;
-use Google\Service\Sasportal\SasPortalValidateInstallerRequest;
-use Google\Service\Sasportal\SasPortalValidateInstallerResponse;
+use FluentMail\Google\Service\Sasportal\SasPortalGenerateSecretRequest;
+use FluentMail\Google\Service\Sasportal\SasPortalGenerateSecretResponse;
+use FluentMail\Google\Service\Sasportal\SasPortalValidateInstallerRequest;
+use FluentMail\Google\Service\Sasportal\SasPortalValidateInstallerResponse;
 
 /**
  * The "installer" collection of methods.

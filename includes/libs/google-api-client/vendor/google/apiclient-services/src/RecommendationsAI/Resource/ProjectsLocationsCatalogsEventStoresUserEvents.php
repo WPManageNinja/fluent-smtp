@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\RecommendationsAI\Resource;
+namespace FluentMail\Google\Service\RecommendationsAI\Resource;
 
-use Google\Service\RecommendationsAI\GoogleApiHttpBody;
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1ImportUserEventsRequest;
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1ListUserEventsResponse;
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1PurgeUserEventsRequest;
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1RejoinUserEventsRequest;
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1UserEvent;
-use Google\Service\RecommendationsAI\GoogleLongrunningOperation;
+use FluentMail\Google\Service\RecommendationsAI\GoogleApiHttpBody;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1ImportUserEventsRequest;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1ListUserEventsResponse;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1PurgeUserEventsRequest;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1RejoinUserEventsRequest;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1UserEvent;
+use FluentMail\Google\Service\RecommendationsAI\GoogleLongrunningOperation;
 
 /**
  * The "userEvents" collection of methods.

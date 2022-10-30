@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\ListNonBillableWinningBidsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListNonBillableWinningBidsResponse;
 
 /**
  * The "nonBillableWinningBids" collection of methods.

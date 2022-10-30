@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Books;
+namespace FluentMail\Google\Service\Books;
 
 class GeolayerdataCommon extends \Google\Model
 {

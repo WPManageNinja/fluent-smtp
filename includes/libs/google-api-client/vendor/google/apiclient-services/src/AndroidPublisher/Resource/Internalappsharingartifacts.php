@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\InternalAppSharingArtifact;
+use FluentMail\Google\Service\AndroidPublisher\InternalAppSharingArtifact;
 
 /**
  * The "internalappsharingartifacts" collection of methods.

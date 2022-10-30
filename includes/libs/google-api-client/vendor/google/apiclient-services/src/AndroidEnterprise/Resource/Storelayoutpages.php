@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise\Resource;
+namespace FluentMail\Google\Service\AndroidEnterprise\Resource;
 
-use Google\Service\AndroidEnterprise\StoreLayoutPagesListResponse;
-use Google\Service\AndroidEnterprise\StorePage;
+use FluentMail\Google\Service\AndroidEnterprise\StoreLayoutPagesListResponse;
+use FluentMail\Google\Service\AndroidEnterprise\StorePage;
 
 /**
  * The "storelayoutpages" collection of methods.

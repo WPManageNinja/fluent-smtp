@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AIPlatformNotebooks\Resource;
+namespace FluentMail\Google\Service\AIPlatformNotebooks\Resource;
 
 /**
  * The "projects" collection of methods.

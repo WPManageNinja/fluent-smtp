@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\GameServices\Resource;
+namespace FluentMail\Google\Service\GameServices\Resource;
 
-use Google\Service\GameServices\ListRealmsResponse;
-use Google\Service\GameServices\Operation;
-use Google\Service\GameServices\PreviewRealmUpdateResponse;
-use Google\Service\GameServices\Realm;
+use FluentMail\Google\Service\GameServices\ListRealmsResponse;
+use FluentMail\Google\Service\GameServices\Operation;
+use FluentMail\Google\Service\GameServices\PreviewRealmUpdateResponse;
+use FluentMail\Google\Service\GameServices\Realm;
 
 /**
  * The "realms" collection of methods.

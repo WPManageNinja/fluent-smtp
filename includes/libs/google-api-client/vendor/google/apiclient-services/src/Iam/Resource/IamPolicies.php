@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Iam\Resource;
+namespace FluentMail\Google\Service\Iam\Resource;
 
-use Google\Service\Iam\LintPolicyRequest;
-use Google\Service\Iam\LintPolicyResponse;
-use Google\Service\Iam\QueryAuditableServicesRequest;
-use Google\Service\Iam\QueryAuditableServicesResponse;
+use FluentMail\Google\Service\Iam\LintPolicyRequest;
+use FluentMail\Google\Service\Iam\LintPolicyResponse;
+use FluentMail\Google\Service\Iam\QueryAuditableServicesRequest;
+use FluentMail\Google\Service\Iam\QueryAuditableServicesResponse;
 
 /**
  * The "iamPolicies" collection of methods.

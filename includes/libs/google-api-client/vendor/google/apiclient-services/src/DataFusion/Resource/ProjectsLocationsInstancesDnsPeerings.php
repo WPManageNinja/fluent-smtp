@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\DataFusion\Resource;
+namespace FluentMail\Google\Service\DataFusion\Resource;
 
-use Google\Service\DataFusion\DatafusionEmpty;
-use Google\Service\DataFusion\DnsPeering;
-use Google\Service\DataFusion\ListDnsPeeringsResponse;
+use FluentMail\Google\Service\DataFusion\DatafusionEmpty;
+use FluentMail\Google\Service\DataFusion\DnsPeering;
+use FluentMail\Google\Service\DataFusion\ListDnsPeeringsResponse;
 
 /**
  * The "dnsPeerings" collection of methods.

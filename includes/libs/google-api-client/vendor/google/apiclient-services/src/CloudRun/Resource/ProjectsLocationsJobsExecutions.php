@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudRun\Resource;
+namespace FluentMail\Google\Service\CloudRun\Resource;
 
-use Google\Service\CloudRun\GoogleCloudRunV2Execution;
-use Google\Service\CloudRun\GoogleCloudRunV2ListExecutionsResponse;
-use Google\Service\CloudRun\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudRun\GoogleCloudRunV2Execution;
+use FluentMail\Google\Service\CloudRun\GoogleCloudRunV2ListExecutionsResponse;
+use FluentMail\Google\Service\CloudRun\GoogleLongrunningOperation;
 
 /**
  * The "executions" collection of methods.

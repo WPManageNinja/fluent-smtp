@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Contactcenterinsights;
+namespace FluentMail\Google\Service\Contactcenterinsights;
 
 class GoogleCloudContactcenterinsightsV1DeployIssueModelMetadata extends \Google\Model
 {

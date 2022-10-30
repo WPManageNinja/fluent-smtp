@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\BatchDeleteMessagesRequest;
-use Google\Service\Gmail\BatchModifyMessagesRequest;
-use Google\Service\Gmail\ListMessagesResponse;
-use Google\Service\Gmail\Message;
-use Google\Service\Gmail\ModifyMessageRequest;
+use FluentMail\Google\Service\Gmail\BatchDeleteMessagesRequest;
+use FluentMail\Google\Service\Gmail\BatchModifyMessagesRequest;
+use FluentMail\Google\Service\Gmail\ListMessagesResponse;
+use FluentMail\Google\Service\Gmail\Message;
+use FluentMail\Google\Service\Gmail\ModifyMessageRequest;
 
 /**
  * The "messages" collection of methods.

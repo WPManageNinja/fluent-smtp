@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\HomeGraphService;
+namespace FluentMail\Google\Service\HomeGraphService;
 
 class SyncResponsePayload extends \Google\Collection
 {

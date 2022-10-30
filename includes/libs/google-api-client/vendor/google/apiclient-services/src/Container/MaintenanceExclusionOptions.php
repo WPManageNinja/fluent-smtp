@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Container;
+namespace FluentMail\Google\Service\Container;
 
 class MaintenanceExclusionOptions extends \Google\Model
 {

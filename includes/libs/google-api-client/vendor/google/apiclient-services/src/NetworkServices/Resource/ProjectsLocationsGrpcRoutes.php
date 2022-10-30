@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\NetworkServices\Resource;
+namespace FluentMail\Google\Service\NetworkServices\Resource;
 
-use Google\Service\NetworkServices\GrpcRoute;
-use Google\Service\NetworkServices\ListGrpcRoutesResponse;
-use Google\Service\NetworkServices\Operation;
+use FluentMail\Google\Service\NetworkServices\GrpcRoute;
+use FluentMail\Google\Service\NetworkServices\ListGrpcRoutesResponse;
+use FluentMail\Google\Service\NetworkServices\Operation;
 
 /**
  * The "grpcRoutes" collection of methods.

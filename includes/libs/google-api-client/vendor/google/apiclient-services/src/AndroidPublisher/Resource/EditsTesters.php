@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\Testers;
+use FluentMail\Google\Service\AndroidPublisher\Testers;
 
 /**
  * The "testers" collection of methods.

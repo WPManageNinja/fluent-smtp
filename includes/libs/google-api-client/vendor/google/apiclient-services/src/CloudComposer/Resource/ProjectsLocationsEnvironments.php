@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudComposer\Resource;
+namespace FluentMail\Google\Service\CloudComposer\Resource;
 
-use Google\Service\CloudComposer\Environment;
-use Google\Service\CloudComposer\ListEnvironmentsResponse;
-use Google\Service\CloudComposer\Operation;
+use FluentMail\Google\Service\CloudComposer\Environment;
+use FluentMail\Google\Service\CloudComposer\ListEnvironmentsResponse;
+use FluentMail\Google\Service\CloudComposer\Operation;
 
 /**
  * The "environments" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service;
+namespace FluentMail\Google\Service;
 
-use Google\Client;
+use FluentMail\Google\Client;
 
 /**
  * Service definition for Recommender (v1).

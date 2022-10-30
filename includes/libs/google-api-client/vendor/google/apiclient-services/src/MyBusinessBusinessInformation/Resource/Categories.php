@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessBusinessInformation\Resource;
+namespace FluentMail\Google\Service\MyBusinessBusinessInformation\Resource;
 
-use Google\Service\MyBusinessBusinessInformation\BatchGetCategoriesResponse;
-use Google\Service\MyBusinessBusinessInformation\ListCategoriesResponse;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\BatchGetCategoriesResponse;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\ListCategoriesResponse;
 
 /**
  * The "categories" collection of methods.

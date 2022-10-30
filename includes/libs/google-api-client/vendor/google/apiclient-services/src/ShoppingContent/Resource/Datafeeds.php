@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\Datafeed;
-use Google\Service\ShoppingContent\DatafeedsCustomBatchRequest;
-use Google\Service\ShoppingContent\DatafeedsCustomBatchResponse;
-use Google\Service\ShoppingContent\DatafeedsFetchNowResponse;
-use Google\Service\ShoppingContent\DatafeedsListResponse;
+use FluentMail\Google\Service\ShoppingContent\Datafeed;
+use FluentMail\Google\Service\ShoppingContent\DatafeedsCustomBatchRequest;
+use FluentMail\Google\Service\ShoppingContent\DatafeedsCustomBatchResponse;
+use FluentMail\Google\Service\ShoppingContent\DatafeedsFetchNowResponse;
+use FluentMail\Google\Service\ShoppingContent\DatafeedsListResponse;
 
 /**
  * The "datafeeds" collection of methods.

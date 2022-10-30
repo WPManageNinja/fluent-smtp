@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ApigeeRegistry\Resource;
+namespace FluentMail\Google\Service\ApigeeRegistry\Resource;
 
-use Google\Service\ApigeeRegistry\Policy;
-use Google\Service\ApigeeRegistry\SetIamPolicyRequest;
-use Google\Service\ApigeeRegistry\TestIamPermissionsRequest;
-use Google\Service\ApigeeRegistry\TestIamPermissionsResponse;
+use FluentMail\Google\Service\ApigeeRegistry\Policy;
+use FluentMail\Google\Service\ApigeeRegistry\SetIamPolicyRequest;
+use FluentMail\Google\Service\ApigeeRegistry\TestIamPermissionsRequest;
+use FluentMail\Google\Service\ApigeeRegistry\TestIamPermissionsResponse;
 
 /**
  * The "runtime" collection of methods.

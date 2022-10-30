@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BusinessProfilePerformance\Resource;
+namespace FluentMail\Google\Service\BusinessProfilePerformance\Resource;
 
 /**
  * The "impressions" collection of methods.

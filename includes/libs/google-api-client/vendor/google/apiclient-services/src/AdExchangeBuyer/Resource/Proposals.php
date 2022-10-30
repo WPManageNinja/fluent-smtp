@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyer\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyer\Resource;
 
-use Google\Service\AdExchangeBuyer\CreateOrdersRequest;
-use Google\Service\AdExchangeBuyer\CreateOrdersResponse;
-use Google\Service\AdExchangeBuyer\GetOrdersResponse;
-use Google\Service\AdExchangeBuyer\Proposal;
+use FluentMail\Google\Service\AdExchangeBuyer\CreateOrdersRequest;
+use FluentMail\Google\Service\AdExchangeBuyer\CreateOrdersResponse;
+use FluentMail\Google\Service\AdExchangeBuyer\GetOrdersResponse;
+use FluentMail\Google\Service\AdExchangeBuyer\Proposal;
 
 /**
  * The "proposals" collection of methods.

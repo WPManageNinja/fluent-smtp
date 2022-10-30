@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\ReturnShippingLabel;
+use FluentMail\Google\Service\ShoppingContent\ReturnShippingLabel;
 
 /**
  * The "labels" collection of methods.

@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\DLP\Resource;
+namespace FluentMail\Google\Service\DLP\Resource;
 
-use Google\Service\DLP\GooglePrivacyDlpV2CreateStoredInfoTypeRequest;
-use Google\Service\DLP\GooglePrivacyDlpV2ListStoredInfoTypesResponse;
-use Google\Service\DLP\GooglePrivacyDlpV2StoredInfoType;
-use Google\Service\DLP\GooglePrivacyDlpV2UpdateStoredInfoTypeRequest;
-use Google\Service\DLP\GoogleProtobufEmpty;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2CreateStoredInfoTypeRequest;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2ListStoredInfoTypesResponse;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2StoredInfoType;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2UpdateStoredInfoTypeRequest;
+use FluentMail\Google\Service\DLP\GoogleProtobufEmpty;
 
 /**
  * The "storedInfoTypes" collection of methods.

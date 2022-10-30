@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryReservation\Resource;
+namespace FluentMail\Google\Service\BigQueryReservation\Resource;
 
-use Google\Service\BigQueryReservation\BigqueryreservationEmpty;
-use Google\Service\BigQueryReservation\ListReservationsResponse;
-use Google\Service\BigQueryReservation\Reservation;
+use FluentMail\Google\Service\BigQueryReservation\BigqueryreservationEmpty;
+use FluentMail\Google\Service\BigQueryReservation\ListReservationsResponse;
+use FluentMail\Google\Service\BigQueryReservation\Reservation;
 
 /**
  * The "reservations" collection of methods.

@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Classroom\Resource;
+namespace FluentMail\Google\Service\Classroom\Resource;
 
-use Google\Service\Classroom\ClassroomEmpty;
-use Google\Service\Classroom\ListStudentSubmissionsResponse;
-use Google\Service\Classroom\ModifyAttachmentsRequest;
-use Google\Service\Classroom\ReclaimStudentSubmissionRequest;
-use Google\Service\Classroom\ReturnStudentSubmissionRequest;
-use Google\Service\Classroom\StudentSubmission;
-use Google\Service\Classroom\TurnInStudentSubmissionRequest;
+use FluentMail\Google\Service\Classroom\ClassroomEmpty;
+use FluentMail\Google\Service\Classroom\ListStudentSubmissionsResponse;
+use FluentMail\Google\Service\Classroom\ModifyAttachmentsRequest;
+use FluentMail\Google\Service\Classroom\ReclaimStudentSubmissionRequest;
+use FluentMail\Google\Service\Classroom\ReturnStudentSubmissionRequest;
+use FluentMail\Google\Service\Classroom\StudentSubmission;
+use FluentMail\Google\Service\Classroom\TurnInStudentSubmissionRequest;
 
 /**
  * The "studentSubmissions" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Calendar\Resource;
+namespace FluentMail\Google\Service\Calendar\Resource;
 
-use Google\Service\Calendar\Channel;
-use Google\Service\Calendar\Event;
-use Google\Service\Calendar\Events as EventsModel;
+use FluentMail\Google\Service\Calendar\Channel;
+use FluentMail\Google\Service\Calendar\Event;
+use FluentMail\Google\Service\Calendar\Events as EventsModel;
 
 /**
  * The "events" collection of methods.

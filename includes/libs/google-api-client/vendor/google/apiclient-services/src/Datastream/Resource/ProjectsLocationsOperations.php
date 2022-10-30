@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Datastream\Resource;
+namespace FluentMail\Google\Service\Datastream\Resource;
 
-use Google\Service\Datastream\CancelOperationRequest;
-use Google\Service\Datastream\DatastreamEmpty;
-use Google\Service\Datastream\ListOperationsResponse;
-use Google\Service\Datastream\Operation;
+use FluentMail\Google\Service\Datastream\CancelOperationRequest;
+use FluentMail\Google\Service\Datastream\DatastreamEmpty;
+use FluentMail\Google\Service\Datastream\ListOperationsResponse;
+use FluentMail\Google\Service\Datastream\Operation;
 
 /**
  * The "operations" collection of methods.

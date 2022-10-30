@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\SystemApksListResponse;
-use Google\Service\AndroidPublisher\Variant;
+use FluentMail\Google\Service\AndroidPublisher\SystemApksListResponse;
+use FluentMail\Google\Service\AndroidPublisher\Variant;
 
 /**
  * The "variants" collection of methods.

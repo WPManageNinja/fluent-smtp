@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DataLabeling\Resource;
+namespace FluentMail\Google\Service\DataLabeling\Resource;
 
 /**
  * The "projects" collection of methods.

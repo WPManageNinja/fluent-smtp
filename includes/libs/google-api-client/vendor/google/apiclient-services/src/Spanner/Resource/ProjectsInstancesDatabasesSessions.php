@@ -15,28 +15,28 @@
  * the License.
  */
 
-namespace Google\Service\Spanner\Resource;
+namespace FluentMail\Google\Service\Spanner\Resource;
 
-use Google\Service\Spanner\BatchCreateSessionsRequest;
-use Google\Service\Spanner\BatchCreateSessionsResponse;
-use Google\Service\Spanner\BeginTransactionRequest;
-use Google\Service\Spanner\CommitRequest;
-use Google\Service\Spanner\CommitResponse;
-use Google\Service\Spanner\CreateSessionRequest;
-use Google\Service\Spanner\ExecuteBatchDmlRequest;
-use Google\Service\Spanner\ExecuteBatchDmlResponse;
-use Google\Service\Spanner\ExecuteSqlRequest;
-use Google\Service\Spanner\ListSessionsResponse;
-use Google\Service\Spanner\PartialResultSet;
-use Google\Service\Spanner\PartitionQueryRequest;
-use Google\Service\Spanner\PartitionReadRequest;
-use Google\Service\Spanner\PartitionResponse;
-use Google\Service\Spanner\ReadRequest;
-use Google\Service\Spanner\ResultSet;
-use Google\Service\Spanner\RollbackRequest;
-use Google\Service\Spanner\Session;
-use Google\Service\Spanner\SpannerEmpty;
-use Google\Service\Spanner\Transaction;
+use FluentMail\Google\Service\Spanner\BatchCreateSessionsRequest;
+use FluentMail\Google\Service\Spanner\BatchCreateSessionsResponse;
+use FluentMail\Google\Service\Spanner\BeginTransactionRequest;
+use FluentMail\Google\Service\Spanner\CommitRequest;
+use FluentMail\Google\Service\Spanner\CommitResponse;
+use FluentMail\Google\Service\Spanner\CreateSessionRequest;
+use FluentMail\Google\Service\Spanner\ExecuteBatchDmlRequest;
+use FluentMail\Google\Service\Spanner\ExecuteBatchDmlResponse;
+use FluentMail\Google\Service\Spanner\ExecuteSqlRequest;
+use FluentMail\Google\Service\Spanner\ListSessionsResponse;
+use FluentMail\Google\Service\Spanner\PartialResultSet;
+use FluentMail\Google\Service\Spanner\PartitionQueryRequest;
+use FluentMail\Google\Service\Spanner\PartitionReadRequest;
+use FluentMail\Google\Service\Spanner\PartitionResponse;
+use FluentMail\Google\Service\Spanner\ReadRequest;
+use FluentMail\Google\Service\Spanner\ResultSet;
+use FluentMail\Google\Service\Spanner\RollbackRequest;
+use FluentMail\Google\Service\Spanner\Session;
+use FluentMail\Google\Service\Spanner\SpannerEmpty;
+use FluentMail\Google\Service\Spanner\Transaction;
 
 /**
  * The "sessions" collection of methods.

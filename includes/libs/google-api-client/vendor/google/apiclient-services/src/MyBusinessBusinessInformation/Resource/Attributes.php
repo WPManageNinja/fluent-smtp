@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessBusinessInformation\Resource;
+namespace FluentMail\Google\Service\MyBusinessBusinessInformation\Resource;
 
-use Google\Service\MyBusinessBusinessInformation\ListAttributeMetadataResponse;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\ListAttributeMetadataResponse;
 
 /**
  * The "attributes" collection of methods.

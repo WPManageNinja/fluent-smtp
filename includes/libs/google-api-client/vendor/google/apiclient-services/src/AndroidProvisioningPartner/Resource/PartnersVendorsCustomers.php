@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidProvisioningPartner\Resource;
+namespace FluentMail\Google\Service\AndroidProvisioningPartner\Resource;
 
-use Google\Service\AndroidProvisioningPartner\ListVendorCustomersResponse;
+use FluentMail\Google\Service\AndroidProvisioningPartner\ListVendorCustomersResponse;
 
 /**
  * The "customers" collection of methods.

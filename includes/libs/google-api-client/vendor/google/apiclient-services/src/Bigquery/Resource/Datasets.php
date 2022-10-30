@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Bigquery\Resource;
+namespace FluentMail\Google\Service\Bigquery\Resource;
 
-use Google\Service\Bigquery\Dataset;
-use Google\Service\Bigquery\DatasetList;
+use FluentMail\Google\Service\Bigquery\Dataset;
+use FluentMail\Google\Service\Bigquery\DatasetList;
 
 /**
  * The "datasets" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\HangoutsChat;
+namespace FluentMail\Google\Service\HangoutsChat;
 
 class StringInputs extends \Google\Collection
 {

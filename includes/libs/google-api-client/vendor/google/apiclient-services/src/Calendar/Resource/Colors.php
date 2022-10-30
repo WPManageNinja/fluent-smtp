@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Calendar\Resource;
+namespace FluentMail\Google\Service\Calendar\Resource;
 
-use Google\Service\Calendar\Colors as ColorsModel;
+use FluentMail\Google\Service\Calendar\Colors as ColorsModel;
 
 /**
  * The "colors" collection of methods.

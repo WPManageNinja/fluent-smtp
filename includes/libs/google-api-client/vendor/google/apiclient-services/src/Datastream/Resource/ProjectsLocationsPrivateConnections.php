@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Datastream\Resource;
+namespace FluentMail\Google\Service\Datastream\Resource;
 
-use Google\Service\Datastream\ListPrivateConnectionsResponse;
-use Google\Service\Datastream\Operation;
-use Google\Service\Datastream\PrivateConnection;
+use FluentMail\Google\Service\Datastream\ListPrivateConnectionsResponse;
+use FluentMail\Google\Service\Datastream\Operation;
+use FluentMail\Google\Service\Datastream\PrivateConnection;
 
 /**
  * The "privateConnections" collection of methods.

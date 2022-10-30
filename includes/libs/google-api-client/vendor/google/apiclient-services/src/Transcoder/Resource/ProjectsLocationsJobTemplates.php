@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Transcoder\Resource;
+namespace FluentMail\Google\Service\Transcoder\Resource;
 
-use Google\Service\Transcoder\JobTemplate;
-use Google\Service\Transcoder\ListJobTemplatesResponse;
-use Google\Service\Transcoder\TranscoderEmpty;
+use FluentMail\Google\Service\Transcoder\JobTemplate;
+use FluentMail\Google\Service\Transcoder\ListJobTemplatesResponse;
+use FluentMail\Google\Service\Transcoder\TranscoderEmpty;
 
 /**
  * The "jobTemplates" collection of methods.

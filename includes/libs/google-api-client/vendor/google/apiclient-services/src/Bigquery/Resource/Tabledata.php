@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Bigquery\Resource;
+namespace FluentMail\Google\Service\Bigquery\Resource;
 
-use Google\Service\Bigquery\TableDataInsertAllRequest;
-use Google\Service\Bigquery\TableDataInsertAllResponse;
-use Google\Service\Bigquery\TableDataList;
+use FluentMail\Google\Service\Bigquery\TableDataInsertAllRequest;
+use FluentMail\Google\Service\Bigquery\TableDataInsertAllResponse;
+use FluentMail\Google\Service\Bigquery\TableDataList;
 
 /**
  * The "tabledata" collection of methods.

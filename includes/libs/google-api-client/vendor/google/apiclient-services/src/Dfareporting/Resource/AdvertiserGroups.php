@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\AdvertiserGroup;
-use Google\Service\Dfareporting\AdvertiserGroupsListResponse;
+use FluentMail\Google\Service\Dfareporting\AdvertiserGroup;
+use FluentMail\Google\Service\Dfareporting\AdvertiserGroupsListResponse;
 
 /**
  * The "advertiserGroups" collection of methods.

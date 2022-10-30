@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\NetworkManagement\Resource;
+namespace FluentMail\Google\Service\NetworkManagement\Resource;
 
-use Google\Service\NetworkManagement\ConnectivityTest;
-use Google\Service\NetworkManagement\ListConnectivityTestsResponse;
-use Google\Service\NetworkManagement\Operation;
-use Google\Service\NetworkManagement\Policy;
-use Google\Service\NetworkManagement\RerunConnectivityTestRequest;
-use Google\Service\NetworkManagement\SetIamPolicyRequest;
-use Google\Service\NetworkManagement\TestIamPermissionsRequest;
-use Google\Service\NetworkManagement\TestIamPermissionsResponse;
+use FluentMail\Google\Service\NetworkManagement\ConnectivityTest;
+use FluentMail\Google\Service\NetworkManagement\ListConnectivityTestsResponse;
+use FluentMail\Google\Service\NetworkManagement\Operation;
+use FluentMail\Google\Service\NetworkManagement\Policy;
+use FluentMail\Google\Service\NetworkManagement\RerunConnectivityTestRequest;
+use FluentMail\Google\Service\NetworkManagement\SetIamPolicyRequest;
+use FluentMail\Google\Service\NetworkManagement\TestIamPermissionsRequest;
+use FluentMail\Google\Service\NetworkManagement\TestIamPermissionsResponse;
 
 /**
  * The "connectivityTests" collection of methods.

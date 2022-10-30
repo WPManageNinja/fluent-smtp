@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow;
+namespace FluentMail\Google\Service\Dialogflow;
 
 class GoogleCloudDialogflowCxV3beta1TestCaseError extends \Google\Model
 {

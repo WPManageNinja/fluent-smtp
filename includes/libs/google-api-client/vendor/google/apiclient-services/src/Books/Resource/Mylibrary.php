@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
 /**
  * The "mylibrary" collection of methods.

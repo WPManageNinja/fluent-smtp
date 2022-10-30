@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ApiKeysService;
+namespace FluentMail\Google\Service\ApiKeysService;
 
 class V2Restrictions extends \Google\Collection
 {

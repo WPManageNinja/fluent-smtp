@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\SQLAdmin\Resource;
+namespace FluentMail\Google\Service\SQLAdmin\Resource;
 
-use Google\Service\SQLAdmin\TiersListResponse;
+use FluentMail\Google\Service\SQLAdmin\TiersListResponse;
 
 /**
  * The "tiers" collection of methods.

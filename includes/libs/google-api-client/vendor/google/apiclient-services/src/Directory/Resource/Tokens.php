@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\Token;
-use Google\Service\Directory\Tokens as TokensModel;
+use FluentMail\Google\Service\Directory\Token;
+use FluentMail\Google\Service\Directory\Tokens as TokensModel;
 
 /**
  * The "tokens" collection of methods.

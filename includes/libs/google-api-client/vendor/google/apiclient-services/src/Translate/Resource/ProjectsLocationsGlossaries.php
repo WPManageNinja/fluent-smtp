@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Translate\Resource;
+namespace FluentMail\Google\Service\Translate\Resource;
 
-use Google\Service\Translate\Glossary;
-use Google\Service\Translate\ListGlossariesResponse;
-use Google\Service\Translate\Operation;
+use FluentMail\Google\Service\Translate\Glossary;
+use FluentMail\Google\Service\Translate\ListGlossariesResponse;
+use FluentMail\Google\Service\Translate\Operation;
 
 /**
  * The "glossaries" collection of methods.

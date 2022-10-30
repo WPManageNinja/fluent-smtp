@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Adsense\Resource;
+namespace FluentMail\Google\Service\Adsense\Resource;
 
-use Google\Service\Adsense\ListUrlChannelsResponse;
-use Google\Service\Adsense\UrlChannel;
+use FluentMail\Google\Service\Adsense\ListUrlChannelsResponse;
+use FluentMail\Google\Service\Adsense\UrlChannel;
 
 /**
  * The "urlchannels" collection of methods.

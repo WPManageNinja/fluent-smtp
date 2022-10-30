@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ServiceDirectory;
+namespace FluentMail\Google\Service\ServiceDirectory;
 
 class Policy extends \Google\Collection
 {

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyer\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyer\Resource;
 
-use Google\Service\AdExchangeBuyer\Creative;
-use Google\Service\AdExchangeBuyer\CreativeDealIds;
-use Google\Service\AdExchangeBuyer\CreativesList;
+use FluentMail\Google\Service\AdExchangeBuyer\Creative;
+use FluentMail\Google\Service\AdExchangeBuyer\CreativeDealIds;
+use FluentMail\Google\Service\AdExchangeBuyer\CreativesList;
 
 /**
  * The "creatives" collection of methods.

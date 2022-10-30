@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudKMS\Resource;
+namespace FluentMail\Google\Service\CloudKMS\Resource;
 
-use Google\Service\CloudKMS\GenerateRandomBytesRequest;
-use Google\Service\CloudKMS\GenerateRandomBytesResponse;
-use Google\Service\CloudKMS\ListLocationsResponse;
-use Google\Service\CloudKMS\Location;
+use FluentMail\Google\Service\CloudKMS\GenerateRandomBytesRequest;
+use FluentMail\Google\Service\CloudKMS\GenerateRandomBytesResponse;
+use FluentMail\Google\Service\CloudKMS\ListLocationsResponse;
+use FluentMail\Google\Service\CloudKMS\Location;
 
 /**
  * The "locations" collection of methods.

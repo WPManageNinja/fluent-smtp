@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PolyService;
+namespace FluentMail\Google\Service\PolyService;
 
 class ImageError extends \Google\Model
 {

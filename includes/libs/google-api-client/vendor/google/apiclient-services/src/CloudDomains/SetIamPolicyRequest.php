@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudDomains;
+namespace FluentMail\Google\Service\CloudDomains;
 
 class SetIamPolicyRequest extends \Google\Model
 {

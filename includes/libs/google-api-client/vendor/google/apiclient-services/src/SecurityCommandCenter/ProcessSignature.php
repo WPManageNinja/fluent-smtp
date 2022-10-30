@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter;
+namespace FluentMail\Google\Service\SecurityCommandCenter;
 
 class ProcessSignature extends \Google\Model
 {

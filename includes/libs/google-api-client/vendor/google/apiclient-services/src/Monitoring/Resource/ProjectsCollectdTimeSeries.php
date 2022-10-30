@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
-use Google\Service\Monitoring\CreateCollectdTimeSeriesRequest;
-use Google\Service\Monitoring\CreateCollectdTimeSeriesResponse;
+use FluentMail\Google\Service\Monitoring\CreateCollectdTimeSeriesRequest;
+use FluentMail\Google\Service\Monitoring\CreateCollectdTimeSeriesResponse;
 
 /**
  * The "collectdTimeSeries" collection of methods.

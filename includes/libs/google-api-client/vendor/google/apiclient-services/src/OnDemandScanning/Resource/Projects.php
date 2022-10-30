@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\OnDemandScanning\Resource;
+namespace FluentMail\Google\Service\OnDemandScanning\Resource;
 
 /**
  * The "projects" collection of methods.

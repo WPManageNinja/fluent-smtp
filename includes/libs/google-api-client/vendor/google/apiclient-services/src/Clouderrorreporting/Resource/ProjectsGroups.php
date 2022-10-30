@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Clouderrorreporting\Resource;
+namespace FluentMail\Google\Service\Clouderrorreporting\Resource;
 
-use Google\Service\Clouderrorreporting\ErrorGroup;
+use FluentMail\Google\Service\Clouderrorreporting\ErrorGroup;
 
 /**
  * The "groups" collection of methods.

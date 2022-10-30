@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudAsset\Resource;
+namespace FluentMail\Google\Service\CloudAsset\Resource;
 
-use Google\Service\CloudAsset\BatchGetEffectiveIamPoliciesResponse;
+use FluentMail\Google\Service\CloudAsset\BatchGetEffectiveIamPoliciesResponse;
 
 /**
  * The "effectiveIamPolicies" collection of methods.

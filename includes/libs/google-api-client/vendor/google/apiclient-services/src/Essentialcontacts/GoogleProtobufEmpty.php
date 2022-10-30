@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Essentialcontacts;
+namespace FluentMail\Google\Service\Essentialcontacts;
 
 class GoogleProtobufEmpty extends \Google\Model
 {

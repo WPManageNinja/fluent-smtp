@@ -15,21 +15,21 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Disk;
-use Google\Service\Compute\DiskAggregatedList;
-use Google\Service\Compute\DiskList;
-use Google\Service\Compute\DisksAddResourcePoliciesRequest;
-use Google\Service\Compute\DisksRemoveResourcePoliciesRequest;
-use Google\Service\Compute\DisksResizeRequest;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Policy;
-use Google\Service\Compute\Snapshot;
-use Google\Service\Compute\TestPermissionsRequest;
-use Google\Service\Compute\TestPermissionsResponse;
-use Google\Service\Compute\ZoneSetLabelsRequest;
-use Google\Service\Compute\ZoneSetPolicyRequest;
+use FluentMail\Google\Service\Compute\Disk;
+use FluentMail\Google\Service\Compute\DiskAggregatedList;
+use FluentMail\Google\Service\Compute\DiskList;
+use FluentMail\Google\Service\Compute\DisksAddResourcePoliciesRequest;
+use FluentMail\Google\Service\Compute\DisksRemoveResourcePoliciesRequest;
+use FluentMail\Google\Service\Compute\DisksResizeRequest;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Policy;
+use FluentMail\Google\Service\Compute\Snapshot;
+use FluentMail\Google\Service\Compute\TestPermissionsRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsResponse;
+use FluentMail\Google\Service\Compute\ZoneSetLabelsRequest;
+use FluentMail\Google\Service\Compute\ZoneSetPolicyRequest;
 
 /**
  * The "disks" collection of methods.

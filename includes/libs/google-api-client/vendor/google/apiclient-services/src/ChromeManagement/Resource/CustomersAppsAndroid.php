@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ChromeManagement\Resource;
+namespace FluentMail\Google\Service\ChromeManagement\Resource;
 
-use Google\Service\ChromeManagement\GoogleChromeManagementV1AppDetails;
+use FluentMail\Google\Service\ChromeManagement\GoogleChromeManagementV1AppDetails;
 
 /**
  * The "android" collection of methods.

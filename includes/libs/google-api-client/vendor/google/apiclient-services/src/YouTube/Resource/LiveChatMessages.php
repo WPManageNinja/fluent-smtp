@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\LiveChatMessage;
-use Google\Service\YouTube\LiveChatMessageListResponse;
+use FluentMail\Google\Service\YouTube\LiveChatMessage;
+use FluentMail\Google\Service\YouTube\LiveChatMessageListResponse;
 
 /**
  * The "liveChatMessages" collection of methods.

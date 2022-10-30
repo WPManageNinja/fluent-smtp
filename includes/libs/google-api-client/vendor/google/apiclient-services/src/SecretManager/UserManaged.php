@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SecretManager;
+namespace FluentMail\Google\Service\SecretManager;
 
 class UserManaged extends \Google\Collection
 {

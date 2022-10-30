@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Firebaseappcheck\Resource;
+namespace FluentMail\Google\Service\Firebaseappcheck\Resource;
 
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchGetRecaptchaV3ConfigsResponse;
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1RecaptchaV3Config;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchGetRecaptchaV3ConfigsResponse;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1RecaptchaV3Config;
 
 /**
  * The "recaptchaV3Config" collection of methods.

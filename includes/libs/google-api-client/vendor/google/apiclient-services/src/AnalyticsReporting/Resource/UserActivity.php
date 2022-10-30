@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsReporting\Resource;
+namespace FluentMail\Google\Service\AnalyticsReporting\Resource;
 
-use Google\Service\AnalyticsReporting\SearchUserActivityRequest;
-use Google\Service\AnalyticsReporting\SearchUserActivityResponse;
+use FluentMail\Google\Service\AnalyticsReporting\SearchUserActivityRequest;
+use FluentMail\Google\Service\AnalyticsReporting\SearchUserActivityResponse;
 
 /**
  * The "userActivity" collection of methods.

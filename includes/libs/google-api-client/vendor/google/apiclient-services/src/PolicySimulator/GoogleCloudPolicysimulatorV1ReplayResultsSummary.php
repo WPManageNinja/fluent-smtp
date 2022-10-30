@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PolicySimulator;
+namespace FluentMail\Google\Service\PolicySimulator;
 
 class GoogleCloudPolicysimulatorV1ReplayResultsSummary extends \Google\Model
 {

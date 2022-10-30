@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\CollectionStatus;
-use Google\Service\ShoppingContent\ListCollectionStatusesResponse;
+use FluentMail\Google\Service\ShoppingContent\CollectionStatus;
+use FluentMail\Google\Service\ShoppingContent\ListCollectionStatusesResponse;
 
 /**
  * The "collectionstatuses" collection of methods.

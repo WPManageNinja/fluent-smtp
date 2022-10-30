@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\RealTimeBidding\Resource;
+namespace FluentMail\Google\Service\RealTimeBidding\Resource;
 
-use Google\Service\RealTimeBidding\Bidder;
-use Google\Service\RealTimeBidding\ListBiddersResponse;
+use FluentMail\Google\Service\RealTimeBidding\Bidder;
+use FluentMail\Google\Service\RealTimeBidding\ListBiddersResponse;
 
 /**
  * The "bidders" collection of methods.

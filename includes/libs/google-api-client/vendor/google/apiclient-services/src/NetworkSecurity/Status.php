@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\NetworkSecurity;
+namespace FluentMail\Google\Service\NetworkSecurity;
 
 class Status extends \Google\Collection
 {

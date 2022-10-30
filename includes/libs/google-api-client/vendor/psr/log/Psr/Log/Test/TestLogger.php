@@ -1,8 +1,8 @@
 <?php
 
-namespace Psr\Log\Test;
+namespace FluentMail\Psr\Log\Test;
 
-use Psr\Log\AbstractLogger;
+use FluentMail\Psr\Log\AbstractLogger;
 
 /**
  * Used for testing purposes.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\CreativeAssetMetadata;
+use FluentMail\Google\Service\Dfareporting\CreativeAssetMetadata;
 
 /**
  * The "creativeAssets" collection of methods.

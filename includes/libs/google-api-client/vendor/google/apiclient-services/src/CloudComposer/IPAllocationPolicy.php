@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudComposer;
+namespace FluentMail\Google\Service\CloudComposer;
 
 class IPAllocationPolicy extends \Google\Model
 {

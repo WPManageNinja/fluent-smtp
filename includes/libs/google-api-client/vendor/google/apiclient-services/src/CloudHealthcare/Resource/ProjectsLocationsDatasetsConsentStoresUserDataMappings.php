@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
-use Google\Service\CloudHealthcare\ArchiveUserDataMappingRequest;
-use Google\Service\CloudHealthcare\ArchiveUserDataMappingResponse;
-use Google\Service\CloudHealthcare\HealthcareEmpty;
-use Google\Service\CloudHealthcare\ListUserDataMappingsResponse;
-use Google\Service\CloudHealthcare\UserDataMapping;
+use FluentMail\Google\Service\CloudHealthcare\ArchiveUserDataMappingRequest;
+use FluentMail\Google\Service\CloudHealthcare\ArchiveUserDataMappingResponse;
+use FluentMail\Google\Service\CloudHealthcare\HealthcareEmpty;
+use FluentMail\Google\Service\CloudHealthcare\ListUserDataMappingsResponse;
+use FluentMail\Google\Service\CloudHealthcare\UserDataMapping;
 
 /**
  * The "userDataMappings" collection of methods.

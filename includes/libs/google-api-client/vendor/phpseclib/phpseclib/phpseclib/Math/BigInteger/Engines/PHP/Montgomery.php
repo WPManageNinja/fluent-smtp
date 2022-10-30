@@ -11,11 +11,11 @@
  * @link      http://pear.php.net/package/Math_BigInteger
  */
 
-namespace phpseclib3\Math\BigInteger\Engines\PHP;
+namespace FluentMail\phpseclib3\Math\BigInteger\Engines\PHP;
 
-use phpseclib3\Math\BigInteger\Engines\Engine;
-use phpseclib3\Math\BigInteger\Engines\PHP;
-use phpseclib3\Math\BigInteger\Engines\PHP\Reductions\PowerOfTwo;
+use FluentMail\phpseclib3\Math\BigInteger\Engines\Engine;
+use FluentMail\phpseclib3\Math\BigInteger\Engines\PHP;
+use FluentMail\phpseclib3\Math\BigInteger\Engines\PHP\Reductions\PowerOfTwo;
 
 /**
  * PHP Montgomery Modular Exponentiation Engine

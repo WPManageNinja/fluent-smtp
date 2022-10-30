@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudRuntimeConfig;
+namespace FluentMail\Google\Service\CloudRuntimeConfig;
 
 class Status extends \Google\Collection
 {

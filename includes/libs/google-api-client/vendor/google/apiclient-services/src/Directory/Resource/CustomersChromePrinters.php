@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\AdminEmpty;
-use Google\Service\Directory\BatchCreatePrintersRequest;
-use Google\Service\Directory\BatchCreatePrintersResponse;
-use Google\Service\Directory\BatchDeletePrintersRequest;
-use Google\Service\Directory\BatchDeletePrintersResponse;
-use Google\Service\Directory\ListPrinterModelsResponse;
-use Google\Service\Directory\ListPrintersResponse;
-use Google\Service\Directory\Printer;
+use FluentMail\Google\Service\Directory\AdminEmpty;
+use FluentMail\Google\Service\Directory\BatchCreatePrintersRequest;
+use FluentMail\Google\Service\Directory\BatchCreatePrintersResponse;
+use FluentMail\Google\Service\Directory\BatchDeletePrintersRequest;
+use FluentMail\Google\Service\Directory\BatchDeletePrintersResponse;
+use FluentMail\Google\Service\Directory\ListPrinterModelsResponse;
+use FluentMail\Google\Service\Directory\ListPrintersResponse;
+use FluentMail\Google\Service\Directory\Printer;
 
 /**
  * The "printers" collection of methods.

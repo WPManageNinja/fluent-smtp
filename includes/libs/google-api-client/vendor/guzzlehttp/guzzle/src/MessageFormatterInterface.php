@@ -1,9 +1,9 @@
 <?php
 
-namespace GuzzleHttp;
+namespace FluentMail\GuzzleHttp;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\ResponseInterface;
 
 interface MessageFormatterInterface
 {

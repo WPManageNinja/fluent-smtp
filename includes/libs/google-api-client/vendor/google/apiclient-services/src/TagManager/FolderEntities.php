@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\TagManager;
+namespace FluentMail\Google\Service\TagManager;
 
 class FolderEntities extends \Google\Collection
 {

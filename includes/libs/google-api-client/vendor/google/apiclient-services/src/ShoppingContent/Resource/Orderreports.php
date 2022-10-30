@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\OrderreportsListDisbursementsResponse;
-use Google\Service\ShoppingContent\OrderreportsListTransactionsResponse;
+use FluentMail\Google\Service\ShoppingContent\OrderreportsListDisbursementsResponse;
+use FluentMail\Google\Service\ShoppingContent\OrderreportsListTransactionsResponse;
 
 /**
  * The "orderreports" collection of methods.

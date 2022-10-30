@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryDataTransfer\Resource;
+namespace FluentMail\Google\Service\BigQueryDataTransfer\Resource;
 
-use Google\Service\BigQueryDataTransfer\BigquerydatatransferEmpty;
-use Google\Service\BigQueryDataTransfer\EnrollDataSourcesRequest;
+use FluentMail\Google\Service\BigQueryDataTransfer\BigquerydatatransferEmpty;
+use FluentMail\Google\Service\BigQueryDataTransfer\EnrollDataSourcesRequest;
 
 /**
  * The "projects" collection of methods.

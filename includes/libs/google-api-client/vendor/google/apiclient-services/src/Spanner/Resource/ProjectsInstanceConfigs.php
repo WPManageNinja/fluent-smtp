@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\Spanner\Resource;
+namespace FluentMail\Google\Service\Spanner\Resource;
 
-use Google\Service\Spanner\CreateInstanceConfigRequest;
-use Google\Service\Spanner\InstanceConfig;
-use Google\Service\Spanner\ListInstanceConfigsResponse;
-use Google\Service\Spanner\Operation;
-use Google\Service\Spanner\SpannerEmpty;
-use Google\Service\Spanner\UpdateInstanceConfigRequest;
+use FluentMail\Google\Service\Spanner\CreateInstanceConfigRequest;
+use FluentMail\Google\Service\Spanner\InstanceConfig;
+use FluentMail\Google\Service\Spanner\ListInstanceConfigsResponse;
+use FluentMail\Google\Service\Spanner\Operation;
+use FluentMail\Google\Service\Spanner\SpannerEmpty;
+use FluentMail\Google\Service\Spanner\UpdateInstanceConfigRequest;
 
 /**
  * The "instanceConfigs" collection of methods.

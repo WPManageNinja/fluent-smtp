@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ContainerAnalysis;
+namespace FluentMail\Google\Service\ContainerAnalysis;
 
 class GoogleDevtoolsContaineranalysisV1alpha1OperationMetadata extends \Google\Model
 {

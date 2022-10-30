@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Document\Resource;
+namespace FluentMail\Google\Service\Document\Resource;
 
-use Google\Service\Document\GoogleCloudDocumentaiV1ListProcessorTypesResponse;
+use FluentMail\Google\Service\Document\GoogleCloudDocumentaiV1ListProcessorTypesResponse;
 
 /**
  * The "processorTypes" collection of methods.

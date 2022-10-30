@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Fcmdata;
+namespace FluentMail\Google\Service\Fcmdata;
 
 class GoogleTypeDate extends \Google\Model
 {

@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ExportFlowRequest;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3Flow;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3FlowValidationResult;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ImportFlowRequest;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListFlowsResponse;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3TrainFlowRequest;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ValidateFlowRequest;
-use Google\Service\Dialogflow\GoogleLongrunningOperation;
-use Google\Service\Dialogflow\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ExportFlowRequest;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3Flow;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3FlowValidationResult;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ImportFlowRequest;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListFlowsResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3TrainFlowRequest;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ValidateFlowRequest;
+use FluentMail\Google\Service\Dialogflow\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Dialogflow\GoogleProtobufEmpty;
 
 /**
  * The "flows" collection of methods.

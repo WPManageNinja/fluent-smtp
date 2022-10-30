@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PolicySimulator;
+namespace FluentMail\Google\Service\PolicySimulator;
 
 class GoogleIamV1AuditLogConfig extends \Google\Collection
 {

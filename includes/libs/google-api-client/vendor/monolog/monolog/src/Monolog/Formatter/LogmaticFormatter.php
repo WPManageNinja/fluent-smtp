@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Formatter;
+namespace FluentMail\Monolog\Formatter;
 
 /**
  * Encodes message information into JSON in a format compatible with Logmatic.

@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Logger;
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Formatter\LogmaticFormatter;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\Formatter\FormatterInterface;
+use FluentMail\Monolog\Formatter\LogmaticFormatter;
 
 /**
  * @author Julien Breux <julien.breux@gmail.com>

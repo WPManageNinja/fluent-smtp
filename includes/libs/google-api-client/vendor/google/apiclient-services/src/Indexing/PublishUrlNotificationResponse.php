@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Indexing;
+namespace FluentMail\Google\Service\Indexing;
 
 class PublishUrlNotificationResponse extends \Google\Model
 {

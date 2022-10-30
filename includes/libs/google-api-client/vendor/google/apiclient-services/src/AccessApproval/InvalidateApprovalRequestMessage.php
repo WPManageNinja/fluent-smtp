@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AccessApproval;
+namespace FluentMail\Google\Service\AccessApproval;
 
 class InvalidateApprovalRequestMessage extends \Google\Model
 {

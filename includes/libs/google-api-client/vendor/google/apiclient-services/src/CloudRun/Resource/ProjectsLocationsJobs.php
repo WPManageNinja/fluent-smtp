@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\CloudRun\Resource;
+namespace FluentMail\Google\Service\CloudRun\Resource;
 
-use Google\Service\CloudRun\GoogleCloudRunV2Job;
-use Google\Service\CloudRun\GoogleCloudRunV2ListJobsResponse;
-use Google\Service\CloudRun\GoogleCloudRunV2RunJobRequest;
-use Google\Service\CloudRun\GoogleIamV1Policy;
-use Google\Service\CloudRun\GoogleIamV1SetIamPolicyRequest;
-use Google\Service\CloudRun\GoogleIamV1TestIamPermissionsRequest;
-use Google\Service\CloudRun\GoogleIamV1TestIamPermissionsResponse;
-use Google\Service\CloudRun\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudRun\GoogleCloudRunV2Job;
+use FluentMail\Google\Service\CloudRun\GoogleCloudRunV2ListJobsResponse;
+use FluentMail\Google\Service\CloudRun\GoogleCloudRunV2RunJobRequest;
+use FluentMail\Google\Service\CloudRun\GoogleIamV1Policy;
+use FluentMail\Google\Service\CloudRun\GoogleIamV1SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudRun\GoogleIamV1TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudRun\GoogleIamV1TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudRun\GoogleLongrunningOperation;
 
 /**
  * The "jobs" collection of methods.

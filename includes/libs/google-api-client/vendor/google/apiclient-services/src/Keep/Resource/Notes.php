@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Keep\Resource;
+namespace FluentMail\Google\Service\Keep\Resource;
 
-use Google\Service\Keep\KeepEmpty;
-use Google\Service\Keep\ListNotesResponse;
-use Google\Service\Keep\Note;
+use FluentMail\Google\Service\Keep\KeepEmpty;
+use FluentMail\Google\Service\Keep\ListNotesResponse;
+use FluentMail\Google\Service\Keep\Note;
 
 /**
  * The "notes" collection of methods.

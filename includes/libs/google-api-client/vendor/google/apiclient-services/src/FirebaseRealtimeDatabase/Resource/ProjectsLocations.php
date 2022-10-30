@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseRealtimeDatabase\Resource;
+namespace FluentMail\Google\Service\FirebaseRealtimeDatabase\Resource;
 
 /**
  * The "locations" collection of methods.

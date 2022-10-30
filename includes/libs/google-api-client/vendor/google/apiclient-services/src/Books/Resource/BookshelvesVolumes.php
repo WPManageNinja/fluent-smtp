@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\Volumes as VolumesModel;
+use FluentMail\Google\Service\Books\Volumes as VolumesModel;
 
 /**
  * The "volumes" collection of methods.

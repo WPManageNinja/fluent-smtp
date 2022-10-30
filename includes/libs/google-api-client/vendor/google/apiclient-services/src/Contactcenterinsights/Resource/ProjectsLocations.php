@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Contactcenterinsights\Resource;
+namespace FluentMail\Google\Service\Contactcenterinsights\Resource;
 
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1Settings;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1Settings;
 
 /**
  * The "locations" collection of methods.

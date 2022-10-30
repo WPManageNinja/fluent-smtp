@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\DLP\Resource;
+namespace FluentMail\Google\Service\DLP\Resource;
 
-use Google\Service\DLP\GooglePrivacyDlpV2DeidentifyContentRequest;
-use Google\Service\DLP\GooglePrivacyDlpV2DeidentifyContentResponse;
-use Google\Service\DLP\GooglePrivacyDlpV2InspectContentRequest;
-use Google\Service\DLP\GooglePrivacyDlpV2InspectContentResponse;
-use Google\Service\DLP\GooglePrivacyDlpV2ReidentifyContentRequest;
-use Google\Service\DLP\GooglePrivacyDlpV2ReidentifyContentResponse;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2DeidentifyContentRequest;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2DeidentifyContentResponse;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2InspectContentRequest;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2InspectContentResponse;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2ReidentifyContentRequest;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2ReidentifyContentResponse;
 
 /**
  * The "content" collection of methods.

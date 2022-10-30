@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudDeploy\Resource;
+namespace FluentMail\Google\Service\CloudDeploy\Resource;
 
-use Google\Service\CloudDeploy\CancelOperationRequest;
-use Google\Service\CloudDeploy\ClouddeployEmpty;
-use Google\Service\CloudDeploy\ListOperationsResponse;
-use Google\Service\CloudDeploy\Operation;
+use FluentMail\Google\Service\CloudDeploy\CancelOperationRequest;
+use FluentMail\Google\Service\CloudDeploy\ClouddeployEmpty;
+use FluentMail\Google\Service\CloudDeploy\ListOperationsResponse;
+use FluentMail\Google\Service\CloudDeploy\Operation;
 
 /**
  * The "operations" collection of methods.

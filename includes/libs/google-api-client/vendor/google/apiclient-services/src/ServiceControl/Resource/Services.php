@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ServiceControl\Resource;
+namespace FluentMail\Google\Service\ServiceControl\Resource;
 
-use Google\Service\ServiceControl\CheckRequest;
-use Google\Service\ServiceControl\CheckResponse;
-use Google\Service\ServiceControl\ReportRequest;
-use Google\Service\ServiceControl\ReportResponse;
+use FluentMail\Google\Service\ServiceControl\CheckRequest;
+use FluentMail\Google\Service\ServiceControl\CheckResponse;
+use FluentMail\Google\Service\ServiceControl\ReportRequest;
+use FluentMail\Google\Service\ServiceControl\ReportResponse;
 
 /**
  * The "services" collection of methods.

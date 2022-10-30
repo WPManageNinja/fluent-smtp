@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\RealtimeData;
+use FluentMail\Google\Service\Analytics\RealtimeData;
 
 /**
  * The "realtime" collection of methods.

@@ -1,9 +1,9 @@
 <?php
 
-namespace Psr\Log\Test;
+namespace FluentMail\Psr\Log\Test;
 
-use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
+use FluentMail\Psr\Log\LoggerInterface;
+use FluentMail\Psr\Log\LogLevel;
 use PHPUnit\Framework\TestCase;
 
 /**

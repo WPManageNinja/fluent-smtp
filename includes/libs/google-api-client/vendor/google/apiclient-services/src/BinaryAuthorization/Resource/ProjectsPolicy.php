@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\BinaryAuthorization\Resource;
+namespace FluentMail\Google\Service\BinaryAuthorization\Resource;
 
-use Google\Service\BinaryAuthorization\IamPolicy;
-use Google\Service\BinaryAuthorization\SetIamPolicyRequest;
-use Google\Service\BinaryAuthorization\TestIamPermissionsRequest;
-use Google\Service\BinaryAuthorization\TestIamPermissionsResponse;
+use FluentMail\Google\Service\BinaryAuthorization\IamPolicy;
+use FluentMail\Google\Service\BinaryAuthorization\SetIamPolicyRequest;
+use FluentMail\Google\Service\BinaryAuthorization\TestIamPermissionsRequest;
+use FluentMail\Google\Service\BinaryAuthorization\TestIamPermissionsResponse;
 
 /**
  * The "policy" collection of methods.

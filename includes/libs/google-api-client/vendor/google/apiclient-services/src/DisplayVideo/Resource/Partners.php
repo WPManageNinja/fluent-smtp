@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\BulkEditPartnerAssignedTargetingOptionsRequest;
-use Google\Service\DisplayVideo\BulkEditPartnerAssignedTargetingOptionsResponse;
-use Google\Service\DisplayVideo\ListPartnersResponse;
-use Google\Service\DisplayVideo\Partner;
+use FluentMail\Google\Service\DisplayVideo\BulkEditPartnerAssignedTargetingOptionsRequest;
+use FluentMail\Google\Service\DisplayVideo\BulkEditPartnerAssignedTargetingOptionsResponse;
+use FluentMail\Google\Service\DisplayVideo\ListPartnersResponse;
+use FluentMail\Google\Service\DisplayVideo\Partner;
 
 /**
  * The "partners" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo;
+namespace FluentMail\Google\Service\DisplayVideo;
 
 class ListLineItemAssignedTargetingOptionsResponse extends \Google\Collection
 {

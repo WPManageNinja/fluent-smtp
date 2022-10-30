@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
-use Google\Service\CloudSearch\GetSearchApplicationQueryStatsResponse;
+use FluentMail\Google\Service\CloudSearch\GetSearchApplicationQueryStatsResponse;
 
 /**
  * The "searchapplications" collection of methods.

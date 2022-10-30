@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DataCatalog;
+namespace FluentMail\Google\Service\DataCatalog;
 
 class GoogleCloudDatacatalogV1beta1ViewSpec extends \Google\Model
 {

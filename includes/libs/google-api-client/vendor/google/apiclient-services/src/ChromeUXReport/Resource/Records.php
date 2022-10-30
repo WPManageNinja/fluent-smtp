@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ChromeUXReport\Resource;
+namespace FluentMail\Google\Service\ChromeUXReport\Resource;
 
-use Google\Service\ChromeUXReport\QueryRequest;
-use Google\Service\ChromeUXReport\QueryResponse;
+use FluentMail\Google\Service\ChromeUXReport\QueryRequest;
+use FluentMail\Google\Service\ChromeUXReport\QueryResponse;
 
 /**
  * The "records" collection of methods.

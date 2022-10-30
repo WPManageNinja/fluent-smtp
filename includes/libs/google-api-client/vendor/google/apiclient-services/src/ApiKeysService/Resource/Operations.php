@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ApiKeysService\Resource;
+namespace FluentMail\Google\Service\ApiKeysService\Resource;
 
-use Google\Service\ApiKeysService\Operation;
+use FluentMail\Google\Service\ApiKeysService\Operation;
 
 /**
  * The "operations" collection of methods.

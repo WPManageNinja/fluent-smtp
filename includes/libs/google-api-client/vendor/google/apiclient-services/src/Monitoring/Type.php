@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring;
+namespace FluentMail\Google\Service\Monitoring;
 
 class Type extends \Google\Collection
 {

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Slides\Resource;
+namespace FluentMail\Google\Service\Slides\Resource;
 
-use Google\Service\Slides\BatchUpdatePresentationRequest;
-use Google\Service\Slides\BatchUpdatePresentationResponse;
-use Google\Service\Slides\Presentation;
+use FluentMail\Google\Service\Slides\BatchUpdatePresentationRequest;
+use FluentMail\Google\Service\Slides\BatchUpdatePresentationResponse;
+use FluentMail\Google\Service\Slides\Presentation;
 
 /**
  * The "presentations" collection of methods.

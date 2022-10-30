@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudFilestore\Resource;
+namespace FluentMail\Google\Service\CloudFilestore\Resource;
 
-use Google\Service\CloudFilestore\ListLocationsResponse;
-use Google\Service\CloudFilestore\Location;
+use FluentMail\Google\Service\CloudFilestore\ListLocationsResponse;
+use FluentMail\Google\Service\CloudFilestore\Location;
 
 /**
  * The "locations" collection of methods.

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ManufacturerCenter\Resource;
+namespace FluentMail\Google\Service\ManufacturerCenter\Resource;
 
-use Google\Service\ManufacturerCenter\Attributes;
-use Google\Service\ManufacturerCenter\ListProductsResponse;
-use Google\Service\ManufacturerCenter\ManufacturersEmpty;
-use Google\Service\ManufacturerCenter\Product;
+use FluentMail\Google\Service\ManufacturerCenter\Attributes;
+use FluentMail\Google\Service\ManufacturerCenter\ListProductsResponse;
+use FluentMail\Google\Service\ManufacturerCenter\ManufacturersEmpty;
+use FluentMail\Google\Service\ManufacturerCenter\Product;
 
 /**
  * The "products" collection of methods.

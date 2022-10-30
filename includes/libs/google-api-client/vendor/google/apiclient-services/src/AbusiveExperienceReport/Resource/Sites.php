@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AbusiveExperienceReport\Resource;
+namespace FluentMail\Google\Service\AbusiveExperienceReport\Resource;
 
-use Google\Service\AbusiveExperienceReport\SiteSummaryResponse;
+use FluentMail\Google\Service\AbusiveExperienceReport\SiteSummaryResponse;
 
 /**
  * The "sites" collection of methods.

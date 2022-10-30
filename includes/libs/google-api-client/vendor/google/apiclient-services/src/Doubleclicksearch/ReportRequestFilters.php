@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Doubleclicksearch;
+namespace FluentMail\Google\Service\Doubleclicksearch;
 
 class ReportRequestFilters extends \Google\Collection
 {

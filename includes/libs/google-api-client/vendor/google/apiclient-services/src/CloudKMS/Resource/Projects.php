@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudKMS\Resource;
+namespace FluentMail\Google\Service\CloudKMS\Resource;
 
 /**
  * The "projects" collection of methods.

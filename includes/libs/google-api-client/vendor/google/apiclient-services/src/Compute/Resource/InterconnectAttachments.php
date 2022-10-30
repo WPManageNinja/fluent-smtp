@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\InterconnectAttachment;
-use Google\Service\Compute\InterconnectAttachmentAggregatedList;
-use Google\Service\Compute\InterconnectAttachmentList;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\RegionSetLabelsRequest;
+use FluentMail\Google\Service\Compute\InterconnectAttachment;
+use FluentMail\Google\Service\Compute\InterconnectAttachmentAggregatedList;
+use FluentMail\Google\Service\Compute\InterconnectAttachmentList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\RegionSetLabelsRequest;
 
 /**
  * The "interconnectAttachments" collection of methods.

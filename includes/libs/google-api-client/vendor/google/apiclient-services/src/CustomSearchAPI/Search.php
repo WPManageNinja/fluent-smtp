@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CustomSearchAPI;
+namespace FluentMail\Google\Service\CustomSearchAPI;
 
 class Search extends \Google\Collection
 {

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\ListBidResponseErrorsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListBidResponseErrorsResponse;
 
 /**
  * The "bidResponseErrors" collection of methods.

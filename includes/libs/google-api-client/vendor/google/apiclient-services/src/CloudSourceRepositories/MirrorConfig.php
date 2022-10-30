@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudSourceRepositories;
+namespace FluentMail\Google\Service\CloudSourceRepositories;
 
 class MirrorConfig extends \Google\Model
 {

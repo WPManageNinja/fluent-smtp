@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Connectors\Resource;
+namespace FluentMail\Google\Service\Connectors\Resource;
 
-use Google\Service\Connectors\Connector;
-use Google\Service\Connectors\ListConnectorsResponse;
+use FluentMail\Google\Service\Connectors\Connector;
+use FluentMail\Google\Service\Connectors\ListConnectorsResponse;
 
 /**
  * The "connectors" collection of methods.

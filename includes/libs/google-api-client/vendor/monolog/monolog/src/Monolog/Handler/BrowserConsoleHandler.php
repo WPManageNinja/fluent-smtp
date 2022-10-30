@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Utils;
+use FluentMail\Monolog\Formatter\FormatterInterface;
+use FluentMail\Monolog\Formatter\LineFormatter;
+use FluentMail\Monolog\Utils;
 
 use function count;
 use function headers_list;

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise\Resource;
+namespace FluentMail\Google\Service\AndroidEnterprise\Resource;
 
-use Google\Service\AndroidEnterprise\Entitlement;
-use Google\Service\AndroidEnterprise\EntitlementsListResponse;
+use FluentMail\Google\Service\AndroidEnterprise\Entitlement;
+use FluentMail\Google\Service\AndroidEnterprise\EntitlementsListResponse;
 
 /**
  * The "entitlements" collection of methods.

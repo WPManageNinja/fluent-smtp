@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog;
+namespace FluentMail\Monolog;
 
 use DateTimeZone;
-use Monolog\Handler\HandlerInterface;
-use Psr\Log\LoggerInterface;
-use Psr\Log\InvalidArgumentException;
-use Psr\Log\LogLevel;
+use FluentMail\Monolog\Handler\HandlerInterface;
+use FluentMail\Psr\Log\LoggerInterface;
+use FluentMail\Psr\Log\InvalidArgumentException;
+use FluentMail\Psr\Log\LogLevel;
 use Throwable;
 use Stringable;
 

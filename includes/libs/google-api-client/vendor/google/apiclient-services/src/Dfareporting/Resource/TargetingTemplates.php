@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\TargetingTemplate;
-use Google\Service\Dfareporting\TargetingTemplatesListResponse;
+use FluentMail\Google\Service\Dfareporting\TargetingTemplate;
+use FluentMail\Google\Service\Dfareporting\TargetingTemplatesListResponse;
 
 /**
  * The "targetingTemplates" collection of methods.

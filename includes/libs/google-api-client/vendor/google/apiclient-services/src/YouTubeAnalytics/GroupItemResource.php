@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\YouTubeAnalytics;
+namespace FluentMail\Google\Service\YouTubeAnalytics;
 
 class GroupItemResource extends \Google\Model
 {

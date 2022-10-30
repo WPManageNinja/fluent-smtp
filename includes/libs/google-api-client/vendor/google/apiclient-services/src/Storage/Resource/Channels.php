@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Storage\Resource;
+namespace FluentMail\Google\Service\Storage\Resource;
 
-use Google\Service\Storage\Channel;
+use FluentMail\Google\Service\Storage\Channel;
 
 /**
  * The "channels" collection of methods.

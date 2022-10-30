@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\BackupforGKE\Resource;
+namespace FluentMail\Google\Service\BackupforGKE\Resource;
 
-use Google\Service\BackupforGKE\ListVolumeRestoresResponse;
-use Google\Service\BackupforGKE\Policy;
-use Google\Service\BackupforGKE\SetIamPolicyRequest;
-use Google\Service\BackupforGKE\TestIamPermissionsRequest;
-use Google\Service\BackupforGKE\TestIamPermissionsResponse;
-use Google\Service\BackupforGKE\VolumeRestore;
+use FluentMail\Google\Service\BackupforGKE\ListVolumeRestoresResponse;
+use FluentMail\Google\Service\BackupforGKE\Policy;
+use FluentMail\Google\Service\BackupforGKE\SetIamPolicyRequest;
+use FluentMail\Google\Service\BackupforGKE\TestIamPermissionsRequest;
+use FluentMail\Google\Service\BackupforGKE\TestIamPermissionsResponse;
+use FluentMail\Google\Service\BackupforGKE\VolumeRestore;
 
 /**
  * The "volumeRestores" collection of methods.

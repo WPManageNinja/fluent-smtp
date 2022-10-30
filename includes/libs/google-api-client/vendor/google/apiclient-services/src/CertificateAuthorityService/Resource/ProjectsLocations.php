@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CertificateAuthorityService\Resource;
+namespace FluentMail\Google\Service\CertificateAuthorityService\Resource;
 
-use Google\Service\CertificateAuthorityService\ListLocationsResponse;
-use Google\Service\CertificateAuthorityService\Location;
+use FluentMail\Google\Service\CertificateAuthorityService\ListLocationsResponse;
+use FluentMail\Google\Service\CertificateAuthorityService\Location;
 
 /**
  * The "locations" collection of methods.

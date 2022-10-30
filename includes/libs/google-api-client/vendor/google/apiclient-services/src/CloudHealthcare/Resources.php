@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare;
+namespace FluentMail\Google\Service\CloudHealthcare;
 
 class Resources extends \Google\Collection
 {

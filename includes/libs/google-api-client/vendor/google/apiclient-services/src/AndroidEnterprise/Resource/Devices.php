@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise\Resource;
+namespace FluentMail\Google\Service\AndroidEnterprise\Resource;
 
-use Google\Service\AndroidEnterprise\Device;
-use Google\Service\AndroidEnterprise\DeviceState;
-use Google\Service\AndroidEnterprise\DevicesListResponse;
+use FluentMail\Google\Service\AndroidEnterprise\Device;
+use FluentMail\Google\Service\AndroidEnterprise\DeviceState;
+use FluentMail\Google\Service\AndroidEnterprise\DevicesListResponse;
 
 /**
  * The "devices" collection of methods.

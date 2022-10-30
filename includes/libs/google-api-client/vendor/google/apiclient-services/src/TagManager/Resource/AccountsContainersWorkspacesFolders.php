@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\TagManager\Resource;
+namespace FluentMail\Google\Service\TagManager\Resource;
 
-use Google\Service\TagManager\Folder;
-use Google\Service\TagManager\FolderEntities;
-use Google\Service\TagManager\ListFoldersResponse;
-use Google\Service\TagManager\RevertFolderResponse;
+use FluentMail\Google\Service\TagManager\Folder;
+use FluentMail\Google\Service\TagManager\FolderEntities;
+use FluentMail\Google\Service\TagManager\ListFoldersResponse;
+use FluentMail\Google\Service\TagManager\RevertFolderResponse;
 
 /**
  * The "folders" collection of methods.

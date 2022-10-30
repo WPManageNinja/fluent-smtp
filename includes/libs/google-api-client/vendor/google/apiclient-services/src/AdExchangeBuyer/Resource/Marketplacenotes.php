@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyer\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyer\Resource;
 
-use Google\Service\AdExchangeBuyer\AddOrderNotesRequest;
-use Google\Service\AdExchangeBuyer\AddOrderNotesResponse;
-use Google\Service\AdExchangeBuyer\GetOrderNotesResponse;
+use FluentMail\Google\Service\AdExchangeBuyer\AddOrderNotesRequest;
+use FluentMail\Google\Service\AdExchangeBuyer\AddOrderNotesResponse;
+use FluentMail\Google\Service\AdExchangeBuyer\GetOrderNotesResponse;
 
 /**
  * The "marketplacenotes" collection of methods.

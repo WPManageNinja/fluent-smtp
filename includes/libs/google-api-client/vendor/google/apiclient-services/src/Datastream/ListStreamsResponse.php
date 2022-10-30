@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Datastream;
+namespace FluentMail\Google\Service\Datastream;
 
 class ListStreamsResponse extends \Google\Collection
 {

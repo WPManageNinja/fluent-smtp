@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\CloudDataplex\Resource;
+namespace FluentMail\Google\Service\CloudDataplex\Resource;
 
-use Google\Service\CloudDataplex\GoogleCloudDataplexV1Asset;
-use Google\Service\CloudDataplex\GoogleCloudDataplexV1ListAssetsResponse;
-use Google\Service\CloudDataplex\GoogleIamV1Policy;
-use Google\Service\CloudDataplex\GoogleIamV1SetIamPolicyRequest;
-use Google\Service\CloudDataplex\GoogleIamV1TestIamPermissionsRequest;
-use Google\Service\CloudDataplex\GoogleIamV1TestIamPermissionsResponse;
-use Google\Service\CloudDataplex\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudDataplexV1Asset;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudDataplexV1ListAssetsResponse;
+use FluentMail\Google\Service\CloudDataplex\GoogleIamV1Policy;
+use FluentMail\Google\Service\CloudDataplex\GoogleIamV1SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudDataplex\GoogleIamV1TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudDataplex\GoogleIamV1TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudDataplex\GoogleLongrunningOperation;
 
 /**
  * The "assets" collection of methods.

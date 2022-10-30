@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessAccountManagement\Resource;
+namespace FluentMail\Google\Service\MyBusinessAccountManagement\Resource;
 
-use Google\Service\MyBusinessAccountManagement\MybusinessaccountmanagementEmpty;
-use Google\Service\MyBusinessAccountManagement\TransferLocationRequest;
+use FluentMail\Google\Service\MyBusinessAccountManagement\MybusinessaccountmanagementEmpty;
+use FluentMail\Google\Service\MyBusinessAccountManagement\TransferLocationRequest;
 
 /**
  * The "locations" collection of methods.

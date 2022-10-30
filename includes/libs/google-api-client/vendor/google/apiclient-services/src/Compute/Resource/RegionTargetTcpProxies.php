@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\TargetTcpProxy;
-use Google\Service\Compute\TargetTcpProxyList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\TargetTcpProxy;
+use FluentMail\Google\Service\Compute\TargetTcpProxyList;
 
 /**
  * The "regionTargetTcpProxies" collection of methods.

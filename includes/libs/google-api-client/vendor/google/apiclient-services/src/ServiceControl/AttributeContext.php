@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ServiceControl;
+namespace FluentMail\Google\Service\ServiceControl;
 
 class AttributeContext extends \Google\Collection
 {

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\VMMigrationService\Resource;
+namespace FluentMail\Google\Service\VMMigrationService\Resource;
 
-use Google\Service\VMMigrationService\ListUtilizationReportsResponse;
-use Google\Service\VMMigrationService\Operation;
-use Google\Service\VMMigrationService\UtilizationReport;
+use FluentMail\Google\Service\VMMigrationService\ListUtilizationReportsResponse;
+use FluentMail\Google\Service\VMMigrationService\Operation;
+use FluentMail\Google\Service\VMMigrationService\UtilizationReport;
 
 /**
  * The "utilizationReports" collection of methods.

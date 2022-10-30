@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\ListFilteredBidRequestsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListFilteredBidRequestsResponse;
 
 /**
  * The "filteredBidRequests" collection of methods.

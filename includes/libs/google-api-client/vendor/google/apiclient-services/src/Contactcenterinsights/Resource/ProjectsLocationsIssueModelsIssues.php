@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Contactcenterinsights\Resource;
+namespace FluentMail\Google\Service\Contactcenterinsights\Resource;
 
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1Issue;
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ListIssuesResponse;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1Issue;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ListIssuesResponse;
 
 /**
  * The "issues" collection of methods.

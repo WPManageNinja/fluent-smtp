@@ -15,20 +15,20 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
-use Google\Service\CloudHealthcare\DeidentifyDicomStoreRequest;
-use Google\Service\CloudHealthcare\DicomStore;
-use Google\Service\CloudHealthcare\ExportDicomDataRequest;
-use Google\Service\CloudHealthcare\HealthcareEmpty;
-use Google\Service\CloudHealthcare\HttpBody;
-use Google\Service\CloudHealthcare\ImportDicomDataRequest;
-use Google\Service\CloudHealthcare\ListDicomStoresResponse;
-use Google\Service\CloudHealthcare\Operation;
-use Google\Service\CloudHealthcare\Policy;
-use Google\Service\CloudHealthcare\SetIamPolicyRequest;
-use Google\Service\CloudHealthcare\TestIamPermissionsRequest;
-use Google\Service\CloudHealthcare\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudHealthcare\DeidentifyDicomStoreRequest;
+use FluentMail\Google\Service\CloudHealthcare\DicomStore;
+use FluentMail\Google\Service\CloudHealthcare\ExportDicomDataRequest;
+use FluentMail\Google\Service\CloudHealthcare\HealthcareEmpty;
+use FluentMail\Google\Service\CloudHealthcare\HttpBody;
+use FluentMail\Google\Service\CloudHealthcare\ImportDicomDataRequest;
+use FluentMail\Google\Service\CloudHealthcare\ListDicomStoresResponse;
+use FluentMail\Google\Service\CloudHealthcare\Operation;
+use FluentMail\Google\Service\CloudHealthcare\Policy;
+use FluentMail\Google\Service\CloudHealthcare\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudHealthcare\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudHealthcare\TestIamPermissionsResponse;
 
 /**
  * The "dicomStores" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BigtableAdmin\Resource;
+namespace FluentMail\Google\Service\BigtableAdmin\Resource;
 
 /**
  * The "projects" collection of methods.

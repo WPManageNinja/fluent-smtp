@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Drive\Resource;
+namespace FluentMail\Google\Service\Drive\Resource;
 
-use Google\Service\Drive\ChangeList;
-use Google\Service\Drive\Channel;
-use Google\Service\Drive\StartPageToken;
+use FluentMail\Google\Service\Drive\ChangeList;
+use FluentMail\Google\Service\Drive\Channel;
+use FluentMail\Google\Service\Drive\StartPageToken;
 
 /**
  * The "changes" collection of methods.

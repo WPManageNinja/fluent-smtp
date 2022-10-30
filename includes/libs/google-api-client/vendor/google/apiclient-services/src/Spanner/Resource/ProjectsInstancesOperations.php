@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Spanner\Resource;
+namespace FluentMail\Google\Service\Spanner\Resource;
 
-use Google\Service\Spanner\ListOperationsResponse;
-use Google\Service\Spanner\Operation;
-use Google\Service\Spanner\SpannerEmpty;
+use FluentMail\Google\Service\Spanner\ListOperationsResponse;
+use FluentMail\Google\Service\Spanner\Operation;
+use FluentMail\Google\Service\Spanner\SpannerEmpty;
 
 /**
  * The "operations" collection of methods.

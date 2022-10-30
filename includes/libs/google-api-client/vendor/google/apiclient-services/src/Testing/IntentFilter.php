@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Testing;
+namespace FluentMail\Google\Service\Testing;
 
 class IntentFilter extends \Google\Collection
 {

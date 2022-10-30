@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\Video;
-use Google\Service\YouTube\VideoAbuseReport;
-use Google\Service\YouTube\VideoGetRatingResponse;
-use Google\Service\YouTube\VideoListResponse;
+use FluentMail\Google\Service\YouTube\Video;
+use FluentMail\Google\Service\YouTube\VideoAbuseReport;
+use FluentMail\Google\Service\YouTube\VideoGetRatingResponse;
+use FluentMail\Google\Service\YouTube\VideoListResponse;
 
 /**
  * The "videos" collection of methods.

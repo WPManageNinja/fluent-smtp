@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\PostmasterTools\Resource;
+namespace FluentMail\Google\Service\PostmasterTools\Resource;
 
-use Google\Service\PostmasterTools\ListTrafficStatsResponse;
-use Google\Service\PostmasterTools\TrafficStats;
+use FluentMail\Google\Service\PostmasterTools\ListTrafficStatsResponse;
+use FluentMail\Google\Service\PostmasterTools\TrafficStats;
 
 /**
  * The "trafficStats" collection of methods.

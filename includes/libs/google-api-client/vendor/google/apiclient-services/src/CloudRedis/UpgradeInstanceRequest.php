@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudRedis;
+namespace FluentMail\Google\Service\CloudRedis;
 
 class UpgradeInstanceRequest extends \Google\Model
 {

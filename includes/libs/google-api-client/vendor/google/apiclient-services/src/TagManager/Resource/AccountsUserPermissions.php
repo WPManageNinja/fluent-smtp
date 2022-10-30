@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\TagManager\Resource;
+namespace FluentMail\Google\Service\TagManager\Resource;
 
-use Google\Service\TagManager\ListUserPermissionsResponse;
-use Google\Service\TagManager\UserPermission;
+use FluentMail\Google\Service\TagManager\ListUserPermissionsResponse;
+use FluentMail\Google\Service\TagManager\UserPermission;
 
 /**
  * The "user_permissions" collection of methods.

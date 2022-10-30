@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Speech\Resource;
+namespace FluentMail\Google\Service\Speech\Resource;
 
-use Google\Service\Speech\CreatePhraseSetRequest;
-use Google\Service\Speech\ListPhraseSetResponse;
-use Google\Service\Speech\PhraseSet;
-use Google\Service\Speech\SpeechEmpty;
+use FluentMail\Google\Service\Speech\CreatePhraseSetRequest;
+use FluentMail\Google\Service\Speech\ListPhraseSetResponse;
+use FluentMail\Google\Service\Speech\PhraseSet;
+use FluentMail\Google\Service\Speech\SpeechEmpty;
 
 /**
  * The "phraseSets" collection of methods.

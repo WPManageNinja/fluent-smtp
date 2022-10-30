@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\OSConfig;
+namespace FluentMail\Google\Service\OSConfig;
 
 class GoogleCloudOsconfigV1OSPolicyAssignmentOperationMetadata extends \Google\Model
 {

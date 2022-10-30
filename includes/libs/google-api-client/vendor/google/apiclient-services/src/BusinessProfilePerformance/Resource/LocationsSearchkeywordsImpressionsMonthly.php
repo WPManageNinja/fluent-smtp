@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\BusinessProfilePerformance\Resource;
+namespace FluentMail\Google\Service\BusinessProfilePerformance\Resource;
 
-use Google\Service\BusinessProfilePerformance\ListSearchKeywordImpressionsMonthlyResponse;
+use FluentMail\Google\Service\BusinessProfilePerformance\ListSearchKeywordImpressionsMonthlyResponse;
 
 /**
  * The "monthly" collection of methods.

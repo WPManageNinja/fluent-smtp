@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\RecommendationsAI\Resource;
+namespace FluentMail\Google\Service\RecommendationsAI\Resource;
 
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1CreatePredictionApiKeyRegistrationRequest;
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1ListPredictionApiKeyRegistrationsResponse;
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1PredictionApiKeyRegistration;
-use Google\Service\RecommendationsAI\GoogleProtobufEmpty;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1CreatePredictionApiKeyRegistrationRequest;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1ListPredictionApiKeyRegistrationsResponse;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1PredictionApiKeyRegistration;
+use FluentMail\Google\Service\RecommendationsAI\GoogleProtobufEmpty;
 
 /**
  * The "predictionApiKeyRegistrations" collection of methods.

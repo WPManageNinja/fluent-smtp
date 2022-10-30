@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Speech\Resource;
+namespace FluentMail\Google\Service\Speech\Resource;
 
-use Google\Service\Speech\ListOperationsResponse;
-use Google\Service\Speech\Operation;
+use FluentMail\Google\Service\Speech\ListOperationsResponse;
+use FluentMail\Google\Service\Speech\Operation;
 
 /**
  * The "operations" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\SearchConsole\Resource;
+namespace FluentMail\Google\Service\SearchConsole\Resource;
 
-use Google\Service\SearchConsole\InspectUrlIndexRequest;
-use Google\Service\SearchConsole\InspectUrlIndexResponse;
+use FluentMail\Google\Service\SearchConsole\InspectUrlIndexRequest;
+use FluentMail\Google\Service\SearchConsole\InspectUrlIndexResponse;
 
 /**
  * The "index" collection of methods.

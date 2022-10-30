@@ -15,25 +15,25 @@
  * the License.
  */
 
-namespace Google\Service\Iam\Resource;
+namespace FluentMail\Google\Service\Iam\Resource;
 
-use Google\Service\Iam\CreateServiceAccountRequest;
-use Google\Service\Iam\DisableServiceAccountRequest;
-use Google\Service\Iam\EnableServiceAccountRequest;
-use Google\Service\Iam\IamEmpty;
-use Google\Service\Iam\ListServiceAccountsResponse;
-use Google\Service\Iam\PatchServiceAccountRequest;
-use Google\Service\Iam\Policy;
-use Google\Service\Iam\ServiceAccount;
-use Google\Service\Iam\SetIamPolicyRequest;
-use Google\Service\Iam\SignBlobRequest;
-use Google\Service\Iam\SignBlobResponse;
-use Google\Service\Iam\SignJwtRequest;
-use Google\Service\Iam\SignJwtResponse;
-use Google\Service\Iam\TestIamPermissionsRequest;
-use Google\Service\Iam\TestIamPermissionsResponse;
-use Google\Service\Iam\UndeleteServiceAccountRequest;
-use Google\Service\Iam\UndeleteServiceAccountResponse;
+use FluentMail\Google\Service\Iam\CreateServiceAccountRequest;
+use FluentMail\Google\Service\Iam\DisableServiceAccountRequest;
+use FluentMail\Google\Service\Iam\EnableServiceAccountRequest;
+use FluentMail\Google\Service\Iam\IamEmpty;
+use FluentMail\Google\Service\Iam\ListServiceAccountsResponse;
+use FluentMail\Google\Service\Iam\PatchServiceAccountRequest;
+use FluentMail\Google\Service\Iam\Policy;
+use FluentMail\Google\Service\Iam\ServiceAccount;
+use FluentMail\Google\Service\Iam\SetIamPolicyRequest;
+use FluentMail\Google\Service\Iam\SignBlobRequest;
+use FluentMail\Google\Service\Iam\SignBlobResponse;
+use FluentMail\Google\Service\Iam\SignJwtRequest;
+use FluentMail\Google\Service\Iam\SignJwtResponse;
+use FluentMail\Google\Service\Iam\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Iam\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Iam\UndeleteServiceAccountRequest;
+use FluentMail\Google\Service\Iam\UndeleteServiceAccountResponse;
 
 /**
  * The "serviceAccounts" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\Segments;
+use FluentMail\Google\Service\Analytics\Segments;
 
 /**
  * The "segments" collection of methods.

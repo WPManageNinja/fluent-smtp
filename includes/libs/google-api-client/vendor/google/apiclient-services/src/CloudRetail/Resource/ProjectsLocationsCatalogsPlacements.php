@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudRetail\Resource;
+namespace FluentMail\Google\Service\CloudRetail\Resource;
 
-use Google\Service\CloudRetail\GoogleCloudRetailV2PredictRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2PredictResponse;
-use Google\Service\CloudRetail\GoogleCloudRetailV2SearchRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2SearchResponse;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2PredictRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2PredictResponse;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2SearchRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2SearchResponse;
 
 /**
  * The "placements" collection of methods.

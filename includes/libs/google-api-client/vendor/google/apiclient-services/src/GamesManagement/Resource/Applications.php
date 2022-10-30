@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\GamesManagement\Resource;
+namespace FluentMail\Google\Service\GamesManagement\Resource;
 
-use Google\Service\GamesManagement\HiddenPlayerList;
+use FluentMail\Google\Service\GamesManagement\HiddenPlayerList;
 
 /**
  * The "applications" collection of methods.

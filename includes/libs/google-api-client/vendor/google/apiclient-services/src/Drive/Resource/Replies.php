@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Drive\Resource;
+namespace FluentMail\Google\Service\Drive\Resource;
 
-use Google\Service\Drive\Reply;
-use Google\Service\Drive\ReplyList;
+use FluentMail\Google\Service\Drive\Reply;
+use FluentMail\Google\Service\Drive\ReplyList;
 
 /**
  * The "replies" collection of methods.

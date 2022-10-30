@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ToolResults\Resource;
+namespace FluentMail\Google\Service\ToolResults\Resource;
 
-use Google\Service\ToolResults\ListTestCasesResponse;
-use Google\Service\ToolResults\TestCase;
+use FluentMail\Google\Service\ToolResults\ListTestCasesResponse;
+use FluentMail\Google\Service\ToolResults\TestCase;
 
 /**
  * The "testCases" collection of methods.

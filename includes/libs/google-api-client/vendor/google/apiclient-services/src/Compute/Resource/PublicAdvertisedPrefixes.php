@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\PublicAdvertisedPrefix;
-use Google\Service\Compute\PublicAdvertisedPrefixList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\PublicAdvertisedPrefix;
+use FluentMail\Google\Service\Compute\PublicAdvertisedPrefixList;
 
 /**
  * The "publicAdvertisedPrefixes" collection of methods.

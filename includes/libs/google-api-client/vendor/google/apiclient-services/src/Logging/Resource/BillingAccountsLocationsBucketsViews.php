@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Logging\Resource;
+namespace FluentMail\Google\Service\Logging\Resource;
 
-use Google\Service\Logging\ListViewsResponse;
-use Google\Service\Logging\LogView;
-use Google\Service\Logging\LoggingEmpty;
+use FluentMail\Google\Service\Logging\ListViewsResponse;
+use FluentMail\Google\Service\Logging\LogView;
+use FluentMail\Google\Service\Logging\LoggingEmpty;
 
 /**
  * The "views" collection of methods.

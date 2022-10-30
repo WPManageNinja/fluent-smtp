@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1ComputeEnvironmentScoresRequest;
-use Google\Service\Apigee\GoogleCloudApigeeV1ComputeEnvironmentScoresResponse;
-use Google\Service\Apigee\GoogleCloudApigeeV1SecurityProfileEnvironmentAssociation;
-use Google\Service\Apigee\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ComputeEnvironmentScoresRequest;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ComputeEnvironmentScoresResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1SecurityProfileEnvironmentAssociation;
+use FluentMail\Google\Service\Apigee\GoogleProtobufEmpty;
 
 /**
  * The "environments" collection of methods.

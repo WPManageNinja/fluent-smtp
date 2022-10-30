@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudRun\Resource;
+namespace FluentMail\Google\Service\CloudRun\Resource;
 
-use Google\Service\CloudRun\ListRoutesResponse;
-use Google\Service\CloudRun\Route;
+use FluentMail\Google\Service\CloudRun\ListRoutesResponse;
+use FluentMail\Google\Service\CloudRun\Route;
 
 /**
  * The "routes" collection of methods.

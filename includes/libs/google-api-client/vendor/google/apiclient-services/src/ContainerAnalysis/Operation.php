@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ContainerAnalysis;
+namespace FluentMail\Google\Service\ContainerAnalysis;
 
 class Operation extends \Google\Model
 {

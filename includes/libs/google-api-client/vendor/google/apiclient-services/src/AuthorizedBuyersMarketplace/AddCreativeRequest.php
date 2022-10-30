@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AuthorizedBuyersMarketplace;
+namespace FluentMail\Google\Service\AuthorizedBuyersMarketplace;
 
 class AddCreativeRequest extends \Google\Model
 {

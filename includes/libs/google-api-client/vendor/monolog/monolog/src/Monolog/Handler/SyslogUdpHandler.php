@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
 use DateTimeInterface;
-use Monolog\Logger;
-use Monolog\Handler\SyslogUdp\UdpSocket;
-use Monolog\Utils;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\Handler\SyslogUdp\UdpSocket;
+use FluentMail\Monolog\Utils;
 
 /**
  * A Handler for logging to a remote syslogd server.

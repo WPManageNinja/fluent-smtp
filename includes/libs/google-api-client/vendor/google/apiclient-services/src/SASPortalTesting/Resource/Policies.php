@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\SASPortalTesting\Resource;
+namespace FluentMail\Google\Service\SASPortalTesting\Resource;
 
-use Google\Service\SASPortalTesting\SasPortalGetPolicyRequest;
-use Google\Service\SASPortalTesting\SasPortalPolicy;
-use Google\Service\SASPortalTesting\SasPortalSetPolicyRequest;
-use Google\Service\SASPortalTesting\SasPortalTestPermissionsRequest;
-use Google\Service\SASPortalTesting\SasPortalTestPermissionsResponse;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalGetPolicyRequest;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalPolicy;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalSetPolicyRequest;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalTestPermissionsRequest;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalTestPermissionsResponse;
 
 /**
  * The "policies" collection of methods.

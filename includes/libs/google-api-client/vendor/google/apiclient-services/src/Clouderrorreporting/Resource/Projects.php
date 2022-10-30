@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Clouderrorreporting\Resource;
+namespace FluentMail\Google\Service\Clouderrorreporting\Resource;
 
-use Google\Service\Clouderrorreporting\DeleteEventsResponse;
+use FluentMail\Google\Service\Clouderrorreporting\DeleteEventsResponse;
 
 /**
  * The "projects" collection of methods.

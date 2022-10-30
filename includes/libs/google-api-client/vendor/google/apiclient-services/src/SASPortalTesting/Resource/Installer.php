@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\SASPortalTesting\Resource;
+namespace FluentMail\Google\Service\SASPortalTesting\Resource;
 
-use Google\Service\SASPortalTesting\SasPortalGenerateSecretRequest;
-use Google\Service\SASPortalTesting\SasPortalGenerateSecretResponse;
-use Google\Service\SASPortalTesting\SasPortalValidateInstallerRequest;
-use Google\Service\SASPortalTesting\SasPortalValidateInstallerResponse;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalGenerateSecretRequest;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalGenerateSecretResponse;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalValidateInstallerRequest;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalValidateInstallerResponse;
 
 /**
  * The "installer" collection of methods.

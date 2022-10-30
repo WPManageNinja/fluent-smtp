@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Commitment;
-use Google\Service\Compute\CommitmentAggregatedList;
-use Google\Service\Compute\CommitmentList;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Commitment;
+use FluentMail\Google\Service\Compute\CommitmentAggregatedList;
+use FluentMail\Google\Service\Compute\CommitmentList;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "regionCommitments" collection of methods.

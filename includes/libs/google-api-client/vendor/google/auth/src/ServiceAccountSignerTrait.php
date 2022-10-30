@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-namespace Google\Auth;
+namespace FluentMail\Google\Auth;
 
-use phpseclib\Crypt\RSA;
+use FluentMail\phpseclib\Crypt\RSA;
 
 /**
  * Sign a string using a Service Account private key.

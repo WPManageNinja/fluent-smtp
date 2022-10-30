@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AndroidProvisioningPartner;
+namespace FluentMail\Google\Service\AndroidProvisioningPartner;
 
 class CustomerUnclaimDeviceRequest extends \Google\Model
 {

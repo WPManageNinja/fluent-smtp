@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTubeReporting\Resource;
+namespace FluentMail\Google\Service\YouTubeReporting\Resource;
 
-use Google\Service\YouTubeReporting\ListReportTypesResponse;
+use FluentMail\Google\Service\YouTubeReporting\ListReportTypesResponse;
 
 /**
  * The "reportTypes" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DatabaseMigrationService;
+namespace FluentMail\Google\Service\DatabaseMigrationService;
 
 class ListOperationsResponse extends \Google\Collection
 {

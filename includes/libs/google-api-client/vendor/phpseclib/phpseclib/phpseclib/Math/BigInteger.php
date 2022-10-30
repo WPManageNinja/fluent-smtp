@@ -25,10 +25,10 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace phpseclib3\Math;
+namespace FluentMail\phpseclib3\Math;
 
-use phpseclib3\Exception\BadConfigurationException;
-use phpseclib3\Math\BigInteger\Engines\Engine;
+use FluentMail\phpseclib3\Exception\BadConfigurationException;
+use FluentMail\phpseclib3\Math\BigInteger\Engines\Engine;
 
 /**
  * Pure-PHP arbitrary precision integer arithmetic library. Supports base-2, base-10, base-16, and base-256

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\PubsubNotificationSettings as PubsubNotificationSettingsModel;
+use FluentMail\Google\Service\ShoppingContent\PubsubNotificationSettings as PubsubNotificationSettingsModel;
 
 /**
  * The "pubsubnotificationsettings" collection of methods.

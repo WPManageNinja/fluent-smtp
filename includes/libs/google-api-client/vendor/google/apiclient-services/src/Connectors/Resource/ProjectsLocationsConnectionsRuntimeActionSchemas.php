@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Connectors\Resource;
+namespace FluentMail\Google\Service\Connectors\Resource;
 
-use Google\Service\Connectors\ListRuntimeActionSchemasResponse;
+use FluentMail\Google\Service\Connectors\ListRuntimeActionSchemasResponse;
 
 /**
  * The "runtimeActionSchemas" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Bigquery\Resource;
+namespace FluentMail\Google\Service\Bigquery\Resource;
 
-use Google\Service\Bigquery\GetServiceAccountResponse;
-use Google\Service\Bigquery\ProjectList;
+use FluentMail\Google\Service\Bigquery\GetServiceAccountResponse;
+use FluentMail\Google\Service\Bigquery\ProjectList;
 
 /**
  * The "projects" collection of methods.

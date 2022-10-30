@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Forms\Resource;
+namespace FluentMail\Google\Service\Forms\Resource;
 
-use Google\Service\Forms\FormResponse;
-use Google\Service\Forms\ListFormResponsesResponse;
+use FluentMail\Google\Service\Forms\FormResponse;
+use FluentMail\Google\Service\Forms\ListFormResponsesResponse;
 
 /**
  * The "responses" collection of methods.

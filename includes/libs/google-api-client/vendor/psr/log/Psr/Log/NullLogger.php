@@ -1,6 +1,6 @@
 <?php
 
-namespace Psr\Log;
+namespace FluentMail\Psr\Log;
 
 /**
  * This Logger can be used to avoid conditional log calls.

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Integrations\Resource;
+namespace FluentMail\Google\Service\Integrations\Resource;
 
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCancelExecutionRequest;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCancelExecutionResponse;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaExecution;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListExecutionsResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCancelExecutionRequest;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCancelExecutionResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaExecution;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListExecutionsResponse;
 
 /**
  * The "executions" collection of methods.

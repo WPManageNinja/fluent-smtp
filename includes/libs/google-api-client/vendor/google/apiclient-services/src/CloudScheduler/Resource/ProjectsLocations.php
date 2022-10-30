@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudScheduler\Resource;
+namespace FluentMail\Google\Service\CloudScheduler\Resource;
 
-use Google\Service\CloudScheduler\ListLocationsResponse;
-use Google\Service\CloudScheduler\Location;
+use FluentMail\Google\Service\CloudScheduler\ListLocationsResponse;
+use FluentMail\Google\Service\CloudScheduler\Location;
 
 /**
  * The "locations" collection of methods.

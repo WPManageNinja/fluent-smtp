@@ -15,20 +15,20 @@
  * the License.
  */
 
-namespace Google\Service\Translate\Resource;
+namespace FluentMail\Google\Service\Translate\Resource;
 
-use Google\Service\Translate\BatchTranslateDocumentRequest;
-use Google\Service\Translate\BatchTranslateTextRequest;
-use Google\Service\Translate\DetectLanguageRequest;
-use Google\Service\Translate\DetectLanguageResponse;
-use Google\Service\Translate\ListLocationsResponse;
-use Google\Service\Translate\Location;
-use Google\Service\Translate\Operation;
-use Google\Service\Translate\SupportedLanguages;
-use Google\Service\Translate\TranslateDocumentRequest;
-use Google\Service\Translate\TranslateDocumentResponse;
-use Google\Service\Translate\TranslateTextRequest;
-use Google\Service\Translate\TranslateTextResponse;
+use FluentMail\Google\Service\Translate\BatchTranslateDocumentRequest;
+use FluentMail\Google\Service\Translate\BatchTranslateTextRequest;
+use FluentMail\Google\Service\Translate\DetectLanguageRequest;
+use FluentMail\Google\Service\Translate\DetectLanguageResponse;
+use FluentMail\Google\Service\Translate\ListLocationsResponse;
+use FluentMail\Google\Service\Translate\Location;
+use FluentMail\Google\Service\Translate\Operation;
+use FluentMail\Google\Service\Translate\SupportedLanguages;
+use FluentMail\Google\Service\Translate\TranslateDocumentRequest;
+use FluentMail\Google\Service\Translate\TranslateDocumentResponse;
+use FluentMail\Google\Service\Translate\TranslateTextRequest;
+use FluentMail\Google\Service\Translate\TranslateTextResponse;
 
 /**
  * The "locations" collection of methods.
@@ -45,7 +45,7 @@ class ProjectsLocations extends \Google\Service\Resource
    * function provides real-time output as the inputs are being processed. If
    * caller cancels a request, the partial results (for an input file, it's all or
    * nothing) may still be available on the specified output location. This call
-   * returns immediately and you can use google.longrunning.Operation.name to poll
+   * returns immediately and you can use FluentMail\google.longrunning.Operation.name to poll
    * the status of the call. (locations.batchTranslateDocument)
    *
    * @param string $parent Required. Location to make a regional call. Format:
@@ -68,7 +68,7 @@ class ProjectsLocations extends \Google\Service\Resource
    * provides real-time output as the inputs are being processed. If caller
    * cancels a request, the partial results (for an input file, it's all or
    * nothing) may still be available on the specified output location. This call
-   * returns immediately and you can use google.longrunning.Operation.name to poll
+   * returns immediately and you can use FluentMail\google.longrunning.Operation.name to poll
    * the status of the call. (locations.batchTranslateText)
    *
    * @param string $parent Required. Location to make a call. Must refer to a

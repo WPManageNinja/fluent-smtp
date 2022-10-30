@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Processor\ProcessorInterface;
+use FluentMail\Monolog\Processor\ProcessorInterface;
 
 /**
  * Interface to describe loggers that have processors

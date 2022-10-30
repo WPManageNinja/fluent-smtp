@@ -15,34 +15,34 @@
  * limitations under the License.
  */
 
-namespace Google;
+namespace FluentMail\Google;
 
 use BadMethodCallException;
 use DomainException;
-use Google\AccessToken\Revoke;
-use Google\AccessToken\Verify;
-use Google\Auth\ApplicationDefaultCredentials;
-use Google\Auth\Cache\MemoryCacheItemPool;
-use Google\Auth\Credentials\ServiceAccountCredentials;
-use Google\Auth\Credentials\UserRefreshCredentials;
-use Google\Auth\CredentialsLoader;
-use Google\Auth\FetchAuthTokenCache;
-use Google\Auth\HttpHandler\HttpHandlerFactory;
-use Google\Auth\OAuth2;
-use Google\AuthHandler\AuthHandlerFactory;
-use Google\Http\REST;
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Ring\Client\StreamHandler;
+use FluentMail\Google\AccessToken\Revoke;
+use FluentMail\Google\AccessToken\Verify;
+use FluentMail\Google\Auth\ApplicationDefaultCredentials;
+use FluentMail\Google\Auth\Cache\MemoryCacheItemPool;
+use FluentMail\Google\Auth\Credentials\ServiceAccountCredentials;
+use FluentMail\Google\Auth\Credentials\UserRefreshCredentials;
+use FluentMail\Google\Auth\CredentialsLoader;
+use FluentMail\Google\Auth\FetchAuthTokenCache;
+use FluentMail\Google\Auth\HttpHandler\HttpHandlerFactory;
+use FluentMail\Google\Auth\OAuth2;
+use FluentMail\Google\AuthHandler\AuthHandlerFactory;
+use FluentMail\Google\Http\REST;
+use FluentMail\GuzzleHttp\Client as GuzzleClient;
+use FluentMail\GuzzleHttp\ClientInterface;
+use FluentMail\GuzzleHttp\Ring\Client\StreamHandler;
 use InvalidArgumentException;
 use LogicException;
-use Monolog\Handler\StreamHandler as MonologStreamHandler;
-use Monolog\Handler\SyslogHandler as MonologSyslogHandler;
-use Monolog\Logger;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
+use FluentMail\Monolog\Handler\StreamHandler as MonologStreamHandler;
+use FluentMail\Monolog\Handler\SyslogHandler as MonologSyslogHandler;
+use FluentMail\Monolog\Logger;
+use FluentMail\Psr\Cache\CacheItemPoolInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\ResponseInterface;
+use FluentMail\Psr\Log\LoggerInterface;
 use UnexpectedValueException;
 
 /**

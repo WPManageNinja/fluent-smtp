@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare;
+namespace FluentMail\Google\Service\CloudHealthcare;
 
 class ActivateConsentRequest extends \Google\Model
 {

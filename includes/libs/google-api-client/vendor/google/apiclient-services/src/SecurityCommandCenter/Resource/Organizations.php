@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter\Resource;
+namespace FluentMail\Google\Service\SecurityCommandCenter\Resource;
 
-use Google\Service\SecurityCommandCenter\OrganizationSettings;
+use FluentMail\Google\Service\SecurityCommandCenter\OrganizationSettings;
 
 /**
  * The "organizations" collection of methods.

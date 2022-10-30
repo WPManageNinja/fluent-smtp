@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Zone;
-use Google\Service\Compute\ZoneList;
+use FluentMail\Google\Service\Compute\Zone;
+use FluentMail\Google\Service\Compute\ZoneList;
 
 /**
  * The "zones" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AlertCenter\Resource;
+namespace FluentMail\Google\Service\AlertCenter\Resource;
 
-use Google\Service\AlertCenter\AlertFeedback;
-use Google\Service\AlertCenter\ListAlertFeedbackResponse;
+use FluentMail\Google\Service\AlertCenter\AlertFeedback;
+use FluentMail\Google\Service\AlertCenter\ListAlertFeedbackResponse;
 
 /**
  * The "feedback" collection of methods.

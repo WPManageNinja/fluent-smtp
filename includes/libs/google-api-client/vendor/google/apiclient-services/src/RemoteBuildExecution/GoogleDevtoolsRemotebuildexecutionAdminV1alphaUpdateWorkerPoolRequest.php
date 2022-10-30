@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\RemoteBuildExecution;
+namespace FluentMail\Google\Service\RemoteBuildExecution;
 
 class GoogleDevtoolsRemotebuildexecutionAdminV1alphaUpdateWorkerPoolRequest extends \Google\Model
 {

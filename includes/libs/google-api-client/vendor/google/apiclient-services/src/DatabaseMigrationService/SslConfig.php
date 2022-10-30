@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DatabaseMigrationService;
+namespace FluentMail\Google\Service\DatabaseMigrationService;
 
 class SslConfig extends \Google\Model
 {

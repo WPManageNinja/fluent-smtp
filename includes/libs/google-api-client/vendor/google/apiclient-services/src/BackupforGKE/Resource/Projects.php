@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BackupforGKE\Resource;
+namespace FluentMail\Google\Service\BackupforGKE\Resource;
 
 /**
  * The "projects" collection of methods.

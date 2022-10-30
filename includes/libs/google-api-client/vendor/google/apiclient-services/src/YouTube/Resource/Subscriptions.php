@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\Subscription;
-use Google\Service\YouTube\SubscriptionListResponse;
+use FluentMail\Google\Service\YouTube\Subscription;
+use FluentMail\Google\Service\YouTube\SubscriptionListResponse;
 
 /**
  * The "subscriptions" collection of methods.

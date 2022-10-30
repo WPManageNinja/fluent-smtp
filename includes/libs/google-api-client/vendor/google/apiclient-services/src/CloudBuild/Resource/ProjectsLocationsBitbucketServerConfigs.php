@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\CloudBuild\Resource;
+namespace FluentMail\Google\Service\CloudBuild\Resource;
 
-use Google\Service\CloudBuild\BitbucketServerConfig;
-use Google\Service\CloudBuild\CloudbuildEmpty;
-use Google\Service\CloudBuild\ListBitbucketServerConfigsResponse;
-use Google\Service\CloudBuild\Operation;
-use Google\Service\CloudBuild\RemoveBitbucketServerConnectedRepositoryRequest;
+use FluentMail\Google\Service\CloudBuild\BitbucketServerConfig;
+use FluentMail\Google\Service\CloudBuild\CloudbuildEmpty;
+use FluentMail\Google\Service\CloudBuild\ListBitbucketServerConfigsResponse;
+use FluentMail\Google\Service\CloudBuild\Operation;
+use FluentMail\Google\Service\CloudBuild\RemoveBitbucketServerConnectedRepositoryRequest;
 
 /**
  * The "bitbucketServerConfigs" collection of methods.

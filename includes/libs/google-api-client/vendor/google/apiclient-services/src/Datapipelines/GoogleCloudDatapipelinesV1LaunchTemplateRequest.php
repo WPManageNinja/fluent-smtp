@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Datapipelines;
+namespace FluentMail\Google\Service\Datapipelines;
 
 class GoogleCloudDatapipelinesV1LaunchTemplateRequest extends \Google\Model
 {

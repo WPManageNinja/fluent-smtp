@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\GameServices;
+namespace FluentMail\Google\Service\GameServices;
 
 class PreviewDeleteGameServerClusterResponse extends \Google\Model
 {

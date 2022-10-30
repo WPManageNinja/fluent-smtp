@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\IAMCredentials\Resource;
+namespace FluentMail\Google\Service\IAMCredentials\Resource;
 
 /**
  * The "projects" collection of methods.

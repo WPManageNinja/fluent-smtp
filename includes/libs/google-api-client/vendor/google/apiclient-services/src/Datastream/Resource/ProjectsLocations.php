@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Datastream\Resource;
+namespace FluentMail\Google\Service\Datastream\Resource;
 
-use Google\Service\Datastream\FetchStaticIpsResponse;
-use Google\Service\Datastream\ListLocationsResponse;
-use Google\Service\Datastream\Location;
+use FluentMail\Google\Service\Datastream\FetchStaticIpsResponse;
+use FluentMail\Google\Service\Datastream\ListLocationsResponse;
+use FluentMail\Google\Service\Datastream\Location;
 
 /**
  * The "locations" collection of methods.

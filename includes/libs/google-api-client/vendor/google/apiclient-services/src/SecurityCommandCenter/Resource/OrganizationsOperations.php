@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter\Resource;
+namespace FluentMail\Google\Service\SecurityCommandCenter\Resource;
 
-use Google\Service\SecurityCommandCenter\ListOperationsResponse;
-use Google\Service\SecurityCommandCenter\Operation;
-use Google\Service\SecurityCommandCenter\SecuritycenterEmpty;
+use FluentMail\Google\Service\SecurityCommandCenter\ListOperationsResponse;
+use FluentMail\Google\Service\SecurityCommandCenter\Operation;
+use FluentMail\Google\Service\SecurityCommandCenter\SecuritycenterEmpty;
 
 /**
  * The "operations" collection of methods.

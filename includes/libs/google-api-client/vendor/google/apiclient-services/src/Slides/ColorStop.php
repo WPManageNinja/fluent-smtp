@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Slides;
+namespace FluentMail\Google\Service\Slides;
 
 class ColorStop extends \Google\Model
 {

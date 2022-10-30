@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleLongrunningListOperationsResponse;
-use Google\Service\Dialogflow\GoogleLongrunningOperation;
-use Google\Service\Dialogflow\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Dialogflow\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Dialogflow\GoogleProtobufEmpty;
 
 /**
  * The "operations" collection of methods.

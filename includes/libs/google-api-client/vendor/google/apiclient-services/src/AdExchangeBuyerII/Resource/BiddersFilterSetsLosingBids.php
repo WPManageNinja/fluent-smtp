@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\ListLosingBidsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListLosingBidsResponse;
 
 /**
  * The "losingBids" collection of methods.

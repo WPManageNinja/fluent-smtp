@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\BulkInsertInstanceResource;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\BulkInsertInstanceResource;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "regionInstances" collection of methods.

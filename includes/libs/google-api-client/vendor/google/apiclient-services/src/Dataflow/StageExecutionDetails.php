@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dataflow;
+namespace FluentMail\Google\Service\Dataflow;
 
 class StageExecutionDetails extends \Google\Collection
 {

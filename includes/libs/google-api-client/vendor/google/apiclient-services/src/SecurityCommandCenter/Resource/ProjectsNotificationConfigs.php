@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter\Resource;
+namespace FluentMail\Google\Service\SecurityCommandCenter\Resource;
 
-use Google\Service\SecurityCommandCenter\ListNotificationConfigsResponse;
-use Google\Service\SecurityCommandCenter\NotificationConfig;
-use Google\Service\SecurityCommandCenter\SecuritycenterEmpty;
+use FluentMail\Google\Service\SecurityCommandCenter\ListNotificationConfigsResponse;
+use FluentMail\Google\Service\SecurityCommandCenter\NotificationConfig;
+use FluentMail\Google\Service\SecurityCommandCenter\SecuritycenterEmpty;
 
 /**
  * The "notificationConfigs" collection of methods.

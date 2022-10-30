@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Recommender;
+namespace FluentMail\Google\Service\Recommender;
 
 class GoogleCloudRecommenderV1InsightTypeConfig extends \Google\Model
 {

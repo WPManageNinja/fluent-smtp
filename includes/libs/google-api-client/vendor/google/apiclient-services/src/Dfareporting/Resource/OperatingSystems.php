@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\OperatingSystem;
-use Google\Service\Dfareporting\OperatingSystemsListResponse;
+use FluentMail\Google\Service\Dfareporting\OperatingSystem;
+use FluentMail\Google\Service\Dfareporting\OperatingSystemsListResponse;
 
 /**
  * The "operatingSystems" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTubeReporting\Resource;
+namespace FluentMail\Google\Service\YouTubeReporting\Resource;
 
-use Google\Service\YouTubeReporting\GdataMedia;
+use FluentMail\Google\Service\YouTubeReporting\GdataMedia;
 
 /**
  * The "media" collection of methods.

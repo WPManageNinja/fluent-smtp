@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Firestore\Resource;
+namespace FluentMail\Google\Service\Firestore\Resource;
 
-use Google\Service\Firestore\FirestoreEmpty;
-use Google\Service\Firestore\GoogleFirestoreAdminV1Index;
-use Google\Service\Firestore\GoogleFirestoreAdminV1ListIndexesResponse;
-use Google\Service\Firestore\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Firestore\FirestoreEmpty;
+use FluentMail\Google\Service\Firestore\GoogleFirestoreAdminV1Index;
+use FluentMail\Google\Service\Firestore\GoogleFirestoreAdminV1ListIndexesResponse;
+use FluentMail\Google\Service\Firestore\GoogleLongrunningOperation;
 
 /**
  * The "indexes" collection of methods.

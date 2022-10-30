@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Policy;
-use Google\Service\Compute\RegionSetPolicyRequest;
-use Google\Service\Compute\Subnetwork;
-use Google\Service\Compute\SubnetworkAggregatedList;
-use Google\Service\Compute\SubnetworkList;
-use Google\Service\Compute\SubnetworksExpandIpCidrRangeRequest;
-use Google\Service\Compute\SubnetworksSetPrivateIpGoogleAccessRequest;
-use Google\Service\Compute\TestPermissionsRequest;
-use Google\Service\Compute\TestPermissionsResponse;
-use Google\Service\Compute\UsableSubnetworksAggregatedList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Policy;
+use FluentMail\Google\Service\Compute\RegionSetPolicyRequest;
+use FluentMail\Google\Service\Compute\Subnetwork;
+use FluentMail\Google\Service\Compute\SubnetworkAggregatedList;
+use FluentMail\Google\Service\Compute\SubnetworkList;
+use FluentMail\Google\Service\Compute\SubnetworksExpandIpCidrRangeRequest;
+use FluentMail\Google\Service\Compute\SubnetworksSetPrivateIpGoogleAccessRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsResponse;
+use FluentMail\Google\Service\Compute\UsableSubnetworksAggregatedList;
 
 /**
  * The "subnetworks" collection of methods.

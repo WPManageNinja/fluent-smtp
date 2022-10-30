@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\BooksEmpty;
-use Google\Service\Books\Bookshelf;
-use Google\Service\Books\Bookshelves as BookshelvesModel;
+use FluentMail\Google\Service\Books\BooksEmpty;
+use FluentMail\Google\Service\Books\Bookshelf;
+use FluentMail\Google\Service\Books\Bookshelves as BookshelvesModel;
 
 /**
  * The "bookshelves" collection of methods.

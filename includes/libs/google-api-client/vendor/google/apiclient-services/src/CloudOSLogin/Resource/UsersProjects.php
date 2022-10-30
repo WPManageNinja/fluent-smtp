@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudOSLogin\Resource;
+namespace FluentMail\Google\Service\CloudOSLogin\Resource;
 
-use Google\Service\CloudOSLogin\OsloginEmpty;
+use FluentMail\Google\Service\CloudOSLogin\OsloginEmpty;
 
 /**
  * The "projects" collection of methods.

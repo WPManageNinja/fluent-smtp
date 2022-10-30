@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudIot\Resource;
+namespace FluentMail\Google\Service\CloudIot\Resource;
 
-use Google\Service\CloudIot\ListDeviceStatesResponse;
+use FluentMail\Google\Service\CloudIot\ListDeviceStatesResponse;
 
 /**
  * The "states" collection of methods.

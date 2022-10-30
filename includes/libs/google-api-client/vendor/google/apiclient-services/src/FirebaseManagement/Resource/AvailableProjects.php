@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseManagement\Resource;
+namespace FluentMail\Google\Service\FirebaseManagement\Resource;
 
-use Google\Service\FirebaseManagement\ListAvailableProjectsResponse;
+use FluentMail\Google\Service\FirebaseManagement\ListAvailableProjectsResponse;
 
 /**
  * The "availableProjects" collection of methods.

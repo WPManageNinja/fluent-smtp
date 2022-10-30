@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Adsense\Resource;
+namespace FluentMail\Google\Service\Adsense\Resource;
 
-use Google\Service\Adsense\HttpBody;
-use Google\Service\Adsense\ReportResult;
-use Google\Service\Adsense\SavedReport;
+use FluentMail\Google\Service\Adsense\HttpBody;
+use FluentMail\Google\Service\Adsense\ReportResult;
+use FluentMail\Google\Service\Adsense\SavedReport;
 
 /**
  * The "reports" collection of methods.

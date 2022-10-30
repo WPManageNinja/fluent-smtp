@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\Spanner\Resource;
+namespace FluentMail\Google\Service\Spanner\Resource;
 
-use Google\Service\Spanner\Backup;
-use Google\Service\Spanner\CopyBackupRequest;
-use Google\Service\Spanner\GetIamPolicyRequest;
-use Google\Service\Spanner\ListBackupsResponse;
-use Google\Service\Spanner\Operation;
-use Google\Service\Spanner\Policy;
-use Google\Service\Spanner\SetIamPolicyRequest;
-use Google\Service\Spanner\SpannerEmpty;
-use Google\Service\Spanner\TestIamPermissionsRequest;
-use Google\Service\Spanner\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Spanner\Backup;
+use FluentMail\Google\Service\Spanner\CopyBackupRequest;
+use FluentMail\Google\Service\Spanner\GetIamPolicyRequest;
+use FluentMail\Google\Service\Spanner\ListBackupsResponse;
+use FluentMail\Google\Service\Spanner\Operation;
+use FluentMail\Google\Service\Spanner\Policy;
+use FluentMail\Google\Service\Spanner\SetIamPolicyRequest;
+use FluentMail\Google\Service\Spanner\SpannerEmpty;
+use FluentMail\Google\Service\Spanner\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Spanner\TestIamPermissionsResponse;
 
 /**
  * The "backups" collection of methods.

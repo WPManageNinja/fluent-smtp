@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ApigeeRegistry;
+namespace FluentMail\Google\Service\ApigeeRegistry;
 
 class ApigeeregistryEmpty extends \Google\Model
 {

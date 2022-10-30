@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\RecommendationsAI\Resource;
+namespace FluentMail\Google\Service\RecommendationsAI\Resource;
 
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1Catalog;
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1ListCatalogsResponse;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1Catalog;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1ListCatalogsResponse;
 
 /**
  * The "catalogs" collection of methods.

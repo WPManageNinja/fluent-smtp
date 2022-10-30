@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Datapipelines\Resource;
+namespace FluentMail\Google\Service\Datapipelines\Resource;
 
-use Google\Service\Datapipelines\GoogleCloudDatapipelinesV1ListPipelinesResponse;
+use FluentMail\Google\Service\Datapipelines\GoogleCloudDatapipelinesV1ListPipelinesResponse;
 
 /**
  * The "locations" collection of methods.

@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\ServiceConsumerManagement\Resource;
+namespace FluentMail\Google\Service\ServiceConsumerManagement\Resource;
 
-use Google\Service\ServiceConsumerManagement\AddTenantProjectRequest;
-use Google\Service\ServiceConsumerManagement\ApplyTenantProjectConfigRequest;
-use Google\Service\ServiceConsumerManagement\AttachTenantProjectRequest;
-use Google\Service\ServiceConsumerManagement\CreateTenancyUnitRequest;
-use Google\Service\ServiceConsumerManagement\DeleteTenantProjectRequest;
-use Google\Service\ServiceConsumerManagement\ListTenancyUnitsResponse;
-use Google\Service\ServiceConsumerManagement\Operation;
-use Google\Service\ServiceConsumerManagement\RemoveTenantProjectRequest;
-use Google\Service\ServiceConsumerManagement\TenancyUnit;
-use Google\Service\ServiceConsumerManagement\UndeleteTenantProjectRequest;
+use FluentMail\Google\Service\ServiceConsumerManagement\AddTenantProjectRequest;
+use FluentMail\Google\Service\ServiceConsumerManagement\ApplyTenantProjectConfigRequest;
+use FluentMail\Google\Service\ServiceConsumerManagement\AttachTenantProjectRequest;
+use FluentMail\Google\Service\ServiceConsumerManagement\CreateTenancyUnitRequest;
+use FluentMail\Google\Service\ServiceConsumerManagement\DeleteTenantProjectRequest;
+use FluentMail\Google\Service\ServiceConsumerManagement\ListTenancyUnitsResponse;
+use FluentMail\Google\Service\ServiceConsumerManagement\Operation;
+use FluentMail\Google\Service\ServiceConsumerManagement\RemoveTenantProjectRequest;
+use FluentMail\Google\Service\ServiceConsumerManagement\TenancyUnit;
+use FluentMail\Google\Service\ServiceConsumerManagement\UndeleteTenantProjectRequest;
 
 /**
  * The "tenancyUnits" collection of methods.

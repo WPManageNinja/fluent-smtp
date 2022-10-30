@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Contentwarehouse;
+namespace FluentMail\Google\Service\Contentwarehouse;
 
 class KnowledgeAnswersIntentQueryNTPRAnnotationSignals extends \Google\Model
 {

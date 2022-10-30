@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PeopleService;
+namespace FluentMail\Google\Service\PeopleService;
 
 class BatchDeleteContactsRequest extends \Google\Collection
 {

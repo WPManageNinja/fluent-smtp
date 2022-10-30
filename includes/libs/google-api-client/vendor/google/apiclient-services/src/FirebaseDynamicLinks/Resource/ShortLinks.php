@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseDynamicLinks\Resource;
+namespace FluentMail\Google\Service\FirebaseDynamicLinks\Resource;
 
-use Google\Service\FirebaseDynamicLinks\CreateShortDynamicLinkRequest;
-use Google\Service\FirebaseDynamicLinks\CreateShortDynamicLinkResponse;
+use FluentMail\Google\Service\FirebaseDynamicLinks\CreateShortDynamicLinkRequest;
+use FluentMail\Google\Service\FirebaseDynamicLinks\CreateShortDynamicLinkResponse;
 
 /**
  * The "shortLinks" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\MobileCarrier;
-use Google\Service\Dfareporting\MobileCarriersListResponse;
+use FluentMail\Google\Service\Dfareporting\MobileCarrier;
+use FluentMail\Google\Service\Dfareporting\MobileCarriersListResponse;
 
 /**
  * The "mobileCarriers" collection of methods.

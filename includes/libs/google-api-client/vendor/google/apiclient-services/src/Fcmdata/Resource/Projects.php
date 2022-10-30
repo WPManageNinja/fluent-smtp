@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Fcmdata\Resource;
+namespace FluentMail\Google\Service\Fcmdata\Resource;
 
 /**
  * The "projects" collection of methods.

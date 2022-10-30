@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Vision;
+namespace FluentMail\Google\Service\Vision;
 
 class BatchAnnotateImagesRequest extends \Google\Collection
 {

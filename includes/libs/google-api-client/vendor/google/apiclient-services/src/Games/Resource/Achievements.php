@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Games\Resource;
+namespace FluentMail\Google\Service\Games\Resource;
 
-use Google\Service\Games\AchievementIncrementResponse;
-use Google\Service\Games\AchievementRevealResponse;
-use Google\Service\Games\AchievementSetStepsAtLeastResponse;
-use Google\Service\Games\AchievementUnlockResponse;
-use Google\Service\Games\AchievementUpdateMultipleRequest;
-use Google\Service\Games\AchievementUpdateMultipleResponse;
-use Google\Service\Games\PlayerAchievementListResponse;
+use FluentMail\Google\Service\Games\AchievementIncrementResponse;
+use FluentMail\Google\Service\Games\AchievementRevealResponse;
+use FluentMail\Google\Service\Games\AchievementSetStepsAtLeastResponse;
+use FluentMail\Google\Service\Games\AchievementUnlockResponse;
+use FluentMail\Google\Service\Games\AchievementUpdateMultipleRequest;
+use FluentMail\Google\Service\Games\AchievementUpdateMultipleResponse;
+use FluentMail\Google\Service\Games\PlayerAchievementListResponse;
 
 /**
  * The "achievements" collection of methods.

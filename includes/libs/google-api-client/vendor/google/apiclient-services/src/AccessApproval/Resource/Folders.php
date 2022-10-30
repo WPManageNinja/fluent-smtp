@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AccessApproval\Resource;
+namespace FluentMail\Google\Service\AccessApproval\Resource;
 
-use Google\Service\AccessApproval\AccessApprovalServiceAccount;
-use Google\Service\AccessApproval\AccessApprovalSettings;
-use Google\Service\AccessApproval\AccessapprovalEmpty;
+use FluentMail\Google\Service\AccessApproval\AccessApprovalServiceAccount;
+use FluentMail\Google\Service\AccessApproval\AccessApprovalSettings;
+use FluentMail\Google\Service\AccessApproval\AccessapprovalEmpty;
 
 /**
  * The "folders" collection of methods.

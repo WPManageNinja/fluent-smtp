@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\RecommendationsAI\Resource;
+namespace FluentMail\Google\Service\RecommendationsAI\Resource;
 
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1PredictRequest;
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1PredictResponse;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1PredictRequest;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1PredictResponse;
 
 /**
  * The "placements" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\WebRisk\Resource;
+namespace FluentMail\Google\Service\WebRisk\Resource;
 
-use Google\Service\WebRisk\GoogleCloudWebriskV1ComputeThreatListDiffResponse;
+use FluentMail\Google\Service\WebRisk\GoogleCloudWebriskV1ComputeThreatListDiffResponse;
 
 /**
  * The "threatLists" collection of methods.

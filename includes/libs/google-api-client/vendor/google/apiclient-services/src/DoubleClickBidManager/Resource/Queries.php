@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\DoubleClickBidManager\Resource;
+namespace FluentMail\Google\Service\DoubleClickBidManager\Resource;
 
-use Google\Service\DoubleClickBidManager\ListQueriesResponse;
-use Google\Service\DoubleClickBidManager\Query;
-use Google\Service\DoubleClickBidManager\Report;
-use Google\Service\DoubleClickBidManager\RunQueryRequest;
+use FluentMail\Google\Service\DoubleClickBidManager\ListQueriesResponse;
+use FluentMail\Google\Service\DoubleClickBidManager\Query;
+use FluentMail\Google\Service\DoubleClickBidManager\Report;
+use FluentMail\Google\Service\DoubleClickBidManager\RunQueryRequest;
 
 /**
  * The "queries" collection of methods.

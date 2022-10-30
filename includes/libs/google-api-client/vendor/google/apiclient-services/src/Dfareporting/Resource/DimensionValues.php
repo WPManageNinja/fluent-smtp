@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\DimensionValueList;
-use Google\Service\Dfareporting\DimensionValueRequest;
+use FluentMail\Google\Service\Dfareporting\DimensionValueList;
+use FluentMail\Google\Service\Dfareporting\DimensionValueRequest;
 
 /**
  * The "dimensionValues" collection of methods.

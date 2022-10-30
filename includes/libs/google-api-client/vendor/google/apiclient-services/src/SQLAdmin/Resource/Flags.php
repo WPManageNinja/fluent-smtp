@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\SQLAdmin\Resource;
+namespace FluentMail\Google\Service\SQLAdmin\Resource;
 
-use Google\Service\SQLAdmin\FlagsListResponse;
+use FluentMail\Google\Service\SQLAdmin\FlagsListResponse;
 
 /**
  * The "flags" collection of methods.

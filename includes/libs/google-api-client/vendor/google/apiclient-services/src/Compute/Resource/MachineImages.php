@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\GlobalSetPolicyRequest;
-use Google\Service\Compute\MachineImage;
-use Google\Service\Compute\MachineImageList;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Policy;
-use Google\Service\Compute\TestPermissionsRequest;
-use Google\Service\Compute\TestPermissionsResponse;
+use FluentMail\Google\Service\Compute\GlobalSetPolicyRequest;
+use FluentMail\Google\Service\Compute\MachineImage;
+use FluentMail\Google\Service\Compute\MachineImageList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Policy;
+use FluentMail\Google\Service\Compute\TestPermissionsRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsResponse;
 
 /**
  * The "machineImages" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Reports;
+namespace FluentMail\Google\Service\Reports;
 
 class ActivityEventsParameters extends \Google\Collection
 {

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\BooksCloudloadingResource;
-use Google\Service\Books\BooksEmpty;
+use FluentMail\Google\Service\Books\BooksCloudloadingResource;
+use FluentMail\Google\Service\Books\BooksEmpty;
 
 /**
  * The "cloudloading" collection of methods.

@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\Container\Resource;
+namespace FluentMail\Google\Service\Container\Resource;
 
-use Google\Service\Container\CompleteNodePoolUpgradeRequest;
-use Google\Service\Container\ContainerEmpty;
-use Google\Service\Container\CreateNodePoolRequest;
-use Google\Service\Container\ListNodePoolsResponse;
-use Google\Service\Container\NodePool;
-use Google\Service\Container\Operation;
-use Google\Service\Container\RollbackNodePoolUpgradeRequest;
-use Google\Service\Container\SetNodePoolAutoscalingRequest;
-use Google\Service\Container\SetNodePoolManagementRequest;
-use Google\Service\Container\SetNodePoolSizeRequest;
-use Google\Service\Container\UpdateNodePoolRequest;
+use FluentMail\Google\Service\Container\CompleteNodePoolUpgradeRequest;
+use FluentMail\Google\Service\Container\ContainerEmpty;
+use FluentMail\Google\Service\Container\CreateNodePoolRequest;
+use FluentMail\Google\Service\Container\ListNodePoolsResponse;
+use FluentMail\Google\Service\Container\NodePool;
+use FluentMail\Google\Service\Container\Operation;
+use FluentMail\Google\Service\Container\RollbackNodePoolUpgradeRequest;
+use FluentMail\Google\Service\Container\SetNodePoolAutoscalingRequest;
+use FluentMail\Google\Service\Container\SetNodePoolManagementRequest;
+use FluentMail\Google\Service\Container\SetNodePoolSizeRequest;
+use FluentMail\Google\Service\Container\UpdateNodePoolRequest;
 
 /**
  * The "nodePools" collection of methods.

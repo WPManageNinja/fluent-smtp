@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\RemarketingList;
-use Google\Service\Dfareporting\RemarketingListsListResponse;
+use FluentMail\Google\Service\Dfareporting\RemarketingList;
+use FluentMail\Google\Service\Dfareporting\RemarketingListsListResponse;
 
 /**
  * The "remarketingLists" collection of methods.

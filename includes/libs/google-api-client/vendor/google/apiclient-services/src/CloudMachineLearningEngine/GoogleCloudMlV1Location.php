@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudMachineLearningEngine;
+namespace FluentMail\Google\Service\CloudMachineLearningEngine;
 
 class GoogleCloudMlV1Location extends \Google\Collection
 {

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\ActivateSubscriptionOfferRequest;
-use Google\Service\AndroidPublisher\DeactivateSubscriptionOfferRequest;
-use Google\Service\AndroidPublisher\ListSubscriptionOffersResponse;
-use Google\Service\AndroidPublisher\SubscriptionOffer;
+use FluentMail\Google\Service\AndroidPublisher\ActivateSubscriptionOfferRequest;
+use FluentMail\Google\Service\AndroidPublisher\DeactivateSubscriptionOfferRequest;
+use FluentMail\Google\Service\AndroidPublisher\ListSubscriptionOffersResponse;
+use FluentMail\Google\Service\AndroidPublisher\SubscriptionOffer;
 
 /**
  * The "offers" collection of methods.

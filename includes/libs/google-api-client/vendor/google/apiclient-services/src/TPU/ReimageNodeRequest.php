@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\TPU;
+namespace FluentMail\Google\Service\TPU;
 
 class ReimageNodeRequest extends \Google\Model
 {

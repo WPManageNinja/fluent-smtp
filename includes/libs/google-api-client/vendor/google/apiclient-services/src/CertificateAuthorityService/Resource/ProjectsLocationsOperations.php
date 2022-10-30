@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CertificateAuthorityService\Resource;
+namespace FluentMail\Google\Service\CertificateAuthorityService\Resource;
 
-use Google\Service\CertificateAuthorityService\CancelOperationRequest;
-use Google\Service\CertificateAuthorityService\ListOperationsResponse;
-use Google\Service\CertificateAuthorityService\Operation;
-use Google\Service\CertificateAuthorityService\PrivatecaEmpty;
+use FluentMail\Google\Service\CertificateAuthorityService\CancelOperationRequest;
+use FluentMail\Google\Service\CertificateAuthorityService\ListOperationsResponse;
+use FluentMail\Google\Service\CertificateAuthorityService\Operation;
+use FluentMail\Google\Service\CertificateAuthorityService\PrivatecaEmpty;
 
 /**
  * The "operations" collection of methods.

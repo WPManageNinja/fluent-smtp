@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Fitness\Resource;
+namespace FluentMail\Google\Service\Fitness\Resource;
 
 /**
  * The "users" collection of methods.

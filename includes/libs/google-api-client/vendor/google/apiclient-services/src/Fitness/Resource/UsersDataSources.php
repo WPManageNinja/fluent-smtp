@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Fitness\Resource;
+namespace FluentMail\Google\Service\Fitness\Resource;
 
-use Google\Service\Fitness\DataSource;
-use Google\Service\Fitness\ListDataSourcesResponse;
+use FluentMail\Google\Service\Fitness\DataSource;
+use FluentMail\Google\Service\Fitness\ListDataSourcesResponse;
 
 /**
  * The "dataSources" collection of methods.

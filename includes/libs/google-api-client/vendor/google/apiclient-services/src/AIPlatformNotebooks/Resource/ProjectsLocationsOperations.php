@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\AIPlatformNotebooks\Resource;
+namespace FluentMail\Google\Service\AIPlatformNotebooks\Resource;
 
-use Google\Service\AIPlatformNotebooks\CancelOperationRequest;
-use Google\Service\AIPlatformNotebooks\ListOperationsResponse;
-use Google\Service\AIPlatformNotebooks\NotebooksEmpty;
-use Google\Service\AIPlatformNotebooks\Operation;
+use FluentMail\Google\Service\AIPlatformNotebooks\CancelOperationRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\ListOperationsResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\NotebooksEmpty;
+use FluentMail\Google\Service\AIPlatformNotebooks\Operation;
 
 /**
  * The "operations" collection of methods.

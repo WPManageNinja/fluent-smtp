@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\AcceptProposalRequest;
-use Google\Service\AdExchangeBuyerII\AddNoteRequest;
-use Google\Service\AdExchangeBuyerII\CancelNegotiationRequest;
-use Google\Service\AdExchangeBuyerII\CompleteSetupRequest;
-use Google\Service\AdExchangeBuyerII\ListProposalsResponse;
-use Google\Service\AdExchangeBuyerII\Note;
-use Google\Service\AdExchangeBuyerII\PauseProposalRequest;
-use Google\Service\AdExchangeBuyerII\Proposal;
-use Google\Service\AdExchangeBuyerII\ResumeProposalRequest;
+use FluentMail\Google\Service\AdExchangeBuyerII\AcceptProposalRequest;
+use FluentMail\Google\Service\AdExchangeBuyerII\AddNoteRequest;
+use FluentMail\Google\Service\AdExchangeBuyerII\CancelNegotiationRequest;
+use FluentMail\Google\Service\AdExchangeBuyerII\CompleteSetupRequest;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListProposalsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\Note;
+use FluentMail\Google\Service\AdExchangeBuyerII\PauseProposalRequest;
+use FluentMail\Google\Service\AdExchangeBuyerII\Proposal;
+use FluentMail\Google\Service\AdExchangeBuyerII\ResumeProposalRequest;
 
 /**
  * The "proposals" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Kgsearch\Resource;
+namespace FluentMail\Google\Service\Kgsearch\Resource;
 
-use Google\Service\Kgsearch\SearchResponse;
+use FluentMail\Google\Service\Kgsearch\SearchResponse;
 
 /**
  * The "entities" collection of methods.

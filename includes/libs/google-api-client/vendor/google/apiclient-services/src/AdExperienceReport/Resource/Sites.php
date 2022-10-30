@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExperienceReport\Resource;
+namespace FluentMail\Google\Service\AdExperienceReport\Resource;
 
-use Google\Service\AdExperienceReport\SiteSummaryResponse;
+use FluentMail\Google\Service\AdExperienceReport\SiteSummaryResponse;
 
 /**
  * The "sites" collection of methods.

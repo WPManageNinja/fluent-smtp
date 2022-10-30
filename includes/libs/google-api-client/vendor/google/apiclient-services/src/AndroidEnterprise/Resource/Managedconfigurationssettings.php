@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise\Resource;
+namespace FluentMail\Google\Service\AndroidEnterprise\Resource;
 
-use Google\Service\AndroidEnterprise\ManagedConfigurationsSettingsListResponse;
+use FluentMail\Google\Service\AndroidEnterprise\ManagedConfigurationsSettingsListResponse;
 
 /**
  * The "managedconfigurationssettings" collection of methods.

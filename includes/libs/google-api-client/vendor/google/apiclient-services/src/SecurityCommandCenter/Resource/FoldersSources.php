@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter\Resource;
+namespace FluentMail\Google\Service\SecurityCommandCenter\Resource;
 
-use Google\Service\SecurityCommandCenter\ListSourcesResponse;
+use FluentMail\Google\Service\SecurityCommandCenter\ListSourcesResponse;
 
 /**
  * The "sources" collection of methods.

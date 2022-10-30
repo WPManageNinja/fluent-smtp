@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudLifeSciences;
+namespace FluentMail\Google\Service\CloudLifeSciences;
 
 class VirtualMachine extends \Google\Collection
 {

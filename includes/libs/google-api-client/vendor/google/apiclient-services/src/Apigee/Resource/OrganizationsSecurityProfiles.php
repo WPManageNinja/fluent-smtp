@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1ListSecurityProfileRevisionsResponse;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListSecurityProfilesResponse;
-use Google\Service\Apigee\GoogleCloudApigeeV1SecurityProfile;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListSecurityProfileRevisionsResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListSecurityProfilesResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1SecurityProfile;
 
 /**
  * The "securityProfiles" collection of methods.

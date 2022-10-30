@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudMachineLearningEngine\Resource;
+namespace FluentMail\Google\Service\CloudMachineLearningEngine\Resource;
 
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListStudiesResponse;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1Study;
-use Google\Service\CloudMachineLearningEngine\GoogleProtobufEmpty;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListStudiesResponse;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1Study;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleProtobufEmpty;
 
 /**
  * The "studies" collection of methods.

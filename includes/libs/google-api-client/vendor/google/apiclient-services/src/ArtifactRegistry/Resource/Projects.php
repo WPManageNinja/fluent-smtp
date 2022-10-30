@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\ProjectSettings;
+use FluentMail\Google\Service\ArtifactRegistry\ProjectSettings;
 
 /**
  * The "projects" collection of methods.

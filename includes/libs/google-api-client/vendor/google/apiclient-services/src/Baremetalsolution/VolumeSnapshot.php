@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution;
+namespace FluentMail\Google\Service\Baremetalsolution;
 
 class VolumeSnapshot extends \Google\Model
 {

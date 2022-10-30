@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudIAP\Resource;
+namespace FluentMail\Google\Service\CloudIAP\Resource;
 
 /**
  * The "iap_tunnel" collection of methods.

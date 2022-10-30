@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DomainsRDAP;
+namespace FluentMail\Google\Service\DomainsRDAP;
 
 class HttpBody extends \Google\Collection
 {

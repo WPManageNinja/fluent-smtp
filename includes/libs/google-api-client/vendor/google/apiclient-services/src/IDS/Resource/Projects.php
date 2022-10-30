@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\IDS\Resource;
+namespace FluentMail\Google\Service\IDS\Resource;
 
 /**
  * The "projects" collection of methods.

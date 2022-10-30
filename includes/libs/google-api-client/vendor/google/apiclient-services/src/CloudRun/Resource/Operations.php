@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudRun\Resource;
+namespace FluentMail\Google\Service\CloudRun\Resource;
 
-use Google\Service\CloudRun\GoogleLongrunningCancelOperationRequest;
-use Google\Service\CloudRun\RunEmpty;
+use FluentMail\Google\Service\CloudRun\GoogleLongrunningCancelOperationRequest;
+use FluentMail\Google\Service\CloudRun\RunEmpty;
 
 /**
  * The "operations" collection of methods.

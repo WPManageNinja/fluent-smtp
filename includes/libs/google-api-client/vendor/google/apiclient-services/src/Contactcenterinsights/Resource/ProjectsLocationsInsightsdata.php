@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Contactcenterinsights\Resource;
+namespace FluentMail\Google\Service\Contactcenterinsights\Resource;
 
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ExportInsightsDataRequest;
-use Google\Service\Contactcenterinsights\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ExportInsightsDataRequest;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleLongrunningOperation;
 
 /**
  * The "insightsdata" collection of methods.

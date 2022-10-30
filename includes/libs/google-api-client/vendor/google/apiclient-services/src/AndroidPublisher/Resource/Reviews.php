@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\Review;
-use Google\Service\AndroidPublisher\ReviewsListResponse;
-use Google\Service\AndroidPublisher\ReviewsReplyRequest;
-use Google\Service\AndroidPublisher\ReviewsReplyResponse;
+use FluentMail\Google\Service\AndroidPublisher\Review;
+use FluentMail\Google\Service\AndroidPublisher\ReviewsListResponse;
+use FluentMail\Google\Service\AndroidPublisher\ReviewsReplyRequest;
+use FluentMail\Google\Service\AndroidPublisher\ReviewsReplyResponse;
 
 /**
  * The "reviews" collection of methods.

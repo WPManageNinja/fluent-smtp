@@ -15,21 +15,21 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
-use Google\Service\CloudHealthcare\CheckDataAccessRequest;
-use Google\Service\CloudHealthcare\CheckDataAccessResponse;
-use Google\Service\CloudHealthcare\ConsentStore;
-use Google\Service\CloudHealthcare\EvaluateUserConsentsRequest;
-use Google\Service\CloudHealthcare\EvaluateUserConsentsResponse;
-use Google\Service\CloudHealthcare\HealthcareEmpty;
-use Google\Service\CloudHealthcare\ListConsentStoresResponse;
-use Google\Service\CloudHealthcare\Operation;
-use Google\Service\CloudHealthcare\Policy;
-use Google\Service\CloudHealthcare\QueryAccessibleDataRequest;
-use Google\Service\CloudHealthcare\SetIamPolicyRequest;
-use Google\Service\CloudHealthcare\TestIamPermissionsRequest;
-use Google\Service\CloudHealthcare\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudHealthcare\CheckDataAccessRequest;
+use FluentMail\Google\Service\CloudHealthcare\CheckDataAccessResponse;
+use FluentMail\Google\Service\CloudHealthcare\ConsentStore;
+use FluentMail\Google\Service\CloudHealthcare\EvaluateUserConsentsRequest;
+use FluentMail\Google\Service\CloudHealthcare\EvaluateUserConsentsResponse;
+use FluentMail\Google\Service\CloudHealthcare\HealthcareEmpty;
+use FluentMail\Google\Service\CloudHealthcare\ListConsentStoresResponse;
+use FluentMail\Google\Service\CloudHealthcare\Operation;
+use FluentMail\Google\Service\CloudHealthcare\Policy;
+use FluentMail\Google\Service\CloudHealthcare\QueryAccessibleDataRequest;
+use FluentMail\Google\Service\CloudHealthcare\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudHealthcare\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudHealthcare\TestIamPermissionsResponse;
 
 /**
  * The "consentStores" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\HangoutsChat;
+namespace FluentMail\Google\Service\HangoutsChat;
 
 class GoogleAppsCardV1Intent extends \Google\Collection
 {

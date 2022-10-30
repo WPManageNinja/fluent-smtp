@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\Dns\Resource;
+namespace FluentMail\Google\Service\Dns\Resource;
 
-use Google\Service\Dns\GoogleIamV1GetIamPolicyRequest;
-use Google\Service\Dns\GoogleIamV1Policy;
-use Google\Service\Dns\GoogleIamV1SetIamPolicyRequest;
-use Google\Service\Dns\GoogleIamV1TestIamPermissionsRequest;
-use Google\Service\Dns\GoogleIamV1TestIamPermissionsResponse;
-use Google\Service\Dns\ManagedZone;
-use Google\Service\Dns\ManagedZonesListResponse;
-use Google\Service\Dns\Operation;
+use FluentMail\Google\Service\Dns\GoogleIamV1GetIamPolicyRequest;
+use FluentMail\Google\Service\Dns\GoogleIamV1Policy;
+use FluentMail\Google\Service\Dns\GoogleIamV1SetIamPolicyRequest;
+use FluentMail\Google\Service\Dns\GoogleIamV1TestIamPermissionsRequest;
+use FluentMail\Google\Service\Dns\GoogleIamV1TestIamPermissionsResponse;
+use FluentMail\Google\Service\Dns\ManagedZone;
+use FluentMail\Google\Service\Dns\ManagedZonesListResponse;
+use FluentMail\Google\Service\Dns\Operation;
 
 /**
  * The "managedZones" collection of methods.

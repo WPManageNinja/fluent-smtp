@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessLodging\Resource;
+namespace FluentMail\Google\Service\MyBusinessLodging\Resource;
 
-use Google\Service\MyBusinessLodging\Lodging;
+use FluentMail\Google\Service\MyBusinessLodging\Lodging;
 
 /**
  * The "locations" collection of methods.

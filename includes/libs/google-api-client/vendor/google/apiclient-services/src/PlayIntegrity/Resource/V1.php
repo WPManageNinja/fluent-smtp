@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\PlayIntegrity\Resource;
+namespace FluentMail\Google\Service\PlayIntegrity\Resource;
 
-use Google\Service\PlayIntegrity\DecodeIntegrityTokenRequest;
-use Google\Service\PlayIntegrity\DecodeIntegrityTokenResponse;
+use FluentMail\Google\Service\PlayIntegrity\DecodeIntegrityTokenRequest;
+use FluentMail\Google\Service\PlayIntegrity\DecodeIntegrityTokenResponse;
 
 /**
  * The "v1" collection of methods.

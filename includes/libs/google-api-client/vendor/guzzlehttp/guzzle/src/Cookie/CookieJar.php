@@ -1,9 +1,9 @@
 <?php
 
-namespace GuzzleHttp\Cookie;
+namespace FluentMail\GuzzleHttp\Cookie;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\ResponseInterface;
 
 /**
  * Cookie jar that stores cookies as an array

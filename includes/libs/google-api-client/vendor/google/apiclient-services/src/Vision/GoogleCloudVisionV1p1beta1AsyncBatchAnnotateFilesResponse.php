@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Vision;
+namespace FluentMail\Google\Service\Vision;
 
 class GoogleCloudVisionV1p1beta1AsyncBatchAnnotateFilesResponse extends \Google\Collection
 {

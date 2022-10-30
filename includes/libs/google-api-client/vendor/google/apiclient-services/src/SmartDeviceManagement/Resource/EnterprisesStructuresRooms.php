@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\SmartDeviceManagement\Resource;
+namespace FluentMail\Google\Service\SmartDeviceManagement\Resource;
 
-use Google\Service\SmartDeviceManagement\GoogleHomeEnterpriseSdmV1ListRoomsResponse;
-use Google\Service\SmartDeviceManagement\GoogleHomeEnterpriseSdmV1Room;
+use FluentMail\Google\Service\SmartDeviceManagement\GoogleHomeEnterpriseSdmV1ListRoomsResponse;
+use FluentMail\Google\Service\SmartDeviceManagement\GoogleHomeEnterpriseSdmV1Room;
 
 /**
  * The "rooms" collection of methods.

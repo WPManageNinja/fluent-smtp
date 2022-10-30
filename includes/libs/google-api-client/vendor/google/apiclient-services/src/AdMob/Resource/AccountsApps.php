@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdMob\Resource;
+namespace FluentMail\Google\Service\AdMob\Resource;
 
-use Google\Service\AdMob\ListAppsResponse;
+use FluentMail\Google\Service\AdMob\ListAppsResponse;
 
 /**
  * The "apps" collection of methods.

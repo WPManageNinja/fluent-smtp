@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\DataprocMetastore\Resource;
+namespace FluentMail\Google\Service\DataprocMetastore\Resource;
 
-use Google\Service\DataprocMetastore\Federation;
-use Google\Service\DataprocMetastore\ListFederationsResponse;
-use Google\Service\DataprocMetastore\Operation;
-use Google\Service\DataprocMetastore\Policy;
-use Google\Service\DataprocMetastore\SetIamPolicyRequest;
-use Google\Service\DataprocMetastore\TestIamPermissionsRequest;
-use Google\Service\DataprocMetastore\TestIamPermissionsResponse;
+use FluentMail\Google\Service\DataprocMetastore\Federation;
+use FluentMail\Google\Service\DataprocMetastore\ListFederationsResponse;
+use FluentMail\Google\Service\DataprocMetastore\Operation;
+use FluentMail\Google\Service\DataprocMetastore\Policy;
+use FluentMail\Google\Service\DataprocMetastore\SetIamPolicyRequest;
+use FluentMail\Google\Service\DataprocMetastore\TestIamPermissionsRequest;
+use FluentMail\Google\Service\DataprocMetastore\TestIamPermissionsResponse;
 
 /**
  * The "federations" collection of methods.

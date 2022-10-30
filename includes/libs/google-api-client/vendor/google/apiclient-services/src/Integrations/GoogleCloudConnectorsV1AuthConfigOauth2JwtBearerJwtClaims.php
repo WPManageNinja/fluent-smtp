@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Integrations;
+namespace FluentMail\Google\Service\Integrations;
 
 class GoogleCloudConnectorsV1AuthConfigOauth2JwtBearerJwtClaims extends \Google\Model
 {

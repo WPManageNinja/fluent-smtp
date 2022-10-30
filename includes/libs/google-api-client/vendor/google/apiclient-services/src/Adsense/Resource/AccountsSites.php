@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Adsense\Resource;
+namespace FluentMail\Google\Service\Adsense\Resource;
 
-use Google\Service\Adsense\ListSitesResponse;
-use Google\Service\Adsense\Site;
+use FluentMail\Google\Service\Adsense\ListSitesResponse;
+use FluentMail\Google\Service\Adsense\Site;
 
 /**
  * The "sites" collection of methods.

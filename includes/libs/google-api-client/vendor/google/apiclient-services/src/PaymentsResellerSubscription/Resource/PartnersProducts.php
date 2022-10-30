@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\PaymentsResellerSubscription\Resource;
+namespace FluentMail\Google\Service\PaymentsResellerSubscription\Resource;
 
-use Google\Service\PaymentsResellerSubscription\GoogleCloudPaymentsResellerSubscriptionV1ListProductsResponse;
+use FluentMail\Google\Service\PaymentsResellerSubscription\GoogleCloudPaymentsResellerSubscriptionV1ListProductsResponse;
 
 /**
  * The "products" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudOSLogin\Resource;
+namespace FluentMail\Google\Service\CloudOSLogin\Resource;
 
-use Google\Service\CloudOSLogin\ImportSshPublicKeyResponse;
-use Google\Service\CloudOSLogin\LoginProfile;
-use Google\Service\CloudOSLogin\SshPublicKey;
+use FluentMail\Google\Service\CloudOSLogin\ImportSshPublicKeyResponse;
+use FluentMail\Google\Service\CloudOSLogin\LoginProfile;
+use FluentMail\Google\Service\CloudOSLogin\SshPublicKey;
 
 /**
  * The "users" collection of methods.

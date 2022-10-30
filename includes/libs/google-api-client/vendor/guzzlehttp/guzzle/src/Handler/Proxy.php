@@ -1,10 +1,10 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace FluentMail\GuzzleHttp\Handler;
 
-use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\RequestOptions;
-use Psr\Http\Message\RequestInterface;
+use FluentMail\GuzzleHttp\Promise\PromiseInterface;
+use FluentMail\GuzzleHttp\RequestOptions;
+use FluentMail\Psr\Http\Message\RequestInterface;
 
 /**
  * Provides basic proxies for handlers.

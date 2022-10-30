@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\VersionHistory\Resource;
+namespace FluentMail\Google\Service\VersionHistory\Resource;
 
-use Google\Service\VersionHistory\ListReleasesResponse;
+use FluentMail\Google\Service\VersionHistory\ListReleasesResponse;
 
 /**
  * The "releases" collection of methods.

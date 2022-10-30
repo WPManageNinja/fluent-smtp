@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\GaData;
+use FluentMail\Google\Service\Analytics\GaData;
 
 /**
  * The "ga" collection of methods.

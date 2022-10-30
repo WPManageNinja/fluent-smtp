@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\ListRepricingProductReportsResponse;
+use FluentMail\Google\Service\ShoppingContent\ListRepricingProductReportsResponse;
 
 /**
  * The "repricingreports" collection of methods.

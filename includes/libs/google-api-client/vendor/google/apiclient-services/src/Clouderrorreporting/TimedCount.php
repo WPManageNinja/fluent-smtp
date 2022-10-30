@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Clouderrorreporting;
+namespace FluentMail\Google\Service\Clouderrorreporting;
 
 class TimedCount extends \Google\Model
 {

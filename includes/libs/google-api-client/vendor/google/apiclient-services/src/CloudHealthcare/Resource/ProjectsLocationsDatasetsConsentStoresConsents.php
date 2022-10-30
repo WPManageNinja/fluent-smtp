@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
-use Google\Service\CloudHealthcare\ActivateConsentRequest;
-use Google\Service\CloudHealthcare\Consent;
-use Google\Service\CloudHealthcare\HealthcareEmpty;
-use Google\Service\CloudHealthcare\ListConsentRevisionsResponse;
-use Google\Service\CloudHealthcare\ListConsentsResponse;
-use Google\Service\CloudHealthcare\RejectConsentRequest;
-use Google\Service\CloudHealthcare\RevokeConsentRequest;
+use FluentMail\Google\Service\CloudHealthcare\ActivateConsentRequest;
+use FluentMail\Google\Service\CloudHealthcare\Consent;
+use FluentMail\Google\Service\CloudHealthcare\HealthcareEmpty;
+use FluentMail\Google\Service\CloudHealthcare\ListConsentRevisionsResponse;
+use FluentMail\Google\Service\CloudHealthcare\ListConsentsResponse;
+use FluentMail\Google\Service\CloudHealthcare\RejectConsentRequest;
+use FluentMail\Google\Service\CloudHealthcare\RevokeConsentRequest;
 
 /**
  * The "consents" collection of methods.

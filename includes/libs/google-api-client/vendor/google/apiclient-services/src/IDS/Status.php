@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\IDS;
+namespace FluentMail\Google\Service\IDS;
 
 class Status extends \Google\Collection
 {

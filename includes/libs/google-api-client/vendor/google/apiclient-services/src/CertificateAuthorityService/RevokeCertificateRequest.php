@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CertificateAuthorityService;
+namespace FluentMail\Google\Service\CertificateAuthorityService;
 
 class RevokeCertificateRequest extends \Google\Model
 {

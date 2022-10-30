@@ -1,6 +1,6 @@
 <?php
 
-namespace Psr\Cache;
+namespace FluentMail\Psr\Cache;
 
 /**
  * CacheItemPoolInterface generates CacheItemInterface objects.

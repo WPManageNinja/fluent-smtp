@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Appengine;
+namespace FluentMail\Google\Service\Appengine;
 
 class DiskUtilization extends \Google\Model
 {

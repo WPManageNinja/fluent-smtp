@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\ServiceNetworking\Resource;
+namespace FluentMail\Google\Service\ServiceNetworking\Resource;
 
-use Google\Service\ServiceNetworking\ListPeeredDnsDomainsResponse;
-use Google\Service\ServiceNetworking\Operation;
-use Google\Service\ServiceNetworking\PeeredDnsDomain;
+use FluentMail\Google\Service\ServiceNetworking\ListPeeredDnsDomainsResponse;
+use FluentMail\Google\Service\ServiceNetworking\Operation;
+use FluentMail\Google\Service\ServiceNetworking\PeeredDnsDomain;
 
 /**
  * The "peeredDnsDomains" collection of methods.

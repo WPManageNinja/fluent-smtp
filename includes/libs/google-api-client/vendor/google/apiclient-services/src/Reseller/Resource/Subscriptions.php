@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Reseller\Resource;
+namespace FluentMail\Google\Service\Reseller\Resource;
 
-use Google\Service\Reseller\ChangePlanRequest;
-use Google\Service\Reseller\RenewalSettings;
-use Google\Service\Reseller\Seats;
-use Google\Service\Reseller\Subscription;
-use Google\Service\Reseller\Subscriptions as SubscriptionsModel;
+use FluentMail\Google\Service\Reseller\ChangePlanRequest;
+use FluentMail\Google\Service\Reseller\RenewalSettings;
+use FluentMail\Google\Service\Reseller\Seats;
+use FluentMail\Google\Service\Reseller\Subscription;
+use FluentMail\Google\Service\Reseller\Subscriptions as SubscriptionsModel;
 
 /**
  * The "subscriptions" collection of methods.

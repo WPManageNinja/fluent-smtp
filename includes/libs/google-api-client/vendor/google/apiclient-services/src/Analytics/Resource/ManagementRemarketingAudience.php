@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\RemarketingAudience;
-use Google\Service\Analytics\RemarketingAudiences;
+use FluentMail\Google\Service\Analytics\RemarketingAudience;
+use FluentMail\Google\Service\Analytics\RemarketingAudiences;
 
 /**
  * The "remarketingAudience" collection of methods.

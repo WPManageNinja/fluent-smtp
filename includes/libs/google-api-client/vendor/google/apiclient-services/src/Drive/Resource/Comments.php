@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Drive\Resource;
+namespace FluentMail\Google\Service\Drive\Resource;
 
-use Google\Service\Drive\Comment;
-use Google\Service\Drive\CommentList;
+use FluentMail\Google\Service\Drive\Comment;
+use FluentMail\Google\Service\Drive\CommentList;
 
 /**
  * The "comments" collection of methods.

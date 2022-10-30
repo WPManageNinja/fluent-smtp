@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Safebrowsing\Resource;
+namespace FluentMail\Google\Service\Safebrowsing\Resource;
 
-use Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4ListThreatListsResponse;
+use FluentMail\Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4ListThreatListsResponse;
 
 /**
  * The "threatLists" collection of methods.

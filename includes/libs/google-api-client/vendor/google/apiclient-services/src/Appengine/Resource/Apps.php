@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Appengine\Resource;
+namespace FluentMail\Google\Service\Appengine\Resource;
 
-use Google\Service\Appengine\Application;
-use Google\Service\Appengine\Operation;
-use Google\Service\Appengine\RepairApplicationRequest;
+use FluentMail\Google\Service\Appengine\Application;
+use FluentMail\Google\Service\Appengine\Operation;
+use FluentMail\Google\Service\Appengine\RepairApplicationRequest;
 
 /**
  * The "apps" collection of methods.

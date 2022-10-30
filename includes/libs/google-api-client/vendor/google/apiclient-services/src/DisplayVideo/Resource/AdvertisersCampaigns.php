@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\BulkListCampaignAssignedTargetingOptionsResponse;
-use Google\Service\DisplayVideo\Campaign;
-use Google\Service\DisplayVideo\DisplayvideoEmpty;
-use Google\Service\DisplayVideo\ListCampaignsResponse;
+use FluentMail\Google\Service\DisplayVideo\BulkListCampaignAssignedTargetingOptionsResponse;
+use FluentMail\Google\Service\DisplayVideo\Campaign;
+use FluentMail\Google\Service\DisplayVideo\DisplayvideoEmpty;
+use FluentMail\Google\Service\DisplayVideo\ListCampaignsResponse;
 
 /**
  * The "campaigns" collection of methods.

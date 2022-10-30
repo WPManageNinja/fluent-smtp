@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-namespace Google\Service;
+namespace FluentMail\Google\Service;
 
-use Google\Exception as GoogleException;
-use Google\Http\MediaFileUpload;
-use Google\Model;
-use Google\Utils\UriTemplate;
-use GuzzleHttp\Psr7\Request;
+use FluentMail\Google\Exception as GoogleException;
+use FluentMail\Google\Http\MediaFileUpload;
+use FluentMail\Google\Model;
+use FluentMail\Google\Utils\UriTemplate;
+use FluentMail\GuzzleHttp\Psr7\Request;
 
 /**
  * Implements the actual methods/resources of the discovered Google API using magic function

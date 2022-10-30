@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdSenseHost\Resource;
+namespace FluentMail\Google\Service\AdSenseHost\Resource;
 
-use Google\Service\AdSenseHost\UrlChannel;
-use Google\Service\AdSenseHost\UrlChannels as UrlChannelsModel;
+use FluentMail\Google\Service\AdSenseHost\UrlChannel;
+use FluentMail\Google\Service\AdSenseHost\UrlChannels as UrlChannelsModel;
 
 /**
  * The "urlchannels" collection of methods.

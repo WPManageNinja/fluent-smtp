@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\AutoForwarding;
-use Google\Service\Gmail\ImapSettings;
-use Google\Service\Gmail\LanguageSettings;
-use Google\Service\Gmail\PopSettings;
-use Google\Service\Gmail\VacationSettings;
+use FluentMail\Google\Service\Gmail\AutoForwarding;
+use FluentMail\Google\Service\Gmail\ImapSettings;
+use FluentMail\Google\Service\Gmail\LanguageSettings;
+use FluentMail\Google\Service\Gmail\PopSettings;
+use FluentMail\Google\Service\Gmail\VacationSettings;
 
 /**
  * The "settings" collection of methods.

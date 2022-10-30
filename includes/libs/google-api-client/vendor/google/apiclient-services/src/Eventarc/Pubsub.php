@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Eventarc;
+namespace FluentMail\Google\Service\Eventarc;
 
 class Pubsub extends \Google\Model
 {

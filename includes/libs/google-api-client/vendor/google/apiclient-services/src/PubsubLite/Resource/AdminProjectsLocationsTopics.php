@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\PubsubLite\Resource;
+namespace FluentMail\Google\Service\PubsubLite\Resource;
 
-use Google\Service\PubsubLite\ListTopicsResponse;
-use Google\Service\PubsubLite\PubsubliteEmpty;
-use Google\Service\PubsubLite\Topic;
-use Google\Service\PubsubLite\TopicPartitions;
+use FluentMail\Google\Service\PubsubLite\ListTopicsResponse;
+use FluentMail\Google\Service\PubsubLite\PubsubliteEmpty;
+use FluentMail\Google\Service\PubsubLite\Topic;
+use FluentMail\Google\Service\PubsubLite\TopicPartitions;
 
 /**
  * The "topics" collection of methods.

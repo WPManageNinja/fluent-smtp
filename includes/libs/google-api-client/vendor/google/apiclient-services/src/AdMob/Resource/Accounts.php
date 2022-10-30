@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdMob\Resource;
+namespace FluentMail\Google\Service\AdMob\Resource;
 
-use Google\Service\AdMob\ListPublisherAccountsResponse;
-use Google\Service\AdMob\PublisherAccount;
+use FluentMail\Google\Service\AdMob\ListPublisherAccountsResponse;
+use FluentMail\Google\Service\AdMob\PublisherAccount;
 
 /**
  * The "accounts" collection of methods.

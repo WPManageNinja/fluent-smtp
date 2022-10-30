@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\GKEHub;
+namespace FluentMail\Google\Service\GKEHub;
 
 class ResourceOptions extends \Google\Model
 {

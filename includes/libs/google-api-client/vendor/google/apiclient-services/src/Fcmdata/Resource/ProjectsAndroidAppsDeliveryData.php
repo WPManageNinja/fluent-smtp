@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Fcmdata\Resource;
+namespace FluentMail\Google\Service\Fcmdata\Resource;
 
-use Google\Service\Fcmdata\GoogleFirebaseFcmDataV1beta1ListAndroidDeliveryDataResponse;
+use FluentMail\Google\Service\Fcmdata\GoogleFirebaseFcmDataV1beta1ListAndroidDeliveryDataResponse;
 
 /**
  * The "deliveryData" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3Intent;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListIntentsResponse;
-use Google\Service\Dialogflow\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3Intent;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListIntentsResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleProtobufEmpty;
 
 /**
  * The "intents" collection of methods.

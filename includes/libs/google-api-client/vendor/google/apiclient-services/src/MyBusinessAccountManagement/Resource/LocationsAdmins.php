@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessAccountManagement\Resource;
+namespace FluentMail\Google\Service\MyBusinessAccountManagement\Resource;
 
-use Google\Service\MyBusinessAccountManagement\Admin;
-use Google\Service\MyBusinessAccountManagement\ListLocationAdminsResponse;
-use Google\Service\MyBusinessAccountManagement\MybusinessaccountmanagementEmpty;
+use FluentMail\Google\Service\MyBusinessAccountManagement\Admin;
+use FluentMail\Google\Service\MyBusinessAccountManagement\ListLocationAdminsResponse;
+use FluentMail\Google\Service\MyBusinessAccountManagement\MybusinessaccountmanagementEmpty;
 
 /**
  * The "admins" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Integrations;
+namespace FluentMail\Google\Service\Integrations;
 
 class EnterpriseCrmEventbusProtoFunction extends \Google\Collection
 {

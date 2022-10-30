@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\ListThreadsResponse;
-use Google\Service\Gmail\ModifyThreadRequest;
-use Google\Service\Gmail\Thread;
+use FluentMail\Google\Service\Gmail\ListThreadsResponse;
+use FluentMail\Google\Service\Gmail\ModifyThreadRequest;
+use FluentMail\Google\Service\Gmail\Thread;
 
 /**
  * The "threads" collection of methods.

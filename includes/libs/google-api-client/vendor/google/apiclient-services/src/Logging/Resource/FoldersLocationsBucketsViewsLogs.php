@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Logging\Resource;
+namespace FluentMail\Google\Service\Logging\Resource;
 
-use Google\Service\Logging\ListLogsResponse;
+use FluentMail\Google\Service\Logging\ListLogsResponse;
 
 /**
  * The "logs" collection of methods.

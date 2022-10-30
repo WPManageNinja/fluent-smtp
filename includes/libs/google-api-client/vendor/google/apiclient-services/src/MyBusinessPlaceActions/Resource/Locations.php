@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessPlaceActions\Resource;
+namespace FluentMail\Google\Service\MyBusinessPlaceActions\Resource;
 
 /**
  * The "locations" collection of methods.

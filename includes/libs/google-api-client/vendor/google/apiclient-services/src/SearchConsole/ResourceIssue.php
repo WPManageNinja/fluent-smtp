@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SearchConsole;
+namespace FluentMail\Google\Service\SearchConsole;
 
 class ResourceIssue extends \Google\Model
 {

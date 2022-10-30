@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DataFusion\Resource;
+namespace FluentMail\Google\Service\DataFusion\Resource;
 
 /**
  * The "projects" collection of methods.

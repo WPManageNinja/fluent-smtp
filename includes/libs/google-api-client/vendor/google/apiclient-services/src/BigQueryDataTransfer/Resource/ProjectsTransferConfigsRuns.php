@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryDataTransfer\Resource;
+namespace FluentMail\Google\Service\BigQueryDataTransfer\Resource;
 
-use Google\Service\BigQueryDataTransfer\BigquerydatatransferEmpty;
-use Google\Service\BigQueryDataTransfer\ListTransferRunsResponse;
-use Google\Service\BigQueryDataTransfer\TransferRun;
+use FluentMail\Google\Service\BigQueryDataTransfer\BigquerydatatransferEmpty;
+use FluentMail\Google\Service\BigQueryDataTransfer\ListTransferRunsResponse;
+use FluentMail\Google\Service\BigQueryDataTransfer\TransferRun;
 
 /**
  * The "runs" collection of methods.

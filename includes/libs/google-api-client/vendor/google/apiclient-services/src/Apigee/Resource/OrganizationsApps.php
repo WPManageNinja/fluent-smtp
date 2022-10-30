@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1App;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListAppsResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1App;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListAppsResponse;
 
 /**
  * The "apps" collection of methods.

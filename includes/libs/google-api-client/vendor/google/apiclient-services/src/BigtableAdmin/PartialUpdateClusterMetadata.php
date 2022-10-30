@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BigtableAdmin;
+namespace FluentMail\Google\Service\BigtableAdmin;
 
 class PartialUpdateClusterMetadata extends \Google\Model
 {

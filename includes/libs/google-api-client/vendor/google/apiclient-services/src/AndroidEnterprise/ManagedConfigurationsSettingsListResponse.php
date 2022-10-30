@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise;
+namespace FluentMail\Google\Service\AndroidEnterprise;
 
 class ManagedConfigurationsSettingsListResponse extends \Google\Collection
 {

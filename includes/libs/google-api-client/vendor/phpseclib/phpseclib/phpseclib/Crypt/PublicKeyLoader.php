@@ -11,13 +11,13 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt;
+namespace FluentMail\phpseclib3\Crypt;
 
-use phpseclib3\Crypt\Common\AsymmetricKey;
-use phpseclib3\Crypt\Common\PrivateKey;
-use phpseclib3\Crypt\Common\PublicKey;
-use phpseclib3\Exception\NoKeyLoadedException;
-use phpseclib3\File\X509;
+use FluentMail\phpseclib3\Crypt\Common\AsymmetricKey;
+use FluentMail\phpseclib3\Crypt\Common\PrivateKey;
+use FluentMail\phpseclib3\Crypt\Common\PublicKey;
+use FluentMail\phpseclib3\Exception\NoKeyLoadedException;
+use FluentMail\phpseclib3\File\X509;
 
 /**
  * PublicKeyLoader

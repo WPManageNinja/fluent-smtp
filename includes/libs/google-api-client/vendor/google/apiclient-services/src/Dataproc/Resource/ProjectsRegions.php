@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dataproc\Resource;
+namespace FluentMail\Google\Service\Dataproc\Resource;
 
 /**
  * The "regions" collection of methods.

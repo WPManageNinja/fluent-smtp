@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Calendar\Resource;
+namespace FluentMail\Google\Service\Calendar\Resource;
 
-use Google\Service\Calendar\CalendarList as CalendarListModel;
-use Google\Service\Calendar\CalendarListEntry;
-use Google\Service\Calendar\Channel;
+use FluentMail\Google\Service\Calendar\CalendarList as CalendarListModel;
+use FluentMail\Google\Service\Calendar\CalendarListEntry;
+use FluentMail\Google\Service\Calendar\Channel;
 
 /**
  * The "calendarList" collection of methods.

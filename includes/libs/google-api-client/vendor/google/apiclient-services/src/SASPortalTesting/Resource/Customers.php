@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\SASPortalTesting\Resource;
+namespace FluentMail\Google\Service\SASPortalTesting\Resource;
 
-use Google\Service\SASPortalTesting\SasPortalCustomer;
-use Google\Service\SASPortalTesting\SasPortalListCustomersResponse;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalCustomer;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalListCustomersResponse;
 
 /**
  * The "customers" collection of methods.

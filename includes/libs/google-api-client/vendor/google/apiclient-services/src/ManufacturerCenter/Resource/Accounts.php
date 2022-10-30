@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ManufacturerCenter\Resource;
+namespace FluentMail\Google\Service\ManufacturerCenter\Resource;
 
 /**
  * The "accounts" collection of methods.

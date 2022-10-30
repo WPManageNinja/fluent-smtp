@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Acceleratedmobilepageurl\Resource;
+namespace FluentMail\Google\Service\Acceleratedmobilepageurl\Resource;
 
-use Google\Service\Acceleratedmobilepageurl\BatchGetAmpUrlsRequest;
-use Google\Service\Acceleratedmobilepageurl\BatchGetAmpUrlsResponse;
+use FluentMail\Google\Service\Acceleratedmobilepageurl\BatchGetAmpUrlsRequest;
+use FluentMail\Google\Service\Acceleratedmobilepageurl\BatchGetAmpUrlsResponse;
 
 /**
  * The "ampUrls" collection of methods.

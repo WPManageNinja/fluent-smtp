@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
-use Google\Service\CloudSearch\Operation;
+use FluentMail\Google\Service\CloudSearch\Operation;
 
 /**
  * The "operations" collection of methods.

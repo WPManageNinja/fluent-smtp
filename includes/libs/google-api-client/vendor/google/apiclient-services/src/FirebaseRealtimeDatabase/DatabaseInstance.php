@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseRealtimeDatabase;
+namespace FluentMail\Google\Service\FirebaseRealtimeDatabase;
 
 class DatabaseInstance extends \Google\Model
 {

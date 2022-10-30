@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Drive\Resource;
+namespace FluentMail\Google\Service\Drive\Resource;
 
-use Google\Service\Drive\Revision;
-use Google\Service\Drive\RevisionList;
+use FluentMail\Google\Service\Drive\Revision;
+use FluentMail\Google\Service\Drive\RevisionList;
 
 /**
  * The "revisions" collection of methods.

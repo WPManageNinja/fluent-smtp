@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\WebRisk;
+namespace FluentMail\Google\Service\WebRisk;
 
 class GoogleCloudWebriskV1SearchHashesResponseThreatHash extends \Google\Collection
 {

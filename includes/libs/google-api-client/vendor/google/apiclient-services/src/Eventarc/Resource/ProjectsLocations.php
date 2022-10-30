@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Eventarc\Resource;
+namespace FluentMail\Google\Service\Eventarc\Resource;
 
-use Google\Service\Eventarc\GoogleChannelConfig;
-use Google\Service\Eventarc\ListLocationsResponse;
-use Google\Service\Eventarc\Location;
+use FluentMail\Google\Service\Eventarc\GoogleChannelConfig;
+use FluentMail\Google\Service\Eventarc\ListLocationsResponse;
+use FluentMail\Google\Service\Eventarc\Location;
 
 /**
  * The "locations" collection of methods.

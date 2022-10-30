@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SemanticTile;
+namespace FluentMail\Google\Service\SemanticTile;
 
 class RoadInfo extends \Google\Model
 {

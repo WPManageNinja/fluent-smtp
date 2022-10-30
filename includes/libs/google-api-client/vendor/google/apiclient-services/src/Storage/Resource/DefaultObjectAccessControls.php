@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Storage\Resource;
+namespace FluentMail\Google\Service\Storage\Resource;
 
-use Google\Service\Storage\ObjectAccessControl;
-use Google\Service\Storage\ObjectAccessControls as ObjectAccessControlsModel;
+use FluentMail\Google\Service\Storage\ObjectAccessControl;
+use FluentMail\Google\Service\Storage\ObjectAccessControls as ObjectAccessControlsModel;
 
 /**
  * The "defaultObjectAccessControls" collection of methods.

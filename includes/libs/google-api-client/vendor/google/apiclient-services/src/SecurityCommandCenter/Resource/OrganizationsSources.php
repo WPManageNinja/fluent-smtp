@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter\Resource;
+namespace FluentMail\Google\Service\SecurityCommandCenter\Resource;
 
-use Google\Service\SecurityCommandCenter\GetIamPolicyRequest;
-use Google\Service\SecurityCommandCenter\ListSourcesResponse;
-use Google\Service\SecurityCommandCenter\Policy;
-use Google\Service\SecurityCommandCenter\SetIamPolicyRequest;
-use Google\Service\SecurityCommandCenter\Source;
-use Google\Service\SecurityCommandCenter\TestIamPermissionsRequest;
-use Google\Service\SecurityCommandCenter\TestIamPermissionsResponse;
+use FluentMail\Google\Service\SecurityCommandCenter\GetIamPolicyRequest;
+use FluentMail\Google\Service\SecurityCommandCenter\ListSourcesResponse;
+use FluentMail\Google\Service\SecurityCommandCenter\Policy;
+use FluentMail\Google\Service\SecurityCommandCenter\SetIamPolicyRequest;
+use FluentMail\Google\Service\SecurityCommandCenter\Source;
+use FluentMail\Google\Service\SecurityCommandCenter\TestIamPermissionsRequest;
+use FluentMail\Google\Service\SecurityCommandCenter\TestIamPermissionsResponse;
 
 /**
  * The "sources" collection of methods.

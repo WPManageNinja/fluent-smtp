@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\OnDemandScanning\Resource;
+namespace FluentMail\Google\Service\OnDemandScanning\Resource;
 
-use Google\Service\OnDemandScanning\ListVulnerabilitiesResponseV1;
+use FluentMail\Google\Service\OnDemandScanning\ListVulnerabilitiesResponseV1;
 
 /**
  * The "vulnerabilities" collection of methods.

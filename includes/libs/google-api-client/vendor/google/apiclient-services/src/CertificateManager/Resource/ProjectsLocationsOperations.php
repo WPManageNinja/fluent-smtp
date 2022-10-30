@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CertificateManager\Resource;
+namespace FluentMail\Google\Service\CertificateManager\Resource;
 
-use Google\Service\CertificateManager\CancelOperationRequest;
-use Google\Service\CertificateManager\CertificatemanagerEmpty;
-use Google\Service\CertificateManager\ListOperationsResponse;
-use Google\Service\CertificateManager\Operation;
+use FluentMail\Google\Service\CertificateManager\CancelOperationRequest;
+use FluentMail\Google\Service\CertificateManager\CertificatemanagerEmpty;
+use FluentMail\Google\Service\CertificateManager\ListOperationsResponse;
+use FluentMail\Google\Service\CertificateManager\Operation;
 
 /**
  * The "operations" collection of methods.

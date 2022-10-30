@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Spanner;
+namespace FluentMail\Google\Service\Spanner;
 
 class BackupInfo extends \Google\Model
 {

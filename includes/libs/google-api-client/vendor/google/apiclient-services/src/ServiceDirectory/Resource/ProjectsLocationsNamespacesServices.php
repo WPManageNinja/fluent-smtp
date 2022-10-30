@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\ServiceDirectory\Resource;
+namespace FluentMail\Google\Service\ServiceDirectory\Resource;
 
-use Google\Service\ServiceDirectory\GetIamPolicyRequest;
-use Google\Service\ServiceDirectory\ListServicesResponse;
-use Google\Service\ServiceDirectory\Policy;
-use Google\Service\ServiceDirectory\ResolveServiceRequest;
-use Google\Service\ServiceDirectory\ResolveServiceResponse;
-use Google\Service\ServiceDirectory\Service;
-use Google\Service\ServiceDirectory\ServicedirectoryEmpty;
-use Google\Service\ServiceDirectory\SetIamPolicyRequest;
-use Google\Service\ServiceDirectory\TestIamPermissionsRequest;
-use Google\Service\ServiceDirectory\TestIamPermissionsResponse;
+use FluentMail\Google\Service\ServiceDirectory\GetIamPolicyRequest;
+use FluentMail\Google\Service\ServiceDirectory\ListServicesResponse;
+use FluentMail\Google\Service\ServiceDirectory\Policy;
+use FluentMail\Google\Service\ServiceDirectory\ResolveServiceRequest;
+use FluentMail\Google\Service\ServiceDirectory\ResolveServiceResponse;
+use FluentMail\Google\Service\ServiceDirectory\Service;
+use FluentMail\Google\Service\ServiceDirectory\ServicedirectoryEmpty;
+use FluentMail\Google\Service\ServiceDirectory\SetIamPolicyRequest;
+use FluentMail\Google\Service\ServiceDirectory\TestIamPermissionsRequest;
+use FluentMail\Google\Service\ServiceDirectory\TestIamPermissionsResponse;
 
 /**
  * The "services" collection of methods.

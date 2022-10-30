@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\FloodlightGroup;
+use FluentMail\Google\Service\DisplayVideo\FloodlightGroup;
 
 /**
  * The "floodlightGroups" collection of methods.

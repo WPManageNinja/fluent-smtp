@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Script\Resource;
+namespace FluentMail\Google\Service\Script\Resource;
 
-use Google\Service\Script\ListScriptProcessesResponse;
-use Google\Service\Script\ListUserProcessesResponse;
+use FluentMail\Google\Service\Script\ListScriptProcessesResponse;
+use FluentMail\Google\Service\Script\ListUserProcessesResponse;
 
 /**
  * The "processes" collection of methods.

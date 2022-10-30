@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\UserPhoto;
+use FluentMail\Google\Service\Directory\UserPhoto;
 
 /**
  * The "photos" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudNaturalLanguage;
+namespace FluentMail\Google\Service\CloudNaturalLanguage;
 
 class Sentiment extends \Google\Model
 {

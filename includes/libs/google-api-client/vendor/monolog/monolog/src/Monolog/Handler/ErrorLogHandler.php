@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Formatter\LineFormatter;
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Logger;
-use Monolog\Utils;
+use FluentMail\Monolog\Formatter\LineFormatter;
+use FluentMail\Monolog\Formatter\FormatterInterface;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\Utils;
 
 /**
  * Stores to PHP error_log() handler.

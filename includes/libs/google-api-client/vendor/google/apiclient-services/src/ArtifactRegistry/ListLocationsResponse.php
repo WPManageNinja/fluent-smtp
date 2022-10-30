@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry;
+namespace FluentMail\Google\Service\ArtifactRegistry;
 
 class ListLocationsResponse extends \Google\Collection
 {

@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\PubsubLite\Resource;
+namespace FluentMail\Google\Service\PubsubLite\Resource;
 
-use Google\Service\PubsubLite\ListSubscriptionsResponse;
-use Google\Service\PubsubLite\Operation;
-use Google\Service\PubsubLite\PubsubliteEmpty;
-use Google\Service\PubsubLite\SeekSubscriptionRequest;
-use Google\Service\PubsubLite\Subscription;
+use FluentMail\Google\Service\PubsubLite\ListSubscriptionsResponse;
+use FluentMail\Google\Service\PubsubLite\Operation;
+use FluentMail\Google\Service\PubsubLite\PubsubliteEmpty;
+use FluentMail\Google\Service\PubsubLite\SeekSubscriptionRequest;
+use FluentMail\Google\Service\PubsubLite\Subscription;
 
 /**
  * The "subscriptions" collection of methods.

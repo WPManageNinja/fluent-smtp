@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\NetworkServices\Resource;
+namespace FluentMail\Google\Service\NetworkServices\Resource;
 
-use Google\Service\NetworkServices\ListTlsRoutesResponse;
-use Google\Service\NetworkServices\Operation;
-use Google\Service\NetworkServices\TlsRoute;
+use FluentMail\Google\Service\NetworkServices\ListTlsRoutesResponse;
+use FluentMail\Google\Service\NetworkServices\Operation;
+use FluentMail\Google\Service\NetworkServices\TlsRoute;
 
 /**
  * The "tlsRoutes" collection of methods.

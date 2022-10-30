@@ -10,11 +10,11 @@
  * @license   http://www.opensource.org/licenses/mit-license.html  MIT License
  */
 
-namespace phpseclib3\Math\PrimeField;
+namespace FluentMail\phpseclib3\Math\PrimeField;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Math\BigInteger;
-use phpseclib3\Math\Common\FiniteField\Integer as Base;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Math\Common\FiniteField\Integer as Base;
 
 /**
  * Prime Finite Fields

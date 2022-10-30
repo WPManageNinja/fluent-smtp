@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\AnalyticsDataimportDeleteUploadDataRequest;
-use Google\Service\Analytics\Upload;
-use Google\Service\Analytics\Uploads;
+use FluentMail\Google\Service\Analytics\AnalyticsDataimportDeleteUploadDataRequest;
+use FluentMail\Google\Service\Analytics\Upload;
+use FluentMail\Google\Service\Analytics\Uploads;
 
 /**
  * The "uploads" collection of methods.

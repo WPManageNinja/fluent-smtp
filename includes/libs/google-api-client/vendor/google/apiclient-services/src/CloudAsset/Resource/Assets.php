@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudAsset\Resource;
+namespace FluentMail\Google\Service\CloudAsset\Resource;
 
-use Google\Service\CloudAsset\ListAssetsResponse;
+use FluentMail\Google\Service\CloudAsset\ListAssetsResponse;
 
 /**
  * The "assets" collection of methods.

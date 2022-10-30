@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\UserRole;
-use Google\Service\Dfareporting\UserRolesListResponse;
+use FluentMail\Google\Service\Dfareporting\UserRole;
+use FluentMail\Google\Service\Dfareporting\UserRolesListResponse;
 
 /**
  * The "userRoles" collection of methods.

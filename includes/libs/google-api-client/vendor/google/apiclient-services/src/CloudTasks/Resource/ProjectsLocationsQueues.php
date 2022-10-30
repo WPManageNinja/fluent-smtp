@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\CloudTasks\Resource;
+namespace FluentMail\Google\Service\CloudTasks\Resource;
 
-use Google\Service\CloudTasks\CloudtasksEmpty;
-use Google\Service\CloudTasks\GetIamPolicyRequest;
-use Google\Service\CloudTasks\ListQueuesResponse;
-use Google\Service\CloudTasks\PauseQueueRequest;
-use Google\Service\CloudTasks\Policy;
-use Google\Service\CloudTasks\PurgeQueueRequest;
-use Google\Service\CloudTasks\Queue;
-use Google\Service\CloudTasks\ResumeQueueRequest;
-use Google\Service\CloudTasks\SetIamPolicyRequest;
-use Google\Service\CloudTasks\TestIamPermissionsRequest;
-use Google\Service\CloudTasks\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudTasks\CloudtasksEmpty;
+use FluentMail\Google\Service\CloudTasks\GetIamPolicyRequest;
+use FluentMail\Google\Service\CloudTasks\ListQueuesResponse;
+use FluentMail\Google\Service\CloudTasks\PauseQueueRequest;
+use FluentMail\Google\Service\CloudTasks\Policy;
+use FluentMail\Google\Service\CloudTasks\PurgeQueueRequest;
+use FluentMail\Google\Service\CloudTasks\Queue;
+use FluentMail\Google\Service\CloudTasks\ResumeQueueRequest;
+use FluentMail\Google\Service\CloudTasks\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudTasks\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudTasks\TestIamPermissionsResponse;
 
 /**
  * The "queues" collection of methods.

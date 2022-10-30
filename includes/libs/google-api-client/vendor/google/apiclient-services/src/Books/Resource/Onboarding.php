@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\Category;
-use Google\Service\Books\Volume2;
+use FluentMail\Google\Service\Books\Category;
+use FluentMail\Google\Service\Books\Volume2;
 
 /**
  * The "onboarding" collection of methods.

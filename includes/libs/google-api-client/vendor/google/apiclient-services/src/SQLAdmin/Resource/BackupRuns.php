@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\SQLAdmin\Resource;
+namespace FluentMail\Google\Service\SQLAdmin\Resource;
 
-use Google\Service\SQLAdmin\BackupRun;
-use Google\Service\SQLAdmin\BackupRunsListResponse;
-use Google\Service\SQLAdmin\Operation;
+use FluentMail\Google\Service\SQLAdmin\BackupRun;
+use FluentMail\Google\Service\SQLAdmin\BackupRunsListResponse;
+use FluentMail\Google\Service\SQLAdmin\Operation;
 
 /**
  * The "backupRuns" collection of methods.

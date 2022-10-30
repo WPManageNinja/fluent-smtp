@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Iam\Resource;
+namespace FluentMail\Google\Service\Iam\Resource;
 
-use Google\Service\Iam\CreateServiceAccountKeyRequest;
-use Google\Service\Iam\DisableServiceAccountKeyRequest;
-use Google\Service\Iam\EnableServiceAccountKeyRequest;
-use Google\Service\Iam\IamEmpty;
-use Google\Service\Iam\ListServiceAccountKeysResponse;
-use Google\Service\Iam\ServiceAccountKey;
-use Google\Service\Iam\UploadServiceAccountKeyRequest;
+use FluentMail\Google\Service\Iam\CreateServiceAccountKeyRequest;
+use FluentMail\Google\Service\Iam\DisableServiceAccountKeyRequest;
+use FluentMail\Google\Service\Iam\EnableServiceAccountKeyRequest;
+use FluentMail\Google\Service\Iam\IamEmpty;
+use FluentMail\Google\Service\Iam\ListServiceAccountKeysResponse;
+use FluentMail\Google\Service\Iam\ServiceAccountKey;
+use FluentMail\Google\Service\Iam\UploadServiceAccountKeyRequest;
 
 /**
  * The "keys" collection of methods.

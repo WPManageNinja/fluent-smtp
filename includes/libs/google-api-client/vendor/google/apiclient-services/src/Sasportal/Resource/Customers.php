@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Sasportal\Resource;
+namespace FluentMail\Google\Service\Sasportal\Resource;
 
-use Google\Service\Sasportal\SasPortalCustomer;
-use Google\Service\Sasportal\SasPortalListCustomersResponse;
+use FluentMail\Google\Service\Sasportal\SasPortalCustomer;
+use FluentMail\Google\Service\Sasportal\SasPortalListCustomersResponse;
 
 /**
  * The "customers" collection of methods.

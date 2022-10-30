@@ -15,20 +15,20 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\DiskMoveRequest;
-use Google\Service\Compute\InstanceMoveRequest;
-use Google\Service\Compute\Metadata;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Project;
-use Google\Service\Compute\ProjectsDisableXpnResourceRequest;
-use Google\Service\Compute\ProjectsEnableXpnResourceRequest;
-use Google\Service\Compute\ProjectsGetXpnResources;
-use Google\Service\Compute\ProjectsListXpnHostsRequest;
-use Google\Service\Compute\ProjectsSetDefaultNetworkTierRequest;
-use Google\Service\Compute\UsageExportLocation;
-use Google\Service\Compute\XpnHostList;
+use FluentMail\Google\Service\Compute\DiskMoveRequest;
+use FluentMail\Google\Service\Compute\InstanceMoveRequest;
+use FluentMail\Google\Service\Compute\Metadata;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Project;
+use FluentMail\Google\Service\Compute\ProjectsDisableXpnResourceRequest;
+use FluentMail\Google\Service\Compute\ProjectsEnableXpnResourceRequest;
+use FluentMail\Google\Service\Compute\ProjectsGetXpnResources;
+use FluentMail\Google\Service\Compute\ProjectsListXpnHostsRequest;
+use FluentMail\Google\Service\Compute\ProjectsSetDefaultNetworkTierRequest;
+use FluentMail\Google\Service\Compute\UsageExportLocation;
+use FluentMail\Google\Service\Compute\XpnHostList;
 
 /**
  * The "projects" collection of methods.

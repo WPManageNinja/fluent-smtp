@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyer\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyer\Resource;
 
-use Google\Service\AdExchangeBuyer\BillingInfo as BillingInfoModel;
-use Google\Service\AdExchangeBuyer\BillingInfoList;
+use FluentMail\Google\Service\AdExchangeBuyer\BillingInfo as BillingInfoModel;
+use FluentMail\Google\Service\AdExchangeBuyer\BillingInfoList;
 
 /**
  * The "billingInfo" collection of methods.

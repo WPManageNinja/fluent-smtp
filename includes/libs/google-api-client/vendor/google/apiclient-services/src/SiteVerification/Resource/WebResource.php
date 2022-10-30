@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\SiteVerification\Resource;
+namespace FluentMail\Google\Service\SiteVerification\Resource;
 
-use Google\Service\SiteVerification\SiteVerificationWebResourceGettokenRequest;
-use Google\Service\SiteVerification\SiteVerificationWebResourceGettokenResponse;
-use Google\Service\SiteVerification\SiteVerificationWebResourceListResponse;
-use Google\Service\SiteVerification\SiteVerificationWebResourceResource;
+use FluentMail\Google\Service\SiteVerification\SiteVerificationWebResourceGettokenRequest;
+use FluentMail\Google\Service\SiteVerification\SiteVerificationWebResourceGettokenResponse;
+use FluentMail\Google\Service\SiteVerification\SiteVerificationWebResourceListResponse;
+use FluentMail\Google\Service\SiteVerification\SiteVerificationWebResourceResource;
 
 /**
  * The "webResource" collection of methods.

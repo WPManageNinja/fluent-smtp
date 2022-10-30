@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\UnsampledReport;
-use Google\Service\Analytics\UnsampledReports;
+use FluentMail\Google\Service\Analytics\UnsampledReport;
+use FluentMail\Google\Service\Analytics\UnsampledReports;
 
 /**
  * The "unsampledReports" collection of methods.

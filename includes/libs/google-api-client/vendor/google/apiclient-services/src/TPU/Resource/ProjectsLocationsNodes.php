@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\TPU\Resource;
+namespace FluentMail\Google\Service\TPU\Resource;
 
-use Google\Service\TPU\ListNodesResponse;
-use Google\Service\TPU\Node;
-use Google\Service\TPU\Operation;
-use Google\Service\TPU\ReimageNodeRequest;
-use Google\Service\TPU\StartNodeRequest;
-use Google\Service\TPU\StopNodeRequest;
+use FluentMail\Google\Service\TPU\ListNodesResponse;
+use FluentMail\Google\Service\TPU\Node;
+use FluentMail\Google\Service\TPU\Operation;
+use FluentMail\Google\Service\TPU\ReimageNodeRequest;
+use FluentMail\Google\Service\TPU\StartNodeRequest;
+use FluentMail\Google\Service\TPU\StopNodeRequest;
 
 /**
  * The "nodes" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudRuntimeConfig\Resource;
+namespace FluentMail\Google\Service\CloudRuntimeConfig\Resource;
 
-use Google\Service\CloudRuntimeConfig\CancelOperationRequest;
-use Google\Service\CloudRuntimeConfig\ListOperationsResponse;
-use Google\Service\CloudRuntimeConfig\RuntimeconfigEmpty;
+use FluentMail\Google\Service\CloudRuntimeConfig\CancelOperationRequest;
+use FluentMail\Google\Service\CloudRuntimeConfig\ListOperationsResponse;
+use FluentMail\Google\Service\CloudRuntimeConfig\RuntimeconfigEmpty;
 
 /**
  * The "operations" collection of methods.

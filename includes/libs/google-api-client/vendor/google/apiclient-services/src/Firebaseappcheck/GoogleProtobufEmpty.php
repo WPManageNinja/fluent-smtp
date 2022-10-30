@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Firebaseappcheck;
+namespace FluentMail\Google\Service\Firebaseappcheck;
 
 class GoogleProtobufEmpty extends \Google\Model
 {

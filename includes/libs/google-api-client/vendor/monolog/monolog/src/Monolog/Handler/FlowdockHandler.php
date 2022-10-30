@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Logger;
-use Monolog\Utils;
-use Monolog\Formatter\FlowdockFormatter;
-use Monolog\Formatter\FormatterInterface;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\Utils;
+use FluentMail\Monolog\Formatter\FlowdockFormatter;
+use FluentMail\Monolog\Formatter\FormatterInterface;
 
 /**
  * Sends notifications through the Flowdock push API

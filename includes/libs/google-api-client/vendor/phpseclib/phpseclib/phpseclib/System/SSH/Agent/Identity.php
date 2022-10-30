@@ -13,17 +13,17 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\System\SSH\Agent;
+namespace FluentMail\phpseclib3\System\SSH\Agent;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Crypt\Common\PrivateKey;
-use phpseclib3\Crypt\Common\PublicKey;
-use phpseclib3\Crypt\DSA;
-use phpseclib3\Crypt\EC;
-use phpseclib3\Crypt\RSA;
-use phpseclib3\Exception\UnsupportedAlgorithmException;
-use phpseclib3\System\SSH\Agent;
-use phpseclib3\System\SSH\Common\Traits\ReadBytes;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Crypt\Common\PrivateKey;
+use FluentMail\phpseclib3\Crypt\Common\PublicKey;
+use FluentMail\phpseclib3\Crypt\DSA;
+use FluentMail\phpseclib3\Crypt\EC;
+use FluentMail\phpseclib3\Crypt\RSA;
+use FluentMail\phpseclib3\Exception\UnsupportedAlgorithmException;
+use FluentMail\phpseclib3\System\SSH\Agent;
+use FluentMail\phpseclib3\System\SSH\Common\Traits\ReadBytes;
 
 /**
  * Pure-PHP ssh-agent client identity object

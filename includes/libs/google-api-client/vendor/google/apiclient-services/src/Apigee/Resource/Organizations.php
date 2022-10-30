@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1GetSyncAuthorizationRequest;
-use Google\Service\Apigee\GoogleCloudApigeeV1IngressConfig;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListOrganizationsResponse;
-use Google\Service\Apigee\GoogleCloudApigeeV1Organization;
-use Google\Service\Apigee\GoogleCloudApigeeV1OrganizationProjectMapping;
-use Google\Service\Apigee\GoogleCloudApigeeV1RuntimeConfig;
-use Google\Service\Apigee\GoogleCloudApigeeV1SetAddonsRequest;
-use Google\Service\Apigee\GoogleCloudApigeeV1SyncAuthorization;
-use Google\Service\Apigee\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1GetSyncAuthorizationRequest;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1IngressConfig;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListOrganizationsResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1Organization;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1OrganizationProjectMapping;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1RuntimeConfig;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1SetAddonsRequest;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1SyncAuthorization;
+use FluentMail\Google\Service\Apigee\GoogleLongrunningOperation;
 
 /**
  * The "organizations" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Sasportal;
+namespace FluentMail\Google\Service\Sasportal;
 
 class SasPortalDevice extends \Google\Collection
 {

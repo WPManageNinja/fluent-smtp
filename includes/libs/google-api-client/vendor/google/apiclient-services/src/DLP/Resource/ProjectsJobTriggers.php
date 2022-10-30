@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\DLP\Resource;
+namespace FluentMail\Google\Service\DLP\Resource;
 
-use Google\Service\DLP\GooglePrivacyDlpV2ActivateJobTriggerRequest;
-use Google\Service\DLP\GooglePrivacyDlpV2CreateJobTriggerRequest;
-use Google\Service\DLP\GooglePrivacyDlpV2DlpJob;
-use Google\Service\DLP\GooglePrivacyDlpV2JobTrigger;
-use Google\Service\DLP\GooglePrivacyDlpV2ListJobTriggersResponse;
-use Google\Service\DLP\GooglePrivacyDlpV2UpdateJobTriggerRequest;
-use Google\Service\DLP\GoogleProtobufEmpty;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2ActivateJobTriggerRequest;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2CreateJobTriggerRequest;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2DlpJob;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2JobTrigger;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2ListJobTriggersResponse;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2UpdateJobTriggerRequest;
+use FluentMail\Google\Service\DLP\GoogleProtobufEmpty;
 
 /**
  * The "jobTriggers" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudTalentSolution;
+namespace FluentMail\Google\Service\CloudTalentSolution;
 
 class JobQuery extends \Google\Collection
 {

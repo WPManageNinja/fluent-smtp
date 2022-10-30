@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Integrations\Resource;
+namespace FluentMail\Google\Service\Integrations\Resource;
 
 /**
  * The "integrationtemplates" collection of methods.

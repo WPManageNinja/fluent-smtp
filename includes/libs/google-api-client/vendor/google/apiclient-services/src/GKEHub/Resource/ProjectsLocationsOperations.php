@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\GKEHub\Resource;
+namespace FluentMail\Google\Service\GKEHub\Resource;
 
-use Google\Service\GKEHub\CancelOperationRequest;
-use Google\Service\GKEHub\GkehubEmpty;
-use Google\Service\GKEHub\ListOperationsResponse;
-use Google\Service\GKEHub\Operation;
+use FluentMail\Google\Service\GKEHub\CancelOperationRequest;
+use FluentMail\Google\Service\GKEHub\GkehubEmpty;
+use FluentMail\Google\Service\GKEHub\ListOperationsResponse;
+use FluentMail\Google\Service\GKEHub\Operation;
 
 /**
  * The "operations" collection of methods.

@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\VMMigrationService\Resource;
+namespace FluentMail\Google\Service\VMMigrationService\Resource;
 
-use Google\Service\VMMigrationService\AddGroupMigrationRequest;
-use Google\Service\VMMigrationService\Group;
-use Google\Service\VMMigrationService\ListGroupsResponse;
-use Google\Service\VMMigrationService\Operation;
-use Google\Service\VMMigrationService\RemoveGroupMigrationRequest;
+use FluentMail\Google\Service\VMMigrationService\AddGroupMigrationRequest;
+use FluentMail\Google\Service\VMMigrationService\Group;
+use FluentMail\Google\Service\VMMigrationService\ListGroupsResponse;
+use FluentMail\Google\Service\VMMigrationService\Operation;
+use FluentMail\Google\Service\VMMigrationService\RemoveGroupMigrationRequest;
 
 /**
  * The "groups" collection of methods.

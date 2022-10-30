@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\VMMigrationService\Resource;
+namespace FluentMail\Google\Service\VMMigrationService\Resource;
 
 /**
  * The "projects" collection of methods.

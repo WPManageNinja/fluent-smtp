@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter\Resource;
+namespace FluentMail\Google\Service\SecurityCommandCenter\Resource;
 
-use Google\Service\SecurityCommandCenter\GroupAssetsRequest;
-use Google\Service\SecurityCommandCenter\GroupAssetsResponse;
-use Google\Service\SecurityCommandCenter\ListAssetsResponse;
-use Google\Service\SecurityCommandCenter\SecurityMarks;
+use FluentMail\Google\Service\SecurityCommandCenter\GroupAssetsRequest;
+use FluentMail\Google\Service\SecurityCommandCenter\GroupAssetsResponse;
+use FluentMail\Google\Service\SecurityCommandCenter\ListAssetsResponse;
+use FluentMail\Google\Service\SecurityCommandCenter\SecurityMarks;
 
 /**
  * The "assets" collection of methods.

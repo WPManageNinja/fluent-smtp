@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\NetworkSecurity\Resource;
+namespace FluentMail\Google\Service\NetworkSecurity\Resource;
 
 /**
  * The "projects" collection of methods.

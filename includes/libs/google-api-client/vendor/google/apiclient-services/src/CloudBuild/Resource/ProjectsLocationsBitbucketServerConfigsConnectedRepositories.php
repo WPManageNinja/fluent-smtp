@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudBuild\Resource;
+namespace FluentMail\Google\Service\CloudBuild\Resource;
 
-use Google\Service\CloudBuild\BatchCreateBitbucketServerConnectedRepositoriesRequest;
-use Google\Service\CloudBuild\Operation;
+use FluentMail\Google\Service\CloudBuild\BatchCreateBitbucketServerConnectedRepositoriesRequest;
+use FluentMail\Google\Service\CloudBuild\Operation;
 
 /**
  * The "connectedRepositories" collection of methods.

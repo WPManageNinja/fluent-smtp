@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Document\Resource;
+namespace FluentMail\Google\Service\Document\Resource;
 
 /**
  * The "uiv1beta3" collection of methods.

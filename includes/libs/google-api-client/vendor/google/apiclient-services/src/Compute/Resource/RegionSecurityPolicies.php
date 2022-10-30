@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\SecurityPolicy;
-use Google\Service\Compute\SecurityPolicyList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\SecurityPolicy;
+use FluentMail\Google\Service\Compute\SecurityPolicyList;
 
 /**
  * The "regionSecurityPolicies" collection of methods.

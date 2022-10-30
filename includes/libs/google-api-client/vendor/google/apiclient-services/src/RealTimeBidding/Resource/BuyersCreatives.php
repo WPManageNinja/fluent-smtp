@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\RealTimeBidding\Resource;
+namespace FluentMail\Google\Service\RealTimeBidding\Resource;
 
-use Google\Service\RealTimeBidding\Creative;
-use Google\Service\RealTimeBidding\ListCreativesResponse;
+use FluentMail\Google\Service\RealTimeBidding\Creative;
+use FluentMail\Google\Service\RealTimeBidding\ListCreativesResponse;
 
 /**
  * The "creatives" collection of methods.

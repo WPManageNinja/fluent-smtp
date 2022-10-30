@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3CompareVersionsRequest;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3CompareVersionsResponse;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListVersionsResponse;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3LoadVersionRequest;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3Version;
-use Google\Service\Dialogflow\GoogleLongrunningOperation;
-use Google\Service\Dialogflow\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3CompareVersionsRequest;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3CompareVersionsResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListVersionsResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3LoadVersionRequest;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3Version;
+use FluentMail\Google\Service\Dialogflow\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Dialogflow\GoogleProtobufEmpty;
 
 /**
  * The "versions" collection of methods.

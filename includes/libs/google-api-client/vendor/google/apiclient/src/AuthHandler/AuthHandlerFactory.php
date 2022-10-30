@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-namespace Google\AuthHandler;
+namespace FluentMail\Google\AuthHandler;
 
 use Exception;
-use GuzzleHttp\ClientInterface;
+use FluentMail\GuzzleHttp\ClientInterface;
 
 class AuthHandlerFactory
 {

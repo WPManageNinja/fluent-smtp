@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\ChannelSection;
-use Google\Service\YouTube\ChannelSectionListResponse;
+use FluentMail\Google\Service\YouTube\ChannelSection;
+use FluentMail\Google\Service\YouTube\ChannelSectionListResponse;
 
 /**
  * The "channelSections" collection of methods.

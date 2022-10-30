@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\AuthorizedBuyersMarketplace\Resource;
+namespace FluentMail\Google\Service\AuthorizedBuyersMarketplace\Resource;
 
-use Google\Service\AuthorizedBuyersMarketplace\AcceptProposalRequest;
-use Google\Service\AuthorizedBuyersMarketplace\AddNoteRequest;
-use Google\Service\AuthorizedBuyersMarketplace\CancelNegotiationRequest;
-use Google\Service\AuthorizedBuyersMarketplace\ListProposalsResponse;
-use Google\Service\AuthorizedBuyersMarketplace\Proposal;
-use Google\Service\AuthorizedBuyersMarketplace\SendRfpRequest;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\AcceptProposalRequest;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\AddNoteRequest;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\CancelNegotiationRequest;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\ListProposalsResponse;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\Proposal;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\SendRfpRequest;
 
 /**
  * The "proposals" collection of methods.

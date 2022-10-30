@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Classroom;
+namespace FluentMail\Google\Service\Classroom;
 
 class TurnInStudentSubmissionRequest extends \Google\Model
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Spanner\Resource;
+namespace FluentMail\Google\Service\Spanner\Resource;
 
 /**
  * The "projects" collection of methods.

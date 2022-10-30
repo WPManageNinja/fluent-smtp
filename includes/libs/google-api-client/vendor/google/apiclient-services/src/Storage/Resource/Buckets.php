@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Storage\Resource;
+namespace FluentMail\Google\Service\Storage\Resource;
 
-use Google\Service\Storage\Bucket;
-use Google\Service\Storage\Buckets as BucketsModel;
-use Google\Service\Storage\Policy;
-use Google\Service\Storage\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Storage\Bucket;
+use FluentMail\Google\Service\Storage\Buckets as BucketsModel;
+use FluentMail\Google\Service\Storage\Policy;
+use FluentMail\Google\Service\Storage\TestIamPermissionsResponse;
 
 /**
  * The "buckets" collection of methods.

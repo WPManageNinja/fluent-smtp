@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Cloudchannel\Resource;
+namespace FluentMail\Google\Service\Cloudchannel\Resource;
 
-use Google\Service\Cloudchannel\GoogleCloudChannelV1CustomerRepricingConfig;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListCustomerRepricingConfigsResponse;
-use Google\Service\Cloudchannel\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1CustomerRepricingConfig;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListCustomerRepricingConfigsResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleProtobufEmpty;
 
 /**
  * The "customerRepricingConfigs" collection of methods.

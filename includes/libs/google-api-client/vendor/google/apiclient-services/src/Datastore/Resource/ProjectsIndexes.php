@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Datastore\Resource;
+namespace FluentMail\Google\Service\Datastore\Resource;
 
-use Google\Service\Datastore\GoogleDatastoreAdminV1Index;
-use Google\Service\Datastore\GoogleDatastoreAdminV1ListIndexesResponse;
-use Google\Service\Datastore\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Datastore\GoogleDatastoreAdminV1Index;
+use FluentMail\Google\Service\Datastore\GoogleDatastoreAdminV1ListIndexesResponse;
+use FluentMail\Google\Service\Datastore\GoogleLongrunningOperation;
 
 /**
  * The "indexes" collection of methods.

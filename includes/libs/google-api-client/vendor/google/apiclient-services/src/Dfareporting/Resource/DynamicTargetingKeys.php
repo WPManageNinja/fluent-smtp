@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\DynamicTargetingKey;
-use Google\Service\Dfareporting\DynamicTargetingKeysListResponse;
+use FluentMail\Google\Service\Dfareporting\DynamicTargetingKey;
+use FluentMail\Google\Service\Dfareporting\DynamicTargetingKeysListResponse;
 
 /**
  * The "dynamicTargetingKeys" collection of methods.

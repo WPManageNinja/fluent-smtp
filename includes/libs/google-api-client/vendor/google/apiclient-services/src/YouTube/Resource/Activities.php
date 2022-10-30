@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\ActivityListResponse;
+use FluentMail\Google\Service\YouTube\ActivityListResponse;
 
 /**
  * The "activities" collection of methods.

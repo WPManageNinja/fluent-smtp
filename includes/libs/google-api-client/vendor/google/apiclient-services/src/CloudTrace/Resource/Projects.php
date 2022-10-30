@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudTrace\Resource;
+namespace FluentMail\Google\Service\CloudTrace\Resource;
 
 /**
  * The "projects" collection of methods.

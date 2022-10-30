@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudFilestore\Resource;
+namespace FluentMail\Google\Service\CloudFilestore\Resource;
 
-use Google\Service\CloudFilestore\Backup;
-use Google\Service\CloudFilestore\ListBackupsResponse;
-use Google\Service\CloudFilestore\Operation;
+use FluentMail\Google\Service\CloudFilestore\Backup;
+use FluentMail\Google\Service\CloudFilestore\ListBackupsResponse;
+use FluentMail\Google\Service\CloudFilestore\Operation;
 
 /**
  * The "backups" collection of methods.

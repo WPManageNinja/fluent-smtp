@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3Experiment;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListExperimentsResponse;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3StartExperimentRequest;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3StopExperimentRequest;
-use Google\Service\Dialogflow\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3Experiment;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListExperimentsResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3StartExperimentRequest;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3StopExperimentRequest;
+use FluentMail\Google\Service\Dialogflow\GoogleProtobufEmpty;
 
 /**
  * The "experiments" collection of methods.

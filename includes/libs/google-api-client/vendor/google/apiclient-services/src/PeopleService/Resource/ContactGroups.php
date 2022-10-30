@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\PeopleService\Resource;
+namespace FluentMail\Google\Service\PeopleService\Resource;
 
-use Google\Service\PeopleService\BatchGetContactGroupsResponse;
-use Google\Service\PeopleService\ContactGroup;
-use Google\Service\PeopleService\CreateContactGroupRequest;
-use Google\Service\PeopleService\ListContactGroupsResponse;
-use Google\Service\PeopleService\PeopleEmpty;
-use Google\Service\PeopleService\UpdateContactGroupRequest;
+use FluentMail\Google\Service\PeopleService\BatchGetContactGroupsResponse;
+use FluentMail\Google\Service\PeopleService\ContactGroup;
+use FluentMail\Google\Service\PeopleService\CreateContactGroupRequest;
+use FluentMail\Google\Service\PeopleService\ListContactGroupsResponse;
+use FluentMail\Google\Service\PeopleService\PeopleEmpty;
+use FluentMail\Google\Service\PeopleService\UpdateContactGroupRequest;
 
 /**
  * The "contactGroups" collection of methods.

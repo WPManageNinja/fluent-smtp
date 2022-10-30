@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\Caption;
-use Google\Service\YouTube\CaptionListResponse;
+use FluentMail\Google\Service\YouTube\Caption;
+use FluentMail\Google\Service\YouTube\CaptionListResponse;
 
 /**
  * The "captions" collection of methods.

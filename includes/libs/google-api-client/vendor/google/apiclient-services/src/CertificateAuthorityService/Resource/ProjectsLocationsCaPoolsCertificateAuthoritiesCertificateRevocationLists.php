@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\CertificateAuthorityService\Resource;
+namespace FluentMail\Google\Service\CertificateAuthorityService\Resource;
 
-use Google\Service\CertificateAuthorityService\CertificateRevocationList;
-use Google\Service\CertificateAuthorityService\ListCertificateRevocationListsResponse;
-use Google\Service\CertificateAuthorityService\Operation;
-use Google\Service\CertificateAuthorityService\Policy;
-use Google\Service\CertificateAuthorityService\SetIamPolicyRequest;
-use Google\Service\CertificateAuthorityService\TestIamPermissionsRequest;
-use Google\Service\CertificateAuthorityService\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CertificateAuthorityService\CertificateRevocationList;
+use FluentMail\Google\Service\CertificateAuthorityService\ListCertificateRevocationListsResponse;
+use FluentMail\Google\Service\CertificateAuthorityService\Operation;
+use FluentMail\Google\Service\CertificateAuthorityService\Policy;
+use FluentMail\Google\Service\CertificateAuthorityService\SetIamPolicyRequest;
+use FluentMail\Google\Service\CertificateAuthorityService\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CertificateAuthorityService\TestIamPermissionsResponse;
 
 /**
  * The "certificateRevocationLists" collection of methods.

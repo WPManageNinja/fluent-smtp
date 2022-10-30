@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Apigee\GoogleProtobufEmpty;
 
 /**
  * The "caches" collection of methods.

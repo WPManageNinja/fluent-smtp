@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\TagManager\Resource;
+namespace FluentMail\Google\Service\TagManager\Resource;
 
-use Google\Service\TagManager\CreateBuiltInVariableResponse;
-use Google\Service\TagManager\ListEnabledBuiltInVariablesResponse;
-use Google\Service\TagManager\RevertBuiltInVariableResponse;
+use FluentMail\Google\Service\TagManager\CreateBuiltInVariableResponse;
+use FluentMail\Google\Service\TagManager\ListEnabledBuiltInVariablesResponse;
+use FluentMail\Google\Service\TagManager\RevertBuiltInVariableResponse;
 
 /**
  * The "built_in_variables" collection of methods.

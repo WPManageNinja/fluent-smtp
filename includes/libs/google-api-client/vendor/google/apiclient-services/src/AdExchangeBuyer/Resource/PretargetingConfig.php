@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyer\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyer\Resource;
 
-use Google\Service\AdExchangeBuyer\PretargetingConfig as PretargetingConfigModel;
-use Google\Service\AdExchangeBuyer\PretargetingConfigList;
+use FluentMail\Google\Service\AdExchangeBuyer\PretargetingConfig as PretargetingConfigModel;
+use FluentMail\Google\Service\AdExchangeBuyer\PretargetingConfigList;
 
 /**
  * The "pretargetingConfig" collection of methods.

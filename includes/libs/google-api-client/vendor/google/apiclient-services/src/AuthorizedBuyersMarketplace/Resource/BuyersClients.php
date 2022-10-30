@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\AuthorizedBuyersMarketplace\Resource;
+namespace FluentMail\Google\Service\AuthorizedBuyersMarketplace\Resource;
 
-use Google\Service\AuthorizedBuyersMarketplace\ActivateClientRequest;
-use Google\Service\AuthorizedBuyersMarketplace\Client;
-use Google\Service\AuthorizedBuyersMarketplace\DeactivateClientRequest;
-use Google\Service\AuthorizedBuyersMarketplace\ListClientsResponse;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\ActivateClientRequest;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\Client;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\DeactivateClientRequest;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\ListClientsResponse;
 
 /**
  * The "clients" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Gmail;
+namespace FluentMail\Google\Service\Gmail;
 
 class HistoryLabelRemoved extends \Google\Collection
 {

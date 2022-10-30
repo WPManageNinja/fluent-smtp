@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ToolResults\Resource;
+namespace FluentMail\Google\Service\ToolResults\Resource;
 
-use Google\Service\ToolResults\History;
-use Google\Service\ToolResults\ListHistoriesResponse;
+use FluentMail\Google\Service\ToolResults\History;
+use FluentMail\Google\Service\ToolResults\ListHistoriesResponse;
 
 /**
  * The "histories" collection of methods.

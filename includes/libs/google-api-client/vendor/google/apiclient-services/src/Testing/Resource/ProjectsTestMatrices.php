@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Testing\Resource;
+namespace FluentMail\Google\Service\Testing\Resource;
 
-use Google\Service\Testing\CancelTestMatrixResponse;
-use Google\Service\Testing\TestMatrix;
+use FluentMail\Google\Service\Testing\CancelTestMatrixResponse;
+use FluentMail\Google\Service\Testing\TestMatrix;
 
 /**
  * The "testMatrices" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\WorkflowExecutions\Resource;
+namespace FluentMail\Google\Service\WorkflowExecutions\Resource;
 
-use Google\Service\WorkflowExecutions\Execution;
-use Google\Service\WorkflowExecutions\TriggerPubsubExecutionRequest;
+use FluentMail\Google\Service\WorkflowExecutions\Execution;
+use FluentMail\Google\Service\WorkflowExecutions\TriggerPubsubExecutionRequest;
 
 /**
  * The "workflows" collection of methods.

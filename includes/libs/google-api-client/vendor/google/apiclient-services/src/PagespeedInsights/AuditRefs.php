@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PagespeedInsights;
+namespace FluentMail\Google\Service\PagespeedInsights;
 
 class AuditRefs extends \Google\Collection
 {

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\SQLAdmin\Resource;
+namespace FluentMail\Google\Service\SQLAdmin\Resource;
 
-use Google\Service\SQLAdmin\Operation;
-use Google\Service\SQLAdmin\User;
-use Google\Service\SQLAdmin\UsersListResponse;
+use FluentMail\Google\Service\SQLAdmin\Operation;
+use FluentMail\Google\Service\SQLAdmin\User;
+use FluentMail\Google\Service\SQLAdmin\UsersListResponse;
 
 /**
  * The "users" collection of methods.

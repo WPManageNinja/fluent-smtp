@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ApigeeRegistry\Resource;
+namespace FluentMail\Google\Service\ApigeeRegistry\Resource;
 
-use Google\Service\ApigeeRegistry\ListLocationsResponse;
-use Google\Service\ApigeeRegistry\Location;
+use FluentMail\Google\Service\ApigeeRegistry\ListLocationsResponse;
+use FluentMail\Google\Service\ApigeeRegistry\Location;
 
 /**
  * The "locations" collection of methods.

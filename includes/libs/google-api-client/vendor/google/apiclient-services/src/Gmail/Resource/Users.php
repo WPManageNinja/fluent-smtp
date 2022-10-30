@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\Profile;
-use Google\Service\Gmail\WatchRequest;
-use Google\Service\Gmail\WatchResponse;
+use FluentMail\Google\Service\Gmail\Profile;
+use FluentMail\Google\Service\Gmail\WatchRequest;
+use FluentMail\Google\Service\Gmail\WatchResponse;
 
 /**
  * The "users" collection of methods.

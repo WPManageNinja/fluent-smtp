@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-namespace Google\Auth;
+namespace FluentMail\Google\Auth;
 
-use Google\Auth\Credentials\InsecureCredentials;
-use Google\Auth\Credentials\ServiceAccountCredentials;
-use Google\Auth\Credentials\UserRefreshCredentials;
+use FluentMail\Google\Auth\Credentials\InsecureCredentials;
+use FluentMail\Google\Auth\Credentials\ServiceAccountCredentials;
+use FluentMail\Google\Auth\Credentials\UserRefreshCredentials;
 use RuntimeException;
 use UnexpectedValueException;
 

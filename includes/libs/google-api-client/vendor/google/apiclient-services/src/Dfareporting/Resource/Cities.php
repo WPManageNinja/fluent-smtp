@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\CitiesListResponse;
+use FluentMail\Google\Service\Dfareporting\CitiesListResponse;
 
 /**
  * The "cities" collection of methods.

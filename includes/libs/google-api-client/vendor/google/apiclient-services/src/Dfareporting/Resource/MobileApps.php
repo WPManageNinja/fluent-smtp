@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\MobileApp;
-use Google\Service\Dfareporting\MobileAppsListResponse;
+use FluentMail\Google\Service\Dfareporting\MobileApp;
+use FluentMail\Google\Service\Dfareporting\MobileAppsListResponse;
 
 /**
  * The "mobileApps" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SQLAdmin\Resource;
+namespace FluentMail\Google\Service\SQLAdmin\Resource;
 
 /**
  * The "projects" collection of methods.

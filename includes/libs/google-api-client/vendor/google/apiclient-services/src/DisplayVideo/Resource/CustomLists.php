@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\CustomList;
-use Google\Service\DisplayVideo\ListCustomListsResponse;
+use FluentMail\Google\Service\DisplayVideo\CustomList;
+use FluentMail\Google\Service\DisplayVideo\ListCustomListsResponse;
 
 /**
  * The "customLists" collection of methods.

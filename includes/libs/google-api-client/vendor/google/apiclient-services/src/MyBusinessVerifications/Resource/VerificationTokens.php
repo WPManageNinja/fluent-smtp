@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessVerifications\Resource;
+namespace FluentMail\Google\Service\MyBusinessVerifications\Resource;
 
-use Google\Service\MyBusinessVerifications\GenerateVerificationTokenRequest;
-use Google\Service\MyBusinessVerifications\GenerateVerificationTokenResponse;
+use FluentMail\Google\Service\MyBusinessVerifications\GenerateVerificationTokenRequest;
+use FluentMail\Google\Service\MyBusinessVerifications\GenerateVerificationTokenResponse;
 
 /**
  * The "verificationTokens" collection of methods.

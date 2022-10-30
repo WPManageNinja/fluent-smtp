@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\GamesManagement\Resource;
+namespace FluentMail\Google\Service\GamesManagement\Resource;
 
-use Google\Service\GamesManagement\PlayerScoreResetAllResponse;
-use Google\Service\GamesManagement\PlayerScoreResetResponse;
-use Google\Service\GamesManagement\ScoresResetMultipleForAllRequest;
+use FluentMail\Google\Service\GamesManagement\PlayerScoreResetAllResponse;
+use FluentMail\Google\Service\GamesManagement\PlayerScoreResetResponse;
+use FluentMail\Google\Service\GamesManagement\ScoresResetMultipleForAllRequest;
 
 /**
  * The "scores" collection of methods.

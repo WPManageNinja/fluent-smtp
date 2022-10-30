@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-namespace Google\Auth\Credentials;
+namespace FluentMail\Google\Auth\Credentials;
 
-use Google\Auth\CredentialsLoader;
-use Google\Auth\GetQuotaProjectInterface;
-use Google\Auth\OAuth2;
-use Google\Auth\ProjectIdProviderInterface;
-use Google\Auth\ServiceAccountSignerTrait;
-use Google\Auth\SignBlobInterface;
+use FluentMail\Google\Auth\CredentialsLoader;
+use FluentMail\Google\Auth\GetQuotaProjectInterface;
+use FluentMail\Google\Auth\OAuth2;
+use FluentMail\Google\Auth\ProjectIdProviderInterface;
+use FluentMail\Google\Auth\ServiceAccountSignerTrait;
+use FluentMail\Google\Auth\SignBlobInterface;
 
 /**
  * Authenticates requests using Google's Service Account credentials via

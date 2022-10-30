@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Games\Resource;
+namespace FluentMail\Google\Service\Games\Resource;
 
-use Google\Service\Games\Snapshot;
-use Google\Service\Games\SnapshotListResponse;
+use FluentMail\Google\Service\Games\Snapshot;
+use FluentMail\Google\Service\Games\SnapshotListResponse;
 
 /**
  * The "snapshots" collection of methods.

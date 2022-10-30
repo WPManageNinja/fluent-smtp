@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudSupport\Resource;
+namespace FluentMail\Google\Service\CloudSupport\Resource;
 
-use Google\Service\CloudSupport\ListAttachmentsResponse;
+use FluentMail\Google\Service\CloudSupport\ListAttachmentsResponse;
 
 /**
  * The "attachments" collection of methods.

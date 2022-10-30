@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\CertificateAuthorityService\Resource;
+namespace FluentMail\Google\Service\CertificateAuthorityService\Resource;
 
-use Google\Service\CertificateAuthorityService\CaPool;
-use Google\Service\CertificateAuthorityService\FetchCaCertsRequest;
-use Google\Service\CertificateAuthorityService\FetchCaCertsResponse;
-use Google\Service\CertificateAuthorityService\ListCaPoolsResponse;
-use Google\Service\CertificateAuthorityService\Operation;
-use Google\Service\CertificateAuthorityService\Policy;
-use Google\Service\CertificateAuthorityService\SetIamPolicyRequest;
-use Google\Service\CertificateAuthorityService\TestIamPermissionsRequest;
-use Google\Service\CertificateAuthorityService\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CertificateAuthorityService\CaPool;
+use FluentMail\Google\Service\CertificateAuthorityService\FetchCaCertsRequest;
+use FluentMail\Google\Service\CertificateAuthorityService\FetchCaCertsResponse;
+use FluentMail\Google\Service\CertificateAuthorityService\ListCaPoolsResponse;
+use FluentMail\Google\Service\CertificateAuthorityService\Operation;
+use FluentMail\Google\Service\CertificateAuthorityService\Policy;
+use FluentMail\Google\Service\CertificateAuthorityService\SetIamPolicyRequest;
+use FluentMail\Google\Service\CertificateAuthorityService\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CertificateAuthorityService\TestIamPermissionsResponse;
 
 /**
  * The "caPools" collection of methods.

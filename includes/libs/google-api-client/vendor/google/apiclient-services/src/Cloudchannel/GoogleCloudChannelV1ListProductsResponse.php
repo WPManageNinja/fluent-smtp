@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Cloudchannel;
+namespace FluentMail\Google\Service\Cloudchannel;
 
 class GoogleCloudChannelV1ListProductsResponse extends \Google\Collection
 {

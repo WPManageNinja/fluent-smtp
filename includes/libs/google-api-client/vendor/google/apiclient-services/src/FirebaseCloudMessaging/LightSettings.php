@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseCloudMessaging;
+namespace FluentMail\Google\Service\FirebaseCloudMessaging;
 
 class LightSettings extends \Google\Model
 {

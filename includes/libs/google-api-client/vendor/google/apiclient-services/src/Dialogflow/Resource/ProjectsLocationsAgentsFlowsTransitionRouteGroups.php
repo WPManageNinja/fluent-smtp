@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListTransitionRouteGroupsResponse;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3TransitionRouteGroup;
-use Google\Service\Dialogflow\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListTransitionRouteGroupsResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3TransitionRouteGroup;
+use FluentMail\Google\Service\Dialogflow\GoogleProtobufEmpty;
 
 /**
  * The "transitionRouteGroups" collection of methods.

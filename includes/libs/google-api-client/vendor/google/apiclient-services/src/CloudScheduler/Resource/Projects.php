@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudScheduler\Resource;
+namespace FluentMail\Google\Service\CloudScheduler\Resource;
 
 /**
  * The "projects" collection of methods.

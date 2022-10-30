@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\TagManager\Resource;
+namespace FluentMail\Google\Service\TagManager\Resource;
 
-use Google\Service\TagManager\ListTagsResponse;
-use Google\Service\TagManager\RevertTagResponse;
-use Google\Service\TagManager\Tag;
+use FluentMail\Google\Service\TagManager\ListTagsResponse;
+use FluentMail\Google\Service\TagManager\RevertTagResponse;
+use FluentMail\Google\Service\TagManager\Tag;
 
 /**
  * The "tags" collection of methods.

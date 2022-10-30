@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\VMMigrationService\Resource;
+namespace FluentMail\Google\Service\VMMigrationService\Resource;
 
-use Google\Service\VMMigrationService\FinalizeMigrationRequest;
-use Google\Service\VMMigrationService\ListMigratingVmsResponse;
-use Google\Service\VMMigrationService\MigratingVm;
-use Google\Service\VMMigrationService\Operation;
-use Google\Service\VMMigrationService\PauseMigrationRequest;
-use Google\Service\VMMigrationService\ResumeMigrationRequest;
-use Google\Service\VMMigrationService\StartMigrationRequest;
+use FluentMail\Google\Service\VMMigrationService\FinalizeMigrationRequest;
+use FluentMail\Google\Service\VMMigrationService\ListMigratingVmsResponse;
+use FluentMail\Google\Service\VMMigrationService\MigratingVm;
+use FluentMail\Google\Service\VMMigrationService\Operation;
+use FluentMail\Google\Service\VMMigrationService\PauseMigrationRequest;
+use FluentMail\Google\Service\VMMigrationService\ResumeMigrationRequest;
+use FluentMail\Google\Service\VMMigrationService\StartMigrationRequest;
 
 /**
  * The "migratingVms" collection of methods.

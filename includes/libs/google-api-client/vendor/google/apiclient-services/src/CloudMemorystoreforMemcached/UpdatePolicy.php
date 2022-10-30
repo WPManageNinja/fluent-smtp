@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudMemorystoreforMemcached;
+namespace FluentMail\Google\Service\CloudMemorystoreforMemcached;
 
 class UpdatePolicy extends \Google\Collection
 {

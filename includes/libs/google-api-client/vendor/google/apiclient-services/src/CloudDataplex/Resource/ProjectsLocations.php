@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudDataplex\Resource;
+namespace FluentMail\Google\Service\CloudDataplex\Resource;
 
-use Google\Service\CloudDataplex\GoogleCloudLocationListLocationsResponse;
-use Google\Service\CloudDataplex\GoogleCloudLocationLocation;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudLocationListLocationsResponse;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudLocationLocation;
 
 /**
  * The "locations" collection of methods.

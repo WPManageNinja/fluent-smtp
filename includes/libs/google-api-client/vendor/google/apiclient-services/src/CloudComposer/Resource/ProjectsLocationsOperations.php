@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudComposer\Resource;
+namespace FluentMail\Google\Service\CloudComposer\Resource;
 
-use Google\Service\CloudComposer\ComposerEmpty;
-use Google\Service\CloudComposer\ListOperationsResponse;
-use Google\Service\CloudComposer\Operation;
+use FluentMail\Google\Service\CloudComposer\ComposerEmpty;
+use FluentMail\Google\Service\CloudComposer\ListOperationsResponse;
+use FluentMail\Google\Service\CloudComposer\Operation;
 
 /**
  * The "operations" collection of methods.

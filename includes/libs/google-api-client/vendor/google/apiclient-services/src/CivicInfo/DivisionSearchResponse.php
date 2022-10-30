@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CivicInfo;
+namespace FluentMail\Google\Service\CivicInfo;
 
 class DivisionSearchResponse extends \Google\Collection
 {

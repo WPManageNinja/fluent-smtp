@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PlayableLocations;
+namespace FluentMail\Google\Service\PlayableLocations;
 
 class GoogleMapsUnityClientInfo extends \Google\Model
 {

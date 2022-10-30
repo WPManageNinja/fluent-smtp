@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\PlayableLocations\Resource;
+namespace FluentMail\Google\Service\PlayableLocations\Resource;
 
-use Google\Service\PlayableLocations\GoogleMapsPlayablelocationsV3LogImpressionsRequest;
-use Google\Service\PlayableLocations\GoogleMapsPlayablelocationsV3LogImpressionsResponse;
-use Google\Service\PlayableLocations\GoogleMapsPlayablelocationsV3LogPlayerReportsRequest;
-use Google\Service\PlayableLocations\GoogleMapsPlayablelocationsV3LogPlayerReportsResponse;
-use Google\Service\PlayableLocations\GoogleMapsPlayablelocationsV3SamplePlayableLocationsRequest;
-use Google\Service\PlayableLocations\GoogleMapsPlayablelocationsV3SamplePlayableLocationsResponse;
+use FluentMail\Google\Service\PlayableLocations\GoogleMapsPlayablelocationsV3LogImpressionsRequest;
+use FluentMail\Google\Service\PlayableLocations\GoogleMapsPlayablelocationsV3LogImpressionsResponse;
+use FluentMail\Google\Service\PlayableLocations\GoogleMapsPlayablelocationsV3LogPlayerReportsRequest;
+use FluentMail\Google\Service\PlayableLocations\GoogleMapsPlayablelocationsV3LogPlayerReportsResponse;
+use FluentMail\Google\Service\PlayableLocations\GoogleMapsPlayablelocationsV3SamplePlayableLocationsRequest;
+use FluentMail\Google\Service\PlayableLocations\GoogleMapsPlayablelocationsV3SamplePlayableLocationsResponse;
 
 /**
  * The "v3" collection of methods.

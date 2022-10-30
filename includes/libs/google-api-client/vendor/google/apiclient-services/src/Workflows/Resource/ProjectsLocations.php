@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Workflows\Resource;
+namespace FluentMail\Google\Service\Workflows\Resource;
 
-use Google\Service\Workflows\ListLocationsResponse;
-use Google\Service\Workflows\Location;
+use FluentMail\Google\Service\Workflows\ListLocationsResponse;
+use FluentMail\Google\Service\Workflows\Location;
 
 /**
  * The "locations" collection of methods.

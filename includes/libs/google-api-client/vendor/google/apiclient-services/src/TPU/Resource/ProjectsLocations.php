@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\TPU\Resource;
+namespace FluentMail\Google\Service\TPU\Resource;
 
-use Google\Service\TPU\ListLocationsResponse;
-use Google\Service\TPU\Location;
+use FluentMail\Google\Service\TPU\ListLocationsResponse;
+use FluentMail\Google\Service\TPU\Location;
 
 /**
  * The "locations" collection of methods.

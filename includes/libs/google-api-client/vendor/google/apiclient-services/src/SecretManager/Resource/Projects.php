@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SecretManager\Resource;
+namespace FluentMail\Google\Service\SecretManager\Resource;
 
 /**
  * The "projects" collection of methods.

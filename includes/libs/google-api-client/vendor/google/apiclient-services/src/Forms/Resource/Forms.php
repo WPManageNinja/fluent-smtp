@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Forms\Resource;
+namespace FluentMail\Google\Service\Forms\Resource;
 
-use Google\Service\Forms\BatchUpdateFormRequest;
-use Google\Service\Forms\BatchUpdateFormResponse;
-use Google\Service\Forms\Form;
+use FluentMail\Google\Service\Forms\BatchUpdateFormRequest;
+use FluentMail\Google\Service\Forms\BatchUpdateFormResponse;
+use FluentMail\Google\Service\Forms\Form;
 
 /**
  * The "forms" collection of methods.

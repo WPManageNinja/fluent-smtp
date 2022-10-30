@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\BillingAssignment;
-use Google\Service\Dfareporting\BillingAssignmentsListResponse;
+use FluentMail\Google\Service\Dfareporting\BillingAssignment;
+use FluentMail\Google\Service\Dfareporting\BillingAssignmentsListResponse;
 
 /**
  * The "billingAssignments" collection of methods.

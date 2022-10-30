@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DLP\Resource;
+namespace FluentMail\Google\Service\DLP\Resource;
 
-use Google\Service\DLP\GooglePrivacyDlpV2RedactImageRequest;
-use Google\Service\DLP\GooglePrivacyDlpV2RedactImageResponse;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2RedactImageRequest;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2RedactImageResponse;
 
 /**
  * The "image" collection of methods.

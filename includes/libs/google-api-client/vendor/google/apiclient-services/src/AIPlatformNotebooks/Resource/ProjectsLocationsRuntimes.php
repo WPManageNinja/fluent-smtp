@@ -15,24 +15,24 @@
  * the License.
  */
 
-namespace Google\Service\AIPlatformNotebooks\Resource;
+namespace FluentMail\Google\Service\AIPlatformNotebooks\Resource;
 
-use Google\Service\AIPlatformNotebooks\DiagnoseRuntimeRequest;
-use Google\Service\AIPlatformNotebooks\ListRuntimesResponse;
-use Google\Service\AIPlatformNotebooks\Operation;
-use Google\Service\AIPlatformNotebooks\Policy;
-use Google\Service\AIPlatformNotebooks\RefreshRuntimeTokenInternalRequest;
-use Google\Service\AIPlatformNotebooks\RefreshRuntimeTokenInternalResponse;
-use Google\Service\AIPlatformNotebooks\ReportRuntimeEventRequest;
-use Google\Service\AIPlatformNotebooks\ResetRuntimeRequest;
-use Google\Service\AIPlatformNotebooks\Runtime;
-use Google\Service\AIPlatformNotebooks\SetIamPolicyRequest;
-use Google\Service\AIPlatformNotebooks\StartRuntimeRequest;
-use Google\Service\AIPlatformNotebooks\StopRuntimeRequest;
-use Google\Service\AIPlatformNotebooks\SwitchRuntimeRequest;
-use Google\Service\AIPlatformNotebooks\TestIamPermissionsRequest;
-use Google\Service\AIPlatformNotebooks\TestIamPermissionsResponse;
-use Google\Service\AIPlatformNotebooks\UpgradeRuntimeRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\DiagnoseRuntimeRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\ListRuntimesResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\Operation;
+use FluentMail\Google\Service\AIPlatformNotebooks\Policy;
+use FluentMail\Google\Service\AIPlatformNotebooks\RefreshRuntimeTokenInternalRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\RefreshRuntimeTokenInternalResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\ReportRuntimeEventRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\ResetRuntimeRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\Runtime;
+use FluentMail\Google\Service\AIPlatformNotebooks\SetIamPolicyRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\StartRuntimeRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\StopRuntimeRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\SwitchRuntimeRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\TestIamPermissionsRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\TestIamPermissionsResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\UpgradeRuntimeRequest;
 
 /**
  * The "runtimes" collection of methods.

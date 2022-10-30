@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CertificateAuthorityService;
+namespace FluentMail\Google\Service\CertificateAuthorityService;
 
 class Status extends \Google\Collection
 {

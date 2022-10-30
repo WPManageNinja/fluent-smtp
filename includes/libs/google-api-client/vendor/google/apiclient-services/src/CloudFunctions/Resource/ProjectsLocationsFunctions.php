@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\CloudFunctions\Resource;
+namespace FluentMail\Google\Service\CloudFunctions\Resource;
 
-use Google\Service\CloudFunctions\CloudfunctionsFunction;
-use Google\Service\CloudFunctions\GenerateDownloadUrlRequest;
-use Google\Service\CloudFunctions\GenerateDownloadUrlResponse;
-use Google\Service\CloudFunctions\GenerateUploadUrlRequest;
-use Google\Service\CloudFunctions\GenerateUploadUrlResponse;
-use Google\Service\CloudFunctions\ListFunctionsResponse;
-use Google\Service\CloudFunctions\Operation;
-use Google\Service\CloudFunctions\Policy;
-use Google\Service\CloudFunctions\SetIamPolicyRequest;
-use Google\Service\CloudFunctions\TestIamPermissionsRequest;
-use Google\Service\CloudFunctions\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudFunctions\CloudfunctionsFunction;
+use FluentMail\Google\Service\CloudFunctions\GenerateDownloadUrlRequest;
+use FluentMail\Google\Service\CloudFunctions\GenerateDownloadUrlResponse;
+use FluentMail\Google\Service\CloudFunctions\GenerateUploadUrlRequest;
+use FluentMail\Google\Service\CloudFunctions\GenerateUploadUrlResponse;
+use FluentMail\Google\Service\CloudFunctions\ListFunctionsResponse;
+use FluentMail\Google\Service\CloudFunctions\Operation;
+use FluentMail\Google\Service\CloudFunctions\Policy;
+use FluentMail\Google\Service\CloudFunctions\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudFunctions\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudFunctions\TestIamPermissionsResponse;
 
 /**
  * The "functions" collection of methods.

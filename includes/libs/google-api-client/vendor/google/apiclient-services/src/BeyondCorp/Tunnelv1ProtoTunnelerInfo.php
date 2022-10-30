@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BeyondCorp;
+namespace FluentMail\Google\Service\BeyondCorp;
 
 class Tunnelv1ProtoTunnelerInfo extends \Google\Model
 {

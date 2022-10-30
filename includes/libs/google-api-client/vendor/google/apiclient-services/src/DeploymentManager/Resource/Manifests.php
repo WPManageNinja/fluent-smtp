@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DeploymentManager\Resource;
+namespace FluentMail\Google\Service\DeploymentManager\Resource;
 
-use Google\Service\DeploymentManager\Manifest;
-use Google\Service\DeploymentManager\ManifestsListResponse;
+use FluentMail\Google\Service\DeploymentManager\Manifest;
+use FluentMail\Google\Service\DeploymentManager\ManifestsListResponse;
 
 /**
  * The "manifests" collection of methods.

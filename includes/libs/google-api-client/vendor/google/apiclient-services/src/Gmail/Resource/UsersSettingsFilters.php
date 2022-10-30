@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\Filter;
-use Google\Service\Gmail\ListFiltersResponse;
+use FluentMail\Google\Service\Gmail\Filter;
+use FluentMail\Google\Service\Gmail\ListFiltersResponse;
 
 /**
  * The "filters" collection of methods.

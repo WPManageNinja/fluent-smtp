@@ -30,14 +30,14 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\System\SSH;
+namespace FluentMail\phpseclib3\System\SSH;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Crypt\PublicKeyLoader;
-use phpseclib3\Crypt\RSA;
-use phpseclib3\Exception\BadConfigurationException;
-use phpseclib3\Net\SSH2;
-use phpseclib3\System\SSH\Agent\Identity;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Crypt\PublicKeyLoader;
+use FluentMail\phpseclib3\Crypt\RSA;
+use FluentMail\phpseclib3\Exception\BadConfigurationException;
+use FluentMail\phpseclib3\Net\SSH2;
+use FluentMail\phpseclib3\System\SSH\Agent\Identity;
 
 /**
  * Pure-PHP ssh-agent client identity factory

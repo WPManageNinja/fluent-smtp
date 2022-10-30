@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
-use Google\Service\Baremetalsolution\ListLunsResponse;
-use Google\Service\Baremetalsolution\Lun;
+use FluentMail\Google\Service\Baremetalsolution\ListLunsResponse;
+use FluentMail\Google\Service\Baremetalsolution\Lun;
 
 /**
  * The "luns" collection of methods.

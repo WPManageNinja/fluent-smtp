@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Genomics\Resource;
+namespace FluentMail\Google\Service\Genomics\Resource;
 
-use Google\Service\Genomics\CheckInRequest;
-use Google\Service\Genomics\CheckInResponse;
+use FluentMail\Google\Service\Genomics\CheckInRequest;
+use FluentMail\Google\Service\Genomics\CheckInResponse;
 
 /**
  * The "workers" collection of methods.

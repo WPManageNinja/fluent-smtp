@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Appengine\Resource;
+namespace FluentMail\Google\Service\Appengine\Resource;
 
-use Google\Service\Appengine\DebugInstanceRequest;
-use Google\Service\Appengine\Instance;
-use Google\Service\Appengine\ListInstancesResponse;
-use Google\Service\Appengine\Operation;
+use FluentMail\Google\Service\Appengine\DebugInstanceRequest;
+use FluentMail\Google\Service\Appengine\Instance;
+use FluentMail\Google\Service\Appengine\ListInstancesResponse;
+use FluentMail\Google\Service\Appengine\Operation;
 
 /**
  * The "instances" collection of methods.

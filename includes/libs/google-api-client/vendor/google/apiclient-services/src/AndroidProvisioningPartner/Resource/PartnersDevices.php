@@ -15,23 +15,23 @@
  * the License.
  */
 
-namespace Google\Service\AndroidProvisioningPartner\Resource;
+namespace FluentMail\Google\Service\AndroidProvisioningPartner\Resource;
 
-use Google\Service\AndroidProvisioningPartner\AndroiddeviceprovisioningEmpty;
-use Google\Service\AndroidProvisioningPartner\ClaimDeviceRequest;
-use Google\Service\AndroidProvisioningPartner\ClaimDeviceResponse;
-use Google\Service\AndroidProvisioningPartner\ClaimDevicesRequest;
-use Google\Service\AndroidProvisioningPartner\Device;
-use Google\Service\AndroidProvisioningPartner\DeviceMetadata;
-use Google\Service\AndroidProvisioningPartner\FindDevicesByDeviceIdentifierRequest;
-use Google\Service\AndroidProvisioningPartner\FindDevicesByDeviceIdentifierResponse;
-use Google\Service\AndroidProvisioningPartner\FindDevicesByOwnerRequest;
-use Google\Service\AndroidProvisioningPartner\FindDevicesByOwnerResponse;
-use Google\Service\AndroidProvisioningPartner\Operation;
-use Google\Service\AndroidProvisioningPartner\UnclaimDeviceRequest;
-use Google\Service\AndroidProvisioningPartner\UnclaimDevicesRequest;
-use Google\Service\AndroidProvisioningPartner\UpdateDeviceMetadataInBatchRequest;
-use Google\Service\AndroidProvisioningPartner\UpdateDeviceMetadataRequest;
+use FluentMail\Google\Service\AndroidProvisioningPartner\AndroiddeviceprovisioningEmpty;
+use FluentMail\Google\Service\AndroidProvisioningPartner\ClaimDeviceRequest;
+use FluentMail\Google\Service\AndroidProvisioningPartner\ClaimDeviceResponse;
+use FluentMail\Google\Service\AndroidProvisioningPartner\ClaimDevicesRequest;
+use FluentMail\Google\Service\AndroidProvisioningPartner\Device;
+use FluentMail\Google\Service\AndroidProvisioningPartner\DeviceMetadata;
+use FluentMail\Google\Service\AndroidProvisioningPartner\FindDevicesByDeviceIdentifierRequest;
+use FluentMail\Google\Service\AndroidProvisioningPartner\FindDevicesByDeviceIdentifierResponse;
+use FluentMail\Google\Service\AndroidProvisioningPartner\FindDevicesByOwnerRequest;
+use FluentMail\Google\Service\AndroidProvisioningPartner\FindDevicesByOwnerResponse;
+use FluentMail\Google\Service\AndroidProvisioningPartner\Operation;
+use FluentMail\Google\Service\AndroidProvisioningPartner\UnclaimDeviceRequest;
+use FluentMail\Google\Service\AndroidProvisioningPartner\UnclaimDevicesRequest;
+use FluentMail\Google\Service\AndroidProvisioningPartner\UpdateDeviceMetadataInBatchRequest;
+use FluentMail\Google\Service\AndroidProvisioningPartner\UpdateDeviceMetadataRequest;
 
 /**
  * The "devices" collection of methods.

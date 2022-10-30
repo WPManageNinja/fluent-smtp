@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Document\Resource;
+namespace FluentMail\Google\Service\Document\Resource;
 
-use Google\Service\Document\GoogleLongrunningListOperationsResponse;
-use Google\Service\Document\GoogleLongrunningOperation;
-use Google\Service\Document\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Document\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\Document\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Document\GoogleProtobufEmpty;
 
 /**
  * The "operations" collection of methods.

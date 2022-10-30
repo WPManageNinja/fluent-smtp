@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\SubscriptionPurchaseV2;
+use FluentMail\Google\Service\AndroidPublisher\SubscriptionPurchaseV2;
 
 /**
  * The "subscriptionsv2" collection of methods.

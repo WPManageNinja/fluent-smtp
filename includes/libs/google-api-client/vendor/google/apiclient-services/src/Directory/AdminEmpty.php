@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Directory;
+namespace FluentMail\Google\Service\Directory;
 
 class AdminEmpty extends \Google\Model
 {

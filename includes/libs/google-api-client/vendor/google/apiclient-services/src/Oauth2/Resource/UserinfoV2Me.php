@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Oauth2\Resource;
+namespace FluentMail\Google\Service\Oauth2\Resource;
 
-use Google\Service\Oauth2\Userinfo as UserinfoModel;
+use FluentMail\Google\Service\Oauth2\Userinfo as UserinfoModel;
 
 /**
  * The "me" collection of methods.

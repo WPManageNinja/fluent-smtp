@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DataFusion;
+namespace FluentMail\Google\Service\DataFusion;
 
 class TestIamPermissionsRequest extends \Google\Collection
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudBuild;
+namespace FluentMail\Google\Service\CloudBuild;
 
 class UpdateGitHubEnterpriseConfigOperationMetadata extends \Google\Model
 {

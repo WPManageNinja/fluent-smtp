@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SearchConsole;
+namespace FluentMail\Google\Service\SearchConsole;
 
 class MobileFriendlyIssue extends \Google\Model
 {

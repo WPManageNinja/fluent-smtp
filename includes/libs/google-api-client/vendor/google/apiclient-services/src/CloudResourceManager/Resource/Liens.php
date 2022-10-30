@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudResourceManager\Resource;
+namespace FluentMail\Google\Service\CloudResourceManager\Resource;
 
-use Google\Service\CloudResourceManager\CloudresourcemanagerEmpty;
-use Google\Service\CloudResourceManager\Lien;
-use Google\Service\CloudResourceManager\ListLiensResponse;
+use FluentMail\Google\Service\CloudResourceManager\CloudresourcemanagerEmpty;
+use FluentMail\Google\Service\CloudResourceManager\Lien;
+use FluentMail\Google\Service\CloudResourceManager\ListLiensResponse;
 
 /**
  * The "liens" collection of methods.

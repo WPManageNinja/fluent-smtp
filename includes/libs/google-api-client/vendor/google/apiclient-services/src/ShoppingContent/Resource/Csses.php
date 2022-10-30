@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\Css;
-use Google\Service\ShoppingContent\LabelIds;
-use Google\Service\ShoppingContent\ListCssesResponse;
+use FluentMail\Google\Service\ShoppingContent\Css;
+use FluentMail\Google\Service\ShoppingContent\LabelIds;
+use FluentMail\Google\Service\ShoppingContent\ListCssesResponse;
 
 /**
  * The "csses" collection of methods.

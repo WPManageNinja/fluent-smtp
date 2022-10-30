@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Apigateway;
+namespace FluentMail\Google\Service\Apigateway;
 
 class ApigatewayApiConfig extends \Google\Collection
 {

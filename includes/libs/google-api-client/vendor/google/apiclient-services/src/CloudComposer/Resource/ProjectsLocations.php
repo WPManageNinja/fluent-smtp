@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudComposer\Resource;
+namespace FluentMail\Google\Service\CloudComposer\Resource;
 
 /**
  * The "locations" collection of methods.

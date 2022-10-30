@@ -9,7 +9,7 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\Common;
+namespace FluentMail\phpseclib3\Crypt\Common;
 
 /**
  * PublicKey interface

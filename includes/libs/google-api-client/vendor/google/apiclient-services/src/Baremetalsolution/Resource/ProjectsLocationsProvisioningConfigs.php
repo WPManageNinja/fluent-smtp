@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
-use Google\Service\Baremetalsolution\ProvisioningConfig;
-use Google\Service\Baremetalsolution\SubmitProvisioningConfigRequest;
-use Google\Service\Baremetalsolution\SubmitProvisioningConfigResponse;
+use FluentMail\Google\Service\Baremetalsolution\ProvisioningConfig;
+use FluentMail\Google\Service\Baremetalsolution\SubmitProvisioningConfigRequest;
+use FluentMail\Google\Service\Baremetalsolution\SubmitProvisioningConfigResponse;
 
 /**
  * The "provisioningConfigs" collection of methods.

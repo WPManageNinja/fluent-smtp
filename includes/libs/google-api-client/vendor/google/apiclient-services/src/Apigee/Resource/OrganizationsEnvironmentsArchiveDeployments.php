@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1ArchiveDeployment;
-use Google\Service\Apigee\GoogleCloudApigeeV1GenerateDownloadUrlRequest;
-use Google\Service\Apigee\GoogleCloudApigeeV1GenerateDownloadUrlResponse;
-use Google\Service\Apigee\GoogleCloudApigeeV1GenerateUploadUrlRequest;
-use Google\Service\Apigee\GoogleCloudApigeeV1GenerateUploadUrlResponse;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListArchiveDeploymentsResponse;
-use Google\Service\Apigee\GoogleLongrunningOperation;
-use Google\Service\Apigee\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ArchiveDeployment;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1GenerateDownloadUrlRequest;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1GenerateDownloadUrlResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1GenerateUploadUrlRequest;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1GenerateUploadUrlResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListArchiveDeploymentsResponse;
+use FluentMail\Google\Service\Apigee\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Apigee\GoogleProtobufEmpty;
 
 /**
  * The "archiveDeployments" collection of methods.

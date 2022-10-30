@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Vault;
+namespace FluentMail\Google\Service\Vault;
 
 class Matter extends \Google\Collection
 {

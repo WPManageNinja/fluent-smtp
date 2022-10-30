@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudBillingBudget;
+namespace FluentMail\Google\Service\CloudBillingBudget;
 
 class GoogleTypeMoney extends \Google\Model
 {

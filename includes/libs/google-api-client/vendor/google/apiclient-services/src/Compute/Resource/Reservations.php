@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Policy;
-use Google\Service\Compute\Reservation;
-use Google\Service\Compute\ReservationAggregatedList;
-use Google\Service\Compute\ReservationList;
-use Google\Service\Compute\ReservationsResizeRequest;
-use Google\Service\Compute\TestPermissionsRequest;
-use Google\Service\Compute\TestPermissionsResponse;
-use Google\Service\Compute\ZoneSetPolicyRequest;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Policy;
+use FluentMail\Google\Service\Compute\Reservation;
+use FluentMail\Google\Service\Compute\ReservationAggregatedList;
+use FluentMail\Google\Service\Compute\ReservationList;
+use FluentMail\Google\Service\Compute\ReservationsResizeRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsResponse;
+use FluentMail\Google\Service\Compute\ZoneSetPolicyRequest;
 
 /**
  * The "reservations" collection of methods.

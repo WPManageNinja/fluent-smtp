@@ -15,33 +15,33 @@
  * the License.
  */
 
-namespace Google\Service\AIPlatformNotebooks\Resource;
+namespace FluentMail\Google\Service\AIPlatformNotebooks\Resource;
 
-use Google\Service\AIPlatformNotebooks\DiagnoseInstanceRequest;
-use Google\Service\AIPlatformNotebooks\GetInstanceHealthResponse;
-use Google\Service\AIPlatformNotebooks\Instance;
-use Google\Service\AIPlatformNotebooks\IsInstanceUpgradeableResponse;
-use Google\Service\AIPlatformNotebooks\ListInstancesResponse;
-use Google\Service\AIPlatformNotebooks\Operation;
-use Google\Service\AIPlatformNotebooks\Policy;
-use Google\Service\AIPlatformNotebooks\RegisterInstanceRequest;
-use Google\Service\AIPlatformNotebooks\ReportInstanceInfoRequest;
-use Google\Service\AIPlatformNotebooks\ResetInstanceRequest;
-use Google\Service\AIPlatformNotebooks\RollbackInstanceRequest;
-use Google\Service\AIPlatformNotebooks\SetIamPolicyRequest;
-use Google\Service\AIPlatformNotebooks\SetInstanceAcceleratorRequest;
-use Google\Service\AIPlatformNotebooks\SetInstanceLabelsRequest;
-use Google\Service\AIPlatformNotebooks\SetInstanceMachineTypeRequest;
-use Google\Service\AIPlatformNotebooks\StartInstanceRequest;
-use Google\Service\AIPlatformNotebooks\StopInstanceRequest;
-use Google\Service\AIPlatformNotebooks\TestIamPermissionsRequest;
-use Google\Service\AIPlatformNotebooks\TestIamPermissionsResponse;
-use Google\Service\AIPlatformNotebooks\UpdateInstanceConfigRequest;
-use Google\Service\AIPlatformNotebooks\UpdateInstanceMetadataItemsRequest;
-use Google\Service\AIPlatformNotebooks\UpdateInstanceMetadataItemsResponse;
-use Google\Service\AIPlatformNotebooks\UpdateShieldedInstanceConfigRequest;
-use Google\Service\AIPlatformNotebooks\UpgradeInstanceInternalRequest;
-use Google\Service\AIPlatformNotebooks\UpgradeInstanceRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\DiagnoseInstanceRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\GetInstanceHealthResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\Instance;
+use FluentMail\Google\Service\AIPlatformNotebooks\IsInstanceUpgradeableResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\ListInstancesResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\Operation;
+use FluentMail\Google\Service\AIPlatformNotebooks\Policy;
+use FluentMail\Google\Service\AIPlatformNotebooks\RegisterInstanceRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\ReportInstanceInfoRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\ResetInstanceRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\RollbackInstanceRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\SetIamPolicyRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\SetInstanceAcceleratorRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\SetInstanceLabelsRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\SetInstanceMachineTypeRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\StartInstanceRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\StopInstanceRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\TestIamPermissionsRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\TestIamPermissionsResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\UpdateInstanceConfigRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\UpdateInstanceMetadataItemsRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\UpdateInstanceMetadataItemsResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\UpdateShieldedInstanceConfigRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\UpgradeInstanceInternalRequest;
+use FluentMail\Google\Service\AIPlatformNotebooks\UpgradeInstanceRequest;
 
 /**
  * The "instances" collection of methods.

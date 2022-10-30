@@ -24,11 +24,11 @@
  * @link      http://pear.php.net/package/Math_BigInteger
  */
 
-namespace phpseclib3\Crypt\EC\BaseCurves;
+namespace FluentMail\phpseclib3\Crypt\EC\BaseCurves;
 
-use phpseclib3\Math\BigInteger;
-use phpseclib3\Math\PrimeField;
-use phpseclib3\Math\PrimeField\Integer as PrimeInteger;
+use FluentMail\phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Math\PrimeField;
+use FluentMail\phpseclib3\Math\PrimeField\Integer as PrimeInteger;
 
 /**
  * Curves over a*x^2 + y^2 = 1 + d*x^2*y^2

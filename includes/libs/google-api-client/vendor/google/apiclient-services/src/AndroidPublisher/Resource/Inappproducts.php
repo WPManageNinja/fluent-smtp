@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\InAppProduct;
-use Google\Service\AndroidPublisher\InappproductsListResponse;
+use FluentMail\Google\Service\AndroidPublisher\InAppProduct;
+use FluentMail\Google\Service\AndroidPublisher\InappproductsListResponse;
 
 /**
  * The "inappproducts" collection of methods.

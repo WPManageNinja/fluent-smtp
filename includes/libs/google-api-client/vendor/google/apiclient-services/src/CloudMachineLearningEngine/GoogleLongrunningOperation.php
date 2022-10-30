@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudMachineLearningEngine;
+namespace FluentMail\Google\Service\CloudMachineLearningEngine;
 
 class GoogleLongrunningOperation extends \Google\Model
 {

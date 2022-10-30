@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\ReturnAddress as ReturnAddressModel;
-use Google\Service\ShoppingContent\ReturnaddressCustomBatchRequest;
-use Google\Service\ShoppingContent\ReturnaddressCustomBatchResponse;
-use Google\Service\ShoppingContent\ReturnaddressListResponse;
+use FluentMail\Google\Service\ShoppingContent\ReturnAddress as ReturnAddressModel;
+use FluentMail\Google\Service\ShoppingContent\ReturnaddressCustomBatchRequest;
+use FluentMail\Google\Service\ShoppingContent\ReturnaddressCustomBatchResponse;
+use FluentMail\Google\Service\ShoppingContent\ReturnaddressListResponse;
 
 /**
  * The "returnaddress" collection of methods.

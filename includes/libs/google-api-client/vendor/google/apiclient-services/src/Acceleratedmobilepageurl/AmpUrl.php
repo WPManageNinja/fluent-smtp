@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Acceleratedmobilepageurl;
+namespace FluentMail\Google\Service\Acceleratedmobilepageurl;
 
 class AmpUrl extends \Google\Model
 {

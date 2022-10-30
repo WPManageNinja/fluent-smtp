@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\ChannelBannerResource;
+use FluentMail\Google\Service\YouTube\ChannelBannerResource;
 
 /**
  * The "channelBanners" collection of methods.

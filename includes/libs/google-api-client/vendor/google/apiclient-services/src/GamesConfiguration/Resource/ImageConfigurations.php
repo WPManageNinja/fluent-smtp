@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\GamesConfiguration\Resource;
+namespace FluentMail\Google\Service\GamesConfiguration\Resource;
 
-use Google\Service\GamesConfiguration\ImageConfiguration;
+use FluentMail\Google\Service\GamesConfiguration\ImageConfiguration;
 
 /**
  * The "imageConfigurations" collection of methods.

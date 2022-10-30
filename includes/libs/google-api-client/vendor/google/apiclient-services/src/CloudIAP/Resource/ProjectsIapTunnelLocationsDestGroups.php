@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudIAP\Resource;
+namespace FluentMail\Google\Service\CloudIAP\Resource;
 
-use Google\Service\CloudIAP\IapEmpty;
-use Google\Service\CloudIAP\ListTunnelDestGroupsResponse;
-use Google\Service\CloudIAP\TunnelDestGroup;
+use FluentMail\Google\Service\CloudIAP\IapEmpty;
+use FluentMail\Google\Service\CloudIAP\ListTunnelDestGroupsResponse;
+use FluentMail\Google\Service\CloudIAP\TunnelDestGroup;
 
 /**
  * The "destGroups" collection of methods.

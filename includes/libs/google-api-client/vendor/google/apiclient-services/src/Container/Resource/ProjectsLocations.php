@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Container\Resource;
+namespace FluentMail\Google\Service\Container\Resource;
 
-use Google\Service\Container\ServerConfig;
+use FluentMail\Google\Service\Container\ServerConfig;
 
 /**
  * The "locations" collection of methods.

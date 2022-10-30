@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ChromeUXReport;
+namespace FluentMail\Google\Service\ChromeUXReport;
 
 class Metric extends \Google\Collection
 {

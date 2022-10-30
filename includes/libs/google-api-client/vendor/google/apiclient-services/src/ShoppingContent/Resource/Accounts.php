@@ -15,23 +15,23 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\Account;
-use Google\Service\ShoppingContent\AccountsAuthInfoResponse;
-use Google\Service\ShoppingContent\AccountsClaimWebsiteResponse;
-use Google\Service\ShoppingContent\AccountsCustomBatchRequest;
-use Google\Service\ShoppingContent\AccountsCustomBatchResponse;
-use Google\Service\ShoppingContent\AccountsLinkRequest;
-use Google\Service\ShoppingContent\AccountsLinkResponse;
-use Google\Service\ShoppingContent\AccountsListLinksResponse;
-use Google\Service\ShoppingContent\AccountsListResponse;
-use Google\Service\ShoppingContent\AccountsUpdateLabelsRequest;
-use Google\Service\ShoppingContent\AccountsUpdateLabelsResponse;
-use Google\Service\ShoppingContent\RequestPhoneVerificationRequest;
-use Google\Service\ShoppingContent\RequestPhoneVerificationResponse;
-use Google\Service\ShoppingContent\VerifyPhoneNumberRequest;
-use Google\Service\ShoppingContent\VerifyPhoneNumberResponse;
+use FluentMail\Google\Service\ShoppingContent\Account;
+use FluentMail\Google\Service\ShoppingContent\AccountsAuthInfoResponse;
+use FluentMail\Google\Service\ShoppingContent\AccountsClaimWebsiteResponse;
+use FluentMail\Google\Service\ShoppingContent\AccountsCustomBatchRequest;
+use FluentMail\Google\Service\ShoppingContent\AccountsCustomBatchResponse;
+use FluentMail\Google\Service\ShoppingContent\AccountsLinkRequest;
+use FluentMail\Google\Service\ShoppingContent\AccountsLinkResponse;
+use FluentMail\Google\Service\ShoppingContent\AccountsListLinksResponse;
+use FluentMail\Google\Service\ShoppingContent\AccountsListResponse;
+use FluentMail\Google\Service\ShoppingContent\AccountsUpdateLabelsRequest;
+use FluentMail\Google\Service\ShoppingContent\AccountsUpdateLabelsResponse;
+use FluentMail\Google\Service\ShoppingContent\RequestPhoneVerificationRequest;
+use FluentMail\Google\Service\ShoppingContent\RequestPhoneVerificationResponse;
+use FluentMail\Google\Service\ShoppingContent\VerifyPhoneNumberRequest;
+use FluentMail\Google\Service\ShoppingContent\VerifyPhoneNumberResponse;
 
 /**
  * The "accounts" collection of methods.

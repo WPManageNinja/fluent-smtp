@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Firestore\Resource;
+namespace FluentMail\Google\Service\Firestore\Resource;
 
-use Google\Service\Firestore\GoogleFirestoreAdminV1Database;
-use Google\Service\Firestore\GoogleFirestoreAdminV1ExportDocumentsRequest;
-use Google\Service\Firestore\GoogleFirestoreAdminV1ImportDocumentsRequest;
-use Google\Service\Firestore\GoogleFirestoreAdminV1ListDatabasesResponse;
-use Google\Service\Firestore\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Firestore\GoogleFirestoreAdminV1Database;
+use FluentMail\Google\Service\Firestore\GoogleFirestoreAdminV1ExportDocumentsRequest;
+use FluentMail\Google\Service\Firestore\GoogleFirestoreAdminV1ImportDocumentsRequest;
+use FluentMail\Google\Service\Firestore\GoogleFirestoreAdminV1ListDatabasesResponse;
+use FluentMail\Google\Service\Firestore\GoogleLongrunningOperation;
 
 /**
  * The "databases" collection of methods.

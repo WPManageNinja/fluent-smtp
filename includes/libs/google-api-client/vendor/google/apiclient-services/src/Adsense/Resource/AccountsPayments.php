@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Adsense\Resource;
+namespace FluentMail\Google\Service\Adsense\Resource;
 
-use Google\Service\Adsense\ListPaymentsResponse;
+use FluentMail\Google\Service\Adsense\ListPaymentsResponse;
 
 /**
  * The "payments" collection of methods.

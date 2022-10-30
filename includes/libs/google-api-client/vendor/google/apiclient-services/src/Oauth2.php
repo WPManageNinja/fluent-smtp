@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service;
+namespace FluentMail\Google\Service;
 
-use Google\Client;
-use Google\Service\Oauth2\Tokeninfo;
+use FluentMail\Google\Client;
+use FluentMail\Google\Service\Oauth2\Tokeninfo;
 
 /**
  * Service definition for Oauth2 (v2).

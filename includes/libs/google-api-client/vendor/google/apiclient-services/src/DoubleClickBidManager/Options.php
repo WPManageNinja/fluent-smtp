@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DoubleClickBidManager;
+namespace FluentMail\Google\Service\DoubleClickBidManager;
 
 class Options extends \Google\Model
 {

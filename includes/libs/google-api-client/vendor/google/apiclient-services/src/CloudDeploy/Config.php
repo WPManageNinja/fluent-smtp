@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudDeploy;
+namespace FluentMail\Google\Service\CloudDeploy;
 
 class Config extends \Google\Collection
 {

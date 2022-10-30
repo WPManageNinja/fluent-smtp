@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AuthorizedBuyersMarketplace;
+namespace FluentMail\Google\Service\AuthorizedBuyersMarketplace;
 
 class AuctionPackage extends \Google\Collection
 {

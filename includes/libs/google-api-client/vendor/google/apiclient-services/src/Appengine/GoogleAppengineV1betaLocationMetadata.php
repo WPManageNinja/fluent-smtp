@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Appengine;
+namespace FluentMail\Google\Service\Appengine;
 
 class GoogleAppengineV1betaLocationMetadata extends \Google\Model
 {

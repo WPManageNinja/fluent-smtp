@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ToolResults\Resource;
+namespace FluentMail\Google\Service\ToolResults\Resource;
 
-use Google\Service\ToolResults\ProjectSettings;
+use FluentMail\Google\Service\ToolResults\ProjectSettings;
 
 /**
  * The "projects" collection of methods.

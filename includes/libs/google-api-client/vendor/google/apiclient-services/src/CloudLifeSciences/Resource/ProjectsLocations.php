@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudLifeSciences\Resource;
+namespace FluentMail\Google\Service\CloudLifeSciences\Resource;
 
-use Google\Service\CloudLifeSciences\ListLocationsResponse;
-use Google\Service\CloudLifeSciences\Location;
+use FluentMail\Google\Service\CloudLifeSciences\ListLocationsResponse;
+use FluentMail\Google\Service\CloudLifeSciences\Location;
 
 /**
  * The "locations" collection of methods.

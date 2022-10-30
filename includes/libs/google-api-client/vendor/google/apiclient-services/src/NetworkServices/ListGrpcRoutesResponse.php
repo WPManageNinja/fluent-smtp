@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\NetworkServices;
+namespace FluentMail\Google\Service\NetworkServices;
 
 class ListGrpcRoutesResponse extends \Google\Collection
 {

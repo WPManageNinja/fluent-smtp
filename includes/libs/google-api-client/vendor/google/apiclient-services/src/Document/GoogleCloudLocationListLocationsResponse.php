@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Document;
+namespace FluentMail\Google\Service\Document;
 
 class GoogleCloudLocationListLocationsResponse extends \Google\Collection
 {

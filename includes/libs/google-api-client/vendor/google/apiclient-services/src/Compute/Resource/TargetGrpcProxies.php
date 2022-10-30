@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\TargetGrpcProxy;
-use Google\Service\Compute\TargetGrpcProxyList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\TargetGrpcProxy;
+use FluentMail\Google\Service\Compute\TargetGrpcProxyList;
 
 /**
  * The "targetGrpcProxies" collection of methods.

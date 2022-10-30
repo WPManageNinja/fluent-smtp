@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Speech\Resource;
+namespace FluentMail\Google\Service\Speech\Resource;
 
-use Google\Service\Speech\LongRunningRecognizeRequest;
-use Google\Service\Speech\Operation;
-use Google\Service\Speech\RecognizeRequest;
-use Google\Service\Speech\RecognizeResponse;
+use FluentMail\Google\Service\Speech\LongRunningRecognizeRequest;
+use FluentMail\Google\Service\Speech\Operation;
+use FluentMail\Google\Service\Speech\RecognizeRequest;
+use FluentMail\Google\Service\Speech\RecognizeResponse;
 
 /**
  * The "speech" collection of methods.

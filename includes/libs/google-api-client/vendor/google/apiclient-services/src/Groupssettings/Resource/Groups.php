@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Groupssettings\Resource;
+namespace FluentMail\Google\Service\Groupssettings\Resource;
 
-use Google\Service\Groupssettings\Groups as GroupsModel;
+use FluentMail\Google\Service\Groupssettings\Groups as GroupsModel;
 
 /**
  * The "groups" collection of methods.

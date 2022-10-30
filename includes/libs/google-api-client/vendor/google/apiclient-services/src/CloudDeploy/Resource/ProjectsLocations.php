@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudDeploy\Resource;
+namespace FluentMail\Google\Service\CloudDeploy\Resource;
 
-use Google\Service\CloudDeploy\Config;
-use Google\Service\CloudDeploy\ListLocationsResponse;
-use Google\Service\CloudDeploy\Location;
+use FluentMail\Google\Service\CloudDeploy\Config;
+use FluentMail\Google\Service\CloudDeploy\ListLocationsResponse;
+use FluentMail\Google\Service\CloudDeploy\Location;
 
 /**
  * The "locations" collection of methods.

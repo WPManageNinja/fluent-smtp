@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\ListHistoryResponse;
+use FluentMail\Google\Service\Gmail\ListHistoryResponse;
 
 /**
  * The "history" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Spanner\Resource;
+namespace FluentMail\Google\Service\Spanner\Resource;
 
-use Google\Service\Spanner\ListDatabaseOperationsResponse;
+use FluentMail\Google\Service\Spanner\ListDatabaseOperationsResponse;
 
 /**
  * The "databaseOperations" collection of methods.

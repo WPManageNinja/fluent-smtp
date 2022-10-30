@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Games\Resource;
+namespace FluentMail\Google\Service\Games\Resource;
 
-use Google\Service\Games\StatsResponse;
+use FluentMail\Google\Service\Games\StatsResponse;
 
 /**
  * The "stats" collection of methods.

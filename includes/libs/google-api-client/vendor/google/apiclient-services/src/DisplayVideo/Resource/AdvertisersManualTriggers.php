@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\ActivateManualTriggerRequest;
-use Google\Service\DisplayVideo\DeactivateManualTriggerRequest;
-use Google\Service\DisplayVideo\ListManualTriggersResponse;
-use Google\Service\DisplayVideo\ManualTrigger;
+use FluentMail\Google\Service\DisplayVideo\ActivateManualTriggerRequest;
+use FluentMail\Google\Service\DisplayVideo\DeactivateManualTriggerRequest;
+use FluentMail\Google\Service\DisplayVideo\ListManualTriggersResponse;
+use FluentMail\Google\Service\DisplayVideo\ManualTrigger;
 
 /**
  * The "manualTriggers" collection of methods.

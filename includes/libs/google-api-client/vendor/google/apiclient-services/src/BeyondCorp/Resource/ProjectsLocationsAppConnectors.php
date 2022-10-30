@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\BeyondCorp\Resource;
+namespace FluentMail\Google\Service\BeyondCorp\Resource;
 
-use Google\Service\BeyondCorp\GoogleCloudBeyondcorpAppconnectorsV1AppConnector;
-use Google\Service\BeyondCorp\GoogleCloudBeyondcorpAppconnectorsV1ListAppConnectorsResponse;
-use Google\Service\BeyondCorp\GoogleCloudBeyondcorpAppconnectorsV1ReportStatusRequest;
-use Google\Service\BeyondCorp\GoogleCloudBeyondcorpAppconnectorsV1ResolveInstanceConfigResponse;
-use Google\Service\BeyondCorp\GoogleIamV1Policy;
-use Google\Service\BeyondCorp\GoogleIamV1SetIamPolicyRequest;
-use Google\Service\BeyondCorp\GoogleIamV1TestIamPermissionsRequest;
-use Google\Service\BeyondCorp\GoogleIamV1TestIamPermissionsResponse;
-use Google\Service\BeyondCorp\GoogleLongrunningOperation;
+use FluentMail\Google\Service\BeyondCorp\GoogleCloudBeyondcorpAppconnectorsV1AppConnector;
+use FluentMail\Google\Service\BeyondCorp\GoogleCloudBeyondcorpAppconnectorsV1ListAppConnectorsResponse;
+use FluentMail\Google\Service\BeyondCorp\GoogleCloudBeyondcorpAppconnectorsV1ReportStatusRequest;
+use FluentMail\Google\Service\BeyondCorp\GoogleCloudBeyondcorpAppconnectorsV1ResolveInstanceConfigResponse;
+use FluentMail\Google\Service\BeyondCorp\GoogleIamV1Policy;
+use FluentMail\Google\Service\BeyondCorp\GoogleIamV1SetIamPolicyRequest;
+use FluentMail\Google\Service\BeyondCorp\GoogleIamV1TestIamPermissionsRequest;
+use FluentMail\Google\Service\BeyondCorp\GoogleIamV1TestIamPermissionsResponse;
+use FluentMail\Google\Service\BeyondCorp\GoogleLongrunningOperation;
 
 /**
  * The "appConnectors" collection of methods.

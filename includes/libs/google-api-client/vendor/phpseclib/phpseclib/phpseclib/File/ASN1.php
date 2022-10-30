@@ -19,12 +19,12 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\File;
+namespace FluentMail\phpseclib3\File;
 
 use DateTime;
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\File\ASN1\Element;
-use phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\File\ASN1\Element;
+use FluentMail\phpseclib3\Math\BigInteger;
 
 /**
  * Pure-PHP ASN.1 Parser

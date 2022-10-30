@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\NetworkServices\Resource;
+namespace FluentMail\Google\Service\NetworkServices\Resource;
 
-use Google\Service\NetworkServices\ListTcpRoutesResponse;
-use Google\Service\NetworkServices\Operation;
-use Google\Service\NetworkServices\TcpRoute;
+use FluentMail\Google\Service\NetworkServices\ListTcpRoutesResponse;
+use FluentMail\Google\Service\NetworkServices\Operation;
+use FluentMail\Google\Service\NetworkServices\TcpRoute;
 
 /**
  * The "tcpRoutes" collection of methods.

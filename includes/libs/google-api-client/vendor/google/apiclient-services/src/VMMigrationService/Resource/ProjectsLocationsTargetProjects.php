@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\VMMigrationService\Resource;
+namespace FluentMail\Google\Service\VMMigrationService\Resource;
 
-use Google\Service\VMMigrationService\ListTargetProjectsResponse;
-use Google\Service\VMMigrationService\Operation;
-use Google\Service\VMMigrationService\TargetProject;
+use FluentMail\Google\Service\VMMigrationService\ListTargetProjectsResponse;
+use FluentMail\Google\Service\VMMigrationService\Operation;
+use FluentMail\Google\Service\VMMigrationService\TargetProject;
 
 /**
  * The "targetProjects" collection of methods.

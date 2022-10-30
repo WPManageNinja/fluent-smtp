@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise\Resource;
+namespace FluentMail\Google\Service\AndroidEnterprise\Resource;
 
-use Google\Service\AndroidEnterprise\GroupLicense;
-use Google\Service\AndroidEnterprise\GroupLicensesListResponse;
+use FluentMail\Google\Service\AndroidEnterprise\GroupLicense;
+use FluentMail\Google\Service\AndroidEnterprise\GroupLicensesListResponse;
 
 /**
  * The "grouplicenses" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessQA\Resource;
+namespace FluentMail\Google\Service\MyBusinessQA\Resource;
 
-use Google\Service\MyBusinessQA\ListQuestionsResponse;
-use Google\Service\MyBusinessQA\MybusinessqandaEmpty;
-use Google\Service\MyBusinessQA\Question;
+use FluentMail\Google\Service\MyBusinessQA\ListQuestionsResponse;
+use FluentMail\Google\Service\MyBusinessQA\MybusinessqandaEmpty;
+use FluentMail\Google\Service\MyBusinessQA\Question;
 
 /**
  * The "questions" collection of methods.

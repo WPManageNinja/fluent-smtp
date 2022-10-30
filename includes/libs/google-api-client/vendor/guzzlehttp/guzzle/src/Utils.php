@@ -1,13 +1,13 @@
 <?php
 
-namespace GuzzleHttp;
+namespace FluentMail\GuzzleHttp;
 
-use GuzzleHttp\Exception\InvalidArgumentException;
-use GuzzleHttp\Handler\CurlHandler;
-use GuzzleHttp\Handler\CurlMultiHandler;
-use GuzzleHttp\Handler\Proxy;
-use GuzzleHttp\Handler\StreamHandler;
-use Psr\Http\Message\UriInterface;
+use FluentMail\GuzzleHttp\Exception\InvalidArgumentException;
+use FluentMail\GuzzleHttp\Handler\CurlHandler;
+use FluentMail\GuzzleHttp\Handler\CurlMultiHandler;
+use FluentMail\GuzzleHttp\Handler\Proxy;
+use FluentMail\GuzzleHttp\Handler\StreamHandler;
+use FluentMail\Psr\Http\Message\UriInterface;
 
 final class Utils
 {

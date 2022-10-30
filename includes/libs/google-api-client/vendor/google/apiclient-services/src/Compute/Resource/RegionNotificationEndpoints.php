@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\NotificationEndpoint;
-use Google\Service\Compute\NotificationEndpointList;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\NotificationEndpoint;
+use FluentMail\Google\Service\Compute\NotificationEndpointList;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "regionNotificationEndpoints" collection of methods.

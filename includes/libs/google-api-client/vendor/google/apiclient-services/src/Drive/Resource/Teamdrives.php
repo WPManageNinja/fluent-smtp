@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Drive\Resource;
+namespace FluentMail\Google\Service\Drive\Resource;
 
-use Google\Service\Drive\TeamDrive;
-use Google\Service\Drive\TeamDriveList;
+use FluentMail\Google\Service\Drive\TeamDrive;
+use FluentMail\Google\Service\Drive\TeamDriveList;
 
 /**
  * The "teamdrives" collection of methods.

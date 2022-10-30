@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Calendar;
+namespace FluentMail\Google\Service\Calendar;
 
 class ConferenceRequestStatus extends \Google\Model
 {

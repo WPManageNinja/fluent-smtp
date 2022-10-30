@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\YouTube;
+namespace FluentMail\Google\Service\YouTube;
 
 class LiveBroadcast extends \Google\Model
 {

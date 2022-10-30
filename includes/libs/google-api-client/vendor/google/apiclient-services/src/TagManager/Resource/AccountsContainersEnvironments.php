@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\TagManager\Resource;
+namespace FluentMail\Google\Service\TagManager\Resource;
 
-use Google\Service\TagManager\Environment;
-use Google\Service\TagManager\ListEnvironmentsResponse;
+use FluentMail\Google\Service\TagManager\Environment;
+use FluentMail\Google\Service\TagManager\ListEnvironmentsResponse;
 
 /**
  * The "environments" collection of methods.

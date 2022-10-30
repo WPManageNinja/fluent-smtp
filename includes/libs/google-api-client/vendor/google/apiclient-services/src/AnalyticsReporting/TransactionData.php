@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsReporting;
+namespace FluentMail\Google\Service\AnalyticsReporting;
 
 class TransactionData extends \Google\Model
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SearchConsole\Resource;
+namespace FluentMail\Google\Service\SearchConsole\Resource;
 
 /**
  * The "urlInspection" collection of methods.

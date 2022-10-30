@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudRun\Resource;
+namespace FluentMail\Google\Service\CloudRun\Resource;
 
 /**
  * The "projects" collection of methods.

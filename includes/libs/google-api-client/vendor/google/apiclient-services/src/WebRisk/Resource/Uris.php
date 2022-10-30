@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\WebRisk\Resource;
+namespace FluentMail\Google\Service\WebRisk\Resource;
 
-use Google\Service\WebRisk\GoogleCloudWebriskV1SearchUrisResponse;
+use FluentMail\Google\Service\WebRisk\GoogleCloudWebriskV1SearchUrisResponse;
 
 /**
  * The "uris" collection of methods.

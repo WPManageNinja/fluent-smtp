@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Genomics\Resource;
+namespace FluentMail\Google\Service\Genomics\Resource;
 
 /**
  * The "projects" collection of methods.

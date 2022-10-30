@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\RemoteBuildExecution;
+namespace FluentMail\Google\Service\RemoteBuildExecution;
 
 class BuildBazelRemoteExecutionV2NodeProperty extends \Google\Model
 {

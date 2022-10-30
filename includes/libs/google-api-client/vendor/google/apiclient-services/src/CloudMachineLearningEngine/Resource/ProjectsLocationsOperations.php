@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudMachineLearningEngine\Resource;
+namespace FluentMail\Google\Service\CloudMachineLearningEngine\Resource;
 
-use Google\Service\CloudMachineLearningEngine\GoogleLongrunningOperation;
-use Google\Service\CloudMachineLearningEngine\GoogleProtobufEmpty;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleProtobufEmpty;
 
 /**
  * The "operations" collection of methods.

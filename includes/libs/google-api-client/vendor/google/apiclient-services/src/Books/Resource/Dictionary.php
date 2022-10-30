@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\Metadata;
+use FluentMail\Google\Service\Books\Metadata;
 
 /**
  * The "dictionary" collection of methods.

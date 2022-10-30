@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DataFusion\Resource;
+namespace FluentMail\Google\Service\DataFusion\Resource;
 
-use Google\Service\DataFusion\ListLocationsResponse;
-use Google\Service\DataFusion\Location;
+use FluentMail\Google\Service\DataFusion\ListLocationsResponse;
+use FluentMail\Google\Service\DataFusion\Location;
 
 /**
  * The "locations" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ServiceNetworking;
+namespace FluentMail\Google\Service\ServiceNetworking;
 
 class GoogleCloudServicenetworkingV1betaConnection extends \Google\Collection
 {

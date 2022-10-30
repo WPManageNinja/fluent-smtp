@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\CloudTalentSolution\Resource;
+namespace FluentMail\Google\Service\CloudTalentSolution\Resource;
 
-use Google\Service\CloudTalentSolution\BatchCreateJobsRequest;
-use Google\Service\CloudTalentSolution\BatchDeleteJobsRequest;
-use Google\Service\CloudTalentSolution\BatchUpdateJobsRequest;
-use Google\Service\CloudTalentSolution\Job;
-use Google\Service\CloudTalentSolution\JobsEmpty;
-use Google\Service\CloudTalentSolution\ListJobsResponse;
-use Google\Service\CloudTalentSolution\Operation;
-use Google\Service\CloudTalentSolution\SearchJobsRequest;
-use Google\Service\CloudTalentSolution\SearchJobsResponse;
+use FluentMail\Google\Service\CloudTalentSolution\BatchCreateJobsRequest;
+use FluentMail\Google\Service\CloudTalentSolution\BatchDeleteJobsRequest;
+use FluentMail\Google\Service\CloudTalentSolution\BatchUpdateJobsRequest;
+use FluentMail\Google\Service\CloudTalentSolution\Job;
+use FluentMail\Google\Service\CloudTalentSolution\JobsEmpty;
+use FluentMail\Google\Service\CloudTalentSolution\ListJobsResponse;
+use FluentMail\Google\Service\CloudTalentSolution\Operation;
+use FluentMail\Google\Service\CloudTalentSolution\SearchJobsRequest;
+use FluentMail\Google\Service\CloudTalentSolution\SearchJobsResponse;
 
 /**
  * The "jobs" collection of methods.

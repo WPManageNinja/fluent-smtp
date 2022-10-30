@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessBusinessInformation\Resource;
+namespace FluentMail\Google\Service\MyBusinessBusinessInformation\Resource;
 
-use Google\Service\MyBusinessBusinessInformation\Chain;
-use Google\Service\MyBusinessBusinessInformation\SearchChainsResponse;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\Chain;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\SearchChainsResponse;
 
 /**
  * The "chains" collection of methods.

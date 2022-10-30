@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Integrations\Resource;
+namespace FluentMail\Google\Service\Integrations\Resource;
 
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaGenerateTokenResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaGenerateTokenResponse;
 
 /**
  * The "callback" collection of methods.

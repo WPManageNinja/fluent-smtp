@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Keep\Resource;
+namespace FluentMail\Google\Service\Keep\Resource;
 
-use Google\Service\Keep\BatchCreatePermissionsRequest;
-use Google\Service\Keep\BatchCreatePermissionsResponse;
-use Google\Service\Keep\BatchDeletePermissionsRequest;
-use Google\Service\Keep\KeepEmpty;
+use FluentMail\Google\Service\Keep\BatchCreatePermissionsRequest;
+use FluentMail\Google\Service\Keep\BatchCreatePermissionsResponse;
+use FluentMail\Google\Service\Keep\BatchDeletePermissionsRequest;
+use FluentMail\Google\Service\Keep\KeepEmpty;
 
 /**
  * The "permissions" collection of methods.

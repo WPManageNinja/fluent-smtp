@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\VMMigrationService\Resource;
+namespace FluentMail\Google\Service\VMMigrationService\Resource;
 
-use Google\Service\VMMigrationService\CancelOperationRequest;
-use Google\Service\VMMigrationService\ListOperationsResponse;
-use Google\Service\VMMigrationService\Operation;
-use Google\Service\VMMigrationService\VmmigrationEmpty;
+use FluentMail\Google\Service\VMMigrationService\CancelOperationRequest;
+use FluentMail\Google\Service\VMMigrationService\ListOperationsResponse;
+use FluentMail\Google\Service\VMMigrationService\Operation;
+use FluentMail\Google\Service\VMMigrationService\VmmigrationEmpty;
 
 /**
  * The "operations" collection of methods.

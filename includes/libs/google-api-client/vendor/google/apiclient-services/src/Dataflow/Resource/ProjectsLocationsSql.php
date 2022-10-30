@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Dataflow\Resource;
+namespace FluentMail\Google\Service\Dataflow\Resource;
 
-use Google\Service\Dataflow\ValidateResponse;
+use FluentMail\Google\Service\Dataflow\ValidateResponse;
 
 /**
  * The "sql" collection of methods.

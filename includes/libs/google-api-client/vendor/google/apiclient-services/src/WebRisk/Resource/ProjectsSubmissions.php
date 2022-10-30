@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\WebRisk\Resource;
+namespace FluentMail\Google\Service\WebRisk\Resource;
 
-use Google\Service\WebRisk\GoogleCloudWebriskV1Submission;
+use FluentMail\Google\Service\WebRisk\GoogleCloudWebriskV1Submission;
 
 /**
  * The "submissions" collection of methods.

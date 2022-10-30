@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BinaryAuthorization;
+namespace FluentMail\Google\Service\BinaryAuthorization;
 
 class AdmissionRule extends \Google\Collection
 {

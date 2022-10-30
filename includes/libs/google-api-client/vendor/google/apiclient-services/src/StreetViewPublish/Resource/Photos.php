@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\StreetViewPublish\Resource;
+namespace FluentMail\Google\Service\StreetViewPublish\Resource;
 
-use Google\Service\StreetViewPublish\BatchDeletePhotosRequest;
-use Google\Service\StreetViewPublish\BatchDeletePhotosResponse;
-use Google\Service\StreetViewPublish\BatchGetPhotosResponse;
-use Google\Service\StreetViewPublish\BatchUpdatePhotosRequest;
-use Google\Service\StreetViewPublish\BatchUpdatePhotosResponse;
-use Google\Service\StreetViewPublish\ListPhotosResponse;
+use FluentMail\Google\Service\StreetViewPublish\BatchDeletePhotosRequest;
+use FluentMail\Google\Service\StreetViewPublish\BatchDeletePhotosResponse;
+use FluentMail\Google\Service\StreetViewPublish\BatchGetPhotosResponse;
+use FluentMail\Google\Service\StreetViewPublish\BatchUpdatePhotosRequest;
+use FluentMail\Google\Service\StreetViewPublish\BatchUpdatePhotosResponse;
+use FluentMail\Google\Service\StreetViewPublish\ListPhotosResponse;
 
 /**
  * The "photos" collection of methods.

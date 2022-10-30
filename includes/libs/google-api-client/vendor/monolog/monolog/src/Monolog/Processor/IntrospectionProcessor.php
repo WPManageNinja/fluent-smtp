@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Processor;
+namespace FluentMail\Monolog\Processor;
 
-use Monolog\Logger;
-use Psr\Log\LogLevel;
+use FluentMail\Monolog\Logger;
+use FluentMail\Psr\Log\LogLevel;
 
 /**
  * Injects line/file:class/function where the log message came from

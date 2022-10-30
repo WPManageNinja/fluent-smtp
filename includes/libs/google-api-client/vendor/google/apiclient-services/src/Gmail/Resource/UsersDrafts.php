@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\Draft;
-use Google\Service\Gmail\ListDraftsResponse;
-use Google\Service\Gmail\Message;
+use FluentMail\Google\Service\Gmail\Draft;
+use FluentMail\Google\Service\Gmail\ListDraftsResponse;
+use FluentMail\Google\Service\Gmail\Message;
 
 /**
  * The "drafts" collection of methods.

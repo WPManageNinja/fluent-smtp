@@ -11,19 +11,19 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\EC\Formats\Keys;
+namespace FluentMail\phpseclib3\Crypt\EC\Formats\Keys;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Crypt\Common\Formats\Keys\JWK as Progenitor;
-use phpseclib3\Crypt\EC\BaseCurves\Base as BaseCurve;
-use phpseclib3\Crypt\EC\BaseCurves\TwistedEdwards as TwistedEdwardsCurve;
-use phpseclib3\Crypt\EC\Curves\Ed25519;
-use phpseclib3\Crypt\EC\Curves\secp256k1;
-use phpseclib3\Crypt\EC\Curves\secp256r1;
-use phpseclib3\Crypt\EC\Curves\secp384r1;
-use phpseclib3\Crypt\EC\Curves\secp521r1;
-use phpseclib3\Exception\UnsupportedCurveException;
-use phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Crypt\Common\Formats\Keys\JWK as Progenitor;
+use FluentMail\phpseclib3\Crypt\EC\BaseCurves\Base as BaseCurve;
+use FluentMail\phpseclib3\Crypt\EC\BaseCurves\TwistedEdwards as TwistedEdwardsCurve;
+use FluentMail\phpseclib3\Crypt\EC\Curves\Ed25519;
+use FluentMail\phpseclib3\Crypt\EC\Curves\secp256k1;
+use FluentMail\phpseclib3\Crypt\EC\Curves\secp256r1;
+use FluentMail\phpseclib3\Crypt\EC\Curves\secp384r1;
+use FluentMail\phpseclib3\Crypt\EC\Curves\secp521r1;
+use FluentMail\phpseclib3\Exception\UnsupportedCurveException;
+use FluentMail\phpseclib3\Math\BigInteger;
 
 /**
  * JWK Formatted EC Handler

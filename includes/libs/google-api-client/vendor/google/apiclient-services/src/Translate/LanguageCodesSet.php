@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Translate;
+namespace FluentMail\Google\Service\Translate;
 
 class LanguageCodesSet extends \Google\Collection
 {

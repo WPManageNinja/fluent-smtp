@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Translate\Resource;
+namespace FluentMail\Google\Service\Translate\Resource;
 
-use Google\Service\Translate\DetectLanguageRequest;
-use Google\Service\Translate\DetectLanguageResponse;
-use Google\Service\Translate\SupportedLanguages;
-use Google\Service\Translate\TranslateTextRequest;
-use Google\Service\Translate\TranslateTextResponse;
+use FluentMail\Google\Service\Translate\DetectLanguageRequest;
+use FluentMail\Google\Service\Translate\DetectLanguageResponse;
+use FluentMail\Google\Service\Translate\SupportedLanguages;
+use FluentMail\Google\Service\Translate\TranslateTextRequest;
+use FluentMail\Google\Service\Translate\TranslateTextResponse;
 
 /**
  * The "projects" collection of methods.

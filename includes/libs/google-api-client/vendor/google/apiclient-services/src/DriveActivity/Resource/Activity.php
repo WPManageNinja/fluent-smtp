@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DriveActivity\Resource;
+namespace FluentMail\Google\Service\DriveActivity\Resource;
 
-use Google\Service\DriveActivity\QueryDriveActivityRequest;
-use Google\Service\DriveActivity\QueryDriveActivityResponse;
+use FluentMail\Google\Service\DriveActivity\QueryDriveActivityRequest;
+use FluentMail\Google\Service\DriveActivity\QueryDriveActivityResponse;
 
 /**
  * The "activity" collection of methods.

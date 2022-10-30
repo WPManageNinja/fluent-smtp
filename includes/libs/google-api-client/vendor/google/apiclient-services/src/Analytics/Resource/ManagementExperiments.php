@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\Experiment;
-use Google\Service\Analytics\Experiments;
+use FluentMail\Google\Service\Analytics\Experiment;
+use FluentMail\Google\Service\Analytics\Experiments;
 
 /**
  * The "experiments" collection of methods.

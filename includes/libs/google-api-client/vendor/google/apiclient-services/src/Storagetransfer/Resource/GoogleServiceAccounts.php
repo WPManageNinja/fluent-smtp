@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Storagetransfer\Resource;
+namespace FluentMail\Google\Service\Storagetransfer\Resource;
 
-use Google\Service\Storagetransfer\GoogleServiceAccount;
+use FluentMail\Google\Service\Storagetransfer\GoogleServiceAccount;
 
 /**
  * The "googleServiceAccounts" collection of methods.

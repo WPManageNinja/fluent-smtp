@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\NetworkManagement\Resource;
+namespace FluentMail\Google\Service\NetworkManagement\Resource;
 
-use Google\Service\NetworkManagement\ListLocationsResponse;
-use Google\Service\NetworkManagement\Location;
+use FluentMail\Google\Service\NetworkManagement\ListLocationsResponse;
+use FluentMail\Google\Service\NetworkManagement\Location;
 
 /**
  * The "locations" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\GoogleAnalyticsAdmin;
+namespace FluentMail\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1alphaListSearchAds360LinksResponse extends \Google\Collection
 {

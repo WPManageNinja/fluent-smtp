@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Pubsub;
+namespace FluentMail\Google\Service\Pubsub;
 
 class AcknowledgeRequest extends \Google\Collection
 {

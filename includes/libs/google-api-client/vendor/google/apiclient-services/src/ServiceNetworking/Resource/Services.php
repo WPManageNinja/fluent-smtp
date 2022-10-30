@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\ServiceNetworking\Resource;
+namespace FluentMail\Google\Service\ServiceNetworking\Resource;
 
-use Google\Service\ServiceNetworking\AddSubnetworkRequest;
-use Google\Service\ServiceNetworking\DisableVpcServiceControlsRequest;
-use Google\Service\ServiceNetworking\EnableVpcServiceControlsRequest;
-use Google\Service\ServiceNetworking\Operation;
-use Google\Service\ServiceNetworking\SearchRangeRequest;
-use Google\Service\ServiceNetworking\ValidateConsumerConfigRequest;
-use Google\Service\ServiceNetworking\ValidateConsumerConfigResponse;
+use FluentMail\Google\Service\ServiceNetworking\AddSubnetworkRequest;
+use FluentMail\Google\Service\ServiceNetworking\DisableVpcServiceControlsRequest;
+use FluentMail\Google\Service\ServiceNetworking\EnableVpcServiceControlsRequest;
+use FluentMail\Google\Service\ServiceNetworking\Operation;
+use FluentMail\Google\Service\ServiceNetworking\SearchRangeRequest;
+use FluentMail\Google\Service\ServiceNetworking\ValidateConsumerConfigRequest;
+use FluentMail\Google\Service\ServiceNetworking\ValidateConsumerConfigResponse;
 
 /**
  * The "services" collection of methods.

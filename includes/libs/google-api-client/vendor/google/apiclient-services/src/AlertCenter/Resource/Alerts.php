@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\AlertCenter\Resource;
+namespace FluentMail\Google\Service\AlertCenter\Resource;
 
-use Google\Service\AlertCenter\Alert;
-use Google\Service\AlertCenter\AlertMetadata;
-use Google\Service\AlertCenter\AlertcenterEmpty;
-use Google\Service\AlertCenter\BatchDeleteAlertsRequest;
-use Google\Service\AlertCenter\BatchDeleteAlertsResponse;
-use Google\Service\AlertCenter\BatchUndeleteAlertsRequest;
-use Google\Service\AlertCenter\BatchUndeleteAlertsResponse;
-use Google\Service\AlertCenter\ListAlertsResponse;
-use Google\Service\AlertCenter\UndeleteAlertRequest;
+use FluentMail\Google\Service\AlertCenter\Alert;
+use FluentMail\Google\Service\AlertCenter\AlertMetadata;
+use FluentMail\Google\Service\AlertCenter\AlertcenterEmpty;
+use FluentMail\Google\Service\AlertCenter\BatchDeleteAlertsRequest;
+use FluentMail\Google\Service\AlertCenter\BatchDeleteAlertsResponse;
+use FluentMail\Google\Service\AlertCenter\BatchUndeleteAlertsRequest;
+use FluentMail\Google\Service\AlertCenter\BatchUndeleteAlertsResponse;
+use FluentMail\Google\Service\AlertCenter\ListAlertsResponse;
+use FluentMail\Google\Service\AlertCenter\UndeleteAlertRequest;
 
 /**
  * The "alerts" collection of methods.

@@ -16,24 +16,24 @@
  * limitations under the License.
  */
 
-namespace Google\AccessToken;
+namespace FluentMail\Google\AccessToken;
 
 use DateTime;
 use DomainException;
 use Exception;
 use ExpiredException;
-use Firebase\JWT\ExpiredException as ExpiredExceptionV3;
-use Firebase\JWT\Key;
-use Firebase\JWT\SignatureInvalidException;
-use Google\Auth\Cache\MemoryCacheItemPool;
-use Google\Exception as GoogleException;
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
+use FluentMail\Firebase\JWT\ExpiredException as ExpiredExceptionV3;
+use FluentMail\Firebase\JWT\Key;
+use FluentMail\Firebase\JWT\SignatureInvalidException;
+use FluentMail\Google\Auth\Cache\MemoryCacheItemPool;
+use FluentMail\Google\Exception as GoogleException;
+use FluentMail\GuzzleHttp\Client;
+use FluentMail\GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 use LogicException;
-use phpseclib3\Crypt\PublicKeyLoader;
-use phpseclib3\Crypt\RSA\PublicKey; // Firebase v2
-use Psr\Cache\CacheItemPoolInterface;
+use FluentMail\phpseclib3\Crypt\PublicKeyLoader;
+use FluentMail\phpseclib3\Crypt\RSA\PublicKey; // Firebase v2
+use FluentMail\Psr\Cache\CacheItemPoolInterface;
 
 /**
  * Wrapper around Google Access Tokens which provides convenience functions

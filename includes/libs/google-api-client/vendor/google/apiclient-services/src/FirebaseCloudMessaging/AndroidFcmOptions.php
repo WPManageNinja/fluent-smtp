@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseCloudMessaging;
+namespace FluentMail\Google\Service\FirebaseCloudMessaging;
 
 class AndroidFcmOptions extends \Google\Model
 {

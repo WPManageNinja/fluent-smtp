@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DataLabeling;
+namespace FluentMail\Google\Service\DataLabeling;
 
 class GoogleCloudDatalabelingV1beta1EvaluationMetrics extends \Google\Model
 {

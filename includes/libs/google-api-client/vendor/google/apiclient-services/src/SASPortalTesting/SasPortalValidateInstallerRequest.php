@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SASPortalTesting;
+namespace FluentMail\Google\Service\SASPortalTesting;
 
 class SasPortalValidateInstallerRequest extends \Google\Model
 {

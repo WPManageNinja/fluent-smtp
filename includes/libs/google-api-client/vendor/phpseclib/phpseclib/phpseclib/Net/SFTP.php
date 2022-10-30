@@ -31,10 +31,10 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Net;
+namespace FluentMail\phpseclib3\Net;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Exception\FileNotFoundException;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Exception\FileNotFoundException;
 
 /**
  * Pure-PHP implementations of SFTP.

@@ -13,13 +13,13 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\Common\Formats\Keys;
+namespace FluentMail\phpseclib3\Crypt\Common\Formats\Keys;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Crypt\AES;
-use phpseclib3\Crypt\Hash;
-use phpseclib3\Crypt\Random;
-use phpseclib3\Exception\UnsupportedAlgorithmException;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Crypt\AES;
+use FluentMail\phpseclib3\Crypt\Hash;
+use FluentMail\phpseclib3\Crypt\Random;
+use FluentMail\phpseclib3\Exception\UnsupportedAlgorithmException;
 
 /**
  * PuTTY Formatted Key Handler

@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler\SyslogUdp;
+namespace FluentMail\Monolog\Handler\SyslogUdp;
 
-use Monolog\Utils;
+use FluentMail\Monolog\Utils;
 use Socket;
 
 class UdpSocket

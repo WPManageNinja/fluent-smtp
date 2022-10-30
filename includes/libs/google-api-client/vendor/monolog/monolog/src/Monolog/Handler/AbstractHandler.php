@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Logger;
-use Monolog\ResettableInterface;
-use Psr\Log\LogLevel;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\ResettableInterface;
+use FluentMail\Psr\Log\LogLevel;
 
 /**
  * Base Handler class providing basic level/bubble support

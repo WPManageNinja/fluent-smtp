@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudRun\Resource;
+namespace FluentMail\Google\Service\CloudRun\Resource;
 
-use Google\Service\CloudRun\GoogleCloudRunV2ListTasksResponse;
-use Google\Service\CloudRun\GoogleCloudRunV2Task;
+use FluentMail\Google\Service\CloudRun\GoogleCloudRunV2ListTasksResponse;
+use FluentMail\Google\Service\CloudRun\GoogleCloudRunV2Task;
 
 /**
  * The "tasks" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Sasportal;
+namespace FluentMail\Google\Service\Sasportal;
 
 class SasPortalNrqzValidation extends \Google\Model
 {

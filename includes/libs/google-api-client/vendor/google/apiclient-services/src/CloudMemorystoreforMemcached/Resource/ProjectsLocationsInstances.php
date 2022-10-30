@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\CloudMemorystoreforMemcached\Resource;
+namespace FluentMail\Google\Service\CloudMemorystoreforMemcached\Resource;
 
-use Google\Service\CloudMemorystoreforMemcached\ApplyParametersRequest;
-use Google\Service\CloudMemorystoreforMemcached\Instance;
-use Google\Service\CloudMemorystoreforMemcached\ListInstancesResponse;
-use Google\Service\CloudMemorystoreforMemcached\Operation;
-use Google\Service\CloudMemorystoreforMemcached\RescheduleMaintenanceRequest;
-use Google\Service\CloudMemorystoreforMemcached\UpdateParametersRequest;
+use FluentMail\Google\Service\CloudMemorystoreforMemcached\ApplyParametersRequest;
+use FluentMail\Google\Service\CloudMemorystoreforMemcached\Instance;
+use FluentMail\Google\Service\CloudMemorystoreforMemcached\ListInstancesResponse;
+use FluentMail\Google\Service\CloudMemorystoreforMemcached\Operation;
+use FluentMail\Google\Service\CloudMemorystoreforMemcached\RescheduleMaintenanceRequest;
+use FluentMail\Google\Service\CloudMemorystoreforMemcached\UpdateParametersRequest;
 
 /**
  * The "instances" collection of methods.

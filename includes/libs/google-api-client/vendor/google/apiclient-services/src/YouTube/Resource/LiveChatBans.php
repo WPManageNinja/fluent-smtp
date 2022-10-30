@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\LiveChatBan;
+use FluentMail\Google\Service\YouTube\LiveChatBan;
 
 /**
  * The "liveChatBans" collection of methods.

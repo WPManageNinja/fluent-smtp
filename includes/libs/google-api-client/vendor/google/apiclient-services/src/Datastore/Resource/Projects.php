@@ -15,25 +15,25 @@
  * the License.
  */
 
-namespace Google\Service\Datastore\Resource;
+namespace FluentMail\Google\Service\Datastore\Resource;
 
-use Google\Service\Datastore\AllocateIdsRequest;
-use Google\Service\Datastore\AllocateIdsResponse;
-use Google\Service\Datastore\BeginTransactionRequest;
-use Google\Service\Datastore\BeginTransactionResponse;
-use Google\Service\Datastore\CommitRequest;
-use Google\Service\Datastore\CommitResponse;
-use Google\Service\Datastore\GoogleDatastoreAdminV1ExportEntitiesRequest;
-use Google\Service\Datastore\GoogleDatastoreAdminV1ImportEntitiesRequest;
-use Google\Service\Datastore\GoogleLongrunningOperation;
-use Google\Service\Datastore\LookupRequest;
-use Google\Service\Datastore\LookupResponse;
-use Google\Service\Datastore\ReserveIdsRequest;
-use Google\Service\Datastore\ReserveIdsResponse;
-use Google\Service\Datastore\RollbackRequest;
-use Google\Service\Datastore\RollbackResponse;
-use Google\Service\Datastore\RunQueryRequest;
-use Google\Service\Datastore\RunQueryResponse;
+use FluentMail\Google\Service\Datastore\AllocateIdsRequest;
+use FluentMail\Google\Service\Datastore\AllocateIdsResponse;
+use FluentMail\Google\Service\Datastore\BeginTransactionRequest;
+use FluentMail\Google\Service\Datastore\BeginTransactionResponse;
+use FluentMail\Google\Service\Datastore\CommitRequest;
+use FluentMail\Google\Service\Datastore\CommitResponse;
+use FluentMail\Google\Service\Datastore\GoogleDatastoreAdminV1ExportEntitiesRequest;
+use FluentMail\Google\Service\Datastore\GoogleDatastoreAdminV1ImportEntitiesRequest;
+use FluentMail\Google\Service\Datastore\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Datastore\LookupRequest;
+use FluentMail\Google\Service\Datastore\LookupResponse;
+use FluentMail\Google\Service\Datastore\ReserveIdsRequest;
+use FluentMail\Google\Service\Datastore\ReserveIdsResponse;
+use FluentMail\Google\Service\Datastore\RollbackRequest;
+use FluentMail\Google\Service\Datastore\RollbackResponse;
+use FluentMail\Google\Service\Datastore\RunQueryRequest;
+use FluentMail\Google\Service\Datastore\RunQueryResponse;
 
 /**
  * The "projects" collection of methods.

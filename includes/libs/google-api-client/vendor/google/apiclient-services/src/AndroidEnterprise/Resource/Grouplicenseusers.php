@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise\Resource;
+namespace FluentMail\Google\Service\AndroidEnterprise\Resource;
 
-use Google\Service\AndroidEnterprise\GroupLicenseUsersListResponse;
+use FluentMail\Google\Service\AndroidEnterprise\GroupLicenseUsersListResponse;
 
 /**
  * The "grouplicenseusers" collection of methods.

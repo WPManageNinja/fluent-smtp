@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudVideoIntelligence\Resource;
+namespace FluentMail\Google\Service\CloudVideoIntelligence\Resource;
 
-use Google\Service\CloudVideoIntelligence\GoogleCloudVideointelligenceV1AnnotateVideoRequest;
-use Google\Service\CloudVideoIntelligence\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudVideoIntelligence\GoogleCloudVideointelligenceV1AnnotateVideoRequest;
+use FluentMail\Google\Service\CloudVideoIntelligence\GoogleLongrunningOperation;
 
 /**
  * The "videos" collection of methods.

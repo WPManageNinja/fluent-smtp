@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
 /**
  * The "projects" collection of methods.

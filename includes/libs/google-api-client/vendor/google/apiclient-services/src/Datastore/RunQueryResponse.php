@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Datastore;
+namespace FluentMail\Google\Service\Datastore;
 
 class RunQueryResponse extends \Google\Model
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Sheets;
+namespace FluentMail\Google\Service\Sheets;
 
 class FilterView extends \Google\Collection
 {

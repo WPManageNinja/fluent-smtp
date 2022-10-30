@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
-use Google\Service\CloudSearch\ListUnmappedIdentitiesResponse;
+use FluentMail\Google\Service\CloudSearch\ListUnmappedIdentitiesResponse;
 
 /**
  * The "unmappedids" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\WebRisk\Resource;
+namespace FluentMail\Google\Service\WebRisk\Resource;
 
 /**
  * The "projects" collection of methods.

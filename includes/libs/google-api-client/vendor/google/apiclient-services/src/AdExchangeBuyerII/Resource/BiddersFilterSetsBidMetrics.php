@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\ListBidMetricsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListBidMetricsResponse;
 
 /**
  * The "bidMetrics" collection of methods.

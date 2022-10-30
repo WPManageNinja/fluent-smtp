@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\ContainerAnalysis\Resource;
+namespace FluentMail\Google\Service\ContainerAnalysis\Resource;
 
-use Google\Service\ContainerAnalysis\BatchCreateNotesRequest;
-use Google\Service\ContainerAnalysis\BatchCreateNotesResponse;
-use Google\Service\ContainerAnalysis\ContaineranalysisEmpty;
-use Google\Service\ContainerAnalysis\GetIamPolicyRequest;
-use Google\Service\ContainerAnalysis\ListNotesResponse;
-use Google\Service\ContainerAnalysis\Note;
-use Google\Service\ContainerAnalysis\Policy;
-use Google\Service\ContainerAnalysis\SetIamPolicyRequest;
-use Google\Service\ContainerAnalysis\TestIamPermissionsRequest;
-use Google\Service\ContainerAnalysis\TestIamPermissionsResponse;
+use FluentMail\Google\Service\ContainerAnalysis\BatchCreateNotesRequest;
+use FluentMail\Google\Service\ContainerAnalysis\BatchCreateNotesResponse;
+use FluentMail\Google\Service\ContainerAnalysis\ContaineranalysisEmpty;
+use FluentMail\Google\Service\ContainerAnalysis\GetIamPolicyRequest;
+use FluentMail\Google\Service\ContainerAnalysis\ListNotesResponse;
+use FluentMail\Google\Service\ContainerAnalysis\Note;
+use FluentMail\Google\Service\ContainerAnalysis\Policy;
+use FluentMail\Google\Service\ContainerAnalysis\SetIamPolicyRequest;
+use FluentMail\Google\Service\ContainerAnalysis\TestIamPermissionsRequest;
+use FluentMail\Google\Service\ContainerAnalysis\TestIamPermissionsResponse;
 
 /**
  * The "notes" collection of methods.

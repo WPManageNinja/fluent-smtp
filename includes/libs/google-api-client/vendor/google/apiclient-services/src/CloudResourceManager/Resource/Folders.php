@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\CloudResourceManager\Resource;
+namespace FluentMail\Google\Service\CloudResourceManager\Resource;
 
-use Google\Service\CloudResourceManager\Folder;
-use Google\Service\CloudResourceManager\GetIamPolicyRequest;
-use Google\Service\CloudResourceManager\ListFoldersResponse;
-use Google\Service\CloudResourceManager\MoveFolderRequest;
-use Google\Service\CloudResourceManager\Operation;
-use Google\Service\CloudResourceManager\Policy;
-use Google\Service\CloudResourceManager\SearchFoldersResponse;
-use Google\Service\CloudResourceManager\SetIamPolicyRequest;
-use Google\Service\CloudResourceManager\TestIamPermissionsRequest;
-use Google\Service\CloudResourceManager\TestIamPermissionsResponse;
-use Google\Service\CloudResourceManager\UndeleteFolderRequest;
+use FluentMail\Google\Service\CloudResourceManager\Folder;
+use FluentMail\Google\Service\CloudResourceManager\GetIamPolicyRequest;
+use FluentMail\Google\Service\CloudResourceManager\ListFoldersResponse;
+use FluentMail\Google\Service\CloudResourceManager\MoveFolderRequest;
+use FluentMail\Google\Service\CloudResourceManager\Operation;
+use FluentMail\Google\Service\CloudResourceManager\Policy;
+use FluentMail\Google\Service\CloudResourceManager\SearchFoldersResponse;
+use FluentMail\Google\Service\CloudResourceManager\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudResourceManager\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudResourceManager\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudResourceManager\UndeleteFolderRequest;
 
 /**
  * The "folders" collection of methods.

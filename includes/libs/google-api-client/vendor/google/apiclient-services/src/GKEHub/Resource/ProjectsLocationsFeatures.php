@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\GKEHub\Resource;
+namespace FluentMail\Google\Service\GKEHub\Resource;
 
-use Google\Service\GKEHub\Feature;
-use Google\Service\GKEHub\ListFeaturesResponse;
-use Google\Service\GKEHub\Operation;
-use Google\Service\GKEHub\Policy;
-use Google\Service\GKEHub\SetIamPolicyRequest;
-use Google\Service\GKEHub\TestIamPermissionsRequest;
-use Google\Service\GKEHub\TestIamPermissionsResponse;
+use FluentMail\Google\Service\GKEHub\Feature;
+use FluentMail\Google\Service\GKEHub\ListFeaturesResponse;
+use FluentMail\Google\Service\GKEHub\Operation;
+use FluentMail\Google\Service\GKEHub\Policy;
+use FluentMail\Google\Service\GKEHub\SetIamPolicyRequest;
+use FluentMail\Google\Service\GKEHub\TestIamPermissionsRequest;
+use FluentMail\Google\Service\GKEHub\TestIamPermissionsResponse;
 
 /**
  * The "features" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Adsense\Resource;
+namespace FluentMail\Google\Service\Adsense\Resource;
 
-use Google\Service\Adsense\AdClient;
-use Google\Service\Adsense\AdClientAdCode;
-use Google\Service\Adsense\ListAdClientsResponse;
+use FluentMail\Google\Service\Adsense\AdClient;
+use FluentMail\Google\Service\Adsense\AdClientAdCode;
+use FluentMail\Google\Service\Adsense\ListAdClientsResponse;
 
 /**
  * The "adclients" collection of methods.

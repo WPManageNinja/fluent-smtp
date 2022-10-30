@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryDataTransfer\Resource;
+namespace FluentMail\Google\Service\BigQueryDataTransfer\Resource;
 
-use Google\Service\BigQueryDataTransfer\CheckValidCredsRequest;
-use Google\Service\BigQueryDataTransfer\CheckValidCredsResponse;
-use Google\Service\BigQueryDataTransfer\DataSource;
-use Google\Service\BigQueryDataTransfer\ListDataSourcesResponse;
+use FluentMail\Google\Service\BigQueryDataTransfer\CheckValidCredsRequest;
+use FluentMail\Google\Service\BigQueryDataTransfer\CheckValidCredsResponse;
+use FluentMail\Google\Service\BigQueryDataTransfer\DataSource;
+use FluentMail\Google\Service\BigQueryDataTransfer\ListDataSourcesResponse;
 
 /**
  * The "dataSources" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudTasks;
+namespace FluentMail\Google\Service\CloudTasks;
 
 class Binding extends \Google\Collection
 {

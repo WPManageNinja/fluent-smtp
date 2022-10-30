@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudResourceManager;
+namespace FluentMail\Google\Service\CloudResourceManager;
 
 class CloudresourcemanagerGoogleCloudResourcemanagerV2alpha1FolderOperation extends \Google\Model
 {

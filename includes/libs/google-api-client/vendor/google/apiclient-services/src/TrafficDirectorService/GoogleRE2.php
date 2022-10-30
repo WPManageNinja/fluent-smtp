@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\TrafficDirectorService;
+namespace FluentMail\Google\Service\TrafficDirectorService;
 
 class GoogleRE2 extends \Google\Model
 {

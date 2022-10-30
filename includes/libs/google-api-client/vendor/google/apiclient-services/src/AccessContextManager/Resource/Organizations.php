@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AccessContextManager\Resource;
+namespace FluentMail\Google\Service\AccessContextManager\Resource;
 
 /**
  * The "organizations" collection of methods.

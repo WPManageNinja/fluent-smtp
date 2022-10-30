@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\EventTag;
-use Google\Service\Dfareporting\EventTagsListResponse;
+use FluentMail\Google\Service\Dfareporting\EventTag;
+use FluentMail\Google\Service\Dfareporting\EventTagsListResponse;
 
 /**
  * The "eventTags" collection of methods.

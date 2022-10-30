@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Games;
+namespace FluentMail\Google\Service\Games;
 
 class Player extends \Google\Model
 {

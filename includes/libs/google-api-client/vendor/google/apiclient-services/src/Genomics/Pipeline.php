@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Genomics;
+namespace FluentMail\Google\Service\Genomics;
 
 class Pipeline extends \Google\Collection
 {

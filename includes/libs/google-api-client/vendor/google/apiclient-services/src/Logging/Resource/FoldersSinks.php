@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Logging\Resource;
+namespace FluentMail\Google\Service\Logging\Resource;
 
-use Google\Service\Logging\ListSinksResponse;
-use Google\Service\Logging\LogSink;
-use Google\Service\Logging\LoggingEmpty;
+use FluentMail\Google\Service\Logging\ListSinksResponse;
+use FluentMail\Google\Service\Logging\LogSink;
+use FluentMail\Google\Service\Logging\LoggingEmpty;
 
 /**
  * The "sinks" collection of methods.

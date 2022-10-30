@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Contentwarehouse;
+namespace FluentMail\Google\Service\Contentwarehouse;
 
 class NewsReconServiceLrsQ2lrs2QueryToLrsEntry extends \Google\Collection
 {

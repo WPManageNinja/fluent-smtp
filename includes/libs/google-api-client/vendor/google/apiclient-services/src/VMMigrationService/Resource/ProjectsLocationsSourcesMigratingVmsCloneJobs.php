@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\VMMigrationService\Resource;
+namespace FluentMail\Google\Service\VMMigrationService\Resource;
 
-use Google\Service\VMMigrationService\CancelCloneJobRequest;
-use Google\Service\VMMigrationService\CloneJob;
-use Google\Service\VMMigrationService\ListCloneJobsResponse;
-use Google\Service\VMMigrationService\Operation;
+use FluentMail\Google\Service\VMMigrationService\CancelCloneJobRequest;
+use FluentMail\Google\Service\VMMigrationService\CloneJob;
+use FluentMail\Google\Service\VMMigrationService\ListCloneJobsResponse;
+use FluentMail\Google\Service\VMMigrationService\Operation;
 
 /**
  * The "cloneJobs" collection of methods.

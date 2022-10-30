@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ServiceDirectory\Resource;
+namespace FluentMail\Google\Service\ServiceDirectory\Resource;
 
 /**
  * The "projects" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Safebrowsing;
+namespace FluentMail\Google\Service\Safebrowsing;
 
 class GoogleSecuritySafebrowsingV4ThreatEntrySet extends \Google\Model
 {

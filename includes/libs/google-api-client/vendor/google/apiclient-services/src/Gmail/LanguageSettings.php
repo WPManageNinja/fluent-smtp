@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Gmail;
+namespace FluentMail\Google\Service\Gmail;
 
 class LanguageSettings extends \Google\Model
 {

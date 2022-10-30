@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ChromeManagement\Resource;
+namespace FluentMail\Google\Service\ChromeManagement\Resource;
 
-use Google\Service\ChromeManagement\GoogleChromeManagementV1CountChromeAppRequestsResponse;
+use FluentMail\Google\Service\ChromeManagement\GoogleChromeManagementV1CountChromeAppRequestsResponse;
 
 /**
  * The "apps" collection of methods.

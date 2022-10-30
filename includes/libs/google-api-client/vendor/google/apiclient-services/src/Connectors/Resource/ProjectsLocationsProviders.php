@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Connectors\Resource;
+namespace FluentMail\Google\Service\Connectors\Resource;
 
-use Google\Service\Connectors\Policy;
-use Google\Service\Connectors\SetIamPolicyRequest;
-use Google\Service\Connectors\TestIamPermissionsRequest;
-use Google\Service\Connectors\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Connectors\Policy;
+use FluentMail\Google\Service\Connectors\SetIamPolicyRequest;
+use FluentMail\Google\Service\Connectors\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Connectors\TestIamPermissionsResponse;
 
 /**
  * The "providers" collection of methods.

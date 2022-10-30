@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Classroom\Resource;
+namespace FluentMail\Google\Service\Classroom\Resource;
 
-use Google\Service\Classroom\ClassroomEmpty;
-use Google\Service\Classroom\ListTeachersResponse;
-use Google\Service\Classroom\Teacher;
+use FluentMail\Google\Service\Classroom\ClassroomEmpty;
+use FluentMail\Google\Service\Classroom\ListTeachersResponse;
+use FluentMail\Google\Service\Classroom\Teacher;
 
 /**
  * The "teachers" collection of methods.

@@ -1,8 +1,8 @@
 <?php
 
-namespace GuzzleHttp\Handler;
+namespace FluentMail\GuzzleHttp\Handler;
 
-use Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
 
 interface CurlFactoryInterface
 {

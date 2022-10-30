@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Connectors\Resource;
+namespace FluentMail\Google\Service\Connectors\Resource;
 
-use Google\Service\Connectors\ExecuteActionRequest;
-use Google\Service\Connectors\ExecuteActionResponse;
-use Google\Service\Connectors\ListActionsResponse;
+use FluentMail\Google\Service\Connectors\ExecuteActionRequest;
+use FluentMail\Google\Service\Connectors\ExecuteActionResponse;
+use FluentMail\Google\Service\Connectors\ListActionsResponse;
 
 /**
  * The "actions" collection of methods.

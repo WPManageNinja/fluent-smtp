@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Digitalassetlinks\Resource;
+namespace FluentMail\Google\Service\Digitalassetlinks\Resource;
 
-use Google\Service\Digitalassetlinks\ListResponse;
+use FluentMail\Google\Service\Digitalassetlinks\ListResponse;
 
 /**
  * The "statements" collection of methods.

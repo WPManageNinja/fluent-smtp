@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BackupforGKE;
+namespace FluentMail\Google\Service\BackupforGKE;
 
 class ListVolumeRestoresResponse extends \Google\Collection
 {

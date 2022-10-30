@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\MessagePartBody;
+use FluentMail\Google\Service\Gmail\MessagePartBody;
 
 /**
  * The "attachments" collection of methods.

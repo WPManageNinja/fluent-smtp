@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler\Curl;
+namespace FluentMail\Monolog\Handler\Curl;
 
 use CurlHandle;
 

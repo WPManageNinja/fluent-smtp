@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Safebrowsing\Resource;
+namespace FluentMail\Google\Service\Safebrowsing\Resource;
 
-use Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4FindThreatMatchesRequest;
-use Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4FindThreatMatchesResponse;
+use FluentMail\Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4FindThreatMatchesRequest;
+use FluentMail\Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4FindThreatMatchesResponse;
 
 /**
  * The "threatMatches" collection of methods.

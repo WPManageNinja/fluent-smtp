@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\Area120Tables\Resource;
+namespace FluentMail\Google\Service\Area120Tables\Resource;
 
-use Google\Service\Area120Tables\Area120tablesEmpty;
-use Google\Service\Area120Tables\BatchCreateRowsRequest;
-use Google\Service\Area120Tables\BatchCreateRowsResponse;
-use Google\Service\Area120Tables\BatchDeleteRowsRequest;
-use Google\Service\Area120Tables\BatchUpdateRowsRequest;
-use Google\Service\Area120Tables\BatchUpdateRowsResponse;
-use Google\Service\Area120Tables\ListRowsResponse;
-use Google\Service\Area120Tables\Row;
+use FluentMail\Google\Service\Area120Tables\Area120tablesEmpty;
+use FluentMail\Google\Service\Area120Tables\BatchCreateRowsRequest;
+use FluentMail\Google\Service\Area120Tables\BatchCreateRowsResponse;
+use FluentMail\Google\Service\Area120Tables\BatchDeleteRowsRequest;
+use FluentMail\Google\Service\Area120Tables\BatchUpdateRowsRequest;
+use FluentMail\Google\Service\Area120Tables\BatchUpdateRowsResponse;
+use FluentMail\Google\Service\Area120Tables\ListRowsResponse;
+use FluentMail\Google\Service\Area120Tables\Row;
 
 /**
  * The "rows" collection of methods.

@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\Bigquery\Resource;
+namespace FluentMail\Google\Service\Bigquery\Resource;
 
-use Google\Service\Bigquery\GetQueryResultsResponse;
-use Google\Service\Bigquery\Job;
-use Google\Service\Bigquery\JobCancelResponse;
-use Google\Service\Bigquery\JobList;
-use Google\Service\Bigquery\QueryRequest;
-use Google\Service\Bigquery\QueryResponse;
+use FluentMail\Google\Service\Bigquery\GetQueryResultsResponse;
+use FluentMail\Google\Service\Bigquery\Job;
+use FluentMail\Google\Service\Bigquery\JobCancelResponse;
+use FluentMail\Google\Service\Bigquery\JobList;
+use FluentMail\Google\Service\Bigquery\QueryRequest;
+use FluentMail\Google\Service\Bigquery\QueryResponse;
 
 /**
  * The "jobs" collection of methods.

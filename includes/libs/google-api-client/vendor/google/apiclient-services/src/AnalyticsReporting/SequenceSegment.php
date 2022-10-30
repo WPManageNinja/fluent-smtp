@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsReporting;
+namespace FluentMail\Google\Service\AnalyticsReporting;
 
 class SequenceSegment extends \Google\Collection
 {

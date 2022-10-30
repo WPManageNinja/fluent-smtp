@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListSessionEntityTypesResponse;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3SessionEntityType;
-use Google\Service\Dialogflow\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListSessionEntityTypesResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3SessionEntityType;
+use FluentMail\Google\Service\Dialogflow\GoogleProtobufEmpty;
 
 /**
  * The "entityTypes" collection of methods.

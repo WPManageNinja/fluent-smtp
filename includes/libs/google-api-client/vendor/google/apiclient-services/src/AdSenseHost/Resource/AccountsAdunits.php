@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AdSenseHost\Resource;
+namespace FluentMail\Google\Service\AdSenseHost\Resource;
 
-use Google\Service\AdSenseHost\AdCode;
-use Google\Service\AdSenseHost\AdUnit;
-use Google\Service\AdSenseHost\AdUnits;
+use FluentMail\Google\Service\AdSenseHost\AdCode;
+use FluentMail\Google\Service\AdSenseHost\AdUnit;
+use FluentMail\Google\Service\AdSenseHost\AdUnits;
 
 /**
  * The "adunits" collection of methods.

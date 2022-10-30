@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\CloudDataplex\Resource;
+namespace FluentMail\Google\Service\CloudDataplex\Resource;
 
-use Google\Service\CloudDataplex\GoogleCloudDataplexV1ListZonesResponse;
-use Google\Service\CloudDataplex\GoogleCloudDataplexV1Zone;
-use Google\Service\CloudDataplex\GoogleIamV1Policy;
-use Google\Service\CloudDataplex\GoogleIamV1SetIamPolicyRequest;
-use Google\Service\CloudDataplex\GoogleIamV1TestIamPermissionsRequest;
-use Google\Service\CloudDataplex\GoogleIamV1TestIamPermissionsResponse;
-use Google\Service\CloudDataplex\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudDataplexV1ListZonesResponse;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudDataplexV1Zone;
+use FluentMail\Google\Service\CloudDataplex\GoogleIamV1Policy;
+use FluentMail\Google\Service\CloudDataplex\GoogleIamV1SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudDataplex\GoogleIamV1TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudDataplex\GoogleIamV1TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudDataplex\GoogleLongrunningOperation;
 
 /**
  * The "zones" collection of methods.

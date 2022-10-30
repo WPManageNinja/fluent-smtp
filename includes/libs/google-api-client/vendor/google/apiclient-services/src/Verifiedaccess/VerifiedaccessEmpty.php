@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Verifiedaccess;
+namespace FluentMail\Google\Service\Verifiedaccess;
 
 class VerifiedaccessEmpty extends \Google\Model
 {

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DataLabeling\Resource;
+namespace FluentMail\Google\Service\DataLabeling\Resource;
 
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1LabelTextRequest;
-use Google\Service\DataLabeling\GoogleLongrunningOperation;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1LabelTextRequest;
+use FluentMail\Google\Service\DataLabeling\GoogleLongrunningOperation;
 
 /**
  * The "text" collection of methods.

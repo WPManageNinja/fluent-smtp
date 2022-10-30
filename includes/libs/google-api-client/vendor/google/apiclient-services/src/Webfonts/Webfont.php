@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Webfonts;
+namespace FluentMail\Google\Service\Webfonts;
 
 class Webfont extends \Google\Collection
 {

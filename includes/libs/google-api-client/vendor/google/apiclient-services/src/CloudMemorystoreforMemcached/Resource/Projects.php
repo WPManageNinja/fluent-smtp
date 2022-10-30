@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudMemorystoreforMemcached\Resource;
+namespace FluentMail\Google\Service\CloudMemorystoreforMemcached\Resource;
 
 /**
  * The "projects" collection of methods.

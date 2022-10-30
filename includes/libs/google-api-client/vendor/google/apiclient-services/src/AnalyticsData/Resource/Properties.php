@@ -15,21 +15,21 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsData\Resource;
+namespace FluentMail\Google\Service\AnalyticsData\Resource;
 
-use Google\Service\AnalyticsData\BatchRunPivotReportsRequest;
-use Google\Service\AnalyticsData\BatchRunPivotReportsResponse;
-use Google\Service\AnalyticsData\BatchRunReportsRequest;
-use Google\Service\AnalyticsData\BatchRunReportsResponse;
-use Google\Service\AnalyticsData\CheckCompatibilityRequest;
-use Google\Service\AnalyticsData\CheckCompatibilityResponse;
-use Google\Service\AnalyticsData\Metadata;
-use Google\Service\AnalyticsData\RunPivotReportRequest;
-use Google\Service\AnalyticsData\RunPivotReportResponse;
-use Google\Service\AnalyticsData\RunRealtimeReportRequest;
-use Google\Service\AnalyticsData\RunRealtimeReportResponse;
-use Google\Service\AnalyticsData\RunReportRequest;
-use Google\Service\AnalyticsData\RunReportResponse;
+use FluentMail\Google\Service\AnalyticsData\BatchRunPivotReportsRequest;
+use FluentMail\Google\Service\AnalyticsData\BatchRunPivotReportsResponse;
+use FluentMail\Google\Service\AnalyticsData\BatchRunReportsRequest;
+use FluentMail\Google\Service\AnalyticsData\BatchRunReportsResponse;
+use FluentMail\Google\Service\AnalyticsData\CheckCompatibilityRequest;
+use FluentMail\Google\Service\AnalyticsData\CheckCompatibilityResponse;
+use FluentMail\Google\Service\AnalyticsData\Metadata;
+use FluentMail\Google\Service\AnalyticsData\RunPivotReportRequest;
+use FluentMail\Google\Service\AnalyticsData\RunPivotReportResponse;
+use FluentMail\Google\Service\AnalyticsData\RunRealtimeReportRequest;
+use FluentMail\Google\Service\AnalyticsData\RunRealtimeReportResponse;
+use FluentMail\Google\Service\AnalyticsData\RunReportRequest;
+use FluentMail\Google\Service\AnalyticsData\RunReportResponse;
 
 /**
  * The "properties" collection of methods.

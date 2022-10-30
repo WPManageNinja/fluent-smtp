@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DataCatalog\Resource;
+namespace FluentMail\Google\Service\DataCatalog\Resource;
 
 /**
  * The "locations" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DataLabeling;
+namespace FluentMail\Google\Service\DataLabeling;
 
 class GoogleCloudDatalabelingV1p1alpha1GcsFolderDestination extends \Google\Model
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Recommender;
+namespace FluentMail\Google\Service\Recommender;
 
 class GoogleTypeMoney extends \Google\Model
 {

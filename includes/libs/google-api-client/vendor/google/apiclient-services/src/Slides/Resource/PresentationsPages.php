@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Slides\Resource;
+namespace FluentMail\Google\Service\Slides\Resource;
 
-use Google\Service\Slides\Page;
-use Google\Service\Slides\Thumbnail;
+use FluentMail\Google\Service\Slides\Page;
+use FluentMail\Google\Service\Slides\Thumbnail;
 
 /**
  * The "pages" collection of methods.

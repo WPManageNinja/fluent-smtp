@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Playcustomapp\Resource;
+namespace FluentMail\Google\Service\Playcustomapp\Resource;
 
 /**
  * The "accounts" collection of methods.

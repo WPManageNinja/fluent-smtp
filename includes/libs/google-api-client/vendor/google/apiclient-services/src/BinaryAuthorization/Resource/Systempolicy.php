@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\BinaryAuthorization\Resource;
+namespace FluentMail\Google\Service\BinaryAuthorization\Resource;
 
-use Google\Service\BinaryAuthorization\Policy;
+use FluentMail\Google\Service\BinaryAuthorization\Policy;
 
 /**
  * The "systempolicy" collection of methods.

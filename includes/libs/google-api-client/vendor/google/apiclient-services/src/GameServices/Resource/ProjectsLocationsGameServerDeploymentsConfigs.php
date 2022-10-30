@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\GameServices\Resource;
+namespace FluentMail\Google\Service\GameServices\Resource;
 
-use Google\Service\GameServices\GameServerConfig;
-use Google\Service\GameServices\ListGameServerConfigsResponse;
-use Google\Service\GameServices\Operation;
+use FluentMail\Google\Service\GameServices\GameServerConfig;
+use FluentMail\Google\Service\GameServices\ListGameServerConfigsResponse;
+use FluentMail\Google\Service\GameServices\Operation;
 
 /**
  * The "configs" collection of methods.

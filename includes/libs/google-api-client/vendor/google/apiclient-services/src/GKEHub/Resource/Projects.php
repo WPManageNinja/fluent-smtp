@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\GKEHub\Resource;
+namespace FluentMail\Google\Service\GKEHub\Resource;
 
 /**
  * The "projects" collection of methods.

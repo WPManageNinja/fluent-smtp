@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\IAMCredentials;
+namespace FluentMail\Google\Service\IAMCredentials;
 
 class GenerateAccessTokenResponse extends \Google\Model
 {

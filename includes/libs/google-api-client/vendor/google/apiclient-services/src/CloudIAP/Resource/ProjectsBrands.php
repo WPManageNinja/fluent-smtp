@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudIAP\Resource;
+namespace FluentMail\Google\Service\CloudIAP\Resource;
 
-use Google\Service\CloudIAP\Brand;
-use Google\Service\CloudIAP\ListBrandsResponse;
+use FluentMail\Google\Service\CloudIAP\Brand;
+use FluentMail\Google\Service\CloudIAP\ListBrandsResponse;
 
 /**
  * The "brands" collection of methods.

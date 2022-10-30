@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Adsense;
+namespace FluentMail\Google\Service\Adsense;
 
 class ListAlertsResponse extends \Google\Collection
 {

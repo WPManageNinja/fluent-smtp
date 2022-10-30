@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Networkconnectivity\Resource;
+namespace FluentMail\Google\Service\Networkconnectivity\Resource;
 
-use Google\Service\Networkconnectivity\Policy;
-use Google\Service\Networkconnectivity\SetIamPolicyRequest;
-use Google\Service\Networkconnectivity\TestIamPermissionsRequest;
-use Google\Service\Networkconnectivity\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Networkconnectivity\Policy;
+use FluentMail\Google\Service\Networkconnectivity\SetIamPolicyRequest;
+use FluentMail\Google\Service\Networkconnectivity\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Networkconnectivity\TestIamPermissionsResponse;
 
 /**
  * The "internalRanges" collection of methods.

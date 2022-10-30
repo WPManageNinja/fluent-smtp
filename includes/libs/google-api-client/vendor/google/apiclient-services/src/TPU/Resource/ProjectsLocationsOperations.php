@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\TPU\Resource;
+namespace FluentMail\Google\Service\TPU\Resource;
 
-use Google\Service\TPU\ListOperationsResponse;
-use Google\Service\TPU\Operation;
-use Google\Service\TPU\TpuEmpty;
+use FluentMail\Google\Service\TPU\ListOperationsResponse;
+use FluentMail\Google\Service\TPU\Operation;
+use FluentMail\Google\Service\TPU\TpuEmpty;
 
 /**
  * The "operations" collection of methods.

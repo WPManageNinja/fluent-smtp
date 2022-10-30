@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\OrgPolicyAPI\Resource;
+namespace FluentMail\Google\Service\OrgPolicyAPI\Resource;
 
-use Google\Service\OrgPolicyAPI\GoogleCloudOrgpolicyV2ListConstraintsResponse;
+use FluentMail\Google\Service\OrgPolicyAPI\GoogleCloudOrgpolicyV2ListConstraintsResponse;
 
 /**
  * The "constraints" collection of methods.

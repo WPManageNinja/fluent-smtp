@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\ThumbnailSetResponse;
+use FluentMail\Google\Service\YouTube\ThumbnailSetResponse;
 
 /**
  * The "thumbnails" collection of methods.

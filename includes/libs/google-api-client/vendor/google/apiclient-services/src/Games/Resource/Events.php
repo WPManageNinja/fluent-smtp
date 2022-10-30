@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Games\Resource;
+namespace FluentMail\Google\Service\Games\Resource;
 
-use Google\Service\Games\EventDefinitionListResponse;
-use Google\Service\Games\EventRecordRequest;
-use Google\Service\Games\EventUpdateResponse;
-use Google\Service\Games\PlayerEventListResponse;
+use FluentMail\Google\Service\Games\EventDefinitionListResponse;
+use FluentMail\Google\Service\Games\EventRecordRequest;
+use FluentMail\Google\Service\Games\EventUpdateResponse;
+use FluentMail\Google\Service\Games\PlayerEventListResponse;
 
 /**
  * The "events" collection of methods.

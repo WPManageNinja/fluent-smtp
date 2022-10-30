@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\PaymentsResellerSubscription\Resource;
+namespace FluentMail\Google\Service\PaymentsResellerSubscription\Resource;
 
-use Google\Service\PaymentsResellerSubscription\GoogleCloudPaymentsResellerSubscriptionV1FindEligiblePromotionsRequest;
-use Google\Service\PaymentsResellerSubscription\GoogleCloudPaymentsResellerSubscriptionV1FindEligiblePromotionsResponse;
-use Google\Service\PaymentsResellerSubscription\GoogleCloudPaymentsResellerSubscriptionV1ListPromotionsResponse;
+use FluentMail\Google\Service\PaymentsResellerSubscription\GoogleCloudPaymentsResellerSubscriptionV1FindEligiblePromotionsRequest;
+use FluentMail\Google\Service\PaymentsResellerSubscription\GoogleCloudPaymentsResellerSubscriptionV1FindEligiblePromotionsResponse;
+use FluentMail\Google\Service\PaymentsResellerSubscription\GoogleCloudPaymentsResellerSubscriptionV1ListPromotionsResponse;
 
 /**
  * The "promotions" collection of methods.

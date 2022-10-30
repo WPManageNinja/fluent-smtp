@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DataCatalog\Resource;
+namespace FluentMail\Google\Service\DataCatalog\Resource;
 
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1SearchCatalogRequest;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1SearchCatalogResponse;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1SearchCatalogRequest;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1SearchCatalogResponse;
 
 /**
  * The "catalog" collection of methods.

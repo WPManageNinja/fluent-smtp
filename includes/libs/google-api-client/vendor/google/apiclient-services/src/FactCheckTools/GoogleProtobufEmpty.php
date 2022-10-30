@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FactCheckTools;
+namespace FluentMail\Google\Service\FactCheckTools;
 
 class GoogleProtobufEmpty extends \Google\Model
 {

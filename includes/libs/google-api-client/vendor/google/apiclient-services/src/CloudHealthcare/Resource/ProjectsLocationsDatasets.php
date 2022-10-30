@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
-use Google\Service\CloudHealthcare\Dataset;
-use Google\Service\CloudHealthcare\DeidentifyDatasetRequest;
-use Google\Service\CloudHealthcare\HealthcareEmpty;
-use Google\Service\CloudHealthcare\ListDatasetsResponse;
-use Google\Service\CloudHealthcare\Operation;
-use Google\Service\CloudHealthcare\Policy;
-use Google\Service\CloudHealthcare\SetIamPolicyRequest;
-use Google\Service\CloudHealthcare\TestIamPermissionsRequest;
-use Google\Service\CloudHealthcare\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudHealthcare\Dataset;
+use FluentMail\Google\Service\CloudHealthcare\DeidentifyDatasetRequest;
+use FluentMail\Google\Service\CloudHealthcare\HealthcareEmpty;
+use FluentMail\Google\Service\CloudHealthcare\ListDatasetsResponse;
+use FluentMail\Google\Service\CloudHealthcare\Operation;
+use FluentMail\Google\Service\CloudHealthcare\Policy;
+use FluentMail\Google\Service\CloudHealthcare\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudHealthcare\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudHealthcare\TestIamPermissionsResponse;
 
 /**
  * The "datasets" collection of methods.

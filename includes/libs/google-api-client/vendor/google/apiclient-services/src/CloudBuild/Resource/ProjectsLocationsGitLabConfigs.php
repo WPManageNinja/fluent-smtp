@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\CloudBuild\Resource;
+namespace FluentMail\Google\Service\CloudBuild\Resource;
 
-use Google\Service\CloudBuild\CloudbuildEmpty;
-use Google\Service\CloudBuild\GitLabConfig;
-use Google\Service\CloudBuild\ListGitLabConfigsResponse;
-use Google\Service\CloudBuild\Operation;
-use Google\Service\CloudBuild\RemoveGitLabConnectedRepositoryRequest;
+use FluentMail\Google\Service\CloudBuild\CloudbuildEmpty;
+use FluentMail\Google\Service\CloudBuild\GitLabConfig;
+use FluentMail\Google\Service\CloudBuild\ListGitLabConfigsResponse;
+use FluentMail\Google\Service\CloudBuild\Operation;
+use FluentMail\Google\Service\CloudBuild\RemoveGitLabConnectedRepositoryRequest;
 
 /**
  * The "gitLabConfigs" collection of methods.

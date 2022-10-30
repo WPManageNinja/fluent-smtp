@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\HangoutsChat\Resource;
+namespace FluentMail\Google\Service\HangoutsChat\Resource;
 
-use Google\Service\HangoutsChat\Media as MediaModel;
+use FluentMail\Google\Service\HangoutsChat\Media as MediaModel;
 
 /**
  * The "media" collection of methods.

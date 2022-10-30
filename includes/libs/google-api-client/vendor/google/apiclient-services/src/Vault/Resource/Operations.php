@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Vault\Resource;
+namespace FluentMail\Google\Service\Vault\Resource;
 
-use Google\Service\Vault\CancelOperationRequest;
-use Google\Service\Vault\ListOperationsResponse;
-use Google\Service\Vault\Operation;
-use Google\Service\Vault\VaultEmpty;
+use FluentMail\Google\Service\Vault\CancelOperationRequest;
+use FluentMail\Google\Service\Vault\ListOperationsResponse;
+use FluentMail\Google\Service\Vault\Operation;
+use FluentMail\Google\Service\Vault\VaultEmpty;
 
 /**
  * The "operations" collection of methods.

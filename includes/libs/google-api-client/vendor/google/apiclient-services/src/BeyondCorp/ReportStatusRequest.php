@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BeyondCorp;
+namespace FluentMail\Google\Service\BeyondCorp;
 
 class ReportStatusRequest extends \Google\Model
 {

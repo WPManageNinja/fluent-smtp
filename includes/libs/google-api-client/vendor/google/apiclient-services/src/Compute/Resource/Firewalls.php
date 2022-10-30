@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Firewall;
-use Google\Service\Compute\FirewallList;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Firewall;
+use FluentMail\Google\Service\Compute\FirewallList;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "firewalls" collection of methods.

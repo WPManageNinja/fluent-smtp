@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\BooksEmpty;
-use Google\Service\Books\FamilyInfo;
+use FluentMail\Google\Service\Books\BooksEmpty;
+use FluentMail\Google\Service\Books\FamilyInfo;
 
 /**
  * The "familysharing" collection of methods.

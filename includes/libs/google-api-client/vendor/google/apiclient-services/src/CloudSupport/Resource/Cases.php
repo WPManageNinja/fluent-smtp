@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\CloudSupport\Resource;
+namespace FluentMail\Google\Service\CloudSupport\Resource;
 
-use Google\Service\CloudSupport\CloseCaseRequest;
-use Google\Service\CloudSupport\CloudsupportCase;
-use Google\Service\CloudSupport\EscalateCaseRequest;
-use Google\Service\CloudSupport\ListCasesResponse;
-use Google\Service\CloudSupport\SearchCasesResponse;
+use FluentMail\Google\Service\CloudSupport\CloseCaseRequest;
+use FluentMail\Google\Service\CloudSupport\CloudsupportCase;
+use FluentMail\Google\Service\CloudSupport\EscalateCaseRequest;
+use FluentMail\Google\Service\CloudSupport\ListCasesResponse;
+use FluentMail\Google\Service\CloudSupport\SearchCasesResponse;
 
 /**
  * The "cases" collection of methods.

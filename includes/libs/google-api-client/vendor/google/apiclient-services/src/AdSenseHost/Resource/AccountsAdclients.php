@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdSenseHost\Resource;
+namespace FluentMail\Google\Service\AdSenseHost\Resource;
 
-use Google\Service\AdSenseHost\AdClient;
-use Google\Service\AdSenseHost\AdClients;
+use FluentMail\Google\Service\AdSenseHost\AdClient;
+use FluentMail\Google\Service\AdSenseHost\AdClients;
 
 /**
  * The "adclients" collection of methods.

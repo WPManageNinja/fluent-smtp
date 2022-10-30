@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Bigquery;
+namespace FluentMail\Google\Service\Bigquery;
 
 class GlobalExplanation extends \Google\Collection
 {

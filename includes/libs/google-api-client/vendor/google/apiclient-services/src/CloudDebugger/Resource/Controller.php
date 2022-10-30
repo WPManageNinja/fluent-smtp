@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudDebugger\Resource;
+namespace FluentMail\Google\Service\CloudDebugger\Resource;
 
 /**
  * The "controller" collection of methods.

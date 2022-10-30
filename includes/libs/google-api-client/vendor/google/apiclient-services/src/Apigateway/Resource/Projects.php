@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Apigateway\Resource;
+namespace FluentMail\Google\Service\Apigateway\Resource;
 
 /**
  * The "projects" collection of methods.

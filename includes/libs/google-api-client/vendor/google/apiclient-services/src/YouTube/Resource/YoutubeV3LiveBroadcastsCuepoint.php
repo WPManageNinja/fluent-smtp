@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\Cuepoint;
+use FluentMail\Google\Service\YouTube\Cuepoint;
 
 /**
  * The "cuepoint" collection of methods.

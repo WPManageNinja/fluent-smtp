@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\RealTimeBidding\Resource;
+namespace FluentMail\Google\Service\RealTimeBidding\Resource;
 
-use Google\Service\RealTimeBidding\BatchApprovePublisherConnectionsRequest;
-use Google\Service\RealTimeBidding\BatchApprovePublisherConnectionsResponse;
-use Google\Service\RealTimeBidding\BatchRejectPublisherConnectionsRequest;
-use Google\Service\RealTimeBidding\BatchRejectPublisherConnectionsResponse;
-use Google\Service\RealTimeBidding\ListPublisherConnectionsResponse;
-use Google\Service\RealTimeBidding\PublisherConnection;
+use FluentMail\Google\Service\RealTimeBidding\BatchApprovePublisherConnectionsRequest;
+use FluentMail\Google\Service\RealTimeBidding\BatchApprovePublisherConnectionsResponse;
+use FluentMail\Google\Service\RealTimeBidding\BatchRejectPublisherConnectionsRequest;
+use FluentMail\Google\Service\RealTimeBidding\BatchRejectPublisherConnectionsResponse;
+use FluentMail\Google\Service\RealTimeBidding\ListPublisherConnectionsResponse;
+use FluentMail\Google\Service\RealTimeBidding\PublisherConnection;
 
 /**
  * The "publisherConnections" collection of methods.

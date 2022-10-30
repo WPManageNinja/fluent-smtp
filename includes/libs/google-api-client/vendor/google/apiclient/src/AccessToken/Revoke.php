@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-namespace Google\AccessToken;
+namespace FluentMail\Google\AccessToken;
 
-use Google\Auth\HttpHandler\HttpHandlerFactory;
-use Google\Client;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Psr7\Request;
+use FluentMail\Google\Auth\HttpHandler\HttpHandlerFactory;
+use FluentMail\Google\Client;
+use FluentMail\GuzzleHttp\ClientInterface;
+use FluentMail\GuzzleHttp\Psr7;
+use FluentMail\GuzzleHttp\Psr7\Request;
 
 /**
  * Wrapper around Google Access Tokens which provides convenience functions

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\ImportYumArtifactsRequest;
-use Google\Service\ArtifactRegistry\Operation;
-use Google\Service\ArtifactRegistry\UploadYumArtifactMediaResponse;
-use Google\Service\ArtifactRegistry\UploadYumArtifactRequest;
+use FluentMail\Google\Service\ArtifactRegistry\ImportYumArtifactsRequest;
+use FluentMail\Google\Service\ArtifactRegistry\Operation;
+use FluentMail\Google\Service\ArtifactRegistry\UploadYumArtifactMediaResponse;
+use FluentMail\Google\Service\ArtifactRegistry\UploadYumArtifactRequest;
 
 /**
  * The "yumArtifacts" collection of methods.

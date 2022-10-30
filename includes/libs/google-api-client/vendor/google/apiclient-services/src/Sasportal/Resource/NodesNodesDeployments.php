@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Sasportal\Resource;
+namespace FluentMail\Google\Service\Sasportal\Resource;
 
-use Google\Service\Sasportal\SasPortalDeployment;
-use Google\Service\Sasportal\SasPortalListDeploymentsResponse;
+use FluentMail\Google\Service\Sasportal\SasPortalDeployment;
+use FluentMail\Google\Service\Sasportal\SasPortalListDeploymentsResponse;
 
 /**
  * The "deployments" collection of methods.

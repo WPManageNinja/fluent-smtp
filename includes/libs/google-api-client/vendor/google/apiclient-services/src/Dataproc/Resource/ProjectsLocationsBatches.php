@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Dataproc\Resource;
+namespace FluentMail\Google\Service\Dataproc\Resource;
 
-use Google\Service\Dataproc\Batch;
-use Google\Service\Dataproc\DataprocEmpty;
-use Google\Service\Dataproc\ListBatchesResponse;
-use Google\Service\Dataproc\Operation;
+use FluentMail\Google\Service\Dataproc\Batch;
+use FluentMail\Google\Service\Dataproc\DataprocEmpty;
+use FluentMail\Google\Service\Dataproc\ListBatchesResponse;
+use FluentMail\Google\Service\Dataproc\Operation;
 
 /**
  * The "batches" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessLodging;
+namespace FluentMail\Google\Service\MyBusinessLodging;
 
 class SustainableSourcing extends \Google\Model
 {

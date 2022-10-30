@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\UploadKfpArtifactMediaResponse;
-use Google\Service\ArtifactRegistry\UploadKfpArtifactRequest;
+use FluentMail\Google\Service\ArtifactRegistry\UploadKfpArtifactMediaResponse;
+use FluentMail\Google\Service\ArtifactRegistry\UploadKfpArtifactRequest;
 
 /**
  * The "kfpArtifacts" collection of methods.

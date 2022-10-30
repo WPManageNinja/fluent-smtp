@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\TPU\Resource;
+namespace FluentMail\Google\Service\TPU\Resource;
 
-use Google\Service\TPU\ListTensorFlowVersionsResponse;
-use Google\Service\TPU\TensorFlowVersion;
+use FluentMail\Google\Service\TPU\ListTensorFlowVersionsResponse;
+use FluentMail\Google\Service\TPU\TensorFlowVersion;
 
 /**
  * The "tensorflowVersions" collection of methods.

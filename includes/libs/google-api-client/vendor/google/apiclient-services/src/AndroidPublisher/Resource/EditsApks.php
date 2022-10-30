@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\Apk;
-use Google\Service\AndroidPublisher\ApksAddExternallyHostedRequest;
-use Google\Service\AndroidPublisher\ApksAddExternallyHostedResponse;
-use Google\Service\AndroidPublisher\ApksListResponse;
+use FluentMail\Google\Service\AndroidPublisher\Apk;
+use FluentMail\Google\Service\AndroidPublisher\ApksAddExternallyHostedRequest;
+use FluentMail\Google\Service\AndroidPublisher\ApksAddExternallyHostedResponse;
+use FluentMail\Google\Service\AndroidPublisher\ApksListResponse;
 
 /**
  * The "apks" collection of methods.

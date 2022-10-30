@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\CountriesListResponse;
-use Google\Service\Dfareporting\Country;
+use FluentMail\Google\Service\Dfareporting\CountriesListResponse;
+use FluentMail\Google\Service\Dfareporting\Country;
 
 /**
  * The "countries" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudMachineLearningEngine\Resource;
+namespace FluentMail\Google\Service\CloudMachineLearningEngine\Resource;
 
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListLocationsResponse;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1Location;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListLocationsResponse;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1Location;
 
 /**
  * The "locations" collection of methods.

@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\GlobalNetworkEndpointGroupsAttachEndpointsRequest;
-use Google\Service\Compute\GlobalNetworkEndpointGroupsDetachEndpointsRequest;
-use Google\Service\Compute\NetworkEndpointGroup;
-use Google\Service\Compute\NetworkEndpointGroupList;
-use Google\Service\Compute\NetworkEndpointGroupsListNetworkEndpoints;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\GlobalNetworkEndpointGroupsAttachEndpointsRequest;
+use FluentMail\Google\Service\Compute\GlobalNetworkEndpointGroupsDetachEndpointsRequest;
+use FluentMail\Google\Service\Compute\NetworkEndpointGroup;
+use FluentMail\Google\Service\Compute\NetworkEndpointGroupList;
+use FluentMail\Google\Service\Compute\NetworkEndpointGroupsListNetworkEndpoints;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "globalNetworkEndpointGroups" collection of methods.

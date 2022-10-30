@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\GlobalSetPolicyRequest;
-use Google\Service\Compute\InstanceTemplate;
-use Google\Service\Compute\InstanceTemplateList;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Policy;
-use Google\Service\Compute\TestPermissionsRequest;
-use Google\Service\Compute\TestPermissionsResponse;
+use FluentMail\Google\Service\Compute\GlobalSetPolicyRequest;
+use FluentMail\Google\Service\Compute\InstanceTemplate;
+use FluentMail\Google\Service\Compute\InstanceTemplateList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Policy;
+use FluentMail\Google\Service\Compute\TestPermissionsRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsResponse;
 
 /**
  * The "instanceTemplates" collection of methods.

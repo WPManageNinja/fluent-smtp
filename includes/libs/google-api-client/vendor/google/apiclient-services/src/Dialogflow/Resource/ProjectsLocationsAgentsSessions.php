@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3DetectIntentRequest;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3DetectIntentResponse;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3FulfillIntentRequest;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3FulfillIntentResponse;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3MatchIntentRequest;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3MatchIntentResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3DetectIntentRequest;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3DetectIntentResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3FulfillIntentRequest;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3FulfillIntentResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3MatchIntentRequest;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3MatchIntentResponse;
 
 /**
  * The "sessions" collection of methods.

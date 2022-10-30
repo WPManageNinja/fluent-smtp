@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudMemorystoreforMemcached\Resource;
+namespace FluentMail\Google\Service\CloudMemorystoreforMemcached\Resource;
 
-use Google\Service\CloudMemorystoreforMemcached\ListLocationsResponse;
-use Google\Service\CloudMemorystoreforMemcached\Location;
+use FluentMail\Google\Service\CloudMemorystoreforMemcached\ListLocationsResponse;
+use FluentMail\Google\Service\CloudMemorystoreforMemcached\Location;
 
 /**
  * The "locations" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Directory;
+namespace FluentMail\Google\Service\Directory;
 
 class CustomerPostalAddress extends \Google\Model
 {

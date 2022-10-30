@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Oauth2\Resource;
+namespace FluentMail\Google\Service\Oauth2\Resource;
 
 /**
  * The "v2" collection of methods.

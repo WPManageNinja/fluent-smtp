@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\Storagetransfer\Resource;
+namespace FluentMail\Google\Service\Storagetransfer\Resource;
 
-use Google\Service\Storagetransfer\ListTransferJobsResponse;
-use Google\Service\Storagetransfer\Operation;
-use Google\Service\Storagetransfer\RunTransferJobRequest;
-use Google\Service\Storagetransfer\StoragetransferEmpty;
-use Google\Service\Storagetransfer\TransferJob;
-use Google\Service\Storagetransfer\UpdateTransferJobRequest;
+use FluentMail\Google\Service\Storagetransfer\ListTransferJobsResponse;
+use FluentMail\Google\Service\Storagetransfer\Operation;
+use FluentMail\Google\Service\Storagetransfer\RunTransferJobRequest;
+use FluentMail\Google\Service\Storagetransfer\StoragetransferEmpty;
+use FluentMail\Google\Service\Storagetransfer\TransferJob;
+use FluentMail\Google\Service\Storagetransfer\UpdateTransferJobRequest;
 
 /**
  * The "transferJobs" collection of methods.

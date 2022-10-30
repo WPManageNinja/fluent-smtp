@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Classroom\Resource;
+namespace FluentMail\Google\Service\Classroom\Resource;
 
-use Google\Service\Classroom\GuardianInvitation;
-use Google\Service\Classroom\ListGuardianInvitationsResponse;
+use FluentMail\Google\Service\Classroom\GuardianInvitation;
+use FluentMail\Google\Service\Classroom\ListGuardianInvitationsResponse;
 
 /**
  * The "guardianInvitations" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Datastream\Resource;
+namespace FluentMail\Google\Service\Datastream\Resource;
 
-use Google\Service\Datastream\ListRoutesResponse;
-use Google\Service\Datastream\Operation;
-use Google\Service\Datastream\Route;
+use FluentMail\Google\Service\Datastream\ListRoutesResponse;
+use FluentMail\Google\Service\Datastream\Operation;
+use FluentMail\Google\Service\Datastream\Route;
 
 /**
  * The "routes" collection of methods.

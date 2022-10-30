@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Transcoder\Resource;
+namespace FluentMail\Google\Service\Transcoder\Resource;
 
 /**
  * The "projects" collection of methods.

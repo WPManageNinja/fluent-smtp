@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\DataprocMetastore\Resource;
+namespace FluentMail\Google\Service\DataprocMetastore\Resource;
 
-use Google\Service\DataprocMetastore\Policy;
-use Google\Service\DataprocMetastore\SetIamPolicyRequest;
-use Google\Service\DataprocMetastore\TestIamPermissionsRequest;
-use Google\Service\DataprocMetastore\TestIamPermissionsResponse;
+use FluentMail\Google\Service\DataprocMetastore\Policy;
+use FluentMail\Google\Service\DataprocMetastore\SetIamPolicyRequest;
+use FluentMail\Google\Service\DataprocMetastore\TestIamPermissionsRequest;
+use FluentMail\Google\Service\DataprocMetastore\TestIamPermissionsResponse;
 
 /**
  * The "tables" collection of methods.

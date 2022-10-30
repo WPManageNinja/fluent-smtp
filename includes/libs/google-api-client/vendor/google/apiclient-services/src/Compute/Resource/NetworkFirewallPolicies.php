@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\FirewallPolicy;
-use Google\Service\Compute\FirewallPolicyAssociation;
-use Google\Service\Compute\FirewallPolicyList;
-use Google\Service\Compute\FirewallPolicyRule;
-use Google\Service\Compute\GlobalSetPolicyRequest;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Policy;
-use Google\Service\Compute\TestPermissionsRequest;
-use Google\Service\Compute\TestPermissionsResponse;
+use FluentMail\Google\Service\Compute\FirewallPolicy;
+use FluentMail\Google\Service\Compute\FirewallPolicyAssociation;
+use FluentMail\Google\Service\Compute\FirewallPolicyList;
+use FluentMail\Google\Service\Compute\FirewallPolicyRule;
+use FluentMail\Google\Service\Compute\GlobalSetPolicyRequest;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Policy;
+use FluentMail\Google\Service\Compute\TestPermissionsRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsResponse;
 
 /**
  * The "networkFirewallPolicies" collection of methods.

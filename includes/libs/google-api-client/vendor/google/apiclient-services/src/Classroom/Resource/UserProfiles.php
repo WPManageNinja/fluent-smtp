@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Classroom\Resource;
+namespace FluentMail\Google\Service\Classroom\Resource;
 
-use Google\Service\Classroom\UserProfile;
+use FluentMail\Google\Service\Classroom\UserProfile;
 
 /**
  * The "userProfiles" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\HangoutsChat\Resource;
+namespace FluentMail\Google\Service\HangoutsChat\Resource;
 
-use Google\Service\HangoutsChat\ListMembershipsResponse;
-use Google\Service\HangoutsChat\Membership;
+use FluentMail\Google\Service\HangoutsChat\ListMembershipsResponse;
+use FluentMail\Google\Service\HangoutsChat\Membership;
 
 /**
  * The "members" collection of methods.

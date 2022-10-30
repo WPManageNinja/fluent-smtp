@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudFilestore\Resource;
+namespace FluentMail\Google\Service\CloudFilestore\Resource;
 
-use Google\Service\CloudFilestore\CancelOperationRequest;
-use Google\Service\CloudFilestore\FileEmpty;
-use Google\Service\CloudFilestore\ListOperationsResponse;
-use Google\Service\CloudFilestore\Operation;
+use FluentMail\Google\Service\CloudFilestore\CancelOperationRequest;
+use FluentMail\Google\Service\CloudFilestore\FileEmpty;
+use FluentMail\Google\Service\CloudFilestore\ListOperationsResponse;
+use FluentMail\Google\Service\CloudFilestore\Operation;
 
 /**
  * The "operations" collection of methods.

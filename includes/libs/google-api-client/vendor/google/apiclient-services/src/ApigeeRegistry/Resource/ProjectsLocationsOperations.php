@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ApigeeRegistry\Resource;
+namespace FluentMail\Google\Service\ApigeeRegistry\Resource;
 
-use Google\Service\ApigeeRegistry\ApigeeregistryEmpty;
-use Google\Service\ApigeeRegistry\CancelOperationRequest;
-use Google\Service\ApigeeRegistry\ListOperationsResponse;
-use Google\Service\ApigeeRegistry\Operation;
+use FluentMail\Google\Service\ApigeeRegistry\ApigeeregistryEmpty;
+use FluentMail\Google\Service\ApigeeRegistry\CancelOperationRequest;
+use FluentMail\Google\Service\ApigeeRegistry\ListOperationsResponse;
+use FluentMail\Google\Service\ApigeeRegistry\Operation;
 
 /**
  * The "operations" collection of methods.

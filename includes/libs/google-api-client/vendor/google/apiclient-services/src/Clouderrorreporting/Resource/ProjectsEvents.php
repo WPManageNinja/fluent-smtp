@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Clouderrorreporting\Resource;
+namespace FluentMail\Google\Service\Clouderrorreporting\Resource;
 
-use Google\Service\Clouderrorreporting\ListEventsResponse;
-use Google\Service\Clouderrorreporting\ReportErrorEventResponse;
-use Google\Service\Clouderrorreporting\ReportedErrorEvent;
+use FluentMail\Google\Service\Clouderrorreporting\ListEventsResponse;
+use FluentMail\Google\Service\Clouderrorreporting\ReportErrorEventResponse;
+use FluentMail\Google\Service\Clouderrorreporting\ReportedErrorEvent;
 
 /**
  * The "events" collection of methods.

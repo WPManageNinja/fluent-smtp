@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Iam\Resource;
+namespace FluentMail\Google\Service\Iam\Resource;
 
 /**
  * The "workforcePools" collection of methods.

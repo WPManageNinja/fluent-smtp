@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\PubsubLite\Resource;
+namespace FluentMail\Google\Service\PubsubLite\Resource;
 
-use Google\Service\PubsubLite\ComputeHeadCursorRequest;
-use Google\Service\PubsubLite\ComputeHeadCursorResponse;
-use Google\Service\PubsubLite\ComputeMessageStatsRequest;
-use Google\Service\PubsubLite\ComputeMessageStatsResponse;
-use Google\Service\PubsubLite\ComputeTimeCursorRequest;
-use Google\Service\PubsubLite\ComputeTimeCursorResponse;
+use FluentMail\Google\Service\PubsubLite\ComputeHeadCursorRequest;
+use FluentMail\Google\Service\PubsubLite\ComputeHeadCursorResponse;
+use FluentMail\Google\Service\PubsubLite\ComputeMessageStatsRequest;
+use FluentMail\Google\Service\PubsubLite\ComputeMessageStatsResponse;
+use FluentMail\Google\Service\PubsubLite\ComputeTimeCursorRequest;
+use FluentMail\Google\Service\PubsubLite\ComputeTimeCursorResponse;
 
 /**
  * The "topics" collection of methods.

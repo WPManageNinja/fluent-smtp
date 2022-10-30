@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\AssignedLocation;
-use Google\Service\DisplayVideo\BulkEditAssignedLocationsRequest;
-use Google\Service\DisplayVideo\BulkEditAssignedLocationsResponse;
-use Google\Service\DisplayVideo\DisplayvideoEmpty;
-use Google\Service\DisplayVideo\ListAssignedLocationsResponse;
+use FluentMail\Google\Service\DisplayVideo\AssignedLocation;
+use FluentMail\Google\Service\DisplayVideo\BulkEditAssignedLocationsRequest;
+use FluentMail\Google\Service\DisplayVideo\BulkEditAssignedLocationsResponse;
+use FluentMail\Google\Service\DisplayVideo\DisplayvideoEmpty;
+use FluentMail\Google\Service\DisplayVideo\ListAssignedLocationsResponse;
 
 /**
  * The "assignedLocations" collection of methods.

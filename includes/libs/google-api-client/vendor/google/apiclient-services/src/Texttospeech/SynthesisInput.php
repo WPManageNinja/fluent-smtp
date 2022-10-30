@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Texttospeech;
+namespace FluentMail\Google\Service\Texttospeech;
 
 class SynthesisInput extends \Google\Model
 {

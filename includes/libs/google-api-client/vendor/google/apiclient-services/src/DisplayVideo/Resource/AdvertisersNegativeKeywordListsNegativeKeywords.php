@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\BulkEditNegativeKeywordsRequest;
-use Google\Service\DisplayVideo\BulkEditNegativeKeywordsResponse;
-use Google\Service\DisplayVideo\DisplayvideoEmpty;
-use Google\Service\DisplayVideo\ListNegativeKeywordsResponse;
-use Google\Service\DisplayVideo\NegativeKeyword;
-use Google\Service\DisplayVideo\ReplaceNegativeKeywordsRequest;
-use Google\Service\DisplayVideo\ReplaceNegativeKeywordsResponse;
+use FluentMail\Google\Service\DisplayVideo\BulkEditNegativeKeywordsRequest;
+use FluentMail\Google\Service\DisplayVideo\BulkEditNegativeKeywordsResponse;
+use FluentMail\Google\Service\DisplayVideo\DisplayvideoEmpty;
+use FluentMail\Google\Service\DisplayVideo\ListNegativeKeywordsResponse;
+use FluentMail\Google\Service\DisplayVideo\NegativeKeyword;
+use FluentMail\Google\Service\DisplayVideo\ReplaceNegativeKeywordsRequest;
+use FluentMail\Google\Service\DisplayVideo\ReplaceNegativeKeywordsResponse;
 
 /**
  * The "negativeKeywords" collection of methods.

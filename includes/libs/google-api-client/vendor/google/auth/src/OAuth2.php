@@ -15,19 +15,19 @@
  * limitations under the License.
  */
 
-namespace Google\Auth;
+namespace FluentMail\Google\Auth;
 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use Google\Auth\HttpHandler\HttpClientCache;
-use Google\Auth\HttpHandler\HttpHandlerFactory;
-use GuzzleHttp\Psr7\Query;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Utils;
+use FluentMail\Firebase\JWT\JWT;
+use FluentMail\Firebase\JWT\Key;
+use FluentMail\Google\Auth\HttpHandler\HttpClientCache;
+use FluentMail\Google\Auth\HttpHandler\HttpHandlerFactory;
+use FluentMail\GuzzleHttp\Psr7\Query;
+use FluentMail\GuzzleHttp\Psr7\Request;
+use FluentMail\GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\ResponseInterface;
+use FluentMail\Psr\Http\Message\UriInterface;
 
 /**
  * OAuth2 supports authentication by OAuth2 2-legged flows.

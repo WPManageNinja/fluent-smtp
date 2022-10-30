@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudIAP\Resource;
+namespace FluentMail\Google\Service\CloudIAP\Resource;
 
-use Google\Service\CloudIAP\IapEmpty;
-use Google\Service\CloudIAP\IdentityAwareProxyClient;
-use Google\Service\CloudIAP\ListIdentityAwareProxyClientsResponse;
-use Google\Service\CloudIAP\ResetIdentityAwareProxyClientSecretRequest;
+use FluentMail\Google\Service\CloudIAP\IapEmpty;
+use FluentMail\Google\Service\CloudIAP\IdentityAwareProxyClient;
+use FluentMail\Google\Service\CloudIAP\ListIdentityAwareProxyClientsResponse;
+use FluentMail\Google\Service\CloudIAP\ResetIdentityAwareProxyClientSecretRequest;
 
 /**
  * The "identityAwareProxyClients" collection of methods.

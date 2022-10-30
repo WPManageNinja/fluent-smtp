@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ToolResults\Resource;
+namespace FluentMail\Google\Service\ToolResults\Resource;
 
-use Google\Service\ToolResults\ListStepThumbnailsResponse;
+use FluentMail\Google\Service\ToolResults\ListStepThumbnailsResponse;
 
 /**
  * The "thumbnails" collection of methods.

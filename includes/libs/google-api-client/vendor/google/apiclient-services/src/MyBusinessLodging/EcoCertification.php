@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessLodging;
+namespace FluentMail\Google\Service\MyBusinessLodging;
 
 class EcoCertification extends \Google\Model
 {

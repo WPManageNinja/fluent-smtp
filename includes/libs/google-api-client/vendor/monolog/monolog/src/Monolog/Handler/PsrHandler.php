@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Logger;
-use Psr\Log\LoggerInterface;
-use Monolog\Formatter\FormatterInterface;
+use FluentMail\Monolog\Logger;
+use FluentMail\Psr\Log\LoggerInterface;
+use FluentMail\Monolog\Formatter\FormatterInterface;
 
 /**
  * Proxies log messages to an existing PSR-3 compliant logger.

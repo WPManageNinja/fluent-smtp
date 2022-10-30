@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\BigtableAdmin\Resource;
+namespace FluentMail\Google\Service\BigtableAdmin\Resource;
 
-use Google\Service\BigtableAdmin\ListOperationsResponse;
+use FluentMail\Google\Service\BigtableAdmin\ListOperationsResponse;
 
 /**
  * The "operations" collection of methods.

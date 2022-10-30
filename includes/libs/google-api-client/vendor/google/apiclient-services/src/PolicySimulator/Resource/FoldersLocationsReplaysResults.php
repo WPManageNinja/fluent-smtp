@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\PolicySimulator\Resource;
+namespace FluentMail\Google\Service\PolicySimulator\Resource;
 
-use Google\Service\PolicySimulator\GoogleCloudPolicysimulatorV1ListReplayResultsResponse;
+use FluentMail\Google\Service\PolicySimulator\GoogleCloudPolicysimulatorV1ListReplayResultsResponse;
 
 /**
  * The "results" collection of methods.

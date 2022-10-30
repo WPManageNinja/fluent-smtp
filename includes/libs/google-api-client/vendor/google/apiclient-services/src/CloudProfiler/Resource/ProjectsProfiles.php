@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudProfiler\Resource;
+namespace FluentMail\Google\Service\CloudProfiler\Resource;
 
-use Google\Service\CloudProfiler\CreateProfileRequest;
-use Google\Service\CloudProfiler\Profile;
+use FluentMail\Google\Service\CloudProfiler\CreateProfileRequest;
+use FluentMail\Google\Service\CloudProfiler\Profile;
 
 /**
  * The "profiles" collection of methods.

@@ -15,23 +15,23 @@
  * limitations under the License.
  */
 
-namespace Google\Auth;
+namespace FluentMail\Google\Auth;
 
 use DateTime;
 use Exception;
-use Firebase\JWT\ExpiredException;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use Firebase\JWT\SignatureInvalidException;
-use Google\Auth\Cache\MemoryCacheItemPool;
-use Google\Auth\HttpHandler\HttpClientCache;
-use Google\Auth\HttpHandler\HttpHandlerFactory;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Utils;
+use FluentMail\Firebase\JWT\ExpiredException;
+use FluentMail\Firebase\JWT\JWT;
+use FluentMail\Firebase\JWT\Key;
+use FluentMail\Firebase\JWT\SignatureInvalidException;
+use FluentMail\Google\Auth\Cache\MemoryCacheItemPool;
+use FluentMail\Google\Auth\HttpHandler\HttpClientCache;
+use FluentMail\Google\Auth\HttpHandler\HttpHandlerFactory;
+use FluentMail\GuzzleHttp\Psr7\Request;
+use FluentMail\GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
-use phpseclib\Crypt\RSA;
-use phpseclib\Math\BigInteger;
-use Psr\Cache\CacheItemPoolInterface;
+use FluentMail\phpseclib\Crypt\RSA;
+use FluentMail\phpseclib\Math\BigInteger;
+use FluentMail\Psr\Cache\CacheItemPoolInterface;
 use RuntimeException;
 use SimpleJWT\InvalidTokenException;
 use SimpleJWT\JWT as SimpleJWT;

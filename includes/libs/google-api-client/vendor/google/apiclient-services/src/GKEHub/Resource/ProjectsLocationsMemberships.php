@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\GKEHub\Resource;
+namespace FluentMail\Google\Service\GKEHub\Resource;
 
-use Google\Service\GKEHub\GenerateConnectManifestResponse;
-use Google\Service\GKEHub\ListMembershipsResponse;
-use Google\Service\GKEHub\Membership;
-use Google\Service\GKEHub\Operation;
-use Google\Service\GKEHub\Policy;
-use Google\Service\GKEHub\SetIamPolicyRequest;
-use Google\Service\GKEHub\TestIamPermissionsRequest;
-use Google\Service\GKEHub\TestIamPermissionsResponse;
+use FluentMail\Google\Service\GKEHub\GenerateConnectManifestResponse;
+use FluentMail\Google\Service\GKEHub\ListMembershipsResponse;
+use FluentMail\Google\Service\GKEHub\Membership;
+use FluentMail\Google\Service\GKEHub\Operation;
+use FluentMail\Google\Service\GKEHub\Policy;
+use FluentMail\Google\Service\GKEHub\SetIamPolicyRequest;
+use FluentMail\Google\Service\GKEHub\TestIamPermissionsRequest;
+use FluentMail\Google\Service\GKEHub\TestIamPermissionsResponse;
 
 /**
  * The "memberships" collection of methods.

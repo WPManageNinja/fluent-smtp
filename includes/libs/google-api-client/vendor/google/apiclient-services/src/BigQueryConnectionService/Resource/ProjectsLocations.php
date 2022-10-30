@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryConnectionService\Resource;
+namespace FluentMail\Google\Service\BigQueryConnectionService\Resource;
 
 /**
  * The "locations" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\TPU\Resource;
+namespace FluentMail\Google\Service\TPU\Resource;
 
-use Google\Service\TPU\AcceleratorType;
-use Google\Service\TPU\ListAcceleratorTypesResponse;
+use FluentMail\Google\Service\TPU\AcceleratorType;
+use FluentMail\Google\Service\TPU\ListAcceleratorTypesResponse;
 
 /**
  * The "acceleratorTypes" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Calendar;
+namespace FluentMail\Google\Service\Calendar;
 
 class ColorDefinition extends \Google\Model
 {

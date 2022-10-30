@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Workflows;
+namespace FluentMail\Google\Service\Workflows;
 
 class ListLocationsResponse extends \Google\Collection
 {

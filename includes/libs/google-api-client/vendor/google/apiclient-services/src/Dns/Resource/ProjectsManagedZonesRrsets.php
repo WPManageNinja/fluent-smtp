@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dns\Resource;
+namespace FluentMail\Google\Service\Dns\Resource;
 
-use Google\Service\Dns\ResourceRecordSet;
-use Google\Service\Dns\ResourceRecordSetsDeleteResponse;
+use FluentMail\Google\Service\Dns\ResourceRecordSet;
+use FluentMail\Google\Service\Dns\ResourceRecordSetsDeleteResponse;
 
 /**
  * The "rrsets" collection of methods.

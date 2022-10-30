@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Formatter;
+namespace FluentMail\Monolog\Formatter;
 
-use Monolog\Logger;
-use Monolog\Utils;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\Utils;
 
 /**
  * Formats incoming records into an HTML table

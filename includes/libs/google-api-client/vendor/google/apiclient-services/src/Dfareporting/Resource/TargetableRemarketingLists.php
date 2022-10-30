@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\TargetableRemarketingList;
-use Google\Service\Dfareporting\TargetableRemarketingListsListResponse;
+use FluentMail\Google\Service\Dfareporting\TargetableRemarketingList;
+use FluentMail\Google\Service\Dfareporting\TargetableRemarketingListsListResponse;
 
 /**
  * The "targetableRemarketingLists" collection of methods.

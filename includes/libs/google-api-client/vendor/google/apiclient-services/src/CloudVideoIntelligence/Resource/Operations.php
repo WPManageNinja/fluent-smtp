@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudVideoIntelligence\Resource;
+namespace FluentMail\Google\Service\CloudVideoIntelligence\Resource;
 
 /**
  * The "operations" collection of methods.

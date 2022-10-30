@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\BeyondCorp\Resource;
+namespace FluentMail\Google\Service\BeyondCorp\Resource;
 
-use Google\Service\BeyondCorp\GoogleCloudLocationListLocationsResponse;
-use Google\Service\BeyondCorp\GoogleCloudLocationLocation;
+use FluentMail\Google\Service\BeyondCorp\GoogleCloudLocationListLocationsResponse;
+use FluentMail\Google\Service\BeyondCorp\GoogleCloudLocationLocation;
 
 /**
  * The "locations" collection of methods.

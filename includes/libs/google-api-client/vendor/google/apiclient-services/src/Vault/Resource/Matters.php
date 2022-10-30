@@ -15,21 +15,21 @@
  * the License.
  */
 
-namespace Google\Service\Vault\Resource;
+namespace FluentMail\Google\Service\Vault\Resource;
 
-use Google\Service\Vault\AddMatterPermissionsRequest;
-use Google\Service\Vault\CloseMatterRequest;
-use Google\Service\Vault\CloseMatterResponse;
-use Google\Service\Vault\CountArtifactsRequest;
-use Google\Service\Vault\ListMattersResponse;
-use Google\Service\Vault\Matter;
-use Google\Service\Vault\MatterPermission;
-use Google\Service\Vault\Operation;
-use Google\Service\Vault\RemoveMatterPermissionsRequest;
-use Google\Service\Vault\ReopenMatterRequest;
-use Google\Service\Vault\ReopenMatterResponse;
-use Google\Service\Vault\UndeleteMatterRequest;
-use Google\Service\Vault\VaultEmpty;
+use FluentMail\Google\Service\Vault\AddMatterPermissionsRequest;
+use FluentMail\Google\Service\Vault\CloseMatterRequest;
+use FluentMail\Google\Service\Vault\CloseMatterResponse;
+use FluentMail\Google\Service\Vault\CountArtifactsRequest;
+use FluentMail\Google\Service\Vault\ListMattersResponse;
+use FluentMail\Google\Service\Vault\Matter;
+use FluentMail\Google\Service\Vault\MatterPermission;
+use FluentMail\Google\Service\Vault\Operation;
+use FluentMail\Google\Service\Vault\RemoveMatterPermissionsRequest;
+use FluentMail\Google\Service\Vault\ReopenMatterRequest;
+use FluentMail\Google\Service\Vault\ReopenMatterResponse;
+use FluentMail\Google\Service\Vault\UndeleteMatterRequest;
+use FluentMail\Google\Service\Vault\VaultEmpty;
 
 /**
  * The "matters" collection of methods.

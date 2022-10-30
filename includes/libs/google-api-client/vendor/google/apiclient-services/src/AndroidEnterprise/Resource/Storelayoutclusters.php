@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise\Resource;
+namespace FluentMail\Google\Service\AndroidEnterprise\Resource;
 
-use Google\Service\AndroidEnterprise\StoreCluster;
-use Google\Service\AndroidEnterprise\StoreLayoutClustersListResponse;
+use FluentMail\Google\Service\AndroidEnterprise\StoreCluster;
+use FluentMail\Google\Service\AndroidEnterprise\StoreLayoutClustersListResponse;
 
 /**
  * The "storelayoutclusters" collection of methods.

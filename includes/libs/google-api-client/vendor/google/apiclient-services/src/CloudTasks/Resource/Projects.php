@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudTasks\Resource;
+namespace FluentMail\Google\Service\CloudTasks\Resource;
 
 /**
  * The "projects" collection of methods.

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\PublicDelegatedPrefix;
-use Google\Service\Compute\PublicDelegatedPrefixAggregatedList;
-use Google\Service\Compute\PublicDelegatedPrefixList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\PublicDelegatedPrefix;
+use FluentMail\Google\Service\Compute\PublicDelegatedPrefixAggregatedList;
+use FluentMail\Google\Service\Compute\PublicDelegatedPrefixList;
 
 /**
  * The "publicDelegatedPrefixes" collection of methods.

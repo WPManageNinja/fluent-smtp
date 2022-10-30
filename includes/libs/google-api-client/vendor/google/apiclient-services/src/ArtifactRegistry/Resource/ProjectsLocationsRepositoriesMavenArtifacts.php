@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\ListMavenArtifactsResponse;
-use Google\Service\ArtifactRegistry\MavenArtifact;
+use FluentMail\Google\Service\ArtifactRegistry\ListMavenArtifactsResponse;
+use FluentMail\Google\Service\ArtifactRegistry\MavenArtifact;
 
 /**
  * The "mavenArtifacts" collection of methods.

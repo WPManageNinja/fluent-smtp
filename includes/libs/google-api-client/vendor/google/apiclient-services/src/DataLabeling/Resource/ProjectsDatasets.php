@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\DataLabeling\Resource;
+namespace FluentMail\Google\Service\DataLabeling\Resource;
 
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1CreateDatasetRequest;
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1Dataset;
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1ExportDataRequest;
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1ImportDataRequest;
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1ListDatasetsResponse;
-use Google\Service\DataLabeling\GoogleLongrunningOperation;
-use Google\Service\DataLabeling\GoogleProtobufEmpty;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1CreateDatasetRequest;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1Dataset;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1ExportDataRequest;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1ImportDataRequest;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1ListDatasetsResponse;
+use FluentMail\Google\Service\DataLabeling\GoogleLongrunningOperation;
+use FluentMail\Google\Service\DataLabeling\GoogleProtobufEmpty;
 
 /**
  * The "datasets" collection of methods.

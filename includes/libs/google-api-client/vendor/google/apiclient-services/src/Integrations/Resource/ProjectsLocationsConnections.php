@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Integrations\Resource;
+namespace FluentMail\Google\Service\Integrations\Resource;
 
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaConnectionSchemaMetadata;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListConnectionsResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaConnectionSchemaMetadata;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListConnectionsResponse;
 
 /**
  * The "connections" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DriveActivity;
+namespace FluentMail\Google\Service\DriveActivity;
 
 class Action extends \Google\Model
 {

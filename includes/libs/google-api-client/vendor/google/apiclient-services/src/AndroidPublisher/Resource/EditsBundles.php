@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\Bundle;
-use Google\Service\AndroidPublisher\BundlesListResponse;
+use FluentMail\Google\Service\AndroidPublisher\Bundle;
+use FluentMail\Google\Service\AndroidPublisher\BundlesListResponse;
 
 /**
  * The "bundles" collection of methods.

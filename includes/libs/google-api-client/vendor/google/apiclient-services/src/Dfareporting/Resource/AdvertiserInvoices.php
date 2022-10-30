@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\AdvertiserInvoicesListResponse;
+use FluentMail\Google\Service\Dfareporting\AdvertiserInvoicesListResponse;
 
 /**
  * The "advertiserInvoices" collection of methods.

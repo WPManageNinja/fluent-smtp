@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ContainerAnalysis\Resource;
+namespace FluentMail\Google\Service\ContainerAnalysis\Resource;
 
-use Google\Service\ContainerAnalysis\ListNoteOccurrencesResponse;
+use FluentMail\Google\Service\ContainerAnalysis\ListNoteOccurrencesResponse;
 
 /**
  * The "occurrences" collection of methods.

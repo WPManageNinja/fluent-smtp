@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher;
+namespace FluentMail\Google\Service\AndroidPublisher;
 
 class ImagesDeleteAllResponse extends \Google\Collection
 {

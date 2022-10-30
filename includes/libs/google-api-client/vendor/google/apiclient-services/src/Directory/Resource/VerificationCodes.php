@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\VerificationCodes as VerificationCodesModel;
+use FluentMail\Google\Service\Directory\VerificationCodes as VerificationCodesModel;
 
 /**
  * The "verificationCodes" collection of methods.

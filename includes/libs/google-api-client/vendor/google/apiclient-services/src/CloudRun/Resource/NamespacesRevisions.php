@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudRun\Resource;
+namespace FluentMail\Google\Service\CloudRun\Resource;
 
-use Google\Service\CloudRun\ListRevisionsResponse;
-use Google\Service\CloudRun\Revision;
-use Google\Service\CloudRun\Status;
+use FluentMail\Google\Service\CloudRun\ListRevisionsResponse;
+use FluentMail\Google\Service\CloudRun\Revision;
+use FluentMail\Google\Service\CloudRun\Status;
 
 /**
  * The "revisions" collection of methods.

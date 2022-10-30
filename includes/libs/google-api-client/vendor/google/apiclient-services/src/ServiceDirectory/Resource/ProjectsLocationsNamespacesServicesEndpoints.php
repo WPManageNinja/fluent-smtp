@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\ServiceDirectory\Resource;
+namespace FluentMail\Google\Service\ServiceDirectory\Resource;
 
-use Google\Service\ServiceDirectory\Endpoint;
-use Google\Service\ServiceDirectory\ListEndpointsResponse;
-use Google\Service\ServiceDirectory\ServicedirectoryEmpty;
+use FluentMail\Google\Service\ServiceDirectory\Endpoint;
+use FluentMail\Google\Service\ServiceDirectory\ListEndpointsResponse;
+use FluentMail\Google\Service\ServiceDirectory\ServicedirectoryEmpty;
 
 /**
  * The "endpoints" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
-use Google\Service\Monitoring\ListTimeSeriesResponse;
+use FluentMail\Google\Service\Monitoring\ListTimeSeriesResponse;
 
 /**
  * The "timeSeries" collection of methods.

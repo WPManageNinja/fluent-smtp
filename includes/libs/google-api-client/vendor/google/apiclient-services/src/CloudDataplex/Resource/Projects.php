@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudDataplex\Resource;
+namespace FluentMail\Google\Service\CloudDataplex\Resource;
 
 /**
  * The "projects" collection of methods.

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Connectors\Resource;
+namespace FluentMail\Google\Service\Connectors\Resource;
 
-use Google\Service\Connectors\CancelOperationRequest;
-use Google\Service\Connectors\ConnectorsEmpty;
-use Google\Service\Connectors\ListOperationsResponse;
-use Google\Service\Connectors\Operation;
+use FluentMail\Google\Service\Connectors\CancelOperationRequest;
+use FluentMail\Google\Service\Connectors\ConnectorsEmpty;
+use FluentMail\Google\Service\Connectors\ListOperationsResponse;
+use FluentMail\Google\Service\Connectors\Operation;
 
 /**
  * The "operations" collection of methods.

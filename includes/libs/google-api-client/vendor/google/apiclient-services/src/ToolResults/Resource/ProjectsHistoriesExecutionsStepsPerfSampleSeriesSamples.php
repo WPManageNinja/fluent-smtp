@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\ToolResults\Resource;
+namespace FluentMail\Google\Service\ToolResults\Resource;
 
-use Google\Service\ToolResults\BatchCreatePerfSamplesRequest;
-use Google\Service\ToolResults\BatchCreatePerfSamplesResponse;
-use Google\Service\ToolResults\ListPerfSamplesResponse;
+use FluentMail\Google\Service\ToolResults\BatchCreatePerfSamplesRequest;
+use FluentMail\Google\Service\ToolResults\BatchCreatePerfSamplesResponse;
+use FluentMail\Google\Service\ToolResults\ListPerfSamplesResponse;
 
 /**
  * The "samples" collection of methods.

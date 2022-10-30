@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\ThirdPartyLink;
-use Google\Service\YouTube\ThirdPartyLinkListResponse;
+use FluentMail\Google\Service\YouTube\ThirdPartyLink;
+use FluentMail\Google\Service\YouTube\ThirdPartyLinkListResponse;
 
 /**
  * The "thirdPartyLinks" collection of methods.

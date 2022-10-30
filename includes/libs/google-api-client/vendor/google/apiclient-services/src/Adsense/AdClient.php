@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Adsense;
+namespace FluentMail\Google\Service\Adsense;
 
 class AdClient extends \Google\Model
 {

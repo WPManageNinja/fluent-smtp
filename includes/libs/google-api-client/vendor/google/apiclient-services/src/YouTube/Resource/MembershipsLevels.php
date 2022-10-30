@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\MembershipsLevelListResponse;
+use FluentMail\Google\Service\YouTube\MembershipsLevelListResponse;
 
 /**
  * The "membershipsLevels" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ChromeManagement;
+namespace FluentMail\Google\Service\ChromeManagement;
 
 class GoogleChromeManagementV1DeviceAueCountReport extends \Google\Model
 {

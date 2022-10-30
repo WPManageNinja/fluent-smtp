@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DataLabeling\Resource;
+namespace FluentMail\Google\Service\DataLabeling\Resource;
 
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1SearchExampleComparisonsRequest;
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1SearchExampleComparisonsResponse;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1SearchExampleComparisonsRequest;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1SearchExampleComparisonsResponse;
 
 /**
  * The "exampleComparisons" collection of methods.

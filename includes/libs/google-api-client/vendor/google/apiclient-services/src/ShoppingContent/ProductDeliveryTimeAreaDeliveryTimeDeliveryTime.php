@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent;
+namespace FluentMail\Google\Service\ShoppingContent;
 
 class ProductDeliveryTimeAreaDeliveryTimeDeliveryTime extends \Google\Model
 {

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\SuperChatEventListResponse;
+use FluentMail\Google\Service\YouTube\SuperChatEventListResponse;
 
 /**
  * The "superChatEvents" collection of methods.

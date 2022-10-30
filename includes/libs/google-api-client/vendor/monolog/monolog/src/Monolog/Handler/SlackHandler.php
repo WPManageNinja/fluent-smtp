@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Logger;
-use Monolog\Utils;
-use Monolog\Handler\Slack\SlackRecord;
+use FluentMail\Monolog\Formatter\FormatterInterface;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\Utils;
+use FluentMail\Monolog\Handler\Slack\SlackRecord;
 
 /**
  * Sends notifications through Slack API

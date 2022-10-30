@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\WebRisk\Resource;
+namespace FluentMail\Google\Service\WebRisk\Resource;
 
-use Google\Service\WebRisk\GoogleCloudWebriskV1SearchHashesResponse;
+use FluentMail\Google\Service\WebRisk\GoogleCloudWebriskV1SearchHashesResponse;
 
 /**
  * The "hashes" collection of methods.

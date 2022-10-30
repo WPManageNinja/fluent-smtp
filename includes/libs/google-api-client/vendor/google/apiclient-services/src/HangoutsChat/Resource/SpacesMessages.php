@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\HangoutsChat\Resource;
+namespace FluentMail\Google\Service\HangoutsChat\Resource;
 
-use Google\Service\HangoutsChat\ChatEmpty;
-use Google\Service\HangoutsChat\Message;
+use FluentMail\Google\Service\HangoutsChat\ChatEmpty;
+use FluentMail\Google\Service\HangoutsChat\Message;
 
 /**
  * The "messages" collection of methods.

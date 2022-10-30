@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DatabaseMigrationService\Resource;
+namespace FluentMail\Google\Service\DatabaseMigrationService\Resource;
 
-use Google\Service\DatabaseMigrationService\ListLocationsResponse;
-use Google\Service\DatabaseMigrationService\Location;
+use FluentMail\Google\Service\DatabaseMigrationService\ListLocationsResponse;
+use FluentMail\Google\Service\DatabaseMigrationService\Location;
 
 /**
  * The "locations" collection of methods.

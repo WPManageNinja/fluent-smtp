@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Vault\Resource;
+namespace FluentMail\Google\Service\Vault\Resource;
 
-use Google\Service\Vault\Export;
-use Google\Service\Vault\ListExportsResponse;
-use Google\Service\Vault\VaultEmpty;
+use FluentMail\Google\Service\Vault\Export;
+use FluentMail\Google\Service\Vault\ListExportsResponse;
+use FluentMail\Google\Service\Vault\VaultEmpty;
 
 /**
  * The "exports" collection of methods.

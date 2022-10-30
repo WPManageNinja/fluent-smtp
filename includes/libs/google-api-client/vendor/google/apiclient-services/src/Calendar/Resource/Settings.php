@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Calendar\Resource;
+namespace FluentMail\Google\Service\Calendar\Resource;
 
-use Google\Service\Calendar\Channel;
-use Google\Service\Calendar\Setting;
-use Google\Service\Calendar\Settings as SettingsModel;
+use FluentMail\Google\Service\Calendar\Channel;
+use FluentMail\Google\Service\Calendar\Setting;
+use FluentMail\Google\Service\Calendar\Settings as SettingsModel;
 
 /**
  * The "settings" collection of methods.

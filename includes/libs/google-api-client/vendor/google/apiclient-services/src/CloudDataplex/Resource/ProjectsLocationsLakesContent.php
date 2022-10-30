@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\CloudDataplex\Resource;
+namespace FluentMail\Google\Service\CloudDataplex\Resource;
 
-use Google\Service\CloudDataplex\DataplexEmpty;
-use Google\Service\CloudDataplex\GoogleCloudDataplexV1Content;
-use Google\Service\CloudDataplex\GoogleCloudDataplexV1ListContentResponse;
-use Google\Service\CloudDataplex\GoogleIamV1Policy;
-use Google\Service\CloudDataplex\GoogleIamV1SetIamPolicyRequest;
-use Google\Service\CloudDataplex\GoogleIamV1TestIamPermissionsRequest;
-use Google\Service\CloudDataplex\GoogleIamV1TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudDataplex\DataplexEmpty;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudDataplexV1Content;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudDataplexV1ListContentResponse;
+use FluentMail\Google\Service\CloudDataplex\GoogleIamV1Policy;
+use FluentMail\Google\Service\CloudDataplex\GoogleIamV1SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudDataplex\GoogleIamV1TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudDataplex\GoogleIamV1TestIamPermissionsResponse;
 
 /**
  * The "content" collection of methods.

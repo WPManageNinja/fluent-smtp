@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\NetworkServices;
+namespace FluentMail\Google\Service\NetworkServices;
 
 class HttpRouteCorsPolicy extends \Google\Collection
 {

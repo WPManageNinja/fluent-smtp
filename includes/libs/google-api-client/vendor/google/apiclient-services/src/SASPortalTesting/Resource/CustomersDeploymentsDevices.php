@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\SASPortalTesting\Resource;
+namespace FluentMail\Google\Service\SASPortalTesting\Resource;
 
-use Google\Service\SASPortalTesting\SasPortalCreateSignedDeviceRequest;
-use Google\Service\SASPortalTesting\SasPortalDevice;
-use Google\Service\SASPortalTesting\SasPortalListDevicesResponse;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalCreateSignedDeviceRequest;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalDevice;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalListDevicesResponse;
 
 /**
  * The "devices" collection of methods.

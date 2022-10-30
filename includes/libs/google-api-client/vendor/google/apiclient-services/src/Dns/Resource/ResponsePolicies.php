@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Dns\Resource;
+namespace FluentMail\Google\Service\Dns\Resource;
 
-use Google\Service\Dns\ResponsePoliciesListResponse;
-use Google\Service\Dns\ResponsePoliciesPatchResponse;
-use Google\Service\Dns\ResponsePoliciesUpdateResponse;
-use Google\Service\Dns\ResponsePolicy;
+use FluentMail\Google\Service\Dns\ResponsePoliciesListResponse;
+use FluentMail\Google\Service\Dns\ResponsePoliciesPatchResponse;
+use FluentMail\Google\Service\Dns\ResponsePoliciesUpdateResponse;
+use FluentMail\Google\Service\Dns\ResponsePolicy;
 
 /**
  * The "responsePolicies" collection of methods.

@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-namespace Google\Auth\Middleware;
+namespace FluentMail\Google\Auth\Middleware;
 
-use Google\Auth\CacheTrait;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Http\Message\RequestInterface;
+use FluentMail\Google\Auth\CacheTrait;
+use FluentMail\Psr\Cache\CacheItemPoolInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
 
 /**
  * ScopedAccessTokenMiddleware is a Guzzle Middleware that adds an Authorization
@@ -86,10 +86,10 @@ class ScopedAccessTokenMiddleware
      *   E.g this could be used to authenticate using the AppEngine
      *   AppIdentityService.
      *
-     *   use google\appengine\api\app_identity\AppIdentityService;
-     *   use Google\Auth\Middleware\ScopedAccessTokenMiddleware;
-     *   use GuzzleHttp\Client;
-     *   use GuzzleHttp\HandlerStack;
+     *   use FluentMail\google\appengine\api\app_identity\AppIdentityService;
+     *   use FluentMail\Google\Auth\Middleware\ScopedAccessTokenMiddleware;
+     *   use FluentMail\GuzzleHttp\Client;
+     *   use FluentMail\GuzzleHttp\HandlerStack;
      *
      *   $scope = 'https://www.googleapis.com/auth/taskqueue'
      *   $middleware = new ScopedAccessTokenMiddleware(

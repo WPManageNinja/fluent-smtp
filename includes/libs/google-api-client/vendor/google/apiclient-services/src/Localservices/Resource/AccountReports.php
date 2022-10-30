@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Localservices\Resource;
+namespace FluentMail\Google\Service\Localservices\Resource;
 
-use Google\Service\Localservices\GoogleAdsHomeservicesLocalservicesV1SearchAccountReportsResponse;
+use FluentMail\Google\Service\Localservices\GoogleAdsHomeservicesLocalservicesV1SearchAccountReportsResponse;
 
 /**
  * The "accountReports" collection of methods.

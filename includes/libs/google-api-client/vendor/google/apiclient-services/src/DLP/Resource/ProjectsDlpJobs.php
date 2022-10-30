@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\DLP\Resource;
+namespace FluentMail\Google\Service\DLP\Resource;
 
-use Google\Service\DLP\GooglePrivacyDlpV2CancelDlpJobRequest;
-use Google\Service\DLP\GooglePrivacyDlpV2CreateDlpJobRequest;
-use Google\Service\DLP\GooglePrivacyDlpV2DlpJob;
-use Google\Service\DLP\GooglePrivacyDlpV2ListDlpJobsResponse;
-use Google\Service\DLP\GoogleProtobufEmpty;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2CancelDlpJobRequest;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2CreateDlpJobRequest;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2DlpJob;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2ListDlpJobsResponse;
+use FluentMail\Google\Service\DLP\GoogleProtobufEmpty;
 
 /**
  * The "dlpJobs" collection of methods.

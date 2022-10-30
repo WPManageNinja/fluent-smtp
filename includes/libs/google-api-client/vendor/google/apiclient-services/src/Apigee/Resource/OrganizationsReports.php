@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1CustomReport;
-use Google\Service\Apigee\GoogleCloudApigeeV1DeleteCustomReportResponse;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListCustomReportsResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1CustomReport;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1DeleteCustomReportResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListCustomReportsResponse;
 
 /**
  * The "reports" collection of methods.

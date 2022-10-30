@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Cloudchannel\Resource;
+namespace FluentMail\Google\Service\Cloudchannel\Resource;
 
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ChannelPartnerLink;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListChannelPartnerLinksResponse;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1UpdateChannelPartnerLinkRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ChannelPartnerLink;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListChannelPartnerLinksResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1UpdateChannelPartnerLinkRequest;
 
 /**
  * The "channelPartnerLinks" collection of methods.

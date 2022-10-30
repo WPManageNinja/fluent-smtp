@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AIPlatformNotebooks\Resource;
+namespace FluentMail\Google\Service\AIPlatformNotebooks\Resource;
 
-use Google\Service\AIPlatformNotebooks\Execution;
-use Google\Service\AIPlatformNotebooks\ListExecutionsResponse;
-use Google\Service\AIPlatformNotebooks\Operation;
+use FluentMail\Google\Service\AIPlatformNotebooks\Execution;
+use FluentMail\Google\Service\AIPlatformNotebooks\ListExecutionsResponse;
+use FluentMail\Google\Service\AIPlatformNotebooks\Operation;
 
 /**
  * The "executions" collection of methods.

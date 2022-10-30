@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\SearchRequest;
-use Google\Service\ShoppingContent\SearchResponse;
+use FluentMail\Google\Service\ShoppingContent\SearchRequest;
+use FluentMail\Google\Service\ShoppingContent\SearchResponse;
 
 /**
  * The "reports" collection of methods.

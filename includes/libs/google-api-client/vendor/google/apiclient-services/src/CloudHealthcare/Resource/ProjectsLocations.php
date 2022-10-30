@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
-use Google\Service\CloudHealthcare\ListLocationsResponse;
-use Google\Service\CloudHealthcare\Location;
+use FluentMail\Google\Service\CloudHealthcare\ListLocationsResponse;
+use FluentMail\Google\Service\CloudHealthcare\Location;
 
 /**
  * The "locations" collection of methods.

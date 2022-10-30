@@ -15,20 +15,20 @@
  * the License.
  */
 
-namespace Google\Service\CloudNaturalLanguage\Resource;
+namespace FluentMail\Google\Service\CloudNaturalLanguage\Resource;
 
-use Google\Service\CloudNaturalLanguage\AnalyzeEntitiesRequest;
-use Google\Service\CloudNaturalLanguage\AnalyzeEntitiesResponse;
-use Google\Service\CloudNaturalLanguage\AnalyzeEntitySentimentRequest;
-use Google\Service\CloudNaturalLanguage\AnalyzeEntitySentimentResponse;
-use Google\Service\CloudNaturalLanguage\AnalyzeSentimentRequest;
-use Google\Service\CloudNaturalLanguage\AnalyzeSentimentResponse;
-use Google\Service\CloudNaturalLanguage\AnalyzeSyntaxRequest;
-use Google\Service\CloudNaturalLanguage\AnalyzeSyntaxResponse;
-use Google\Service\CloudNaturalLanguage\AnnotateTextRequest;
-use Google\Service\CloudNaturalLanguage\AnnotateTextResponse;
-use Google\Service\CloudNaturalLanguage\ClassifyTextRequest;
-use Google\Service\CloudNaturalLanguage\ClassifyTextResponse;
+use FluentMail\Google\Service\CloudNaturalLanguage\AnalyzeEntitiesRequest;
+use FluentMail\Google\Service\CloudNaturalLanguage\AnalyzeEntitiesResponse;
+use FluentMail\Google\Service\CloudNaturalLanguage\AnalyzeEntitySentimentRequest;
+use FluentMail\Google\Service\CloudNaturalLanguage\AnalyzeEntitySentimentResponse;
+use FluentMail\Google\Service\CloudNaturalLanguage\AnalyzeSentimentRequest;
+use FluentMail\Google\Service\CloudNaturalLanguage\AnalyzeSentimentResponse;
+use FluentMail\Google\Service\CloudNaturalLanguage\AnalyzeSyntaxRequest;
+use FluentMail\Google\Service\CloudNaturalLanguage\AnalyzeSyntaxResponse;
+use FluentMail\Google\Service\CloudNaturalLanguage\AnnotateTextRequest;
+use FluentMail\Google\Service\CloudNaturalLanguage\AnnotateTextResponse;
+use FluentMail\Google\Service\CloudNaturalLanguage\ClassifyTextRequest;
+use FluentMail\Google\Service\CloudNaturalLanguage\ClassifyTextResponse;
 
 /**
  * The "documents" collection of methods.

@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\DataCatalog\Resource;
+namespace FluentMail\Google\Service\DataCatalog\Resource;
 
-use Google\Service\DataCatalog\DatacatalogEmpty;
-use Google\Service\DataCatalog\GetIamPolicyRequest;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1EntryGroup;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1ListEntryGroupsResponse;
-use Google\Service\DataCatalog\Policy;
-use Google\Service\DataCatalog\SetIamPolicyRequest;
-use Google\Service\DataCatalog\TestIamPermissionsRequest;
-use Google\Service\DataCatalog\TestIamPermissionsResponse;
+use FluentMail\Google\Service\DataCatalog\DatacatalogEmpty;
+use FluentMail\Google\Service\DataCatalog\GetIamPolicyRequest;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1EntryGroup;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1ListEntryGroupsResponse;
+use FluentMail\Google\Service\DataCatalog\Policy;
+use FluentMail\Google\Service\DataCatalog\SetIamPolicyRequest;
+use FluentMail\Google\Service\DataCatalog\TestIamPermissionsRequest;
+use FluentMail\Google\Service\DataCatalog\TestIamPermissionsResponse;
 
 /**
  * The "entryGroups" collection of methods.

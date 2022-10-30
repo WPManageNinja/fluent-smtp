@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudDeploy;
+namespace FluentMail\Google\Service\CloudDeploy;
 
 class TargetArtifact extends \Google\Model
 {

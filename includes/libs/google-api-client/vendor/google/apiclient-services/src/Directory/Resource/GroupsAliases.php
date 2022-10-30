@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\Alias;
-use Google\Service\Directory\Aliases;
+use FluentMail\Google\Service\Directory\Alias;
+use FluentMail\Google\Service\Directory\Aliases;
 
 /**
  * The "aliases" collection of methods.

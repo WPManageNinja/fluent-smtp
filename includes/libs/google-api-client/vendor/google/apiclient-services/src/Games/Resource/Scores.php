@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Games\Resource;
+namespace FluentMail\Google\Service\Games\Resource;
 
-use Google\Service\Games\LeaderboardScores;
-use Google\Service\Games\PlayerLeaderboardScoreListResponse;
-use Google\Service\Games\PlayerScoreListResponse;
-use Google\Service\Games\PlayerScoreResponse;
-use Google\Service\Games\PlayerScoreSubmissionList;
+use FluentMail\Google\Service\Games\LeaderboardScores;
+use FluentMail\Google\Service\Games\PlayerLeaderboardScoreListResponse;
+use FluentMail\Google\Service\Games\PlayerScoreListResponse;
+use FluentMail\Google\Service\Games\PlayerScoreResponse;
+use FluentMail\Google\Service\Games\PlayerScoreSubmissionList;
 
 /**
  * The "scores" collection of methods.

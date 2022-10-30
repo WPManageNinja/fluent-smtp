@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Datapipelines\Resource;
+namespace FluentMail\Google\Service\Datapipelines\Resource;
 
-use Google\Service\Datapipelines\GoogleCloudDatapipelinesV1Pipeline;
-use Google\Service\Datapipelines\GoogleCloudDatapipelinesV1RunPipelineRequest;
-use Google\Service\Datapipelines\GoogleCloudDatapipelinesV1RunPipelineResponse;
-use Google\Service\Datapipelines\GoogleCloudDatapipelinesV1StopPipelineRequest;
-use Google\Service\Datapipelines\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Datapipelines\GoogleCloudDatapipelinesV1Pipeline;
+use FluentMail\Google\Service\Datapipelines\GoogleCloudDatapipelinesV1RunPipelineRequest;
+use FluentMail\Google\Service\Datapipelines\GoogleCloudDatapipelinesV1RunPipelineResponse;
+use FluentMail\Google\Service\Datapipelines\GoogleCloudDatapipelinesV1StopPipelineRequest;
+use FluentMail\Google\Service\Datapipelines\GoogleProtobufEmpty;
 
 /**
  * The "pipelines" collection of methods.

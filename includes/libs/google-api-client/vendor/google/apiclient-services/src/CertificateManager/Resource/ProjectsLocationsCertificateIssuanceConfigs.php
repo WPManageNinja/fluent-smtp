@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CertificateManager\Resource;
+namespace FluentMail\Google\Service\CertificateManager\Resource;
 
-use Google\Service\CertificateManager\CertificateIssuanceConfig;
-use Google\Service\CertificateManager\ListCertificateIssuanceConfigsResponse;
-use Google\Service\CertificateManager\Operation;
+use FluentMail\Google\Service\CertificateManager\CertificateIssuanceConfig;
+use FluentMail\Google\Service\CertificateManager\ListCertificateIssuanceConfigsResponse;
+use FluentMail\Google\Service\CertificateManager\Operation;
 
 /**
  * The "certificateIssuanceConfigs" collection of methods.

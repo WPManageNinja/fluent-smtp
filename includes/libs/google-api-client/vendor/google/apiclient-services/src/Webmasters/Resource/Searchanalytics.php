@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Webmasters\Resource;
+namespace FluentMail\Google\Service\Webmasters\Resource;
 
-use Google\Service\Webmasters\SearchAnalyticsQueryRequest;
-use Google\Service\Webmasters\SearchAnalyticsQueryResponse;
+use FluentMail\Google\Service\Webmasters\SearchAnalyticsQueryRequest;
+use FluentMail\Google\Service\Webmasters\SearchAnalyticsQueryResponse;
 
 /**
  * The "searchanalytics" collection of methods.

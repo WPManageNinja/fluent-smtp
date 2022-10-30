@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\Filter;
-use Google\Service\Analytics\Filters;
+use FluentMail\Google\Service\Analytics\Filter;
+use FluentMail\Google\Service\Analytics\Filters;
 
 /**
  * The "filters" collection of methods.

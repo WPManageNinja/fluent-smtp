@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\ImageFamilyView;
+use FluentMail\Google\Service\Compute\ImageFamilyView;
 
 /**
  * The "imageFamilyViews" collection of methods.

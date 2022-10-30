@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Iam;
+namespace FluentMail\Google\Service\Iam;
 
 class LintPolicyResponse extends \Google\Collection
 {

@@ -9,20 +9,20 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\EC;
+namespace FluentMail\phpseclib3\Crypt\EC;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Crypt\Common;
-use phpseclib3\Crypt\EC;
-use phpseclib3\Crypt\EC\BaseCurves\Montgomery as MontgomeryCurve;
-use phpseclib3\Crypt\EC\BaseCurves\TwistedEdwards as TwistedEdwardsCurve;
-use phpseclib3\Crypt\EC\Curves\Curve25519;
-use phpseclib3\Crypt\EC\Curves\Ed25519;
-use phpseclib3\Crypt\EC\Formats\Keys\PKCS1;
-use phpseclib3\Crypt\EC\Formats\Signature\ASN1 as ASN1Signature;
-use phpseclib3\Crypt\Hash;
-use phpseclib3\Exception\UnsupportedOperationException;
-use phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Crypt\Common;
+use FluentMail\phpseclib3\Crypt\EC;
+use FluentMail\phpseclib3\Crypt\EC\BaseCurves\Montgomery as MontgomeryCurve;
+use FluentMail\phpseclib3\Crypt\EC\BaseCurves\TwistedEdwards as TwistedEdwardsCurve;
+use FluentMail\phpseclib3\Crypt\EC\Curves\Curve25519;
+use FluentMail\phpseclib3\Crypt\EC\Curves\Ed25519;
+use FluentMail\phpseclib3\Crypt\EC\Formats\Keys\PKCS1;
+use FluentMail\phpseclib3\Crypt\EC\Formats\Signature\ASN1 as ASN1Signature;
+use FluentMail\phpseclib3\Crypt\Hash;
+use FluentMail\phpseclib3\Exception\UnsupportedOperationException;
+use FluentMail\phpseclib3\Math\BigInteger;
 
 /**
  * EC Private Key

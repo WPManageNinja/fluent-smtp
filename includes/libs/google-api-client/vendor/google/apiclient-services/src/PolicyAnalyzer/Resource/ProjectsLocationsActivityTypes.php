@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PolicyAnalyzer\Resource;
+namespace FluentMail\Google\Service\PolicyAnalyzer\Resource;
 
 /**
  * The "activityTypes" collection of methods.

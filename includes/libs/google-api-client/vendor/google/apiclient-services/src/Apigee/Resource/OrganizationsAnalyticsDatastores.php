@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1Datastore;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListDatastoresResponse;
-use Google\Service\Apigee\GoogleCloudApigeeV1TestDatastoreResponse;
-use Google\Service\Apigee\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1Datastore;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListDatastoresResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1TestDatastoreResponse;
+use FluentMail\Google\Service\Apigee\GoogleProtobufEmpty;
 
 /**
  * The "datastores" collection of methods.

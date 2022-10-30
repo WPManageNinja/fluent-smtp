@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ApiKeysService;
+namespace FluentMail\Google\Service\ApiKeysService;
 
 class V2AndroidApplication extends \Google\Model
 {

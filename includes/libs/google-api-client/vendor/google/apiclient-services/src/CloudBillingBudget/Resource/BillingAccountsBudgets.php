@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudBillingBudget\Resource;
+namespace FluentMail\Google\Service\CloudBillingBudget\Resource;
 
-use Google\Service\CloudBillingBudget\GoogleCloudBillingBudgetsV1Budget;
-use Google\Service\CloudBillingBudget\GoogleCloudBillingBudgetsV1ListBudgetsResponse;
-use Google\Service\CloudBillingBudget\GoogleProtobufEmpty;
+use FluentMail\Google\Service\CloudBillingBudget\GoogleCloudBillingBudgetsV1Budget;
+use FluentMail\Google\Service\CloudBillingBudget\GoogleCloudBillingBudgetsV1ListBudgetsResponse;
+use FluentMail\Google\Service\CloudBillingBudget\GoogleProtobufEmpty;
 
 /**
  * The "budgets" collection of methods.

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace Google\AuthHandler;
+namespace FluentMail\Google\AuthHandler;
 
 /**
  * This supports Guzzle 7

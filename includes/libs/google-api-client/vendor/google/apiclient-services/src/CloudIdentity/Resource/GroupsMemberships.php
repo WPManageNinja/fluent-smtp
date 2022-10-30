@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\CloudIdentity\Resource;
+namespace FluentMail\Google\Service\CloudIdentity\Resource;
 
-use Google\Service\CloudIdentity\CheckTransitiveMembershipResponse;
-use Google\Service\CloudIdentity\ListMembershipsResponse;
-use Google\Service\CloudIdentity\LookupMembershipNameResponse;
-use Google\Service\CloudIdentity\Membership;
-use Google\Service\CloudIdentity\ModifyMembershipRolesRequest;
-use Google\Service\CloudIdentity\ModifyMembershipRolesResponse;
-use Google\Service\CloudIdentity\Operation;
-use Google\Service\CloudIdentity\SearchTransitiveGroupsResponse;
-use Google\Service\CloudIdentity\SearchTransitiveMembershipsResponse;
+use FluentMail\Google\Service\CloudIdentity\CheckTransitiveMembershipResponse;
+use FluentMail\Google\Service\CloudIdentity\ListMembershipsResponse;
+use FluentMail\Google\Service\CloudIdentity\LookupMembershipNameResponse;
+use FluentMail\Google\Service\CloudIdentity\Membership;
+use FluentMail\Google\Service\CloudIdentity\ModifyMembershipRolesRequest;
+use FluentMail\Google\Service\CloudIdentity\ModifyMembershipRolesResponse;
+use FluentMail\Google\Service\CloudIdentity\Operation;
+use FluentMail\Google\Service\CloudIdentity\SearchTransitiveGroupsResponse;
+use FluentMail\Google\Service\CloudIdentity\SearchTransitiveMembershipsResponse;
 
 /**
  * The "memberships" collection of methods.

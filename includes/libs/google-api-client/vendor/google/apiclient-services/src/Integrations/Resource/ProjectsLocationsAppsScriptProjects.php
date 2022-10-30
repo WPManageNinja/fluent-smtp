@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Integrations\Resource;
+namespace FluentMail\Google\Service\Integrations\Resource;
 
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCreateAppsScriptProjectRequest;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCreateAppsScriptProjectResponse;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaLinkAppsScriptProjectRequest;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaLinkAppsScriptProjectResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCreateAppsScriptProjectRequest;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaCreateAppsScriptProjectResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaLinkAppsScriptProjectRequest;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaLinkAppsScriptProjectResponse;
 
 /**
  * The "appsScriptProjects" collection of methods.

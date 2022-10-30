@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\Cuepoint;
-use Google\Service\YouTube\LiveBroadcast;
-use Google\Service\YouTube\LiveBroadcastListResponse;
+use FluentMail\Google\Service\YouTube\Cuepoint;
+use FluentMail\Google\Service\YouTube\LiveBroadcast;
+use FluentMail\Google\Service\YouTube\LiveBroadcastListResponse;
 
 /**
  * The "liveBroadcasts" collection of methods.

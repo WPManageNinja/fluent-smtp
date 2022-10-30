@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ServiceConsumerManagement;
+namespace FluentMail\Google\Service\ServiceConsumerManagement;
 
 class Field extends \Google\Collection
 {

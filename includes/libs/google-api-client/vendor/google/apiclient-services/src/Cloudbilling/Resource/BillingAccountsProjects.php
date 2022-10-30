@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Cloudbilling\Resource;
+namespace FluentMail\Google\Service\Cloudbilling\Resource;
 
-use Google\Service\Cloudbilling\ListProjectBillingInfoResponse;
+use FluentMail\Google\Service\Cloudbilling\ListProjectBillingInfoResponse;
 
 /**
  * The "projects" collection of methods.

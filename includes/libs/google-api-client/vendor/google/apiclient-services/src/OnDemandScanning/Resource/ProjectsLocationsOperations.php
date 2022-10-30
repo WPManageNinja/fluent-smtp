@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\OnDemandScanning\Resource;
+namespace FluentMail\Google\Service\OnDemandScanning\Resource;
 
-use Google\Service\OnDemandScanning\ListOperationsResponse;
-use Google\Service\OnDemandScanning\OndemandscanningEmpty;
-use Google\Service\OnDemandScanning\Operation;
+use FluentMail\Google\Service\OnDemandScanning\ListOperationsResponse;
+use FluentMail\Google\Service\OnDemandScanning\OndemandscanningEmpty;
+use FluentMail\Google\Service\OnDemandScanning\Operation;
 
 /**
  * The "operations" collection of methods.

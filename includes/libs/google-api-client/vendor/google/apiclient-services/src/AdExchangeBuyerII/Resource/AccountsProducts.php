@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\ListProductsResponse;
-use Google\Service\AdExchangeBuyerII\Product;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListProductsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\Product;
 
 /**
  * The "products" collection of methods.

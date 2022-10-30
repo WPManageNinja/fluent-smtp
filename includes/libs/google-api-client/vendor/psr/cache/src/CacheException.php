@@ -1,6 +1,6 @@
 <?php
 
-namespace Psr\Cache;
+namespace FluentMail\Psr\Cache;
 
 /**
  * Exception interface for all exceptions thrown by an Implementing Library.

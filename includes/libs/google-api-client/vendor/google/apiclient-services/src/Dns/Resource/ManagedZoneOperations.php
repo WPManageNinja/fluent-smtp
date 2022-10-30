@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dns\Resource;
+namespace FluentMail\Google\Service\Dns\Resource;
 
-use Google\Service\Dns\ManagedZoneOperationsListResponse;
-use Google\Service\Dns\Operation;
+use FluentMail\Google\Service\Dns\ManagedZoneOperationsListResponse;
+use FluentMail\Google\Service\Dns\Operation;
 
 /**
  * The "managedZoneOperations" collection of methods.

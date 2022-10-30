@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\OrgPolicyAPI;
+namespace FluentMail\Google\Service\OrgPolicyAPI;
 
 class GoogleProtobufEmpty extends \Google\Model
 {

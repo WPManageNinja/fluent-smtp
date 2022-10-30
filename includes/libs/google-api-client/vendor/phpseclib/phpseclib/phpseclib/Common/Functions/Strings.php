@@ -11,13 +11,13 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Common\Functions;
+namespace FluentMail\phpseclib3\Common\Functions;
 
 use ParagonIE\ConstantTime\Base64;
 use ParagonIE\ConstantTime\Base64UrlSafe;
 use ParagonIE\ConstantTime\Hex;
-use phpseclib3\Math\BigInteger;
-use phpseclib3\Math\Common\FiniteField;
+use FluentMail\phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Math\Common\FiniteField;
 
 /**
  * Common String Functions

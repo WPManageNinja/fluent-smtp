@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudSupport;
+namespace FluentMail\Google\Service\CloudSupport;
 
 class CreateAttachmentRequest extends \Google\Model
 {

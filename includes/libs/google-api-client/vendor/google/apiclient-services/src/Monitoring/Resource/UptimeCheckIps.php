@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
-use Google\Service\Monitoring\ListUptimeCheckIpsResponse;
+use FluentMail\Google\Service\Monitoring\ListUptimeCheckIpsResponse;
 
 /**
  * The "uptimeCheckIps" collection of methods.

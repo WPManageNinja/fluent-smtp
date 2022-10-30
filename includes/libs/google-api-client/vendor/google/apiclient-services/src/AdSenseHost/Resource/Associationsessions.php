@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdSenseHost\Resource;
+namespace FluentMail\Google\Service\AdSenseHost\Resource;
 
-use Google\Service\AdSenseHost\AssociationSession;
+use FluentMail\Google\Service\AdSenseHost\AssociationSession;
 
 /**
  * The "associationsessions" collection of methods.

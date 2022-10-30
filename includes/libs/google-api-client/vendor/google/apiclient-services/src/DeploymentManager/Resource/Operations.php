@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DeploymentManager\Resource;
+namespace FluentMail\Google\Service\DeploymentManager\Resource;
 
-use Google\Service\DeploymentManager\Operation;
-use Google\Service\DeploymentManager\OperationsListResponse;
+use FluentMail\Google\Service\DeploymentManager\Operation;
+use FluentMail\Google\Service\DeploymentManager\OperationsListResponse;
 
 /**
  * The "operations" collection of methods.

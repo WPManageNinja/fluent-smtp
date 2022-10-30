@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DataCatalog\Resource;
+namespace FluentMail\Google\Service\DataCatalog\Resource;
 
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1RenameTagTemplateFieldEnumValueRequest;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1TagTemplateField;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1RenameTagTemplateFieldEnumValueRequest;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1TagTemplateField;
 
 /**
  * The "enumValues" collection of methods.

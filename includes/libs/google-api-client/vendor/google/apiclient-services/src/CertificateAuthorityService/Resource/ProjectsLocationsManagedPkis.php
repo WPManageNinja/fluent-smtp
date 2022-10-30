@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CertificateAuthorityService\Resource;
+namespace FluentMail\Google\Service\CertificateAuthorityService\Resource;
 
-use Google\Service\CertificateAuthorityService\Policy;
+use FluentMail\Google\Service\CertificateAuthorityService\Policy;
 
 /**
  * The "managedPkis" collection of methods.

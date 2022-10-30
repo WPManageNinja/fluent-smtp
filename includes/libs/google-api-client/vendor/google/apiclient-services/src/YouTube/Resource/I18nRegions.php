@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\I18nRegionListResponse;
+use FluentMail\Google\Service\YouTube\I18nRegionListResponse;
 
 /**
  * The "i18nRegions" collection of methods.

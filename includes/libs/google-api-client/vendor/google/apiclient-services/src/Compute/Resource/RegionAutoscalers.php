@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Autoscaler;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\RegionAutoscalerList;
+use FluentMail\Google\Service\Compute\Autoscaler;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\RegionAutoscalerList;
 
 /**
  * The "regionAutoscalers" collection of methods.

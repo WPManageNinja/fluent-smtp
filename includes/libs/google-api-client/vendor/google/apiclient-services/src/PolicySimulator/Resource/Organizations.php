@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PolicySimulator\Resource;
+namespace FluentMail\Google\Service\PolicySimulator\Resource;
 
 /**
  * The "organizations" collection of methods.

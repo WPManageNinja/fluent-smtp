@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessAccountManagement\Resource;
+namespace FluentMail\Google\Service\MyBusinessAccountManagement\Resource;
 
-use Google\Service\MyBusinessAccountManagement\AcceptInvitationRequest;
-use Google\Service\MyBusinessAccountManagement\DeclineInvitationRequest;
-use Google\Service\MyBusinessAccountManagement\ListInvitationsResponse;
-use Google\Service\MyBusinessAccountManagement\MybusinessaccountmanagementEmpty;
+use FluentMail\Google\Service\MyBusinessAccountManagement\AcceptInvitationRequest;
+use FluentMail\Google\Service\MyBusinessAccountManagement\DeclineInvitationRequest;
+use FluentMail\Google\Service\MyBusinessAccountManagement\ListInvitationsResponse;
+use FluentMail\Google\Service\MyBusinessAccountManagement\MybusinessaccountmanagementEmpty;
 
 /**
  * The "invitations" collection of methods.

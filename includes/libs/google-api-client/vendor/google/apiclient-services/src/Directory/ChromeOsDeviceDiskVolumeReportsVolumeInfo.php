@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Directory;
+namespace FluentMail\Google\Service\Directory;
 
 class ChromeOsDeviceDiskVolumeReportsVolumeInfo extends \Google\Model
 {

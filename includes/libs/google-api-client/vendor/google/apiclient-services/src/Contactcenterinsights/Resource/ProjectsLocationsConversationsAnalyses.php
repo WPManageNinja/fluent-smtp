@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Contactcenterinsights\Resource;
+namespace FluentMail\Google\Service\Contactcenterinsights\Resource;
 
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1Analysis;
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ListAnalysesResponse;
-use Google\Service\Contactcenterinsights\GoogleLongrunningOperation;
-use Google\Service\Contactcenterinsights\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1Analysis;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ListAnalysesResponse;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleProtobufEmpty;
 
 /**
  * The "analyses" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListWebhooksResponse;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3Webhook;
-use Google\Service\Dialogflow\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListWebhooksResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3Webhook;
+use FluentMail\Google\Service\Dialogflow\GoogleProtobufEmpty;
 
 /**
  * The "webhooks" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Safebrowsing\Resource;
+namespace FluentMail\Google\Service\Safebrowsing\Resource;
 
-use Google\Service\Safebrowsing\GoogleProtobufEmpty;
-use Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4ThreatHit;
+use FluentMail\Google\Service\Safebrowsing\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4ThreatHit;
 
 /**
  * The "threatHits" collection of methods.

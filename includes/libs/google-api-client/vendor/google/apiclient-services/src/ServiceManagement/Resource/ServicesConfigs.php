@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ServiceManagement\Resource;
+namespace FluentMail\Google\Service\ServiceManagement\Resource;
 
-use Google\Service\ServiceManagement\ListServiceConfigsResponse;
-use Google\Service\ServiceManagement\Operation;
-use Google\Service\ServiceManagement\Service;
-use Google\Service\ServiceManagement\SubmitConfigSourceRequest;
+use FluentMail\Google\Service\ServiceManagement\ListServiceConfigsResponse;
+use FluentMail\Google\Service\ServiceManagement\Operation;
+use FluentMail\Google\Service\ServiceManagement\Service;
+use FluentMail\Google\Service\ServiceManagement\SubmitConfigSourceRequest;
 
 /**
  * The "configs" collection of methods.

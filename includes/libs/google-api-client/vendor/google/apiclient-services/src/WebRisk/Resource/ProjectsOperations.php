@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\WebRisk\Resource;
+namespace FluentMail\Google\Service\WebRisk\Resource;
 
-use Google\Service\WebRisk\GoogleLongrunningCancelOperationRequest;
-use Google\Service\WebRisk\GoogleLongrunningListOperationsResponse;
-use Google\Service\WebRisk\GoogleLongrunningOperation;
-use Google\Service\WebRisk\GoogleProtobufEmpty;
+use FluentMail\Google\Service\WebRisk\GoogleLongrunningCancelOperationRequest;
+use FluentMail\Google\Service\WebRisk\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\WebRisk\GoogleLongrunningOperation;
+use FluentMail\Google\Service\WebRisk\GoogleProtobufEmpty;
 
 /**
  * The "operations" collection of methods.

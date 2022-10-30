@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessBusinessInformation\Resource;
+namespace FluentMail\Google\Service\MyBusinessBusinessInformation\Resource;
 
-use Google\Service\MyBusinessBusinessInformation\Attributes as AttributesModel;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\Attributes as AttributesModel;
 
 /**
  * The "attributes" collection of methods.

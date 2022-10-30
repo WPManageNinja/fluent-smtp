@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\VMMigrationService\Resource;
+namespace FluentMail\Google\Service\VMMigrationService\Resource;
 
-use Google\Service\VMMigrationService\ListLocationsResponse;
-use Google\Service\VMMigrationService\Location;
+use FluentMail\Google\Service\VMMigrationService\ListLocationsResponse;
+use FluentMail\Google\Service\VMMigrationService\Location;
 
 /**
  * The "locations" collection of methods.

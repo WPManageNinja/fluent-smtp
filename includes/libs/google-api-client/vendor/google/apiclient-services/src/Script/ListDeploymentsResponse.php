@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Script;
+namespace FluentMail\Google\Service\Script;
 
 class ListDeploymentsResponse extends \Google\Collection
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AIPlatformNotebooks;
+namespace FluentMail\Google\Service\AIPlatformNotebooks;
 
 class Operation extends \Google\Model
 {

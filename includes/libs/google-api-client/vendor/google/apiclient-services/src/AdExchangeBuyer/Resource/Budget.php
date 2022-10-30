@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyer\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyer\Resource;
 
-use Google\Service\AdExchangeBuyer\Budget as BudgetModel;
+use FluentMail\Google\Service\AdExchangeBuyer\Budget as BudgetModel;
 
 /**
  * The "budget" collection of methods.

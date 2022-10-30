@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\CacheInvalidationRule;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\UrlMap;
-use Google\Service\Compute\UrlMapList;
-use Google\Service\Compute\UrlMapsAggregatedList;
-use Google\Service\Compute\UrlMapsValidateRequest;
-use Google\Service\Compute\UrlMapsValidateResponse;
+use FluentMail\Google\Service\Compute\CacheInvalidationRule;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\UrlMap;
+use FluentMail\Google\Service\Compute\UrlMapList;
+use FluentMail\Google\Service\Compute\UrlMapsAggregatedList;
+use FluentMail\Google\Service\Compute\UrlMapsValidateRequest;
+use FluentMail\Google\Service\Compute\UrlMapsValidateResponse;
 
 /**
  * The "urlMaps" collection of methods.

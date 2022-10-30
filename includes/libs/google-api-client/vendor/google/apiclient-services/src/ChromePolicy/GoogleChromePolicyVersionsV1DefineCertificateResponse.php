@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ChromePolicy;
+namespace FluentMail\Google\Service\ChromePolicy;
 
 class GoogleChromePolicyVersionsV1DefineCertificateResponse extends \Google\Collection
 {

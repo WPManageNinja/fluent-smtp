@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Adsense\Resource;
+namespace FluentMail\Google\Service\Adsense\Resource;
 
-use Google\Service\Adsense\AdsenseEmpty;
-use Google\Service\Adsense\CustomChannel;
-use Google\Service\Adsense\ListCustomChannelsResponse;
-use Google\Service\Adsense\ListLinkedAdUnitsResponse;
+use FluentMail\Google\Service\Adsense\AdsenseEmpty;
+use FluentMail\Google\Service\Adsense\CustomChannel;
+use FluentMail\Google\Service\Adsense\ListCustomChannelsResponse;
+use FluentMail\Google\Service\Adsense\ListLinkedAdUnitsResponse;
 
 /**
  * The "customchannels" collection of methods.

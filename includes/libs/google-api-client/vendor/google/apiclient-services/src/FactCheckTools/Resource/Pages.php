@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\FactCheckTools\Resource;
+namespace FluentMail\Google\Service\FactCheckTools\Resource;
 
-use Google\Service\FactCheckTools\GoogleFactcheckingFactchecktoolsV1alpha1ClaimReviewMarkupPage;
-use Google\Service\FactCheckTools\GoogleFactcheckingFactchecktoolsV1alpha1ListClaimReviewMarkupPagesResponse;
-use Google\Service\FactCheckTools\GoogleProtobufEmpty;
+use FluentMail\Google\Service\FactCheckTools\GoogleFactcheckingFactchecktoolsV1alpha1ClaimReviewMarkupPage;
+use FluentMail\Google\Service\FactCheckTools\GoogleFactcheckingFactchecktoolsV1alpha1ListClaimReviewMarkupPagesResponse;
+use FluentMail\Google\Service\FactCheckTools\GoogleProtobufEmpty;
 
 /**
  * The "pages" collection of methods.

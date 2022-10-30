@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Connectors\Resource;
+namespace FluentMail\Google\Service\Connectors\Resource;
 
-use Google\Service\Connectors\ListEntityTypesResponse;
+use FluentMail\Google\Service\Connectors\ListEntityTypesResponse;
 
 /**
  * The "entityTypes" collection of methods.

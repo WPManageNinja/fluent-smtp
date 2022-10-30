@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Firebaseappcheck\Resource;
+namespace FluentMail\Google\Service\Firebaseappcheck\Resource;
 
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchUpdateServicesRequest;
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchUpdateServicesResponse;
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1ListServicesResponse;
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1Service;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchUpdateServicesRequest;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchUpdateServicesResponse;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1ListServicesResponse;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1Service;
 
 /**
  * The "services" collection of methods.

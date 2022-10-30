@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Classroom\Resource;
+namespace FluentMail\Google\Service\Classroom\Resource;
 
-use Google\Service\Classroom\ClassroomEmpty;
-use Google\Service\Classroom\CourseAlias;
-use Google\Service\Classroom\ListCourseAliasesResponse;
+use FluentMail\Google\Service\Classroom\ClassroomEmpty;
+use FluentMail\Google\Service\Classroom\CourseAlias;
+use FluentMail\Google\Service\Classroom\ListCourseAliasesResponse;
 
 /**
  * The "aliases" collection of methods.

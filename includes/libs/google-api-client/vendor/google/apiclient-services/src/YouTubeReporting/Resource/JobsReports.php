@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\YouTubeReporting\Resource;
+namespace FluentMail\Google\Service\YouTubeReporting\Resource;
 
-use Google\Service\YouTubeReporting\ListReportsResponse;
-use Google\Service\YouTubeReporting\Report;
+use FluentMail\Google\Service\YouTubeReporting\ListReportsResponse;
+use FluentMail\Google\Service\YouTubeReporting\Report;
 
 /**
  * The "reports" collection of methods.

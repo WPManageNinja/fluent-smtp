@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Playcustomapp;
+namespace FluentMail\Google\Service\Playcustomapp;
 
 class CustomApp extends \Google\Collection
 {

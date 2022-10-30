@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Sheets\Resource;
+namespace FluentMail\Google\Service\Sheets\Resource;
 
-use Google\Service\Sheets\CopySheetToAnotherSpreadsheetRequest;
-use Google\Service\Sheets\SheetProperties;
+use FluentMail\Google\Service\Sheets\CopySheetToAnotherSpreadsheetRequest;
+use FluentMail\Google\Service\Sheets\SheetProperties;
 
 /**
  * The "sheets" collection of methods.

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\Annotation;
-use Google\Service\Books\Annotations;
-use Google\Service\Books\AnnotationsSummary;
-use Google\Service\Books\BooksEmpty;
+use FluentMail\Google\Service\Books\Annotation;
+use FluentMail\Google\Service\Books\Annotations;
+use FluentMail\Google\Service\Books\AnnotationsSummary;
+use FluentMail\Google\Service\Books\BooksEmpty;
 
 /**
  * The "annotations" collection of methods.

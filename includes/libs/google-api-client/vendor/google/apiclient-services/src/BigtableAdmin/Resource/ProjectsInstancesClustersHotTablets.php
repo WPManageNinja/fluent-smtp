@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\BigtableAdmin\Resource;
+namespace FluentMail\Google\Service\BigtableAdmin\Resource;
 
-use Google\Service\BigtableAdmin\ListHotTabletsResponse;
+use FluentMail\Google\Service\BigtableAdmin\ListHotTabletsResponse;
 
 /**
  * The "hotTablets" collection of methods.

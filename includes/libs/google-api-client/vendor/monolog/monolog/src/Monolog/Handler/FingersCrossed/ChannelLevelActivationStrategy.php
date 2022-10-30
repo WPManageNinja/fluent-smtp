@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler\FingersCrossed;
+namespace FluentMail\Monolog\Handler\FingersCrossed;
 
-use Monolog\Logger;
-use Psr\Log\LogLevel;
+use FluentMail\Monolog\Logger;
+use FluentMail\Psr\Log\LogLevel;
 
 /**
  * Channel and Error level based monolog activation strategy. Allows to trigger activation

@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\BeyondCorp\Resource;
+namespace FluentMail\Google\Service\BeyondCorp\Resource;
 
-use Google\Service\BeyondCorp\ClientConnectorService;
-use Google\Service\BeyondCorp\GoogleIamV1Policy;
-use Google\Service\BeyondCorp\GoogleIamV1SetIamPolicyRequest;
-use Google\Service\BeyondCorp\GoogleIamV1TestIamPermissionsRequest;
-use Google\Service\BeyondCorp\GoogleIamV1TestIamPermissionsResponse;
-use Google\Service\BeyondCorp\GoogleLongrunningOperation;
-use Google\Service\BeyondCorp\ListClientConnectorServicesResponse;
+use FluentMail\Google\Service\BeyondCorp\ClientConnectorService;
+use FluentMail\Google\Service\BeyondCorp\GoogleIamV1Policy;
+use FluentMail\Google\Service\BeyondCorp\GoogleIamV1SetIamPolicyRequest;
+use FluentMail\Google\Service\BeyondCorp\GoogleIamV1TestIamPermissionsRequest;
+use FluentMail\Google\Service\BeyondCorp\GoogleIamV1TestIamPermissionsResponse;
+use FluentMail\Google\Service\BeyondCorp\GoogleLongrunningOperation;
+use FluentMail\Google\Service\BeyondCorp\ListClientConnectorServicesResponse;
 
 /**
  * The "clientConnectorServices" collection of methods.

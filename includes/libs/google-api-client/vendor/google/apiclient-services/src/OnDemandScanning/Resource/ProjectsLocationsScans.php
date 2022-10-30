@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\OnDemandScanning\Resource;
+namespace FluentMail\Google\Service\OnDemandScanning\Resource;
 
-use Google\Service\OnDemandScanning\AnalyzePackagesRequestV1;
-use Google\Service\OnDemandScanning\Operation;
+use FluentMail\Google\Service\OnDemandScanning\AnalyzePackagesRequestV1;
+use FluentMail\Google\Service\OnDemandScanning\Operation;
 
 /**
  * The "scans" collection of methods.

@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-namespace Google\Auth;
+namespace FluentMail\Google\Auth;
 
 use DomainException;
-use Google\Auth\Credentials\AppIdentityCredentials;
-use Google\Auth\Credentials\GCECredentials;
-use Google\Auth\Credentials\ServiceAccountCredentials;
-use Google\Auth\HttpHandler\HttpClientCache;
-use Google\Auth\HttpHandler\HttpHandlerFactory;
-use Google\Auth\Middleware\AuthTokenMiddleware;
-use Google\Auth\Middleware\ProxyAuthTokenMiddleware;
-use Google\Auth\Subscriber\AuthTokenSubscriber;
-use GuzzleHttp\Client;
+use FluentMail\Google\Auth\Credentials\AppIdentityCredentials;
+use FluentMail\Google\Auth\Credentials\GCECredentials;
+use FluentMail\Google\Auth\Credentials\ServiceAccountCredentials;
+use FluentMail\Google\Auth\HttpHandler\HttpClientCache;
+use FluentMail\Google\Auth\HttpHandler\HttpHandlerFactory;
+use FluentMail\Google\Auth\Middleware\AuthTokenMiddleware;
+use FluentMail\Google\Auth\Middleware\ProxyAuthTokenMiddleware;
+use FluentMail\Google\Auth\Subscriber\AuthTokenSubscriber;
+use FluentMail\GuzzleHttp\Client;
 use InvalidArgumentException;
-use Psr\Cache\CacheItemPoolInterface;
+use FluentMail\Psr\Cache\CacheItemPoolInterface;
 
 /**
  * ApplicationDefaultCredentials obtains the default credentials for
@@ -48,9 +48,9 @@ use Psr\Cache\CacheItemPoolInterface;
  * This allows it to be used as follows with GuzzleHttp\Client:
  *
  * ```
- * use Google\Auth\ApplicationDefaultCredentials;
- * use GuzzleHttp\Client;
- * use GuzzleHttp\HandlerStack;
+ * use FluentMail\Google\Auth\ApplicationDefaultCredentials;
+ * use FluentMail\GuzzleHttp\Client;
+ * use FluentMail\GuzzleHttp\HandlerStack;
  *
  * $middleware = ApplicationDefaultCredentials::getMiddleware(
  *     'https://www.googleapis.com/auth/taskqueue'

@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Translate\Resource;
+namespace FluentMail\Google\Service\Translate\Resource;
 
-use Google\Service\Translate\CancelOperationRequest;
-use Google\Service\Translate\ListOperationsResponse;
-use Google\Service\Translate\Operation;
-use Google\Service\Translate\TranslateEmpty;
-use Google\Service\Translate\WaitOperationRequest;
+use FluentMail\Google\Service\Translate\CancelOperationRequest;
+use FluentMail\Google\Service\Translate\ListOperationsResponse;
+use FluentMail\Google\Service\Translate\Operation;
+use FluentMail\Google\Service\Translate\TranslateEmpty;
+use FluentMail\Google\Service\Translate\WaitOperationRequest;
 
 /**
  * The "operations" collection of methods.

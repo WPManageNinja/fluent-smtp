@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\OSConfig\Resource;
+namespace FluentMail\Google\Service\OSConfig\Resource;
 
-use Google\Service\OSConfig\Inventory;
-use Google\Service\OSConfig\ListInventoriesResponse;
+use FluentMail\Google\Service\OSConfig\Inventory;
+use FluentMail\Google\Service\OSConfig\ListInventoriesResponse;
 
 /**
  * The "inventories" collection of methods.

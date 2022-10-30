@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
-use Google\Service\Baremetalsolution\ListVolumesResponse;
-use Google\Service\Baremetalsolution\Operation;
-use Google\Service\Baremetalsolution\ResizeVolumeRequest;
-use Google\Service\Baremetalsolution\Volume;
+use FluentMail\Google\Service\Baremetalsolution\ListVolumesResponse;
+use FluentMail\Google\Service\Baremetalsolution\Operation;
+use FluentMail\Google\Service\Baremetalsolution\ResizeVolumeRequest;
+use FluentMail\Google\Service\Baremetalsolution\Volume;
 
 /**
  * The "volumes" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AndroidProvisioningPartner\Resource;
+namespace FluentMail\Google\Service\AndroidProvisioningPartner\Resource;
 
-use Google\Service\AndroidProvisioningPartner\AndroiddeviceprovisioningEmpty;
-use Google\Service\AndroidProvisioningPartner\Configuration;
-use Google\Service\AndroidProvisioningPartner\CustomerListConfigurationsResponse;
+use FluentMail\Google\Service\AndroidProvisioningPartner\AndroiddeviceprovisioningEmpty;
+use FluentMail\Google\Service\AndroidProvisioningPartner\Configuration;
+use FluentMail\Google\Service\AndroidProvisioningPartner\CustomerListConfigurationsResponse;
 
 /**
  * The "configurations" collection of methods.

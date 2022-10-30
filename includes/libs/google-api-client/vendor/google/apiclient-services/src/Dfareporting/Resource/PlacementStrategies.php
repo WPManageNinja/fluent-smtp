@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\PlacementStrategiesListResponse;
-use Google\Service\Dfareporting\PlacementStrategy;
+use FluentMail\Google\Service\Dfareporting\PlacementStrategiesListResponse;
+use FluentMail\Google\Service\Dfareporting\PlacementStrategy;
 
 /**
  * The "placementStrategies" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow;
+namespace FluentMail\Google\Service\Dialogflow;
 
 class GoogleCloudDialogflowCxV3beta1ContinuousTestResult extends \Google\Collection
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AdExperienceReport;
+namespace FluentMail\Google\Service\AdExperienceReport;
 
 class PlatformSummary extends \Google\Collection
 {

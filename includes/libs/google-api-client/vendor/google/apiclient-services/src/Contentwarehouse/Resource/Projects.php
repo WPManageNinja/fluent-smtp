@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Contentwarehouse\Resource;
+namespace FluentMail\Google\Service\Contentwarehouse\Resource;
 
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1FetchAclRequest;
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1FetchAclResponse;
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1SetAclRequest;
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1SetAclResponse;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1FetchAclRequest;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1FetchAclResponse;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1SetAclRequest;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1SetAclResponse;
 
 /**
  * The "projects" collection of methods.

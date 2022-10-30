@@ -1,8 +1,8 @@
 <?php
 
-namespace Psr\Http\Client;
+namespace FluentMail\Psr\Http\Client;
 
-use Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
 
 /**
  * Exception for when a request failed.

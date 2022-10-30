@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DataprocMetastore\Resource;
+namespace FluentMail\Google\Service\DataprocMetastore\Resource;
 
 /**
  * The "projects" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Playdeveloperreporting\Resource;
+namespace FluentMail\Google\Service\Playdeveloperreporting\Resource;
 
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1ListAnomaliesResponse;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1ListAnomaliesResponse;
 
 /**
  * The "anomalies" collection of methods.

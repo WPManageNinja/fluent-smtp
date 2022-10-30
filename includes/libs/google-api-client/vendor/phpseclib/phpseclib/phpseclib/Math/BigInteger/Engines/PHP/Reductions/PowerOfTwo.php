@@ -11,9 +11,9 @@
  * @link      http://pear.php.net/package/Math_BigInteger
  */
 
-namespace phpseclib3\Math\BigInteger\Engines\PHP\Reductions;
+namespace FluentMail\phpseclib3\Math\BigInteger\Engines\PHP\Reductions;
 
-use phpseclib3\Math\BigInteger\Engines\PHP\Base;
+use FluentMail\phpseclib3\Math\BigInteger\Engines\PHP\Base;
 
 /**
  * PHP Power Of Two Modular Exponentiation Engine

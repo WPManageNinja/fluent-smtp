@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseHosting\Resource;
+namespace FluentMail\Google\Service\FirebaseHosting\Resource;
 
-use Google\Service\FirebaseHosting\CancelOperationRequest;
-use Google\Service\FirebaseHosting\FirebasehostingEmpty;
-use Google\Service\FirebaseHosting\ListOperationsResponse;
+use FluentMail\Google\Service\FirebaseHosting\CancelOperationRequest;
+use FluentMail\Google\Service\FirebaseHosting\FirebasehostingEmpty;
+use FluentMail\Google\Service\FirebaseHosting\ListOperationsResponse;
 
 /**
  * The "operations" collection of methods.

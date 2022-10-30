@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-namespace Google;
+namespace FluentMail\Google;
 
-use Google\Http\Batch;
+use FluentMail\Google\Http\Batch;
 use TypeError;
 
 class Service

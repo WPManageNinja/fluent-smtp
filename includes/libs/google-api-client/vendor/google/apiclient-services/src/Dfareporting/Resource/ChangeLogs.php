@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\ChangeLog;
-use Google\Service\Dfareporting\ChangeLogsListResponse;
+use FluentMail\Google\Service\Dfareporting\ChangeLog;
+use FluentMail\Google\Service\Dfareporting\ChangeLogsListResponse;
 
 /**
  * The "changeLogs" collection of methods.

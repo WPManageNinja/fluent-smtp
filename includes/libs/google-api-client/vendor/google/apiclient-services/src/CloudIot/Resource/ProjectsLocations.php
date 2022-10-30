@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudIot\Resource;
+namespace FluentMail\Google\Service\CloudIot\Resource;
 
 /**
  * The "locations" collection of methods.

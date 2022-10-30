@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\WebRisk\Resource;
+namespace FluentMail\Google\Service\WebRisk\Resource;
 
-use Google\Service\WebRisk\GoogleCloudWebriskV1SubmitUriRequest;
-use Google\Service\WebRisk\GoogleLongrunningOperation;
+use FluentMail\Google\Service\WebRisk\GoogleCloudWebriskV1SubmitUriRequest;
+use FluentMail\Google\Service\WebRisk\GoogleLongrunningOperation;
 
 /**
  * The "uris" collection of methods.

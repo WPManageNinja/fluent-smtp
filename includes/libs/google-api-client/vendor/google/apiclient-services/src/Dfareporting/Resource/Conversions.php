@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\ConversionsBatchInsertRequest;
-use Google\Service\Dfareporting\ConversionsBatchInsertResponse;
-use Google\Service\Dfareporting\ConversionsBatchUpdateRequest;
-use Google\Service\Dfareporting\ConversionsBatchUpdateResponse;
+use FluentMail\Google\Service\Dfareporting\ConversionsBatchInsertRequest;
+use FluentMail\Google\Service\Dfareporting\ConversionsBatchInsertResponse;
+use FluentMail\Google\Service\Dfareporting\ConversionsBatchUpdateRequest;
+use FluentMail\Google\Service\Dfareporting\ConversionsBatchUpdateResponse;
 
 /**
  * The "conversions" collection of methods.

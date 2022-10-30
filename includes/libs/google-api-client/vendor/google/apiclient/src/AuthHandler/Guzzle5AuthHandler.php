@@ -1,16 +1,16 @@
 <?php
 
-namespace Google\AuthHandler;
+namespace FluentMail\Google\AuthHandler;
 
-use Google\Auth\CredentialsLoader;
-use Google\Auth\FetchAuthTokenCache;
-use Google\Auth\HttpHandler\HttpHandlerFactory;
-use Google\Auth\Subscriber\AuthTokenSubscriber;
-use Google\Auth\Subscriber\ScopedAccessTokenSubscriber;
-use Google\Auth\Subscriber\SimpleSubscriber;
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
-use Psr\Cache\CacheItemPoolInterface;
+use FluentMail\Google\Auth\CredentialsLoader;
+use FluentMail\Google\Auth\FetchAuthTokenCache;
+use FluentMail\Google\Auth\HttpHandler\HttpHandlerFactory;
+use FluentMail\Google\Auth\Subscriber\AuthTokenSubscriber;
+use FluentMail\Google\Auth\Subscriber\ScopedAccessTokenSubscriber;
+use FluentMail\Google\Auth\Subscriber\SimpleSubscriber;
+use FluentMail\GuzzleHttp\Client;
+use FluentMail\GuzzleHttp\ClientInterface;
+use FluentMail\Psr\Cache\CacheItemPoolInterface;
 
 /**
  * This supports Guzzle 5

@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\DLP\Resource;
+namespace FluentMail\Google\Service\DLP\Resource;
 
-use Google\Service\DLP\GooglePrivacyDlpV2CreateDeidentifyTemplateRequest;
-use Google\Service\DLP\GooglePrivacyDlpV2DeidentifyTemplate;
-use Google\Service\DLP\GooglePrivacyDlpV2ListDeidentifyTemplatesResponse;
-use Google\Service\DLP\GooglePrivacyDlpV2UpdateDeidentifyTemplateRequest;
-use Google\Service\DLP\GoogleProtobufEmpty;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2CreateDeidentifyTemplateRequest;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2DeidentifyTemplate;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2ListDeidentifyTemplatesResponse;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2UpdateDeidentifyTemplateRequest;
+use FluentMail\Google\Service\DLP\GoogleProtobufEmpty;
 
 /**
  * The "deidentifyTemplates" collection of methods.

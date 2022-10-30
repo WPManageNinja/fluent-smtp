@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Speech;
+namespace FluentMail\Google\Service\Speech;
 
 class Operation extends \Google\Model
 {

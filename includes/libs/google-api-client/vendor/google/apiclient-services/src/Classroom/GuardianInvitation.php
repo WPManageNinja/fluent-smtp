@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Classroom;
+namespace FluentMail\Google\Service\Classroom;
 
 class GuardianInvitation extends \Google\Model
 {

@@ -15,20 +15,20 @@
  * the License.
  */
 
-namespace Google\Service\Cloudchannel\Resource;
+namespace FluentMail\Google\Service\Cloudchannel\Resource;
 
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ActivateEntitlementRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1CancelEntitlementRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ChangeOfferRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ChangeParametersRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ChangeRenewalSettingsRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1CreateEntitlementRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1Entitlement;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListEntitlementsResponse;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1Offer;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1StartPaidServiceRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1SuspendEntitlementRequest;
-use Google\Service\Cloudchannel\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ActivateEntitlementRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1CancelEntitlementRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ChangeOfferRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ChangeParametersRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ChangeRenewalSettingsRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1CreateEntitlementRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1Entitlement;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListEntitlementsResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1Offer;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1StartPaidServiceRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1SuspendEntitlementRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleLongrunningOperation;
 
 /**
  * The "entitlements" collection of methods.

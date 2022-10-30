@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\DataFusion\Resource;
+namespace FluentMail\Google\Service\DataFusion\Resource;
 
-use Google\Service\DataFusion\Instance;
-use Google\Service\DataFusion\ListInstancesResponse;
-use Google\Service\DataFusion\Operation;
-use Google\Service\DataFusion\Policy;
-use Google\Service\DataFusion\RestartInstanceRequest;
-use Google\Service\DataFusion\SetIamPolicyRequest;
-use Google\Service\DataFusion\TestIamPermissionsRequest;
-use Google\Service\DataFusion\TestIamPermissionsResponse;
+use FluentMail\Google\Service\DataFusion\Instance;
+use FluentMail\Google\Service\DataFusion\ListInstancesResponse;
+use FluentMail\Google\Service\DataFusion\Operation;
+use FluentMail\Google\Service\DataFusion\Policy;
+use FluentMail\Google\Service\DataFusion\RestartInstanceRequest;
+use FluentMail\Google\Service\DataFusion\SetIamPolicyRequest;
+use FluentMail\Google\Service\DataFusion\TestIamPermissionsRequest;
+use FluentMail\Google\Service\DataFusion\TestIamPermissionsResponse;
 
 /**
  * The "instances" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Iam\Resource;
+namespace FluentMail\Google\Service\Iam\Resource;
 
-use Google\Service\Iam\QueryTestablePermissionsRequest;
-use Google\Service\Iam\QueryTestablePermissionsResponse;
+use FluentMail\Google\Service\Iam\QueryTestablePermissionsRequest;
+use FluentMail\Google\Service\Iam\QueryTestablePermissionsResponse;
 
 /**
  * The "permissions" collection of methods.

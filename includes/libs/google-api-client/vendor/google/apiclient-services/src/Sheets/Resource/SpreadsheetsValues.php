@@ -15,24 +15,24 @@
  * the License.
  */
 
-namespace Google\Service\Sheets\Resource;
+namespace FluentMail\Google\Service\Sheets\Resource;
 
-use Google\Service\Sheets\AppendValuesResponse;
-use Google\Service\Sheets\BatchClearValuesByDataFilterRequest;
-use Google\Service\Sheets\BatchClearValuesByDataFilterResponse;
-use Google\Service\Sheets\BatchClearValuesRequest;
-use Google\Service\Sheets\BatchClearValuesResponse;
-use Google\Service\Sheets\BatchGetValuesByDataFilterRequest;
-use Google\Service\Sheets\BatchGetValuesByDataFilterResponse;
-use Google\Service\Sheets\BatchGetValuesResponse;
-use Google\Service\Sheets\BatchUpdateValuesByDataFilterRequest;
-use Google\Service\Sheets\BatchUpdateValuesByDataFilterResponse;
-use Google\Service\Sheets\BatchUpdateValuesRequest;
-use Google\Service\Sheets\BatchUpdateValuesResponse;
-use Google\Service\Sheets\ClearValuesRequest;
-use Google\Service\Sheets\ClearValuesResponse;
-use Google\Service\Sheets\UpdateValuesResponse;
-use Google\Service\Sheets\ValueRange;
+use FluentMail\Google\Service\Sheets\AppendValuesResponse;
+use FluentMail\Google\Service\Sheets\BatchClearValuesByDataFilterRequest;
+use FluentMail\Google\Service\Sheets\BatchClearValuesByDataFilterResponse;
+use FluentMail\Google\Service\Sheets\BatchClearValuesRequest;
+use FluentMail\Google\Service\Sheets\BatchClearValuesResponse;
+use FluentMail\Google\Service\Sheets\BatchGetValuesByDataFilterRequest;
+use FluentMail\Google\Service\Sheets\BatchGetValuesByDataFilterResponse;
+use FluentMail\Google\Service\Sheets\BatchGetValuesResponse;
+use FluentMail\Google\Service\Sheets\BatchUpdateValuesByDataFilterRequest;
+use FluentMail\Google\Service\Sheets\BatchUpdateValuesByDataFilterResponse;
+use FluentMail\Google\Service\Sheets\BatchUpdateValuesRequest;
+use FluentMail\Google\Service\Sheets\BatchUpdateValuesResponse;
+use FluentMail\Google\Service\Sheets\ClearValuesRequest;
+use FluentMail\Google\Service\Sheets\ClearValuesResponse;
+use FluentMail\Google\Service\Sheets\UpdateValuesResponse;
+use FluentMail\Google\Service\Sheets\ValueRange;
 
 /**
  * The "values" collection of methods.

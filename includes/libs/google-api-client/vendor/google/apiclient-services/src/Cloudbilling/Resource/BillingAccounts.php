@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\Cloudbilling\Resource;
+namespace FluentMail\Google\Service\Cloudbilling\Resource;
 
-use Google\Service\Cloudbilling\BillingAccount;
-use Google\Service\Cloudbilling\ListBillingAccountsResponse;
-use Google\Service\Cloudbilling\Policy;
-use Google\Service\Cloudbilling\SetIamPolicyRequest;
-use Google\Service\Cloudbilling\TestIamPermissionsRequest;
-use Google\Service\Cloudbilling\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Cloudbilling\BillingAccount;
+use FluentMail\Google\Service\Cloudbilling\ListBillingAccountsResponse;
+use FluentMail\Google\Service\Cloudbilling\Policy;
+use FluentMail\Google\Service\Cloudbilling\SetIamPolicyRequest;
+use FluentMail\Google\Service\Cloudbilling\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Cloudbilling\TestIamPermissionsResponse;
 
 /**
  * The "billingAccounts" collection of methods.

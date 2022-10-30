@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Gmail\Resource;
+namespace FluentMail\Google\Service\Gmail\Resource;
 
-use Google\Service\Gmail\ListSmimeInfoResponse;
-use Google\Service\Gmail\SmimeInfo;
+use FluentMail\Google\Service\Gmail\ListSmimeInfoResponse;
+use FluentMail\Google\Service\Gmail\SmimeInfo;
 
 /**
  * The "smimeInfo" collection of methods.

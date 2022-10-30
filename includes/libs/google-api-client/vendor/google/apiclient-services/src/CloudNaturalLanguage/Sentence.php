@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudNaturalLanguage;
+namespace FluentMail\Google\Service\CloudNaturalLanguage;
 
 class Sentence extends \Google\Model
 {

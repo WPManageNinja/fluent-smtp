@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\PeopleService\Resource;
+namespace FluentMail\Google\Service\PeopleService\Resource;
 
-use Google\Service\PeopleService\ModifyContactGroupMembersRequest;
-use Google\Service\PeopleService\ModifyContactGroupMembersResponse;
+use FluentMail\Google\Service\PeopleService\ModifyContactGroupMembersRequest;
+use FluentMail\Google\Service\PeopleService\ModifyContactGroupMembersResponse;
 
 /**
  * The "members" collection of methods.

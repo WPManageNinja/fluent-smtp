@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\NetworkServices\Resource;
+namespace FluentMail\Google\Service\NetworkServices\Resource;
 
-use Google\Service\NetworkServices\HttpRoute;
-use Google\Service\NetworkServices\ListHttpRoutesResponse;
-use Google\Service\NetworkServices\Operation;
+use FluentMail\Google\Service\NetworkServices\HttpRoute;
+use FluentMail\Google\Service\NetworkServices\ListHttpRoutesResponse;
+use FluentMail\Google\Service\NetworkServices\Operation;
 
 /**
  * The "httpRoutes" collection of methods.

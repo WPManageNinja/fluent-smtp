@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Storagetransfer;
+namespace FluentMail\Google\Service\Storagetransfer;
 
 class AwsS3CompatibleData extends \Google\Model
 {

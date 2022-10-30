@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyer\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyer\Resource;
 
-use Google\Service\AdExchangeBuyer\GetOffersResponse;
-use Google\Service\AdExchangeBuyer\Product;
+use FluentMail\Google\Service\AdExchangeBuyer\GetOffersResponse;
+use FluentMail\Google\Service\AdExchangeBuyer\Product;
 
 /**
  * The "products" collection of methods.

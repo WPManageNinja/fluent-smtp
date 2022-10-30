@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\PubsubLite\Resource;
+namespace FluentMail\Google\Service\PubsubLite\Resource;
 
-use Google\Service\PubsubLite\CancelOperationRequest;
-use Google\Service\PubsubLite\ListOperationsResponse;
-use Google\Service\PubsubLite\Operation;
-use Google\Service\PubsubLite\PubsubliteEmpty;
+use FluentMail\Google\Service\PubsubLite\CancelOperationRequest;
+use FluentMail\Google\Service\PubsubLite\ListOperationsResponse;
+use FluentMail\Google\Service\PubsubLite\Operation;
+use FluentMail\Google\Service\PubsubLite\PubsubliteEmpty;
 
 /**
  * The "operations" collection of methods.

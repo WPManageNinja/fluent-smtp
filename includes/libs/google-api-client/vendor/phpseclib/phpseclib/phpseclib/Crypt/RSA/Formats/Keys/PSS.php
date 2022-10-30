@@ -21,13 +21,13 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\RSA\Formats\Keys;
+namespace FluentMail\phpseclib3\Crypt\RSA\Formats\Keys;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Crypt\Common\Formats\Keys\PKCS8 as Progenitor;
-use phpseclib3\File\ASN1;
-use phpseclib3\File\ASN1\Maps;
-use phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Crypt\Common\Formats\Keys\PKCS8 as Progenitor;
+use FluentMail\phpseclib3\File\ASN1;
+use FluentMail\phpseclib3\File\ASN1\Maps;
+use FluentMail\phpseclib3\Math\BigInteger;
 
 /**
  * PKCS#8 Formatted RSA-PSS Key Handler

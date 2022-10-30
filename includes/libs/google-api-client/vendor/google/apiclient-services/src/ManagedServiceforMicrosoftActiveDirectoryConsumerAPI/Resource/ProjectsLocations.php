@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Resource;
+namespace FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Resource;
 
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\ListLocationsResponse;
-use Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Location;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\ListLocationsResponse;
+use FluentMail\Google\Service\ManagedServiceforMicrosoftActiveDirectoryConsumerAPI\Location;
 
 /**
  * The "locations" collection of methods.

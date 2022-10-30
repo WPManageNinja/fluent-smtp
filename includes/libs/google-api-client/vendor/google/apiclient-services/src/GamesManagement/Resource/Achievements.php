@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\GamesManagement\Resource;
+namespace FluentMail\Google\Service\GamesManagement\Resource;
 
-use Google\Service\GamesManagement\AchievementResetAllResponse;
-use Google\Service\GamesManagement\AchievementResetMultipleForAllRequest;
-use Google\Service\GamesManagement\AchievementResetResponse;
+use FluentMail\Google\Service\GamesManagement\AchievementResetAllResponse;
+use FluentMail\Google\Service\GamesManagement\AchievementResetMultipleForAllRequest;
+use FluentMail\Google\Service\GamesManagement\AchievementResetResponse;
 
 /**
  * The "achievements" collection of methods.

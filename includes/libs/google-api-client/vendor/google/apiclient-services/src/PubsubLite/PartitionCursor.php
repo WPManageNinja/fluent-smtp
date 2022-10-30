@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PubsubLite;
+namespace FluentMail\Google\Service\PubsubLite;
 
 class PartitionCursor extends \Google\Model
 {

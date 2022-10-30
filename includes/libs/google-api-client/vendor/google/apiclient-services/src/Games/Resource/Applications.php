@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Games\Resource;
+namespace FluentMail\Google\Service\Games\Resource;
 
-use Google\Service\Games\Application;
-use Google\Service\Games\ApplicationVerifyResponse;
-use Google\Service\Games\EndPoint;
+use FluentMail\Google\Service\Games\Application;
+use FluentMail\Google\Service\Games\ApplicationVerifyResponse;
+use FluentMail\Google\Service\Games\EndPoint;
 
 /**
  * The "applications" collection of methods.

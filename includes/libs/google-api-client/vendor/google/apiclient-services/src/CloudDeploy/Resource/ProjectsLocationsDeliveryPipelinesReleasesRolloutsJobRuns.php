@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudDeploy\Resource;
+namespace FluentMail\Google\Service\CloudDeploy\Resource;
 
-use Google\Service\CloudDeploy\JobRun;
-use Google\Service\CloudDeploy\ListJobRunsResponse;
+use FluentMail\Google\Service\CloudDeploy\JobRun;
+use FluentMail\Google\Service\CloudDeploy\ListJobRunsResponse;
 
 /**
  * The "jobRuns" collection of methods.

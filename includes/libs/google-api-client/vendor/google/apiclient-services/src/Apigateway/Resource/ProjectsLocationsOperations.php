@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Apigateway\Resource;
+namespace FluentMail\Google\Service\Apigateway\Resource;
 
-use Google\Service\Apigateway\ApigatewayCancelOperationRequest;
-use Google\Service\Apigateway\ApigatewayEmpty;
-use Google\Service\Apigateway\ApigatewayListOperationsResponse;
-use Google\Service\Apigateway\ApigatewayOperation;
+use FluentMail\Google\Service\Apigateway\ApigatewayCancelOperationRequest;
+use FluentMail\Google\Service\Apigateway\ApigatewayEmpty;
+use FluentMail\Google\Service\Apigateway\ApigatewayListOperationsResponse;
+use FluentMail\Google\Service\Apigateway\ApigatewayOperation;
 
 /**
  * The "operations" collection of methods.

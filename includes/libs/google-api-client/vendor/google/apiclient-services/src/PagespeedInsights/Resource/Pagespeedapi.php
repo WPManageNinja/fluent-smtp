@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\PagespeedInsights\Resource;
+namespace FluentMail\Google\Service\PagespeedInsights\Resource;
 
-use Google\Service\PagespeedInsights\PagespeedApiPagespeedResponseV5;
+use FluentMail\Google\Service\PagespeedInsights\PagespeedApiPagespeedResponseV5;
 
 /**
  * The "pagespeedapi" collection of methods.

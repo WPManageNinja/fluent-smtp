@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Formatter\WildfireFormatter;
-use Monolog\Formatter\FormatterInterface;
+use FluentMail\Monolog\Formatter\WildfireFormatter;
+use FluentMail\Monolog\Formatter\FormatterInterface;
 
 /**
  * Simple FirePHP Handler (http://www.firephp.org/), which uses the Wildfire protocol.

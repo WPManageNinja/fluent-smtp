@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Sheets\Resource;
+namespace FluentMail\Google\Service\Sheets\Resource;
 
-use Google\Service\Sheets\BatchUpdateSpreadsheetRequest;
-use Google\Service\Sheets\BatchUpdateSpreadsheetResponse;
-use Google\Service\Sheets\GetSpreadsheetByDataFilterRequest;
-use Google\Service\Sheets\Spreadsheet;
+use FluentMail\Google\Service\Sheets\BatchUpdateSpreadsheetRequest;
+use FluentMail\Google\Service\Sheets\BatchUpdateSpreadsheetResponse;
+use FluentMail\Google\Service\Sheets\GetSpreadsheetByDataFilterRequest;
+use FluentMail\Google\Service\Sheets\Spreadsheet;
 
 /**
  * The "spreadsheets" collection of methods.

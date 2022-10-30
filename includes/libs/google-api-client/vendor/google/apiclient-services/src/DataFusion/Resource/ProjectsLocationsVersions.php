@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\DataFusion\Resource;
+namespace FluentMail\Google\Service\DataFusion\Resource;
 
-use Google\Service\DataFusion\ListAvailableVersionsResponse;
+use FluentMail\Google\Service\DataFusion\ListAvailableVersionsResponse;
 
 /**
  * The "versions" collection of methods.

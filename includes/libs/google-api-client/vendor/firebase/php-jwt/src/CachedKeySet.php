@@ -1,14 +1,14 @@
 <?php
 
-namespace Firebase\JWT;
+namespace FluentMail\Firebase\JWT;
 
 use ArrayAccess;
 use LogicException;
 use OutOfBoundsException;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestFactoryInterface;
+use FluentMail\Psr\Cache\CacheItemInterface;
+use FluentMail\Psr\Cache\CacheItemPoolInterface;
+use FluentMail\Psr\Http\Client\ClientInterface;
+use FluentMail\Psr\Http\Message\RequestFactoryInterface;
 use RuntimeException;
 
 /**

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Safebrowsing\Resource;
+namespace FluentMail\Google\Service\Safebrowsing\Resource;
 
-use Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4FetchThreatListUpdatesRequest;
-use Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4FetchThreatListUpdatesResponse;
+use FluentMail\Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4FetchThreatListUpdatesRequest;
+use FluentMail\Google\Service\Safebrowsing\GoogleSecuritySafebrowsingV4FetchThreatListUpdatesResponse;
 
 /**
  * The "threatListUpdates" collection of methods.

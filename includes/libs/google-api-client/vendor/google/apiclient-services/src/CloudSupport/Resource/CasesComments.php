@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudSupport\Resource;
+namespace FluentMail\Google\Service\CloudSupport\Resource;
 
-use Google\Service\CloudSupport\Comment;
-use Google\Service\CloudSupport\ListCommentsResponse;
+use FluentMail\Google\Service\CloudSupport\Comment;
+use FluentMail\Google\Service\CloudSupport\ListCommentsResponse;
 
 /**
  * The "comments" collection of methods.

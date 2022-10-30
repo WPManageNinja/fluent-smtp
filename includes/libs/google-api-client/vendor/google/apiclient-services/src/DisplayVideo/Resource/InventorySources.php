@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\EditInventorySourceReadWriteAccessorsRequest;
-use Google\Service\DisplayVideo\InventorySource;
-use Google\Service\DisplayVideo\InventorySourceAccessors;
-use Google\Service\DisplayVideo\ListInventorySourcesResponse;
+use FluentMail\Google\Service\DisplayVideo\EditInventorySourceReadWriteAccessorsRequest;
+use FluentMail\Google\Service\DisplayVideo\InventorySource;
+use FluentMail\Google\Service\DisplayVideo\InventorySourceAccessors;
+use FluentMail\Google\Service\DisplayVideo\ListInventorySourcesResponse;
 
 /**
  * The "inventorySources" collection of methods.

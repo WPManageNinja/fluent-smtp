@@ -13,11 +13,11 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Net\SFTP;
+namespace FluentMail\phpseclib3\Net\SFTP;
 
-use phpseclib3\Crypt\Common\PrivateKey;
-use phpseclib3\Net\SFTP;
-use phpseclib3\Net\SSH2;
+use FluentMail\phpseclib3\Crypt\Common\PrivateKey;
+use FluentMail\phpseclib3\Net\SFTP;
+use FluentMail\phpseclib3\Net\SSH2;
 
 /**
  * SFTP Stream Wrapper

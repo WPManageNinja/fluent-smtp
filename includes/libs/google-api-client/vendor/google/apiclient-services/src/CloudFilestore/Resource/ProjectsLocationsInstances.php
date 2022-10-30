@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudFilestore\Resource;
+namespace FluentMail\Google\Service\CloudFilestore\Resource;
 
-use Google\Service\CloudFilestore\Instance;
-use Google\Service\CloudFilestore\ListInstancesResponse;
-use Google\Service\CloudFilestore\Operation;
-use Google\Service\CloudFilestore\RestoreInstanceRequest;
+use FluentMail\Google\Service\CloudFilestore\Instance;
+use FluentMail\Google\Service\CloudFilestore\ListInstancesResponse;
+use FluentMail\Google\Service\CloudFilestore\Operation;
+use FluentMail\Google\Service\CloudFilestore\RestoreInstanceRequest;
 
 /**
  * The "instances" collection of methods.

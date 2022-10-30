@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Integrations\Resource;
+namespace FluentMail\Google\Service\Integrations\Resource;
 
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaLiftSuspensionRequest;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaLiftSuspensionResponse;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListSuspensionsResponse;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaResolveSuspensionRequest;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaResolveSuspensionResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaLiftSuspensionRequest;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaLiftSuspensionResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListSuspensionsResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaResolveSuspensionRequest;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaResolveSuspensionResponse;
 
 /**
  * The "suspensions" collection of methods.

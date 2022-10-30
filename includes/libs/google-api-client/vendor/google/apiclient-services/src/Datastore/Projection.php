@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Datastore;
+namespace FluentMail\Google\Service\Datastore;
 
 class Projection extends \Google\Model
 {

@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\RealTimeBidding\Resource;
+namespace FluentMail\Google\Service\RealTimeBidding\Resource;
 
-use Google\Service\RealTimeBidding\ActivatePretargetingConfigRequest;
-use Google\Service\RealTimeBidding\AddTargetedAppsRequest;
-use Google\Service\RealTimeBidding\AddTargetedPublishersRequest;
-use Google\Service\RealTimeBidding\AddTargetedSitesRequest;
-use Google\Service\RealTimeBidding\ListPretargetingConfigsResponse;
-use Google\Service\RealTimeBidding\PretargetingConfig;
-use Google\Service\RealTimeBidding\RealtimebiddingEmpty;
-use Google\Service\RealTimeBidding\RemoveTargetedAppsRequest;
-use Google\Service\RealTimeBidding\RemoveTargetedPublishersRequest;
-use Google\Service\RealTimeBidding\RemoveTargetedSitesRequest;
-use Google\Service\RealTimeBidding\SuspendPretargetingConfigRequest;
+use FluentMail\Google\Service\RealTimeBidding\ActivatePretargetingConfigRequest;
+use FluentMail\Google\Service\RealTimeBidding\AddTargetedAppsRequest;
+use FluentMail\Google\Service\RealTimeBidding\AddTargetedPublishersRequest;
+use FluentMail\Google\Service\RealTimeBidding\AddTargetedSitesRequest;
+use FluentMail\Google\Service\RealTimeBidding\ListPretargetingConfigsResponse;
+use FluentMail\Google\Service\RealTimeBidding\PretargetingConfig;
+use FluentMail\Google\Service\RealTimeBidding\RealtimebiddingEmpty;
+use FluentMail\Google\Service\RealTimeBidding\RemoveTargetedAppsRequest;
+use FluentMail\Google\Service\RealTimeBidding\RemoveTargetedPublishersRequest;
+use FluentMail\Google\Service\RealTimeBidding\RemoveTargetedSitesRequest;
+use FluentMail\Google\Service\RealTimeBidding\SuspendPretargetingConfigRequest;
 
 /**
  * The "pretargetingConfigs" collection of methods.

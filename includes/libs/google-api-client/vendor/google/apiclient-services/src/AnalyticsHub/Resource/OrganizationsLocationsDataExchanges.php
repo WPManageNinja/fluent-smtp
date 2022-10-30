@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsHub\Resource;
+namespace FluentMail\Google\Service\AnalyticsHub\Resource;
 
-use Google\Service\AnalyticsHub\ListOrgDataExchangesResponse;
+use FluentMail\Google\Service\AnalyticsHub\ListOrgDataExchangesResponse;
 
 /**
  * The "dataExchanges" collection of methods.

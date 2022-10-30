@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\TargetHttpProxy;
-use Google\Service\Compute\TargetHttpProxyList;
-use Google\Service\Compute\UrlMapReference;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\TargetHttpProxy;
+use FluentMail\Google\Service\Compute\TargetHttpProxyList;
+use FluentMail\Google\Service\Compute\UrlMapReference;
 
 /**
  * The "regionTargetHttpProxies" collection of methods.

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\DataFusion\Resource;
+namespace FluentMail\Google\Service\DataFusion\Resource;
 
-use Google\Service\DataFusion\CancelOperationRequest;
-use Google\Service\DataFusion\DatafusionEmpty;
-use Google\Service\DataFusion\ListOperationsResponse;
-use Google\Service\DataFusion\Operation;
+use FluentMail\Google\Service\DataFusion\CancelOperationRequest;
+use FluentMail\Google\Service\DataFusion\DatafusionEmpty;
+use FluentMail\Google\Service\DataFusion\ListOperationsResponse;
+use FluentMail\Google\Service\DataFusion\Operation;
 
 /**
  * The "operations" collection of methods.

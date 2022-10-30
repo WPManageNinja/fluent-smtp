@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DataprocMetastore\Resource;
+namespace FluentMail\Google\Service\DataprocMetastore\Resource;
 
-use Google\Service\DataprocMetastore\ListLocationsResponse;
-use Google\Service\DataprocMetastore\Location;
+use FluentMail\Google\Service\DataprocMetastore\ListLocationsResponse;
+use FluentMail\Google\Service\DataprocMetastore\Location;
 
 /**
  * The "locations" collection of methods.

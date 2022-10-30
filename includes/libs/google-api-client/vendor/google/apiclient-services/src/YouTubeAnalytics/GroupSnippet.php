@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\YouTubeAnalytics;
+namespace FluentMail\Google\Service\YouTubeAnalytics;
 
 class GroupSnippet extends \Google\Model
 {

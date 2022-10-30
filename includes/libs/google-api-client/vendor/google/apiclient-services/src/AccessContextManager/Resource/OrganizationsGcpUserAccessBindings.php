@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AccessContextManager\Resource;
+namespace FluentMail\Google\Service\AccessContextManager\Resource;
 
-use Google\Service\AccessContextManager\GcpUserAccessBinding;
-use Google\Service\AccessContextManager\ListGcpUserAccessBindingsResponse;
-use Google\Service\AccessContextManager\Operation;
+use FluentMail\Google\Service\AccessContextManager\GcpUserAccessBinding;
+use FluentMail\Google\Service\AccessContextManager\ListGcpUserAccessBindingsResponse;
+use FluentMail\Google\Service\AccessContextManager\Operation;
 
 /**
  * The "gcpUserAccessBindings" collection of methods.

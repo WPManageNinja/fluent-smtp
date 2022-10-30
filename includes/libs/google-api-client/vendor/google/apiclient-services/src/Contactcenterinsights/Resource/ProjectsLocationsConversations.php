@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Contactcenterinsights\Resource;
+namespace FluentMail\Google\Service\Contactcenterinsights\Resource;
 
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1CalculateStatsResponse;
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1Conversation;
-use Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ListConversationsResponse;
-use Google\Service\Contactcenterinsights\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1CalculateStatsResponse;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1Conversation;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleCloudContactcenterinsightsV1ListConversationsResponse;
+use FluentMail\Google\Service\Contactcenterinsights\GoogleProtobufEmpty;
 
 /**
  * The "conversations" collection of methods.

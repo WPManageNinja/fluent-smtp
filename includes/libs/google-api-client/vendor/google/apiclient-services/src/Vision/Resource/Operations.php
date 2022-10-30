@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Vision\Resource;
+namespace FluentMail\Google\Service\Vision\Resource;
 
-use Google\Service\Vision\CancelOperationRequest;
-use Google\Service\Vision\ListOperationsResponse;
-use Google\Service\Vision\Operation;
-use Google\Service\Vision\VisionEmpty;
+use FluentMail\Google\Service\Vision\CancelOperationRequest;
+use FluentMail\Google\Service\Vision\ListOperationsResponse;
+use FluentMail\Google\Service\Vision\Operation;
+use FluentMail\Google\Service\Vision\VisionEmpty;
 
 /**
  * The "operations" collection of methods.

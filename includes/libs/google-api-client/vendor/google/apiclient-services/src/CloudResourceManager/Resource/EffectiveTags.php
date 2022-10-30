@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudResourceManager\Resource;
+namespace FluentMail\Google\Service\CloudResourceManager\Resource;
 
-use Google\Service\CloudResourceManager\ListEffectiveTagsResponse;
+use FluentMail\Google\Service\CloudResourceManager\ListEffectiveTagsResponse;
 
 /**
  * The "effectiveTags" collection of methods.

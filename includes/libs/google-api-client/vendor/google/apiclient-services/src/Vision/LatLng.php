@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Vision;
+namespace FluentMail\Google\Service\Vision;
 
 class LatLng extends \Google\Model
 {

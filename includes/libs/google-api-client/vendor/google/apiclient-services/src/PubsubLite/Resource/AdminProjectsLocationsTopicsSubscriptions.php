@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\PubsubLite\Resource;
+namespace FluentMail\Google\Service\PubsubLite\Resource;
 
-use Google\Service\PubsubLite\ListTopicSubscriptionsResponse;
+use FluentMail\Google\Service\PubsubLite\ListTopicSubscriptionsResponse;
 
 /**
  * The "subscriptions" collection of methods.

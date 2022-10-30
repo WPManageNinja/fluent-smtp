@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\RecommendationsAI\Resource;
+namespace FluentMail\Google\Service\RecommendationsAI\Resource;
 
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1CatalogItem;
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1ImportCatalogItemsRequest;
-use Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1ListCatalogItemsResponse;
-use Google\Service\RecommendationsAI\GoogleLongrunningOperation;
-use Google\Service\RecommendationsAI\GoogleProtobufEmpty;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1CatalogItem;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1ImportCatalogItemsRequest;
+use FluentMail\Google\Service\RecommendationsAI\GoogleCloudRecommendationengineV1beta1ListCatalogItemsResponse;
+use FluentMail\Google\Service\RecommendationsAI\GoogleLongrunningOperation;
+use FluentMail\Google\Service\RecommendationsAI\GoogleProtobufEmpty;
 
 /**
  * The "catalogItems" collection of methods.

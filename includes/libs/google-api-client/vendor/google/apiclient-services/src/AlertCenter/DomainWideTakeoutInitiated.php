@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AlertCenter;
+namespace FluentMail\Google\Service\AlertCenter;
 
 class DomainWideTakeoutInitiated extends \Google\Model
 {

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\DeobfuscationFilesUploadResponse;
+use FluentMail\Google\Service\AndroidPublisher\DeobfuscationFilesUploadResponse;
 
 /**
  * The "deobfuscationfiles" collection of methods.

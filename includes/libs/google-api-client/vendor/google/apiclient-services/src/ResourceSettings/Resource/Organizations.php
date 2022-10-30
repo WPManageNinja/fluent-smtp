@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ResourceSettings\Resource;
+namespace FluentMail\Google\Service\ResourceSettings\Resource;
 
 /**
  * The "organizations" collection of methods.

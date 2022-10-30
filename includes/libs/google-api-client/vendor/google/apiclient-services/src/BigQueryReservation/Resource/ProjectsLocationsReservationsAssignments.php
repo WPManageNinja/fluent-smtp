@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryReservation\Resource;
+namespace FluentMail\Google\Service\BigQueryReservation\Resource;
 
-use Google\Service\BigQueryReservation\Assignment;
-use Google\Service\BigQueryReservation\BigqueryreservationEmpty;
-use Google\Service\BigQueryReservation\ListAssignmentsResponse;
-use Google\Service\BigQueryReservation\MoveAssignmentRequest;
+use FluentMail\Google\Service\BigQueryReservation\Assignment;
+use FluentMail\Google\Service\BigQueryReservation\BigqueryreservationEmpty;
+use FluentMail\Google\Service\BigQueryReservation\ListAssignmentsResponse;
+use FluentMail\Google\Service\BigQueryReservation\MoveAssignmentRequest;
 
 /**
  * The "assignments" collection of methods.

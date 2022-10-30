@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\BooksVolumesRecommendedRateResponse;
-use Google\Service\Books\Volumes as VolumesModel;
+use FluentMail\Google\Service\Books\BooksVolumesRecommendedRateResponse;
+use FluentMail\Google\Service\Books\Volumes as VolumesModel;
 
 /**
  * The "recommended" collection of methods.

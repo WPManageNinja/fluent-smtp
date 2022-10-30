@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\WorkflowExecutions\Resource;
+namespace FluentMail\Google\Service\WorkflowExecutions\Resource;
 
 /**
  * The "projects" collection of methods.

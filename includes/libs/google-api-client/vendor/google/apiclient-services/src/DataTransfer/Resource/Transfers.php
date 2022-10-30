@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DataTransfer\Resource;
+namespace FluentMail\Google\Service\DataTransfer\Resource;
 
-use Google\Service\DataTransfer\DataTransfer;
-use Google\Service\DataTransfer\DataTransfersListResponse;
+use FluentMail\Google\Service\DataTransfer\DataTransfer;
+use FluentMail\Google\Service\DataTransfer\DataTransfersListResponse;
 
 /**
  * The "transfers" collection of methods.

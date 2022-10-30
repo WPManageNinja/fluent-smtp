@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\VMMigrationService;
+namespace FluentMail\Google\Service\VMMigrationService;
 
 class LocalizedMessage extends \Google\Model
 {

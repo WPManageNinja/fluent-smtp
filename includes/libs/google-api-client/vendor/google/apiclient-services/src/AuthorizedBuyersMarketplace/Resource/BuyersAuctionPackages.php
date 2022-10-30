@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\AuthorizedBuyersMarketplace\Resource;
+namespace FluentMail\Google\Service\AuthorizedBuyersMarketplace\Resource;
 
-use Google\Service\AuthorizedBuyersMarketplace\AuctionPackage;
-use Google\Service\AuthorizedBuyersMarketplace\ListAuctionPackagesResponse;
-use Google\Service\AuthorizedBuyersMarketplace\SubscribeAuctionPackageRequest;
-use Google\Service\AuthorizedBuyersMarketplace\SubscribeClientsRequest;
-use Google\Service\AuthorizedBuyersMarketplace\UnsubscribeAuctionPackageRequest;
-use Google\Service\AuthorizedBuyersMarketplace\UnsubscribeClientsRequest;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\AuctionPackage;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\ListAuctionPackagesResponse;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\SubscribeAuctionPackageRequest;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\SubscribeClientsRequest;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\UnsubscribeAuctionPackageRequest;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\UnsubscribeClientsRequest;
 
 /**
  * The "auctionPackages" collection of methods.

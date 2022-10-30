@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\OrderDocument;
-use Google\Service\Dfareporting\OrderDocumentsListResponse;
+use FluentMail\Google\Service\Dfareporting\OrderDocument;
+use FluentMail\Google\Service\Dfareporting\OrderDocumentsListResponse;
 
 /**
  * The "orderDocuments" collection of methods.

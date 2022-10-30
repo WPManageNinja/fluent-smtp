@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Digitalassetlinks;
+namespace FluentMail\Google\Service\Digitalassetlinks;
 
 class AndroidAppAsset extends \Google\Model
 {

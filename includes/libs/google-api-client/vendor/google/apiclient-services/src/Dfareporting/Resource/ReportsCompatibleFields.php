@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\CompatibleFields;
-use Google\Service\Dfareporting\Report;
+use FluentMail\Google\Service\Dfareporting\CompatibleFields;
+use FluentMail\Google\Service\Dfareporting\Report;
 
 /**
  * The "compatibleFields" collection of methods.

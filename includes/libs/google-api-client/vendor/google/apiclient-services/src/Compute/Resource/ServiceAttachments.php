@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Policy;
-use Google\Service\Compute\RegionSetPolicyRequest;
-use Google\Service\Compute\ServiceAttachment;
-use Google\Service\Compute\ServiceAttachmentAggregatedList;
-use Google\Service\Compute\ServiceAttachmentList;
-use Google\Service\Compute\TestPermissionsRequest;
-use Google\Service\Compute\TestPermissionsResponse;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Policy;
+use FluentMail\Google\Service\Compute\RegionSetPolicyRequest;
+use FluentMail\Google\Service\Compute\ServiceAttachment;
+use FluentMail\Google\Service\Compute\ServiceAttachmentAggregatedList;
+use FluentMail\Google\Service\Compute\ServiceAttachmentList;
+use FluentMail\Google\Service\Compute\TestPermissionsRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsResponse;
 
 /**
  * The "serviceAttachments" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Bigquery\Resource;
+namespace FluentMail\Google\Service\Bigquery\Resource;
 
-use Google\Service\Bigquery\ListModelsResponse;
-use Google\Service\Bigquery\Model;
+use FluentMail\Google\Service\Bigquery\ListModelsResponse;
+use FluentMail\Google\Service\Bigquery\Model;
 
 /**
  * The "models" collection of methods.

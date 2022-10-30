@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudAsset;
+namespace FluentMail\Google\Service\CloudAsset;
 
 class GoogleIdentityAccesscontextmanagerV1ServicePerimeterConfig extends \Google\Collection
 {

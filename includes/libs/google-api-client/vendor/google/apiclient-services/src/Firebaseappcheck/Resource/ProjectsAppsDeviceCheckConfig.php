@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Firebaseappcheck\Resource;
+namespace FluentMail\Google\Service\Firebaseappcheck\Resource;
 
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchGetDeviceCheckConfigsResponse;
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1DeviceCheckConfig;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchGetDeviceCheckConfigsResponse;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1DeviceCheckConfig;
 
 /**
  * The "deviceCheckConfig" collection of methods.

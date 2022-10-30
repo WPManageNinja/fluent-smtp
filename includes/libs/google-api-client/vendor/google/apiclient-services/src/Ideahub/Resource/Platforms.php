@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Ideahub\Resource;
+namespace FluentMail\Google\Service\Ideahub\Resource;
 
 /**
  * The "platforms" collection of methods.

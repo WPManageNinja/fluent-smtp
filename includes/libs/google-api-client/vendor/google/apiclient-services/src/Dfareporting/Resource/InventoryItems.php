@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\InventoryItem;
-use Google\Service\Dfareporting\InventoryItemsListResponse;
+use FluentMail\Google\Service\Dfareporting\InventoryItem;
+use FluentMail\Google\Service\Dfareporting\InventoryItemsListResponse;
 
 /**
  * The "inventoryItems" collection of methods.

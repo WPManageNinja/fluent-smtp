@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CertificateManager\Resource;
+namespace FluentMail\Google\Service\CertificateManager\Resource;
 
 /**
  * The "projects" collection of methods.

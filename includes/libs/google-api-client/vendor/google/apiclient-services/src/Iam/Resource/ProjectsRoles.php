@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Iam\Resource;
+namespace FluentMail\Google\Service\Iam\Resource;
 
-use Google\Service\Iam\CreateRoleRequest;
-use Google\Service\Iam\ListRolesResponse;
-use Google\Service\Iam\Role;
-use Google\Service\Iam\UndeleteRoleRequest;
+use FluentMail\Google\Service\Iam\CreateRoleRequest;
+use FluentMail\Google\Service\Iam\ListRolesResponse;
+use FluentMail\Google\Service\Iam\Role;
+use FluentMail\Google\Service\Iam\UndeleteRoleRequest;
 
 /**
  * The "roles" collection of methods.

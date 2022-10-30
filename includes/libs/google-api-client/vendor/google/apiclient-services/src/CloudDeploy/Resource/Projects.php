@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudDeploy\Resource;
+namespace FluentMail\Google\Service\CloudDeploy\Resource;
 
 /**
  * The "projects" collection of methods.

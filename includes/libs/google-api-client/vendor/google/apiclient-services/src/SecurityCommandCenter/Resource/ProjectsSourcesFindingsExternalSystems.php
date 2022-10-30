@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter\Resource;
+namespace FluentMail\Google\Service\SecurityCommandCenter\Resource;
 
-use Google\Service\SecurityCommandCenter\GoogleCloudSecuritycenterV1ExternalSystem;
+use FluentMail\Google\Service\SecurityCommandCenter\GoogleCloudSecuritycenterV1ExternalSystem;
 
 /**
  * The "externalSystems" collection of methods.

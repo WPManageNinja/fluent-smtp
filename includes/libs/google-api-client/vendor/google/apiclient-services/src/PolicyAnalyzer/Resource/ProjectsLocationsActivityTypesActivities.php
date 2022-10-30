@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\PolicyAnalyzer\Resource;
+namespace FluentMail\Google\Service\PolicyAnalyzer\Resource;
 
-use Google\Service\PolicyAnalyzer\GoogleCloudPolicyanalyzerV1QueryActivityResponse;
+use FluentMail\Google\Service\PolicyAnalyzer\GoogleCloudPolicyanalyzerV1QueryActivityResponse;
 
 /**
  * The "activities" collection of methods.

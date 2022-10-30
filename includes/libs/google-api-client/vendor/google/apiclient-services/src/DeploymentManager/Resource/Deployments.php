@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\DeploymentManager\Resource;
+namespace FluentMail\Google\Service\DeploymentManager\Resource;
 
-use Google\Service\DeploymentManager\Deployment;
-use Google\Service\DeploymentManager\DeploymentsCancelPreviewRequest;
-use Google\Service\DeploymentManager\DeploymentsListResponse;
-use Google\Service\DeploymentManager\DeploymentsStopRequest;
-use Google\Service\DeploymentManager\GlobalSetPolicyRequest;
-use Google\Service\DeploymentManager\Operation;
-use Google\Service\DeploymentManager\Policy;
-use Google\Service\DeploymentManager\TestPermissionsRequest;
-use Google\Service\DeploymentManager\TestPermissionsResponse;
+use FluentMail\Google\Service\DeploymentManager\Deployment;
+use FluentMail\Google\Service\DeploymentManager\DeploymentsCancelPreviewRequest;
+use FluentMail\Google\Service\DeploymentManager\DeploymentsListResponse;
+use FluentMail\Google\Service\DeploymentManager\DeploymentsStopRequest;
+use FluentMail\Google\Service\DeploymentManager\GlobalSetPolicyRequest;
+use FluentMail\Google\Service\DeploymentManager\Operation;
+use FluentMail\Google\Service\DeploymentManager\Policy;
+use FluentMail\Google\Service\DeploymentManager\TestPermissionsRequest;
+use FluentMail\Google\Service\DeploymentManager\TestPermissionsResponse;
 
 /**
  * The "deployments" collection of methods.

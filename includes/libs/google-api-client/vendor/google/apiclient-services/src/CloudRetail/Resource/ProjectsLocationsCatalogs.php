@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\CloudRetail\Resource;
+namespace FluentMail\Google\Service\CloudRetail\Resource;
 
-use Google\Service\CloudRetail\GoogleCloudRetailV2AttributesConfig;
-use Google\Service\CloudRetail\GoogleCloudRetailV2Catalog;
-use Google\Service\CloudRetail\GoogleCloudRetailV2CompleteQueryResponse;
-use Google\Service\CloudRetail\GoogleCloudRetailV2CompletionConfig;
-use Google\Service\CloudRetail\GoogleCloudRetailV2GetDefaultBranchResponse;
-use Google\Service\CloudRetail\GoogleCloudRetailV2ListCatalogsResponse;
-use Google\Service\CloudRetail\GoogleCloudRetailV2SetDefaultBranchRequest;
-use Google\Service\CloudRetail\GoogleProtobufEmpty;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2AttributesConfig;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2Catalog;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2CompleteQueryResponse;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2CompletionConfig;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2GetDefaultBranchResponse;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2ListCatalogsResponse;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2SetDefaultBranchRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleProtobufEmpty;
 
 /**
  * The "catalogs" collection of methods.

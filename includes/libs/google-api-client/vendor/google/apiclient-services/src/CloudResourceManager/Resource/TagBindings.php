@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudResourceManager\Resource;
+namespace FluentMail\Google\Service\CloudResourceManager\Resource;
 
-use Google\Service\CloudResourceManager\ListTagBindingsResponse;
-use Google\Service\CloudResourceManager\Operation;
-use Google\Service\CloudResourceManager\TagBinding;
+use FluentMail\Google\Service\CloudResourceManager\ListTagBindingsResponse;
+use FluentMail\Google\Service\CloudResourceManager\Operation;
+use FluentMail\Google\Service\CloudResourceManager\TagBinding;
 
 /**
  * The "tagBindings" collection of methods.

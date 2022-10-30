@@ -32,19 +32,19 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\Common;
+namespace FluentMail\phpseclib3\Crypt\Common;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Crypt\Blowfish;
-use phpseclib3\Crypt\Hash;
-use phpseclib3\Exception\BadDecryptionException;
-use phpseclib3\Exception\BadModeException;
-use phpseclib3\Exception\InconsistentSetupException;
-use phpseclib3\Exception\InsufficientSetupException;
-use phpseclib3\Exception\UnsupportedAlgorithmException;
-use phpseclib3\Math\BigInteger;
-use phpseclib3\Math\BinaryField;
-use phpseclib3\Math\PrimeField;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Crypt\Blowfish;
+use FluentMail\phpseclib3\Crypt\Hash;
+use FluentMail\phpseclib3\Exception\BadDecryptionException;
+use FluentMail\phpseclib3\Exception\BadModeException;
+use FluentMail\phpseclib3\Exception\InconsistentSetupException;
+use FluentMail\phpseclib3\Exception\InsufficientSetupException;
+use FluentMail\phpseclib3\Exception\UnsupportedAlgorithmException;
+use FluentMail\phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Math\BinaryField;
+use FluentMail\phpseclib3\Math\PrimeField;
 
 /**
  * Base Class for all \phpseclib3\Crypt\* cipher classes

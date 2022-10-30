@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\DirectoryChromeosdevicesIssueCommandRequest;
-use Google\Service\Directory\DirectoryChromeosdevicesIssueCommandResponse;
+use FluentMail\Google\Service\Directory\DirectoryChromeosdevicesIssueCommandRequest;
+use FluentMail\Google\Service\Directory\DirectoryChromeosdevicesIssueCommandResponse;
 
 /**
  * The "chromeos" collection of methods.

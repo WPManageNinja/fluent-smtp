@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Appengine\Resource;
+namespace FluentMail\Google\Service\Appengine\Resource;
 
-use Google\Service\Appengine\ListLocationsResponse;
-use Google\Service\Appengine\Location;
+use FluentMail\Google\Service\Appengine\ListLocationsResponse;
+use FluentMail\Google\Service\Appengine\Location;
 
 /**
  * The "locations" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Tasks\Resource;
+namespace FluentMail\Google\Service\Tasks\Resource;
 
-use Google\Service\Tasks\Task;
-use Google\Service\Tasks\Tasks as TasksModel;
+use FluentMail\Google\Service\Tasks\Task;
+use FluentMail\Google\Service\Tasks\Tasks as TasksModel;
 
 /**
  * The "tasks" collection of methods.

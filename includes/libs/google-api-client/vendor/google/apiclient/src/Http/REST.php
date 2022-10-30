@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-namespace Google\Http;
+namespace FluentMail\Google\Http;
 
-use Google\Auth\HttpHandler\HttpHandlerFactory;
-use Google\Service\Exception as GoogleServiceException;
-use Google\Task\Runner;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Psr7\Response;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use FluentMail\Google\Auth\HttpHandler\HttpHandlerFactory;
+use FluentMail\Google\Service\Exception as GoogleServiceException;
+use FluentMail\Google\Task\Runner;
+use FluentMail\GuzzleHttp\ClientInterface;
+use FluentMail\GuzzleHttp\Exception\RequestException;
+use FluentMail\GuzzleHttp\Psr7\Response;
+use FluentMail\Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\ResponseInterface;
 
 /**
  * This class implements the RESTful transport of apiServiceRequest()'s

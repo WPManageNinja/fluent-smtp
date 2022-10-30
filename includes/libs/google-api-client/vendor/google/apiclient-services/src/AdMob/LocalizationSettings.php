@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AdMob;
+namespace FluentMail\Google\Service\AdMob;
 
 class LocalizationSettings extends \Google\Model
 {

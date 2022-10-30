@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Keep;
+namespace FluentMail\Google\Service\Keep;
 
 class BatchCreatePermissionsRequest extends \Google\Collection
 {

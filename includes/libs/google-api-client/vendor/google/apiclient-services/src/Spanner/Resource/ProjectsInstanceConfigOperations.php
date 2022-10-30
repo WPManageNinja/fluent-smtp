@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Spanner\Resource;
+namespace FluentMail\Google\Service\Spanner\Resource;
 
-use Google\Service\Spanner\ListInstanceConfigOperationsResponse;
+use FluentMail\Google\Service\Spanner\ListInstanceConfigOperationsResponse;
 
 /**
  * The "instanceConfigOperations" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\AcceleratorType;
-use Google\Service\Compute\AcceleratorTypeAggregatedList;
-use Google\Service\Compute\AcceleratorTypeList;
+use FluentMail\Google\Service\Compute\AcceleratorType;
+use FluentMail\Google\Service\Compute\AcceleratorTypeAggregatedList;
+use FluentMail\Google\Service\Compute\AcceleratorTypeList;
 
 /**
  * The "acceleratorTypes" collection of methods.

@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\RemoteBuildExecution\Resource;
+namespace FluentMail\Google\Service\RemoteBuildExecution\Resource;
 
-use Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2BatchReadBlobsRequest;
-use Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2BatchReadBlobsResponse;
-use Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2BatchUpdateBlobsRequest;
-use Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2BatchUpdateBlobsResponse;
-use Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2FindMissingBlobsRequest;
-use Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2FindMissingBlobsResponse;
-use Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2GetTreeResponse;
+use FluentMail\Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2BatchReadBlobsRequest;
+use FluentMail\Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2BatchReadBlobsResponse;
+use FluentMail\Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2BatchUpdateBlobsRequest;
+use FluentMail\Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2BatchUpdateBlobsResponse;
+use FluentMail\Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2FindMissingBlobsRequest;
+use FluentMail\Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2FindMissingBlobsResponse;
+use FluentMail\Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2GetTreeResponse;
 
 /**
  * The "blobs" collection of methods.

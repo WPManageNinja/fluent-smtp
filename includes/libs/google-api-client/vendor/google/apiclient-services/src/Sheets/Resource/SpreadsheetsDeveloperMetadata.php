@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Sheets\Resource;
+namespace FluentMail\Google\Service\Sheets\Resource;
 
-use Google\Service\Sheets\DeveloperMetadata;
-use Google\Service\Sheets\SearchDeveloperMetadataRequest;
-use Google\Service\Sheets\SearchDeveloperMetadataResponse;
+use FluentMail\Google\Service\Sheets\DeveloperMetadata;
+use FluentMail\Google\Service\Sheets\SearchDeveloperMetadataRequest;
+use FluentMail\Google\Service\Sheets\SearchDeveloperMetadataResponse;
 
 /**
  * The "developerMetadata" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\Schema;
-use Google\Service\Directory\Schemas as SchemasModel;
+use FluentMail\Google\Service\Directory\Schema;
+use FluentMail\Google\Service\Directory\Schemas as SchemasModel;
 
 /**
  * The "schemas" collection of methods.

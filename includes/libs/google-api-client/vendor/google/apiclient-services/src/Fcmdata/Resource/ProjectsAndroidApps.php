@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Fcmdata\Resource;
+namespace FluentMail\Google\Service\Fcmdata\Resource;
 
 /**
  * The "androidApps" collection of methods.

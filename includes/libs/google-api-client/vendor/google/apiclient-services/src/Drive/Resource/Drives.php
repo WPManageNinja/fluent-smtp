@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Drive\Resource;
+namespace FluentMail\Google\Service\Drive\Resource;
 
-use Google\Service\Drive\Drive;
-use Google\Service\Drive\DriveList;
+use FluentMail\Google\Service\Drive\Drive;
+use FluentMail\Google\Service\Drive\DriveList;
 
 /**
  * The "drives" collection of methods.

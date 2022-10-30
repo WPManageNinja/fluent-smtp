@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Blogger\Resource;
+namespace FluentMail\Google\Service\Blogger\Resource;
 
-use Google\Service\Blogger\Page;
-use Google\Service\Blogger\PageList;
+use FluentMail\Google\Service\Blogger\Page;
+use FluentMail\Google\Service\Blogger\PageList;
 
 /**
  * The "pages" collection of methods.

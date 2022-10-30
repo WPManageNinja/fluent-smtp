@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PubsubLite;
+namespace FluentMail\Google\Service\PubsubLite;
 
 class ListOperationsResponse extends \Google\Collection
 {

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudRun\Resource;
+namespace FluentMail\Google\Service\CloudRun\Resource;
 
-use Google\Service\CloudRun\Configuration;
-use Google\Service\CloudRun\ListConfigurationsResponse;
+use FluentMail\Google\Service\CloudRun\Configuration;
+use FluentMail\Google\Service\CloudRun\ListConfigurationsResponse;
 
 /**
  * The "configurations" collection of methods.

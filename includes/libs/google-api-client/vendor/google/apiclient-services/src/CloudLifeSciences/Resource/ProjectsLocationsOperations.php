@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudLifeSciences\Resource;
+namespace FluentMail\Google\Service\CloudLifeSciences\Resource;
 
-use Google\Service\CloudLifeSciences\CancelOperationRequest;
-use Google\Service\CloudLifeSciences\LifesciencesEmpty;
-use Google\Service\CloudLifeSciences\ListOperationsResponse;
-use Google\Service\CloudLifeSciences\Operation;
+use FluentMail\Google\Service\CloudLifeSciences\CancelOperationRequest;
+use FluentMail\Google\Service\CloudLifeSciences\LifesciencesEmpty;
+use FluentMail\Google\Service\CloudLifeSciences\ListOperationsResponse;
+use FluentMail\Google\Service\CloudLifeSciences\Operation;
 
 /**
  * The "operations" collection of methods.

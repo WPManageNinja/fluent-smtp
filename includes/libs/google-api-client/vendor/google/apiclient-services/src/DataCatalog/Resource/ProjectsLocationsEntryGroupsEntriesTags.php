@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\DataCatalog\Resource;
+namespace FluentMail\Google\Service\DataCatalog\Resource;
 
-use Google\Service\DataCatalog\DatacatalogEmpty;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1ListTagsResponse;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1Tag;
+use FluentMail\Google\Service\DataCatalog\DatacatalogEmpty;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1ListTagsResponse;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1Tag;
 
 /**
  * The "tags" collection of methods.

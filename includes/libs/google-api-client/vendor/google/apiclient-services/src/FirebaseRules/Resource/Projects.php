@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseRules\Resource;
+namespace FluentMail\Google\Service\FirebaseRules\Resource;
 
-use Google\Service\FirebaseRules\TestRulesetRequest;
-use Google\Service\FirebaseRules\TestRulesetResponse;
+use FluentMail\Google\Service\FirebaseRules\TestRulesetRequest;
+use FluentMail\Google\Service\FirebaseRules\TestRulesetResponse;
 
 /**
  * The "projects" collection of methods.

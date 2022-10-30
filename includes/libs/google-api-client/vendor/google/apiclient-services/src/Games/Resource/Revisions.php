@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Games\Resource;
+namespace FluentMail\Google\Service\Games\Resource;
 
-use Google\Service\Games\RevisionCheckResponse;
+use FluentMail\Google\Service\Games\RevisionCheckResponse;
 
 /**
  * The "revisions" collection of methods.

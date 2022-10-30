@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\NetworkManagement;
+namespace FluentMail\Google\Service\NetworkManagement;
 
 class ListConnectivityTestsResponse extends \Google\Collection
 {

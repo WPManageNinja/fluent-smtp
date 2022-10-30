@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ChromePolicy\Resource;
+namespace FluentMail\Google\Service\ChromePolicy\Resource;
 
-use Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1ResolveRequest;
-use Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1ResolveResponse;
+use FluentMail\Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1ResolveRequest;
+use FluentMail\Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1ResolveResponse;
 
 /**
  * The "policies" collection of methods.

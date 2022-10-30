@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudBillingBudget\Resource;
+namespace FluentMail\Google\Service\CloudBillingBudget\Resource;
 
 /**
  * The "billingAccounts" collection of methods.

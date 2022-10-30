@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Recommender\Resource;
+namespace FluentMail\Google\Service\Recommender\Resource;
 
-use Google\Service\Recommender\GoogleCloudRecommenderV1Insight;
-use Google\Service\Recommender\GoogleCloudRecommenderV1ListInsightsResponse;
-use Google\Service\Recommender\GoogleCloudRecommenderV1MarkInsightAcceptedRequest;
+use FluentMail\Google\Service\Recommender\GoogleCloudRecommenderV1Insight;
+use FluentMail\Google\Service\Recommender\GoogleCloudRecommenderV1ListInsightsResponse;
+use FluentMail\Google\Service\Recommender\GoogleCloudRecommenderV1MarkInsightAcceptedRequest;
 
 /**
  * The "insights" collection of methods.

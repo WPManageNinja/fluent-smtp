@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseHosting;
+namespace FluentMail\Google\Service\FirebaseHosting;
 
 class ListOperationsResponse extends \Google\Collection
 {

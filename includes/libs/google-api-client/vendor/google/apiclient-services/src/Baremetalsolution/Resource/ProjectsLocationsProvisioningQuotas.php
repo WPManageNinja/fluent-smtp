@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
-use Google\Service\Baremetalsolution\ListProvisioningQuotasResponse;
+use FluentMail\Google\Service\Baremetalsolution\ListProvisioningQuotasResponse;
 
 /**
  * The "provisioningQuotas" collection of methods.

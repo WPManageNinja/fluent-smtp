@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\AssignedTargetingOption;
-use Google\Service\DisplayVideo\DisplayvideoEmpty;
-use Google\Service\DisplayVideo\ListLineItemAssignedTargetingOptionsResponse;
+use FluentMail\Google\Service\DisplayVideo\AssignedTargetingOption;
+use FluentMail\Google\Service\DisplayVideo\DisplayvideoEmpty;
+use FluentMail\Google\Service\DisplayVideo\ListLineItemAssignedTargetingOptionsResponse;
 
 /**
  * The "assignedTargetingOptions" collection of methods.

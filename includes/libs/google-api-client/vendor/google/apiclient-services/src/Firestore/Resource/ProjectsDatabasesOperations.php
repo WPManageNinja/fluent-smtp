@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Firestore\Resource;
+namespace FluentMail\Google\Service\Firestore\Resource;
 
-use Google\Service\Firestore\FirestoreEmpty;
-use Google\Service\Firestore\GoogleLongrunningCancelOperationRequest;
-use Google\Service\Firestore\GoogleLongrunningListOperationsResponse;
-use Google\Service\Firestore\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Firestore\FirestoreEmpty;
+use FluentMail\Google\Service\Firestore\GoogleLongrunningCancelOperationRequest;
+use FluentMail\Google\Service\Firestore\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\Firestore\GoogleLongrunningOperation;
 
 /**
  * The "operations" collection of methods.

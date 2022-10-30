@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\WorkflowExecutions;
+namespace FluentMail\Google\Service\WorkflowExecutions;
 
 class TriggerPubsubExecutionRequest extends \Google\Model
 {

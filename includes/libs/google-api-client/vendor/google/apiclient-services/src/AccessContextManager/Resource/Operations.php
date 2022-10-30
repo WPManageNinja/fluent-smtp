@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\AccessContextManager\Resource;
+namespace FluentMail\Google\Service\AccessContextManager\Resource;
 
-use Google\Service\AccessContextManager\AccesscontextmanagerEmpty;
-use Google\Service\AccessContextManager\CancelOperationRequest;
-use Google\Service\AccessContextManager\ListOperationsResponse;
-use Google\Service\AccessContextManager\Operation;
+use FluentMail\Google\Service\AccessContextManager\AccesscontextmanagerEmpty;
+use FluentMail\Google\Service\AccessContextManager\CancelOperationRequest;
+use FluentMail\Google\Service\AccessContextManager\ListOperationsResponse;
+use FluentMail\Google\Service\AccessContextManager\Operation;
 
 /**
  * The "operations" collection of methods.

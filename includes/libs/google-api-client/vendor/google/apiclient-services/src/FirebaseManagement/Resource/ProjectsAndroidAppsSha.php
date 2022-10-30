@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseManagement\Resource;
+namespace FluentMail\Google\Service\FirebaseManagement\Resource;
 
-use Google\Service\FirebaseManagement\FirebaseEmpty;
-use Google\Service\FirebaseManagement\ListShaCertificatesResponse;
-use Google\Service\FirebaseManagement\ShaCertificate;
+use FluentMail\Google\Service\FirebaseManagement\FirebaseEmpty;
+use FluentMail\Google\Service\FirebaseManagement\ListShaCertificatesResponse;
+use FluentMail\Google\Service\FirebaseManagement\ShaCertificate;
 
 /**
  * The "sha" collection of methods.

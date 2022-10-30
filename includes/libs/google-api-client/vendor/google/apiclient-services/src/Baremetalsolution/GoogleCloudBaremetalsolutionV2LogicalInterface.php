@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution;
+namespace FluentMail\Google\Service\Baremetalsolution;
 
 class GoogleCloudBaremetalsolutionV2LogicalInterface extends \Google\Collection
 {

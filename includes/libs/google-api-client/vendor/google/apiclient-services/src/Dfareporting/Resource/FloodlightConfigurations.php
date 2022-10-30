@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\FloodlightConfiguration;
-use Google\Service\Dfareporting\FloodlightConfigurationsListResponse;
+use FluentMail\Google\Service\Dfareporting\FloodlightConfiguration;
+use FluentMail\Google\Service\Dfareporting\FloodlightConfigurationsListResponse;
 
 /**
  * The "floodlightConfigurations" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
-use Google\Service\Baremetalsolution\BaremetalsolutionEmpty;
-use Google\Service\Baremetalsolution\ListSnapshotSchedulePoliciesResponse;
-use Google\Service\Baremetalsolution\SnapshotSchedulePolicy;
+use FluentMail\Google\Service\Baremetalsolution\BaremetalsolutionEmpty;
+use FluentMail\Google\Service\Baremetalsolution\ListSnapshotSchedulePoliciesResponse;
+use FluentMail\Google\Service\Baremetalsolution\SnapshotSchedulePolicy;
 
 /**
  * The "snapshotSchedulePolicies" collection of methods.

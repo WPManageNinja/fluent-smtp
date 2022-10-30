@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog;
+namespace FluentMail\Monolog;
 
 final class Utils
 {

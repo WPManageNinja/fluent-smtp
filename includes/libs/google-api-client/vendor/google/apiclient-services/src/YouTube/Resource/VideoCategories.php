@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\VideoCategoryListResponse;
+use FluentMail\Google\Service\YouTube\VideoCategoryListResponse;
 
 /**
  * The "videoCategories" collection of methods.

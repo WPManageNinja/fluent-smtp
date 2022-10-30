@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Assuredworkloads;
+namespace FluentMail\Google\Service\Assuredworkloads;
 
 class GoogleCloudAssuredworkloadsV1ListViolationsResponse extends \Google\Collection
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace GuzzleHttp\Psr7;
+namespace FluentMail\GuzzleHttp\Psr7;
 
-use GuzzleHttp\Psr7\Exception\MalformedUriException;
-use Psr\Http\Message\UriInterface;
+use FluentMail\GuzzleHttp\Psr7\Exception\MalformedUriException;
+use FluentMail\Psr\Http\Message\UriInterface;
 
 /**
  * PSR-7 URI implementation.

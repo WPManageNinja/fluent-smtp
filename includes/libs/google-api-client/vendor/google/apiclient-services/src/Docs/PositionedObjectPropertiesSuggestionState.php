@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Docs;
+namespace FluentMail\Google\Service\Docs;
 
 class PositionedObjectPropertiesSuggestionState extends \Google\Model
 {

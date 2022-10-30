@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudDebugger;
+namespace FluentMail\Google\Service\CloudDebugger;
 
 class SetBreakpointResponse extends \Google\Model
 {

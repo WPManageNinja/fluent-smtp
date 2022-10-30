@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\BigtableAdmin\Resource;
+namespace FluentMail\Google\Service\BigtableAdmin\Resource;
 
-use Google\Service\BigtableAdmin\BigtableadminEmpty;
-use Google\Service\BigtableAdmin\CreateInstanceRequest;
-use Google\Service\BigtableAdmin\GetIamPolicyRequest;
-use Google\Service\BigtableAdmin\Instance;
-use Google\Service\BigtableAdmin\ListInstancesResponse;
-use Google\Service\BigtableAdmin\Operation;
-use Google\Service\BigtableAdmin\Policy;
-use Google\Service\BigtableAdmin\SetIamPolicyRequest;
-use Google\Service\BigtableAdmin\TestIamPermissionsRequest;
-use Google\Service\BigtableAdmin\TestIamPermissionsResponse;
+use FluentMail\Google\Service\BigtableAdmin\BigtableadminEmpty;
+use FluentMail\Google\Service\BigtableAdmin\CreateInstanceRequest;
+use FluentMail\Google\Service\BigtableAdmin\GetIamPolicyRequest;
+use FluentMail\Google\Service\BigtableAdmin\Instance;
+use FluentMail\Google\Service\BigtableAdmin\ListInstancesResponse;
+use FluentMail\Google\Service\BigtableAdmin\Operation;
+use FluentMail\Google\Service\BigtableAdmin\Policy;
+use FluentMail\Google\Service\BigtableAdmin\SetIamPolicyRequest;
+use FluentMail\Google\Service\BigtableAdmin\TestIamPermissionsRequest;
+use FluentMail\Google\Service\BigtableAdmin\TestIamPermissionsResponse;
 
 /**
  * The "instances" collection of methods.

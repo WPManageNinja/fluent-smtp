@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
-use Google\Service\Baremetalsolution\ListNetworkUsageResponse;
-use Google\Service\Baremetalsolution\ListNetworksResponse;
-use Google\Service\Baremetalsolution\Network;
-use Google\Service\Baremetalsolution\Operation;
+use FluentMail\Google\Service\Baremetalsolution\ListNetworkUsageResponse;
+use FluentMail\Google\Service\Baremetalsolution\ListNetworksResponse;
+use FluentMail\Google\Service\Baremetalsolution\Network;
+use FluentMail\Google\Service\Baremetalsolution\Operation;
 
 /**
  * The "networks" collection of methods.

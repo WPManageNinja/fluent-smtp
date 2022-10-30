@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Ideahub;
+namespace FluentMail\Google\Service\Ideahub;
 
 class GoogleSearchIdeahubV1betaListIdeasResponse extends \Google\Collection
 {

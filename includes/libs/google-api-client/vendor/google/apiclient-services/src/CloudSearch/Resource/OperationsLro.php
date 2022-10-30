@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
-use Google\Service\CloudSearch\ListOperationsResponse;
+use FluentMail\Google\Service\CloudSearch\ListOperationsResponse;
 
 /**
  * The "lro" collection of methods.

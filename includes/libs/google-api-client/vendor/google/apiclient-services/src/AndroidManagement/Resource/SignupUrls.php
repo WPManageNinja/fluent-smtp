@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidManagement\Resource;
+namespace FluentMail\Google\Service\AndroidManagement\Resource;
 
-use Google\Service\AndroidManagement\SignupUrl;
+use FluentMail\Google\Service\AndroidManagement\SignupUrl;
 
 /**
  * The "signupUrls" collection of methods.

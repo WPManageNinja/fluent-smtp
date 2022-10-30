@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudVideoIntelligence\Resource;
+namespace FluentMail\Google\Service\CloudVideoIntelligence\Resource;
 
-use Google\Service\CloudVideoIntelligence\GoogleLongrunningOperation;
-use Google\Service\CloudVideoIntelligence\GoogleProtobufEmpty;
+use FluentMail\Google\Service\CloudVideoIntelligence\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudVideoIntelligence\GoogleProtobufEmpty;
 
 /**
  * The "operations" collection of methods.

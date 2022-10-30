@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Speech\Resource;
+namespace FluentMail\Google\Service\Speech\Resource;
 
 /**
  * The "projects" collection of methods.

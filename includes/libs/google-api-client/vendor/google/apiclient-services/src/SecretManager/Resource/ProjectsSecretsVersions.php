@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\SecretManager\Resource;
+namespace FluentMail\Google\Service\SecretManager\Resource;
 
-use Google\Service\SecretManager\AccessSecretVersionResponse;
-use Google\Service\SecretManager\DestroySecretVersionRequest;
-use Google\Service\SecretManager\DisableSecretVersionRequest;
-use Google\Service\SecretManager\EnableSecretVersionRequest;
-use Google\Service\SecretManager\ListSecretVersionsResponse;
-use Google\Service\SecretManager\SecretVersion;
+use FluentMail\Google\Service\SecretManager\AccessSecretVersionResponse;
+use FluentMail\Google\Service\SecretManager\DestroySecretVersionRequest;
+use FluentMail\Google\Service\SecretManager\DisableSecretVersionRequest;
+use FluentMail\Google\Service\SecretManager\EnableSecretVersionRequest;
+use FluentMail\Google\Service\SecretManager\ListSecretVersionsResponse;
+use FluentMail\Google\Service\SecretManager\SecretVersion;
 
 /**
  * The "versions" collection of methods.

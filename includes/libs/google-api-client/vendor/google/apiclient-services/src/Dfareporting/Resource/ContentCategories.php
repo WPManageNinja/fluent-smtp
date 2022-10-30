@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\ContentCategoriesListResponse;
-use Google\Service\Dfareporting\ContentCategory;
+use FluentMail\Google\Service\Dfareporting\ContentCategoriesListResponse;
+use FluentMail\Google\Service\Dfareporting\ContentCategory;
 
 /**
  * The "contentCategories" collection of methods.

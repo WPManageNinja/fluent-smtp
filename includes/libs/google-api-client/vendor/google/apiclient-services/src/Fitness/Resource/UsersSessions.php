@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Fitness\Resource;
+namespace FluentMail\Google\Service\Fitness\Resource;
 
-use Google\Service\Fitness\ListSessionsResponse;
-use Google\Service\Fitness\Session;
+use FluentMail\Google\Service\Fitness\ListSessionsResponse;
+use FluentMail\Google\Service\Fitness\Session;
 
 /**
  * The "sessions" collection of methods.

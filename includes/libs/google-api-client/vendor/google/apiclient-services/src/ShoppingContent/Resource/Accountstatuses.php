@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\AccountStatus;
-use Google\Service\ShoppingContent\AccountstatusesCustomBatchRequest;
-use Google\Service\ShoppingContent\AccountstatusesCustomBatchResponse;
-use Google\Service\ShoppingContent\AccountstatusesListResponse;
+use FluentMail\Google\Service\ShoppingContent\AccountStatus;
+use FluentMail\Google\Service\ShoppingContent\AccountstatusesCustomBatchRequest;
+use FluentMail\Google\Service\ShoppingContent\AccountstatusesCustomBatchResponse;
+use FluentMail\Google\Service\ShoppingContent\AccountstatusesListResponse;
 
 /**
  * The "accountstatuses" collection of methods.

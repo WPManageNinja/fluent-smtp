@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudBuild\Resource;
+namespace FluentMail\Google\Service\CloudBuild\Resource;
 
-use Google\Service\CloudBuild\ListWorkerPoolsResponse;
-use Google\Service\CloudBuild\Operation;
-use Google\Service\CloudBuild\WorkerPool;
+use FluentMail\Google\Service\CloudBuild\ListWorkerPoolsResponse;
+use FluentMail\Google\Service\CloudBuild\Operation;
+use FluentMail\Google\Service\CloudBuild\WorkerPool;
 
 /**
  * The "workerPools" collection of methods.

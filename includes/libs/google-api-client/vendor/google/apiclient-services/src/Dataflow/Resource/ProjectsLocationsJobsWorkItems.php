@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Dataflow\Resource;
+namespace FluentMail\Google\Service\Dataflow\Resource;
 
-use Google\Service\Dataflow\LeaseWorkItemRequest;
-use Google\Service\Dataflow\LeaseWorkItemResponse;
-use Google\Service\Dataflow\ReportWorkItemStatusRequest;
-use Google\Service\Dataflow\ReportWorkItemStatusResponse;
+use FluentMail\Google\Service\Dataflow\LeaseWorkItemRequest;
+use FluentMail\Google\Service\Dataflow\LeaseWorkItemResponse;
+use FluentMail\Google\Service\Dataflow\ReportWorkItemStatusRequest;
+use FluentMail\Google\Service\Dataflow\ReportWorkItemStatusResponse;
 
 /**
  * The "workItems" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\AccountStatus;
+use FluentMail\Google\Service\ShoppingContent\AccountStatus;
 
 /**
  * The "accountstatusesbyexternalsellerid" collection of methods.

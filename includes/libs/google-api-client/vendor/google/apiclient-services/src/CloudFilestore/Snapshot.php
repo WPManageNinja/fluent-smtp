@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudFilestore;
+namespace FluentMail\Google\Service\CloudFilestore;
 
 class Snapshot extends \Google\Model
 {

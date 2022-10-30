@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryDataTransfer\Resource;
+namespace FluentMail\Google\Service\BigQueryDataTransfer\Resource;
 
-use Google\Service\BigQueryDataTransfer\ListTransferLogsResponse;
+use FluentMail\Google\Service\BigQueryDataTransfer\ListTransferLogsResponse;
 
 /**
  * The "transferLogs" collection of methods.

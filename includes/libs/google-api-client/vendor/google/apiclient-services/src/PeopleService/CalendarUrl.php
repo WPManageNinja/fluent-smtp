@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PeopleService;
+namespace FluentMail\Google\Service\PeopleService;
 
 class CalendarUrl extends \Google\Model
 {

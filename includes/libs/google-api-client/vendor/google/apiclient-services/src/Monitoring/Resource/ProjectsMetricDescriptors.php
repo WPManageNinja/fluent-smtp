@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
-use Google\Service\Monitoring\ListMetricDescriptorsResponse;
-use Google\Service\Monitoring\MetricDescriptor;
-use Google\Service\Monitoring\MonitoringEmpty;
+use FluentMail\Google\Service\Monitoring\ListMetricDescriptorsResponse;
+use FluentMail\Google\Service\Monitoring\MetricDescriptor;
+use FluentMail\Google\Service\Monitoring\MonitoringEmpty;
 
 /**
  * The "metricDescriptors" collection of methods.

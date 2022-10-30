@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Script\Resource;
+namespace FluentMail\Google\Service\Script\Resource;
 
-use Google\Service\Script\ListVersionsResponse;
-use Google\Service\Script\Version;
+use FluentMail\Google\Service\Script\ListVersionsResponse;
+use FluentMail\Google\Service\Script\Version;
 
 /**
  * The "versions" collection of methods.

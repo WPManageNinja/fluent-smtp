@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\Privileges as PrivilegesModel;
+use FluentMail\Google\Service\Directory\Privileges as PrivilegesModel;
 
 /**
  * The "privileges" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Vault\Resource;
+namespace FluentMail\Google\Service\Vault\Resource;
 
-use Google\Service\Vault\HeldAccount;
-use Google\Service\Vault\ListHeldAccountsResponse;
-use Google\Service\Vault\VaultEmpty;
+use FluentMail\Google\Service\Vault\HeldAccount;
+use FluentMail\Google\Service\Vault\ListHeldAccountsResponse;
+use FluentMail\Google\Service\Vault\VaultEmpty;
 
 /**
  * The "accounts" collection of methods.

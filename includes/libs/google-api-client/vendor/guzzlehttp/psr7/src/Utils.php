@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace GuzzleHttp\Psr7;
+namespace FluentMail\GuzzleHttp\Psr7;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UriInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Message\ServerRequestInterface;
+use FluentMail\Psr\Http\Message\StreamInterface;
+use FluentMail\Psr\Http\Message\UriInterface;
 
 final class Utils
 {

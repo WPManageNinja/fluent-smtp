@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
-use Google\Service\CloudSearch\CheckAccessResponse;
-use Google\Service\CloudSearch\Principal;
-use Google\Service\CloudSearch\SearchItemsByViewUrlRequest;
-use Google\Service\CloudSearch\SearchItemsByViewUrlResponse;
+use FluentMail\Google\Service\CloudSearch\CheckAccessResponse;
+use FluentMail\Google\Service\CloudSearch\Principal;
+use FluentMail\Google\Service\CloudSearch\SearchItemsByViewUrlRequest;
+use FluentMail\Google\Service\CloudSearch\SearchItemsByViewUrlResponse;
 
 /**
  * The "items" collection of methods.

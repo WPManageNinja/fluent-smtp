@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\PolyService\Resource;
+namespace FluentMail\Google\Service\PolyService\Resource;
 
-use Google\Service\PolyService\ListLikedAssetsResponse;
+use FluentMail\Google\Service\PolyService\ListLikedAssetsResponse;
 
 /**
  * The "likedassets" collection of methods.

@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\CloudKMS\Resource;
+namespace FluentMail\Google\Service\CloudKMS\Resource;
 
-use Google\Service\CloudKMS\KeyRing;
-use Google\Service\CloudKMS\ListKeyRingsResponse;
-use Google\Service\CloudKMS\Policy;
-use Google\Service\CloudKMS\SetIamPolicyRequest;
-use Google\Service\CloudKMS\TestIamPermissionsRequest;
-use Google\Service\CloudKMS\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudKMS\KeyRing;
+use FluentMail\Google\Service\CloudKMS\ListKeyRingsResponse;
+use FluentMail\Google\Service\CloudKMS\Policy;
+use FluentMail\Google\Service\CloudKMS\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudKMS\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudKMS\TestIamPermissionsResponse;
 
 /**
  * The "keyRings" collection of methods.

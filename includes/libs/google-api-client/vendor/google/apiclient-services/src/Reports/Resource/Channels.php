@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Reports\Resource;
+namespace FluentMail\Google\Service\Reports\Resource;
 
-use Google\Service\Reports\Channel;
+use FluentMail\Google\Service\Reports\Channel;
 
 /**
  * The "channels" collection of methods.

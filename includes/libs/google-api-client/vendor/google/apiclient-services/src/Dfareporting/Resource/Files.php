@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\DfareportingFile;
-use Google\Service\Dfareporting\FileList;
+use FluentMail\Google\Service\Dfareporting\DfareportingFile;
+use FluentMail\Google\Service\Dfareporting\FileList;
 
 /**
  * The "files" collection of methods.

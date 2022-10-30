@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\InstanceReference;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\TargetPool;
-use Google\Service\Compute\TargetPoolAggregatedList;
-use Google\Service\Compute\TargetPoolInstanceHealth;
-use Google\Service\Compute\TargetPoolList;
-use Google\Service\Compute\TargetPoolsAddHealthCheckRequest;
-use Google\Service\Compute\TargetPoolsAddInstanceRequest;
-use Google\Service\Compute\TargetPoolsRemoveHealthCheckRequest;
-use Google\Service\Compute\TargetPoolsRemoveInstanceRequest;
-use Google\Service\Compute\TargetReference;
+use FluentMail\Google\Service\Compute\InstanceReference;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\TargetPool;
+use FluentMail\Google\Service\Compute\TargetPoolAggregatedList;
+use FluentMail\Google\Service\Compute\TargetPoolInstanceHealth;
+use FluentMail\Google\Service\Compute\TargetPoolList;
+use FluentMail\Google\Service\Compute\TargetPoolsAddHealthCheckRequest;
+use FluentMail\Google\Service\Compute\TargetPoolsAddInstanceRequest;
+use FluentMail\Google\Service\Compute\TargetPoolsRemoveHealthCheckRequest;
+use FluentMail\Google\Service\Compute\TargetPoolsRemoveInstanceRequest;
+use FluentMail\Google\Service\Compute\TargetReference;
 
 /**
  * The "targetPools" collection of methods.

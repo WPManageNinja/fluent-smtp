@@ -9,9 +9,9 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\EC;
+namespace FluentMail\phpseclib3\Crypt\EC;
 
-use phpseclib3\Crypt\EC;
+use FluentMail\phpseclib3\Crypt\EC;
 
 /**
  * EC Parameters

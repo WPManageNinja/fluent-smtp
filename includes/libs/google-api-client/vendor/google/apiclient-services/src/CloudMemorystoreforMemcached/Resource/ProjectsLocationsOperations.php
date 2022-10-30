@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudMemorystoreforMemcached\Resource;
+namespace FluentMail\Google\Service\CloudMemorystoreforMemcached\Resource;
 
-use Google\Service\CloudMemorystoreforMemcached\CancelOperationRequest;
-use Google\Service\CloudMemorystoreforMemcached\ListOperationsResponse;
-use Google\Service\CloudMemorystoreforMemcached\MemcacheEmpty;
-use Google\Service\CloudMemorystoreforMemcached\Operation;
+use FluentMail\Google\Service\CloudMemorystoreforMemcached\CancelOperationRequest;
+use FluentMail\Google\Service\CloudMemorystoreforMemcached\ListOperationsResponse;
+use FluentMail\Google\Service\CloudMemorystoreforMemcached\MemcacheEmpty;
+use FluentMail\Google\Service\CloudMemorystoreforMemcached\Operation;
 
 /**
  * The "operations" collection of methods.

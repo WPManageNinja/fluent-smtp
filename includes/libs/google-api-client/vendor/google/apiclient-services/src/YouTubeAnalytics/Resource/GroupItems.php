@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\YouTubeAnalytics\Resource;
+namespace FluentMail\Google\Service\YouTubeAnalytics\Resource;
 
-use Google\Service\YouTubeAnalytics\EmptyResponse;
-use Google\Service\YouTubeAnalytics\GroupItem;
-use Google\Service\YouTubeAnalytics\ListGroupItemsResponse;
+use FluentMail\Google\Service\YouTubeAnalytics\EmptyResponse;
+use FluentMail\Google\Service\YouTubeAnalytics\GroupItem;
+use FluentMail\Google\Service\YouTubeAnalytics\ListGroupItemsResponse;
 
 /**
  * The "groupItems" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\Comment;
-use Google\Service\YouTube\CommentListResponse;
+use FluentMail\Google\Service\YouTube\Comment;
+use FluentMail\Google\Service\YouTube\CommentListResponse;
 
 /**
  * The "comments" collection of methods.

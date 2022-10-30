@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DataTransfer;
+namespace FluentMail\Google\Service\DataTransfer;
 
 class ApplicationsListResponse extends \Google\Collection
 {

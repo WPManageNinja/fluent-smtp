@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\DataLabeling\Resource;
+namespace FluentMail\Google\Service\DataLabeling\Resource;
 
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1Evaluation;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1Evaluation;
 
 /**
  * The "evaluations" collection of methods.

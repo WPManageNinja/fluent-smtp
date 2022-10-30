@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\AndroidManagement\Resource;
+namespace FluentMail\Google\Service\AndroidManagement\Resource;
 
-use Google\Service\AndroidManagement\AndroidmanagementEmpty;
-use Google\Service\AndroidManagement\ListWebAppsResponse;
-use Google\Service\AndroidManagement\WebApp;
+use FluentMail\Google\Service\AndroidManagement\AndroidmanagementEmpty;
+use FluentMail\Google\Service\AndroidManagement\ListWebAppsResponse;
+use FluentMail\Google\Service\AndroidManagement\WebApp;
 
 /**
  * The "webApps" collection of methods.

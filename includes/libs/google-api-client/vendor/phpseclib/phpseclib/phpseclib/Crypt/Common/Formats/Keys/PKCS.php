@@ -11,7 +11,7 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\Common\Formats\Keys;
+namespace FluentMail\phpseclib3\Crypt\Common\Formats\Keys;
 
 /**
  * PKCS1 Formatted Key Handler

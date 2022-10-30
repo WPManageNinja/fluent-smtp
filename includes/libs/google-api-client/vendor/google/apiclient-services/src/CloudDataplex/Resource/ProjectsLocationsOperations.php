@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudDataplex\Resource;
+namespace FluentMail\Google\Service\CloudDataplex\Resource;
 
-use Google\Service\CloudDataplex\DataplexEmpty;
-use Google\Service\CloudDataplex\GoogleLongrunningCancelOperationRequest;
-use Google\Service\CloudDataplex\GoogleLongrunningListOperationsResponse;
-use Google\Service\CloudDataplex\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudDataplex\DataplexEmpty;
+use FluentMail\Google\Service\CloudDataplex\GoogleLongrunningCancelOperationRequest;
+use FluentMail\Google\Service\CloudDataplex\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\CloudDataplex\GoogleLongrunningOperation;
 
 /**
  * The "operations" collection of methods.

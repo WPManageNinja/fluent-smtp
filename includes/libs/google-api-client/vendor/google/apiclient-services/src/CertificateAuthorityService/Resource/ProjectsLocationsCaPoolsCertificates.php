@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CertificateAuthorityService\Resource;
+namespace FluentMail\Google\Service\CertificateAuthorityService\Resource;
 
-use Google\Service\CertificateAuthorityService\Certificate;
-use Google\Service\CertificateAuthorityService\ListCertificatesResponse;
-use Google\Service\CertificateAuthorityService\RevokeCertificateRequest;
+use FluentMail\Google\Service\CertificateAuthorityService\Certificate;
+use FluentMail\Google\Service\CertificateAuthorityService\ListCertificatesResponse;
+use FluentMail\Google\Service\CertificateAuthorityService\RevokeCertificateRequest;
 
 /**
  * The "certificates" collection of methods.

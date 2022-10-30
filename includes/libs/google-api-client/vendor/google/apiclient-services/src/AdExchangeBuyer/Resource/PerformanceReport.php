@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyer\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyer\Resource;
 
-use Google\Service\AdExchangeBuyer\PerformanceReportList;
+use FluentMail\Google\Service\AdExchangeBuyer\PerformanceReportList;
 
 /**
  * The "performanceReport" collection of methods.

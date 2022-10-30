@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudTalentSolution\Resource;
+namespace FluentMail\Google\Service\CloudTalentSolution\Resource;
 
-use Google\Service\CloudTalentSolution\Company;
-use Google\Service\CloudTalentSolution\JobsEmpty;
-use Google\Service\CloudTalentSolution\ListCompaniesResponse;
+use FluentMail\Google\Service\CloudTalentSolution\Company;
+use FluentMail\Google\Service\CloudTalentSolution\JobsEmpty;
+use FluentMail\Google\Service\CloudTalentSolution\ListCompaniesResponse;
 
 /**
  * The "companies" collection of methods.

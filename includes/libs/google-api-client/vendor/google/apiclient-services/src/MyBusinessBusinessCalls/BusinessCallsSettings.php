@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessBusinessCalls;
+namespace FluentMail\Google\Service\MyBusinessBusinessCalls;
 
 class BusinessCallsSettings extends \Google\Model
 {

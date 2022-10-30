@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Networkconnectivity\Resource;
+namespace FluentMail\Google\Service\Networkconnectivity\Resource;
 
-use Google\Service\Networkconnectivity\GoogleLongrunningCancelOperationRequest;
-use Google\Service\Networkconnectivity\GoogleLongrunningListOperationsResponse;
-use Google\Service\Networkconnectivity\GoogleLongrunningOperation;
-use Google\Service\Networkconnectivity\NetworkconnectivityEmpty;
+use FluentMail\Google\Service\Networkconnectivity\GoogleLongrunningCancelOperationRequest;
+use FluentMail\Google\Service\Networkconnectivity\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\Networkconnectivity\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Networkconnectivity\NetworkconnectivityEmpty;
 
 /**
  * The "operations" collection of methods.

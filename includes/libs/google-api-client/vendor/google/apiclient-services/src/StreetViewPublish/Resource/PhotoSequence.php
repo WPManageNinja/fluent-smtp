@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\StreetViewPublish\Resource;
+namespace FluentMail\Google\Service\StreetViewPublish\Resource;
 
-use Google\Service\StreetViewPublish\Operation;
-use Google\Service\StreetViewPublish\PhotoSequence as PhotoSequenceModel;
-use Google\Service\StreetViewPublish\StreetviewpublishEmpty;
-use Google\Service\StreetViewPublish\UploadRef;
+use FluentMail\Google\Service\StreetViewPublish\Operation;
+use FluentMail\Google\Service\StreetViewPublish\PhotoSequence as PhotoSequenceModel;
+use FluentMail\Google\Service\StreetViewPublish\StreetviewpublishEmpty;
+use FluentMail\Google\Service\StreetViewPublish\UploadRef;
 
 /**
  * The "photoSequence" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Webmasters\Resource;
+namespace FluentMail\Google\Service\Webmasters\Resource;
 
-use Google\Service\Webmasters\SitesListResponse;
-use Google\Service\Webmasters\WmxSite;
+use FluentMail\Google\Service\Webmasters\SitesListResponse;
+use FluentMail\Google\Service\Webmasters\WmxSite;
 
 /**
  * The "sites" collection of methods.

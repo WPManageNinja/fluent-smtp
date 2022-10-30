@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessBusinessCalls\Resource;
+namespace FluentMail\Google\Service\MyBusinessBusinessCalls\Resource;
 
-use Google\Service\MyBusinessBusinessCalls\ListBusinessCallsInsightsResponse;
+use FluentMail\Google\Service\MyBusinessBusinessCalls\ListBusinessCallsInsightsResponse;
 
 /**
  * The "businesscallsinsights" collection of methods.

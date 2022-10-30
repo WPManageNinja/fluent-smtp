@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidManagement\Resource;
+namespace FluentMail\Google\Service\AndroidManagement\Resource;
 
-use Google\Service\AndroidManagement\WebToken;
+use FluentMail\Google\Service\AndroidManagement\WebToken;
 
 /**
  * The "webTokens" collection of methods.

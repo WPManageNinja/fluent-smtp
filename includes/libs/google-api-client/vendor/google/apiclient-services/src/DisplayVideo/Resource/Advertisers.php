@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\Advertiser;
-use Google\Service\DisplayVideo\AuditAdvertiserResponse;
-use Google\Service\DisplayVideo\BulkEditAdvertiserAssignedTargetingOptionsRequest;
-use Google\Service\DisplayVideo\BulkEditAdvertiserAssignedTargetingOptionsResponse;
-use Google\Service\DisplayVideo\BulkListAdvertiserAssignedTargetingOptionsResponse;
-use Google\Service\DisplayVideo\DisplayvideoEmpty;
-use Google\Service\DisplayVideo\ListAdvertisersResponse;
+use FluentMail\Google\Service\DisplayVideo\Advertiser;
+use FluentMail\Google\Service\DisplayVideo\AuditAdvertiserResponse;
+use FluentMail\Google\Service\DisplayVideo\BulkEditAdvertiserAssignedTargetingOptionsRequest;
+use FluentMail\Google\Service\DisplayVideo\BulkEditAdvertiserAssignedTargetingOptionsResponse;
+use FluentMail\Google\Service\DisplayVideo\BulkListAdvertiserAssignedTargetingOptionsResponse;
+use FluentMail\Google\Service\DisplayVideo\DisplayvideoEmpty;
+use FluentMail\Google\Service\DisplayVideo\ListAdvertisersResponse;
 
 /**
  * The "advertisers" collection of methods.

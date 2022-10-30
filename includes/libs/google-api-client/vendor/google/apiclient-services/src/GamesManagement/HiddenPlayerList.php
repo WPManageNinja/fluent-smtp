@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\GamesManagement;
+namespace FluentMail\Google\Service\GamesManagement;
 
 class HiddenPlayerList extends \Google\Collection
 {

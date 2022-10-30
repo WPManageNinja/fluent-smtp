@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Connectors\Resource;
+namespace FluentMail\Google\Service\Connectors\Resource;
 
-use Google\Service\Connectors\ListRuntimeEntitySchemasResponse;
+use FluentMail\Google\Service\Connectors\ListRuntimeEntitySchemasResponse;
 
 /**
  * The "runtimeEntitySchemas" collection of methods.

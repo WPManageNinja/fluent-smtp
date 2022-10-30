@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\AppEdit;
+use FluentMail\Google\Service\AndroidPublisher\AppEdit;
 
 /**
  * The "edits" collection of methods.

@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Processor;
+namespace FluentMail\Monolog\Processor;
 
-use Monolog\Utils;
+use FluentMail\Monolog\Utils;
 
 /**
  * Processes a record's message according to PSR-3 rules

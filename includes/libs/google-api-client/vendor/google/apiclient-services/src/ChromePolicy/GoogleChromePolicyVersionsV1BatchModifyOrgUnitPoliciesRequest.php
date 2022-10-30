@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ChromePolicy;
+namespace FluentMail\Google\Service\ChromePolicy;
 
 class GoogleChromePolicyVersionsV1BatchModifyOrgUnitPoliciesRequest extends \Google\Collection
 {

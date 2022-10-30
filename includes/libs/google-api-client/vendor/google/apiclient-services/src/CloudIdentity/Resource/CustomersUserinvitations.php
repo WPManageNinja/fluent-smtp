@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\CloudIdentity\Resource;
+namespace FluentMail\Google\Service\CloudIdentity\Resource;
 
-use Google\Service\CloudIdentity\CancelUserInvitationRequest;
-use Google\Service\CloudIdentity\IsInvitableUserResponse;
-use Google\Service\CloudIdentity\ListUserInvitationsResponse;
-use Google\Service\CloudIdentity\Operation;
-use Google\Service\CloudIdentity\SendUserInvitationRequest;
-use Google\Service\CloudIdentity\UserInvitation;
+use FluentMail\Google\Service\CloudIdentity\CancelUserInvitationRequest;
+use FluentMail\Google\Service\CloudIdentity\IsInvitableUserResponse;
+use FluentMail\Google\Service\CloudIdentity\ListUserInvitationsResponse;
+use FluentMail\Google\Service\CloudIdentity\Operation;
+use FluentMail\Google\Service\CloudIdentity\SendUserInvitationRequest;
+use FluentMail\Google\Service\CloudIdentity\UserInvitation;
 
 /**
  * The "userinvitations" collection of methods.

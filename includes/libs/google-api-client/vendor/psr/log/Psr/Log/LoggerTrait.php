@@ -1,6 +1,6 @@
 <?php
 
-namespace Psr\Log;
+namespace FluentMail\Psr\Log;
 
 /**
  * This is a simple Logger trait that classes unable to extend AbstractLogger

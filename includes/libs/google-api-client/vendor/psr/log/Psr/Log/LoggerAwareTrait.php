@@ -1,6 +1,6 @@
 <?php
 
-namespace Psr\Log;
+namespace FluentMail\Psr\Log;
 
 /**
  * Basic Implementation of LoggerAwareInterface.

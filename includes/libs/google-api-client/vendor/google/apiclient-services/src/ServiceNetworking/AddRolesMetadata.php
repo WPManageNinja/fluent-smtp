@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ServiceNetworking;
+namespace FluentMail\Google\Service\ServiceNetworking;
 
 class AddRolesMetadata extends \Google\Model
 {

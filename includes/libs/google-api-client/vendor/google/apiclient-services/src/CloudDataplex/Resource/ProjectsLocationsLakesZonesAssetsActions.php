@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudDataplex\Resource;
+namespace FluentMail\Google\Service\CloudDataplex\Resource;
 
-use Google\Service\CloudDataplex\GoogleCloudDataplexV1ListActionsResponse;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudDataplexV1ListActionsResponse;
 
 /**
  * The "actions" collection of methods.

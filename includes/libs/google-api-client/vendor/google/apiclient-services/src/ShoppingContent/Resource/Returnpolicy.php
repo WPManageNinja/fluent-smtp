@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\ReturnPolicy as ReturnPolicyModel;
-use Google\Service\ShoppingContent\ReturnpolicyCustomBatchRequest;
-use Google\Service\ShoppingContent\ReturnpolicyCustomBatchResponse;
-use Google\Service\ShoppingContent\ReturnpolicyListResponse;
+use FluentMail\Google\Service\ShoppingContent\ReturnPolicy as ReturnPolicyModel;
+use FluentMail\Google\Service\ShoppingContent\ReturnpolicyCustomBatchRequest;
+use FluentMail\Google\Service\ShoppingContent\ReturnpolicyCustomBatchResponse;
+use FluentMail\Google\Service\ShoppingContent\ReturnpolicyListResponse;
 
 /**
  * The "returnpolicy" collection of methods.

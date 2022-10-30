@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\OrderinvoicesCreateChargeInvoiceRequest;
-use Google\Service\ShoppingContent\OrderinvoicesCreateChargeInvoiceResponse;
-use Google\Service\ShoppingContent\OrderinvoicesCreateRefundInvoiceRequest;
-use Google\Service\ShoppingContent\OrderinvoicesCreateRefundInvoiceResponse;
+use FluentMail\Google\Service\ShoppingContent\OrderinvoicesCreateChargeInvoiceRequest;
+use FluentMail\Google\Service\ShoppingContent\OrderinvoicesCreateChargeInvoiceResponse;
+use FluentMail\Google\Service\ShoppingContent\OrderinvoicesCreateRefundInvoiceRequest;
+use FluentMail\Google\Service\ShoppingContent\OrderinvoicesCreateRefundInvoiceResponse;
 
 /**
  * The "orderinvoices" collection of methods.

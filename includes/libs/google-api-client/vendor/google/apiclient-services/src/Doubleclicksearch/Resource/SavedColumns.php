@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Doubleclicksearch\Resource;
+namespace FluentMail\Google\Service\Doubleclicksearch\Resource;
 
-use Google\Service\Doubleclicksearch\SavedColumnList;
+use FluentMail\Google\Service\Doubleclicksearch\SavedColumnList;
 
 /**
  * The "savedColumns" collection of methods.

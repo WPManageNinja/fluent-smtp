@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
-use Google\Service\Baremetalsolution\Operation;
+use FluentMail\Google\Service\Baremetalsolution\Operation;
 
 /**
  * The "operations" collection of methods.

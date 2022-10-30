@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\CloudIdentity\Resource;
+namespace FluentMail\Google\Service\CloudIdentity\Resource;
 
-use Google\Service\CloudIdentity\Group;
-use Google\Service\CloudIdentity\ListGroupsResponse;
-use Google\Service\CloudIdentity\LookupGroupNameResponse;
-use Google\Service\CloudIdentity\Operation;
-use Google\Service\CloudIdentity\SearchGroupsResponse;
-use Google\Service\CloudIdentity\SecuritySettings;
+use FluentMail\Google\Service\CloudIdentity\Group;
+use FluentMail\Google\Service\CloudIdentity\ListGroupsResponse;
+use FluentMail\Google\Service\CloudIdentity\LookupGroupNameResponse;
+use FluentMail\Google\Service\CloudIdentity\Operation;
+use FluentMail\Google\Service\CloudIdentity\SearchGroupsResponse;
+use FluentMail\Google\Service\CloudIdentity\SecuritySettings;
 
 /**
  * The "groups" collection of methods.

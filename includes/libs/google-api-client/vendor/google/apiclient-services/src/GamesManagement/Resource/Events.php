@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\GamesManagement\Resource;
+namespace FluentMail\Google\Service\GamesManagement\Resource;
 
-use Google\Service\GamesManagement\EventsResetMultipleForAllRequest;
+use FluentMail\Google\Service\GamesManagement\EventsResetMultipleForAllRequest;
 
 /**
  * The "events" collection of methods.

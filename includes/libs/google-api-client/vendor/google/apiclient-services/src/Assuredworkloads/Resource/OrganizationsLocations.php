@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Assuredworkloads\Resource;
+namespace FluentMail\Google\Service\Assuredworkloads\Resource;
 
 /**
  * The "locations" collection of methods.

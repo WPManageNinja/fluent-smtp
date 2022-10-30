@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\RemoteBuildExecution\Resource;
+namespace FluentMail\Google\Service\RemoteBuildExecution\Resource;
 
-use Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2ActionResult;
+use FluentMail\Google\Service\RemoteBuildExecution\BuildBazelRemoteExecutionV2ActionResult;
 
 /**
  * The "actionResults" collection of methods.

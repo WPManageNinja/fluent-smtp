@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\AbuseReport;
+use FluentMail\Google\Service\YouTube\AbuseReport;
 
 /**
  * The "abuseReports" collection of methods.

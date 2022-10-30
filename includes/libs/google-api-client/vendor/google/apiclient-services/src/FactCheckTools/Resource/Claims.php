@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\FactCheckTools\Resource;
+namespace FluentMail\Google\Service\FactCheckTools\Resource;
 
-use Google\Service\FactCheckTools\GoogleFactcheckingFactchecktoolsV1alpha1FactCheckedClaimSearchResponse;
+use FluentMail\Google\Service\FactCheckTools\GoogleFactcheckingFactchecktoolsV1alpha1FactCheckedClaimSearchResponse;
 
 /**
  * The "claims" collection of methods.

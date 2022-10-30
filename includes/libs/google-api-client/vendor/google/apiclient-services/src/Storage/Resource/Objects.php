@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Storage\Resource;
+namespace FluentMail\Google\Service\Storage\Resource;
 
-use Google\Service\Storage\Channel;
-use Google\Service\Storage\ComposeRequest;
-use Google\Service\Storage\Objects as ObjectsModel;
-use Google\Service\Storage\Policy;
-use Google\Service\Storage\RewriteResponse;
-use Google\Service\Storage\StorageObject;
-use Google\Service\Storage\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Storage\Channel;
+use FluentMail\Google\Service\Storage\ComposeRequest;
+use FluentMail\Google\Service\Storage\Objects as ObjectsModel;
+use FluentMail\Google\Service\Storage\Policy;
+use FluentMail\Google\Service\Storage\RewriteResponse;
+use FluentMail\Google\Service\Storage\StorageObject;
+use FluentMail\Google\Service\Storage\TestIamPermissionsResponse;
 
 /**
  * The "objects" collection of methods.

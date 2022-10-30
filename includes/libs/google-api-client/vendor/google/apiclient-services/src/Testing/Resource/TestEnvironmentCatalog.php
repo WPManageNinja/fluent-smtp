@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Testing\Resource;
+namespace FluentMail\Google\Service\Testing\Resource;
 
-use Google\Service\Testing\TestEnvironmentCatalog as TestEnvironmentCatalogModel;
+use FluentMail\Google\Service\Testing\TestEnvironmentCatalog as TestEnvironmentCatalogModel;
 
 /**
  * The "testEnvironmentCatalog" collection of methods.

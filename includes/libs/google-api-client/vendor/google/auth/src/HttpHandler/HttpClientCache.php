@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-namespace Google\Auth\HttpHandler;
+namespace FluentMail\Google\Auth\HttpHandler;
 
-use GuzzleHttp\ClientInterface;
+use FluentMail\GuzzleHttp\ClientInterface;
 
 /**
  * Stores an HTTP Client in order to prevent multiple instantiations.

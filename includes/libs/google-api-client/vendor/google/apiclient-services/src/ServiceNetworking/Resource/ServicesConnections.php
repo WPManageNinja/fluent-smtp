@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ServiceNetworking\Resource;
+namespace FluentMail\Google\Service\ServiceNetworking\Resource;
 
-use Google\Service\ServiceNetworking\Connection;
-use Google\Service\ServiceNetworking\DeleteConnectionRequest;
-use Google\Service\ServiceNetworking\ListConnectionsResponse;
-use Google\Service\ServiceNetworking\Operation;
+use FluentMail\Google\Service\ServiceNetworking\Connection;
+use FluentMail\Google\Service\ServiceNetworking\DeleteConnectionRequest;
+use FluentMail\Google\Service\ServiceNetworking\ListConnectionsResponse;
+use FluentMail\Google\Service\ServiceNetworking\Operation;
 
 /**
  * The "connections" collection of methods.

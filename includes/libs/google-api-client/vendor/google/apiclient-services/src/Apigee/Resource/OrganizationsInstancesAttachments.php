@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1InstanceAttachment;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListInstanceAttachmentsResponse;
-use Google\Service\Apigee\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1InstanceAttachment;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListInstanceAttachmentsResponse;
+use FluentMail\Google\Service\Apigee\GoogleLongrunningOperation;
 
 /**
  * The "attachments" collection of methods.

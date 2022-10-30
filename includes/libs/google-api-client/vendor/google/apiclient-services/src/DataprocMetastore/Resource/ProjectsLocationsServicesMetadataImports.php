@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\DataprocMetastore\Resource;
+namespace FluentMail\Google\Service\DataprocMetastore\Resource;
 
-use Google\Service\DataprocMetastore\ListMetadataImportsResponse;
-use Google\Service\DataprocMetastore\MetadataImport;
-use Google\Service\DataprocMetastore\Operation;
+use FluentMail\Google\Service\DataprocMetastore\ListMetadataImportsResponse;
+use FluentMail\Google\Service\DataprocMetastore\MetadataImport;
+use FluentMail\Google\Service\DataprocMetastore\Operation;
 
 /**
  * The "metadataImports" collection of methods.

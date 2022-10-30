@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ApigeeRegistry\Resource;
+namespace FluentMail\Google\Service\ApigeeRegistry\Resource;
 
-use Google\Service\ApigeeRegistry\ApigeeregistryEmpty;
-use Google\Service\ApigeeRegistry\Artifact;
-use Google\Service\ApigeeRegistry\HttpBody;
-use Google\Service\ApigeeRegistry\ListArtifactsResponse;
+use FluentMail\Google\Service\ApigeeRegistry\ApigeeregistryEmpty;
+use FluentMail\Google\Service\ApigeeRegistry\Artifact;
+use FluentMail\Google\Service\ApigeeRegistry\HttpBody;
+use FluentMail\Google\Service\ApigeeRegistry\ListArtifactsResponse;
 
 /**
  * The "artifacts" collection of methods.

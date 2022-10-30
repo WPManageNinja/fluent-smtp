@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\TagManager\Resource;
+namespace FluentMail\Google\Service\TagManager\Resource;
 
-use Google\Service\TagManager\CreateContainerVersionRequestVersionOptions;
-use Google\Service\TagManager\CreateContainerVersionResponse;
-use Google\Service\TagManager\Entity;
-use Google\Service\TagManager\GetWorkspaceStatusResponse;
-use Google\Service\TagManager\ListWorkspacesResponse;
-use Google\Service\TagManager\QuickPreviewResponse;
-use Google\Service\TagManager\SyncWorkspaceResponse;
-use Google\Service\TagManager\Workspace;
+use FluentMail\Google\Service\TagManager\CreateContainerVersionRequestVersionOptions;
+use FluentMail\Google\Service\TagManager\CreateContainerVersionResponse;
+use FluentMail\Google\Service\TagManager\Entity;
+use FluentMail\Google\Service\TagManager\GetWorkspaceStatusResponse;
+use FluentMail\Google\Service\TagManager\ListWorkspacesResponse;
+use FluentMail\Google\Service\TagManager\QuickPreviewResponse;
+use FluentMail\Google\Service\TagManager\SyncWorkspaceResponse;
+use FluentMail\Google\Service\TagManager\Workspace;
 
 /**
  * The "workspaces" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Vault\Resource;
+namespace FluentMail\Google\Service\Vault\Resource;
 
-use Google\Service\Vault\ListSavedQueriesResponse;
-use Google\Service\Vault\SavedQuery;
-use Google\Service\Vault\VaultEmpty;
+use FluentMail\Google\Service\Vault\ListSavedQueriesResponse;
+use FluentMail\Google\Service\Vault\SavedQuery;
+use FluentMail\Google\Service\Vault\VaultEmpty;
 
 /**
  * The "savedQueries" collection of methods.

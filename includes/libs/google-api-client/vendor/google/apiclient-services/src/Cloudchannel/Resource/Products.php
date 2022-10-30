@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Cloudchannel\Resource;
+namespace FluentMail\Google\Service\Cloudchannel\Resource;
 
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListProductsResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListProductsResponse;
 
 /**
  * The "products" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Playdeveloperreporting\Resource;
+namespace FluentMail\Google\Service\Playdeveloperreporting\Resource;
 
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryStuckBackgroundWakelockRateMetricSetRequest;
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryStuckBackgroundWakelockRateMetricSetResponse;
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1StuckBackgroundWakelockRateMetricSet;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryStuckBackgroundWakelockRateMetricSetRequest;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryStuckBackgroundWakelockRateMetricSetResponse;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1StuckBackgroundWakelockRateMetricSet;
 
 /**
  * The "stuckbackgroundwakelockrate" collection of methods.

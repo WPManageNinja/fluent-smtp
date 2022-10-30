@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1ActivateNatAddressRequest;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListNatAddressesResponse;
-use Google\Service\Apigee\GoogleCloudApigeeV1NatAddress;
-use Google\Service\Apigee\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ActivateNatAddressRequest;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListNatAddressesResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1NatAddress;
+use FluentMail\Google\Service\Apigee\GoogleLongrunningOperation;
 
 /**
  * The "natAddresses" collection of methods.

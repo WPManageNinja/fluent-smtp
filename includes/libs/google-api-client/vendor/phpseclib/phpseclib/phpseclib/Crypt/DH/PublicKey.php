@@ -9,10 +9,10 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\DH;
+namespace FluentMail\phpseclib3\Crypt\DH;
 
-use phpseclib3\Crypt\Common;
-use phpseclib3\Crypt\DH;
+use FluentMail\phpseclib3\Crypt\Common;
+use FluentMail\phpseclib3\Crypt\DH;
 
 /**
  * DH Public Key

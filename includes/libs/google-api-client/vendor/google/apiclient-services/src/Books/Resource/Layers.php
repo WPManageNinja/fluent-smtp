@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\Layersummaries;
-use Google\Service\Books\Layersummary;
+use FluentMail\Google\Service\Books\Layersummaries;
+use FluentMail\Google\Service\Books\Layersummary;
 
 /**
  * The "layers" collection of methods.

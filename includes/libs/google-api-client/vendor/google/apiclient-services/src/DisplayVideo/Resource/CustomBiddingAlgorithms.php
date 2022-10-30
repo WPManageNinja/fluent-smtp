@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\CustomBiddingAlgorithm;
-use Google\Service\DisplayVideo\CustomBiddingScriptRef;
-use Google\Service\DisplayVideo\ListCustomBiddingAlgorithmsResponse;
+use FluentMail\Google\Service\DisplayVideo\CustomBiddingAlgorithm;
+use FluentMail\Google\Service\DisplayVideo\CustomBiddingScriptRef;
+use FluentMail\Google\Service\DisplayVideo\ListCustomBiddingAlgorithmsResponse;
 
 /**
  * The "customBiddingAlgorithms" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Fitness\Resource;
+namespace FluentMail\Google\Service\Fitness\Resource;
 
-use Google\Service\Fitness\AggregateRequest;
-use Google\Service\Fitness\AggregateResponse;
+use FluentMail\Google\Service\Fitness\AggregateRequest;
+use FluentMail\Google\Service\Fitness\AggregateResponse;
 
 /**
  * The "dataset" collection of methods.

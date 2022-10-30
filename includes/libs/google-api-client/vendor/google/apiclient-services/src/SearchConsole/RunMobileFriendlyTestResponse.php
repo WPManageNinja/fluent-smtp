@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SearchConsole;
+namespace FluentMail\Google\Service\SearchConsole;
 
 class RunMobileFriendlyTestResponse extends \Google\Collection
 {

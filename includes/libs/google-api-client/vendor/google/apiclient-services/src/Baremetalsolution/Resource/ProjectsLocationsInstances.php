@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\Baremetalsolution\Resource;
+namespace FluentMail\Google\Service\Baremetalsolution\Resource;
 
-use Google\Service\Baremetalsolution\DetachLunRequest;
-use Google\Service\Baremetalsolution\DisableInteractiveSerialConsoleRequest;
-use Google\Service\Baremetalsolution\EnableInteractiveSerialConsoleRequest;
-use Google\Service\Baremetalsolution\Instance;
-use Google\Service\Baremetalsolution\ListInstancesResponse;
-use Google\Service\Baremetalsolution\Operation;
-use Google\Service\Baremetalsolution\ResetInstanceRequest;
-use Google\Service\Baremetalsolution\StartInstanceRequest;
-use Google\Service\Baremetalsolution\StopInstanceRequest;
+use FluentMail\Google\Service\Baremetalsolution\DetachLunRequest;
+use FluentMail\Google\Service\Baremetalsolution\DisableInteractiveSerialConsoleRequest;
+use FluentMail\Google\Service\Baremetalsolution\EnableInteractiveSerialConsoleRequest;
+use FluentMail\Google\Service\Baremetalsolution\Instance;
+use FluentMail\Google\Service\Baremetalsolution\ListInstancesResponse;
+use FluentMail\Google\Service\Baremetalsolution\Operation;
+use FluentMail\Google\Service\Baremetalsolution\ResetInstanceRequest;
+use FluentMail\Google\Service\Baremetalsolution\StartInstanceRequest;
+use FluentMail\Google\Service\Baremetalsolution\StopInstanceRequest;
 
 /**
  * The "instances" collection of methods.

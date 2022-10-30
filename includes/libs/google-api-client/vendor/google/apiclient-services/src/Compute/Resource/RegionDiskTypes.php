@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\DiskType;
-use Google\Service\Compute\RegionDiskTypeList;
+use FluentMail\Google\Service\Compute\DiskType;
+use FluentMail\Google\Service\Compute\RegionDiskTypeList;
 
 /**
  * The "regionDiskTypes" collection of methods.

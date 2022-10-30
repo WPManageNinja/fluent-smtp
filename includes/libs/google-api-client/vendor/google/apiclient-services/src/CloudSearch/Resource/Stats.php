@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
-use Google\Service\CloudSearch\GetCustomerIndexStatsResponse;
-use Google\Service\CloudSearch\GetCustomerQueryStatsResponse;
-use Google\Service\CloudSearch\GetCustomerSearchApplicationStatsResponse;
-use Google\Service\CloudSearch\GetCustomerSessionStatsResponse;
-use Google\Service\CloudSearch\GetCustomerUserStatsResponse;
+use FluentMail\Google\Service\CloudSearch\GetCustomerIndexStatsResponse;
+use FluentMail\Google\Service\CloudSearch\GetCustomerQueryStatsResponse;
+use FluentMail\Google\Service\CloudSearch\GetCustomerSearchApplicationStatsResponse;
+use FluentMail\Google\Service\CloudSearch\GetCustomerSessionStatsResponse;
+use FluentMail\Google\Service\CloudSearch\GetCustomerUserStatsResponse;
 
 /**
  * The "stats" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3Changelog;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListChangelogsResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3Changelog;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListChangelogsResponse;
 
 /**
  * The "changelogs" collection of methods.

@@ -16,7 +16,7 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\File;
+namespace FluentMail\phpseclib3\File;
 
 /**
  * Pure-PHP ANSI Decoder

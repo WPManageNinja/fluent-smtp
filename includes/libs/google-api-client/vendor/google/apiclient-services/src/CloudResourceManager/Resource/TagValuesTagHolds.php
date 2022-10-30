@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudResourceManager\Resource;
+namespace FluentMail\Google\Service\CloudResourceManager\Resource;
 
-use Google\Service\CloudResourceManager\ListTagHoldsResponse;
-use Google\Service\CloudResourceManager\Operation;
-use Google\Service\CloudResourceManager\TagHold;
+use FluentMail\Google\Service\CloudResourceManager\ListTagHoldsResponse;
+use FluentMail\Google\Service\CloudResourceManager\Operation;
+use FluentMail\Google\Service\CloudResourceManager\TagHold;
 
 /**
  * The "tagHolds" collection of methods.

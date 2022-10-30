@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Contentwarehouse;
+namespace FluentMail\Google\Service\Contentwarehouse;
 
 class KnowledgeAnswersIntentQueryArgumentProvenancePreviousTaskStateListCandidate extends \Google\Model
 {

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\OSConfig\Resource;
+namespace FluentMail\Google\Service\OSConfig\Resource;
 
-use Google\Service\OSConfig\ListOSPolicyAssignmentReportsResponse;
-use Google\Service\OSConfig\OSPolicyAssignmentReport;
+use FluentMail\Google\Service\OSConfig\ListOSPolicyAssignmentReportsResponse;
+use FluentMail\Google\Service\OSConfig\OSPolicyAssignmentReport;
 
 /**
  * The "reports" collection of methods.

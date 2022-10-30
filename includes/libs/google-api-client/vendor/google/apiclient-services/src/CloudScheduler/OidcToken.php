@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudScheduler;
+namespace FluentMail\Google\Service\CloudScheduler;
 
 class OidcToken extends \Google\Model
 {

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Logging\Resource;
+namespace FluentMail\Google\Service\Logging\Resource;
 
-use Google\Service\Logging\CmekSettings;
-use Google\Service\Logging\Settings;
+use FluentMail\Google\Service\Logging\CmekSettings;
+use FluentMail\Google\Service\Logging\Settings;
 
 /**
  * The "billingAccounts" collection of methods.

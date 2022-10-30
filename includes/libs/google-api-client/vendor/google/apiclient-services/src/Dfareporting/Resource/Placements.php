@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\Placement;
-use Google\Service\Dfareporting\PlacementsGenerateTagsResponse;
-use Google\Service\Dfareporting\PlacementsListResponse;
+use FluentMail\Google\Service\Dfareporting\Placement;
+use FluentMail\Google\Service\Dfareporting\PlacementsGenerateTagsResponse;
+use FluentMail\Google\Service\Dfareporting\PlacementsListResponse;
 
 /**
  * The "placements" collection of methods.

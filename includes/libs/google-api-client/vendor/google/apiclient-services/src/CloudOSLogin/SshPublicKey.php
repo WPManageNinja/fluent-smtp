@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudOSLogin;
+namespace FluentMail\Google\Service\CloudOSLogin;
 
 class SshPublicKey extends \Google\Model
 {

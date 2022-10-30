@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Document;
+namespace FluentMail\Google\Service\Document;
 
 class GoogleCloudDocumentaiV1beta2DocumentStyleFontSize extends \Google\Model
 {

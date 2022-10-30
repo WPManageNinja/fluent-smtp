@@ -11,7 +11,7 @@
  * @link      http://pear.php.net/package/Math_BigInteger
  */
 
-namespace phpseclib3\Math\BigInteger\Engines;
+namespace FluentMail\phpseclib3\Math\BigInteger\Engines;
 
 /**
  * Pure-PHP 64-bit Engine.

@@ -1,9 +1,9 @@
 <?php
 
-namespace GuzzleHttp\Exception;
+namespace FluentMail\GuzzleHttp\Exception;
 
-use Psr\Http\Client\NetworkExceptionInterface;
-use Psr\Http\Message\RequestInterface;
+use FluentMail\Psr\Http\Client\NetworkExceptionInterface;
+use FluentMail\Psr\Http\Message\RequestInterface;
 
 /**
  * Exception thrown when a connection cannot be established.

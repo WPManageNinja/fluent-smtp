@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\ShippingSettings as ShippingSettingsModel;
-use Google\Service\ShoppingContent\ShippingsettingsCustomBatchRequest;
-use Google\Service\ShoppingContent\ShippingsettingsCustomBatchResponse;
-use Google\Service\ShoppingContent\ShippingsettingsGetSupportedCarriersResponse;
-use Google\Service\ShoppingContent\ShippingsettingsGetSupportedHolidaysResponse;
-use Google\Service\ShoppingContent\ShippingsettingsGetSupportedPickupServicesResponse;
-use Google\Service\ShoppingContent\ShippingsettingsListResponse;
+use FluentMail\Google\Service\ShoppingContent\ShippingSettings as ShippingSettingsModel;
+use FluentMail\Google\Service\ShoppingContent\ShippingsettingsCustomBatchRequest;
+use FluentMail\Google\Service\ShoppingContent\ShippingsettingsCustomBatchResponse;
+use FluentMail\Google\Service\ShoppingContent\ShippingsettingsGetSupportedCarriersResponse;
+use FluentMail\Google\Service\ShoppingContent\ShippingsettingsGetSupportedHolidaysResponse;
+use FluentMail\Google\Service\ShoppingContent\ShippingsettingsGetSupportedPickupServicesResponse;
+use FluentMail\Google\Service\ShoppingContent\ShippingsettingsListResponse;
 
 /**
  * The "shippingsettings" collection of methods.

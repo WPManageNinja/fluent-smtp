@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseML;
+namespace FluentMail\Google\Service\FirebaseML;
 
 class FirebasemlEmpty extends \Google\Model
 {

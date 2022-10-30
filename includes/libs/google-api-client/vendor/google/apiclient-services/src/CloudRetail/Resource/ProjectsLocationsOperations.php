@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudRetail\Resource;
+namespace FluentMail\Google\Service\CloudRetail\Resource;
 
-use Google\Service\CloudRetail\GoogleLongrunningListOperationsResponse;
-use Google\Service\CloudRetail\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudRetail\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\CloudRetail\GoogleLongrunningOperation;
 
 /**
  * The "operations" collection of methods.

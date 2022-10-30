@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\ApigeeRegistry\Resource;
+namespace FluentMail\Google\Service\ApigeeRegistry\Resource;
 
-use Google\Service\ApigeeRegistry\ApiDeployment;
-use Google\Service\ApigeeRegistry\ApigeeregistryEmpty;
-use Google\Service\ApigeeRegistry\ListApiDeploymentRevisionsResponse;
-use Google\Service\ApigeeRegistry\ListApiDeploymentsResponse;
-use Google\Service\ApigeeRegistry\Policy;
-use Google\Service\ApigeeRegistry\RollbackApiDeploymentRequest;
-use Google\Service\ApigeeRegistry\SetIamPolicyRequest;
-use Google\Service\ApigeeRegistry\TagApiDeploymentRevisionRequest;
-use Google\Service\ApigeeRegistry\TestIamPermissionsRequest;
-use Google\Service\ApigeeRegistry\TestIamPermissionsResponse;
+use FluentMail\Google\Service\ApigeeRegistry\ApiDeployment;
+use FluentMail\Google\Service\ApigeeRegistry\ApigeeregistryEmpty;
+use FluentMail\Google\Service\ApigeeRegistry\ListApiDeploymentRevisionsResponse;
+use FluentMail\Google\Service\ApigeeRegistry\ListApiDeploymentsResponse;
+use FluentMail\Google\Service\ApigeeRegistry\Policy;
+use FluentMail\Google\Service\ApigeeRegistry\RollbackApiDeploymentRequest;
+use FluentMail\Google\Service\ApigeeRegistry\SetIamPolicyRequest;
+use FluentMail\Google\Service\ApigeeRegistry\TagApiDeploymentRevisionRequest;
+use FluentMail\Google\Service\ApigeeRegistry\TestIamPermissionsRequest;
+use FluentMail\Google\Service\ApigeeRegistry\TestIamPermissionsResponse;
 
 /**
  * The "deployments" collection of methods.

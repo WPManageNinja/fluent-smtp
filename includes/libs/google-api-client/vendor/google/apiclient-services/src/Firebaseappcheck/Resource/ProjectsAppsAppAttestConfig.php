@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Firebaseappcheck\Resource;
+namespace FluentMail\Google\Service\Firebaseappcheck\Resource;
 
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1AppAttestConfig;
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchGetAppAttestConfigsResponse;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1AppAttestConfig;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1BatchGetAppAttestConfigsResponse;
 
 /**
  * The "appAttestConfig" collection of methods.

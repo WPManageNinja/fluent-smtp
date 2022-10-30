@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\RecommendationsAI;
+namespace FluentMail\Google\Service\RecommendationsAI;
 
 class GoogleLongrunningOperation extends \Google\Model
 {

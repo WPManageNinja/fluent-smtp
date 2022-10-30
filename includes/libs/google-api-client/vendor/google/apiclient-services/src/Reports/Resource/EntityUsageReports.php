@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Reports\Resource;
+namespace FluentMail\Google\Service\Reports\Resource;
 
-use Google\Service\Reports\UsageReports;
+use FluentMail\Google\Service\Reports\UsageReports;
 
 /**
  * The "entityUsageReports" collection of methods.

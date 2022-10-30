@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Processor;
+namespace FluentMail\Monolog\Processor;
 
 /**
  * An optional interface to allow labelling Monolog processors.

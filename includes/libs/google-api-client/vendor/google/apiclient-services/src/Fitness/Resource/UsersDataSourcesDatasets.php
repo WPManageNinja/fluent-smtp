@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Fitness\Resource;
+namespace FluentMail\Google\Service\Fitness\Resource;
 
-use Google\Service\Fitness\Dataset;
+use FluentMail\Google\Service\Fitness\Dataset;
 
 /**
  * The "datasets" collection of methods.

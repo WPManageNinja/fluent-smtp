@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\DLP\Resource;
+namespace FluentMail\Google\Service\DLP\Resource;
 
-use Google\Service\DLP\GooglePrivacyDlpV2ListDlpJobsResponse;
+use FluentMail\Google\Service\DLP\GooglePrivacyDlpV2ListDlpJobsResponse;
 
 /**
  * The "dlpJobs" collection of methods.

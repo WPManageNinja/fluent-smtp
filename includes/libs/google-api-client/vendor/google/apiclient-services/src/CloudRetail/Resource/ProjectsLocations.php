@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudRetail\Resource;
+namespace FluentMail\Google\Service\CloudRetail\Resource;
 
 /**
  * The "locations" collection of methods.

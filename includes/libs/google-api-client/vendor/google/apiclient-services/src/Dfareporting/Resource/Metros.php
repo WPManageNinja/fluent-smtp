@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\MetrosListResponse;
+use FluentMail\Google\Service\Dfareporting\MetrosListResponse;
 
 /**
  * The "metros" collection of methods.

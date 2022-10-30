@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Licensing;
+namespace FluentMail\Google\Service\Licensing;
 
 class LicenseAssignmentInsert extends \Google\Model
 {

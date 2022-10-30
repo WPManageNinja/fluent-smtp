@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Firebaseappcheck\Resource;
+namespace FluentMail\Google\Service\Firebaseappcheck\Resource;
 
-use Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1PublicJwkSet;
+use FluentMail\Google\Service\Firebaseappcheck\GoogleFirebaseAppcheckV1PublicJwkSet;
 
 /**
  * The "jwks" collection of methods.

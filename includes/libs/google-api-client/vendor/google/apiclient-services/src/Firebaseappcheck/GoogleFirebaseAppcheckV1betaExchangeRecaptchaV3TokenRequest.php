@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Firebaseappcheck;
+namespace FluentMail\Google\Service\Firebaseappcheck;
 
 class GoogleFirebaseAppcheckV1betaExchangeRecaptchaV3TokenRequest extends \Google\Model
 {

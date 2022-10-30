@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
-use Google\Service\Monitoring\ListGroupMembersResponse;
+use FluentMail\Google\Service\Monitoring\ListGroupMembersResponse;
 
 /**
  * The "members" collection of methods.

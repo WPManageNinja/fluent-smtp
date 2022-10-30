@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudSupport\Resource;
+namespace FluentMail\Google\Service\CloudSupport\Resource;
 
-use Google\Service\CloudSupport\Attachment;
-use Google\Service\CloudSupport\CreateAttachmentRequest;
-use Google\Service\CloudSupport\Media as MediaModel;
+use FluentMail\Google\Service\CloudSupport\Attachment;
+use FluentMail\Google\Service\CloudSupport\CreateAttachmentRequest;
+use FluentMail\Google\Service\CloudSupport\Media as MediaModel;
 
 /**
  * The "media" collection of methods.

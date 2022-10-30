@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudTrace;
+namespace FluentMail\Google\Service\CloudTrace;
 
 class Annotation extends \Google\Model
 {

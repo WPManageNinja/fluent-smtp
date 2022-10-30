@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessAccountManagement\Resource;
+namespace FluentMail\Google\Service\MyBusinessAccountManagement\Resource;
 
-use Google\Service\MyBusinessAccountManagement\Account;
-use Google\Service\MyBusinessAccountManagement\ListAccountsResponse;
+use FluentMail\Google\Service\MyBusinessAccountManagement\Account;
+use FluentMail\Google\Service\MyBusinessAccountManagement\ListAccountsResponse;
 
 /**
  * The "accounts" collection of methods.

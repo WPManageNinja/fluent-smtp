@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow;
+namespace FluentMail\Google\Service\Dialogflow;
 
 class GoogleCloudDialogflowV2beta1IntentMessageTableCardCell extends \Google\Model
 {

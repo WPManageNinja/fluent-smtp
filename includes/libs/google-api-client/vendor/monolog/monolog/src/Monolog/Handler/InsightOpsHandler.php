@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Logger;
+use FluentMail\Monolog\Logger;
 
 /**
  * Inspired on LogEntriesHandler.

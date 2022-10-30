@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Dataflow\Resource;
+namespace FluentMail\Google\Service\Dataflow\Resource;
 
-use Google\Service\Dataflow\ListSnapshotsResponse;
+use FluentMail\Google\Service\Dataflow\ListSnapshotsResponse;
 
 /**
  * The "snapshots" collection of methods.

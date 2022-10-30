@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\BackupforGKE\Resource;
+namespace FluentMail\Google\Service\BackupforGKE\Resource;
 
-use Google\Service\BackupforGKE\GkebackupEmpty;
-use Google\Service\BackupforGKE\ListLocationsResponse;
-use Google\Service\BackupforGKE\Location;
+use FluentMail\Google\Service\BackupforGKE\GkebackupEmpty;
+use FluentMail\Google\Service\BackupforGKE\ListLocationsResponse;
+use FluentMail\Google\Service\BackupforGKE\Location;
 
 /**
  * The "locations" collection of methods.

@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-namespace Google\Task;
+namespace FluentMail\Google\Task;
 
-use Google\Exception as GoogleException;
+use FluentMail\Google\Exception as GoogleException;
 
 class Exception extends GoogleException
 {

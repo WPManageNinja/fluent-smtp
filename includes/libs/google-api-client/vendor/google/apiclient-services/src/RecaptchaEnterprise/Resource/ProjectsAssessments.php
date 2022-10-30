@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\RecaptchaEnterprise\Resource;
+namespace FluentMail\Google\Service\RecaptchaEnterprise\Resource;
 
-use Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1AnnotateAssessmentRequest;
-use Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1AnnotateAssessmentResponse;
-use Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1Assessment;
+use FluentMail\Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1AnnotateAssessmentRequest;
+use FluentMail\Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1AnnotateAssessmentResponse;
+use FluentMail\Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1Assessment;
 
 /**
  * The "assessments" collection of methods.

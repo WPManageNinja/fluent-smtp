@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AbusiveExperienceReport;
+namespace FluentMail\Google\Service\AbusiveExperienceReport;
 
 class SiteSummaryResponse extends \Google\Model
 {

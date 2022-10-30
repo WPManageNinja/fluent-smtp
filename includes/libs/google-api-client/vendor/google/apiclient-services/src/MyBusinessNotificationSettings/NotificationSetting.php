@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessNotificationSettings;
+namespace FluentMail\Google\Service\MyBusinessNotificationSettings;
 
 class NotificationSetting extends \Google\Collection
 {

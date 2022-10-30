@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\NetworkEdgeSecurityService;
-use Google\Service\Compute\NetworkEdgeSecurityServiceAggregatedList;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\NetworkEdgeSecurityService;
+use FluentMail\Google\Service\Compute\NetworkEdgeSecurityServiceAggregatedList;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "networkEdgeSecurityServices" collection of methods.

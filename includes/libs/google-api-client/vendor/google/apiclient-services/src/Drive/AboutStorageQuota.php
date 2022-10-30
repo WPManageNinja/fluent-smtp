@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Drive;
+namespace FluentMail\Google\Service\Drive;
 
 class AboutStorageQuota extends \Google\Model
 {

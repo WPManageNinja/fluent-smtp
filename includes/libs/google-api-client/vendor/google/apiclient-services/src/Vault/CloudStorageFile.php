@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Vault;
+namespace FluentMail\Google\Service\Vault;
 
 class CloudStorageFile extends \Google\Model
 {

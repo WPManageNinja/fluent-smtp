@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\Volumeannotation;
-use Google\Service\Books\Volumeannotations;
+use FluentMail\Google\Service\Books\Volumeannotation;
+use FluentMail\Google\Service\Books\Volumeannotations;
 
 /**
  * The "volumeAnnotations" collection of methods.

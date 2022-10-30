@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Verifiedaccess;
+namespace FluentMail\Google\Service\Verifiedaccess;
 
 class SignedData extends \Google\Model
 {

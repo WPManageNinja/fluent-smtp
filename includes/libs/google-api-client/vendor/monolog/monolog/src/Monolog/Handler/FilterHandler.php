@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Logger;
-use Monolog\ResettableInterface;
-use Monolog\Formatter\FormatterInterface;
-use Psr\Log\LogLevel;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\ResettableInterface;
+use FluentMail\Monolog\Formatter\FormatterInterface;
+use FluentMail\Psr\Log\LogLevel;
 
 /**
  * Simple handler wrapper that filters records based on a list of levels

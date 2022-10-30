@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\SQLAdmin\Resource;
+namespace FluentMail\Google\Service\SQLAdmin\Resource;
 
-use Google\Service\SQLAdmin\ConnectSettings;
-use Google\Service\SQLAdmin\GenerateEphemeralCertRequest;
-use Google\Service\SQLAdmin\GenerateEphemeralCertResponse;
+use FluentMail\Google\Service\SQLAdmin\ConnectSettings;
+use FluentMail\Google\Service\SQLAdmin\GenerateEphemeralCertRequest;
+use FluentMail\Google\Service\SQLAdmin\GenerateEphemeralCertResponse;
 
 /**
  * The "connect" collection of methods.

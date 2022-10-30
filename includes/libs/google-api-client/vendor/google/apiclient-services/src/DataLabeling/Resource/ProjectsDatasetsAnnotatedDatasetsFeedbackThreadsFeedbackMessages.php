@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\DataLabeling\Resource;
+namespace FluentMail\Google\Service\DataLabeling\Resource;
 
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1FeedbackMessage;
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1ListFeedbackMessagesResponse;
-use Google\Service\DataLabeling\GoogleLongrunningOperation;
-use Google\Service\DataLabeling\GoogleProtobufEmpty;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1FeedbackMessage;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1ListFeedbackMessagesResponse;
+use FluentMail\Google\Service\DataLabeling\GoogleLongrunningOperation;
+use FluentMail\Google\Service\DataLabeling\GoogleProtobufEmpty;
 
 /**
  * The "feedbackMessages" collection of methods.

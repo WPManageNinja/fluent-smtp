@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseManagement;
+namespace FluentMail\Google\Service\FirebaseManagement;
 
 class ListAvailableProjectsResponse extends \Google\Collection
 {

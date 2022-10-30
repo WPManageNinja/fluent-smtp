@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\SearchConsole\Resource;
+namespace FluentMail\Google\Service\SearchConsole\Resource;
 
-use Google\Service\SearchConsole\SearchAnalyticsQueryRequest;
-use Google\Service\SearchConsole\SearchAnalyticsQueryResponse;
+use FluentMail\Google\Service\SearchConsole\SearchAnalyticsQueryRequest;
+use FluentMail\Google\Service\SearchConsole\SearchAnalyticsQueryResponse;
 
 /**
  * The "searchanalytics" collection of methods.

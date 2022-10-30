@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\ListPythonPackagesResponse;
-use Google\Service\ArtifactRegistry\PythonPackage;
+use FluentMail\Google\Service\ArtifactRegistry\ListPythonPackagesResponse;
+use FluentMail\Google\Service\ArtifactRegistry\PythonPackage;
 
 /**
  * The "pythonPackages" collection of methods.

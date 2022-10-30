@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ServiceDirectory;
+namespace FluentMail\Google\Service\ServiceDirectory;
 
 class ListEndpointsResponse extends \Google\Collection
 {

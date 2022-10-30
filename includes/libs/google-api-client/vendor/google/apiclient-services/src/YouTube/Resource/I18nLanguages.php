@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\I18nLanguageListResponse;
+use FluentMail\Google\Service\YouTube\I18nLanguageListResponse;
 
 /**
  * The "i18nLanguages" collection of methods.

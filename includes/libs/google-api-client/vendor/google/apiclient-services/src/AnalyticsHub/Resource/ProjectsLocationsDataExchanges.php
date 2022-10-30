@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsHub\Resource;
+namespace FluentMail\Google\Service\AnalyticsHub\Resource;
 
-use Google\Service\AnalyticsHub\AnalyticshubEmpty;
-use Google\Service\AnalyticsHub\DataExchange;
-use Google\Service\AnalyticsHub\GetIamPolicyRequest;
-use Google\Service\AnalyticsHub\ListDataExchangesResponse;
-use Google\Service\AnalyticsHub\Policy;
-use Google\Service\AnalyticsHub\SetIamPolicyRequest;
-use Google\Service\AnalyticsHub\TestIamPermissionsRequest;
-use Google\Service\AnalyticsHub\TestIamPermissionsResponse;
+use FluentMail\Google\Service\AnalyticsHub\AnalyticshubEmpty;
+use FluentMail\Google\Service\AnalyticsHub\DataExchange;
+use FluentMail\Google\Service\AnalyticsHub\GetIamPolicyRequest;
+use FluentMail\Google\Service\AnalyticsHub\ListDataExchangesResponse;
+use FluentMail\Google\Service\AnalyticsHub\Policy;
+use FluentMail\Google\Service\AnalyticsHub\SetIamPolicyRequest;
+use FluentMail\Google\Service\AnalyticsHub\TestIamPermissionsRequest;
+use FluentMail\Google\Service\AnalyticsHub\TestIamPermissionsResponse;
 
 /**
  * The "dataExchanges" collection of methods.

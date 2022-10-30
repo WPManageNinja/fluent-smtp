@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\DataLabeling\Resource;
+namespace FluentMail\Google\Service\DataLabeling\Resource;
 
-use Google\Service\DataLabeling\GoogleLongrunningListOperationsResponse;
-use Google\Service\DataLabeling\GoogleLongrunningOperation;
-use Google\Service\DataLabeling\GoogleProtobufEmpty;
+use FluentMail\Google\Service\DataLabeling\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\DataLabeling\GoogleLongrunningOperation;
+use FluentMail\Google\Service\DataLabeling\GoogleProtobufEmpty;
 
 /**
  * The "operations" collection of methods.

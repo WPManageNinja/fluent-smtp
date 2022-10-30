@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\HangoutsChat\Resource;
+namespace FluentMail\Google\Service\HangoutsChat\Resource;
 
-use Google\Service\HangoutsChat\Attachment;
+use FluentMail\Google\Service\HangoutsChat\Attachment;
 
 /**
  * The "attachments" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsData;
+namespace FluentMail\Google\Service\AnalyticsData;
 
 class ConcatenateExpression extends \Google\Collection
 {

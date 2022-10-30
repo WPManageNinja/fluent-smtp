@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SiteVerification;
+namespace FluentMail\Google\Service\SiteVerification;
 
 class SiteVerificationWebResourceResource extends \Google\Collection
 {

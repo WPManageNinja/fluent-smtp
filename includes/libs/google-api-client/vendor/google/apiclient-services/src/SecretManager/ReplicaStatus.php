@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SecretManager;
+namespace FluentMail\Google\Service\SecretManager;
 
 class ReplicaStatus extends \Google\Model
 {

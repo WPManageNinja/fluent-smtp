@@ -1,6 +1,6 @@
 <?php
 
-namespace Google;
+namespace FluentMail\Google;
 
 /**
  * Extension to the regular Google\Model that automatically

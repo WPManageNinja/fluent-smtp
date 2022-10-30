@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Reseller\Resource;
+namespace FluentMail\Google\Service\Reseller\Resource;
 
-use Google\Service\Reseller\ResellernotifyGetwatchdetailsResponse;
-use Google\Service\Reseller\ResellernotifyResource;
+use FluentMail\Google\Service\Reseller\ResellernotifyGetwatchdetailsResponse;
+use FluentMail\Google\Service\Reseller\ResellernotifyResource;
 
 /**
  * The "resellernotify" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\Goal;
-use Google\Service\Analytics\Goals;
+use FluentMail\Google\Service\Analytics\Goal;
+use FluentMail\Google\Service\Analytics\Goals;
 
 /**
  * The "goals" collection of methods.

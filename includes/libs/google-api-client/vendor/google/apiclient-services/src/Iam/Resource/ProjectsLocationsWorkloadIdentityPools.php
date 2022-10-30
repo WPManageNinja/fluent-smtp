@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Iam\Resource;
+namespace FluentMail\Google\Service\Iam\Resource;
 
-use Google\Service\Iam\ListWorkloadIdentityPoolsResponse;
-use Google\Service\Iam\Operation;
-use Google\Service\Iam\UndeleteWorkloadIdentityPoolRequest;
-use Google\Service\Iam\WorkloadIdentityPool;
+use FluentMail\Google\Service\Iam\ListWorkloadIdentityPoolsResponse;
+use FluentMail\Google\Service\Iam\Operation;
+use FluentMail\Google\Service\Iam\UndeleteWorkloadIdentityPoolRequest;
+use FluentMail\Google\Service\Iam\WorkloadIdentityPool;
 
 /**
  * The "workloadIdentityPools" collection of methods.

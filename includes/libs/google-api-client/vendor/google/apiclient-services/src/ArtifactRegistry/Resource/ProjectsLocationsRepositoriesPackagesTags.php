@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\ArtifactRegistry\Resource;
+namespace FluentMail\Google\Service\ArtifactRegistry\Resource;
 
-use Google\Service\ArtifactRegistry\ArtifactregistryEmpty;
-use Google\Service\ArtifactRegistry\ListTagsResponse;
-use Google\Service\ArtifactRegistry\Tag;
+use FluentMail\Google\Service\ArtifactRegistry\ArtifactregistryEmpty;
+use FluentMail\Google\Service\ArtifactRegistry\ListTagsResponse;
+use FluentMail\Google\Service\ArtifactRegistry\Tag;
 
 /**
  * The "tags" collection of methods.

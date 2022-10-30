@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudFilestore;
+namespace FluentMail\Google\Service\CloudFilestore;
 
 class GoogleCloudSaasacceleratorManagementProvidersV1SloExclusion extends \Google\Model
 {

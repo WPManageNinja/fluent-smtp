@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\CreateAssetRequest;
-use Google\Service\DisplayVideo\CreateAssetResponse;
+use FluentMail\Google\Service\DisplayVideo\CreateAssetRequest;
+use FluentMail\Google\Service\DisplayVideo\CreateAssetResponse;
 
 /**
  * The "assets" collection of methods.

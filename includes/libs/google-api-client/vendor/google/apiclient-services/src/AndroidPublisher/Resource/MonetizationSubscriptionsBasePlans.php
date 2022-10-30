@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\ActivateBasePlanRequest;
-use Google\Service\AndroidPublisher\DeactivateBasePlanRequest;
-use Google\Service\AndroidPublisher\MigrateBasePlanPricesRequest;
-use Google\Service\AndroidPublisher\MigrateBasePlanPricesResponse;
-use Google\Service\AndroidPublisher\Subscription;
+use FluentMail\Google\Service\AndroidPublisher\ActivateBasePlanRequest;
+use FluentMail\Google\Service\AndroidPublisher\DeactivateBasePlanRequest;
+use FluentMail\Google\Service\AndroidPublisher\MigrateBasePlanPricesRequest;
+use FluentMail\Google\Service\AndroidPublisher\MigrateBasePlanPricesResponse;
+use FluentMail\Google\Service\AndroidPublisher\Subscription;
 
 /**
  * The "basePlans" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\StreetViewPublish;
+namespace FluentMail\Google\Service\StreetViewPublish;
 
 class Measurement3d extends \Google\Model
 {

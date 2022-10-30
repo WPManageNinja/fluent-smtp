@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\PlacementGroup;
-use Google\Service\Dfareporting\PlacementGroupsListResponse;
+use FluentMail\Google\Service\Dfareporting\PlacementGroup;
+use FluentMail\Google\Service\Dfareporting\PlacementGroupsListResponse;
 
 /**
  * The "placementGroups" collection of methods.

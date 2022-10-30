@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-namespace Google\Auth\Cache;
+namespace FluentMail\Google\Auth\Cache;
 
 use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
-use Psr\Cache\CacheItemInterface;
+use FluentMail\Psr\Cache\CacheItemInterface;
 use TypeError;
 
 /**

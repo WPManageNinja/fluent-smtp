@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudFunctions\Resource;
+namespace FluentMail\Google\Service\CloudFunctions\Resource;
 
-use Google\Service\CloudFunctions\ListRuntimesResponse;
+use FluentMail\Google\Service\CloudFunctions\ListRuntimesResponse;
 
 /**
  * The "runtimes" collection of methods.

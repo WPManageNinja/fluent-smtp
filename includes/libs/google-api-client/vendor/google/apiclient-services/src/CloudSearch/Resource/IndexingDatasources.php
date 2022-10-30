@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudSearch\Resource;
+namespace FluentMail\Google\Service\CloudSearch\Resource;
 
-use Google\Service\CloudSearch\Operation;
-use Google\Service\CloudSearch\Schema;
-use Google\Service\CloudSearch\UpdateSchemaRequest;
+use FluentMail\Google\Service\CloudSearch\Operation;
+use FluentMail\Google\Service\CloudSearch\Schema;
+use FluentMail\Google\Service\CloudSearch\UpdateSchemaRequest;
 
 /**
  * The "datasources" collection of methods.

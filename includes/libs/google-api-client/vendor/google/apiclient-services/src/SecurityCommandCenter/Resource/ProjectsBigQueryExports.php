@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter\Resource;
+namespace FluentMail\Google\Service\SecurityCommandCenter\Resource;
 
-use Google\Service\SecurityCommandCenter\GoogleCloudSecuritycenterV1BigQueryExport;
-use Google\Service\SecurityCommandCenter\ListBigQueryExportsResponse;
-use Google\Service\SecurityCommandCenter\SecuritycenterEmpty;
+use FluentMail\Google\Service\SecurityCommandCenter\GoogleCloudSecuritycenterV1BigQueryExport;
+use FluentMail\Google\Service\SecurityCommandCenter\ListBigQueryExportsResponse;
+use FluentMail\Google\Service\SecurityCommandCenter\SecuritycenterEmpty;
 
 /**
  * The "bigQueryExports" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Dialogflow\Resource;
+namespace FluentMail\Google\Service\Dialogflow\Resource;
 
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListSecuritySettingsResponse;
-use Google\Service\Dialogflow\GoogleCloudDialogflowCxV3SecuritySettings;
-use Google\Service\Dialogflow\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3ListSecuritySettingsResponse;
+use FluentMail\Google\Service\Dialogflow\GoogleCloudDialogflowCxV3SecuritySettings;
+use FluentMail\Google\Service\Dialogflow\GoogleProtobufEmpty;
 
 /**
  * The "securitySettings" collection of methods.

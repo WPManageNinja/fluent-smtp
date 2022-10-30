@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1KeyValueEntry;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListKeyValueEntriesResponse;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1KeyValueEntry;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListKeyValueEntriesResponse;
 
 /**
  * The "entries" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DataLabeling\Resource;
+namespace FluentMail\Google\Service\DataLabeling\Resource;
 
-use Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1LabelVideoRequest;
-use Google\Service\DataLabeling\GoogleLongrunningOperation;
+use FluentMail\Google\Service\DataLabeling\GoogleCloudDatalabelingV1beta1LabelVideoRequest;
+use FluentMail\Google\Service\DataLabeling\GoogleLongrunningOperation;
 
 /**
  * The "video" collection of methods.

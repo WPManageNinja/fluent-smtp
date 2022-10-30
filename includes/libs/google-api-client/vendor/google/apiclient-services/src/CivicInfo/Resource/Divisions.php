@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CivicInfo\Resource;
+namespace FluentMail\Google\Service\CivicInfo\Resource;
 
-use Google\Service\CivicInfo\DivisionSearchResponse;
+use FluentMail\Google\Service\CivicInfo\DivisionSearchResponse;
 
 /**
  * The "divisions" collection of methods.

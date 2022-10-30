@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\AndroidEnterprise\Resource;
+namespace FluentMail\Google\Service\AndroidEnterprise\Resource;
 
-use Google\Service\AndroidEnterprise\AdministratorWebToken;
-use Google\Service\AndroidEnterprise\AdministratorWebTokenSpec;
-use Google\Service\AndroidEnterprise\Enterprise;
-use Google\Service\AndroidEnterprise\EnterpriseAccount;
-use Google\Service\AndroidEnterprise\EnterprisesListResponse;
-use Google\Service\AndroidEnterprise\EnterprisesSendTestPushNotificationResponse;
-use Google\Service\AndroidEnterprise\NotificationSet;
-use Google\Service\AndroidEnterprise\ServiceAccount;
-use Google\Service\AndroidEnterprise\SignupInfo;
-use Google\Service\AndroidEnterprise\StoreLayout;
+use FluentMail\Google\Service\AndroidEnterprise\AdministratorWebToken;
+use FluentMail\Google\Service\AndroidEnterprise\AdministratorWebTokenSpec;
+use FluentMail\Google\Service\AndroidEnterprise\Enterprise;
+use FluentMail\Google\Service\AndroidEnterprise\EnterpriseAccount;
+use FluentMail\Google\Service\AndroidEnterprise\EnterprisesListResponse;
+use FluentMail\Google\Service\AndroidEnterprise\EnterprisesSendTestPushNotificationResponse;
+use FluentMail\Google\Service\AndroidEnterprise\NotificationSet;
+use FluentMail\Google\Service\AndroidEnterprise\ServiceAccount;
+use FluentMail\Google\Service\AndroidEnterprise\SignupInfo;
+use FluentMail\Google\Service\AndroidEnterprise\StoreLayout;
 
 /**
  * The "enterprises" collection of methods.

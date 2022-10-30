@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\Size;
-use Google\Service\Dfareporting\SizesListResponse;
+use FluentMail\Google\Service\Dfareporting\Size;
+use FluentMail\Google\Service\Dfareporting\SizesListResponse;
 
 /**
  * The "sizes" collection of methods.

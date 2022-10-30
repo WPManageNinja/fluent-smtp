@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsData;
+namespace FluentMail\Google\Service\AnalyticsData;
 
 class Cohort extends \Google\Model
 {

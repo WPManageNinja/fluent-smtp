@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
-use Google\Service\CloudHealthcare\CreateMessageRequest;
-use Google\Service\CloudHealthcare\HealthcareEmpty;
-use Google\Service\CloudHealthcare\IngestMessageRequest;
-use Google\Service\CloudHealthcare\IngestMessageResponse;
-use Google\Service\CloudHealthcare\ListMessagesResponse;
-use Google\Service\CloudHealthcare\Message;
+use FluentMail\Google\Service\CloudHealthcare\CreateMessageRequest;
+use FluentMail\Google\Service\CloudHealthcare\HealthcareEmpty;
+use FluentMail\Google\Service\CloudHealthcare\IngestMessageRequest;
+use FluentMail\Google\Service\CloudHealthcare\IngestMessageResponse;
+use FluentMail\Google\Service\CloudHealthcare\ListMessagesResponse;
+use FluentMail\Google\Service\CloudHealthcare\Message;
 
 /**
  * The "messages" collection of methods.

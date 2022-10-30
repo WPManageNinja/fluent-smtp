@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
-use Google\Service\CloudHealthcare\AnalyzeEntitiesRequest;
-use Google\Service\CloudHealthcare\AnalyzeEntitiesResponse;
+use FluentMail\Google\Service\CloudHealthcare\AnalyzeEntitiesRequest;
+use FluentMail\Google\Service\CloudHealthcare\AnalyzeEntitiesResponse;
 
 /**
  * The "nlp" collection of methods.

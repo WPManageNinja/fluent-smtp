@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\SemanticTile\Resource;
+namespace FluentMail\Google\Service\SemanticTile\Resource;
 
-use Google\Service\SemanticTile\TerrainTile;
+use FluentMail\Google\Service\SemanticTile\TerrainTile;
 
 /**
  * The "terraintiles" collection of methods.

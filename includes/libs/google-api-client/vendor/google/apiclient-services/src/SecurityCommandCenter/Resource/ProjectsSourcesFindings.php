@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\SecurityCommandCenter\Resource;
+namespace FluentMail\Google\Service\SecurityCommandCenter\Resource;
 
-use Google\Service\SecurityCommandCenter\Finding;
-use Google\Service\SecurityCommandCenter\GroupFindingsRequest;
-use Google\Service\SecurityCommandCenter\GroupFindingsResponse;
-use Google\Service\SecurityCommandCenter\ListFindingsResponse;
-use Google\Service\SecurityCommandCenter\SecurityMarks;
-use Google\Service\SecurityCommandCenter\SetFindingStateRequest;
-use Google\Service\SecurityCommandCenter\SetMuteRequest;
+use FluentMail\Google\Service\SecurityCommandCenter\Finding;
+use FluentMail\Google\Service\SecurityCommandCenter\GroupFindingsRequest;
+use FluentMail\Google\Service\SecurityCommandCenter\GroupFindingsResponse;
+use FluentMail\Google\Service\SecurityCommandCenter\ListFindingsResponse;
+use FluentMail\Google\Service\SecurityCommandCenter\SecurityMarks;
+use FluentMail\Google\Service\SecurityCommandCenter\SetFindingStateRequest;
+use FluentMail\Google\Service\SecurityCommandCenter\SetMuteRequest;
 
 /**
  * The "findings" collection of methods.

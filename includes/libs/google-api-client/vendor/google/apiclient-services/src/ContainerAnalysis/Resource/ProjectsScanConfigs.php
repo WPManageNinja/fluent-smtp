@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ContainerAnalysis\Resource;
+namespace FluentMail\Google\Service\ContainerAnalysis\Resource;
 
-use Google\Service\ContainerAnalysis\ListScanConfigsResponse;
-use Google\Service\ContainerAnalysis\ScanConfig;
+use FluentMail\Google\Service\ContainerAnalysis\ListScanConfigsResponse;
+use FluentMail\Google\Service\ContainerAnalysis\ScanConfig;
 
 /**
  * The "scanConfigs" collection of methods.

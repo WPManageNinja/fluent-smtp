@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Integrations\Resource;
+namespace FluentMail\Google\Service\Integrations\Resource;
 
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListSfdcChannelsResponse;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaSfdcChannel;
-use Google\Service\Integrations\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListSfdcChannelsResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaSfdcChannel;
+use FluentMail\Google\Service\Integrations\GoogleProtobufEmpty;
 
 /**
  * The "sfdcChannels" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\ListUsersResponse;
-use Google\Service\AndroidPublisher\User;
+use FluentMail\Google\Service\AndroidPublisher\ListUsersResponse;
+use FluentMail\Google\Service\AndroidPublisher\User;
 
 /**
  * The "users" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Clouderrorreporting\Resource;
+namespace FluentMail\Google\Service\Clouderrorreporting\Resource;
 
-use Google\Service\Clouderrorreporting\ListGroupStatsResponse;
+use FluentMail\Google\Service\Clouderrorreporting\ListGroupStatsResponse;
 
 /**
  * The "groupStats" collection of methods.

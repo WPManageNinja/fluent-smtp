@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Container\Resource;
+namespace FluentMail\Google\Service\Container\Resource;
 
-use Google\Service\Container\ListUsableSubnetworksResponse;
+use FluentMail\Google\Service\Container\ListUsableSubnetworksResponse;
 
 /**
  * The "usableSubnetworks" collection of methods.

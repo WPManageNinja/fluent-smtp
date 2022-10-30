@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\CloudOSLogin\Resource;
+namespace FluentMail\Google\Service\CloudOSLogin\Resource;
 
-use Google\Service\CloudOSLogin\SshPublicKey;
+use FluentMail\Google\Service\CloudOSLogin\SshPublicKey;
 
 /**
  * The "sshPublicKey" collection of methods.

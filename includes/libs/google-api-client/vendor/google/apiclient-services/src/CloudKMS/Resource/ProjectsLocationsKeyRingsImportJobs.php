@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\CloudKMS\Resource;
+namespace FluentMail\Google\Service\CloudKMS\Resource;
 
-use Google\Service\CloudKMS\ImportJob;
-use Google\Service\CloudKMS\ListImportJobsResponse;
-use Google\Service\CloudKMS\Policy;
-use Google\Service\CloudKMS\SetIamPolicyRequest;
-use Google\Service\CloudKMS\TestIamPermissionsRequest;
-use Google\Service\CloudKMS\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudKMS\ImportJob;
+use FluentMail\Google\Service\CloudKMS\ListImportJobsResponse;
+use FluentMail\Google\Service\CloudKMS\Policy;
+use FluentMail\Google\Service\CloudKMS\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudKMS\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudKMS\TestIamPermissionsResponse;
 
 /**
  * The "importJobs" collection of methods.

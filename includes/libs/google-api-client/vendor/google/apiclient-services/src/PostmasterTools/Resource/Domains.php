@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\PostmasterTools\Resource;
+namespace FluentMail\Google\Service\PostmasterTools\Resource;
 
-use Google\Service\PostmasterTools\Domain;
-use Google\Service\PostmasterTools\ListDomainsResponse;
+use FluentMail\Google\Service\PostmasterTools\Domain;
+use FluentMail\Google\Service\PostmasterTools\ListDomainsResponse;
 
 /**
  * The "domains" collection of methods.

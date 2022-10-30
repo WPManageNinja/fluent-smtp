@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
 use InvalidArgumentException;
-use Monolog\Logger;
-use Monolog\Utils;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\Utils;
 
 /**
  * Stores logs to files that are rotated every day and a limited number of files are kept.

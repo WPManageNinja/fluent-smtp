@@ -1,6 +1,6 @@
 <?php
 
-namespace GuzzleHttp\Promise;
+namespace FluentMail\GuzzleHttp\Promise;
 
 interface TaskQueueInterface
 {

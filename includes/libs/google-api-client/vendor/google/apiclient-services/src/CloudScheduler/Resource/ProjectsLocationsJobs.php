@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\CloudScheduler\Resource;
+namespace FluentMail\Google\Service\CloudScheduler\Resource;
 
-use Google\Service\CloudScheduler\CloudschedulerEmpty;
-use Google\Service\CloudScheduler\Job;
-use Google\Service\CloudScheduler\ListJobsResponse;
-use Google\Service\CloudScheduler\PauseJobRequest;
-use Google\Service\CloudScheduler\ResumeJobRequest;
-use Google\Service\CloudScheduler\RunJobRequest;
+use FluentMail\Google\Service\CloudScheduler\CloudschedulerEmpty;
+use FluentMail\Google\Service\CloudScheduler\Job;
+use FluentMail\Google\Service\CloudScheduler\ListJobsResponse;
+use FluentMail\Google\Service\CloudScheduler\PauseJobRequest;
+use FluentMail\Google\Service\CloudScheduler\ResumeJobRequest;
+use FluentMail\Google\Service\CloudScheduler\RunJobRequest;
 
 /**
  * The "jobs" collection of methods.

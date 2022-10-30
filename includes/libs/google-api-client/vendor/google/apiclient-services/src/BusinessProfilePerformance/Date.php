@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BusinessProfilePerformance;
+namespace FluentMail\Google\Service\BusinessProfilePerformance;
 
 class Date extends \Google\Model
 {

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Storagetransfer;
+namespace FluentMail\Google\Service\Storagetransfer;
 
 class Status extends \Google\Collection
 {

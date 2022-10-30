@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
-use Monolog\Logger;
-use Monolog\Utils;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\Utils;
 
 /**
  * Stores to any stream resource

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\CreativeGroup;
-use Google\Service\Dfareporting\CreativeGroupsListResponse;
+use FluentMail\Google\Service\Dfareporting\CreativeGroup;
+use FluentMail\Google\Service\Dfareporting\CreativeGroupsListResponse;
 
 /**
  * The "creativeGroups" collection of methods.

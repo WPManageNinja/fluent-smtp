@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudTrace\Resource;
+namespace FluentMail\Google\Service\CloudTrace\Resource;
 
-use Google\Service\CloudTrace\BatchWriteSpansRequest;
-use Google\Service\CloudTrace\CloudtraceEmpty;
+use FluentMail\Google\Service\CloudTrace\BatchWriteSpansRequest;
+use FluentMail\Google\Service\CloudTrace\CloudtraceEmpty;
 
 /**
  * The "traces" collection of methods.

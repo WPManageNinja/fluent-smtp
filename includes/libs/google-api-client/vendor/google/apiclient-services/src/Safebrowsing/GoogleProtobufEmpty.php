@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Safebrowsing;
+namespace FluentMail\Google\Service\Safebrowsing;
 
 class GoogleProtobufEmpty extends \Google\Model
 {

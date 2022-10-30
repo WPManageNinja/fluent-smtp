@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Fcmdata;
+namespace FluentMail\Google\Service\Fcmdata;
 
 class GoogleFirebaseFcmDataV1beta1AndroidDeliveryData extends \Google\Model
 {

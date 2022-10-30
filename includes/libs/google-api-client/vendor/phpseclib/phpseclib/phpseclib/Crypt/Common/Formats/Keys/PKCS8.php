@@ -23,19 +23,19 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\Common\Formats\Keys;
+namespace FluentMail\phpseclib3\Crypt\Common\Formats\Keys;
 
-use phpseclib3\Common\Functions\Strings;
-use phpseclib3\Crypt\AES;
-use phpseclib3\Crypt\DES;
-use phpseclib3\Crypt\Random;
-use phpseclib3\Crypt\RC2;
-use phpseclib3\Crypt\RC4;
-use phpseclib3\Crypt\TripleDES;
-use phpseclib3\Exception\InsufficientSetupException;
-use phpseclib3\Exception\UnsupportedAlgorithmException;
-use phpseclib3\File\ASN1;
-use phpseclib3\File\ASN1\Maps;
+use FluentMail\phpseclib3\Common\Functions\Strings;
+use FluentMail\phpseclib3\Crypt\AES;
+use FluentMail\phpseclib3\Crypt\DES;
+use FluentMail\phpseclib3\Crypt\Random;
+use FluentMail\phpseclib3\Crypt\RC2;
+use FluentMail\phpseclib3\Crypt\RC4;
+use FluentMail\phpseclib3\Crypt\TripleDES;
+use FluentMail\phpseclib3\Exception\InsufficientSetupException;
+use FluentMail\phpseclib3\Exception\UnsupportedAlgorithmException;
+use FluentMail\phpseclib3\File\ASN1;
+use FluentMail\phpseclib3\File\ASN1\Maps;
 
 /**
  * PKCS#8 Formatted Key Handler

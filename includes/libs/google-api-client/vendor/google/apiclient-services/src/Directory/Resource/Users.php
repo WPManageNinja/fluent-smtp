@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\Channel;
-use Google\Service\Directory\User;
-use Google\Service\Directory\UserMakeAdmin;
-use Google\Service\Directory\UserUndelete;
-use Google\Service\Directory\Users as UsersModel;
+use FluentMail\Google\Service\Directory\Channel;
+use FluentMail\Google\Service\Directory\User;
+use FluentMail\Google\Service\Directory\UserMakeAdmin;
+use FluentMail\Google\Service\Directory\UserUndelete;
+use FluentMail\Google\Service\Directory\Users as UsersModel;
 
 /**
  * The "users" collection of methods.

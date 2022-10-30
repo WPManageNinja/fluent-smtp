@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Playdeveloperreporting\Resource;
+namespace FluentMail\Google\Service\Playdeveloperreporting\Resource;
 
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1AnrRateMetricSet;
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryAnrRateMetricSetRequest;
-use Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryAnrRateMetricSetResponse;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1AnrRateMetricSet;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryAnrRateMetricSetRequest;
+use FluentMail\Google\Service\Playdeveloperreporting\GooglePlayDeveloperReportingV1beta1QueryAnrRateMetricSetResponse;
 
 /**
  * The "anrrate" collection of methods.

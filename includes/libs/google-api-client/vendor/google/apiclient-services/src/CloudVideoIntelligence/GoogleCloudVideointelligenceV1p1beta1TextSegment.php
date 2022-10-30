@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudVideoIntelligence;
+namespace FluentMail\Google\Service\CloudVideoIntelligence;
 
 class GoogleCloudVideointelligenceV1p1beta1TextSegment extends \Google\Collection
 {

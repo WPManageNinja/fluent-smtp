@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\RecommendationsAI\Resource;
+namespace FluentMail\Google\Service\RecommendationsAI\Resource;
 
-use Google\Service\RecommendationsAI\GoogleLongrunningListOperationsResponse;
-use Google\Service\RecommendationsAI\GoogleLongrunningOperation;
+use FluentMail\Google\Service\RecommendationsAI\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\RecommendationsAI\GoogleLongrunningOperation;
 
 /**
  * The "operations" collection of methods.

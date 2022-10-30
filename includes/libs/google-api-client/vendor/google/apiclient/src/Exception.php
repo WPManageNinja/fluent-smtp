@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-namespace Google;
+namespace FluentMail\Google;
 
 use Exception as BaseException;
 

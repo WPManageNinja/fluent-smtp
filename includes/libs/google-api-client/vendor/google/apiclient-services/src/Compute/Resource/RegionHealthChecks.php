@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\HealthCheck;
-use Google\Service\Compute\HealthCheckList;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\HealthCheck;
+use FluentMail\Google\Service\Compute\HealthCheckList;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "regionHealthChecks" collection of methods.

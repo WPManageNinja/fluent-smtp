@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\DatabaseMigrationService\Resource;
+namespace FluentMail\Google\Service\DatabaseMigrationService\Resource;
 
-use Google\Service\DatabaseMigrationService\CancelOperationRequest;
-use Google\Service\DatabaseMigrationService\DatamigrationEmpty;
-use Google\Service\DatabaseMigrationService\ListOperationsResponse;
-use Google\Service\DatabaseMigrationService\Operation;
+use FluentMail\Google\Service\DatabaseMigrationService\CancelOperationRequest;
+use FluentMail\Google\Service\DatabaseMigrationService\DatamigrationEmpty;
+use FluentMail\Google\Service\DatabaseMigrationService\ListOperationsResponse;
+use FluentMail\Google\Service\DatabaseMigrationService\Operation;
 
 /**
  * The "operations" collection of methods.

@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\GameServices\Resource;
+namespace FluentMail\Google\Service\GameServices\Resource;
 
-use Google\Service\GameServices\GameServerCluster;
-use Google\Service\GameServices\ListGameServerClustersResponse;
-use Google\Service\GameServices\Operation;
-use Google\Service\GameServices\PreviewCreateGameServerClusterResponse;
-use Google\Service\GameServices\PreviewDeleteGameServerClusterResponse;
-use Google\Service\GameServices\PreviewUpdateGameServerClusterResponse;
+use FluentMail\Google\Service\GameServices\GameServerCluster;
+use FluentMail\Google\Service\GameServices\ListGameServerClustersResponse;
+use FluentMail\Google\Service\GameServices\Operation;
+use FluentMail\Google\Service\GameServices\PreviewCreateGameServerClusterResponse;
+use FluentMail\Google\Service\GameServices\PreviewDeleteGameServerClusterResponse;
+use FluentMail\Google\Service\GameServices\PreviewUpdateGameServerClusterResponse;
 
 /**
  * The "gameServerClusters" collection of methods.

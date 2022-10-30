@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Classroom\Resource;
+namespace FluentMail\Google\Service\Classroom\Resource;
 
-use Google\Service\Classroom\Announcement;
-use Google\Service\Classroom\ClassroomEmpty;
-use Google\Service\Classroom\ListAnnouncementsResponse;
-use Google\Service\Classroom\ModifyAnnouncementAssigneesRequest;
+use FluentMail\Google\Service\Classroom\Announcement;
+use FluentMail\Google\Service\Classroom\ClassroomEmpty;
+use FluentMail\Google\Service\Classroom\ListAnnouncementsResponse;
+use FluentMail\Google\Service\Classroom\ModifyAnnouncementAssigneesRequest;
 
 /**
  * The "announcements" collection of methods.

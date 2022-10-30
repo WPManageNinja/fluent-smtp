@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\BackendService;
-use Google\Service\Compute\BackendServiceGroupHealth;
-use Google\Service\Compute\BackendServiceList;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Policy;
-use Google\Service\Compute\RegionSetPolicyRequest;
-use Google\Service\Compute\ResourceGroupReference;
+use FluentMail\Google\Service\Compute\BackendService;
+use FluentMail\Google\Service\Compute\BackendServiceGroupHealth;
+use FluentMail\Google\Service\Compute\BackendServiceList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Policy;
+use FluentMail\Google\Service\Compute\RegionSetPolicyRequest;
+use FluentMail\Google\Service\Compute\ResourceGroupReference;
 
 /**
  * The "regionBackendServices" collection of methods.

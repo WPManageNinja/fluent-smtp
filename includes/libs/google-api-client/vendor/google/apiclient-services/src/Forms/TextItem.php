@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Forms;
+namespace FluentMail\Google\Service\Forms;
 
 class TextItem extends \Google\Model
 {

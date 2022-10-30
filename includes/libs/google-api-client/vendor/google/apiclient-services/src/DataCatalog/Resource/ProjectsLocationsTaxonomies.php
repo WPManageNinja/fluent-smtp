@@ -15,20 +15,20 @@
  * the License.
  */
 
-namespace Google\Service\DataCatalog\Resource;
+namespace FluentMail\Google\Service\DataCatalog\Resource;
 
-use Google\Service\DataCatalog\DatacatalogEmpty;
-use Google\Service\DataCatalog\GetIamPolicyRequest;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1ExportTaxonomiesResponse;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1ImportTaxonomiesRequest;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1ImportTaxonomiesResponse;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1ListTaxonomiesResponse;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1ReplaceTaxonomyRequest;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1Taxonomy;
-use Google\Service\DataCatalog\Policy;
-use Google\Service\DataCatalog\SetIamPolicyRequest;
-use Google\Service\DataCatalog\TestIamPermissionsRequest;
-use Google\Service\DataCatalog\TestIamPermissionsResponse;
+use FluentMail\Google\Service\DataCatalog\DatacatalogEmpty;
+use FluentMail\Google\Service\DataCatalog\GetIamPolicyRequest;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1ExportTaxonomiesResponse;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1ImportTaxonomiesRequest;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1ImportTaxonomiesResponse;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1ListTaxonomiesResponse;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1ReplaceTaxonomyRequest;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1Taxonomy;
+use FluentMail\Google\Service\DataCatalog\Policy;
+use FluentMail\Google\Service\DataCatalog\SetIamPolicyRequest;
+use FluentMail\Google\Service\DataCatalog\TestIamPermissionsRequest;
+use FluentMail\Google\Service\DataCatalog\TestIamPermissionsResponse;
 
 /**
  * The "taxonomies" collection of methods.

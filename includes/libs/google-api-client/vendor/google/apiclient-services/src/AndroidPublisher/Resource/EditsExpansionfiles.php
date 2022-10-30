@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\ExpansionFile;
-use Google\Service\AndroidPublisher\ExpansionFilesUploadResponse;
+use FluentMail\Google\Service\AndroidPublisher\ExpansionFile;
+use FluentMail\Google\Service\AndroidPublisher\ExpansionFilesUploadResponse;
 
 /**
  * The "expansionfiles" collection of methods.

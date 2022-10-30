@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Cloudchannel\Resource;
+namespace FluentMail\Google\Service\Cloudchannel\Resource;
 
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListSkusResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListSkusResponse;
 
 /**
  * The "skus" collection of methods.

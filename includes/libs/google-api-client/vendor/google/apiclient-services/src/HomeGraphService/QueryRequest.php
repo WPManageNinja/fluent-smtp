@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\HomeGraphService;
+namespace FluentMail\Google\Service\HomeGraphService;
 
 class QueryRequest extends \Google\Collection
 {

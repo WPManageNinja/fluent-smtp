@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Adsense\Resource;
+namespace FluentMail\Google\Service\Adsense\Resource;
 
-use Google\Service\Adsense\Account;
-use Google\Service\Adsense\AdBlockingRecoveryTag;
-use Google\Service\Adsense\ListAccountsResponse;
-use Google\Service\Adsense\ListChildAccountsResponse;
+use FluentMail\Google\Service\Adsense\Account;
+use FluentMail\Google\Service\Adsense\AdBlockingRecoveryTag;
+use FluentMail\Google\Service\Adsense\ListAccountsResponse;
+use FluentMail\Google\Service\Adsense\ListChildAccountsResponse;
 
 /**
  * The "accounts" collection of methods.

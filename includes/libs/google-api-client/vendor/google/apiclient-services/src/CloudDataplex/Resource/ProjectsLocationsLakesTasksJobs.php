@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudDataplex\Resource;
+namespace FluentMail\Google\Service\CloudDataplex\Resource;
 
-use Google\Service\CloudDataplex\DataplexEmpty;
-use Google\Service\CloudDataplex\GoogleCloudDataplexV1CancelJobRequest;
-use Google\Service\CloudDataplex\GoogleCloudDataplexV1Job;
-use Google\Service\CloudDataplex\GoogleCloudDataplexV1ListJobsResponse;
+use FluentMail\Google\Service\CloudDataplex\DataplexEmpty;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudDataplexV1CancelJobRequest;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudDataplexV1Job;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudDataplexV1ListJobsResponse;
 
 /**
  * The "jobs" collection of methods.

@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\GlobalSetLabelsRequest;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\SecurityPoliciesAggregatedList;
-use Google\Service\Compute\SecurityPoliciesListPreconfiguredExpressionSetsResponse;
-use Google\Service\Compute\SecurityPolicy;
-use Google\Service\Compute\SecurityPolicyList;
-use Google\Service\Compute\SecurityPolicyRule;
+use FluentMail\Google\Service\Compute\GlobalSetLabelsRequest;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\SecurityPoliciesAggregatedList;
+use FluentMail\Google\Service\Compute\SecurityPoliciesListPreconfiguredExpressionSetsResponse;
+use FluentMail\Google\Service\Compute\SecurityPolicy;
+use FluentMail\Google\Service\Compute\SecurityPolicyList;
+use FluentMail\Google\Service\Compute\SecurityPolicyRule;
 
 /**
  * The "securityPolicies" collection of methods.

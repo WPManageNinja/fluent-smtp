@@ -9,9 +9,9 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\DSA;
+namespace FluentMail\phpseclib3\Crypt\DSA;
 
-use phpseclib3\Crypt\DSA;
+use FluentMail\phpseclib3\Crypt\DSA;
 
 /**
  * DSA Parameters

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyerII\Resource;
+namespace FluentMail\Google\Service\AdExchangeBuyerII\Resource;
 
-use Google\Service\AdExchangeBuyerII\AddDealAssociationRequest;
-use Google\Service\AdExchangeBuyerII\Adexchangebuyer2Empty;
-use Google\Service\AdExchangeBuyerII\ListDealAssociationsResponse;
-use Google\Service\AdExchangeBuyerII\RemoveDealAssociationRequest;
+use FluentMail\Google\Service\AdExchangeBuyerII\AddDealAssociationRequest;
+use FluentMail\Google\Service\AdExchangeBuyerII\Adexchangebuyer2Empty;
+use FluentMail\Google\Service\AdExchangeBuyerII\ListDealAssociationsResponse;
+use FluentMail\Google\Service\AdExchangeBuyerII\RemoveDealAssociationRequest;
 
 /**
  * The "dealAssociations" collection of methods.

@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\DataprocMetastore\Resource;
+namespace FluentMail\Google\Service\DataprocMetastore\Resource;
 
-use Google\Service\DataprocMetastore\ListOperationsResponse;
-use Google\Service\DataprocMetastore\MetastoreEmpty;
-use Google\Service\DataprocMetastore\Operation;
+use FluentMail\Google\Service\DataprocMetastore\ListOperationsResponse;
+use FluentMail\Google\Service\DataprocMetastore\MetastoreEmpty;
+use FluentMail\Google\Service\DataprocMetastore\Operation;
 
 /**
  * The "operations" collection of methods.

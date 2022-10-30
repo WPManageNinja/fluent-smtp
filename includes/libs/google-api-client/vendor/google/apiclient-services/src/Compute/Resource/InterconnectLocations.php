@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\InterconnectLocation;
-use Google\Service\Compute\InterconnectLocationList;
+use FluentMail\Google\Service\Compute\InterconnectLocation;
+use FluentMail\Google\Service\Compute\InterconnectLocationList;
 
 /**
  * The "interconnectLocations" collection of methods.

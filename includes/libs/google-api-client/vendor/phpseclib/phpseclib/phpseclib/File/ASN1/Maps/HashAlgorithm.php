@@ -11,7 +11,7 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\File\ASN1\Maps;
+namespace FluentMail\phpseclib3\File\ASN1\Maps;
 
 /**
  * HashAglorithm

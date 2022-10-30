@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Datastream\Resource;
+namespace FluentMail\Google\Service\Datastream\Resource;
 
-use Google\Service\Datastream\ListStreamsResponse;
-use Google\Service\Datastream\Operation;
-use Google\Service\Datastream\Stream;
+use FluentMail\Google\Service\Datastream\ListStreamsResponse;
+use FluentMail\Google\Service\Datastream\Operation;
+use FluentMail\Google\Service\Datastream\Stream;
 
 /**
  * The "streams" collection of methods.

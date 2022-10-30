@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\ApigeeRegistry\Resource;
+namespace FluentMail\Google\Service\ApigeeRegistry\Resource;
 
-use Google\Service\ApigeeRegistry\ApiSpec;
-use Google\Service\ApigeeRegistry\ApigeeregistryEmpty;
-use Google\Service\ApigeeRegistry\HttpBody;
-use Google\Service\ApigeeRegistry\ListApiSpecRevisionsResponse;
-use Google\Service\ApigeeRegistry\ListApiSpecsResponse;
-use Google\Service\ApigeeRegistry\Policy;
-use Google\Service\ApigeeRegistry\RollbackApiSpecRequest;
-use Google\Service\ApigeeRegistry\SetIamPolicyRequest;
-use Google\Service\ApigeeRegistry\TagApiSpecRevisionRequest;
-use Google\Service\ApigeeRegistry\TestIamPermissionsRequest;
-use Google\Service\ApigeeRegistry\TestIamPermissionsResponse;
+use FluentMail\Google\Service\ApigeeRegistry\ApiSpec;
+use FluentMail\Google\Service\ApigeeRegistry\ApigeeregistryEmpty;
+use FluentMail\Google\Service\ApigeeRegistry\HttpBody;
+use FluentMail\Google\Service\ApigeeRegistry\ListApiSpecRevisionsResponse;
+use FluentMail\Google\Service\ApigeeRegistry\ListApiSpecsResponse;
+use FluentMail\Google\Service\ApigeeRegistry\Policy;
+use FluentMail\Google\Service\ApigeeRegistry\RollbackApiSpecRequest;
+use FluentMail\Google\Service\ApigeeRegistry\SetIamPolicyRequest;
+use FluentMail\Google\Service\ApigeeRegistry\TagApiSpecRevisionRequest;
+use FluentMail\Google\Service\ApigeeRegistry\TestIamPermissionsRequest;
+use FluentMail\Google\Service\ApigeeRegistry\TestIamPermissionsResponse;
 
 /**
  * The "specs" collection of methods.

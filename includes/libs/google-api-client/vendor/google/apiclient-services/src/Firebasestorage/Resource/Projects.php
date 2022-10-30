@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Firebasestorage\Resource;
+namespace FluentMail\Google\Service\Firebasestorage\Resource;
 
 /**
  * The "projects" collection of methods.

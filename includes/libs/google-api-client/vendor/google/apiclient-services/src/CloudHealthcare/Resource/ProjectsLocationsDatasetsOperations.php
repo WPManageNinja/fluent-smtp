@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudHealthcare\Resource;
+namespace FluentMail\Google\Service\CloudHealthcare\Resource;
 
-use Google\Service\CloudHealthcare\CancelOperationRequest;
-use Google\Service\CloudHealthcare\HealthcareEmpty;
-use Google\Service\CloudHealthcare\ListOperationsResponse;
-use Google\Service\CloudHealthcare\Operation;
+use FluentMail\Google\Service\CloudHealthcare\CancelOperationRequest;
+use FluentMail\Google\Service\CloudHealthcare\HealthcareEmpty;
+use FluentMail\Google\Service\CloudHealthcare\ListOperationsResponse;
+use FluentMail\Google\Service\CloudHealthcare\Operation;
 
 /**
  * The "operations" collection of methods.

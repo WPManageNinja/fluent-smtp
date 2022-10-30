@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\CloudDeploy\Resource;
+namespace FluentMail\Google\Service\CloudDeploy\Resource;
 
-use Google\Service\CloudDeploy\DeliveryPipeline;
-use Google\Service\CloudDeploy\ListDeliveryPipelinesResponse;
-use Google\Service\CloudDeploy\Operation;
-use Google\Service\CloudDeploy\Policy;
-use Google\Service\CloudDeploy\SetIamPolicyRequest;
-use Google\Service\CloudDeploy\TestIamPermissionsRequest;
-use Google\Service\CloudDeploy\TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudDeploy\DeliveryPipeline;
+use FluentMail\Google\Service\CloudDeploy\ListDeliveryPipelinesResponse;
+use FluentMail\Google\Service\CloudDeploy\Operation;
+use FluentMail\Google\Service\CloudDeploy\Policy;
+use FluentMail\Google\Service\CloudDeploy\SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudDeploy\TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudDeploy\TestIamPermissionsResponse;
 
 /**
  * The "deliveryPipelines" collection of methods.

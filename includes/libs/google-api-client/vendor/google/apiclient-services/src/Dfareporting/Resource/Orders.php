@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\Order;
-use Google\Service\Dfareporting\OrdersListResponse;
+use FluentMail\Google\Service\Dfareporting\Order;
+use FluentMail\Google\Service\Dfareporting\OrdersListResponse;
 
 /**
  * The "orders" collection of methods.

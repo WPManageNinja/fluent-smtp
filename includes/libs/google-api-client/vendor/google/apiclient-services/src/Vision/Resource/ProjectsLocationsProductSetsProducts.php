@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Vision\Resource;
+namespace FluentMail\Google\Service\Vision\Resource;
 
-use Google\Service\Vision\ListProductsInProductSetResponse;
+use FluentMail\Google\Service\Vision\ListProductsInProductSetResponse;
 
 /**
  * The "products" collection of methods.

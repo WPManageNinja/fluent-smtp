@@ -15,19 +15,19 @@
  * the License.
  */
 
-namespace Google\Service\Dataproc\Resource;
+namespace FluentMail\Google\Service\Dataproc\Resource;
 
-use Google\Service\Dataproc\CancelJobRequest;
-use Google\Service\Dataproc\DataprocEmpty;
-use Google\Service\Dataproc\GetIamPolicyRequest;
-use Google\Service\Dataproc\Job;
-use Google\Service\Dataproc\ListJobsResponse;
-use Google\Service\Dataproc\Operation;
-use Google\Service\Dataproc\Policy;
-use Google\Service\Dataproc\SetIamPolicyRequest;
-use Google\Service\Dataproc\SubmitJobRequest;
-use Google\Service\Dataproc\TestIamPermissionsRequest;
-use Google\Service\Dataproc\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Dataproc\CancelJobRequest;
+use FluentMail\Google\Service\Dataproc\DataprocEmpty;
+use FluentMail\Google\Service\Dataproc\GetIamPolicyRequest;
+use FluentMail\Google\Service\Dataproc\Job;
+use FluentMail\Google\Service\Dataproc\ListJobsResponse;
+use FluentMail\Google\Service\Dataproc\Operation;
+use FluentMail\Google\Service\Dataproc\Policy;
+use FluentMail\Google\Service\Dataproc\SetIamPolicyRequest;
+use FluentMail\Google\Service\Dataproc\SubmitJobRequest;
+use FluentMail\Google\Service\Dataproc\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Dataproc\TestIamPermissionsResponse;
 
 /**
  * The "jobs" collection of methods.

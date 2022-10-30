@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace GuzzleHttp\Psr7;
+namespace FluentMail\GuzzleHttp\Psr7;
 
 use InvalidArgumentException;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UploadedFileInterface;
-use Psr\Http\Message\UriInterface;
+use FluentMail\Psr\Http\Message\ServerRequestInterface;
+use FluentMail\Psr\Http\Message\StreamInterface;
+use FluentMail\Psr\Http\Message\UploadedFileInterface;
+use FluentMail\Psr\Http\Message\UriInterface;
 
 /**
  * Server-side HTTP request

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Testing\Resource;
+namespace FluentMail\Google\Service\Testing\Resource;
 
 /**
  * The "projects" collection of methods.

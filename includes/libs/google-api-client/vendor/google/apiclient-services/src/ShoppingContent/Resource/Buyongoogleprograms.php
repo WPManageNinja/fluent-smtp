@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\ActivateBuyOnGoogleProgramRequest;
-use Google\Service\ShoppingContent\BuyOnGoogleProgramStatus;
-use Google\Service\ShoppingContent\OnboardBuyOnGoogleProgramRequest;
-use Google\Service\ShoppingContent\PauseBuyOnGoogleProgramRequest;
-use Google\Service\ShoppingContent\RequestReviewBuyOnGoogleProgramRequest;
+use FluentMail\Google\Service\ShoppingContent\ActivateBuyOnGoogleProgramRequest;
+use FluentMail\Google\Service\ShoppingContent\BuyOnGoogleProgramStatus;
+use FluentMail\Google\Service\ShoppingContent\OnboardBuyOnGoogleProgramRequest;
+use FluentMail\Google\Service\ShoppingContent\PauseBuyOnGoogleProgramRequest;
+use FluentMail\Google\Service\ShoppingContent\RequestReviewBuyOnGoogleProgramRequest;
 
 /**
  * The "buyongoogleprograms" collection of methods.

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Webfonts\Resource;
+namespace FluentMail\Google\Service\Webfonts\Resource;
 
-use Google\Service\Webfonts\WebfontList;
+use FluentMail\Google\Service\Webfonts\WebfontList;
 
 /**
  * The "webfonts" collection of methods.

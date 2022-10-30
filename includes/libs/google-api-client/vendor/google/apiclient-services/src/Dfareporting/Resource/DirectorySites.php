@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\DirectorySite;
-use Google\Service\Dfareporting\DirectorySitesListResponse;
+use FluentMail\Google\Service\Dfareporting\DirectorySite;
+use FluentMail\Google\Service\Dfareporting\DirectorySitesListResponse;
 
 /**
  * The "directorySites" collection of methods.

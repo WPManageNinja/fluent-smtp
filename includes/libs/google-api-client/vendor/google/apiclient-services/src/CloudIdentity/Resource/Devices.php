@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\CloudIdentity\Resource;
+namespace FluentMail\Google\Service\CloudIdentity\Resource;
 
-use Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1CancelWipeDeviceRequest;
-use Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1Device;
-use Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1ListDevicesResponse;
-use Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1WipeDeviceRequest;
-use Google\Service\CloudIdentity\Operation;
+use FluentMail\Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1CancelWipeDeviceRequest;
+use FluentMail\Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1Device;
+use FluentMail\Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1ListDevicesResponse;
+use FluentMail\Google\Service\CloudIdentity\GoogleAppsCloudidentityDevicesV1WipeDeviceRequest;
+use FluentMail\Google\Service\CloudIdentity\Operation;
 
 /**
  * The "devices" collection of methods.

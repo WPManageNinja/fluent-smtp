@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Route;
-use Google\Service\Compute\RouteList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Route;
+use FluentMail\Google\Service\Compute\RouteList;
 
 /**
  * The "routes" collection of methods.

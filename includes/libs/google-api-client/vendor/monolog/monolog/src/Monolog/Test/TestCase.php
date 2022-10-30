@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Test;
+namespace FluentMail\Monolog\Test;
 
-use Monolog\Logger;
-use Monolog\DateTimeImmutable;
-use Monolog\Formatter\FormatterInterface;
+use FluentMail\Monolog\Logger;
+use FluentMail\Monolog\DateTimeImmutable;
+use FluentMail\Monolog\Formatter\FormatterInterface;
 
 /**
  * Lets you easily generate log records and a dummy formatter for testing purposes

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Oauth2;
+namespace FluentMail\Google\Service\Oauth2;
 
 class Tokeninfo extends \Google\Model
 {

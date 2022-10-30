@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Adsense\Resource;
+namespace FluentMail\Google\Service\Adsense\Resource;
 
-use Google\Service\Adsense\AdUnit;
-use Google\Service\Adsense\AdUnitAdCode;
-use Google\Service\Adsense\ListAdUnitsResponse;
-use Google\Service\Adsense\ListLinkedCustomChannelsResponse;
+use FluentMail\Google\Service\Adsense\AdUnit;
+use FluentMail\Google\Service\Adsense\AdUnitAdCode;
+use FluentMail\Google\Service\Adsense\ListAdUnitsResponse;
+use FluentMail\Google\Service\Adsense\ListLinkedCustomChannelsResponse;
 
 /**
  * The "adunits" collection of methods.

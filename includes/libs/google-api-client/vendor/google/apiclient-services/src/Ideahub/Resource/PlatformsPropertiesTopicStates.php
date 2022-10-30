@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Ideahub\Resource;
+namespace FluentMail\Google\Service\Ideahub\Resource;
 
-use Google\Service\Ideahub\GoogleSearchIdeahubV1betaTopicState;
+use FluentMail\Google\Service\Ideahub\GoogleSearchIdeahubV1betaTopicState;
 
 /**
  * The "topicStates" collection of methods.

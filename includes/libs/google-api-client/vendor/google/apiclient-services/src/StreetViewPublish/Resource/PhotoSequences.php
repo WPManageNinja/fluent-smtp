@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\StreetViewPublish\Resource;
+namespace FluentMail\Google\Service\StreetViewPublish\Resource;
 
-use Google\Service\StreetViewPublish\ListPhotoSequencesResponse;
+use FluentMail\Google\Service\StreetViewPublish\ListPhotoSequencesResponse;
 
 /**
  * The "photoSequences" collection of methods.

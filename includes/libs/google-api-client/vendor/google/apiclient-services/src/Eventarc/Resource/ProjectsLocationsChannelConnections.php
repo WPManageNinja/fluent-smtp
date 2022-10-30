@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Eventarc\Resource;
+namespace FluentMail\Google\Service\Eventarc\Resource;
 
-use Google\Service\Eventarc\ChannelConnection;
-use Google\Service\Eventarc\GoogleLongrunningOperation;
-use Google\Service\Eventarc\ListChannelConnectionsResponse;
-use Google\Service\Eventarc\Policy;
-use Google\Service\Eventarc\SetIamPolicyRequest;
-use Google\Service\Eventarc\TestIamPermissionsRequest;
-use Google\Service\Eventarc\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Eventarc\ChannelConnection;
+use FluentMail\Google\Service\Eventarc\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Eventarc\ListChannelConnectionsResponse;
+use FluentMail\Google\Service\Eventarc\Policy;
+use FluentMail\Google\Service\Eventarc\SetIamPolicyRequest;
+use FluentMail\Google\Service\Eventarc\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Eventarc\TestIamPermissionsResponse;
 
 /**
  * The "channelConnections" collection of methods.

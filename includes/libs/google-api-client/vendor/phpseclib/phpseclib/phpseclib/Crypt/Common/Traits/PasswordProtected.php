@@ -11,7 +11,7 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\Common\Traits;
+namespace FluentMail\phpseclib3\Crypt\Common\Traits;
 
 /**
  * Password Protected Trait for Private Keys

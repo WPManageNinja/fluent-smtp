@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ResourceSettings;
+namespace FluentMail\Google\Service\ResourceSettings;
 
 class GoogleCloudResourcesettingsV1ValueStringMap extends \Google\Model
 {

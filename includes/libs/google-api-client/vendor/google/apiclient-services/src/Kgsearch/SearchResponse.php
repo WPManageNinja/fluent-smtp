@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Kgsearch;
+namespace FluentMail\Google\Service\Kgsearch;
 
 class SearchResponse extends \Google\Collection
 {

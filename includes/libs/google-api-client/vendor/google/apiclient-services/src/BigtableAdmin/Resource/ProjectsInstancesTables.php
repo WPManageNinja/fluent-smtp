@@ -15,26 +15,26 @@
  * the License.
  */
 
-namespace Google\Service\BigtableAdmin\Resource;
+namespace FluentMail\Google\Service\BigtableAdmin\Resource;
 
-use Google\Service\BigtableAdmin\BigtableadminEmpty;
-use Google\Service\BigtableAdmin\CheckConsistencyRequest;
-use Google\Service\BigtableAdmin\CheckConsistencyResponse;
-use Google\Service\BigtableAdmin\CreateTableRequest;
-use Google\Service\BigtableAdmin\DropRowRangeRequest;
-use Google\Service\BigtableAdmin\GenerateConsistencyTokenRequest;
-use Google\Service\BigtableAdmin\GenerateConsistencyTokenResponse;
-use Google\Service\BigtableAdmin\GetIamPolicyRequest;
-use Google\Service\BigtableAdmin\ListTablesResponse;
-use Google\Service\BigtableAdmin\ModifyColumnFamiliesRequest;
-use Google\Service\BigtableAdmin\Operation;
-use Google\Service\BigtableAdmin\Policy;
-use Google\Service\BigtableAdmin\RestoreTableRequest;
-use Google\Service\BigtableAdmin\SetIamPolicyRequest;
-use Google\Service\BigtableAdmin\Table;
-use Google\Service\BigtableAdmin\TestIamPermissionsRequest;
-use Google\Service\BigtableAdmin\TestIamPermissionsResponse;
-use Google\Service\BigtableAdmin\UndeleteTableRequest;
+use FluentMail\Google\Service\BigtableAdmin\BigtableadminEmpty;
+use FluentMail\Google\Service\BigtableAdmin\CheckConsistencyRequest;
+use FluentMail\Google\Service\BigtableAdmin\CheckConsistencyResponse;
+use FluentMail\Google\Service\BigtableAdmin\CreateTableRequest;
+use FluentMail\Google\Service\BigtableAdmin\DropRowRangeRequest;
+use FluentMail\Google\Service\BigtableAdmin\GenerateConsistencyTokenRequest;
+use FluentMail\Google\Service\BigtableAdmin\GenerateConsistencyTokenResponse;
+use FluentMail\Google\Service\BigtableAdmin\GetIamPolicyRequest;
+use FluentMail\Google\Service\BigtableAdmin\ListTablesResponse;
+use FluentMail\Google\Service\BigtableAdmin\ModifyColumnFamiliesRequest;
+use FluentMail\Google\Service\BigtableAdmin\Operation;
+use FluentMail\Google\Service\BigtableAdmin\Policy;
+use FluentMail\Google\Service\BigtableAdmin\RestoreTableRequest;
+use FluentMail\Google\Service\BigtableAdmin\SetIamPolicyRequest;
+use FluentMail\Google\Service\BigtableAdmin\Table;
+use FluentMail\Google\Service\BigtableAdmin\TestIamPermissionsRequest;
+use FluentMail\Google\Service\BigtableAdmin\TestIamPermissionsResponse;
+use FluentMail\Google\Service\BigtableAdmin\UndeleteTableRequest;
 
 /**
  * The "tables" collection of methods.

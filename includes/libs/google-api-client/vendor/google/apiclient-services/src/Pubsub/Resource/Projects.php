@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Pubsub\Resource;
+namespace FluentMail\Google\Service\Pubsub\Resource;
 
 /**
  * The "projects" collection of methods.

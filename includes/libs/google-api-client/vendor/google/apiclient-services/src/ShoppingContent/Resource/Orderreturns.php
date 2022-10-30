@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\MerchantOrderReturn;
-use Google\Service\ShoppingContent\OrderreturnsAcknowledgeRequest;
-use Google\Service\ShoppingContent\OrderreturnsAcknowledgeResponse;
-use Google\Service\ShoppingContent\OrderreturnsCreateOrderReturnRequest;
-use Google\Service\ShoppingContent\OrderreturnsCreateOrderReturnResponse;
-use Google\Service\ShoppingContent\OrderreturnsListResponse;
-use Google\Service\ShoppingContent\OrderreturnsProcessRequest;
-use Google\Service\ShoppingContent\OrderreturnsProcessResponse;
+use FluentMail\Google\Service\ShoppingContent\MerchantOrderReturn;
+use FluentMail\Google\Service\ShoppingContent\OrderreturnsAcknowledgeRequest;
+use FluentMail\Google\Service\ShoppingContent\OrderreturnsAcknowledgeResponse;
+use FluentMail\Google\Service\ShoppingContent\OrderreturnsCreateOrderReturnRequest;
+use FluentMail\Google\Service\ShoppingContent\OrderreturnsCreateOrderReturnResponse;
+use FluentMail\Google\Service\ShoppingContent\OrderreturnsListResponse;
+use FluentMail\Google\Service\ShoppingContent\OrderreturnsProcessRequest;
+use FluentMail\Google\Service\ShoppingContent\OrderreturnsProcessResponse;
 
 /**
  * The "orderreturns" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ServiceManagement;
+namespace FluentMail\Google\Service\ServiceManagement;
 
 class Expr extends \Google\Model
 {

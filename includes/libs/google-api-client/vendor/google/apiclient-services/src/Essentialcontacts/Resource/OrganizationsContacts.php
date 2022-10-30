@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Essentialcontacts\Resource;
+namespace FluentMail\Google\Service\Essentialcontacts\Resource;
 
-use Google\Service\Essentialcontacts\GoogleCloudEssentialcontactsV1ComputeContactsResponse;
-use Google\Service\Essentialcontacts\GoogleCloudEssentialcontactsV1Contact;
-use Google\Service\Essentialcontacts\GoogleCloudEssentialcontactsV1ListContactsResponse;
-use Google\Service\Essentialcontacts\GoogleCloudEssentialcontactsV1SendTestMessageRequest;
-use Google\Service\Essentialcontacts\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Essentialcontacts\GoogleCloudEssentialcontactsV1ComputeContactsResponse;
+use FluentMail\Google\Service\Essentialcontacts\GoogleCloudEssentialcontactsV1Contact;
+use FluentMail\Google\Service\Essentialcontacts\GoogleCloudEssentialcontactsV1ListContactsResponse;
+use FluentMail\Google\Service\Essentialcontacts\GoogleCloudEssentialcontactsV1SendTestMessageRequest;
+use FluentMail\Google\Service\Essentialcontacts\GoogleProtobufEmpty;
 
 /**
  * The "contacts" collection of methods.

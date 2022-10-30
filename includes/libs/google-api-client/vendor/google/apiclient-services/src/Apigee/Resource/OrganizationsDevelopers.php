@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
-use Google\Service\Apigee\GoogleCloudApigeeV1Attributes;
-use Google\Service\Apigee\GoogleCloudApigeeV1Developer;
-use Google\Service\Apigee\GoogleCloudApigeeV1DeveloperBalance;
-use Google\Service\Apigee\GoogleCloudApigeeV1DeveloperMonetizationConfig;
-use Google\Service\Apigee\GoogleCloudApigeeV1ListOfDevelopersResponse;
-use Google\Service\Apigee\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1Attributes;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1Developer;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1DeveloperBalance;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1DeveloperMonetizationConfig;
+use FluentMail\Google\Service\Apigee\GoogleCloudApigeeV1ListOfDevelopersResponse;
+use FluentMail\Google\Service\Apigee\GoogleProtobufEmpty;
 
 /**
  * The "developers" collection of methods.

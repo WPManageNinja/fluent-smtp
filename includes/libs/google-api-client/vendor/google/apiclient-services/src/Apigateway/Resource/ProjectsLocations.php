@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Apigateway\Resource;
+namespace FluentMail\Google\Service\Apigateway\Resource;
 
-use Google\Service\Apigateway\ApigatewayListLocationsResponse;
-use Google\Service\Apigateway\ApigatewayLocation;
+use FluentMail\Google\Service\Apigateway\ApigatewayListLocationsResponse;
+use FluentMail\Google\Service\Apigateway\ApigatewayLocation;
 
 /**
  * The "locations" collection of methods.

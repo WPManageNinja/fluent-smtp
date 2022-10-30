@@ -15,20 +15,20 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Disk;
-use Google\Service\Compute\DiskList;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Policy;
-use Google\Service\Compute\RegionDisksAddResourcePoliciesRequest;
-use Google\Service\Compute\RegionDisksRemoveResourcePoliciesRequest;
-use Google\Service\Compute\RegionDisksResizeRequest;
-use Google\Service\Compute\RegionSetLabelsRequest;
-use Google\Service\Compute\RegionSetPolicyRequest;
-use Google\Service\Compute\Snapshot;
-use Google\Service\Compute\TestPermissionsRequest;
-use Google\Service\Compute\TestPermissionsResponse;
+use FluentMail\Google\Service\Compute\Disk;
+use FluentMail\Google\Service\Compute\DiskList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Policy;
+use FluentMail\Google\Service\Compute\RegionDisksAddResourcePoliciesRequest;
+use FluentMail\Google\Service\Compute\RegionDisksRemoveResourcePoliciesRequest;
+use FluentMail\Google\Service\Compute\RegionDisksResizeRequest;
+use FluentMail\Google\Service\Compute\RegionSetLabelsRequest;
+use FluentMail\Google\Service\Compute\RegionSetPolicyRequest;
+use FluentMail\Google\Service\Compute\Snapshot;
+use FluentMail\Google\Service\Compute\TestPermissionsRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsResponse;
 
 /**
  * The "regionDisks" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudProfiler\Resource;
+namespace FluentMail\Google\Service\CloudProfiler\Resource;
 
 /**
  * The "projects" collection of methods.

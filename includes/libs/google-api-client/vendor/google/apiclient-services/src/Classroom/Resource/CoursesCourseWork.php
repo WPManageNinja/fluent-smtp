@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Classroom\Resource;
+namespace FluentMail\Google\Service\Classroom\Resource;
 
-use Google\Service\Classroom\ClassroomEmpty;
-use Google\Service\Classroom\CourseWork;
-use Google\Service\Classroom\ListCourseWorkResponse;
-use Google\Service\Classroom\ModifyCourseWorkAssigneesRequest;
+use FluentMail\Google\Service\Classroom\ClassroomEmpty;
+use FluentMail\Google\Service\Classroom\CourseWork;
+use FluentMail\Google\Service\Classroom\ListCourseWorkResponse;
+use FluentMail\Google\Service\Classroom\ModifyCourseWorkAssigneesRequest;
 
 /**
  * The "courseWork" collection of methods.

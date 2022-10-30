@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Storage;
+namespace FluentMail\Google\Service\Storage;
 
 class Bucket extends \Google\Collection
 {

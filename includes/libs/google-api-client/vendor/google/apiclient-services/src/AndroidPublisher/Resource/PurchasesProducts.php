@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\ProductPurchase;
-use Google\Service\AndroidPublisher\ProductPurchasesAcknowledgeRequest;
+use FluentMail\Google\Service\AndroidPublisher\ProductPurchase;
+use FluentMail\Google\Service\AndroidPublisher\ProductPurchasesAcknowledgeRequest;
 
 /**
  * The "products" collection of methods.

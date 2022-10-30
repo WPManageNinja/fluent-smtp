@@ -11,7 +11,7 @@
  * @link      http://pear.php.net/package/Math_BigInteger
  */
 
-namespace phpseclib3\Crypt\EC\Curves;
+namespace FluentMail\phpseclib3\Crypt\EC\Curves;
 
 final class nistp521 extends secp521r1
 {

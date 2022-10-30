@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Drive\Resource;
+namespace FluentMail\Google\Service\Drive\Resource;
 
-use Google\Service\Drive\Channel;
-use Google\Service\Drive\DriveFile;
-use Google\Service\Drive\FileList;
-use Google\Service\Drive\GeneratedIds;
-use Google\Service\Drive\LabelList;
-use Google\Service\Drive\ModifyLabelsRequest;
-use Google\Service\Drive\ModifyLabelsResponse;
+use FluentMail\Google\Service\Drive\Channel;
+use FluentMail\Google\Service\Drive\DriveFile;
+use FluentMail\Google\Service\Drive\FileList;
+use FluentMail\Google\Service\Drive\GeneratedIds;
+use FluentMail\Google\Service\Drive\LabelList;
+use FluentMail\Google\Service\Drive\ModifyLabelsRequest;
+use FluentMail\Google\Service\Drive\ModifyLabelsResponse;
 
 /**
  * The "files" collection of methods.

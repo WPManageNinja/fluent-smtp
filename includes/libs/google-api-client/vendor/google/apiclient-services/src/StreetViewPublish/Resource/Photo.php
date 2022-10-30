@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\StreetViewPublish\Resource;
+namespace FluentMail\Google\Service\StreetViewPublish\Resource;
 
-use Google\Service\StreetViewPublish\Photo as PhotoModel;
-use Google\Service\StreetViewPublish\StreetviewpublishEmpty;
-use Google\Service\StreetViewPublish\UploadRef;
+use FluentMail\Google\Service\StreetViewPublish\Photo as PhotoModel;
+use FluentMail\Google\Service\StreetViewPublish\StreetviewpublishEmpty;
+use FluentMail\Google\Service\StreetViewPublish\UploadRef;
 
 /**
  * The "photo" collection of methods.

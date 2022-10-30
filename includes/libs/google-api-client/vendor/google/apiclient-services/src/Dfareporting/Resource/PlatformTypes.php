@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\PlatformType;
-use Google\Service\Dfareporting\PlatformTypesListResponse;
+use FluentMail\Google\Service\Dfareporting\PlatformType;
+use FluentMail\Google\Service\Dfareporting\PlatformTypesListResponse;
 
 /**
  * The "platformTypes" collection of methods.

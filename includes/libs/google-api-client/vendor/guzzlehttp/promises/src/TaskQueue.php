@@ -1,6 +1,6 @@
 <?php
 
-namespace GuzzleHttp\Promise;
+namespace FluentMail\GuzzleHttp\Promise;
 
 /**
  * A task queue that executes tasks in a FIFO order.

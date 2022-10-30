@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DatabaseMigrationService\Resource;
+namespace FluentMail\Google\Service\DatabaseMigrationService\Resource;
 
 /**
  * The "projects" collection of methods.

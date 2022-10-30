@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\AccessApproval\Resource;
+namespace FluentMail\Google\Service\AccessApproval\Resource;
 
-use Google\Service\AccessApproval\ApprovalRequest;
-use Google\Service\AccessApproval\ApproveApprovalRequestMessage;
-use Google\Service\AccessApproval\DismissApprovalRequestMessage;
-use Google\Service\AccessApproval\InvalidateApprovalRequestMessage;
-use Google\Service\AccessApproval\ListApprovalRequestsResponse;
+use FluentMail\Google\Service\AccessApproval\ApprovalRequest;
+use FluentMail\Google\Service\AccessApproval\ApproveApprovalRequestMessage;
+use FluentMail\Google\Service\AccessApproval\DismissApprovalRequestMessage;
+use FluentMail\Google\Service\AccessApproval\InvalidateApprovalRequestMessage;
+use FluentMail\Google\Service\AccessApproval\ListApprovalRequestsResponse;
 
 /**
  * The "approvalRequests" collection of methods.

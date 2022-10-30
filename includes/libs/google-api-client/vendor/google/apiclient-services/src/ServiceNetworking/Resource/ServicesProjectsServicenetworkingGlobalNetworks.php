@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\ServiceNetworking\Resource;
+namespace FluentMail\Google\Service\ServiceNetworking\Resource;
 
-use Google\Service\ServiceNetworking\ConsumerConfig;
-use Google\Service\ServiceNetworking\Operation;
-use Google\Service\ServiceNetworking\UpdateConsumerConfigRequest;
+use FluentMail\Google\Service\ServiceNetworking\ConsumerConfig;
+use FluentMail\Google\Service\ServiceNetworking\Operation;
+use FluentMail\Google\Service\ServiceNetworking\UpdateConsumerConfigRequest;
 
 /**
  * The "networks" collection of methods.

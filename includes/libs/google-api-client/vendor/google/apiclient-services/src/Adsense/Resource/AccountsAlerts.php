@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Adsense\Resource;
+namespace FluentMail\Google\Service\Adsense\Resource;
 
-use Google\Service\Adsense\ListAlertsResponse;
+use FluentMail\Google\Service\Adsense\ListAlertsResponse;
 
 /**
  * The "alerts" collection of methods.

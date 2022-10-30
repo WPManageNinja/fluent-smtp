@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\CloudMachineLearningEngine\Resource;
+namespace FluentMail\Google\Service\CloudMachineLearningEngine\Resource;
 
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListModelsResponse;
-use Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1Model;
-use Google\Service\CloudMachineLearningEngine\GoogleIamV1Policy;
-use Google\Service\CloudMachineLearningEngine\GoogleIamV1SetIamPolicyRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleIamV1TestIamPermissionsRequest;
-use Google\Service\CloudMachineLearningEngine\GoogleIamV1TestIamPermissionsResponse;
-use Google\Service\CloudMachineLearningEngine\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1ListModelsResponse;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleCloudMlV1Model;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleIamV1Policy;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleIamV1SetIamPolicyRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleIamV1TestIamPermissionsRequest;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleIamV1TestIamPermissionsResponse;
+use FluentMail\Google\Service\CloudMachineLearningEngine\GoogleLongrunningOperation;
 
 /**
  * The "models" collection of methods.

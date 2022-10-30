@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Keep\Resource;
+namespace FluentMail\Google\Service\Keep\Resource;
 
-use Google\Service\Keep\Attachment;
+use FluentMail\Google\Service\Keep\Attachment;
 
 /**
  * The "media" collection of methods.

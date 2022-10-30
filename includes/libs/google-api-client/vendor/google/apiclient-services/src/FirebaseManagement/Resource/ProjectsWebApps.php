@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseManagement\Resource;
+namespace FluentMail\Google\Service\FirebaseManagement\Resource;
 
-use Google\Service\FirebaseManagement\ListWebAppsResponse;
-use Google\Service\FirebaseManagement\Operation;
-use Google\Service\FirebaseManagement\RemoveWebAppRequest;
-use Google\Service\FirebaseManagement\UndeleteWebAppRequest;
-use Google\Service\FirebaseManagement\WebApp;
-use Google\Service\FirebaseManagement\WebAppConfig;
+use FluentMail\Google\Service\FirebaseManagement\ListWebAppsResponse;
+use FluentMail\Google\Service\FirebaseManagement\Operation;
+use FluentMail\Google\Service\FirebaseManagement\RemoveWebAppRequest;
+use FluentMail\Google\Service\FirebaseManagement\UndeleteWebAppRequest;
+use FluentMail\Google\Service\FirebaseManagement\WebApp;
+use FluentMail\Google\Service\FirebaseManagement\WebAppConfig;
 
 /**
  * The "webApps" collection of methods.

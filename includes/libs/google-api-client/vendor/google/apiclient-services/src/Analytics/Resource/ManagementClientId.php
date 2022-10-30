@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\HashClientIdRequest;
-use Google\Service\Analytics\HashClientIdResponse;
+use FluentMail\Google\Service\Analytics\HashClientIdRequest;
+use FluentMail\Google\Service\Analytics\HashClientIdResponse;
 
 /**
  * The "clientId" collection of methods.

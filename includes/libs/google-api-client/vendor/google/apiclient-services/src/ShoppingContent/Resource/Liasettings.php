@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\LiaSettings as LiaSettingsModel;
-use Google\Service\ShoppingContent\LiasettingsCustomBatchRequest;
-use Google\Service\ShoppingContent\LiasettingsCustomBatchResponse;
-use Google\Service\ShoppingContent\LiasettingsGetAccessibleGmbAccountsResponse;
-use Google\Service\ShoppingContent\LiasettingsListPosDataProvidersResponse;
-use Google\Service\ShoppingContent\LiasettingsListResponse;
-use Google\Service\ShoppingContent\LiasettingsRequestGmbAccessResponse;
-use Google\Service\ShoppingContent\LiasettingsRequestInventoryVerificationResponse;
-use Google\Service\ShoppingContent\LiasettingsSetInventoryVerificationContactResponse;
-use Google\Service\ShoppingContent\LiasettingsSetPosDataProviderResponse;
+use FluentMail\Google\Service\ShoppingContent\LiaSettings as LiaSettingsModel;
+use FluentMail\Google\Service\ShoppingContent\LiasettingsCustomBatchRequest;
+use FluentMail\Google\Service\ShoppingContent\LiasettingsCustomBatchResponse;
+use FluentMail\Google\Service\ShoppingContent\LiasettingsGetAccessibleGmbAccountsResponse;
+use FluentMail\Google\Service\ShoppingContent\LiasettingsListPosDataProvidersResponse;
+use FluentMail\Google\Service\ShoppingContent\LiasettingsListResponse;
+use FluentMail\Google\Service\ShoppingContent\LiasettingsRequestGmbAccessResponse;
+use FluentMail\Google\Service\ShoppingContent\LiasettingsRequestInventoryVerificationResponse;
+use FluentMail\Google\Service\ShoppingContent\LiasettingsSetInventoryVerificationContactResponse;
+use FluentMail\Google\Service\ShoppingContent\LiasettingsSetPosDataProviderResponse;
 
 /**
  * The "liasettings" collection of methods.

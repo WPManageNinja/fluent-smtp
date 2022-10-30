@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-namespace Google;
+namespace FluentMail\Google;
 
-use Google\Exception as GoogleException;
+use FluentMail\Google\Exception as GoogleException;
 use ReflectionObject;
 use ReflectionProperty;
 use stdClass;
@@ -31,7 +31,7 @@ use stdClass;
 class Model implements \ArrayAccess
 {
     /**
-     * If you need to specify a NULL JSON value, use Google\Model::NULL_VALUE
+     * If you need to specify a NULL JSON value, use FluentMail\Google\Model::NULL_VALUE
      * instead - it will be replaced when converting to JSON with a real null.
      */
     const NULL_VALUE = "{}gapi-php-null";

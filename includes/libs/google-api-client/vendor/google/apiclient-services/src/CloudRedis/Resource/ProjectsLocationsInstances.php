@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\CloudRedis\Resource;
+namespace FluentMail\Google\Service\CloudRedis\Resource;
 
-use Google\Service\CloudRedis\ExportInstanceRequest;
-use Google\Service\CloudRedis\FailoverInstanceRequest;
-use Google\Service\CloudRedis\ImportInstanceRequest;
-use Google\Service\CloudRedis\Instance;
-use Google\Service\CloudRedis\InstanceAuthString;
-use Google\Service\CloudRedis\ListInstancesResponse;
-use Google\Service\CloudRedis\Operation;
-use Google\Service\CloudRedis\RescheduleMaintenanceRequest;
-use Google\Service\CloudRedis\UpgradeInstanceRequest;
+use FluentMail\Google\Service\CloudRedis\ExportInstanceRequest;
+use FluentMail\Google\Service\CloudRedis\FailoverInstanceRequest;
+use FluentMail\Google\Service\CloudRedis\ImportInstanceRequest;
+use FluentMail\Google\Service\CloudRedis\Instance;
+use FluentMail\Google\Service\CloudRedis\InstanceAuthString;
+use FluentMail\Google\Service\CloudRedis\ListInstancesResponse;
+use FluentMail\Google\Service\CloudRedis\Operation;
+use FluentMail\Google\Service\CloudRedis\RescheduleMaintenanceRequest;
+use FluentMail\Google\Service\CloudRedis\UpgradeInstanceRequest;
 
 /**
  * The "instances" collection of methods.

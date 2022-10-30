@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessVerifications\Resource;
+namespace FluentMail\Google\Service\MyBusinessVerifications\Resource;
 
-use Google\Service\MyBusinessVerifications\FetchVerificationOptionsRequest;
-use Google\Service\MyBusinessVerifications\FetchVerificationOptionsResponse;
-use Google\Service\MyBusinessVerifications\VerifyLocationRequest;
-use Google\Service\MyBusinessVerifications\VerifyLocationResponse;
-use Google\Service\MyBusinessVerifications\VoiceOfMerchantState;
+use FluentMail\Google\Service\MyBusinessVerifications\FetchVerificationOptionsRequest;
+use FluentMail\Google\Service\MyBusinessVerifications\FetchVerificationOptionsResponse;
+use FluentMail\Google\Service\MyBusinessVerifications\VerifyLocationRequest;
+use FluentMail\Google\Service\MyBusinessVerifications\VerifyLocationResponse;
+use FluentMail\Google\Service\MyBusinessVerifications\VoiceOfMerchantState;
 
 /**
  * The "locations" collection of methods.

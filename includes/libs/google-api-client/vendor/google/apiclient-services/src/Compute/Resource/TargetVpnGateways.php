@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\RegionSetLabelsRequest;
-use Google\Service\Compute\TargetVpnGateway;
-use Google\Service\Compute\TargetVpnGatewayAggregatedList;
-use Google\Service\Compute\TargetVpnGatewayList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\RegionSetLabelsRequest;
+use FluentMail\Google\Service\Compute\TargetVpnGateway;
+use FluentMail\Google\Service\Compute\TargetVpnGatewayAggregatedList;
+use FluentMail\Google\Service\Compute\TargetVpnGatewayList;
 
 /**
  * The "targetVpnGateways" collection of methods.

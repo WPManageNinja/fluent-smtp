@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\ChromePolicy\Resource;
+namespace FluentMail\Google\Service\ChromePolicy\Resource;
 
-use Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1BatchInheritOrgUnitPoliciesRequest;
-use Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1BatchModifyOrgUnitPoliciesRequest;
-use Google\Service\ChromePolicy\GoogleProtobufEmpty;
+use FluentMail\Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1BatchInheritOrgUnitPoliciesRequest;
+use FluentMail\Google\Service\ChromePolicy\GoogleChromePolicyVersionsV1BatchModifyOrgUnitPoliciesRequest;
+use FluentMail\Google\Service\ChromePolicy\GoogleProtobufEmpty;
 
 /**
  * The "orgunits" collection of methods.

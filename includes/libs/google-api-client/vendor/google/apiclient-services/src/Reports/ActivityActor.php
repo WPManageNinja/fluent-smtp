@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Reports;
+namespace FluentMail\Google\Service\Reports;
 
 class ActivityActor extends \Google\Model
 {

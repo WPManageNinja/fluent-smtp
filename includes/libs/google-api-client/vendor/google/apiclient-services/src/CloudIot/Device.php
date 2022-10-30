@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudIot;
+namespace FluentMail\Google\Service\CloudIot;
 
 class Device extends \Google\Collection
 {

@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Cloudbilling\Resource;
+namespace FluentMail\Google\Service\Cloudbilling\Resource;
 
-use Google\Service\Cloudbilling\ListSkusResponse;
+use FluentMail\Google\Service\Cloudbilling\ListSkusResponse;
 
 /**
  * The "skus" collection of methods.

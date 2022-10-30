@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Vision\Resource;
+namespace FluentMail\Google\Service\Vision\Resource;
 
-use Google\Service\Vision\AddProductToProductSetRequest;
-use Google\Service\Vision\ImportProductSetsRequest;
-use Google\Service\Vision\ListProductSetsResponse;
-use Google\Service\Vision\Operation;
-use Google\Service\Vision\ProductSet;
-use Google\Service\Vision\RemoveProductFromProductSetRequest;
-use Google\Service\Vision\VisionEmpty;
+use FluentMail\Google\Service\Vision\AddProductToProductSetRequest;
+use FluentMail\Google\Service\Vision\ImportProductSetsRequest;
+use FluentMail\Google\Service\Vision\ListProductSetsResponse;
+use FluentMail\Google\Service\Vision\Operation;
+use FluentMail\Google\Service\Vision\ProductSet;
+use FluentMail\Google\Service\Vision\RemoveProductFromProductSetRequest;
+use FluentMail\Google\Service\Vision\VisionEmpty;
 
 /**
  * The "productSets" collection of methods.

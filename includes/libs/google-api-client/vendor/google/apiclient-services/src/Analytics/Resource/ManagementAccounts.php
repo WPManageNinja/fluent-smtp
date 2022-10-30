@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\Accounts;
+use FluentMail\Google\Service\Analytics\Accounts;
 
 /**
  * The "accounts" collection of methods.

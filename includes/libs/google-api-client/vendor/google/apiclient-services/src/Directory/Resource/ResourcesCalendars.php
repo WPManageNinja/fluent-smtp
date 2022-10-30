@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\CalendarResource;
-use Google\Service\Directory\CalendarResources;
+use FluentMail\Google\Service\Directory\CalendarResource;
+use FluentMail\Google\Service\Directory\CalendarResources;
 
 /**
  * The "calendars" collection of methods.

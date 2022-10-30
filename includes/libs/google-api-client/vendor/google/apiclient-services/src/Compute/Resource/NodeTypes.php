@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\NodeType;
-use Google\Service\Compute\NodeTypeAggregatedList;
-use Google\Service\Compute\NodeTypeList;
+use FluentMail\Google\Service\Compute\NodeType;
+use FluentMail\Google\Service\Compute\NodeTypeAggregatedList;
+use FluentMail\Google\Service\Compute\NodeTypeList;
 
 /**
  * The "nodeTypes" collection of methods.

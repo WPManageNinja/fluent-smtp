@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Router;
-use Google\Service\Compute\RouterAggregatedList;
-use Google\Service\Compute\RouterList;
-use Google\Service\Compute\RouterStatusResponse;
-use Google\Service\Compute\RoutersPreviewResponse;
-use Google\Service\Compute\VmEndpointNatMappingsList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Router;
+use FluentMail\Google\Service\Compute\RouterAggregatedList;
+use FluentMail\Google\Service\Compute\RouterList;
+use FluentMail\Google\Service\Compute\RouterStatusResponse;
+use FluentMail\Google\Service\Compute\RoutersPreviewResponse;
+use FluentMail\Google\Service\Compute\VmEndpointNatMappingsList;
 
 /**
  * The "routers" collection of methods.

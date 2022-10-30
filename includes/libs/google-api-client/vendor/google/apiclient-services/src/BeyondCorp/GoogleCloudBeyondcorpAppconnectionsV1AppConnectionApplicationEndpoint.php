@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\BeyondCorp;
+namespace FluentMail\Google\Service\BeyondCorp;
 
 class GoogleCloudBeyondcorpAppconnectionsV1AppConnectionApplicationEndpoint extends \Google\Model
 {

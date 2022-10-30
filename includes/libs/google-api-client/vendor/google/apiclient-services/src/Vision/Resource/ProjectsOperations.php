@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Vision\Resource;
+namespace FluentMail\Google\Service\Vision\Resource;
 
-use Google\Service\Vision\Operation;
+use FluentMail\Google\Service\Vision\Operation;
 
 /**
  * The "operations" collection of methods.

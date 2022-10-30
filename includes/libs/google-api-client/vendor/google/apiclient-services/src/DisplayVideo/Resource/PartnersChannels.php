@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\Channel;
-use Google\Service\DisplayVideo\ListChannelsResponse;
+use FluentMail\Google\Service\DisplayVideo\Channel;
+use FluentMail\Google\Service\DisplayVideo\ListChannelsResponse;
 
 /**
  * The "channels" collection of methods.

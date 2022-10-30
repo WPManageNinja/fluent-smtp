@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Texttospeech\Resource;
+namespace FluentMail\Google\Service\Texttospeech\Resource;
 
-use Google\Service\Texttospeech\ListVoicesResponse;
+use FluentMail\Google\Service\Texttospeech\ListVoicesResponse;
 
 /**
  * The "voices" collection of methods.

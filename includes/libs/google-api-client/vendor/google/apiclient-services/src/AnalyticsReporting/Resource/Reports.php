@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AnalyticsReporting\Resource;
+namespace FluentMail\Google\Service\AnalyticsReporting\Resource;
 
-use Google\Service\AnalyticsReporting\GetReportsRequest;
-use Google\Service\AnalyticsReporting\GetReportsResponse;
+use FluentMail\Google\Service\AnalyticsReporting\GetReportsRequest;
+use FluentMail\Google\Service\AnalyticsReporting\GetReportsResponse;
 
 /**
  * The "reports" collection of methods.

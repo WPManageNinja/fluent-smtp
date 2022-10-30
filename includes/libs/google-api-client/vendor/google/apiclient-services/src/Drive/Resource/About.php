@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Drive\Resource;
+namespace FluentMail\Google\Service\Drive\Resource;
 
-use Google\Service\Drive\About as AboutModel;
+use FluentMail\Google\Service\Drive\About as AboutModel;
 
 /**
  * The "about" collection of methods.

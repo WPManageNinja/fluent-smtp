@@ -15,20 +15,20 @@
  * the License.
  */
 
-namespace Google\Service\SQLAdmin\Resource;
+namespace FluentMail\Google\Service\SQLAdmin\Resource;
 
-use Google\Service\SQLAdmin\DatabaseInstance;
-use Google\Service\SQLAdmin\InstancesCloneRequest;
-use Google\Service\SQLAdmin\InstancesDemoteMasterRequest;
-use Google\Service\SQLAdmin\InstancesExportRequest;
-use Google\Service\SQLAdmin\InstancesFailoverRequest;
-use Google\Service\SQLAdmin\InstancesImportRequest;
-use Google\Service\SQLAdmin\InstancesListResponse;
-use Google\Service\SQLAdmin\InstancesListServerCasResponse;
-use Google\Service\SQLAdmin\InstancesRestoreBackupRequest;
-use Google\Service\SQLAdmin\InstancesRotateServerCaRequest;
-use Google\Service\SQLAdmin\InstancesTruncateLogRequest;
-use Google\Service\SQLAdmin\Operation;
+use FluentMail\Google\Service\SQLAdmin\DatabaseInstance;
+use FluentMail\Google\Service\SQLAdmin\InstancesCloneRequest;
+use FluentMail\Google\Service\SQLAdmin\InstancesDemoteMasterRequest;
+use FluentMail\Google\Service\SQLAdmin\InstancesExportRequest;
+use FluentMail\Google\Service\SQLAdmin\InstancesFailoverRequest;
+use FluentMail\Google\Service\SQLAdmin\InstancesImportRequest;
+use FluentMail\Google\Service\SQLAdmin\InstancesListResponse;
+use FluentMail\Google\Service\SQLAdmin\InstancesListServerCasResponse;
+use FluentMail\Google\Service\SQLAdmin\InstancesRestoreBackupRequest;
+use FluentMail\Google\Service\SQLAdmin\InstancesRotateServerCaRequest;
+use FluentMail\Google\Service\SQLAdmin\InstancesTruncateLogRequest;
+use FluentMail\Google\Service\SQLAdmin\Operation;
 
 /**
  * The "instances" collection of methods.

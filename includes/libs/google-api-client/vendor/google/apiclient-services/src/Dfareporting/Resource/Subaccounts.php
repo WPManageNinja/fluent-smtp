@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\Subaccount;
-use Google\Service\Dfareporting\SubaccountsListResponse;
+use FluentMail\Google\Service\Dfareporting\Subaccount;
+use FluentMail\Google\Service\Dfareporting\SubaccountsListResponse;
 
 /**
  * The "subaccounts" collection of methods.

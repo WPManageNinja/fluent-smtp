@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\GamesConfiguration\Resource;
+namespace FluentMail\Google\Service\GamesConfiguration\Resource;
 
-use Google\Service\GamesConfiguration\LeaderboardConfiguration;
-use Google\Service\GamesConfiguration\LeaderboardConfigurationListResponse;
+use FluentMail\Google\Service\GamesConfiguration\LeaderboardConfiguration;
+use FluentMail\Google\Service\GamesConfiguration\LeaderboardConfigurationListResponse;
 
 /**
  * The "leaderboardConfigurations" collection of methods.

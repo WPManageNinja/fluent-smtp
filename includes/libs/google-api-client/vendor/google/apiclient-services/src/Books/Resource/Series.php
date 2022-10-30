@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Books\Resource;
+namespace FluentMail\Google\Service\Books\Resource;
 
-use Google\Service\Books\Series as SeriesModel;
+use FluentMail\Google\Service\Books\Series as SeriesModel;
 
 /**
  * The "series" collection of methods.

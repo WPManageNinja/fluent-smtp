@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\NetworkSecurity\Resource;
+namespace FluentMail\Google\Service\NetworkSecurity\Resource;
 
-use Google\Service\NetworkSecurity\CancelOperationRequest;
-use Google\Service\NetworkSecurity\ListOperationsResponse;
-use Google\Service\NetworkSecurity\NetworksecurityEmpty;
-use Google\Service\NetworkSecurity\Operation;
+use FluentMail\Google\Service\NetworkSecurity\CancelOperationRequest;
+use FluentMail\Google\Service\NetworkSecurity\ListOperationsResponse;
+use FluentMail\Google\Service\NetworkSecurity\NetworksecurityEmpty;
+use FluentMail\Google\Service\NetworkSecurity\Operation;
 
 /**
  * The "operations" collection of methods.

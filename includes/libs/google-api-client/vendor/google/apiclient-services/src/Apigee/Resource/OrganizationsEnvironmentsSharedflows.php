@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Apigee\Resource;
+namespace FluentMail\Google\Service\Apigee\Resource;
 
 /**
  * The "sharedflows" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudScheduler;
+namespace FluentMail\Google\Service\CloudScheduler;
 
 class AppEngineHttpTarget extends \Google\Model
 {

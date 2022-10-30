@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Logging\Resource;
+namespace FluentMail\Google\Service\Logging\Resource;
 
-use Google\Service\Logging\LogBucket;
+use FluentMail\Google\Service\Logging\LogBucket;
 
 /**
  * The "buckets" collection of methods.

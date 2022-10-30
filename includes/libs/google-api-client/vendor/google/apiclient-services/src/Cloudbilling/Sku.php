@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Cloudbilling;
+namespace FluentMail\Google\Service\Cloudbilling;
 
 class Sku extends \Google\Collection
 {

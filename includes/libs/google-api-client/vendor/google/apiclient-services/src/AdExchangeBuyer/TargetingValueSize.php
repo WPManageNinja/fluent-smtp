@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AdExchangeBuyer;
+namespace FluentMail\Google\Service\AdExchangeBuyer;
 
 class TargetingValueSize extends \Google\Model
 {

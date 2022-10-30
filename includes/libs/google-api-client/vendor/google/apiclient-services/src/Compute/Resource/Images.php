@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\DeprecationStatus;
-use Google\Service\Compute\GlobalSetLabelsRequest;
-use Google\Service\Compute\GlobalSetPolicyRequest;
-use Google\Service\Compute\Image;
-use Google\Service\Compute\ImageList;
-use Google\Service\Compute\Operation;
-use Google\Service\Compute\Policy;
-use Google\Service\Compute\TestPermissionsRequest;
-use Google\Service\Compute\TestPermissionsResponse;
+use FluentMail\Google\Service\Compute\DeprecationStatus;
+use FluentMail\Google\Service\Compute\GlobalSetLabelsRequest;
+use FluentMail\Google\Service\Compute\GlobalSetPolicyRequest;
+use FluentMail\Google\Service\Compute\Image;
+use FluentMail\Google\Service\Compute\ImageList;
+use FluentMail\Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\Policy;
+use FluentMail\Google\Service\Compute\TestPermissionsRequest;
+use FluentMail\Google\Service\Compute\TestPermissionsResponse;
 
 /**
  * The "images" collection of methods.

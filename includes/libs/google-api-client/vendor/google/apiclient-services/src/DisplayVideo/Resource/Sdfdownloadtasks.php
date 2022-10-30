@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\CreateSdfDownloadTaskRequest;
-use Google\Service\DisplayVideo\Operation;
+use FluentMail\Google\Service\DisplayVideo\CreateSdfDownloadTaskRequest;
+use FluentMail\Google\Service\DisplayVideo\Operation;
 
 /**
  * The "sdfdownloadtasks" collection of methods.

@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\NetworkSecurity\Resource;
+namespace FluentMail\Google\Service\NetworkSecurity\Resource;
 
-use Google\Service\NetworkSecurity\GoogleIamV1Policy;
-use Google\Service\NetworkSecurity\GoogleIamV1SetIamPolicyRequest;
-use Google\Service\NetworkSecurity\GoogleIamV1TestIamPermissionsRequest;
-use Google\Service\NetworkSecurity\GoogleIamV1TestIamPermissionsResponse;
-use Google\Service\NetworkSecurity\ListServerTlsPoliciesResponse;
-use Google\Service\NetworkSecurity\Operation;
-use Google\Service\NetworkSecurity\ServerTlsPolicy;
+use FluentMail\Google\Service\NetworkSecurity\GoogleIamV1Policy;
+use FluentMail\Google\Service\NetworkSecurity\GoogleIamV1SetIamPolicyRequest;
+use FluentMail\Google\Service\NetworkSecurity\GoogleIamV1TestIamPermissionsRequest;
+use FluentMail\Google\Service\NetworkSecurity\GoogleIamV1TestIamPermissionsResponse;
+use FluentMail\Google\Service\NetworkSecurity\ListServerTlsPoliciesResponse;
+use FluentMail\Google\Service\NetworkSecurity\Operation;
+use FluentMail\Google\Service\NetworkSecurity\ServerTlsPolicy;
 
 /**
  * The "serverTlsPolicies" collection of methods.

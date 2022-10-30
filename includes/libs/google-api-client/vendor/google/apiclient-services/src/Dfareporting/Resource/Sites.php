@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dfareporting\Resource;
+namespace FluentMail\Google\Service\Dfareporting\Resource;
 
-use Google\Service\Dfareporting\Site;
-use Google\Service\Dfareporting\SitesListResponse;
+use FluentMail\Google\Service\Dfareporting\Site;
+use FluentMail\Google\Service\Dfareporting\SitesListResponse;
 
 /**
  * The "sites" collection of methods.

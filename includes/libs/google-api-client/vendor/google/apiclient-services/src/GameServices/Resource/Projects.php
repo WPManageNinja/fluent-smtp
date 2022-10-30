@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\GameServices\Resource;
+namespace FluentMail\Google\Service\GameServices\Resource;
 
 /**
  * The "projects" collection of methods.

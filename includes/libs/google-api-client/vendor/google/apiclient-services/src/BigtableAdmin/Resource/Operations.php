@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\BigtableAdmin\Resource;
+namespace FluentMail\Google\Service\BigtableAdmin\Resource;
 
-use Google\Service\BigtableAdmin\BigtableadminEmpty;
-use Google\Service\BigtableAdmin\Operation;
+use FluentMail\Google\Service\BigtableAdmin\BigtableadminEmpty;
+use FluentMail\Google\Service\BigtableAdmin\Operation;
 
 /**
  * The "operations" collection of methods.

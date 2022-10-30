@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\NetworkEndpointGroup;
-use Google\Service\Compute\NetworkEndpointGroupList;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\NetworkEndpointGroup;
+use FluentMail\Google\Service\Compute\NetworkEndpointGroupList;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "regionNetworkEndpointGroups" collection of methods.

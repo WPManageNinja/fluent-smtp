@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Firestore\Resource;
+namespace FluentMail\Google\Service\Firestore\Resource;
 
-use Google\Service\Firestore\ListLocationsResponse;
-use Google\Service\Firestore\Location;
+use FluentMail\Google\Service\Firestore\ListLocationsResponse;
+use FluentMail\Google\Service\Firestore\Location;
 
 /**
  * The "locations" collection of methods.

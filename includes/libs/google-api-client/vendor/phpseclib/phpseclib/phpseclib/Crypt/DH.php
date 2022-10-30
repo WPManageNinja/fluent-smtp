@@ -22,15 +22,15 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt;
+namespace FluentMail\phpseclib3\Crypt;
 
-use phpseclib3\Crypt\Common\AsymmetricKey;
-use phpseclib3\Crypt\DH\Parameters;
-use phpseclib3\Crypt\DH\PrivateKey;
-use phpseclib3\Crypt\DH\PublicKey;
-use phpseclib3\Exception\NoKeyLoadedException;
-use phpseclib3\Exception\UnsupportedOperationException;
-use phpseclib3\Math\BigInteger;
+use FluentMail\phpseclib3\Crypt\Common\AsymmetricKey;
+use FluentMail\phpseclib3\Crypt\DH\Parameters;
+use FluentMail\phpseclib3\Crypt\DH\PrivateKey;
+use FluentMail\phpseclib3\Crypt\DH\PublicKey;
+use FluentMail\phpseclib3\Exception\NoKeyLoadedException;
+use FluentMail\phpseclib3\Exception\UnsupportedOperationException;
+use FluentMail\phpseclib3\Math\BigInteger;
 
 /**
  * Pure-PHP (EC)DH implementation

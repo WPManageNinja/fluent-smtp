@@ -11,9 +11,9 @@
  * @link      http://phpseclib.sourceforge.net
  */
 
-namespace phpseclib3\Crypt\DSA\Formats\Signature;
+namespace FluentMail\phpseclib3\Crypt\DSA\Formats\Signature;
 
-use phpseclib3\Crypt\Common\Formats\Signature\Raw as Progenitor;
+use FluentMail\phpseclib3\Crypt\Common\Formats\Signature\Raw as Progenitor;
 
 /**
  * Raw DSA Signature Handler

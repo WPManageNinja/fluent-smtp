@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Integrations\Resource;
+namespace FluentMail\Google\Service\Integrations\Resource;
 
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaExecuteIntegrationsRequest;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaExecuteIntegrationsResponse;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListIntegrationsResponse;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaMonitorExecutionStatsRequest;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaMonitorExecutionStatsResponse;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaScheduleIntegrationsRequest;
-use Google\Service\Integrations\GoogleCloudIntegrationsV1alphaScheduleIntegrationsResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaExecuteIntegrationsRequest;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaExecuteIntegrationsResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaListIntegrationsResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaMonitorExecutionStatsRequest;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaMonitorExecutionStatsResponse;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaScheduleIntegrationsRequest;
+use FluentMail\Google\Service\Integrations\GoogleCloudIntegrationsV1alphaScheduleIntegrationsResponse;
 
 /**
  * The "integrations" collection of methods.

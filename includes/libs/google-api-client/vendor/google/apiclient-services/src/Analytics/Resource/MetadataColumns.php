@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\Columns;
+use FluentMail\Google\Service\Analytics\Columns;
 
 /**
  * The "columns" collection of methods.

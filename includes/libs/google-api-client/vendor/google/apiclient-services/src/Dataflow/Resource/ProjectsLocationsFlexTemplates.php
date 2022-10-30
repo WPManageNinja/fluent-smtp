@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Dataflow\Resource;
+namespace FluentMail\Google\Service\Dataflow\Resource;
 
-use Google\Service\Dataflow\LaunchFlexTemplateRequest;
-use Google\Service\Dataflow\LaunchFlexTemplateResponse;
+use FluentMail\Google\Service\Dataflow\LaunchFlexTemplateRequest;
+use FluentMail\Google\Service\Dataflow\LaunchFlexTemplateResponse;
 
 /**
  * The "flexTemplates" collection of methods.

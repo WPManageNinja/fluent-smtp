@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\OrgPolicyAPI\Resource;
+namespace FluentMail\Google\Service\OrgPolicyAPI\Resource;
 
-use Google\Service\OrgPolicyAPI\GoogleCloudOrgpolicyV2ListPoliciesResponse;
-use Google\Service\OrgPolicyAPI\GoogleCloudOrgpolicyV2Policy;
-use Google\Service\OrgPolicyAPI\GoogleProtobufEmpty;
+use FluentMail\Google\Service\OrgPolicyAPI\GoogleCloudOrgpolicyV2ListPoliciesResponse;
+use FluentMail\Google\Service\OrgPolicyAPI\GoogleCloudOrgpolicyV2Policy;
+use FluentMail\Google\Service\OrgPolicyAPI\GoogleProtobufEmpty;
 
 /**
  * The "policies" collection of methods.

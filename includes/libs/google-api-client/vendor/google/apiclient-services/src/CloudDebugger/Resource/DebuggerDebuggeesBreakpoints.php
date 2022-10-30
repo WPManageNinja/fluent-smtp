@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\CloudDebugger\Resource;
+namespace FluentMail\Google\Service\CloudDebugger\Resource;
 
-use Google\Service\CloudDebugger\Breakpoint;
-use Google\Service\CloudDebugger\ClouddebuggerEmpty;
-use Google\Service\CloudDebugger\GetBreakpointResponse;
-use Google\Service\CloudDebugger\ListBreakpointsResponse;
-use Google\Service\CloudDebugger\SetBreakpointResponse;
+use FluentMail\Google\Service\CloudDebugger\Breakpoint;
+use FluentMail\Google\Service\CloudDebugger\ClouddebuggerEmpty;
+use FluentMail\Google\Service\CloudDebugger\GetBreakpointResponse;
+use FluentMail\Google\Service\CloudDebugger\ListBreakpointsResponse;
+use FluentMail\Google\Service\CloudDebugger\SetBreakpointResponse;
 
 /**
  * The "breakpoints" collection of methods.

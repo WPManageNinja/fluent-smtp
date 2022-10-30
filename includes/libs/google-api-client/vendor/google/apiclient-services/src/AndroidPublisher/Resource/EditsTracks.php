@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\Track;
-use Google\Service\AndroidPublisher\TracksListResponse;
+use FluentMail\Google\Service\AndroidPublisher\Track;
+use FluentMail\Google\Service\AndroidPublisher\TracksListResponse;
 
 /**
  * The "tracks" collection of methods.

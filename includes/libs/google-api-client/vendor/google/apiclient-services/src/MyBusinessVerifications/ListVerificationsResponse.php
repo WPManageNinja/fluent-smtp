@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessVerifications;
+namespace FluentMail\Google\Service\MyBusinessVerifications;
 
 class ListVerificationsResponse extends \Google\Collection
 {

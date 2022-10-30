@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Apigee;
+namespace FluentMail\Google\Service\Apigee;
 
 class EdgeConfigstoreBundleBadBundle extends \Google\Collection
 {

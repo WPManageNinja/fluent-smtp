@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\EditCustomerMatchMembersRequest;
-use Google\Service\DisplayVideo\EditCustomerMatchMembersResponse;
-use Google\Service\DisplayVideo\FirstAndThirdPartyAudience;
-use Google\Service\DisplayVideo\ListFirstAndThirdPartyAudiencesResponse;
+use FluentMail\Google\Service\DisplayVideo\EditCustomerMatchMembersRequest;
+use FluentMail\Google\Service\DisplayVideo\EditCustomerMatchMembersResponse;
+use FluentMail\Google\Service\DisplayVideo\FirstAndThirdPartyAudience;
+use FluentMail\Google\Service\DisplayVideo\ListFirstAndThirdPartyAudiencesResponse;
 
 /**
  * The "firstAndThirdPartyAudiences" collection of methods.

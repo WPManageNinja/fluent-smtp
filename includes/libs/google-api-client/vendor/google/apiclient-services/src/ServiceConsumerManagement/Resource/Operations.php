@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\ServiceConsumerManagement\Resource;
+namespace FluentMail\Google\Service\ServiceConsumerManagement\Resource;
 
-use Google\Service\ServiceConsumerManagement\CancelOperationRequest;
-use Google\Service\ServiceConsumerManagement\ListOperationsResponse;
-use Google\Service\ServiceConsumerManagement\Operation;
-use Google\Service\ServiceConsumerManagement\ServiceconsumermanagementEmpty;
+use FluentMail\Google\Service\ServiceConsumerManagement\CancelOperationRequest;
+use FluentMail\Google\Service\ServiceConsumerManagement\ListOperationsResponse;
+use FluentMail\Google\Service\ServiceConsumerManagement\Operation;
+use FluentMail\Google\Service\ServiceConsumerManagement\ServiceconsumermanagementEmpty;
 
 /**
  * The "operations" collection of methods.

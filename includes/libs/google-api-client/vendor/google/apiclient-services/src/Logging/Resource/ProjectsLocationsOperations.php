@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Logging\Resource;
+namespace FluentMail\Google\Service\Logging\Resource;
 
-use Google\Service\Logging\CancelOperationRequest;
-use Google\Service\Logging\ListOperationsResponse;
-use Google\Service\Logging\LoggingEmpty;
-use Google\Service\Logging\Operation;
+use FluentMail\Google\Service\Logging\CancelOperationRequest;
+use FluentMail\Google\Service\Logging\ListOperationsResponse;
+use FluentMail\Google\Service\Logging\LoggingEmpty;
+use FluentMail\Google\Service\Logging\Operation;
 
 /**
  * The "operations" collection of methods.

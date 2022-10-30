@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\DataCatalog\Resource;
+namespace FluentMail\Google\Service\DataCatalog\Resource;
 
-use Google\Service\DataCatalog\DatacatalogEmpty;
-use Google\Service\DataCatalog\GetIamPolicyRequest;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1ListPolicyTagsResponse;
-use Google\Service\DataCatalog\GoogleCloudDatacatalogV1PolicyTag;
-use Google\Service\DataCatalog\Policy;
-use Google\Service\DataCatalog\SetIamPolicyRequest;
-use Google\Service\DataCatalog\TestIamPermissionsRequest;
-use Google\Service\DataCatalog\TestIamPermissionsResponse;
+use FluentMail\Google\Service\DataCatalog\DatacatalogEmpty;
+use FluentMail\Google\Service\DataCatalog\GetIamPolicyRequest;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1ListPolicyTagsResponse;
+use FluentMail\Google\Service\DataCatalog\GoogleCloudDatacatalogV1PolicyTag;
+use FluentMail\Google\Service\DataCatalog\Policy;
+use FluentMail\Google\Service\DataCatalog\SetIamPolicyRequest;
+use FluentMail\Google\Service\DataCatalog\TestIamPermissionsRequest;
+use FluentMail\Google\Service\DataCatalog\TestIamPermissionsResponse;
 
 /**
  * The "policyTags" collection of methods.

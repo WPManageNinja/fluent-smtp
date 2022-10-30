@@ -15,17 +15,17 @@
  * the License.
  */
 
-namespace Google\Service\Pubsub\Resource;
+namespace FluentMail\Google\Service\Pubsub\Resource;
 
-use Google\Service\Pubsub\CreateSnapshotRequest;
-use Google\Service\Pubsub\ListSnapshotsResponse;
-use Google\Service\Pubsub\Policy;
-use Google\Service\Pubsub\PubsubEmpty;
-use Google\Service\Pubsub\SetIamPolicyRequest;
-use Google\Service\Pubsub\Snapshot;
-use Google\Service\Pubsub\TestIamPermissionsRequest;
-use Google\Service\Pubsub\TestIamPermissionsResponse;
-use Google\Service\Pubsub\UpdateSnapshotRequest;
+use FluentMail\Google\Service\Pubsub\CreateSnapshotRequest;
+use FluentMail\Google\Service\Pubsub\ListSnapshotsResponse;
+use FluentMail\Google\Service\Pubsub\Policy;
+use FluentMail\Google\Service\Pubsub\PubsubEmpty;
+use FluentMail\Google\Service\Pubsub\SetIamPolicyRequest;
+use FluentMail\Google\Service\Pubsub\Snapshot;
+use FluentMail\Google\Service\Pubsub\TestIamPermissionsRequest;
+use FluentMail\Google\Service\Pubsub\TestIamPermissionsResponse;
+use FluentMail\Google\Service\Pubsub\UpdateSnapshotRequest;
 
 /**
  * The "snapshots" collection of methods.

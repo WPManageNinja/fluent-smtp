@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\CloudBuild\Resource;
+namespace FluentMail\Google\Service\CloudBuild\Resource;
 
-use Google\Service\CloudBuild\BuildTrigger;
-use Google\Service\CloudBuild\CloudbuildEmpty;
-use Google\Service\CloudBuild\HttpBody;
-use Google\Service\CloudBuild\ListBuildTriggersResponse;
-use Google\Service\CloudBuild\Operation;
-use Google\Service\CloudBuild\ReceiveTriggerWebhookResponse;
-use Google\Service\CloudBuild\RunBuildTriggerRequest;
+use FluentMail\Google\Service\CloudBuild\BuildTrigger;
+use FluentMail\Google\Service\CloudBuild\CloudbuildEmpty;
+use FluentMail\Google\Service\CloudBuild\HttpBody;
+use FluentMail\Google\Service\CloudBuild\ListBuildTriggersResponse;
+use FluentMail\Google\Service\CloudBuild\Operation;
+use FluentMail\Google\Service\CloudBuild\ReceiveTriggerWebhookResponse;
+use FluentMail\Google\Service\CloudBuild\RunBuildTriggerRequest;
 
 /**
  * The "triggers" collection of methods.

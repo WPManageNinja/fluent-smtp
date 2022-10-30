@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\SQLAdmin\Resource;
+namespace FluentMail\Google\Service\SQLAdmin\Resource;
 
-use Google\Service\SQLAdmin\SslCert;
-use Google\Service\SQLAdmin\SslCertsCreateEphemeralRequest;
+use FluentMail\Google\Service\SQLAdmin\SslCert;
+use FluentMail\Google\Service\SQLAdmin\SslCertsCreateEphemeralRequest;
 
 /**
  * The "createEphemeral" collection of methods.

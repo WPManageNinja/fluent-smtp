@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-namespace Google\Auth\Middleware;
+namespace FluentMail\Google\Auth\Middleware;
 
-use GuzzleHttp\Psr7\Query;
-use Psr\Http\Message\RequestInterface;
+use FluentMail\GuzzleHttp\Psr7\Query;
+use FluentMail\Psr\Http\Message\RequestInterface;
 
 /**
  * SimpleMiddleware is a Guzzle Middleware that implements Google's Simple API
@@ -53,9 +53,9 @@ class SimpleMiddleware
     /**
      * Updates the request query with the developer key if auth is set to simple.
      *
-     *   use Google\Auth\Middleware\SimpleMiddleware;
-     *   use GuzzleHttp\Client;
-     *   use GuzzleHttp\HandlerStack;
+     *   use FluentMail\Google\Auth\Middleware\SimpleMiddleware;
+     *   use FluentMail\GuzzleHttp\Client;
+     *   use FluentMail\GuzzleHttp\HandlerStack;
      *
      *   $my_key = 'is not the same as yours';
      *   $middleware = new SimpleMiddleware(['key' => $my_key]);

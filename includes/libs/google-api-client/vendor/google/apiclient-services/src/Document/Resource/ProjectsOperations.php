@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Document\Resource;
+namespace FluentMail\Google\Service\Document\Resource;
 
-use Google\Service\Document\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Document\GoogleLongrunningOperation;
 
 /**
  * The "operations" collection of methods.

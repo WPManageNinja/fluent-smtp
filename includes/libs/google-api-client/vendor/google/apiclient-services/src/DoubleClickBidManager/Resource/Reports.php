@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\DoubleClickBidManager\Resource;
+namespace FluentMail\Google\Service\DoubleClickBidManager\Resource;
 
-use Google\Service\DoubleClickBidManager\ListReportsResponse;
+use FluentMail\Google\Service\DoubleClickBidManager\ListReportsResponse;
 
 /**
  * The "reports" collection of methods.

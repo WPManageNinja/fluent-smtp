@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Transcoder;
+namespace FluentMail\Google\Service\Transcoder;
 
 class AudioAtom extends \Google\Collection
 {

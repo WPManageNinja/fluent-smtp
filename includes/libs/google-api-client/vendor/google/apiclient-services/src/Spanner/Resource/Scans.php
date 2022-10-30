@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Spanner\Resource;
+namespace FluentMail\Google\Service\Spanner\Resource;
 
-use Google\Service\Spanner\ListScansResponse;
+use FluentMail\Google\Service\Spanner\ListScansResponse;
 
 /**
  * The "scans" collection of methods.

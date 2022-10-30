@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\RealTimeBidding\Resource;
+namespace FluentMail\Google\Service\RealTimeBidding\Resource;
 
-use Google\Service\RealTimeBidding\Endpoint;
-use Google\Service\RealTimeBidding\ListEndpointsResponse;
+use FluentMail\Google\Service\RealTimeBidding\Endpoint;
+use FluentMail\Google\Service\RealTimeBidding\ListEndpointsResponse;
 
 /**
  * The "endpoints" collection of methods.

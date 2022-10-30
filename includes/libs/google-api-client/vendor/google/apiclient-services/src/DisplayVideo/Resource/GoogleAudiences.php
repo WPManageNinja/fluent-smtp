@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DisplayVideo\Resource;
+namespace FluentMail\Google\Service\DisplayVideo\Resource;
 
-use Google\Service\DisplayVideo\GoogleAudience;
-use Google\Service\DisplayVideo\ListGoogleAudiencesResponse;
+use FluentMail\Google\Service\DisplayVideo\GoogleAudience;
+use FluentMail\Google\Service\DisplayVideo\ListGoogleAudiencesResponse;
 
 /**
  * The "googleAudiences" collection of methods.

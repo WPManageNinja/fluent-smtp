@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\OSConfig\Resource;
+namespace FluentMail\Google\Service\OSConfig\Resource;
 
-use Google\Service\OSConfig\ListPatchJobInstanceDetailsResponse;
+use FluentMail\Google\Service\OSConfig\ListPatchJobInstanceDetailsResponse;
 
 /**
  * The "instanceDetails" collection of methods.

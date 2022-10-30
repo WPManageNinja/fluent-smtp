@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\SiteVerification;
+namespace FluentMail\Google\Service\SiteVerification;
 
 class SiteVerificationWebResourceGettokenResponse extends \Google\Model
 {

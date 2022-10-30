@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\Group;
-use Google\Service\Directory\Groups as GroupsModel;
+use FluentMail\Google\Service\Directory\Group;
+use FluentMail\Google\Service\Directory\Groups as GroupsModel;
 
 /**
  * The "groups" collection of methods.

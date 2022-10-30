@@ -15,20 +15,20 @@
  * the License.
  */
 
-namespace Google\Service\ContainerAnalysis\Resource;
+namespace FluentMail\Google\Service\ContainerAnalysis\Resource;
 
-use Google\Service\ContainerAnalysis\BatchCreateOccurrencesRequest;
-use Google\Service\ContainerAnalysis\BatchCreateOccurrencesResponse;
-use Google\Service\ContainerAnalysis\ContaineranalysisEmpty;
-use Google\Service\ContainerAnalysis\GetIamPolicyRequest;
-use Google\Service\ContainerAnalysis\ListOccurrencesResponse;
-use Google\Service\ContainerAnalysis\Note;
-use Google\Service\ContainerAnalysis\Occurrence;
-use Google\Service\ContainerAnalysis\Policy;
-use Google\Service\ContainerAnalysis\SetIamPolicyRequest;
-use Google\Service\ContainerAnalysis\TestIamPermissionsRequest;
-use Google\Service\ContainerAnalysis\TestIamPermissionsResponse;
-use Google\Service\ContainerAnalysis\VulnerabilityOccurrencesSummary;
+use FluentMail\Google\Service\ContainerAnalysis\BatchCreateOccurrencesRequest;
+use FluentMail\Google\Service\ContainerAnalysis\BatchCreateOccurrencesResponse;
+use FluentMail\Google\Service\ContainerAnalysis\ContaineranalysisEmpty;
+use FluentMail\Google\Service\ContainerAnalysis\GetIamPolicyRequest;
+use FluentMail\Google\Service\ContainerAnalysis\ListOccurrencesResponse;
+use FluentMail\Google\Service\ContainerAnalysis\Note;
+use FluentMail\Google\Service\ContainerAnalysis\Occurrence;
+use FluentMail\Google\Service\ContainerAnalysis\Policy;
+use FluentMail\Google\Service\ContainerAnalysis\SetIamPolicyRequest;
+use FluentMail\Google\Service\ContainerAnalysis\TestIamPermissionsRequest;
+use FluentMail\Google\Service\ContainerAnalysis\TestIamPermissionsResponse;
+use FluentMail\Google\Service\ContainerAnalysis\VulnerabilityOccurrencesSummary;
 
 /**
  * The "occurrences" collection of methods.

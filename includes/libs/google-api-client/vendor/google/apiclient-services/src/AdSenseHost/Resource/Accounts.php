@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdSenseHost\Resource;
+namespace FluentMail\Google\Service\AdSenseHost\Resource;
 
-use Google\Service\AdSenseHost\Account;
-use Google\Service\AdSenseHost\Accounts as AccountsModel;
+use FluentMail\Google\Service\AdSenseHost\Account;
+use FluentMail\Google\Service\AdSenseHost\Accounts as AccountsModel;
 
 /**
  * The "accounts" collection of methods.

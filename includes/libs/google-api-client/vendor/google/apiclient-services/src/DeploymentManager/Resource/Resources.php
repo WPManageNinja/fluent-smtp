@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DeploymentManager\Resource;
+namespace FluentMail\Google\Service\DeploymentManager\Resource;
 
-use Google\Service\DeploymentManager\DeploymentmanagerResource;
-use Google\Service\DeploymentManager\ResourcesListResponse;
+use FluentMail\Google\Service\DeploymentManager\DeploymentmanagerResource;
+use FluentMail\Google\Service\DeploymentManager\ResourcesListResponse;
 
 /**
  * The "resources" collection of methods.

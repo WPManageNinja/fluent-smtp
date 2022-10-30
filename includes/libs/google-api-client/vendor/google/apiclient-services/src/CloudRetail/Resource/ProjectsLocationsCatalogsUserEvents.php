@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\CloudRetail\Resource;
+namespace FluentMail\Google\Service\CloudRetail\Resource;
 
-use Google\Service\CloudRetail\GoogleApiHttpBody;
-use Google\Service\CloudRetail\GoogleCloudRetailV2ImportUserEventsRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2PurgeUserEventsRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2RejoinUserEventsRequest;
-use Google\Service\CloudRetail\GoogleCloudRetailV2UserEvent;
-use Google\Service\CloudRetail\GoogleLongrunningOperation;
+use FluentMail\Google\Service\CloudRetail\GoogleApiHttpBody;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2ImportUserEventsRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2PurgeUserEventsRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2RejoinUserEventsRequest;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2UserEvent;
+use FluentMail\Google\Service\CloudRetail\GoogleLongrunningOperation;
 
 /**
  * The "userEvents" collection of methods.

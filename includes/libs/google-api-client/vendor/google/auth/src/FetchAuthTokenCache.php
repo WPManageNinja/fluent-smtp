@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-namespace Google\Auth;
+namespace FluentMail\Google\Auth;
 
-use Psr\Cache\CacheItemPoolInterface;
+use FluentMail\Psr\Cache\CacheItemPoolInterface;
 
 /**
  * A class to implement caching for any object implementing

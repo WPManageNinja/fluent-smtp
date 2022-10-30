@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Fitness;
+namespace FluentMail\Google\Service\Fitness;
 
 class BucketByActivity extends \Google\Model
 {

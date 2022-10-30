@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\AccountTicket;
-use Google\Service\Analytics\AccountTreeRequest;
-use Google\Service\Analytics\AccountTreeResponse;
+use FluentMail\Google\Service\Analytics\AccountTicket;
+use FluentMail\Google\Service\Analytics\AccountTreeRequest;
+use FluentMail\Google\Service\Analytics\AccountTreeResponse;
 
 /**
  * The "provisioning" collection of methods.

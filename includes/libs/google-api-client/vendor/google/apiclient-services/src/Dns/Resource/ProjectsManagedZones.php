@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Dns\Resource;
+namespace FluentMail\Google\Service\Dns\Resource;
 
 /**
  * The "managedZones" collection of methods.

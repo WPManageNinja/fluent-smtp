@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
-use Google\Service\Monitoring\ListServiceLevelObjectivesResponse;
-use Google\Service\Monitoring\MonitoringEmpty;
-use Google\Service\Monitoring\ServiceLevelObjective;
+use FluentMail\Google\Service\Monitoring\ListServiceLevelObjectivesResponse;
+use FluentMail\Google\Service\Monitoring\MonitoringEmpty;
+use FluentMail\Google\Service\Monitoring\ServiceLevelObjective;
 
 /**
  * The "serviceLevelObjectives" collection of methods.

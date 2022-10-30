@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Compute\Resource;
+namespace FluentMail\Google\Service\Compute\Resource;
 
-use Google\Service\Compute\GlobalSetLabelsRequest;
-use Google\Service\Compute\Interconnect;
-use Google\Service\Compute\InterconnectList;
-use Google\Service\Compute\InterconnectsGetDiagnosticsResponse;
-use Google\Service\Compute\Operation;
+use FluentMail\Google\Service\Compute\GlobalSetLabelsRequest;
+use FluentMail\Google\Service\Compute\Interconnect;
+use FluentMail\Google\Service\Compute\InterconnectList;
+use FluentMail\Google\Service\Compute\InterconnectsGetDiagnosticsResponse;
+use FluentMail\Google\Service\Compute\Operation;
 
 /**
  * The "interconnects" collection of methods.

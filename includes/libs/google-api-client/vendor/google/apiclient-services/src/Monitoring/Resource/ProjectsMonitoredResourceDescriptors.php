@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Monitoring\Resource;
+namespace FluentMail\Google\Service\Monitoring\Resource;
 
-use Google\Service\Monitoring\ListMonitoredResourceDescriptorsResponse;
-use Google\Service\Monitoring\MonitoredResourceDescriptor;
+use FluentMail\Google\Service\Monitoring\ListMonitoredResourceDescriptorsResponse;
+use FluentMail\Google\Service\Monitoring\MonitoredResourceDescriptor;
 
 /**
  * The "monitoredResourceDescriptors" collection of methods.

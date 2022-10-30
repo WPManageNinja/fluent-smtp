@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\ListRepricingRulesResponse;
-use Google\Service\ShoppingContent\RepricingRule;
+use FluentMail\Google\Service\ShoppingContent\ListRepricingRulesResponse;
+use FluentMail\Google\Service\ShoppingContent\RepricingRule;
 
 /**
  * The "repricingrules" collection of methods.

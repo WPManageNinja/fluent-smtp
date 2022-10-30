@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudDataplex\Resource;
+namespace FluentMail\Google\Service\CloudDataplex\Resource;
 
-use Google\Service\CloudDataplex\DataplexEmpty;
-use Google\Service\CloudDataplex\GoogleCloudDataplexV1ListPartitionsResponse;
-use Google\Service\CloudDataplex\GoogleCloudDataplexV1Partition;
+use FluentMail\Google\Service\CloudDataplex\DataplexEmpty;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudDataplexV1ListPartitionsResponse;
+use FluentMail\Google\Service\CloudDataplex\GoogleCloudDataplexV1Partition;
 
 /**
  * The "partitions" collection of methods.

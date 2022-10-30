@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CertificateManager\Resource;
+namespace FluentMail\Google\Service\CertificateManager\Resource;
 
-use Google\Service\CertificateManager\CertificateMap;
-use Google\Service\CertificateManager\ListCertificateMapsResponse;
-use Google\Service\CertificateManager\Operation;
+use FluentMail\Google\Service\CertificateManager\CertificateMap;
+use FluentMail\Google\Service\CertificateManager\ListCertificateMapsResponse;
+use FluentMail\Google\Service\CertificateManager\Operation;
 
 /**
  * The "certificateMaps" collection of methods.

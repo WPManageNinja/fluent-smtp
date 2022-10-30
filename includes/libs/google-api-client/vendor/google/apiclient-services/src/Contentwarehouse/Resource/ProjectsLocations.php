@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Contentwarehouse\Resource;
+namespace FluentMail\Google\Service\Contentwarehouse\Resource;
 
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1InitializeProjectRequest;
-use Google\Service\Contentwarehouse\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1InitializeProjectRequest;
+use FluentMail\Google\Service\Contentwarehouse\GoogleLongrunningOperation;
 
 /**
  * The "locations" collection of methods.

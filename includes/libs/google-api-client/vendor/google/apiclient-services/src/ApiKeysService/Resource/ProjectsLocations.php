@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\ApiKeysService\Resource;
+namespace FluentMail\Google\Service\ApiKeysService\Resource;
 
 /**
  * The "locations" collection of methods.

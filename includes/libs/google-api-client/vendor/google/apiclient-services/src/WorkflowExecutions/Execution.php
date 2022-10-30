@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\WorkflowExecutions;
+namespace FluentMail\Google\Service\WorkflowExecutions;
 
 class Execution extends \Google\Model
 {

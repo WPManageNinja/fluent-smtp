@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\CertificateAuthorityService\Resource;
+namespace FluentMail\Google\Service\CertificateAuthorityService\Resource;
 
-use Google\Service\CertificateAuthorityService\ActivateCertificateAuthorityRequest;
-use Google\Service\CertificateAuthorityService\CertificateAuthority;
-use Google\Service\CertificateAuthorityService\DisableCertificateAuthorityRequest;
-use Google\Service\CertificateAuthorityService\EnableCertificateAuthorityRequest;
-use Google\Service\CertificateAuthorityService\FetchCertificateAuthorityCsrResponse;
-use Google\Service\CertificateAuthorityService\ListCertificateAuthoritiesResponse;
-use Google\Service\CertificateAuthorityService\Operation;
-use Google\Service\CertificateAuthorityService\UndeleteCertificateAuthorityRequest;
+use FluentMail\Google\Service\CertificateAuthorityService\ActivateCertificateAuthorityRequest;
+use FluentMail\Google\Service\CertificateAuthorityService\CertificateAuthority;
+use FluentMail\Google\Service\CertificateAuthorityService\DisableCertificateAuthorityRequest;
+use FluentMail\Google\Service\CertificateAuthorityService\EnableCertificateAuthorityRequest;
+use FluentMail\Google\Service\CertificateAuthorityService\FetchCertificateAuthorityCsrResponse;
+use FluentMail\Google\Service\CertificateAuthorityService\ListCertificateAuthoritiesResponse;
+use FluentMail\Google\Service\CertificateAuthorityService\Operation;
+use FluentMail\Google\Service\CertificateAuthorityService\UndeleteCertificateAuthorityRequest;
 
 /**
  * The "certificateAuthorities" collection of methods.

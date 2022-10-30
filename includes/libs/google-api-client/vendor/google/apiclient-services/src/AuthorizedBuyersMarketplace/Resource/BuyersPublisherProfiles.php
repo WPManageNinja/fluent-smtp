@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AuthorizedBuyersMarketplace\Resource;
+namespace FluentMail\Google\Service\AuthorizedBuyersMarketplace\Resource;
 
-use Google\Service\AuthorizedBuyersMarketplace\ListPublisherProfilesResponse;
-use Google\Service\AuthorizedBuyersMarketplace\PublisherProfile;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\ListPublisherProfilesResponse;
+use FluentMail\Google\Service\AuthorizedBuyersMarketplace\PublisherProfile;
 
 /**
  * The "publisherProfiles" collection of methods.

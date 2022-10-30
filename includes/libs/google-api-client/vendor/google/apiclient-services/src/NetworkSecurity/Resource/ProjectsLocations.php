@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\NetworkSecurity\Resource;
+namespace FluentMail\Google\Service\NetworkSecurity\Resource;
 
-use Google\Service\NetworkSecurity\ListLocationsResponse;
-use Google\Service\NetworkSecurity\Location;
+use FluentMail\Google\Service\NetworkSecurity\ListLocationsResponse;
+use FluentMail\Google\Service\NetworkSecurity\Location;
 
 /**
  * The "locations" collection of methods.

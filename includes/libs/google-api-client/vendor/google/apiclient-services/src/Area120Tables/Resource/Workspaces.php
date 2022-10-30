@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Area120Tables\Resource;
+namespace FluentMail\Google\Service\Area120Tables\Resource;
 
-use Google\Service\Area120Tables\ListWorkspacesResponse;
-use Google\Service\Area120Tables\Workspace;
+use FluentMail\Google\Service\Area120Tables\ListWorkspacesResponse;
+use FluentMail\Google\Service\Area120Tables\Workspace;
 
 /**
  * The "workspaces" collection of methods.

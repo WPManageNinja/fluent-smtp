@@ -15,32 +15,32 @@
  * the License.
  */
 
-namespace Google\Service\Firestore\Resource;
+namespace FluentMail\Google\Service\Firestore\Resource;
 
-use Google\Service\Firestore\BatchGetDocumentsRequest;
-use Google\Service\Firestore\BatchGetDocumentsResponse;
-use Google\Service\Firestore\BatchWriteRequest;
-use Google\Service\Firestore\BatchWriteResponse;
-use Google\Service\Firestore\BeginTransactionRequest;
-use Google\Service\Firestore\BeginTransactionResponse;
-use Google\Service\Firestore\CommitRequest;
-use Google\Service\Firestore\CommitResponse;
-use Google\Service\Firestore\Document;
-use Google\Service\Firestore\FirestoreEmpty;
-use Google\Service\Firestore\ListCollectionIdsRequest;
-use Google\Service\Firestore\ListCollectionIdsResponse;
-use Google\Service\Firestore\ListDocumentsResponse;
-use Google\Service\Firestore\ListenRequest;
-use Google\Service\Firestore\ListenResponse;
-use Google\Service\Firestore\PartitionQueryRequest;
-use Google\Service\Firestore\PartitionQueryResponse;
-use Google\Service\Firestore\RollbackRequest;
-use Google\Service\Firestore\RunAggregationQueryRequest;
-use Google\Service\Firestore\RunAggregationQueryResponse;
-use Google\Service\Firestore\RunQueryRequest;
-use Google\Service\Firestore\RunQueryResponse;
-use Google\Service\Firestore\WriteRequest;
-use Google\Service\Firestore\WriteResponse;
+use FluentMail\Google\Service\Firestore\BatchGetDocumentsRequest;
+use FluentMail\Google\Service\Firestore\BatchGetDocumentsResponse;
+use FluentMail\Google\Service\Firestore\BatchWriteRequest;
+use FluentMail\Google\Service\Firestore\BatchWriteResponse;
+use FluentMail\Google\Service\Firestore\BeginTransactionRequest;
+use FluentMail\Google\Service\Firestore\BeginTransactionResponse;
+use FluentMail\Google\Service\Firestore\CommitRequest;
+use FluentMail\Google\Service\Firestore\CommitResponse;
+use FluentMail\Google\Service\Firestore\Document;
+use FluentMail\Google\Service\Firestore\FirestoreEmpty;
+use FluentMail\Google\Service\Firestore\ListCollectionIdsRequest;
+use FluentMail\Google\Service\Firestore\ListCollectionIdsResponse;
+use FluentMail\Google\Service\Firestore\ListDocumentsResponse;
+use FluentMail\Google\Service\Firestore\ListenRequest;
+use FluentMail\Google\Service\Firestore\ListenResponse;
+use FluentMail\Google\Service\Firestore\PartitionQueryRequest;
+use FluentMail\Google\Service\Firestore\PartitionQueryResponse;
+use FluentMail\Google\Service\Firestore\RollbackRequest;
+use FluentMail\Google\Service\Firestore\RunAggregationQueryRequest;
+use FluentMail\Google\Service\Firestore\RunAggregationQueryResponse;
+use FluentMail\Google\Service\Firestore\RunQueryRequest;
+use FluentMail\Google\Service\Firestore\RunQueryResponse;
+use FluentMail\Google\Service\Firestore\WriteRequest;
+use FluentMail\Google\Service\Firestore\WriteResponse;
 
 /**
  * The "documents" collection of methods.

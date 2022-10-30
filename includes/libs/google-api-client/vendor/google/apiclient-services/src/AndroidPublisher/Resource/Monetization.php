@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AndroidPublisher\Resource;
+namespace FluentMail\Google\Service\AndroidPublisher\Resource;
 
-use Google\Service\AndroidPublisher\ConvertRegionPricesRequest;
-use Google\Service\AndroidPublisher\ConvertRegionPricesResponse;
+use FluentMail\Google\Service\AndroidPublisher\ConvertRegionPricesRequest;
+use FluentMail\Google\Service\AndroidPublisher\ConvertRegionPricesResponse;
 
 /**
  * The "monetization" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\ProfileFilterLink;
-use Google\Service\Analytics\ProfileFilterLinks;
+use FluentMail\Google\Service\Analytics\ProfileFilterLink;
+use FluentMail\Google\Service\Analytics\ProfileFilterLinks;
 
 /**
  * The "profileFilterLinks" collection of methods.

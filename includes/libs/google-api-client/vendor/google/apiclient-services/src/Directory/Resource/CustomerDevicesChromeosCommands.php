@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\DirectoryChromeosdevicesCommand;
+use FluentMail\Google\Service\Directory\DirectoryChromeosdevicesCommand;
 
 /**
  * The "commands" collection of methods.

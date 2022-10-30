@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\DriveLabels;
+namespace FluentMail\Google\Service\DriveLabels;
 
 class GoogleAppsDriveLabelsV2LabelAppliedCapabilities extends \Google\Model
 {

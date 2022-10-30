@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\VMMigrationService\Resource;
+namespace FluentMail\Google\Service\VMMigrationService\Resource;
 
-use Google\Service\VMMigrationService\CancelCutoverJobRequest;
-use Google\Service\VMMigrationService\CutoverJob;
-use Google\Service\VMMigrationService\ListCutoverJobsResponse;
-use Google\Service\VMMigrationService\Operation;
+use FluentMail\Google\Service\VMMigrationService\CancelCutoverJobRequest;
+use FluentMail\Google\Service\VMMigrationService\CutoverJob;
+use FluentMail\Google\Service\VMMigrationService\ListCutoverJobsResponse;
+use FluentMail\Google\Service\VMMigrationService\Operation;
 
 /**
  * The "cutoverJobs" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\RemoteBuildExecution;
+namespace FluentMail\Google\Service\RemoteBuildExecution;
 
 class GoogleDevtoolsRemotebuildbotResourceUsageIOStats extends \Google\Model
 {

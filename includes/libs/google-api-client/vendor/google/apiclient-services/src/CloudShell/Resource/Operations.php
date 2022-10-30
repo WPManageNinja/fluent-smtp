@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\CloudShell\Resource;
+namespace FluentMail\Google\Service\CloudShell\Resource;
 
-use Google\Service\CloudShell\CancelOperationRequest;
-use Google\Service\CloudShell\CloudshellEmpty;
-use Google\Service\CloudShell\ListOperationsResponse;
-use Google\Service\CloudShell\Operation;
+use FluentMail\Google\Service\CloudShell\CancelOperationRequest;
+use FluentMail\Google\Service\CloudShell\CloudshellEmpty;
+use FluentMail\Google\Service\CloudShell\ListOperationsResponse;
+use FluentMail\Google\Service\CloudShell\Operation;
 
 /**
  * The "operations" collection of methods.

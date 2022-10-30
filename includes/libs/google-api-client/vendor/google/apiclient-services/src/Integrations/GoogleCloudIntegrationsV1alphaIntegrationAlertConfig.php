@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Integrations;
+namespace FluentMail\Google\Service\Integrations;
 
 class GoogleCloudIntegrationsV1alphaIntegrationAlertConfig extends \Google\Model
 {

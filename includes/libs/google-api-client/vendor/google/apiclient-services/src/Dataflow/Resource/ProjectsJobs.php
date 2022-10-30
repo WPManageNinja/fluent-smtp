@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Dataflow\Resource;
+namespace FluentMail\Google\Service\Dataflow\Resource;
 
-use Google\Service\Dataflow\Job;
-use Google\Service\Dataflow\JobMetrics;
-use Google\Service\Dataflow\ListJobsResponse;
-use Google\Service\Dataflow\Snapshot;
-use Google\Service\Dataflow\SnapshotJobRequest;
+use FluentMail\Google\Service\Dataflow\Job;
+use FluentMail\Google\Service\Dataflow\JobMetrics;
+use FluentMail\Google\Service\Dataflow\ListJobsResponse;
+use FluentMail\Google\Service\Dataflow\Snapshot;
+use FluentMail\Google\Service\Dataflow\SnapshotJobRequest;
 
 /**
  * The "jobs" collection of methods.

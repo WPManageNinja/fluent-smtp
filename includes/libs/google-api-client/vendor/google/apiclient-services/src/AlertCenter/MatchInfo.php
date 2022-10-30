@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\AlertCenter;
+namespace FluentMail\Google\Service\AlertCenter;
 
 class MatchInfo extends \Google\Model
 {

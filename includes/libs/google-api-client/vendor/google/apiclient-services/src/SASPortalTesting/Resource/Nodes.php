@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\SASPortalTesting\Resource;
+namespace FluentMail\Google\Service\SASPortalTesting\Resource;
 
-use Google\Service\SASPortalTesting\SasPortalNode;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalNode;
 
 /**
  * The "nodes" collection of methods.

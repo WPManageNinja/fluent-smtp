@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\YouTubeReporting\Resource;
+namespace FluentMail\Google\Service\YouTubeReporting\Resource;
 
-use Google\Service\YouTubeReporting\Job;
-use Google\Service\YouTubeReporting\ListJobsResponse;
-use Google\Service\YouTubeReporting\YoutubereportingEmpty;
+use FluentMail\Google\Service\YouTubeReporting\Job;
+use FluentMail\Google\Service\YouTubeReporting\ListJobsResponse;
+use FluentMail\Google\Service\YouTubeReporting\YoutubereportingEmpty;
 
 /**
  * The "jobs" collection of methods.

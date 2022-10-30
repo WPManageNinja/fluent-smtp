@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\CloudSecurityToken;
+namespace FluentMail\Google\Service\CloudSecurityToken;
 
 class GoogleIdentityStsV1betaAccessBoundary extends \Google\Collection
 {

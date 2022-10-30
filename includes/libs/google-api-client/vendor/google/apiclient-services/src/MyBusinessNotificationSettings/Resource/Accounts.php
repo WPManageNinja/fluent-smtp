@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessNotificationSettings\Resource;
+namespace FluentMail\Google\Service\MyBusinessNotificationSettings\Resource;
 
-use Google\Service\MyBusinessNotificationSettings\NotificationSetting;
+use FluentMail\Google\Service\MyBusinessNotificationSettings\NotificationSetting;
 
 /**
  * The "accounts" collection of methods.

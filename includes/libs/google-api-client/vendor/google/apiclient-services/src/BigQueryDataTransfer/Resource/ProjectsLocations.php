@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\BigQueryDataTransfer\Resource;
+namespace FluentMail\Google\Service\BigQueryDataTransfer\Resource;
 
-use Google\Service\BigQueryDataTransfer\BigquerydatatransferEmpty;
-use Google\Service\BigQueryDataTransfer\EnrollDataSourcesRequest;
-use Google\Service\BigQueryDataTransfer\ListLocationsResponse;
-use Google\Service\BigQueryDataTransfer\Location;
+use FluentMail\Google\Service\BigQueryDataTransfer\BigquerydatatransferEmpty;
+use FluentMail\Google\Service\BigQueryDataTransfer\EnrollDataSourcesRequest;
+use FluentMail\Google\Service\BigQueryDataTransfer\ListLocationsResponse;
+use FluentMail\Google\Service\BigQueryDataTransfer\Location;
 
 /**
  * The "locations" collection of methods.

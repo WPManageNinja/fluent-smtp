@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\Fitness\Resource;
+namespace FluentMail\Google\Service\Fitness\Resource;
 
-use Google\Service\Fitness\ListDataPointChangesResponse;
+use FluentMail\Google\Service\Fitness\ListDataPointChangesResponse;
 
 /**
  * The "dataPointChanges" collection of methods.

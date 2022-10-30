@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Directory\Resource;
+namespace FluentMail\Google\Service\Directory\Resource;
 
-use Google\Service\Directory\RoleAssignment;
-use Google\Service\Directory\RoleAssignments as RoleAssignmentsModel;
+use FluentMail\Google\Service\Directory\RoleAssignment;
+use FluentMail\Google\Service\Directory\RoleAssignments as RoleAssignmentsModel;
 
 /**
  * The "roleAssignments" collection of methods.

@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\SASPortalTesting\Resource;
+namespace FluentMail\Google\Service\SASPortalTesting\Resource;
 
-use Google\Service\SASPortalTesting\SasPortalCreateSignedDeviceRequest;
-use Google\Service\SASPortalTesting\SasPortalDevice;
-use Google\Service\SASPortalTesting\SasPortalEmpty;
-use Google\Service\SASPortalTesting\SasPortalListDevicesResponse;
-use Google\Service\SASPortalTesting\SasPortalMoveDeviceRequest;
-use Google\Service\SASPortalTesting\SasPortalOperation;
-use Google\Service\SASPortalTesting\SasPortalSignDeviceRequest;
-use Google\Service\SASPortalTesting\SasPortalUpdateSignedDeviceRequest;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalCreateSignedDeviceRequest;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalDevice;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalEmpty;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalListDevicesResponse;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalMoveDeviceRequest;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalOperation;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalSignDeviceRequest;
+use FluentMail\Google\Service\SASPortalTesting\SasPortalUpdateSignedDeviceRequest;
 
 /**
  * The "devices" collection of methods.

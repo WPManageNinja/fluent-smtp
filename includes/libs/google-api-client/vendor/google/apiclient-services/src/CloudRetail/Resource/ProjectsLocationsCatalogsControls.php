@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\CloudRetail\Resource;
+namespace FluentMail\Google\Service\CloudRetail\Resource;
 
-use Google\Service\CloudRetail\GoogleCloudRetailV2Control;
-use Google\Service\CloudRetail\GoogleCloudRetailV2ListControlsResponse;
-use Google\Service\CloudRetail\GoogleProtobufEmpty;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2Control;
+use FluentMail\Google\Service\CloudRetail\GoogleCloudRetailV2ListControlsResponse;
+use FluentMail\Google\Service\CloudRetail\GoogleProtobufEmpty;
 
 /**
  * The "controls" collection of methods.

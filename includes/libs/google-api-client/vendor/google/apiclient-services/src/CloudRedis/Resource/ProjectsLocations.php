@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudRedis\Resource;
+namespace FluentMail\Google\Service\CloudRedis\Resource;
 
-use Google\Service\CloudRedis\ListLocationsResponse;
-use Google\Service\CloudRedis\Location;
+use FluentMail\Google\Service\CloudRedis\ListLocationsResponse;
+use FluentMail\Google\Service\CloudRedis\Location;
 
 /**
  * The "locations" collection of methods.

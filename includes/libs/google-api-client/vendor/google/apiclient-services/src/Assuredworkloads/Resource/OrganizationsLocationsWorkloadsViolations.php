@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Assuredworkloads\Resource;
+namespace FluentMail\Google\Service\Assuredworkloads\Resource;
 
-use Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1AcknowledgeViolationRequest;
-use Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1AcknowledgeViolationResponse;
-use Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1ListViolationsResponse;
-use Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1Violation;
+use FluentMail\Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1AcknowledgeViolationRequest;
+use FluentMail\Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1AcknowledgeViolationResponse;
+use FluentMail\Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1ListViolationsResponse;
+use FluentMail\Google\Service\Assuredworkloads\GoogleCloudAssuredworkloadsV1Violation;
 
 /**
  * The "violations" collection of methods.

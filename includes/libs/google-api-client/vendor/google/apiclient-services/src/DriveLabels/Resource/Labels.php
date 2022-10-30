@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\DriveLabels\Resource;
+namespace FluentMail\Google\Service\DriveLabels\Resource;
 
-use Google\Service\DriveLabels\GoogleAppsDriveLabelsV2Label;
-use Google\Service\DriveLabels\GoogleAppsDriveLabelsV2ListLabelsResponse;
+use FluentMail\Google\Service\DriveLabels\GoogleAppsDriveLabelsV2Label;
+use FluentMail\Google\Service\DriveLabels\GoogleAppsDriveLabelsV2ListLabelsResponse;
 
 /**
  * The "labels" collection of methods.

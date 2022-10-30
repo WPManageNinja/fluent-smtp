@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\CloudShell\Resource;
+namespace FluentMail\Google\Service\CloudShell\Resource;
 
-use Google\Service\CloudShell\AddPublicKeyRequest;
-use Google\Service\CloudShell\AuthorizeEnvironmentRequest;
-use Google\Service\CloudShell\Environment;
-use Google\Service\CloudShell\Operation;
-use Google\Service\CloudShell\RemovePublicKeyRequest;
-use Google\Service\CloudShell\StartEnvironmentRequest;
+use FluentMail\Google\Service\CloudShell\AddPublicKeyRequest;
+use FluentMail\Google\Service\CloudShell\AuthorizeEnvironmentRequest;
+use FluentMail\Google\Service\CloudShell\Environment;
+use FluentMail\Google\Service\CloudShell\Operation;
+use FluentMail\Google\Service\CloudShell\RemovePublicKeyRequest;
+use FluentMail\Google\Service\CloudShell\StartEnvironmentRequest;
 
 /**
  * The "environments" collection of methods.

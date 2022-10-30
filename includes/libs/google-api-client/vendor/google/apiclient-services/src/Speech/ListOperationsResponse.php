@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Speech;
+namespace FluentMail\Google\Service\Speech;
 
 class ListOperationsResponse extends \Google\Collection
 {

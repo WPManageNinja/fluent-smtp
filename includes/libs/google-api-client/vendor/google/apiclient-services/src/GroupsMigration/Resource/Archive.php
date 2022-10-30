@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\GroupsMigration\Resource;
+namespace FluentMail\Google\Service\GroupsMigration\Resource;
 
-use Google\Service\GroupsMigration\Groups;
+use FluentMail\Google\Service\GroupsMigration\Groups;
 
 /**
  * The "archive" collection of methods.

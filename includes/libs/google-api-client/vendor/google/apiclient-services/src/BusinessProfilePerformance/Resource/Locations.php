@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\BusinessProfilePerformance\Resource;
+namespace FluentMail\Google\Service\BusinessProfilePerformance\Resource;
 
-use Google\Service\BusinessProfilePerformance\GetDailyMetricsTimeSeriesResponse;
+use FluentMail\Google\Service\BusinessProfilePerformance\GetDailyMetricsTimeSeriesResponse;
 
 /**
  * The "locations" collection of methods.

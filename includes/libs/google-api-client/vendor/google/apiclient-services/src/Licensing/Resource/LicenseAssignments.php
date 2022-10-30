@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Licensing\Resource;
+namespace FluentMail\Google\Service\Licensing\Resource;
 
-use Google\Service\Licensing\LicenseAssignment;
-use Google\Service\Licensing\LicenseAssignmentInsert;
-use Google\Service\Licensing\LicenseAssignmentList;
-use Google\Service\Licensing\LicensingEmpty;
+use FluentMail\Google\Service\Licensing\LicenseAssignment;
+use FluentMail\Google\Service\Licensing\LicenseAssignmentInsert;
+use FluentMail\Google\Service\Licensing\LicenseAssignmentList;
+use FluentMail\Google\Service\Licensing\LicensingEmpty;
 
 /**
  * The "licenseAssignments" collection of methods.

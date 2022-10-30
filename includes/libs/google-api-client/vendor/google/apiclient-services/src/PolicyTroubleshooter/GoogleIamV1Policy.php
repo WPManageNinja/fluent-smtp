@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\PolicyTroubleshooter;
+namespace FluentMail\Google\Service\PolicyTroubleshooter;
 
 class GoogleIamV1Policy extends \Google\Collection
 {

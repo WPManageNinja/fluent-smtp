@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\TagManager\Resource;
+namespace FluentMail\Google\Service\TagManager\Resource;
 
-use Google\Service\TagManager\ListZonesResponse;
-use Google\Service\TagManager\RevertZoneResponse;
-use Google\Service\TagManager\Zone;
+use FluentMail\Google\Service\TagManager\ListZonesResponse;
+use FluentMail\Google\Service\TagManager\RevertZoneResponse;
+use FluentMail\Google\Service\TagManager\Zone;
 
 /**
  * The "zones" collection of methods.

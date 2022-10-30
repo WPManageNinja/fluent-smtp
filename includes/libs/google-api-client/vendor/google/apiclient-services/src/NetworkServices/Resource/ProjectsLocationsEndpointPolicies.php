@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\NetworkServices\Resource;
+namespace FluentMail\Google\Service\NetworkServices\Resource;
 
-use Google\Service\NetworkServices\EndpointPolicy;
-use Google\Service\NetworkServices\ListEndpointPoliciesResponse;
-use Google\Service\NetworkServices\Operation;
-use Google\Service\NetworkServices\Policy;
-use Google\Service\NetworkServices\SetIamPolicyRequest;
-use Google\Service\NetworkServices\TestIamPermissionsRequest;
-use Google\Service\NetworkServices\TestIamPermissionsResponse;
+use FluentMail\Google\Service\NetworkServices\EndpointPolicy;
+use FluentMail\Google\Service\NetworkServices\ListEndpointPoliciesResponse;
+use FluentMail\Google\Service\NetworkServices\Operation;
+use FluentMail\Google\Service\NetworkServices\Policy;
+use FluentMail\Google\Service\NetworkServices\SetIamPolicyRequest;
+use FluentMail\Google\Service\NetworkServices\TestIamPermissionsRequest;
+use FluentMail\Google\Service\NetworkServices\TestIamPermissionsResponse;
 
 /**
  * The "endpointPolicies" collection of methods.

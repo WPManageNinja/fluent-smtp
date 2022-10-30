@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\DatabaseMigrationService\Resource;
+namespace FluentMail\Google\Service\DatabaseMigrationService\Resource;
 
-use Google\Service\DatabaseMigrationService\ConnectionProfile;
-use Google\Service\DatabaseMigrationService\ListConnectionProfilesResponse;
-use Google\Service\DatabaseMigrationService\Operation;
-use Google\Service\DatabaseMigrationService\Policy;
-use Google\Service\DatabaseMigrationService\SetIamPolicyRequest;
-use Google\Service\DatabaseMigrationService\TestIamPermissionsRequest;
-use Google\Service\DatabaseMigrationService\TestIamPermissionsResponse;
+use FluentMail\Google\Service\DatabaseMigrationService\ConnectionProfile;
+use FluentMail\Google\Service\DatabaseMigrationService\ListConnectionProfilesResponse;
+use FluentMail\Google\Service\DatabaseMigrationService\Operation;
+use FluentMail\Google\Service\DatabaseMigrationService\Policy;
+use FluentMail\Google\Service\DatabaseMigrationService\SetIamPolicyRequest;
+use FluentMail\Google\Service\DatabaseMigrationService\TestIamPermissionsRequest;
+use FluentMail\Google\Service\DatabaseMigrationService\TestIamPermissionsResponse;
 
 /**
  * The "connectionProfiles" collection of methods.

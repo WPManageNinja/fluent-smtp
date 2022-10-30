@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\CloudDebugger\Resource;
+namespace FluentMail\Google\Service\CloudDebugger\Resource;
 
-use Google\Service\CloudDebugger\RegisterDebuggeeRequest;
-use Google\Service\CloudDebugger\RegisterDebuggeeResponse;
+use FluentMail\Google\Service\CloudDebugger\RegisterDebuggeeRequest;
+use FluentMail\Google\Service\CloudDebugger\RegisterDebuggeeResponse;
 
 /**
  * The "debuggees" collection of methods.

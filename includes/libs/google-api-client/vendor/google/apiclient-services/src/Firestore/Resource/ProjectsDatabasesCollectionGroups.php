@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Firestore\Resource;
+namespace FluentMail\Google\Service\Firestore\Resource;
 
 /**
  * The "collectionGroups" collection of methods.

@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Contentwarehouse\Resource;
+namespace FluentMail\Google\Service\Contentwarehouse\Resource;
 
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1ListRuleSetsResponse;
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1RuleSet;
-use Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1UpdateRuleSetRequest;
-use Google\Service\Contentwarehouse\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1ListRuleSetsResponse;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1RuleSet;
+use FluentMail\Google\Service\Contentwarehouse\GoogleCloudContentwarehouseV1UpdateRuleSetRequest;
+use FluentMail\Google\Service\Contentwarehouse\GoogleProtobufEmpty;
 
 /**
  * The "ruleSets" collection of methods.

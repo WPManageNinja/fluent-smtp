@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\PolicySimulator\Resource;
+namespace FluentMail\Google\Service\PolicySimulator\Resource;
 
-use Google\Service\PolicySimulator\GoogleLongrunningListOperationsResponse;
-use Google\Service\PolicySimulator\GoogleLongrunningOperation;
+use FluentMail\Google\Service\PolicySimulator\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\PolicySimulator\GoogleLongrunningOperation;
 
 /**
  * The "operations" collection of methods.

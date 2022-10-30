@@ -15,18 +15,18 @@
  * the License.
  */
 
-namespace Google\Service\Cloudchannel\Resource;
+namespace FluentMail\Google\Service\Cloudchannel\Resource;
 
-use Google\Service\Cloudchannel\GoogleCloudChannelV1Customer;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ImportCustomerRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListCustomersResponse;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListPurchasableOffersResponse;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ListPurchasableSkusResponse;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1ProvisionCloudIdentityRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1TransferEntitlementsRequest;
-use Google\Service\Cloudchannel\GoogleCloudChannelV1TransferEntitlementsToGoogleRequest;
-use Google\Service\Cloudchannel\GoogleLongrunningOperation;
-use Google\Service\Cloudchannel\GoogleProtobufEmpty;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1Customer;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ImportCustomerRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListCustomersResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListPurchasableOffersResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ListPurchasableSkusResponse;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1ProvisionCloudIdentityRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1TransferEntitlementsRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleCloudChannelV1TransferEntitlementsToGoogleRequest;
+use FluentMail\Google\Service\Cloudchannel\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Cloudchannel\GoogleProtobufEmpty;
 
 /**
  * The "customers" collection of methods.

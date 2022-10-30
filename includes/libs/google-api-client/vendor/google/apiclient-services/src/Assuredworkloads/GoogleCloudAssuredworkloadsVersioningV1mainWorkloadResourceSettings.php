@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Assuredworkloads;
+namespace FluentMail\Google\Service\Assuredworkloads;
 
 class GoogleCloudAssuredworkloadsVersioningV1mainWorkloadResourceSettings extends \Google\Model
 {

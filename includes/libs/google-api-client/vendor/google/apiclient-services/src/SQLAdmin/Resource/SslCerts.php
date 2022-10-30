@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\SQLAdmin\Resource;
+namespace FluentMail\Google\Service\SQLAdmin\Resource;
 
-use Google\Service\SQLAdmin\Operation;
-use Google\Service\SQLAdmin\SslCert;
-use Google\Service\SQLAdmin\SslCertsCreateEphemeralRequest;
-use Google\Service\SQLAdmin\SslCertsInsertRequest;
-use Google\Service\SQLAdmin\SslCertsInsertResponse;
-use Google\Service\SQLAdmin\SslCertsListResponse;
+use FluentMail\Google\Service\SQLAdmin\Operation;
+use FluentMail\Google\Service\SQLAdmin\SslCert;
+use FluentMail\Google\Service\SQLAdmin\SslCertsCreateEphemeralRequest;
+use FluentMail\Google\Service\SQLAdmin\SslCertsInsertRequest;
+use FluentMail\Google\Service\SQLAdmin\SslCertsInsertResponse;
+use FluentMail\Google\Service\SQLAdmin\SslCertsListResponse;
 
 /**
  * The "sslCerts" collection of methods.

@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\SecretManager\Resource;
+namespace FluentMail\Google\Service\SecretManager\Resource;
 
-use Google\Service\SecretManager\ListLocationsResponse;
-use Google\Service\SecretManager\Location;
+use FluentMail\Google\Service\SecretManager\ListLocationsResponse;
+use FluentMail\Google\Service\SecretManager\Location;
 
 /**
  * The "locations" collection of methods.

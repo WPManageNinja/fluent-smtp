@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Indexing\Resource;
+namespace FluentMail\Google\Service\Indexing\Resource;
 
-use Google\Service\Indexing\PublishUrlNotificationResponse;
-use Google\Service\Indexing\UrlNotification;
-use Google\Service\Indexing\UrlNotificationMetadata;
+use FluentMail\Google\Service\Indexing\PublishUrlNotificationResponse;
+use FluentMail\Google\Service\Indexing\UrlNotification;
+use FluentMail\Google\Service\Indexing\UrlNotificationMetadata;
 
 /**
  * The "urlNotifications" collection of methods.

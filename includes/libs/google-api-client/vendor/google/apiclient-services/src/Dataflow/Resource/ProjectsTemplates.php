@@ -15,13 +15,13 @@
  * the License.
  */
 
-namespace Google\Service\Dataflow\Resource;
+namespace FluentMail\Google\Service\Dataflow\Resource;
 
-use Google\Service\Dataflow\CreateJobFromTemplateRequest;
-use Google\Service\Dataflow\GetTemplateResponse;
-use Google\Service\Dataflow\Job;
-use Google\Service\Dataflow\LaunchTemplateParameters;
-use Google\Service\Dataflow\LaunchTemplateResponse;
+use FluentMail\Google\Service\Dataflow\CreateJobFromTemplateRequest;
+use FluentMail\Google\Service\Dataflow\GetTemplateResponse;
+use FluentMail\Google\Service\Dataflow\Job;
+use FluentMail\Google\Service\Dataflow\LaunchTemplateParameters;
+use FluentMail\Google\Service\Dataflow\LaunchTemplateResponse;
 
 /**
  * The "templates" collection of methods.

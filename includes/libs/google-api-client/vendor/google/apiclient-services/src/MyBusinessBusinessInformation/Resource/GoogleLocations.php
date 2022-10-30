@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\MyBusinessBusinessInformation\Resource;
+namespace FluentMail\Google\Service\MyBusinessBusinessInformation\Resource;
 
-use Google\Service\MyBusinessBusinessInformation\SearchGoogleLocationsRequest;
-use Google\Service\MyBusinessBusinessInformation\SearchGoogleLocationsResponse;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\SearchGoogleLocationsRequest;
+use FluentMail\Google\Service\MyBusinessBusinessInformation\SearchGoogleLocationsResponse;
 
 /**
  * The "googleLocations" collection of methods.

@@ -15,7 +15,7 @@
  * the License.
  */
 
-namespace Google\Service\Playdeveloperreporting;
+namespace FluentMail\Google\Service\Playdeveloperreporting;
 
 class GooglePlayDeveloperReportingV1beta1QueryCrashRateMetricSetResponse extends \Google\Collection
 {

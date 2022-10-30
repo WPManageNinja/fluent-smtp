@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\FirebaseManagement\Resource;
+namespace FluentMail\Google\Service\FirebaseManagement\Resource;
 
-use Google\Service\FirebaseManagement\AndroidApp;
-use Google\Service\FirebaseManagement\AndroidAppConfig;
-use Google\Service\FirebaseManagement\ListAndroidAppsResponse;
-use Google\Service\FirebaseManagement\Operation;
-use Google\Service\FirebaseManagement\RemoveAndroidAppRequest;
-use Google\Service\FirebaseManagement\UndeleteAndroidAppRequest;
+use FluentMail\Google\Service\FirebaseManagement\AndroidApp;
+use FluentMail\Google\Service\FirebaseManagement\AndroidAppConfig;
+use FluentMail\Google\Service\FirebaseManagement\ListAndroidAppsResponse;
+use FluentMail\Google\Service\FirebaseManagement\Operation;
+use FluentMail\Google\Service\FirebaseManagement\RemoveAndroidAppRequest;
+use FluentMail\Google\Service\FirebaseManagement\UndeleteAndroidAppRequest;
 
 /**
  * The "androidApps" collection of methods.

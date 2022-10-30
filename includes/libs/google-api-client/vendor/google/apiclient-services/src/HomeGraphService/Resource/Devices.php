@@ -15,16 +15,16 @@
  * the License.
  */
 
-namespace Google\Service\HomeGraphService\Resource;
+namespace FluentMail\Google\Service\HomeGraphService\Resource;
 
-use Google\Service\HomeGraphService\QueryRequest;
-use Google\Service\HomeGraphService\QueryResponse;
-use Google\Service\HomeGraphService\ReportStateAndNotificationRequest;
-use Google\Service\HomeGraphService\ReportStateAndNotificationResponse;
-use Google\Service\HomeGraphService\RequestSyncDevicesRequest;
-use Google\Service\HomeGraphService\RequestSyncDevicesResponse;
-use Google\Service\HomeGraphService\SyncRequest;
-use Google\Service\HomeGraphService\SyncResponse;
+use FluentMail\Google\Service\HomeGraphService\QueryRequest;
+use FluentMail\Google\Service\HomeGraphService\QueryResponse;
+use FluentMail\Google\Service\HomeGraphService\ReportStateAndNotificationRequest;
+use FluentMail\Google\Service\HomeGraphService\ReportStateAndNotificationResponse;
+use FluentMail\Google\Service\HomeGraphService\RequestSyncDevicesRequest;
+use FluentMail\Google\Service\HomeGraphService\RequestSyncDevicesResponse;
+use FluentMail\Google\Service\HomeGraphService\SyncRequest;
+use FluentMail\Google\Service\HomeGraphService\SyncResponse;
 
 /**
  * The "devices" collection of methods.

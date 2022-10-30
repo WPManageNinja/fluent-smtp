@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\CloudDeploy\Resource;
+namespace FluentMail\Google\Service\CloudDeploy\Resource;
 
-use Google\Service\CloudDeploy\ApproveRolloutRequest;
-use Google\Service\CloudDeploy\ApproveRolloutResponse;
-use Google\Service\CloudDeploy\ListRolloutsResponse;
-use Google\Service\CloudDeploy\Operation;
-use Google\Service\CloudDeploy\RetryJobRequest;
-use Google\Service\CloudDeploy\RetryJobResponse;
-use Google\Service\CloudDeploy\Rollout;
+use FluentMail\Google\Service\CloudDeploy\ApproveRolloutRequest;
+use FluentMail\Google\Service\CloudDeploy\ApproveRolloutResponse;
+use FluentMail\Google\Service\CloudDeploy\ListRolloutsResponse;
+use FluentMail\Google\Service\CloudDeploy\Operation;
+use FluentMail\Google\Service\CloudDeploy\RetryJobRequest;
+use FluentMail\Google\Service\CloudDeploy\RetryJobResponse;
+use FluentMail\Google\Service\CloudDeploy\Rollout;
 
 /**
  * The "rollouts" collection of methods.

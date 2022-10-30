@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\ServiceNetworking\Resource;
+namespace FluentMail\Google\Service\ServiceNetworking\Resource;
 
-use Google\Service\ServiceNetworking\AddRolesRequest;
-use Google\Service\ServiceNetworking\Operation;
+use FluentMail\Google\Service\ServiceNetworking\AddRolesRequest;
+use FluentMail\Google\Service\ServiceNetworking\Operation;
 
 /**
  * The "roles" collection of methods.

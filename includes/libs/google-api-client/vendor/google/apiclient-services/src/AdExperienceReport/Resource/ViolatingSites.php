@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\AdExperienceReport\Resource;
+namespace FluentMail\Google\Service\AdExperienceReport\Resource;
 
-use Google\Service\AdExperienceReport\ViolatingSitesResponse;
+use FluentMail\Google\Service\AdExperienceReport\ViolatingSitesResponse;
 
 /**
  * The "violatingSites" collection of methods.

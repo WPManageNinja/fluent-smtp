@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\PlaylistItem;
-use Google\Service\YouTube\PlaylistItemListResponse;
+use FluentMail\Google\Service\YouTube\PlaylistItem;
+use FluentMail\Google\Service\YouTube\PlaylistItemListResponse;
 
 /**
  * The "playlistItems" collection of methods.

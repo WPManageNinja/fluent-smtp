@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Script\Resource;
+namespace FluentMail\Google\Service\Script\Resource;
 
-use Google\Service\Script\Content;
-use Google\Service\Script\CreateProjectRequest;
-use Google\Service\Script\Metrics;
-use Google\Service\Script\Project;
+use FluentMail\Google\Service\Script\Content;
+use FluentMail\Google\Service\Script\CreateProjectRequest;
+use FluentMail\Google\Service\Script\Metrics;
+use FluentMail\Google\Service\Script\Project;
 
 /**
  * The "projects" collection of methods.

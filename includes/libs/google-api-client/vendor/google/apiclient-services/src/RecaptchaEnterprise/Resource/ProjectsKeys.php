@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\RecaptchaEnterprise\Resource;
+namespace FluentMail\Google\Service\RecaptchaEnterprise\Resource;
 
-use Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1Key;
-use Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1ListKeysResponse;
-use Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1Metrics;
-use Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1MigrateKeyRequest;
-use Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1RetrieveLegacySecretKeyResponse;
-use Google\Service\RecaptchaEnterprise\GoogleProtobufEmpty;
+use FluentMail\Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1Key;
+use FluentMail\Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1ListKeysResponse;
+use FluentMail\Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1Metrics;
+use FluentMail\Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1MigrateKeyRequest;
+use FluentMail\Google\Service\RecaptchaEnterprise\GoogleCloudRecaptchaenterpriseV1RetrieveLegacySecretKeyResponse;
+use FluentMail\Google\Service\RecaptchaEnterprise\GoogleProtobufEmpty;
 
 /**
  * The "keys" collection of methods.

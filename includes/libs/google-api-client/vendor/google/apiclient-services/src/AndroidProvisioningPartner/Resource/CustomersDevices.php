@@ -15,14 +15,14 @@
  * the License.
  */
 
-namespace Google\Service\AndroidProvisioningPartner\Resource;
+namespace FluentMail\Google\Service\AndroidProvisioningPartner\Resource;
 
-use Google\Service\AndroidProvisioningPartner\AndroiddeviceprovisioningEmpty;
-use Google\Service\AndroidProvisioningPartner\CustomerApplyConfigurationRequest;
-use Google\Service\AndroidProvisioningPartner\CustomerListDevicesResponse;
-use Google\Service\AndroidProvisioningPartner\CustomerRemoveConfigurationRequest;
-use Google\Service\AndroidProvisioningPartner\CustomerUnclaimDeviceRequest;
-use Google\Service\AndroidProvisioningPartner\Device;
+use FluentMail\Google\Service\AndroidProvisioningPartner\AndroiddeviceprovisioningEmpty;
+use FluentMail\Google\Service\AndroidProvisioningPartner\CustomerApplyConfigurationRequest;
+use FluentMail\Google\Service\AndroidProvisioningPartner\CustomerListDevicesResponse;
+use FluentMail\Google\Service\AndroidProvisioningPartner\CustomerRemoveConfigurationRequest;
+use FluentMail\Google\Service\AndroidProvisioningPartner\CustomerUnclaimDeviceRequest;
+use FluentMail\Google\Service\AndroidProvisioningPartner\Device;
 
 /**
  * The "devices" collection of methods.

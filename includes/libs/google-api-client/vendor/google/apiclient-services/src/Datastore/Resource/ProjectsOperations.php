@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\Datastore\Resource;
+namespace FluentMail\Google\Service\Datastore\Resource;
 
-use Google\Service\Datastore\DatastoreEmpty;
-use Google\Service\Datastore\GoogleLongrunningListOperationsResponse;
-use Google\Service\Datastore\GoogleLongrunningOperation;
+use FluentMail\Google\Service\Datastore\DatastoreEmpty;
+use FluentMail\Google\Service\Datastore\GoogleLongrunningListOperationsResponse;
+use FluentMail\Google\Service\Datastore\GoogleLongrunningOperation;
 
 /**
  * The "operations" collection of methods.

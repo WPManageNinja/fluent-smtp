@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\AdSenseHost\Resource;
+namespace FluentMail\Google\Service\AdSenseHost\Resource;
 
-use Google\Service\AdSenseHost\CustomChannel;
-use Google\Service\AdSenseHost\CustomChannels as CustomChannelsModel;
+use FluentMail\Google\Service\AdSenseHost\CustomChannel;
+use FluentMail\Google\Service\AdSenseHost\CustomChannels as CustomChannelsModel;
 
 /**
  * The "customchannels" collection of methods.

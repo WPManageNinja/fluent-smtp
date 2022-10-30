@@ -15,11 +15,11 @@
  * the License.
  */
 
-namespace Google\Service\ShoppingContent\Resource;
+namespace FluentMail\Google\Service\ShoppingContent\Resource;
 
-use Google\Service\ShoppingContent\LocalInventory as LocalInventoryModel;
-use Google\Service\ShoppingContent\LocalinventoryCustomBatchRequest;
-use Google\Service\ShoppingContent\LocalinventoryCustomBatchResponse;
+use FluentMail\Google\Service\ShoppingContent\LocalInventory as LocalInventoryModel;
+use FluentMail\Google\Service\ShoppingContent\LocalinventoryCustomBatchRequest;
+use FluentMail\Google\Service\ShoppingContent\LocalinventoryCustomBatchResponse;
 
 /**
  * The "localinventory" collection of methods.

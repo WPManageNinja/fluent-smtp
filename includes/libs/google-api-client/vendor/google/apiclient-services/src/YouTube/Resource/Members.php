@@ -15,9 +15,9 @@
  * the License.
  */
 
-namespace Google\Service\YouTube\Resource;
+namespace FluentMail\Google\Service\YouTube\Resource;
 
-use Google\Service\YouTube\MemberListResponse;
+use FluentMail\Google\Service\YouTube\MemberListResponse;
 
 /**
  * The "members" collection of methods.

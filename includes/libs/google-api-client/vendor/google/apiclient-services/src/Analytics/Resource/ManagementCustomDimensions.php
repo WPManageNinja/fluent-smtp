@@ -15,10 +15,10 @@
  * the License.
  */
 
-namespace Google\Service\Analytics\Resource;
+namespace FluentMail\Google\Service\Analytics\Resource;
 
-use Google\Service\Analytics\CustomDimension;
-use Google\Service\Analytics\CustomDimensions;
+use FluentMail\Google\Service\Analytics\CustomDimension;
+use FluentMail\Google\Service\Analytics\CustomDimensions;
 
 /**
  * The "customDimensions" collection of methods.

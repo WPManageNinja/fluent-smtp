@@ -15,15 +15,15 @@
  * the License.
  */
 
-namespace Google\Service\Apigateway\Resource;
+namespace FluentMail\Google\Service\Apigateway\Resource;
 
-use Google\Service\Apigateway\ApigatewayApi;
-use Google\Service\Apigateway\ApigatewayListApisResponse;
-use Google\Service\Apigateway\ApigatewayOperation;
-use Google\Service\Apigateway\ApigatewayPolicy;
-use Google\Service\Apigateway\ApigatewaySetIamPolicyRequest;
-use Google\Service\Apigateway\ApigatewayTestIamPermissionsRequest;
-use Google\Service\Apigateway\ApigatewayTestIamPermissionsResponse;
+use FluentMail\Google\Service\Apigateway\ApigatewayApi;
+use FluentMail\Google\Service\Apigateway\ApigatewayListApisResponse;
+use FluentMail\Google\Service\Apigateway\ApigatewayOperation;
+use FluentMail\Google\Service\Apigateway\ApigatewayPolicy;
+use FluentMail\Google\Service\Apigateway\ApigatewaySetIamPolicyRequest;
+use FluentMail\Google\Service\Apigateway\ApigatewayTestIamPermissionsRequest;
+use FluentMail\Google\Service\Apigateway\ApigatewayTestIamPermissionsResponse;
 
 /**
  * The "apis" collection of methods.

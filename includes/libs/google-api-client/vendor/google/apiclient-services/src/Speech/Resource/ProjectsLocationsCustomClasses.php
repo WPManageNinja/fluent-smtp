@@ -15,12 +15,12 @@
  * the License.
  */
 
-namespace Google\Service\Speech\Resource;
+namespace FluentMail\Google\Service\Speech\Resource;
 
-use Google\Service\Speech\CreateCustomClassRequest;
-use Google\Service\Speech\CustomClass;
-use Google\Service\Speech\ListCustomClassesResponse;
-use Google\Service\Speech\SpeechEmpty;
+use FluentMail\Google\Service\Speech\CreateCustomClassRequest;
+use FluentMail\Google\Service\Speech\CustomClass;
+use FluentMail\Google\Service\Speech\ListCustomClassesResponse;
+use FluentMail\Google\Service\Speech\SpeechEmpty;
 
 /**
  * The "customClasses" collection of methods.
