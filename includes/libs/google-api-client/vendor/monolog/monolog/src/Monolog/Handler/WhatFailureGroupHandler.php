@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Monolog package.
@@ -9,32 +9,31 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler;
+namespace FluentMail\Monolog\Handler;
 
 /**
  * Forwards records to multiple handlers suppressing failures of each handler
  * and continuing through to give every handler a chance to succeed.
  *
  * @author Craig D'Amelio <craig@damelio.ca>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
 class WhatFailureGroupHandler extends GroupHandler
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handle(array $record)
+    public function handle(array $record): bool
     {
         if ($this->processors) {
-            foreach ($this->processors as $processor) {
-                $record = call_user_func($processor, $record);
-            }
+            /** @var Record $record */
+            $record = $this->processRecord($record);
         }
 
         foreach ($this->handlers as $handler) {
             try {
                 $handler->handle($record);
-            } catch (\Exception $e) {
-                // What failure?
             } catch (\Throwable $e) {
                 // What failure?
             }
@@ -44,15 +43,22 @@ class WhatFailureGroupHandler extends GroupHandler
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handleBatch(array $records)
+    public function handleBatch(array $records): void
     {
+        if ($this->processors) {
+            $processed = array();
+            foreach ($records as $record) {
+                $processed[] = $this->processRecord($record);
+            }
+            /** @var Record[] $records */
+            $records = $processed;
+        }
+
         foreach ($this->handlers as $handler) {
             try {
                 $handler->handleBatch($records);
-            } catch (\Exception $e) {
-                // What failure?
             } catch (\Throwable $e) {
                 // What failure?
             }

@@ -1,5 +1,6 @@
 <?php
-namespace GuzzleHttp\Promise;
+
+namespace FluentMail\GuzzleHttp\Promise;
 
 /**
  * Exception thrown when too many errors occur in the some() or any() methods.

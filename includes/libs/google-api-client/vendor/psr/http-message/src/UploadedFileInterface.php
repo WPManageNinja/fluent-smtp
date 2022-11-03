@@ -1,6 +1,6 @@
 <?php
 
-namespace Psr\Http\Message;
+namespace FluentMail\Psr\Http\Message;
 
 /**
  * Value object representing a file uploaded through an HTTP request.

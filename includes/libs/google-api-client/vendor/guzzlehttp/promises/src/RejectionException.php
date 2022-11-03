@@ -1,5 +1,6 @@
 <?php
-namespace GuzzleHttp\Promise;
+
+namespace FluentMail\GuzzleHttp\Promise;
 
 /**
  * A special exception that is thrown when waiting on a rejected promise.
@@ -12,7 +13,7 @@ class RejectionException extends \RuntimeException
     private $reason;
 
     /**
-     * @param mixed $reason       Rejection reason.
+     * @param mixed  $reason      Rejection reason.
      * @param string $description Optional description
      */
     public function __construct($reason, $description = null)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Psr\Cache;
+namespace FluentMail\Psr\Cache;
 
 /**
  * CacheItemInterface defines an interface for interacting with objects inside a cache.

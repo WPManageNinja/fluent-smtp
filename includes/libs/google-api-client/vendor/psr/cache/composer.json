@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Psr\\Cache\\": "src/"
+            "FluentMail\\Psr\\Cache\\": "src/"
         }
     },
     "extra": {

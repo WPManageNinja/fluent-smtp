@@ -1,5 +1,5 @@
 <?php
-namespace Psr\Http\Message;
+namespace FluentMail\Psr\Http\Message;
 
 /**
  * Value object representing a URI.

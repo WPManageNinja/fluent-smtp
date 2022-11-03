@@ -1,5 +1,8 @@
 {
     "require": {
         "google/apiclient": "^2.0"
+    },
+    "require-dev": {
+        "symfony/finder": "^5.4"
     }
 }

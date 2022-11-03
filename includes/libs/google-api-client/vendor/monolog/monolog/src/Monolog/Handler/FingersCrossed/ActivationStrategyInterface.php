@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Monolog package.
@@ -9,20 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Monolog\Handler\FingersCrossed;
+namespace FluentMail\Monolog\Handler\FingersCrossed;
 
 /**
  * Interface for activation strategies for the FingersCrossedHandler.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
 interface ActivationStrategyInterface
 {
     /**
      * Returns whether the given record activates the handler.
      *
-     * @param  array   $record
-     * @return Boolean
+     * @phpstan-param Record $record
      */
-    public function isHandlerActivated(array $record);
+    public function isHandlerActivated(array $record): bool;
 }
