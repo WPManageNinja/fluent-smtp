@@ -198,7 +198,7 @@ class BaseHandler
         $this->phpMailer->clearCustomHeaders();
 
         foreach ($customHeaders as $customHeader) {
-            $this->phpMailer->addCustomHeader($header[0], $header[1]);
+            $this->phpMailer->addCustomHeader($customHeader[0], $customHeader[1]);
         }
 
         return $headers;
