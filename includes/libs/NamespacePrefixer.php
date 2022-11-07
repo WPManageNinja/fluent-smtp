@@ -88,5 +88,5 @@ class NamespacePrefixer
 		'JWT'
 	])->in(__DIR__ . '/google-api-client/vendor')
 	->exclude(['composer', 'symfony'])
-	->setNamespacePrefix('FluentMail');
+	->setNamespacePrefix('FluentMailLib');
 
