@@ -98,9 +98,9 @@
                         <table width="100%">
                             <tr>
                                 <td>
-                                    <h3 style="font-size: 18px; font-weight: normal; margin: 0;"><?php echo esc_html($sent['title']); ?></h3>
+                                    <h3 style="font-size: 18px; font-weight: normal; margin: 0;"><?php echo wp_kses_post($sent['title']); ?></h3>
                                     <?php if ($sent['subject_items']): ?>
-                                        <p style="margin: 4px 0 0 0;font-size: 12px;"><?php echo esc_html($sent['subtitle']); ?></p>
+                                        <p style="margin: 4px 0 0 0;font-size: 12px;"><?php echo wp_kses_post($sent['subtitle']); ?></p>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -116,7 +116,7 @@
                                             </tr>
                                             <?php foreach ($sent['subject_items'] as $index => $item): ?>
                                                 <tr <?php if($index % 2 == 1) { echo 'style="background-color: #f9f9f9;"'; }?>>
-                                                    <td style="padding: 8px 10px;"><?php echo esc_html($item['subject']); ?></td>
+                                                    <td style="padding: 8px 10px;"><?php echo wp_kses_post($item['subject']); ?></td>
                                                     <td style="padding: 8px 10px;"
                                                         align="center"><?php echo number_format_i18n($item['emails_sent']); ?></td>
                                                 </tr>
@@ -150,9 +150,9 @@
                         <table width="100%">
                             <tr>
                                 <td>
-                                    <h3 style="font-size: 18px; font-weight: normal; margin: 0;"><?php echo esc_html($fail['title']); ?></h3>
+                                    <h3 style="font-size: 18px; font-weight: normal; margin: 0;"><?php echo wp_kses_post($fail['title']); ?></h3>
                                     <?php if ($fail['subject_items']): ?>
-                                        <p style="margin: 4px 0 0 0;"><?php echo esc_html($fail['subtitle']); ?></p>
+                                        <p style="margin: 4px 0 0 0;"><?php echo wp_kses_post($fail['subtitle']); ?></p>
                                     <?php endif; ?>
                                 </td>
                             </tr>
@@ -166,7 +166,7 @@
                                             </tr>
                                             <?php foreach ($fail['subject_items'] as $index => $item): ?>
                                                 <tr <?php if($index % 2 == 1) { echo 'style="background-color: #f9f9f9;"'; }?>>
-                                                    <td style="padding: 8px 10px;"><?php echo esc_html($item['subject']); ?></td>
+                                                    <td style="padding: 8px 10px;"><?php echo wp_kses_post($item['subject']); ?></td>
                                                     <td style="padding: 8px 10px;"
                                                         align="center"><?php echo number_format_i18n($item['emails_sent']); ?></td>
                                                 </tr>
