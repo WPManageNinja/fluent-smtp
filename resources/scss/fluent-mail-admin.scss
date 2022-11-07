@@ -328,17 +328,24 @@ span.header_action_right {
 }
 
 .fss_connection_wizard {
-  .con_gmail .el-radio-button__inner img {
-    max-width: 186px !important;
+  .fss_connections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    .el-radio-button__inner {
+      padding: 10px;
+    }
+    img {
+      width: 100px;
+      height: 60px;
+      object-fit: contain;
+    }
   }
 
   .con_gmail.is-active .el-radio-button__inner {
     background: #eff4f7 !important;
     border-color: #ea4435;
     box-shadow: -1px 0 0 0 #ea4435;
-  }
-  .fss_connections .el-radio-button__inner {
-    padding: 12px 6px;
   }
 
   .con_outlook.is-active .el-radio-button__inner {
