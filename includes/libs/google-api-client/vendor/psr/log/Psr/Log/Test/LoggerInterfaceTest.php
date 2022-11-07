@@ -1,10 +1,9 @@
 <?php
 
-namespace FluentMail\Psr\Log\Test;
+namespace Psr\Log\Test;
 
-use FluentMail\Psr\Log\LoggerInterface;
-use FluentMail\Psr\Log\LogLevel;
-use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * Provides a base test class for ensuring compliance with the LoggerInterface.
@@ -12,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  * Implementors can extend the class and implement abstract methods to run this
  * as part of their test suite.
  */
-abstract class LoggerInterfaceTest extends TestCase
+abstract class LoggerInterfaceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @return LoggerInterface
@@ -102,9 +101,6 @@ abstract class LoggerInterfaceTest extends TestCase
 
     public function testContextCanContainAnything()
     {
-        $closed = fopen('php://memory', 'r');
-        fclose($closed);
-
         $context = array(
             'bool' => true,
             'null' => null,
@@ -114,7 +110,6 @@ abstract class LoggerInterfaceTest extends TestCase
             'nested' => array('with object' => new DummyTest),
             'object' => new \DateTime,
             'resource' => fopen('php://memory', 'r'),
-            'closed' => $closed,
         );
 
         $this->getLogger()->warning('Crazy context data', $context);
@@ -134,5 +129,12 @@ abstract class LoggerInterfaceTest extends TestCase
             'critical Uncaught Exception!'
         );
         $this->assertEquals($expected, $this->getLogs());
+    }
+}
+
+class DummyTest
+{
+    public function __toString()
+    {
     }
 }

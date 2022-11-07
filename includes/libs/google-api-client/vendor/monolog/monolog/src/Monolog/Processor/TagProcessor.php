@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -9,50 +9,33 @@
  * file that was distributed with this source code.
  */
 
-namespace FluentMail\Monolog\Processor;
+namespace Monolog\Processor;
 
 /**
  * Adds a tags array into record
  *
  * @author Martijn Riemers
  */
-class TagProcessor implements ProcessorInterface
+class TagProcessor
 {
-    /** @var string[] */
     private $tags;
 
-    /**
-     * @param string[] $tags
-     */
-    public function __construct(array $tags = [])
+    public function __construct(array $tags = array())
     {
         $this->setTags($tags);
     }
 
-    /**
-     * @param string[] $tags
-     */
-    public function addTags(array $tags = []): self
+    public function addTags(array $tags = array())
     {
         $this->tags = array_merge($this->tags, $tags);
-
-        return $this;
     }
 
-    /**
-     * @param string[] $tags
-     */
-    public function setTags(array $tags = []): self
+    public function setTags(array $tags = array())
     {
         $this->tags = $tags;
-
-        return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function __invoke(array $record): array
+    public function __invoke(array $record)
     {
         $record['extra']['tags'] = $this->tags;
 

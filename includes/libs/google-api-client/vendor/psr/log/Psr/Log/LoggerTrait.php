@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentMail\Psr\Log;
+namespace Psr\Log;
 
 /**
  * This is a simple Logger trait that classes unable to extend AbstractLogger
@@ -135,8 +135,6 @@ trait LoggerTrait
      * @param array  $context
      *
      * @return void
-     *
-     * @throws \Psr\Log\InvalidArgumentException
      */
     abstract public function log($level, $message, array $context = array());
 }

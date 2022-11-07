@@ -1,6 +1,5 @@
 <?php
-
-namespace FluentMail\GuzzleHttp\Promise;
+namespace GuzzleHttp\Promise;
 
 interface TaskQueueInterface
 {
@@ -14,6 +13,8 @@ interface TaskQueueInterface
     /**
      * Adds a task to the queue that will be executed the next time run is
      * called.
+     *
+     * @param callable $task
      */
     public function add(callable $task);
 

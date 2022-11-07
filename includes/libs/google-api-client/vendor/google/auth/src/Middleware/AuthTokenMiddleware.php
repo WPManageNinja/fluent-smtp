@@ -15,11 +15,10 @@
  * limitations under the License.
  */
 
-namespace FluentMail\Google\Auth\Middleware;
+namespace Google\Auth\Middleware;
 
-use FluentMail\Google\Auth\FetchAuthTokenInterface;
-use FluentMail\Google\Auth\GetQuotaProjectInterface;
-use FluentMail\Psr\Http\Message\RequestInterface;
+use Google\Auth\FetchAuthTokenInterface;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * AuthTokenMiddleware is a Guzzle Middleware that adds an Authorization header
@@ -35,7 +34,7 @@ use FluentMail\Psr\Http\Message\RequestInterface;
 class AuthTokenMiddleware
 {
     /**
-     * @var callable
+     * @var callback
      */
     private $httpHandler;
 
@@ -45,7 +44,7 @@ class AuthTokenMiddleware
     private $fetcher;
 
     /**
-     * @var ?callable
+     * @var callable
      */
     private $tokenCallback;
 
@@ -69,10 +68,10 @@ class AuthTokenMiddleware
     /**
      * Updates the request with an Authorization header when auth is 'google_auth'.
      *
-     *   use FluentMail\Google\Auth\Middleware\AuthTokenMiddleware;
-     *   use FluentMail\Google\Auth\OAuth2;
-     *   use FluentMail\GuzzleHttp\Client;
-     *   use FluentMail\GuzzleHttp\HandlerStack;
+     *   use Google\Auth\Middleware\AuthTokenMiddleware;
+     *   use Google\Auth\OAuth2;
+     *   use GuzzleHttp\Client;
+     *   use GuzzleHttp\HandlerStack;
      *
      *   $config = [..<oauth config param>.];
      *   $oauth2 = new OAuth2($config)
@@ -89,6 +88,7 @@ class AuthTokenMiddleware
      *   $res = $client->get('myproject/taskqueues/myqueue');
      *
      * @param callable $handler
+     *
      * @return \Closure
      */
     public function __invoke(callable $handler)
@@ -101,13 +101,6 @@ class AuthTokenMiddleware
 
             $request = $request->withHeader('authorization', 'Bearer ' . $this->fetchToken());
 
-            if ($quotaProject = $this->getQuotaProject()) {
-                $request = $request->withHeader(
-                    GetQuotaProjectInterface::X_GOOG_USER_PROJECT_HEADER,
-                    $quotaProject
-                );
-            }
-
             return $handler($request, $options);
         };
     }
@@ -115,41 +108,19 @@ class AuthTokenMiddleware
     /**
      * Call fetcher to fetch the token.
      *
-     * @return string|null
+     * @return string
      */
     private function fetchToken()
     {
-        $auth_tokens = (array) $this->fetcher->fetchAuthToken($this->httpHandler);
+        $auth_tokens = $this->fetcher->fetchAuthToken($this->httpHandler);
 
         if (array_key_exists('access_token', $auth_tokens)) {
             // notify the callback if applicable
             if ($this->tokenCallback) {
-                call_user_func(
-                    $this->tokenCallback,
-                    $this->fetcher->getCacheKey(),
-                    $auth_tokens['access_token']
-                );
+                call_user_func($this->tokenCallback, $this->fetcher->getCacheKey(), $auth_tokens['access_token']);
             }
 
             return $auth_tokens['access_token'];
         }
-
-        if (array_key_exists('id_token', $auth_tokens)) {
-            return $auth_tokens['id_token'];
-        }
-
-        return null;
-    }
-
-    /**
-     * @return string|null
-     */
-    private function getQuotaProject()
-    {
-        if ($this->fetcher instanceof GetQuotaProjectInterface) {
-            return $this->fetcher->getQuotaProject();
-        }
-
-        return null;
     }
 }

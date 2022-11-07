@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-namespace FluentMail\Google\Auth\Middleware;
+namespace Google\Auth\Middleware;
 
-use FluentMail\GuzzleHttp\Psr7\Query;
-use FluentMail\Psr\Http\Message\RequestInterface;
+use GuzzleHttp\Psr7;
+use Psr\Http\Message\RequestInterface;
 
 /**
  * SimpleMiddleware is a Guzzle Middleware that implements Google's Simple API
@@ -29,7 +29,7 @@ use FluentMail\Psr\Http\Message\RequestInterface;
 class SimpleMiddleware
 {
     /**
-     * @var array<mixed>
+     * @var array
      */
     private $config;
 
@@ -39,7 +39,7 @@ class SimpleMiddleware
      * The configuration array expects one option
      * - key: required, otherwise InvalidArgumentException is thrown
      *
-     * @param array<mixed> $config Configuration array
+     * @param array $config Configuration array
      */
     public function __construct(array $config)
     {
@@ -53,9 +53,9 @@ class SimpleMiddleware
     /**
      * Updates the request query with the developer key if auth is set to simple.
      *
-     *   use FluentMail\Google\Auth\Middleware\SimpleMiddleware;
-     *   use FluentMail\GuzzleHttp\Client;
-     *   use FluentMail\GuzzleHttp\HandlerStack;
+     *   use Google\Auth\Middleware\SimpleMiddleware;
+     *   use GuzzleHttp\Client;
+     *   use GuzzleHttp\HandlerStack;
      *
      *   $my_key = 'is not the same as yours';
      *   $middleware = new SimpleMiddleware(['key' => $my_key]);
@@ -71,6 +71,7 @@ class SimpleMiddleware
      *   $res = $client->get('drive/v2/rest');
      *
      * @param callable $handler
+     *
      * @return \Closure
      */
     public function __invoke(callable $handler)
@@ -81,9 +82,9 @@ class SimpleMiddleware
                 return $handler($request, $options);
             }
 
-            $query = Query::parse($request->getUri()->getQuery());
+            $query = Psr7\parse_query($request->getUri()->getQuery());
             $params = array_merge($query, $this->config);
-            $uri = $request->getUri()->withQuery(Query::build($params));
+            $uri = $request->getUri()->withQuery(Psr7\build_query($params));
             $request = $request->withUri($uri);
 
             return $handler($request, $options);

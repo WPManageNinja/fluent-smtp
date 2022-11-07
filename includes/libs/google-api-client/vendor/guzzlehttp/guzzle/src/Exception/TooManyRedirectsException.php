@@ -1,7 +1,4 @@
 <?php
+namespace GuzzleHttp\Exception;
 
-namespace FluentMail\GuzzleHttp\Exception;
-
-class TooManyRedirectsException extends RequestException
-{
-}
+class TooManyRedirectsException extends RequestException {}

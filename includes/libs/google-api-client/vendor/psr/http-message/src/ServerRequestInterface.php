@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentMail\Psr\Http\Message;
+namespace Psr\Http\Message;
 
 /**
  * Representation of an incoming, server-side HTTP request.

@@ -1,6 +1,5 @@
 <?php
-
-namespace FluentMail\GuzzleHttp\Promise;
+namespace GuzzleHttp\Promise;
 
 /**
  * Interface used with classes that return a promise.

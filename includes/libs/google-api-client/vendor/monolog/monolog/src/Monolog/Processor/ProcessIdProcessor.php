@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -9,19 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace FluentMail\Monolog\Processor;
+namespace Monolog\Processor;
 
 /**
  * Adds value of getmypid into records
  *
  * @author Andreas Hörnicke
  */
-class ProcessIdProcessor implements ProcessorInterface
+class ProcessIdProcessor
 {
     /**
-     * {@inheritDoc}
+     * @param  array $record
+     * @return array
      */
-    public function __invoke(array $record): array
+    public function __invoke(array $record)
     {
         $record['extra']['process_id'] = getmypid();
 

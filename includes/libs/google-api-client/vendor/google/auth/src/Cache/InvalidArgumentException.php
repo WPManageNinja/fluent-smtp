@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-namespace FluentMail\Google\Auth\Cache;
+namespace Google\Auth\Cache;
 
-use FluentMail\Psr\Cache\InvalidArgumentException as PsrInvalidArgumentException;
+use Psr\Cache\InvalidArgumentException as PsrInvalidArgumentException;
 
 class InvalidArgumentException extends \InvalidArgumentException implements PsrInvalidArgumentException
 {

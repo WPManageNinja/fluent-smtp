@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentMail\Psr\Http\Message;
+namespace Psr\Http\Message;
 
 /**
  * Describes a data stream.

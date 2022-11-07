@@ -1,6 +1,5 @@
 <?php
-
-namespace FluentMail\GuzzleHttp\Promise;
+namespace GuzzleHttp\Promise;
 
 /**
  * Exception that is set as the reason for a promise that has been cancelled.

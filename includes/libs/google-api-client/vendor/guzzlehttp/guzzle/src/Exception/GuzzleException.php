@@ -1,9 +1,4 @@
 <?php
+namespace GuzzleHttp\Exception;
 
-namespace FluentMail\GuzzleHttp\Exception;
-
-use FluentMail\Psr\Http\Client\ClientExceptionInterface;
-
-interface GuzzleException extends ClientExceptionInterface
-{
-}
+interface GuzzleException {}

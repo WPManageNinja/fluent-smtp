@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -9,11 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace FluentMail\Monolog\Handler;
+namespace Monolog\Handler;
 
-use FluentMail\Monolog\Logger;
-use FluentMail\Monolog\Formatter\NormalizerFormatter;
-use FluentMail\Monolog\Formatter\FormatterInterface;
+use Monolog\Logger;
+use Monolog\Formatter\NormalizerFormatter;
 use Doctrine\CouchDB\CouchDBClient;
 
 /**
@@ -23,10 +22,9 @@ use Doctrine\CouchDB\CouchDBClient;
  */
 class DoctrineCouchDBHandler extends AbstractProcessingHandler
 {
-    /** @var CouchDBClient */
     private $client;
 
-    public function __construct(CouchDBClient $client, $level = Logger::DEBUG, bool $bubble = true)
+    public function __construct(CouchDBClient $client, $level = Logger::DEBUG, $bubble = true)
     {
         $this->client = $client;
         parent::__construct($level, $bubble);
@@ -35,12 +33,12 @@ class DoctrineCouchDBHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record): void
+    protected function write(array $record)
     {
         $this->client->postDocument($record['formatted']);
     }
 
-    protected function getDefaultFormatter(): FormatterInterface
+    protected function getDefaultFormatter()
     {
         return new NormalizerFormatter;
     }

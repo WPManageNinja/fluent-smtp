@@ -1,7 +1,4 @@
 <?php
+namespace GuzzleHttp\Exception;
 
-namespace FluentMail\GuzzleHttp\Exception;
-
-class TransferException extends \RuntimeException implements GuzzleException
-{
-}
+class TransferException extends \RuntimeException implements GuzzleException {}

@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /*
  * This file is part of the Monolog package.
@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace FluentMail\Monolog\Handler;
+namespace Monolog\Handler;
 
 /**
- * Exception can be thrown if an extension for a handler is missing
+ * Exception can be thrown if an extension for an handler is missing
  *
- * @author Christian Bergau <cbergau86@gmail.com>
+ * @author  Christian Bergau <cbergau86@gmail.com>
  */
 class MissingExtensionException extends \Exception
 {
