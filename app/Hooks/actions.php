@@ -4,6 +4,8 @@
 
 (new \FluentMail\App\Hooks\Handlers\SchedulerHandler())->register();
 
+(new \FluentMail\App\Hooks\Handlers\InitializeSiteHandler())->addHandler();
+
 $app->addCustomAction('handle_exception', 'ExceptionHandler@handle');
 
 $app->addAction('admin_notices', 'AdminMenuHandler@maybeAdminNotice');
