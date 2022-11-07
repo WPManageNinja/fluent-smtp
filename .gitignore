@@ -6,3 +6,4 @@ assets
 !assets/index.php
 package-lock.json
 .DS_Store
+*.sublime-*
