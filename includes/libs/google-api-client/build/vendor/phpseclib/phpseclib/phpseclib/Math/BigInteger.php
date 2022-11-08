@@ -663,7 +663,7 @@ class BigInteger
      *
      * @access public
      * @see self::__clone()
-     * @return \phpseclib\Math\BigInteger
+     * @return \FluentSmtpLib\phpseclib\Math\BigInteger
      */
     function copy()
     {
@@ -697,7 +697,7 @@ class BigInteger
      *
      * @access public
      * @see self::copy()
-     * @return \phpseclib\Math\BigInteger
+     * @return \FluentSmtpLib\phpseclib\Math\BigInteger
      */
     function __clone()
     {
@@ -782,8 +782,8 @@ class BigInteger
      * ?>
      * </code>
      *
-     * @param \phpseclib\Math\BigInteger $y
-     * @return \phpseclib\Math\BigInteger
+     * @param \FluentSmtpLib\phpseclib\Math\BigInteger $y
+     * @return \FluentSmtpLib\phpseclib\Math\BigInteger
      * @access public
      * @internal Performs base-2**52 addition
      */
@@ -884,8 +884,8 @@ class BigInteger
      * ?>
      * </code>
      *
-     * @param \phpseclib\Math\BigInteger $y
-     * @return \phpseclib\Math\BigInteger
+     * @param \FluentSmtpLib\phpseclib\Math\BigInteger $y
+     * @return \FluentSmtpLib\phpseclib\Math\BigInteger
      * @access public
      * @internal Performs base-2**52 subtraction
      */
