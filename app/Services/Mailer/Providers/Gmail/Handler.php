@@ -46,7 +46,7 @@ class Handler extends BaseHandler
     private function sendViaApi()
     {
         if (!class_exists('\FluentSmtpLib\Google\Service\Gmail\Message')) {
-            require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
+            require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/build/vendor/autoload.php';
         }
 
         $message = $this->phpMailer->getSentMIMEMessage();
@@ -260,8 +260,8 @@ class Handler extends BaseHandler
 
         $client->setAccessToken($tokens);
 
-        // check if expired or will be expired in 120 seconds
-        if (($data['expire_stamp'] - 120) < time()) {
+        // check if expired or will be expired in 5 minutes
+        if (($data['expire_stamp'] - 300) < time()) {
             $newTokens = $client->refreshToken($data['refresh_token']);
             $this->saveNewTokens($data, $newTokens);
             $client->setAccessToken($newTokens);
