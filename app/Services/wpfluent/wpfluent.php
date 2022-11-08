@@ -1,36 +1,24 @@
 <?php defined('ABSPATH') or die;
 
-/*
-Plugin Name: Wp Fluent
-Description: Wp Fluent WordPress Plugin
-Version: 1.0.0
-Author: 
-Author URI: 
-Plugin URI: 
-License: GPLv2 or later
-Text Domain: wpfluent
-Domain Path: /resources/languages
-*/
-
 // Autoload plugin.
 require_once(__DIR__.'/autoload.php');
 
-if (! function_exists('wpFluent')) {
+if (! function_exists('FluentSmtpDb')) {
     /**
-     * @return \WpFluent\QueryBuilder\QueryBuilderHandler
+     * @return \FluentSmtpDb\QueryBuilder\QueryBuilderHandler
      */
-    function wpFluent()
+    function FluentSmtpDb()
     {
-        static $wpFluent;
+        static $FluentSmtpDb;
 
-        if (! $wpFluent) {
+        if (! $FluentSmtpDb) {
             global $wpdb;
 
-            $connection = new \WpFluent\Connection($wpdb, ['prefix' => $wpdb->prefix]);
+            $connection = new \FluentSmtpDb\Connection($wpdb, ['prefix' => $wpdb->prefix]);
 
-            $wpFluent = new \WpFluent\QueryBuilder\QueryBuilderHandler($connection);
+            $FluentSmtpDb = new \FluentSmtpDb\QueryBuilder\QueryBuilderHandler($connection);
         }
 
-        return $wpFluent;
+        return $FluentSmtpDb;
     }
 }

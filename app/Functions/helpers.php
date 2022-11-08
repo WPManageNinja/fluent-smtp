@@ -586,3 +586,13 @@ if (!function_exists('fluentMailSend')) {
         }
     }
 }
+
+function fluentMailDb()
+{
+    if (function_exists('FluentSmtpDb')) {
+        return FluentSmtpDb();
+    }
+
+    require_once(FLUENTMAIL_PLUGIN_PATH . 'app/Services/wpfluent/wpfluent.php');
+    return FluentSmtpDb();
+}

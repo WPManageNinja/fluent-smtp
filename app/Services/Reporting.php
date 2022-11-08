@@ -82,14 +82,14 @@ class Reporting
     protected function prepareSelect($frequency, $dateField = 'created_at')
     {
         $select = [
-            wpFluent()->raw('COUNT(id) AS count'),
-            wpFluent()->raw('DATE('.$dateField.') AS date')
+            fluentMailDb()->raw('COUNT(id) AS count'),
+            fluentMailDb()->raw('DATE('.$dateField.') AS date')
         ];
 
         if ($frequency == static::$weekly) {
-            $select[] = wpFluent()->raw('WEEK(created_at) week');
+            $select[] = fluentMailDb()->raw('WEEK(created_at) week');
         } else if ($frequency == static::$monthly) {
-            $select[] = wpFluent()->raw('MONTH(created_at) month');
+            $select[] = fluentMailDb()->raw('MONTH(created_at) month');
         }
 
         return $select;

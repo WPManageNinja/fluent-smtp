@@ -1,13 +1,13 @@
-<?php namespace WpFluent\QueryBuilder;
+<?php namespace FluentSmtpDb\QueryBuilder;
 
-use WpFluent\Connection;
-use WpFluent\Exception;
+use FluentSmtpDb\Connection;
+use FluentSmtpDb\Exception;
 
 class QueryBuilderHandler
 {
 
     /**
-     * @var \Viocon\Container
+     * @var \FluentSmtpDb\Viocon\Container
      */
     protected $container;
 
@@ -37,7 +37,7 @@ class QueryBuilderHandler
     protected $tablePrefix = null;
 
     /**
-     * @var \WpFluent\QueryBuilder\Adapters\BaseAdapter
+     * @var \FluentSmtpDb\QueryBuilder\Adapters\BaseAdapter
      */
     protected $adapterInstance;
 
@@ -49,9 +49,9 @@ class QueryBuilderHandler
     protected $fetchParameters = array(\PDO::FETCH_OBJ);
 
     /**
-     * @param null|\WpFluent\Connection $connection
+     * @param null|\FluentSmtpDb\Connection $connection
      *
-     * @throws \WpFluent\Exception
+     * @throws \FluentSmtpDb\Exception
      */
     public function __construct(Connection $connection = null)
     {
@@ -73,7 +73,7 @@ class QueryBuilderHandler
 
         // Query builder adapter instance
         $this->adapterInstance = $this->container->build(
-            '\\WpFluent\\QueryBuilder\\Adapters\\' . ucfirst($this->adapter),
+            '\\FluentSmtpDb\\QueryBuilder\\Adapters\\' . ucfirst($this->adapter),
             array($this->connection)
         );
     }
@@ -106,7 +106,7 @@ class QueryBuilderHandler
     }
 
     /**
-     * @param null|\WpFluent\Connection $connection
+     * @param null|\FluentSmtpDb\Connection $connection
      *
      * @return static
      */
@@ -128,7 +128,7 @@ class QueryBuilderHandler
     public function query($sql, $bindings = array())
     {
         $this->dbStatement = $this->container->build(
-            '\\WpFluent\\QueryBuilder\\QueryObject',
+            '\\FluentSmtpDb\\QueryBuilder\\QueryObject',
             array($sql, $bindings)
         )->getRawSql();
 
@@ -153,7 +153,7 @@ class QueryBuilderHandler
      * Get all rows
      *
      * @return array|object|null
-     * @throws \WpFluent\Exception
+     * @throws \FluentSmtpDb\Exception
      */
     public function get()
     {
@@ -284,7 +284,7 @@ class QueryBuilderHandler
         $queryArr = $this->adapterInstance->$type($this->statements, $dataToBePassed);
         
         return  $this->container->build(
-            '\\WpFluent\\QueryBuilder\\QueryObject',
+            '\\FluentSmtpDb\\QueryBuilder\\QueryObject',
             array($queryArr['sql'], $queryArr['bindings'])
         );
     }
@@ -310,7 +310,7 @@ class QueryBuilderHandler
      * @param $data
      *
      * @return array|string
-     * @throws \WpFluent\Exception
+     * @throws \FluentSmtpDb\Exception
      */
     private function doInsert($data, $type)
     {
@@ -383,7 +383,7 @@ class QueryBuilderHandler
     /**
      * @param $data
      *
-     * @throws \WpFluent\Exception
+     * @throws \FluentSmtpDb\Exception
      */
     public function update($data)
     {
@@ -428,7 +428,7 @@ class QueryBuilderHandler
 
     /**
      * @return mixed
-     * @throws \WpFluent\Exception
+     * @throws \FluentSmtpDb\Exception
      */
     public function delete()
     {
@@ -811,7 +811,7 @@ class QueryBuilderHandler
 
         // Build a new JoinBuilder class, keep it by reference so any changes made
         // in the closure should reflect here
-        $joinBuilder = $this->container->build('\\WpFluent\\QueryBuilder\\JoinBuilder', array($this->connection));
+        $joinBuilder = $this->container->build('\\FluentSmtpDb\\QueryBuilder\\JoinBuilder', array($this->connection));
         $joinBuilder = & $joinBuilder;
         // Call the closure with our new joinBuilder object
         $key($joinBuilder);
@@ -837,7 +837,7 @@ class QueryBuilderHandler
 
             // Get the Transaction class
             $transaction = $this->container->build(
-                '\\WpFluent\\QueryBuilder\\Transaction',
+                '\\FluentSmtpDb\\QueryBuilder\\Transaction',
                 array($this->connection)
             );
 
@@ -909,7 +909,7 @@ class QueryBuilderHandler
      */
     public function raw($value, $bindings = array())
     {
-        return $this->container->build('\\WpFluent\\QueryBuilder\\Raw', array($value, $bindings));
+        return $this->container->build('\\FluentSmtpDb\\QueryBuilder\\Raw', array($value, $bindings));
     }
 
     /**

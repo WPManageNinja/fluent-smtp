@@ -1,4 +1,4 @@
-<?php namespace WpFluent\QueryBuilder;
+<?php namespace FluentSmtpDb\QueryBuilder;
 
 class NestedCriteria extends QueryBuilderHandler
 {

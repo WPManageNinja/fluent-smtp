@@ -1,4 +1,4 @@
-<?php namespace WpFluent\QueryBuilder\Adapters;
+<?php namespace FluentSmtpDb\QueryBuilder\Adapters;
 
 class Mysql extends BaseAdapter
 {

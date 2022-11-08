@@ -1,7 +1,7 @@
-<?php namespace WpFluent;
+<?php namespace FluentSmtpDb;
 
-use WpFluent\QueryBuilder\QueryBuilderHandler;
-use WpFluent\QueryBuilder\Raw;
+use FluentSmtpDb\QueryBuilder\QueryBuilderHandler;
+use FluentSmtpDb\QueryBuilder\Raw;
 
 class EventHandler
 {

@@ -1,4 +1,4 @@
-<?php namespace Viocon;
+<?php namespace FluentSmtpDb\Viocon;
 
 class Container
 {
@@ -18,7 +18,7 @@ class Container
     {
         if ($alias) {
             AliasFacade::setVioconInstance($this);
-            class_alias('\\Viocon\\AliasFacade', $alias);
+            class_alias('\\FluentSmtpDb\\FluentSmtpDb\\Viocon\\AliasFacade', $alias);
         }
     }
 
