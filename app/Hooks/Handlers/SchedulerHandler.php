@@ -208,7 +208,6 @@ class SchedulerHandler
                 $this->callGmailApiForNewToken($connection['provider_settings']);
             }
         }
-
     }
 
     public function callGmailApiForNewToken($settings)
@@ -239,14 +238,14 @@ class SchedulerHandler
             $client->setAccessToken($tokens);
 
             $newTokens = $client->refreshToken($tokens['refresh_token']);
-            $this->saveNewTokens($settings, $newTokens);
+            $this->saveNewGmailTokens($settings, $newTokens);
             return true;
         } catch (\Exception $exception) {
             return new \WP_Error('api_error', $exception->getMessage());
         }
     }
 
-    private function saveNewTokens($existingData, $tokens)
+    private function saveNewGmailTokens($existingData, $tokens)
     {
         if (empty($tokens['access_token']) || empty($tokens['refresh_token'])) {
             return false;

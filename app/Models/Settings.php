@@ -5,7 +5,6 @@ namespace FluentMail\App\Models;
 use FluentMail\Includes\Support\Arr;
 use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\App\Models\Traits\SendTestEmailTrait;
-use FluentMail\Includes\Support\ValidationException;
 
 class Settings
 {

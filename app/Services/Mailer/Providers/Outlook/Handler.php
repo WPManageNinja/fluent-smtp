@@ -11,6 +11,8 @@ class Handler extends BaseHandler
 
     public function send()
     {
+        $this->phpMailer->Encoding = 'base64';
+
         if ($this->preSend() && $this->phpMailer->preSend()) {
             return $this->postSend();
         }
@@ -45,8 +47,8 @@ class Handler extends BaseHandler
 
     private function sendViaApi()
     {
-
         $mime = chunk_split(base64_encode($this->phpMailer->getSentMIMEMessage()), 76, "\n");
+
         $data = $this->getSetting();
 
         $accessToken = $this->getAccessToken($data);

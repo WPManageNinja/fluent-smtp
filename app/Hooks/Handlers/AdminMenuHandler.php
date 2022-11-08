@@ -145,6 +145,7 @@ class AdminMenuHandler
             'brand_logo'             => esc_url(fluentMailMix('images/logo.svg')),
             'nonce'                  => wp_create_nonce(FLUENTMAIL),
             'settings'               => $settings,
+            'images_url'             => esc_url(fluentMailMix('images/')),
             'has_fluentcrm'          => defined('FLUENTCRM'),
             'has_fluentform'         => defined('FLUENTFORM'),
             'user_email'             => $user->user_email,

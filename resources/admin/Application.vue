@@ -51,19 +51,19 @@
                     },
                     {
                         route: 'test',
-                        title: 'Email Test'
+                        title: this.$t('Email Test')
                     },
                     {
                         route: 'logs',
-                        title: 'Email Logs'
+                        title: this.$t('Email Logs')
                     },
                     {
                         route: 'support',
-                        title: 'Support'
+                        title: this.$t('About')
                     },
                     {
                         route: 'docs',
-                        title: 'Docs'
+                        title: this.$t('Documentation')
                     }
                 ];
             },
