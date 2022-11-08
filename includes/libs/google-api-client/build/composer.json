@@ -1,12 +1,12 @@
 {
     "require": {
-        "google/apiclient": "v2.12.6"
+        "google\/apiclient": "v2.12.6"
     },
     "scripts": {
         "pre-autoload-dump": "Google\\Task\\Composer::cleanup"
     },
     "extra": {
-        "google/apiclient-services": [
+        "google\/apiclient-services": [
             "Gmail"
         ]
     }

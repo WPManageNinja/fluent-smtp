@@ -45,7 +45,7 @@ class Handler extends BaseHandler
 
     private function sendViaApi()
     {
-        if (!class_exists('\Google_Service_Gmail_Message')) {
+        if (!class_exists('\FluentSmtpLib\Google\Service\Gmail\Message')) {
             require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
         }
 
@@ -53,11 +53,11 @@ class Handler extends BaseHandler
 
         $data = $this->getSetting();
 
-        $googleApiMessage = new \Google_Service_Gmail_Message();
+        $googleApiMessage = new \FluentSmtpLib\Google\Service\Gmail\Message();
 
         $file_size = strlen($message);
         $googleClient = $this->getApiClient($data);
-        $googleService = new \Google_Service_Gmail($googleClient);
+        $googleService = new \FluentSmtpLib\Google\Service\Gmail($googleClient);
 
         $result = array();
         try {
@@ -67,7 +67,7 @@ class Handler extends BaseHandler
             $chunkSizeBytes = 1 * 1024 * 1024;
 
             // create mediafile upload
-            $media = new \Google_Http_MediaFileUpload(
+            $media = new \FluentSmtpLib\Google\Http\MediaFileUpload(
                 $googleClient,
                 $result,
                 'message/rfc822',
@@ -245,7 +245,7 @@ class Handler extends BaseHandler
             return $cachedServices[$senderEmail];
         }
 
-        $client = new \Google_Client();
+        $client = new \FluentSmtpLib\Google\Client();
         $client->setClientId($data['client_id']);
         $client->setClientSecret($data['client_secret']);
         $client->addScope("https://www.googleapis.com/auth/gmail.compose");
@@ -279,8 +279,8 @@ class Handler extends BaseHandler
             $connection['client_secret'] = defined('FLUENTMAIL_GMAIL_CLIENT_SECRET') ? FLUENTMAIL_GMAIL_CLIENT_SECRET : '';
         }
 
-        if (!class_exists('\Google_Client')) {
-            require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/vendor/autoload.php';
+        if (!class_exists('\FluentSmtpLib\Google\Client')) {
+            require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/build/vendor/autoload.php';
         }
 
         $this->getApiClient($connection);
