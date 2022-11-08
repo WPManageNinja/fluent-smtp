@@ -1,0 +1,18 @@
+{
+    "require": {
+        "google\/apiclient": "v2.12.6",
+        "guzzlehttp\/guzzle": "6.5.8",
+        "guzzlehttp\/psr7": "^1.7",
+        "monolog\/monolog": "^1.17",
+        "phpseclib\/phpseclib": "~2.0",
+        "firebase\/php-jwt": "~2.0"
+    },
+    "scripts": {
+        "pre-autoload-dump": "Google\\Task\\Composer::cleanup"
+    },
+    "extra": {
+        "google\/apiclient-services": [
+            "Gmail"
+        ]
+    }
+}

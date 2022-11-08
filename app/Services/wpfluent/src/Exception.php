@@ -1,4 +1,4 @@
-<?php namespace WpFluent;
+<?php namespace FluentSmtpDb;
 
 class Exception extends \Exception
 {

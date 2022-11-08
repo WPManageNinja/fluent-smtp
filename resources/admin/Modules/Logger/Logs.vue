@@ -132,7 +132,7 @@
                     </el-col>
                 </el-row>
             </div>
-            <el-skeleton v-else class="content" :rows="15"></el-skeleton>
+            <el-skeleton :animated="true" v-else class="content" :rows="15"></el-skeleton>
 
             <LogViewer :logViewerProps="logViewerProps"/>
         </div>
@@ -221,7 +221,7 @@ export default {
         },
         formatLog(log) {
             log.to = this.formatAddresses(log.to);
-            if (log.headers) {
+            if (log.headers && typeof log.headers == 'object') {
                 log.headers.cc = this.formatAddresses(log.headers.cc);
                 log.headers.bcc = this.formatAddresses(log.headers.bcc);
                 log.headers['reply-to'] = this.formatAddresses(log.headers['reply-to']);
@@ -249,6 +249,10 @@ export default {
 
             if (isEmpty(addresses)) {
                 return '';
+            }
+
+            if(typeof addresses == 'string') {
+                return addresses;
             }
 
             const result = [];

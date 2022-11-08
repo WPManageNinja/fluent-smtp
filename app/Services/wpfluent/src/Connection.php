@@ -1,6 +1,6 @@
-<?php namespace WpFluent;
+<?php namespace FluentSmtpDb;
 
-use Viocon\Container;
+use FluentSmtpDb\Viocon\Container;
 
 class Connection
 {
@@ -57,7 +57,7 @@ class Connection
         $this->setAdapter()->setAdapterConfig($config)->connect();
 
         // Create event dependency
-        $this->eventHandler = $this->container->build('\\WpFluent\\EventHandler');
+        $this->eventHandler = $this->container->build('\\FluentSmtpDb\\EventHandler');
 
         if ($alias) {
             $this->createAlias($alias);
@@ -71,9 +71,9 @@ class Connection
      */
     public function createAlias($alias)
     {
-        class_alias('WpFluent\\AliasFacade', $alias);
+        class_alias('FluentSmtpDb\\AliasFacade', $alias);
 
-        $builder = $this->container->build('\\WpFluent\\QueryBuilder\\QueryBuilderHandler', array($this));
+        $builder = $this->container->build('\\FluentSmtpDb\\QueryBuilder\\QueryBuilderHandler', array($this));
 
         AliasFacade::setQueryBuilderInstance($builder);
     }
@@ -83,7 +83,7 @@ class Connection
      */
     public function getQueryBuilder()
     {
-        return $this->container->build('\\WpFluent\\QueryBuilder\\QueryBuilderHandler', array($this));
+        return $this->container->build('\\FluentSmtpDb\\QueryBuilder\\QueryBuilderHandler', array($this));
     }
 
 

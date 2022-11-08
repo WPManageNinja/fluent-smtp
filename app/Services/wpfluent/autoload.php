@@ -1,13 +1,12 @@
 <?php
 
 // Autoload Service Container.
-require_once(__DIR__.'/libs/viocon/autoload.php');
 
 spl_autoload_register(function ($class) {
 
-    $namespace = 'WpFluent';
+    $namespace = 'FluentSmtpDb';
 
-    if (substr($class, 0, strlen($namespace)) !== $namespace) {
+    if (!preg_match("/\b{$namespace}\b/", $class)) {
         return;
     }
 

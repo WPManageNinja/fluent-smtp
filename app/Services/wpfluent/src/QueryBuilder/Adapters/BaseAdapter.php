@@ -1,18 +1,18 @@
-<?php namespace WpFluent\QueryBuilder\Adapters;
+<?php namespace FluentSmtpDb\QueryBuilder\Adapters;
 
-use WpFluent\Connection;
-use WpFluent\Exception;
-use WpFluent\QueryBuilder\Raw;
+use FluentSmtpDb\Connection;
+use FluentSmtpDb\Exception;
+use FluentSmtpDb\QueryBuilder\Raw;
 
 abstract class BaseAdapter
 {
     /**
-     * @var \WpFluent\Connection
+     * @var \FluentSmtpDb\Connection
      */
     protected $connection;
 
     /**
-     * @var \Viocon\Container
+     * @var \FluentSmtpDb\Viocon\Container
      */
     protected $container;
 
@@ -380,7 +380,7 @@ abstract class BaseAdapter
                 // Build a new NestedCriteria class, keep it by reference so any changes made
                 // in the closure should reflect here
                 $nestedCriteria = $this->container->build(
-                    '\\WpFluent\\QueryBuilder\\NestedCriteria',
+                    '\\FluentSmtpDb\\QueryBuilder\\NestedCriteria',
                     array($this->connection)
                 );
 

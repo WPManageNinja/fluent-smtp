@@ -1,6 +1,6 @@
 <?php
 
-namespace WpFluent\QueryBuilder;
+namespace FluentSmtpDb\QueryBuilder;
 
 class QueryObject
 {

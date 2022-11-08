@@ -1,13 +1,13 @@
-<?php namespace WpFluent;
+<?php namespace FluentSmtpDb;
 
-use WpFluent\QueryBuilder\QueryBuilderHandler;
+use FluentSmtpDb\QueryBuilder\QueryBuilderHandler;
 
 /**
  * This class gives the ability to access non-static methods statically
  *
  * Class AliasFacade
  *
- * @package WpFluent
+ * @package FluentSmtpDb
  */
 class AliasFacade
 {
