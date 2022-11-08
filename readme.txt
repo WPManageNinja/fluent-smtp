@@ -2,9 +2,9 @@
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.5
-Tested up to: 6.0
-Stable tag: 2.2.0
-Requires PHP: 5.6
+Tested up to: 6.1
+Stable tag: 2.2.1
+Requires PHP: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,8 @@ Connect as many Email Service Providers as you want and FluentSMTP will route yo
 * Mailgun API
 * Sendinblue API
 * Pepipost API
+* PostMark API
+* TransMail API
 * SparkPost API
 * Elastic Mail API
 * Zoho via SMTP
@@ -213,11 +215,10 @@ If you like this plugin, then consider checking out our other plugins:
 <ul>
     <li><a href="https://wordpress.org/plugins/fluent-crm/" target="_blank">FluentCRM – Email Marketing Automation and CRM Plugin for WordPress</a></li>
 	<li><a href="https://wordpress.org/plugins/fluentform/" target="_blank">Fluent Forms – Fastest WordPress Form Builder Plugin</a></li>
+	<li><a href="https://wordpress.org/plugins/fluent-support/" target="_blank">WordPress Helpdesk and Customer Support Ticket Plugin</a></li>
 	<li><a href="https://wordpress.org/plugins/ninja-tables/" target="_blank">Ninja Tables – Best WP DataTables Plugin for WordPress</a></li>
 	<li><a href="https://wordpress.org/plugins/ninja-charts/" target="_blank">Ninja Charts – Best WP Charts Plugin for WordPress</a></li>
-	<li><a href="https://wordpress.org/plugins/wp-payment-form/" target="_blank">WPPayForm - Stripe Payments Plugin for WordPress</a></li>
-	<li><a href="https://wordpress.org/plugins/mautic-for-fluent-forms/" target="_blank">Mautic Integration For Fluent Forms</a></li>
-	<li><a href="https://wordpress.org/plugins/fluentforms-pdf/" target="_blank">Fluent Forms PDF - PDF Entries for Fluent Forms</a></li>
+	<li><a href="https://wordpress.org/plugins/wp-payment-form/" target="_blank">Paymattic - Simple Payment Donations & Subscriptions Plugin</a></li>
 </ul>
 
 
@@ -280,6 +281,14 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.2.1 (Date: Nov 08, 2022) =
+* Refactored Google API integration
+* Fix encoding issues for Outlook API connection
+* ElasticMail Attachment issues fixed
+* Fixed digest email esc_* issues
+* Added contributors to the plugin's about page.
+* UI&UX Improvements
 
 = 2.2.0 (Date: Aug 21, 2022) =
 * Added Elastic Mail API
