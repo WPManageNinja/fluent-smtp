@@ -67,10 +67,17 @@ class API
         $responseCode = wp_remote_retrieve_response_code($response);
 
         if($responseCode >= 300) {
-            $responseBody = json_decode(wp_remote_retrieve_body($response), true);
-            if(!$error = Arr::get($responseBody, 'error.message')) {
-                $error = 'Something with wrong with Outlook API. Please check your API Settings';
+            $error = Arr::get($response, 'response.message');
+
+            if(!$error) {
+                $responseBody = json_decode(wp_remote_retrieve_body($response), true);
+
+                $error = Arr::get($responseBody, 'error.message');
+                if(!$error) {
+                    $error = 'Something with wrong with Outlook API. Please check your API Settings';
+                }
             }
+
             return new \WP_Error($responseCode, $error);
         }
 

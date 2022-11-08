@@ -2,14 +2,12 @@
 
 namespace FluentMail\App\Models\Traits;
 
-use FluentMail\App\Services\Mailer\EmailQueueProcessor;
-
 trait SendTestEmailTrait
 {
     public function sendTestEmail($data, $settings)
     {
         if (empty($settings) || empty($data)) return;
-        
+
         $to = $data['email'];
 
         $subject = 'Fluent SMTP: Test Email';
