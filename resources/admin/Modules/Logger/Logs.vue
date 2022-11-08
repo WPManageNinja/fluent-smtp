@@ -132,7 +132,7 @@
                     </el-col>
                 </el-row>
             </div>
-            <el-skeleton v-else class="content" :rows="15"></el-skeleton>
+            <el-skeleton :animated="true" v-else class="content" :rows="15"></el-skeleton>
 
             <LogViewer :logViewerProps="logViewerProps"/>
         </div>
