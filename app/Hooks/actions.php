@@ -1,4 +1,7 @@
 <?php
+/*
+ * @var $app FluentMail\Includes\Core\Application
+ */
 
 (new \FluentMail\App\Hooks\Handlers\AdminMenuHandler($app))->addFluentMailMenu();
 

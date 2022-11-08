@@ -51,7 +51,7 @@ class AdminMenuHandler
             // and FluentSMTP will not work in that case, So we are removing from that menu
             global $submenu;
 
-            if($submenu && !empty($submenu['wpforms-overview'])) {
+            if ($submenu && !empty($submenu['wpforms-overview'])) {
                 if (Arr::get($submenu, 'wpforms-overview.7.2') == 'wpforms-smtp') {
                     unset($submenu['wpforms-overview'][7]);
                 } else {
@@ -68,9 +68,10 @@ class AdminMenuHandler
 
     public function renderApp()
     {
-        $emailReportHookName = 'fluentmail_do_daily_scheduled_tasks';
-        if (!wp_next_scheduled($emailReportHookName)) {
-            wp_schedule_event(time(), 'daily', $emailReportHookName);
+        $dailyTaskHookName = 'fluentmail_do_daily_scheduled_tasks';
+
+        if (!wp_next_scheduled($dailyTaskHookName)) {
+            wp_schedule_event(time(), 'daily', $dailyTaskHookName);
         }
 
         $this->app->view->render('admin.menu');

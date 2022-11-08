@@ -233,6 +233,7 @@ class Handler extends BaseHandler
 
         (new Settings())->updateConnection($senderEmail, $existingData);
         fluentMailGetProvider($senderEmail, true); // we are clearing the static cache here
+        wp_schedule_single_event($existingData['expire_stamp'] - 360, 'fluentsmtp_renew_gmail_token');
         return true;
     }
 
@@ -243,6 +244,10 @@ class Handler extends BaseHandler
         static $cachedServices = [];
         if (isset($cachedServices[$senderEmail])) {
             return $cachedServices[$senderEmail];
+        }
+
+        if (!class_exists('\FluentSmtpLib\Google\Client')) {
+            require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/build/vendor/autoload.php';
         }
 
         $client = new \FluentSmtpLib\Google\Client();
@@ -291,7 +296,7 @@ class Handler extends BaseHandler
 
         $extraRow = [
             'title'   => __('Token Validity', 'fluent-smtp'),
-            'content' => 'Valid (' . (int)(($connection['expire_stamp'] - time()) / 60) . 'm)'
+            'content' => 'Valid (' . (int)(($connection['expire_stamp'] - time()) / 60) . 'minutes)'
         ];
 
         if (($connection['expire_stamp']) < time()) {

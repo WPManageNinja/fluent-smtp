@@ -88,7 +88,7 @@ final class Application extends Container
     /**
      * Require all the common files that needs to be loaded on each request
      *
-     * @param FluentMail\Includes\Core\Application $app [$app is being used inside required files]
+     * @param Application $app [$app is being used inside required files]
      * @return void
      */
     private function requireCommonFilesForRequest($app)
