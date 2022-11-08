@@ -259,14 +259,15 @@ class Handler extends BaseHandler
             }
 
             //Extracting the file name
-            $filenameonly = explode("/", $attpath);
+            $filenameonly = explode("/", $attpath[0]);
+
             $fname = $filenameonly[count($filenameonly) - 1];
 
             $this->postbody[] = '--' . $this->boundary . "\r\n";
             $this->postbody[] = '--' . 'Content-Disposition: form-data; name="attachments' . ($i + 1) . '"; filename="' . $fname . '"' . "\r\n\r\n";
 
             //Loading attachment
-            $handle = fopen($attpath, "r");
+            $handle = fopen($attpath[0], "r");
             if ($handle) {
                 $fileContent = '';
                 while (($buffer = fgets($handle, 4096)) !== false) {
