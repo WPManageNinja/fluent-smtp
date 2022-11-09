@@ -3,23 +3,32 @@
         <div v-if="is_new" class="content">
             <div class="fss_connection_intro">
                 <div class="fss_intro">
-                    <h1>Welcome to FluentSMTP & SES</h1>
-                    <p>Thank you for installing FluentSMTP - The ultimate SMTP & Email Service Connection Plugin for WordPress</p>
+                    <h1>{{ $t('wizard_title') }}</h1>
+                    <p>{{ $t('wizard_sub') }}</p>
                 </div>
-                <h2>Please configure your first email service provider connection</h2>
-                <connection-wizard
-                    :connection="new_connection"
-                    :is_new="true"
-                    :connection_key="false"
-                    :providers="settings.providers">
-                </connection-wizard>
+
+                <div v-if="recommended && !skip_recommended" class="fsmtp_recommened">
+                    <h2>{{recommended.title}}</h2>
+                    <p>{{recommended.subtitle}}</p>
+                    <el-button @click="setRecommendation()" type="primary">{{recommended.button_text}}</el-button>
+                    <el-button @click="skip_recommended = true" type="info">Skip</el-button>
+                </div>
+                <template v-else>
+                    <h2>{{ $t('wizard_instruction') }}</h2>
+                    <connection-wizard
+                        :connection="new_connection"
+                        :is_new="true"
+                        :connection_key="false"
+                        :providers="settings.providers">
+                    </connection-wizard>
+                </template>
             </div>
         </div>
         <div v-else>
             <el-row :gutter="20">
                 <el-col :sm="24" :md="16">
                     <div class="header">
-                        Sending Stats
+                        {{$t('Sending Stats')}}
                         <span class="fss_to_right">
                             <el-date-picker
                                 size="small"
@@ -39,34 +48,50 @@
                     </div>
                 </el-col>
                 <el-col :sm="24" :md="8">
-                    <div class="header">
-                        Quick Overview
+                    <div class="fsm_card">
+                        <div class="header">
+                            {{$t('Quick Overview')}}
+                        </div>
+                        <div class="content" v-if="!loading">
+                            <ul class="fss_dash_lists">
+                                <li v-if="settings_stat.log_enabled == 'yes'">
+                                    {{$t('Total Email Sent (Logged):')}} <span>{{stats.sent}}</span>
+                                </li>
+                                <li style="color: red" v-if="stats.failed > 0">
+                                    <router-link style="color: red"  :to="{ name: 'logs', query: { filterBy: 'status', filterValue: 'failed' } }">
+                                        {{$t('Email Failed:')}} <span>{{stats.failed}}</span>
+                                    </router-link>
+                                </li>
+                                <li>
+                                    {{$t('Active Connections:')}} <span>{{settings_stat.connection_counts}}</span>
+                                </li>
+                                <li>
+                                    {{$t('Active Senders:')}} <span>{{settings_stat.active_senders}}</span>
+                                </li>
+                                <li>
+                                    {{$t('Save Email Logs:')}}
+                                    <span style="text-transform: capitalize;">
+                                        {{settings_stat.log_enabled}}
+                                    </span>
+                                </li>
+                                <li v-if="settings_stat.log_enabled == 'yes'">
+                                    {{$t('Delete Logs:')}}
+                                    <span>After {{settings_stat.auto_delete_days}} {{$t('Days')}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <el-skeleton v-else class="content" :rows="8"></el-skeleton>
                     </div>
-                    <div class="content" v-loading="loading">
-                        <ul class="fss_dash_lists">
-                            <li v-if="settings_stat.log_enabled == 'yes'">
-                                Total Email Sent (Logged): <span>{{stats.sent}}</span>
-                            </li>
-                            <li style="color: red" v-if="stats.failed > 0">
-                                Email Failed: <span>{{stats.failed}}</span>
-                            </li>
-                            <li>
-                                Active Connections: <span>{{settings_stat.connection_counts}}</span>
-                            </li>
-                            <li>
-                                Active Senders: <span>{{settings_stat.active_senders}}</span>
-                            </li>
-                            <li>
-                                Save Email Logs:
-                                <span style="text-transform: capitalize;">
-                                    {{settings_stat.log_enabled}}
-                                </span>
-                            </li>
-                            <li v-if="settings_stat.log_enabled == 'yes'">
-                                Delete Logs:
-                                <span>After {{settings_stat.auto_delete_days}} Days</span>
-                            </li>
-                        </ul>
+                    <div v-if="appVars.require_optin == 'yes' && stats.sent > 9" style="margin-top: 20px;" class="fsm_card">
+                        <div class="header">
+                            {{$t('Subscribe To Updates')}}
+                            <span class="header_action_right">
+                                <subscribe-dismiss />
+                            </span>
+                        </div>
+                        <div class="content">
+                            <email-subscriber />
+                        </div>
                     </div>
                 </el-col>
             </el-row>
@@ -78,12 +103,16 @@
     import isEmpty from 'lodash/isEmpty';
     import ConnectionWizard from '../Settings/ConnectionWizard';
     import EmailsChart from './Charts/Emails';
+    import EmailSubscriber from '../../Pieces/_Subscrbe';
+    import SubscribeDismiss from '../../Pieces/_SubscribeDismiss';
 
     export default {
         name: 'Dashboard',
         components: {
             ConnectionWizard,
-            EmailsChart
+            EmailsChart,
+            EmailSubscriber,
+            SubscribeDismiss
         },
         data() {
             return {
@@ -99,7 +128,7 @@
                     },
                     shortcuts: [
                         {
-                            text: 'Last week',
+                            text: this.$t('Last week'),
                             onClick(picker) {
                                 const end = new Date();
                                 const start = new Date();
@@ -108,7 +137,7 @@
                             }
                         },
                         {
-                            text: 'Last month',
+                            text: this.$t('Last month'),
                             onClick(picker) {
                                 const end = new Date();
                                 const start = new Date();
@@ -117,7 +146,7 @@
                             }
                         },
                         {
-                            text: 'Last 3 months',
+                            text: this.$t('Last 3 months'),
                             onClick(picker) {
                                 const end = new Date();
                                 const start = new Date();
@@ -126,12 +155,20 @@
                             }
                         }
                     ]
-                }
+                },
+                loading: true,
+                skip_recommended: false
             };
         },
         computed: {
             is_new() {
                 return isEmpty(this.settings.connections);
+            },
+            recommended() {
+                if(!this.is_new) {
+                    return false;
+                }
+                return this.appVars.recommended;
             }
         },
         methods: {
@@ -151,6 +188,10 @@
                 this.$nextTick(() => {
                     this.showing_chart = true;
                 });
+            },
+            setRecommendation() {
+                this.new_connection = JSON.parse(JSON.stringify(this.recommended.settings));
+                this.skip_recommended = true;
             }
         },
         created() {

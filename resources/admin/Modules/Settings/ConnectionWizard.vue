@@ -2,32 +2,44 @@
     <div class="fss_connection_wizard">
         <el-form :data="connection" label-position="top">
             <el-form-item label="Connection Provider">
-                <el-radio-group v-model="connection.provider">
-                    <el-radio-button v-for="(provider, providerName) in providers" :key="providerName" :label="providerName">
-                        <img :title="provider.title" style="width:100px;height:32px;" :src="provider.image" />
-                    </el-radio-button>
-                </el-radio-group>
+                <connection-provider :providers="providers" :connection="connection" />
             </el-form-item>
             <template v-if="connection.provider">
                 <div class="fss_config_section">
-                    <h3 class="fs_config_title">Sender Settings</h3>
+                    <h3 class="fs_config_title">{{$t('Sender Settings')}}</h3>
                     <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="From Email">
+                        <el-col :md="12" :sm="24">
+                            <el-form-item :label="$t('From Email')">
                                 <error :error="errors.get('sender_email')" />
                                 <el-input
                                     type="email"
-                                    placeholder="From Email"
+                                    :placeholder="$t('From Email')"
                                     v-model="connection.sender_email"
                                 ></el-input>
+                                <p style="color: red;" v-if="is_conflicted">Another connection with same email address exist. This connection will replace that connection</p>
                             </el-form-item>
-                            <div v-if="connection.return_path !== 'undefinded'">
+                            <div v-if="connection.force_from_email != undefined">
+                                <el-checkbox
+                                    true-label="yes"
+                                    false-label="no"
+                                    v-model="connection.force_from_email"
+                                >
+                                    {{$t('Force From Email (Recommended Settings: Enable)')}}
+                                    <el-tooltip effect="dark" placement="top-start">
+                                        <div slot="content">
+                                            {{$t('from_email_tooltip')}}
+                                        </div>
+                                        <i class="el-icon-info"></i>
+                                    </el-tooltip>
+                                </el-checkbox>
+                            </div>
+                            <div v-if="connection.return_path != undefined">
                                 <el-checkbox
                                     true-label="yes"
                                     false-label="no"
                                     v-model="connection.return_path"
                                 >
-                                    Set the return-path to match the From Email
+                                    {{$t('Set the return-path to match the From Email')}}
                                     <el-tooltip effect="dark" placement="top-start">
                                         <div slot="content">
                                             Return Path indicates where non-delivery receipts - or bounce messages -<br />
@@ -39,11 +51,11 @@
                                 </el-checkbox>
                             </div>
                         </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="From Name">
+                        <el-col :md="12" :sm="24">
+                            <el-form-item :label="$t('From Name')">
                                 <el-input
                                     type="text"
-                                    placeholder="From Name"
+                                    :placeholder="$t('From Name')"
                                     v-model="connection.sender_name"
                                 ></el-input>
                                 <error :error="errors.get('sender_name')" />
@@ -53,10 +65,10 @@
                                 true-label="yes"
                                 false-label="no"
                             >
-                                Force Sender Name
+                                {{$t('Force Sender Name')}}
                                 <el-tooltip effect="dark" placement="top-start">
                                     <div slot="content">
-                                        When checked, the From Name setting above will be used for all emails, ignoring values set by other plugins.
+                                        {{$t('force_sender_tooltip')}}
                                     </div>
                                     <i class="el-icon-info"></i>
                                 </el-tooltip>
@@ -73,10 +85,13 @@
                     />
                 </div>
                 <p v-if="providers[connection.provider].note" style="padding: 20px 0px;" v-html="providers[connection.provider].note"></p>
-                <el-button v-loading="saving" @click="saveConnectionSettings()" type="success">Save Connection Settings</el-button>
+                <el-button v-loading="saving" @click="saveConnectionSettings()" type="success">{{$t('Save Connection Settings')}}</el-button>
             </template>
-            <p v-if="saving">Validating Data. Please wait</p>
-            <el-alert style="margin-top: 20px" v-if="has_error" type="error">Credential Verification Failed. Please check your inputs</el-alert>
+            <div v-else>
+                <h3 style="text-align: center;">{{$t('save_connection_error_1')}}</h3>
+            </div>
+            <p v-if="saving">{{ $t('Validating Data.Please wait') }}</p>
+            <el-alert style="margin-top: 20px" v-if="has_error" type="error">{{$t('save_connection_error_2')}}</el-alert>
         </el-form>
     </div>
 </template>
@@ -89,12 +104,18 @@
     import AmazonSes from './Partials/Providers/AmazonSes';
     import sparkpost from './Partials/Providers/SparkPost';
     import smtp from './Partials/Providers/Smtp';
+    import gmail from './Partials/Providers/Gmail';
+    import outlook from './Partials/Providers/Outlook';
+    import postmark from './Partials/Providers/PostMark';
+    import elasticmail from './Partials/Providers/ElasticMail';
     import Errors from '@/Bits/Errors';
     import Error from '@/Pieces/Error';
+    import each from 'lodash/each';
+    import ConnectionProvider from './Partials/_ConnectionSelector';
 
     export default {
         name: 'ConnectionWizard',
-        props: ['connection', 'is_new', 'providers', 'connection_key'],
+        props: ['connection', 'is_new', 'providers', 'connection_key', 'connections'],
         components: {
             ses: AmazonSes,
             mailgun,
@@ -103,7 +124,12 @@
             sendinblue,
             sparkpost,
             smtp,
-            Error
+            gmail,
+            outlook,
+            postmark,
+            elasticmail,
+            Error,
+            ConnectionProvider
         },
         data() {
             return {
@@ -111,6 +137,22 @@
                 errors: new Errors(),
                 api_error: '',
                 has_error: false
+            }
+        },
+        computed: {
+            is_conflicted() {
+                if (!this.connections) {
+                    return false;
+                }
+
+                let isConflicted = false;
+                each(this.connections, (existingConnection, connectionKey) => {
+                    if(this.connection_key != connectionKey && existingConnection.provider_settings.sender_email == this.connection.sender_email) {
+                        isConflicted = true;
+                    }
+                });
+
+                return isConflicted;
             }
         },
         watch: {

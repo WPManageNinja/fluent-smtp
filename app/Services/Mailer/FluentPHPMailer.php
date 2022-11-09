@@ -22,15 +22,23 @@ class FluentPHPMailer
     public function send()
     {
         if ($driver = fluentMailGetProvider($this->phpMailer->From)) {
-
             if ($forceFromEmail = $driver->getSetting('force_from_email_id')) {
                 $this->phpMailer->From = $forceFromEmail;
             }
-
             return $driver->setPhpMailer($this->phpMailer)->send();
         }
 
         return $this->phpMailer->send();
+    }
+
+    public function sendViaFallback($rowId)
+    {
+        $driver = fluentMailGetProvider($this->phpMailer->From);
+        if($driver) {
+            $driver->setRowId($rowId);
+            return $driver->setPhpMailer($this->phpMailer)->send();
+        }
+        return false;
     }
 
     public function __get($key)
@@ -42,12 +50,6 @@ class FluentPHPMailer
     {
         $this->phpMailer->{$key} = $value;
     }
-
-//    public static function __callStatic($method, $params)
-//    {
-//        return call_user_func_array([$this->phpMailer, $method], $params);
-//    }
-//
 
     public function __call($method, $params)
     {

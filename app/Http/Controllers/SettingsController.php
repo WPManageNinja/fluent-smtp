@@ -5,6 +5,7 @@ namespace FluentMail\App\Http\Controllers;
 use Exception;
 use FluentMail\App\Models\Settings;
 use FluentMail\Includes\Request\Request;
+use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Support\ValidationException;
 use FluentMail\App\Services\Mailer\Providers\Factory;
 
@@ -58,18 +59,32 @@ class SettingsController extends Controller
             $provider = $factory->make($data['connection']['provider']);
 
             $connection = $data['connection'];
+
+            foreach ($connection as $index => $value) {
+                if ($index == 'sender_email') {
+                    $connection['sender_email'] = sanitize_email($connection['sender_email']);
+                }
+                if (is_string($value) && $value) {
+                    $connection[$index] = sanitize_text_field($value);
+                }
+            }
+
+            $data['connection'] = $connection;
+
             $this->validateConnection($provider, $connection);
             $provider->checkConnection($connection);
 
-            $data['valid_senders'] =  $provider->getValidSenders($connection);
+            $data['valid_senders'] = $provider->getValidSenders($connection);
+
+            $data = apply_filters('fluentmail_saving_connection_data', $data, $data['connection']['provider']);
 
             $settings->store($data);
 
             return $this->sendSuccess([
-                'message' => 'Settings saved successfully.',
+                'message'     => 'Settings saved successfully.',
                 'connections' => $settings->getConnections(),
-                'mappings' => $settings->getMappings(),
-                'misc' => $settings->getMisc()
+                'mappings'    => $settings->getMappings(),
+                'misc'        => $settings->getMisc()
             ]);
 
         } catch (ValidationException $e) {
@@ -97,7 +112,7 @@ class SettingsController extends Controller
         $this->verify();
 
         $settings = $settings->delete($request->get('key'));
-        
+
         return $this->sendSuccess($settings);
     }
 
@@ -110,7 +125,7 @@ class SettingsController extends Controller
         );
 
         return $this->sendSuccess([
-            'form' => $data,
+            'form'    => $data,
             'message' => __('Settings saved successfully.', 'fluent-smtp')
         ]);
     }
@@ -130,7 +145,7 @@ class SettingsController extends Controller
                     'email_error' => __('The email field is required.', 'fluent-smtp')
                 ], 422);
             }
-            
+
             if (!defined('FLUENTMAIL_EMAIL_TESTING')) {
                 define('FLUENTMAIL_EMAIL_TESTING', true);
             }
@@ -152,8 +167,8 @@ class SettingsController extends Controller
     {
         return $this->sendError([
             'message' => $response->get_error_message(),
-            'errors' => $response->get_error_data()
-        ], $response->get_error_code());
+            'errors'  => $response->get_error_data()
+        ], 423);
     }
 
     public function validateConnection($provider, $connection)
@@ -206,25 +221,25 @@ class SettingsController extends Controller
         $plugin = [
             'name'      => $pluginSlug,
             'repo-slug' => $pluginSlug,
-            'file'      => $pluginSlug.'.php'
+            'file'      => $pluginSlug . '.php'
         ];
 
         $UrlMaps = [
-            'fluentform' => [
+            'fluentform'   => [
                 'admin_url' => admin_url('admin.php?page=fluent_forms'),
-                'title' => __('Go to Fluent Forms Dashboard', 'fluent-smtp')
+                'title'     => __('Go to Fluent Forms Dashboard', 'fluent-smtp')
             ],
-            'fluent-crm' => [
+            'fluent-crm'   => [
                 'admin_url' => admin_url('admin.php?page=fluentcrm-admin'),
-                'title' => __('Go to FluentCRM Dashboard', 'fluent-smtp')
+                'title'     => __('Go to FluentCRM Dashboard', 'fluent-smtp')
             ],
             'ninja-tables' => [
                 'admin_url' => admin_url('admin.php?page=ninja_tables#/'),
-                'title' => __('Go to Ninja Tables Dashboard', 'fluent-smtp')
+                'title'     => __('Go to Ninja Tables Dashboard', 'fluent-smtp')
             ]
         ];
 
-        if(!isset($UrlMaps[$pluginSlug])) {
+        if (!isset($UrlMaps[$pluginSlug]) || (defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)) {
             $this->sendError([
                 'message' => __('Sorry, You can not install this plugin', 'fluent-smtp')
             ]);
@@ -234,7 +249,7 @@ class SettingsController extends Controller
             $this->backgroundInstaller($plugin);
             $this->send([
                 'message' => __('Plugin has been successfully installed.', 'fluent-smtp'),
-                'info' => $UrlMaps[$pluginSlug]
+                'info'    => $UrlMaps[$pluginSlug]
             ]);
         } catch (\Exception $exception) {
             $this->sendError([
@@ -242,7 +257,6 @@ class SettingsController extends Controller
             ]);
         }
     }
-
 
     private function backgroundInstaller($plugin_to_install)
     {
@@ -357,4 +371,227 @@ class SettingsController extends Controller
             }
         }
     }
+
+    public function subscribe()
+    {
+        $this->verify();
+        $email = sanitize_text_field($_REQUEST['email']);
+
+        $displayName = '';
+
+        if (isset($_REQUEST['display_name'])) {
+            $displayName = sanitize_text_field($_REQUEST['display_name']);
+        }
+
+        if (!is_email($email)) {
+            return $this->sendError([
+                'message' => 'Sorry! The provider email is not valid'
+            ], 423);
+        }
+
+        $shareEssentials = 'no';
+
+        if ($_REQUEST['share_essentials'] == 'yes') {
+            update_option('_fluentsmtp_sub_update', 'shared', 'no');
+            $shareEssentials = 'yes';
+        } else {
+            update_option('_fluentsmtp_sub_update', 'yes', 'no');
+        }
+
+        $this->pushData($email, $shareEssentials, $displayName);
+
+        return $this->sendSuccess([
+            'message' => 'You are subscribed to plugin update and monthly tips'
+        ]);
+    }
+
+    public function subscribeDismiss()
+    {
+        $this->verify();
+        update_option('_fluentsmtp_dismissed_timestamp', time(), 'no');
+
+        return $this->sendSuccess([
+            'message' => 'success'
+        ]);
+    }
+
+    private function pushData($optinEmail, $shareEssentials, $displayName = '')
+    {
+        $user = get_user_by('ID', get_current_user_id());
+
+        $url = 'https://fluentsmtp.com/wp-admin/?fluentcrm=1&route=contact&hash=6012116c-90d8-42a5-a65b-3649aa34b356';
+
+
+        if (!$displayName) {
+            $displayName = trim($user->first_name . ' ' . $user->last_name);
+            if (!$displayName) {
+                $displayName = $user->display_name;
+            }
+        }
+
+        wp_remote_post($url, [
+            'body' => json_encode([
+                'full_name'       => $displayName,
+                'email'           => $optinEmail,
+                'source'          => 'smtp',
+                'optin_website'   => site_url(),
+                'share_essential' => $shareEssentials
+            ])
+        ]);
+    }
+
+    public function getGmailAuthUrl(Request $request)
+    {
+        $this->verify();
+        $connection = wp_unslash($request->get('connection'));
+
+        $clientId = Arr::get($connection, 'client_id');
+        $clientSecret = Arr::get($connection, 'client_secret');
+
+        if (Arr::get($connection, 'key_store') == 'wp_config') {
+            if (defined('FLUENTMAIL_GMAIL_CLIENT_ID')) {
+                $clientId = FLUENTMAIL_GMAIL_CLIENT_ID;
+            } else {
+                return $this->sendError([
+                    'client_id' => [
+                        'required' => 'Please define FLUENTMAIL_GMAIL_CLIENT_ID in your wp-config.php file'
+                    ]
+                ]);
+            }
+            if (defined('FLUENTMAIL_GMAIL_CLIENT_SECRET')) {
+                $clientSecret = FLUENTMAIL_GMAIL_CLIENT_SECRET;
+            } else {
+                return $this->sendError([
+                    'client_secret' => [
+                        'required' => 'Please define FLUENTMAIL_GMAIL_CLIENT_SECRET in your wp-config.php file'
+                    ]
+                ]);
+            }
+        }
+
+        if (!$clientId) {
+            return $this->sendError([
+                'client_id' => [
+                    'required' => 'Please provide application client id'
+                ]
+            ]);
+        }
+
+        if (!$clientSecret) {
+            return $this->sendError([
+                'client_secret' => [
+                    'required' => 'Please provide application client secret'
+                ]
+            ]);
+        }
+
+        $authUrl = add_query_arg([
+            'response_type' => 'code',
+            'access_type' => 'offline',
+            'client_id' => $clientId,
+            'redirect_uri' => apply_filters('fluentsmtp_gapi_callback', 'https://fluentsmtp.com/gapi/'),
+            'state' => admin_url('options-general.php?page=fluent-mail&gapi=1'),
+            'scope' => 'https://mail.google.com/',
+            'approval_prompt' => 'force',
+            'include_granted_scopes' => 'true'
+        ], 'https://accounts.google.com/o/oauth2/auth');
+
+        return $this->sendSuccess([
+            'auth_url' => filter_var($authUrl, FILTER_SANITIZE_URL)
+        ]);
+    }
+
+    public function getOutlookAuthUrl(Request $request)
+    {
+        $this->verify();
+        $connection = wp_unslash($request->get('connection'));
+
+        $clientId = Arr::get($connection, 'client_id');
+        $clientSecret = Arr::get($connection, 'client_secret');
+
+        delete_option('_fluentsmtp_intended_outlook_info');
+
+        if (Arr::get($connection, 'key_store') == 'wp_config') {
+            if (defined('FLUENTMAIL_OUTLOOK_CLIENT_ID')) {
+                $clientId = FLUENTMAIL_OUTLOOK_CLIENT_ID;
+            } else {
+                return $this->sendError([
+                    'client_id' => [
+                        'required' => 'Please define FLUENTMAIL_OUTLOOK_CLIENT_ID in your wp-config.php file'
+                    ]
+                ]);
+            }
+            if (defined('FLUENTMAIL_OUTLOOK_CLIENT_SECRET')) {
+                $clientSecret = FLUENTMAIL_OUTLOOK_CLIENT_SECRET;
+            } else {
+                return $this->sendError([
+                    'client_secret' => [
+                        'required' => 'Please define FLUENTMAIL_OUTLOOK_CLIENT_SECRET in your wp-config.php file'
+                    ]
+                ]);
+            }
+        } else {
+            update_option('_fluentsmtp_intended_outlook_info', [
+                'client_id'     => $clientId,
+                'client_secret' => $clientSecret
+            ]);
+        }
+
+        if (!$clientId) {
+            return $this->sendError([
+                'client_id' => [
+                    'required' => 'Please provide application client id'
+                ]
+            ]);
+        }
+
+        if (!$clientSecret) {
+            return $this->sendError([
+                'client_secret' => [
+                    'required' => 'Please provide application client secret'
+                ]
+            ]);
+        }
+
+        return $this->sendSuccess([
+            'auth_url' => (new \FluentMail\App\Services\Mailer\Providers\Outlook\API($clientId, $clientSecret))->getAuthUrl()
+        ]);
+    }
+
+    public function getNotificationSettings()
+    {
+        $this->verify();
+        return $this->sendSuccess([
+            'settings' => (new Settings())->notificationSettings()
+        ]);
+    }
+
+    public function saveNotificationSettings(Request $request)
+    {
+        $this->verify();
+
+        $settings = $request->get('settings', []);
+
+        $settings = Arr::only($settings, ['enabled', 'notify_email', 'notify_days']);
+
+        $settings['notify_email'] = sanitize_text_field($settings['notify_email']);
+        $settings['enabled'] = sanitize_text_field($settings['enabled']);
+
+        $defaults = [
+            'enabled'      => 'no',
+            'notify_email' => '{site_admin}',
+            'notify_days'  => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        ];
+
+        $settings = wp_parse_args($settings, $defaults);
+
+        update_option('_fluent_smtp_notify_settings', $settings, false);
+
+        return $this->sendSuccess([
+            'message' => 'Settings has been updated successfully'
+        ]);
+    }
+
 }
+
+

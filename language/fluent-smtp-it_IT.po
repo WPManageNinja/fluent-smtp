@@ -1,0 +1,977 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FluentSMTP\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-08-20 18:53+0000\n"
+"PO-Revision-Date: 2022-11-08 12:28+0000\n"
+"Language-Team: Italian\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.5.0; wp-5.6\n"
+"X-Domain: fluent-smtp\n"
+"Last-Translator: Michelangelo <michelangeloscottodigregorio@gmail.com>\n"
+"Language: it_IT"
+
+#: app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php:20
+msgid "Access key is required."
+msgstr "La chiave di accesso è obbligatoria."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:399
+msgid "Actions"
+msgstr "Azioni"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:368
+msgid "Active Connections:"
+msgstr "Connessioni attive:"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:421
+msgid "Active Email Connections"
+msgstr "Connessioni e-mail attive"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:369
+msgid "Active Senders:"
+msgstr "Invii attivi:"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:422
+msgid "Add Another Connection"
+msgstr "Aggiungi un'altra connessione"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:428
+msgid "Add Connection"
+msgstr "Aggiungi connessione"
+
+#: app/Services/Mailer/Providers/config.php:67
+msgid "Africa (Cape Town)"
+msgstr "Africa (Città del Capo)"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:312
+#, fuzzy
+msgid "All"
+msgstr "Tutti"
+
+#: app/Services/Mailer/Providers/config.php:33
+#, fuzzy
+msgid "Amazon SES"
+msgstr "Amazon SES"
+
+#: app/Services/Mailer/Providers/Postmark/ValidatorTrait.php:20
+#: app/Services/Mailer/Providers/ElasticMail/ValidatorTrait.php:19
+#: app/Services/Mailer/Providers/SparkPost/ValidatorTrait.php:20
+#: app/Services/Mailer/Providers/SendGrid/ValidatorTrait.php:20
+#: app/Services/Mailer/Providers/SendInBlue/ValidatorTrait.php:19
+#: app/Services/Mailer/Providers/PepiPost/ValidatorTrait.php:20
+#: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:19
+#: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:19
+msgid "Api key is required."
+msgstr "Api key obbligatoria."
+
+#: app/Services/Mailer/Providers/Gmail/Handler.php:116
+#: app/Services/Mailer/Providers/Outlook/Handler.php:86
+msgid "Application Client Secret key is required."
+msgstr "La Secret key dell'applicazione è obbligatoria."
+
+#: app/Services/Mailer/Providers/Gmail/Handler.php:112
+#: app/Services/Mailer/Providers/Outlook/Handler.php:82
+msgid "Application Cluent ID is required."
+msgstr "Cluent ID dell'applicazione è obbligatoria."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:378
+#, fuzzy
+msgid "Apply"
+msgstr "Applica"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:360
+#, fuzzy
+msgid "Are you sure to delete this?"
+msgstr "Sei sicuro di eliminare questo?"
+
+#: app/Services/Mailer/Providers/config.php:59
+msgid "Asia Pacific (Mumbai)"
+msgstr "Asia Pacifico (Mumbai)"
+
+#: app/Services/Mailer/Providers/config.php:60
+msgid "Asia Pacific (Seoul)"
+msgstr "Asia Pacifico (Seoul)"
+
+#: app/Services/Mailer/Providers/config.php:61
+msgid "Asia Pacific (Singapore)"
+msgstr "Asia Pacifico (Singapore)"
+
+#: app/Services/Mailer/Providers/config.php:62
+msgid "Asia Pacific (Sydney)"
+msgstr "Asia Pacifico (Sydney)"
+
+#: app/Services/Mailer/Providers/config.php:63
+msgid "Asia Pacific (Tokyo)"
+msgstr "Asia Pacifico (Tokyo)"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:405
+#, fuzzy
+msgid "Attachments"
+msgstr "Allegati"
+
+#: app/views/admin/digest_email.php:180
+msgid "Awesome! no failures! 🎉"
+msgstr "Fantastico! nessun fallimento! 🎉"
+
+#: app/Services/Mailer/Providers/config.php:66
+msgid "AWS GovCloud (US)"
+msgstr "AWS GovCloud (Stati Uniti)"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:380
+msgid "Bulk Action"
+msgstr "Azione Multiple"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:377
+#, fuzzy
+msgid "By Date"
+msgstr "Per Data"
+
+#: app/Services/Mailer/Providers/config.php:52
+msgid "Canada (Central)"
+msgstr "Canada (Centrale)"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:358
+#, fuzzy
+msgid "cancel"
+msgstr "annulla"
+
+#: app/Services/Mailer/Providers/config.php:68
+msgid "China (Ningxia)"
+msgstr "Cina (Ningxia)"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:425
+#, fuzzy
+msgid "Close"
+msgstr "Chiudi"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:224
+msgid "Configure FluentSMTP"
+msgstr "Configura FluentSMTP"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:359
+#, fuzzy
+msgid "confirm"
+msgstr "conferma"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:424
+msgid "Connection Details"
+msgstr "Dettagli connessione"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:418
+msgid "Credential Verification Failed. Please check your inputs"
+msgstr "Verifica credenziali fallita. Per favore controlla i campi"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:328
+#: app/Hooks/Handlers/AdminMenuHandler.php:385
+#, fuzzy
+msgid "Date"
+msgstr "Data"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:386
+#, fuzzy
+msgid "Date Range"
+msgstr "Intervallo di date"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:398
+msgid "Date-Time"
+msgstr "Data ed ora"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:372
+#, fuzzy
+msgid "Days"
+msgstr "Giorni"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:442
+msgid "Default Connection"
+msgstr "Connessione predefinita"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:381
+#, fuzzy
+msgid "Delete All"
+msgstr "Cancella tutti"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:440
+#, fuzzy
+msgid "Delete Logs"
+msgstr "Cancella Log"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:371
+msgid "Delete Logs:"
+msgstr "Cancella Logs:"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:438
+msgid "Disable Logging for FluentCRM Emails"
+msgstr "Disabilita i log per le e-mail di FluentCRM"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:448
+msgid "Disable sending all emails. If you enable this, no email will be sent."
+msgstr ""
+"Disabilita l'invio di tutte le e-mail. Se si abilita questa opzione, non "
+"verrà inviata alcuna e-mail."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:357
+#, fuzzy
+msgid "Docs"
+msgstr "Documenti"
+
+#: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:23
+#: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:23
+msgid "Domain name is required."
+msgstr "Il nome di dominio è obbligatorio."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:429
+#, fuzzy
+msgid "Edit Connection"
+msgstr "Modifica collegamento"
+
+#: app/Services/Mailer/Providers/config.php:164
+#, fuzzy
+#| msgid "Elastic Mail"
+msgid "Elastic Email"
+msgstr "Elastic Mail"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:434
+msgid "Email Address"
+msgstr "Indirizzo e-mail"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:404
+#, fuzzy
+msgid "Email Body"
+msgstr "Corpo della e-mail"
+
+#: app/Http/Controllers/SettingsController.php:156
+msgid "Email delivered successfully."
+msgstr "Invio e-mail riuscito."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:244
+msgid "Email Disabled"
+msgstr "E-mail disabilitata"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:367
+msgid "Email Failed:"
+msgstr "E-mail fallita:"
+
+#: app/Hooks/Handlers/SchedulerHandler.php:120
+msgid "Email Failures"
+msgstr "E-mail fallite:"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:355
+msgid "Email Logs"
+msgstr "Logs e-mail"
+
+#: app/Http/Controllers/LoggerController.php:69
+msgid "Email sent successfully."
+msgstr "E-mail inviata correttamente."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:447
+msgid "Email Simulation"
+msgstr "Simulazione e-mail"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:354
+msgid "Email Test"
+msgstr "Prova e-mail"
+
+#: app/Hooks/Handlers/SchedulerHandler.php:116
+#: app/views/admin/digest_email.php:115
+msgid "Emails Sent"
+msgstr "E-mail Inviate"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:431
+msgid "Enable Email Summary"
+msgstr "Abilita rapporto e-mail"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:432
+msgid "Enable Email Summary Notification"
+msgstr "Abilita notifica rapporto e-mail"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:393
+#, fuzzy
+msgid "End date"
+msgstr "Data fine"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:382
+#, fuzzy
+msgid "Enter Full Screen"
+msgstr "Attiva schermo intero"
+
+#: app/Services/Mailer/Providers/config.php:56
+msgid "EU (Frankfurt)"
+msgstr "UE (Francoforte)"
+
+#: app/Services/Mailer/Providers/config.php:53
+msgid "EU (Ireland)"
+msgstr "UE (Irlanda)"
+
+#: app/Services/Mailer/Providers/config.php:54
+msgid "EU (London)"
+msgstr "UE (Londra)"
+
+#: app/Services/Mailer/Providers/config.php:57
+msgid "Europe (Milan)"
+msgstr "Europa (Milano)"
+
+#: app/Services/Mailer/Providers/config.php:55
+msgid "Europe (Paris)"
+msgstr "Europa (Parigi)"
+
+#: app/Services/Mailer/Providers/config.php:58
+msgid "Europe (Stockholm)"
+msgstr "Europa (Stoccolma)"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:330
+#: app/Hooks/Handlers/AdminMenuHandler.php:389
+#, fuzzy
+msgid "Failed"
+msgstr "Fallito"
+
+#: app/views/admin/digest_email.php:165
+msgid "Failed Count"
+msgstr "Fallimenti"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:443
+msgid "Fallback Connection"
+msgstr "Connessione di fallback"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:445
+msgid ""
+"Fallback Connection will be used if an email is failed to send in one "
+"connection. Please select a different connection than the default connection"
+msgstr ""
+"La connessione di fallback verrà utilizzata se un'e-mail non viene inviata "
+"in una connessione. Selezionare una connessione diversa da quella predefinita"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:394
+#, fuzzy
+msgid "Filter"
+msgstr "Filtro"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:383
+#, fuzzy
+msgid "Filter By"
+msgstr "Filtra per"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:36
+#: app/Hooks/Handlers/AdminMenuHandler.php:282
+msgid "Fluent SMTP"
+msgstr "Fluent SMTP"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:439
+msgid "FluentCRM Email Logging"
+msgstr "FluentCRM E-mail Logging"
+
+#. Name of the plugin
+#, fuzzy
+msgid "FluentSMTP"
+msgstr "FluentSMTP"
+
+#. Author of the plugin
+msgid "FluentSMTP & WPManageNinja Team"
+msgstr "FluentSMTP & WPManageNinja Team"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:219
+msgid "FluentSMTP needs to be configured for it to work."
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:411
+msgid "Force From Email (Recommended Settings: Enable)"
+msgstr ""
+"Forza il campo \"From:\" nell'e-mail (Impostazione raccomandata: Abilitato)"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:415
+msgid "Force Sender Name"
+msgstr "Forza il nome del mittente"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:410
+msgid "From Email"
+msgstr "Da E-mail"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:414
+#, fuzzy
+msgid "From Name"
+msgstr "Da Nome"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:426
+#, fuzzy
+msgid "General Settings"
+msgstr "Impostazioni generali"
+
+#: app/Http/Controllers/SettingsController.php:106
+msgid "General Settings has been updated"
+msgstr "Le impostazioni generali sono state aggiornate"
+
+#: app/Services/Mailer/Providers/config.php:179
+#, fuzzy
+#| msgid "Gmail/Google Workspace"
+msgid "Gmail or Google Workspace"
+msgstr "Gmail/Google Workspace"
+
+#: app/Services/Mailer/Providers/config.php:194
+msgid ""
+"Gmail/Google Workspace is not recommended for sending mass marketing emails."
+msgstr ""
+"Gmail/Google Workspace non è consigliato per l'invio di email di marketing "
+"di massa."
+
+#: app/Http/Controllers/SettingsController.php:230
+msgid "Go to Fluent Forms Dashboard"
+msgstr "Vai a Dashboard di Fluent Forms"
+
+#: app/Hooks/filters.php:17
+msgid "Go to Fluent SMTP Settings page"
+msgstr "Vai alla pagina Impostazioni Fluent SMTP"
+
+#: app/Http/Controllers/SettingsController.php:234
+msgid "Go to FluentCRM Dashboard"
+msgstr "Vai alla dashboard di FluentCRM"
+
+#: app/Http/Controllers/SettingsController.php:238
+msgid "Go to Ninja Tables Dashboard"
+msgstr "Vai alla dashboard di Ninja Tables"
+
+#. URI of the plugin
+#. Author URI of the plugin
+msgid "https://fluentsmtp.com"
+msgstr "https://fluentsmtp.com"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:412
+msgid ""
+"If checked, the From Email setting above will be used for all emails (It "
+"will check if the from email is listed to available connections)."
+msgstr ""
+"Se selezionata, l'impostazione \"Da e-mail\" di cui sopra verrà utilizzata "
+"per tutte le e-mail (controllerà se l'e-mail da è elencata per le "
+"connessioni disponibili)."
+
+#: app/views/admin/digest_email.php:133
+msgid "If this is unusual you should probably check if your site is broken."
+msgstr ""
+"Se questo è insolito, probabilmente dovresti controllare se il tuo sito "
+"funziona."
+
+#: app/Services/Mailer/ValidatorTrait.php:20
+#, fuzzy
+msgid "Invalid email address."
+msgstr "Indirizzo email non valido."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:376
+#, fuzzy
+msgid "Last 3 months"
+msgstr "Ultimi 3 Mesi"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:306
+#, fuzzy
+msgid "Last 7 days"
+msgstr "Ultimi 7 giorni"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:375
+msgid "Last month"
+msgstr "Ultimo mese"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:374
+#, fuzzy
+msgid "Last week"
+msgstr "Settimana scorsa"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:437
+msgid "Log All Emails for Reporting"
+msgstr "Logga tutte le e-mail per la creazione di un report"
+
+#: app/views/admin/digest_email.php:131
+msgid "Looks like no email has been sent to the time period"
+msgstr ""
+"Sembra che nessuna e-mail sia stata inviata nel periodo di tempo selezionato"
+
+#: app/Services/Mailer/Providers/config.php:74
+#, fuzzy
+msgid "Mailgun"
+msgstr "Mailgun"
+
+#: app/Services/Mailer/Providers/config.php:65
+msgid "Middle East (Bahrain)"
+msgstr "Medio Oriente (Bahrain)"
+
+#: app/Services/Mailer/Providers/config.php:133
+msgid "Netcore Email API, formerly Pepipost"
+msgstr ""
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:406
+#, fuzzy
+msgid "Next"
+msgstr "Successivo"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:449
+msgid "No Emails will be sent from your WordPress."
+msgstr "Nessuna e-mail verrà inviata dal tuo WordPress."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:435
+msgid "Notification Days"
+msgstr "Giorni di notifica"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:433
+msgid "Notification Email Addresses"
+msgstr "Indirizzi e-mail di notifica"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:427
+#, fuzzy
+msgid "Notification Settings"
+msgstr "Impostazioni delle notifiche"
+
+#: app/Services/Mailer/Providers/config.php:198
+#, fuzzy
+#| msgid "Outlook/Office365"
+msgid "Outlook or Office 365"
+msgstr "Outlook/Office365"
+
+#: app/Services/Mailer/Providers/config.php:213
+msgid "Outlook/Office365 is not recommended for sending mass marketing emails."
+msgstr ""
+"Outlook/Office365 non è consigliato per l'invio di e-mail di marketing di "
+"massa."
+
+#: app/Services/Mailer/Providers/config.php:217
+#, fuzzy
+#| msgid "PHP Mail"
+msgid "PHP mail()"
+msgstr "PHP Mail"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:446
+msgid "Please add another connection to use fallback feature"
+msgstr "Aggiungi un'altra connessione per utilizzare la funzione di fallback"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:363
+msgid "Please configure your first email service provider connection"
+msgstr ""
+"Configurare la prima connessione del provider di servizi di posta elettronica"
+
+#: app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php:28
+msgid "Please define FLUENTMAIL_AWS_ACCESS_KEY_ID in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php:32
+msgid "Please define FLUENTMAIL_AWS_SECRET_ACCESS_KEY in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/ElasticMail/ValidatorTrait.php:23
+msgid "Please define FLUENTMAIL_ELASTICMAIL_API_KEY in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/Gmail/Handler.php:120
+msgid "Please define FLUENTMAIL_GMAIL_CLIENT_ID in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/Gmail/Handler.php:126
+msgid "Please define FLUENTMAIL_GMAIL_CLIENT_SECRET in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_GMAIL_CLIENT_SECRET nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:27
+#: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:27
+msgid "Please define FLUENTMAIL_MAILGUN_API_KEY in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:31
+#: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:31
+msgid "Please define FLUENTMAIL_MAILGUN_DOMAIN in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/Outlook/Handler.php:90
+msgid "Please define FLUENTMAIL_OUTLOOK_CLIENT_ID in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/Outlook/Handler.php:96
+msgid "Please define FLUENTMAIL_OUTLOOK_CLIENT_SECRET in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/PepiPost/ValidatorTrait.php:24
+msgid "Please define FLUENTMAIL_PEPIPOST_API_KEY in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/Postmark/ValidatorTrait.php:24
+msgid "Please define FLUENTMAIL_POSTMARK_API_KEY in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/SendGrid/ValidatorTrait.php:24
+msgid "Please define FLUENTMAIL_SENDGRID_API_KEY in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/SendInBlue/ValidatorTrait.php:23
+msgid "Please define FLUENTMAIL_SENDINBLUE_API_KEY in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:33
+msgid "Please define FLUENTMAIL_SMTP_PASSWORD in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:29
+msgid "Please define FLUENTMAIL_SMTP_USERNAME in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/SparkPost/ValidatorTrait.php:24
+msgid "Please define FLUENTMAIL_SPARKPOST_API_KEY in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
+#: app/Services/Mailer/Providers/Gmail/Handler.php:172
+#: app/Services/Mailer/Providers/Outlook/Handler.php:133
+msgid "Please Provide Auth Token."
+msgstr "Si prega di fornire il token di autenticazione."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:417
+msgid "Please select your email service provider"
+msgstr "Seleziona il tuo provider di servizi e-mail"
+
+#: app/Http/Controllers/SettingsController.php:251
+msgid "Plugin has been successfully installed."
+msgstr "Il plugin è stato installato correttamente."
+
+#: fluent-smtp.php:62
+msgid "Possible Conflict: "
+msgstr "Possibile conflitto: "
+
+#: app/Services/Mailer/Providers/config.php:147
+msgid "Postmark"
+msgstr "Postmark"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:407
+#, fuzzy
+msgid "Prev"
+msgstr "Precedente"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:423
+#, fuzzy
+msgid "Provider"
+msgstr "Provider"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:365
+#, fuzzy
+msgid "Quick Overview"
+msgstr "Descrizione breve"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:401
+#, fuzzy
+msgid "Resend"
+msgstr "Invia di nuovo"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:379
+msgid "Resend Selected Emails"
+msgstr "Invia di nuovo le e-mail selezionate"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:403
+msgid "Resent Count"
+msgstr "Reinvii"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:400
+#, fuzzy
+msgid "Retry"
+msgstr "Riprova"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:416
+msgid "Save Connection Settings"
+msgstr "Salva impostazioni di connessione"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:370
+msgid "Save Email Logs:"
+msgstr "Salva i log e-mail:"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:436
+#, fuzzy
+msgid "Save Settings"
+msgstr "Salva Impostazioni"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:408
+#, fuzzy
+msgid "Search Results for"
+msgstr "Risultati della ricerca per"
+
+#: app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php:24
+msgid "Secret key is required."
+msgstr "Secret key è obbligatoria."
+
+#: app/Http/Controllers/Controller.php:59
+msgid "Security Failed. Please reload the page"
+msgstr "Sicurezza non riuscita. Si prega di ricaricare la pagina"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:387
+#, fuzzy
+msgid "Select"
+msgstr "Seleziona"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:390
+#, fuzzy
+msgid "Select date"
+msgstr "Seleziona data"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:391
+#, fuzzy
+msgid "Select date and time"
+msgstr "Seleziona data e ora"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:441
+msgid ""
+"Select how many days, the logs will be saved. If you select 7 days, then "
+"logs older than 7 days will be deleted automatically."
+msgstr ""
+"Seleziona per quanti giorni, i registri verranno salvati. Se selezioni 7 "
+"giorni, i registri più vecchi di 7 giorni verranno eliminati automaticamente."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:444
+msgid ""
+"Select which connection will be used for sending transactional emails from "
+"your WordPress. If you use multiple connection then email will be routed "
+"based on source from email address"
+msgstr ""
+"Seleziona quale connessione verrà utilizzata per l'invio di e-mail "
+"transazionali dal tuo WordPress. Se si utilizzano più connessioni, l'e-mail "
+"verrà inviata in base alla fonte dall'indirizzo e-mail"
+
+#: app/Services/Mailer/ValidatorTrait.php:16
+msgid "Sender email is required."
+msgstr "L'e-mail del mittente è obbligatoria."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:409
+msgid "Sender Settings"
+msgstr "Impostazioni mittente"
+
+#: app/Services/Mailer/Providers/config.php:91
+#, fuzzy
+msgid "SendGrid"
+msgstr "SendGrid"
+
+#: app/Services/Mailer/Providers/config.php:105
+#, fuzzy
+msgid "Sendinblue"
+msgstr "Sendinblue"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:364
+msgid "Sending Stats"
+msgstr "Statistiche invii"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:329
+#, fuzzy
+msgid "Sent"
+msgstr "Inviato"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:413
+#, fuzzy
+msgid "Set the return-path to match the From Email"
+msgstr "Imposta il percorso di ritorno in modo che corrisponda a Email Da"
+
+#: app/Hooks/filters.php:18 app/Hooks/Handlers/AdminMenuHandler.php:353
+#, fuzzy
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: app/Http/Controllers/SettingsController.php:129
+#, fuzzy
+msgid "Settings saved successfully."
+msgstr "Impostazioni salvate con successo."
+
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:19
+msgid "SMTP host is required."
+msgstr "L'host SMTP è obbligatorio."
+
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:41
+msgid "SMTP password is required."
+msgstr "La password SMTP è obbligatoria."
+
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:23
+msgid "SMTP port is required."
+msgstr "La porta SMTP è obbligatoria."
+
+#: app/Services/Mailer/Providers/config.php:9
+msgid "SMTP server"
+msgstr ""
+
+#: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:37
+msgid "SMTP username is required."
+msgstr "Il nome utente SMTP è obbligatorio."
+
+#: app/Hooks/filters.php:6
+msgid "SMTP/Mail Settings"
+msgstr "Impostazioni SMTP/Mail"
+
+#: app/Http/Controllers/SettingsController.php:204
+msgid "Sorry no connection found. Please reload the page and try again"
+msgstr ""
+"Spiacenti, non è stata trovata alcuna connessione. Ricarica la pagina e "
+"riprova"
+
+#: app/Http/Controllers/SettingsController.php:244
+msgid "Sorry, You can not install this plugin"
+msgstr "Siamo spiacenti, non è puoi installare questo plugin"
+
+#: app/Services/Mailer/Providers/config.php:64
+msgid "South America (São Paulo)"
+msgstr "Sud America (San Paolo)"
+
+#: app/Services/Mailer/Providers/config.php:119
+#, fuzzy
+msgid "SparkPost"
+msgstr "SparkPost"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:392
+#, fuzzy
+msgid "Start date"
+msgstr "Data di inizio"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:384
+#, fuzzy
+msgid "Status"
+msgstr "Stato"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:396
+#: app/views/admin/digest_email.php:114 app/views/admin/digest_email.php:164
+#, fuzzy
+msgid "Subject"
+msgstr "Oggetto"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:373
+msgid "Subscribe To Updates"
+msgstr "Iscriviti agli aggiornamenti"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:388
+#, fuzzy
+msgid "Successful"
+msgstr "Riuscito"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:356
+#, fuzzy
+msgid "Support"
+msgstr "Supporto"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:362
+msgid ""
+"Thank you for installing FluentSMTP - The ultimate SMTP & Email Service "
+"Connection Plugin for WordPress"
+msgstr ""
+"Grazie per aver installato FluentSMTP - L'ultimo SMTP & Email Service "
+"Connection Plugin per WordPress"
+
+#: fluent-smtp.php:55
+#, php-format
+msgid ""
+"The <strong>FluentSMTP</strong> plugin depends on\n"
+"                                <a target=\"_blank\" href=\"%1s\">wp_mail</a>"
+" pluggable function and\n"
+"                                plugin is not able to extend it. Please "
+"check if another plugin is using this and disable it for <strong>"
+"FluentSMTP</strong> to work!"
+msgstr ""
+"Il plugin <strong>FluentSMTP</strong> dipende da\n"
+"                                <a target=\"_blank\" href=\"%1s\">wp_mail</a>"
+" funzione collegabile e\n"
+"                                plugin non è in grado di estenderlo. Si "
+"prega di verificare se un altro plugin lo sta utilizzando e disabilitarlo "
+"per <strong>fluenteSMTP</strong> per funzionare!"
+
+#: app/Services/Mailer/Providers/config.php:228
+msgid ""
+"The Default option does not use SMTP or any Email Service Providers so it "
+"will not improve email delivery on your site."
+msgstr ""
+"L'opzione Predefinita non utilizza SMTP o alcun provider di servizi di posta "
+"elettronica, quindi non migliorerà la consegna delle e-mail sul tuo sito."
+
+#: app/Http/Controllers/SettingsController.php:145
+#, fuzzy
+msgid "The email field is required."
+msgstr "Il campo email è obbligatorio"
+
+#. Description of the plugin
+msgid "The Ultimate SMTP Connection Plugin for WordPress."
+msgstr "L'ultimo plugin di connessione SMTP per WordPress."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:397
+#, fuzzy
+msgid "To"
+msgstr "A"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:299
+#, fuzzy
+msgid "Today"
+msgstr "Oggi"
+
+#: app/Services/Mailer/Providers/Gmail/Handler.php:298
+#: app/Services/Mailer/Providers/Outlook/Handler.php:192
+msgid "Token Validity"
+msgstr "Validità del token"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:366
+msgid "Total Email Sent (Logged):"
+msgstr "Totale e-mail inviate (registrate):"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:402
+#, fuzzy
+msgid "Turn On"
+msgstr "Accendi"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:395
+msgid "Type & press enter..."
+msgstr "Digita e premi invio..."
+
+#: app/Services/Mailer/Providers/config.php:48
+msgid "US East (N. Virginia)"
+msgstr "Stati Uniti orientali (Virginia settentrionale)"
+
+#: app/Services/Mailer/Providers/config.php:49
+msgid "US East (Ohio)"
+msgstr "Stati Uniti orientali (Ohio)"
+
+#: app/Services/Mailer/Providers/config.php:50
+msgid "US West (N. California)"
+msgstr "Stati Uniti occidentali (California settentrionale)"
+
+#: app/Services/Mailer/Providers/config.php:51
+msgid "US West (Oregon)"
+msgstr "Stati Uniti occidentali (Oregon)"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:420
+msgid "Validating Data. Please wait"
+msgstr "Convalida dei dati. Attendere prego"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:345
+#, fuzzy
+msgid "View All"
+msgstr "Vedi tutto"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:361
+msgid "Welcome to FluentSMTP"
+msgstr "Benvenuti in FluentSMTP"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:419
+msgid ""
+"When checked, the From Name setting above will be used for all emails, "
+"ignoring values set by other plugins."
+msgstr ""
+"Se selezionata, l'impostazione \"Da (nome):\" di cui sopra verrà utilizzata "
+"per tutte le e-mail, ignorando i valori impostati da altri plug-in."
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:212
+#, php-format
+msgid ""
+"WordPress version 5.5 or greater is required for FluentSMTP. You are using "
+"version %s currently. Please update your WordPress Core to use FluentSMTP "
+"Plugin."
+msgstr ""
+"E' richiesta la versione 5.5 di WordPress per FluentSMTP. Attualmente si sta "
+"utilizzando la versione %s. Aggiorna WordPress per utilizzare FluentSMTP "
+"Plugin."
+
+#: app/Http/Controllers/Controller.php:51
+#, fuzzy
+msgid "You do not have permission to do this action"
+msgstr "Non disponi dell'autorizzazione per eseguire questa azione"
+
+#: app/views/admin/digest_email.php:182
+msgid "Your email sending health is perfect"
+msgstr "Lo stato di salute di invio di e-mail è perfetto"
+
+#: app/Hooks/Handlers/AdminMenuHandler.php:430
+msgid ""
+"Your emails will be routed automatically based on From email address. No "
+"additional configuration is required."
+msgstr ""
+"Le tue e-mail verranno inviate automaticamente in base all'indirizzo e-mail "
+"Da. Non è richiesta alcuna configurazione aggiuntiva."

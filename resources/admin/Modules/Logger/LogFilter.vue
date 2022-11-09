@@ -2,55 +2,25 @@
     <div style="float:left;margin-left:10px;">
         <el-row :gutter="10" style="margin-right:-20px;">
             <el-col :span="10">
-                <el-select
-                    clearable
-                    size="small"
-                    v-model="filterBy"
-                    placeholder="Filter By"
-                    @clear="clearFilterValue"
-                >
-                    <el-option label="Status" value="status" />
-                    <el-option label="Date" value="date" />
-                    <el-option label="Date Range" value="daterange" />
-                </el-select>
+                <el-radio-group @change="applyFilter()" v-model="filter_query.status" size="small">
+                    <el-radio-button label="">{{ $t('All Statuses') }}</el-radio-button>
+                    <el-radio-button label="sent">{{ $t('Successful') }}</el-radio-button>
+                    <el-radio-button label="failed">{{ $t('Failed') }}</el-radio-button>
+                </el-radio-group>
             </el-col>
 
             <el-col :span="10">
-                <el-select
-                    clearable
-                    size="small"
-                    v-model="filterValue"
-                    :disabled="!filterBy"
-                    placeholder="Select"
-                    v-if="!filterBy || filterBy==='status'"
-                    style="width:100%"
-                >
-                    <el-option label="Successful" value="sent" />
-                    <el-option label="Failed" value="failed" />
-                </el-select>
-
                 <el-date-picker
-                    v-show="filterBy && filterBy==='date'"
                     format="dd-MM-yyyy"
                     value-format="yyyy-MM-dd"
                     size="small"
-                    v-model="filterValue"
-                    type="date"
-                    placeholder="Select date"
-                    style="width:100%"
-                />
-
-                <el-date-picker
-                    v-show="filterBy && filterBy==='daterange'"
-                    format="dd-MM-yyyy"
-                    value-format="yyyy-MM-dd"
-                    size="small"
-                    v-model="filterValue"
+                    :picker-options="pickerOptions"
+                    v-model="filter_query.date_range"
                     type="daterange"
-                    placeholder="Select date and time"
+                    :placeholder="$t('Select date and time')"
                     range-separator="To"
-                    start-placeholder="Start date"
-                    end-placeholder="End date"
+                    :start-placeholder="$t('Start date')"
+                    :end-placeholder="$t('End date')"
                     style="width:100%"
                 />
             </el-col>
@@ -60,63 +30,74 @@
                     plain
                     size="small"
                     type="primary"
-                    :disabled="!filterValue"
                     @click="applyFilter"
-                >Filter</el-button>
+                >{{ $t('Filter') }}
+                </el-button>
             </el-col>
         </el-row>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'LogFilter',
-        data() {
-            return {
-                filterBy: '',
-                filterValue: ''
-            };
-        },
-        methods: {
-            applyFilter() {
-                if (this.filterValue) {
-                    this.$emit('on-filter', this.filterBy, this.filterValue);
-                }
-            },
-            clearFilterValue() {
-                this.filterValue = '';
+export default {
+    name: 'LogFilter',
+    props: ['filter_query'],
+    data() {
+        return {
+            pickerOptions: {
+                disabledDate(time) {
+                    return time.getTime() > Date.now();
+                },
+                shortcuts: [
+                    {
+                        text: this.$t('Today'),
+                        onClick(picker) {
+                            const today = new Date();
+                            picker.$emit('pick', [today, today]);
+                        }
+                    },
+                    {
+                        text: this.$t('Last week'),
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: this.$t('Last month'),
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: this.$t('Last 3 months'),
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
             }
-        },
-        watch: {
-            filterBy: function(newValue, oldValue) {
-                if (newValue !== oldValue) {
-                    if (newValue && oldValue) {
-                        this.filterValue = '';
-                    }
-                }
-            },
-            filterValue: function(newValue, oldValue) {
-                if (newValue) {
-                    this.$emit('on-filter-change', this.filterBy, this.filterValue);
-                } else {
-                    this.$emit('reset-page');
-                    this.$emit('on-filter', this.filterBy, this.filterValue);
-                }
-
-                if (newValue !== oldValue) {
-                    this.$emit('reset-page');
-                }
-            }
-        },
-        mounted() {
-            const filterBy = this.$route.query.filterBy;
-            const filterValue = this.$route.query.filterValue;
-
-            if (filterBy) {
-                this.filterBy = filterBy;
-                this.filterValue = filterValue;
-                this.applyFilter();
-            }
+        };
+    },
+    methods: {
+        applyFilter() {
+            this.$emit('on-filter', this.filter_query);
         }
-    };    
+    },
+    mounted() {
+        const filterBy = this.$route.query.filterBy;
+        const filterValue = this.$route.query.filterValue;
+
+        if (filterBy) {
+            this.filterBy = filterBy;
+            this.filterValue = filterValue;
+            this.applyFilter();
+        }
+    }
+};
 </script>

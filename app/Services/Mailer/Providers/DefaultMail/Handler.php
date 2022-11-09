@@ -13,7 +13,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        $this->handleFailure(new Exception('Something went wrong!', 0));
+        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
     }
 
     protected function postSend()
@@ -38,14 +38,7 @@ class Handler extends BaseHandler
 
     protected function handleFailure($exception)
     {
-        $response = [
-            'message' => 'Oops!',
-            'code' => $exception->getCode(),
-            'errors' => [$exception->getMessage()]
-        ];
-
-        $this->processResponse(['response' => $response], false);
-
-        $this->fireWPMailFailedAction($response);
+        $error = new \WP_Error($exception->getCode(), $exception->getMessage(), []);
+        return $this->handleResponse($error);
     }
 }

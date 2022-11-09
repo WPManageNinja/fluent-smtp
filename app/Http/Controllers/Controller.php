@@ -53,6 +53,14 @@ abstract class Controller
             die();
         }
 
+        $nonce = $this->request->get('nonce');
+        if(!wp_verify_nonce($nonce, FLUENTMAIL)) {
+            wp_send_json_error([
+                'message' => __('Security Failed. Please reload the page', 'fluent-smtp')
+            ]);
+            die();
+        }
+
         return true;
     }
 }

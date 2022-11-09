@@ -23,7 +23,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        $this->handleFailure(new Exception('Something went wrong!', 0));
+        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
     }
 
     public function postSend()
@@ -32,8 +32,7 @@ class Handler extends BaseHandler
             'from' => $this->getFrom(),
             'personalizations' => $this->getRecipients(),
             'subject' => $this->getSubject(),
-            'content' => $this->getBody(),
-            'headers' => $this->getCustomEmailHeaders()
+            'content' => $this->getBody()
         ];
 
         if ($replyTo = $this->getReplyTo()) {
@@ -52,7 +51,27 @@ class Handler extends BaseHandler
 
         $params = array_merge($params, $this->getDefaultParams());
 
-        $this->response = wp_safe_remote_post($this->url, $params);
+        $response = wp_safe_remote_post($this->url, $params);
+
+        if (is_wp_error($response)) {
+            $returnResponse = new \WP_Error($response->get_error_code(), $response->get_error_message(), $response->get_error_messages());
+        } else {
+            $responseBody = wp_remote_retrieve_body($response);
+            $responseCode = wp_remote_retrieve_response_code($response);
+            $isOKCode = $responseCode == $this->emailSentCode;
+            $responseBody = \json_decode($responseBody, true);
+
+            if($isOKCode) {
+                $returnResponse = [
+                    'code' => 202,
+                    'message' => Arr::get($responseBody, 'message')
+                ];
+            } else {
+                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'errors.0.message', 'Unknown Error'), $responseBody);
+            }
+        }
+
+        $this->response = $returnResponse;
 
         return $this->handleResponse($this->response);
     }
@@ -75,7 +94,6 @@ class Handler extends BaseHandler
         if ($replyTo = $this->getParam('headers.reply-to')) {
             return reset($replyTo);
         }
-
     }
 
     protected function getRecipients()
@@ -163,9 +181,7 @@ class Handler extends BaseHandler
 
     protected function getCustomEmailHeaders()
     {
-        return [
-            'X-Mailer' => 'FluentMail - SendGrid'
-        ];
+        return [];
     }
 
     protected function getRequestHeaders()
@@ -183,83 +199,5 @@ class Handler extends BaseHandler
         }
         $this->settings = $settings;
         return $this;
-    }
-
-    public function isEmailSent()
-    {
-        $isSent = wp_remote_retrieve_response_code($this->response) == $this->emailSentCode;
-
-        if (
-            $isSent &&
-            isset($this->response['response']) &&
-            $this->response['response']['message'] != 'Accepted'
-        ) {
-            return false;
-        }
-
-        return $isSent;
-    }
-
-    protected function handleSuccess()
-    {
-        $response = $this->response['response'];
-
-        return $this->processResponse(['response' => $response], true);
-    }
-
-    protected function handleFailure()
-    {
-        $response = $this->getResponseError();
-
-        $this->processResponse(['response' => $response], false);
-
-        $this->fireWPMailFailedAction($response);
-    }
-
-    public function getResponseError()
-    {
-        $response = $this->response;
-
-        $body = (array) wp_remote_retrieve_body($response);
-
-        $body = json_decode($body[0], true);
-
-        $responseErrors = [];
-        
-        if (!empty($body['errors'])) {
-            $responseErrors = $body['errors'];
-        } elseif (!empty($body['error'])) {
-            $responseErrors = $body['error'];
-        }
-
-        $errors = [];
-
-        if (!empty($responseErrors)) {
-
-            foreach ($responseErrors as $error) {
-
-                if (array_key_exists('message', $error)) {
-                    $extra = '';
-
-                    if (array_key_exists('field', $error) && !empty($error['field'])) {
-                        $extra .= $error['field'] . '.';
-                    }
-
-                    if (array_key_exists('help', $error) && !empty($error['help'])) {
-                        $extra .= $error['help'];
-                    }
-
-                    $errors[] = $error['message'] . (!empty($extra) ? ' - ' . $extra : '');
-                }
-            }
-        }
-
-        $errors = array_map('esc_textarea', $errors);
-
-        return [
-            'message' => $response['response']['message'],
-            'code' => $response['response']['code'],
-            'errors' => $errors
-        ];
     }
 }

@@ -53,7 +53,6 @@ class LoggerController extends Controller
 
         try {
             $this->app->addAction('wp_mail_failed', function($response) use ($logger, $request) {
-
                 $log = $logger->find($id = $request->get('id'));
                 $log['retries'] = $log['retries'] + 1;
                 $logger->updateLog($log, ['id' => $id]);
@@ -78,5 +77,41 @@ class LoggerController extends Controller
                 'message' => $e->getMessage()
             ], $e->getCode());
         }
+    }
+
+    public function retryBulk(Request $request, Logger $logger)
+    {
+        $this->verify();
+        $logIds = $request->get('log_ids', []);
+
+        $failedCount = 0;
+        $this->app->addAction('wp_mail_failed', function($response) use (&$failedCount) {
+            $failedCount++;
+        });
+
+        $failedInitiated = 0;
+        $successCount = 0;
+        foreach ($logIds as $logId) {
+            try {
+                $email = $logger->resendEmailFromLog($logId, 'check_realtime');
+                $successCount++;
+            } catch (\Exception $exception) {
+                $failedInitiated++;
+            }
+        }
+        $message = 'Selected Emails have been proceed to send.';
+
+        if($failedCount) {
+            $message .= ' But '.$failedCount.' emails are reported to failed to send.';
+        }
+
+        if($failedInitiated) {
+            $message .= ' And '.$failedInitiated.' emails are failed to init the emails';
+        }
+
+        return $this->sendSuccess([
+            'message' => $message
+        ]);
+
     }
 }

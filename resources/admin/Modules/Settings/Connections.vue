@@ -1,31 +1,32 @@
 <template>
     <div class="connections">
         <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :md="14" :sm="24">
                 <div class="fss_content_box">
                     <div class="header">
                         <span style="float:left;">
-                            Active Email Connections
+                            {{$t('Active Email Connections')}}
                         </span>
                         <span
                             style="float:right;color:#46A0FC;cursor:pointer;"
                             @click="addConnection"
                         >
-                            <i class="el-icon-plus"></i> Add Another Connection
+                            <i class="el-icon-plus"></i> {{$t('Add Another Connection')}}
                         </span>
                     </div>
                     <div class="content">
                         <el-table stripe border :data="connections">
 
-                            <el-table-column label="Provider">
+                            <el-table-column :label="$t('Provider')">
                                 <template slot-scope="scope">
                                     {{ settings.providers[scope.row.provider].title }}
+                                    <span style="color: red;" v-if="scope.row.provider == 'gmail' && !scope.row.version">(Re Authentication Required)</span>
                                 </template>
                             </el-table-column>
 
-                            <el-table-column prop="sender_email" label="From Email"/>
+                            <el-table-column prop="sender_email" :label="$t('From Email')"/>
 
-                            <el-table-column width="120" label="Actions" align="center">
+                            <el-table-column width="120" :label="$t('Actions')" align="center">
                                 <template slot-scope="scope">
                                     <el-button
                                         type="primary"
@@ -51,17 +52,17 @@
                             </el-table-column>
                         </el-table>
                         <el-alert :closable="false" style="margin-top: 20px" type="info" v-if="connections.length > 1">
-                            Your emails will be routed automatically based on From email address. No additional configaration is required.
+                            {{ $t('routing_info') }}
                         </el-alert>
                     </div>
                 </div>
                 <div v-if="showing_connection" class="fss_content_box">
                     <div class="header">
                         <span style="float:left;">
-                            Connection Details
+                            {{$t('Connection Details')}}
                         </span>
                         <span style="float:right;color:#46A0FC;cursor:pointer;" @click="showing_connection = ''">
-                            Close
+                            {{$t('Close')}}
                         </span>
                     </div>
                     <div class="content">
@@ -69,13 +70,21 @@
                     </div>
                 </div>
             </el-col>
-            <el-col :span="12">
-                <div class="fss_content_box">
-                    <div class="header">
-                        General Settings
+            <el-col :md="10" :sm="24">
+                <div :class="{ fss_box_active: active_settings == 'general' }" style="margin-bottom: 0px;" class="fss_content_box fss_box_action">
+                    <div @click="active_settings = 'general'" class="header">
+                        {{$t('General Settings')}}
                     </div>
-                    <div class="content">
+                    <div v-if="active_settings == 'general'" class="content">
                         <general-settings />
+                    </div>
+                </div>
+                <div :class="{ fss_box_active: active_settings == 'notification' }" class="fss_content_box fss_box_action">
+                    <div @click="active_settings = 'notification'" class="header">
+                        {{$t('Notification Settings')}}
+                    </div>
+                    <div v-if="active_settings == 'notification'" class="content">
+                        <notification-settings />
                     </div>
                 </div>
             </el-col>
@@ -85,9 +94,9 @@
 
 <script>
     import Confirm from '@/Pieces/Confirm';
-    // import Pagination from '@/Pieces/Pagination';
     import isEmpty from 'lodash/isEmpty';
     import GeneralSettings from './_GeneralSettings'
+    import NotificationSettings from './_NotificationSettings'
     import ConnectionDetails from './ConnectionDetails'
 
     export default {
@@ -95,11 +104,13 @@
         components: {
             Confirm,
             GeneralSettings,
-            ConnectionDetails
+            ConnectionDetails,
+            NotificationSettings
         },
         data() {
             return {
-                showing_connection: ''
+                showing_connection: '',
+                active_settings: 'general'
             };
         },
         methods: {
@@ -107,7 +118,7 @@
                 const settings = await this.$get('settings');
                 this.settings.mappings = settings.data.settings.mappings;
                 this.settings.connections = settings.data.settings.connections;
-                
+
                 if (isEmpty(this.settings.connections)) {
                     this.$router.push({
                         name: 'dashboard',

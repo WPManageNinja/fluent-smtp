@@ -27,20 +27,25 @@
                                 Congrats, test email was sent successfully!
                             </p>
                             <p class="text-large" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; mso-line-height-rule: exactly; line-height: 140%; margin: 0 0 15px 0; Margin: 0 0 15px 0; font-size: 16px;">
-                                Thank you for using Fluent SMTP Plugin. The ultimate SMTP plugin you need for making sure your emails are delivered.
+                                Thank you for using Fluent SMTP Plugin. The ultimate SMTP plugin you need for making sure your emails are delivered.<br /><br />FluentSMTP is a free opensource plugin and it will be always free (<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/">Learn why it's free</a>).
                             </p>
+
                             <p class="signature" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; text-align: left; margin: 20px 0 0 0; Margin: 20px 0 0 0;">
                                 <img src="<?php echo esc_url( fluentMailMix('images/mail_signature.png')); ?>" width="250" alt="Fluent SMTP Logo" style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 150px;">
                             <p style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; margin: 0 0 15px 0; Margin: 0 0 15px 0;">
                                 Shahjahan Jewel<br>
                                 CEO, WPManageNinja LLC
                             </p>
+
                         </div>
                     </td>
                 </tr>
             </table>
         </td>
     </tr>
+    <p style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: center; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; margin: 0 0 15px 0; margin: 0 0 15px 0;">
+        PS: if you have a minute please <a href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5">write a review for FluentSMTP</a>
+    </p>
 </table>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item>
                     <label for="connection_name">
                         Connection Name <error :error="schema.errors.get('connection_name')" />
@@ -18,7 +18,7 @@
                 </el-form-item>
             </el-col>
         
-            <el-col :span="12">
+            <el-col :md="12" :sm="24">
                 <el-form-item>
                     <label for="provider_name">Select Provider</label>
 

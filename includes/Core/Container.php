@@ -115,7 +115,7 @@ class Container implements ArrayAccess, ContainerContract
      * Define a contextual binding.
      *
      * @param  string  $concrete
-     * @return FluentSupport\Framework\Foundation\ContextualBindingBuilder
+     * @return ContextualBindingBuilder
      */
     public function when($concrete)
     {
@@ -544,7 +544,7 @@ class Container implements ArrayAccess, ContainerContract
      * Get the proper reflection instance for the given callback.
      *
      * @param  callable|string  $callback
-     * @return ReflectionFunctionAbstract
+     * @return ReflectionFunction | ReflectionMethod
      */
     protected function getCallReflector($callback)
     {
@@ -815,13 +815,14 @@ class Container implements ArrayAccess, ContainerContract
         $types = ['bool', 'int', 'float', 'string', 'array', 'resource'];
 
         foreach ($parameters as $parameter) {
-            
+
             if ($dependency = $this->getParameterType($parameter)) {
                 $dependency = $dependency->getName();
                 if ($dependency && in_array($dependency, $types)) {
                     $dependency = null;
                 }
             }
+            
 
             // If the class is null, it means the dependency is a string or some other
             // primitive type which we can not resolve since it is not a class and
@@ -1158,6 +1159,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  string  $key
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return isset($this->bindings[$key]);
@@ -1169,6 +1171,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  string  $key
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return $this->make($key);
@@ -1181,6 +1184,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  mixed   $value
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         // If the value is not a Closure, we will make it one. This simply gives
@@ -1201,6 +1205,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  string  $key
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         unset($this->bindings[$key], $this->instances[$key], $this->resolved[$key]);

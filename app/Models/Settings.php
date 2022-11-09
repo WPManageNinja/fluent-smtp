@@ -5,7 +5,6 @@ namespace FluentMail\App\Models;
 use FluentMail\Includes\Support\Arr;
 use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\App\Models\Traits\SendTestEmailTrait;
-use FluentMail\Includes\Support\ValidationException;
 
 class Settings
 {
@@ -74,6 +73,15 @@ class Settings
 
         $settings['connections'] = $connections;
 
+
+        if($settings['mappings'] && $settings['connections']) {
+            $validMappings = array_keys(Arr::get($settings, 'connections', []));
+
+            $settings['mappings'] = array_filter($settings['mappings'], function ($key) use ($validMappings) {
+                return in_array($key, $validMappings);
+            });
+        }
+
         $misc = $this->getMisc();
 
         if(!$misc) {
@@ -109,22 +117,29 @@ class Settings
     {
         $settings = $this->getSettings();
 
-        $item = array_filter($settings['mappings'], function($k) use ($key) {
-            return $k == $key;
-        });
 
-        $values = array_keys($item);
-        $email = reset($values);
+        $mappings = $settings['mappings'];
+        $connections = $settings['connections'];
 
-        if ($email) {
-            unset($settings['mappings'][$email]);
-            unset($settings['connections'][$key]);
+        unset($connections[$key]);
+
+        foreach ($mappings as $mapKey => $mapValue) {
+            if($mapValue == $key) {
+                unset($mappings[$mapKey]);
+            }
         }
+
+        $settings['mappings'] = $mappings;
+        $settings['connections'] = $connections;
 
         if (Arr::get($settings, 'misc.default_connection') == $key) {
             $default = Arr::get($settings, 'mappings', []);
             $default = reset($default);
             Arr::set($settings, 'misc.default_connection', $default ?: '');
+        }
+
+        if (Arr::get($settings, 'misc.fallback_connection') == $key) {
+            Arr::set($settings, 'misc.fallback_connection', '');
         }
 
         update_option($this->optionName, $settings);
@@ -203,5 +218,26 @@ class Settings
         $settings = $this->get();
         $settings['misc'] = $misc;
         $this->saveGlobalSettings($settings);
+    }
+
+    public function updateConnection($fromEmail, $connection)
+    {
+        $key = $this->generateUniqueKey($fromEmail);
+        $settings = $this->getSettings();
+        $settings['connections'][$key]['provider_settings'] = $connection;
+        $this->saveGlobalSettings($settings);
+    }
+
+    public function notificationSettings()
+    {
+        $defaults = [
+            'enabled' => 'no',
+            'notify_email' => '{site_admin}',
+            'notify_days' => ['Mon']
+        ];
+
+        $settings = get_option('_fluent_smtp_notify_settings', []);
+
+        return wp_parse_args($settings, $defaults);
     }
 }

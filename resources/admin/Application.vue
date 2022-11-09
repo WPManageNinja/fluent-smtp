@@ -20,7 +20,7 @@
         </div>
 
         <div class="fluent-mail-body">
-            <router-view :key="$route.fullPath"></router-view>
+            <router-view :key="$route.name"></router-view>
         </div>
     </div>
 </template>
@@ -47,19 +47,23 @@
                 return [
                     {
                         route: 'connections',
-                        title: 'Settings'
+                        title: this.$t('Settings')
                     },
                     {
                         route: 'test',
-                        title: 'Email Test'
+                        title: this.$t('Email Test')
                     },
                     {
                         route: 'logs',
-                        title: 'Email Logs'
+                        title: this.$t('Email Logs')
                     },
                     {
                         route: 'support',
-                        title: 'Support'
+                        title: this.$t('About')
+                    },
+                    {
+                        route: 'docs',
+                        title: this.$t('Documentation')
                     }
                 ];
             },

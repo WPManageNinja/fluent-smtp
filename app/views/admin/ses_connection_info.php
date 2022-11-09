@@ -6,23 +6,23 @@
         </tr>
         <tr>
             <th>Max Send in 24 hours</th>
-            <td><?php echo intval($stats['Max24HourSend']); ?></td>
+            <td><?php echo (int) $stats['Max24HourSend']; ?></td>
         </tr>
         <tr>
             <th>Sent in last 24 hours</th>
-            <td><?php echo intval($stats['SentLast24Hours']); ?></td>
+            <td><?php echo (int) $stats['SentLast24Hours']; ?></td>
         </tr>
         <tr>
             <th>Max Sending Rate</th>
-            <td><?php echo intval($stats['MaxSendRate']); ?>/sec</td>
+            <td><?php echo (int) $stats['MaxSendRate']; ?>/sec</td>
         </tr>
         <tr>
             <th>Sender Email</th>
-            <td><?php echo ucfirst($connection['sender_email']); ?></td>
+            <td><?php echo $connection['sender_email']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
         </tr>
         <tr>
             <th>Sender Name</th>
-            <td><?php echo ucfirst($connection['sender_name']); ?></td>
+            <td><?php echo esc_html($connection['sender_name']); ?></td>
         </tr>
         <tr>
             <th>Force Sender Name</th>
@@ -33,7 +33,7 @@
             <td>
                 <ul>
                     <?php foreach ($valid_senders as $sender): ?>
-                    <li><?php echo $sender; ?></li>
+                    <li><?php echo esc_html($sender); ?></li>
                     <?php endforeach; ?>
                 </ul>
             </td>

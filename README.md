@@ -2,7 +2,7 @@
 
 ---
 
-**[Get it on WordPress.org](https://wordpress.org/plugins/fluent-smtp/) | [FaceBook Community](https://www.facebook.com/groups/fluentcrm) | [Docs](https://fluentsmtp.com/docs)**
+**[Get it on WordPress.org](https://wordpress.org/plugins/fluent-smtp/) | [Facebook Community](https://www.facebook.com/groups/fluentcrm) | [Docs](https://fluentsmtp.com/docs)**
 
 ![FluentSMTP Banner](https://ps.w.org/fluent-smtp/assets/banner-1544x500.png)
 
@@ -18,13 +18,15 @@ Connect as many Email Service Providers as you want and FluentCRM will route you
 #### 🎉 AVAILABLE EMAIL SERVICE CONNECTIONS
 - Amazon SES
 - SendGrid
-- MailGun
-- SendInBlue
-- PepiPost
+- Mailgun
+- Sendinblue
+- Pepipost
 - SparkPost
-- gmail via SMTP
+- Gmail OAuth API Connection
+- Google Workspace OAuth API Connection
+- Gmail via SMTP
 - Zoho via SMTP
-- Outlook via SMTP
+- Outlook OAuth API Connection
 - All Other SMTP
 - More native integrations coming soon
 
@@ -37,7 +39,7 @@ Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin in the m
 * Email Logs
 * Resend Any Emails
 * In Details Reporting
-* Super fast UI powered by VueJS
+* Super-fast UI powered by VueJS
 
 Most importantly, This is plugin is free and always will be free.
 👉 <a href="https://fluentsmtp.com/why-we-build-fluentsmtp-plugin/">Read Why it's 100% free (always)</a> 👈
@@ -49,13 +51,18 @@ Please check `app/Http/routes.php` to see all the endpoints.
 
 All the email connect drivers are at: `app/Services/Mailer/Providers`
 
-#### Build Javascript source
+**Thanks to our contributors**
+
+![GitHub Contributors Image](https://contrib.rocks/image?repo=WPManageNinja/fluent-smtp)
+
+
+#### Build JavaScript source
 
 - Clone this project
 - open the project in terminal
 - run `npm install`
-- then `npm run watch` for development
-- `npm run production` to build the project
+- then `npx mix watch` for development
+- `npx mix --production` to build the project
 
 All the VueJS source are at: `resources/admin` folder
 

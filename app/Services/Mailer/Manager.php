@@ -33,8 +33,6 @@ class Manager
         $this->loadConfigAndSettings();
 
         $this->app->addCustomFilter('active_driver', [$this, 'activeDriver']);
-
-        $this->app->addAction('fluent_mail_delete_email_logs', [$this, 'maybeDeleteLogs']);
     }
 
     protected function loadConfigAndSettings()
@@ -101,18 +99,5 @@ class Manager
     public function activeDriver($phpMailer)
     {
         return fluentMailgetConnection($phpMailer->From);
-    }
-
-    public function maybeDeleteLogs()
-    {
-        $logSettings = $this->getSettings('misc');
-
-        if (isset($logSettings['on']) && $logSettings['on'] == 'yes') {
-            if ($logSettings['interval'] != 'never') {
-                $this->app
-                    ->make(Logger::class)
-                    ->deleteLogsOlderThan($logSettings['log_saved_interval_days']);
-            }
-        }
     }
 }

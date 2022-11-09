@@ -10,6 +10,7 @@
                     :connection="provider"
                     :connection_key="provider_key"
                     :providers="settings.providers"
+                    :connections="settings.connections"
                 />
             </div>
         </div>
@@ -36,18 +37,10 @@
         created() {
             const key = this.$route.query.connection_key;
             if (key && key !== '0') {
-                this.title = 'Edit Connection';
+                this.title = this.$t('Edit Connection');
                 this.provider = this.settings.connections[key].provider_settings;
                 this.provider_key = key;
             }
         }
     };
 </script>
-
-<style>
-    #fluent_mail_app .small-help-text,
-    .fluent-mail-app .small-help-text {
-        font-size: 12px;
-        color: gray;
-    }
-</style>

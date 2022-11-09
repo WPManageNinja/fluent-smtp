@@ -27,6 +27,8 @@ class BaseHandler
 
     protected $response = null;
 
+    protected $existing_row_id = null;
+
     public function __construct(Application $app = null, Manager $manager = null)
     {
         $this->app = $app ?: fluentMail();
@@ -46,6 +48,7 @@ class BaseHandler
 
     public function setSettings($settings)
     {
+
         $this->settings = $settings;
 
         return $this;
@@ -59,11 +62,6 @@ class BaseHandler
             $this->phpMailer->FromName = $this->getSetting('sender_name');
         }
 
-        $title = ucwords($this->getSetting('provider'));
-        $this->phpMailer->addCustomHeader(
-            'X-Mailer', 'FluentMail - ' . $title
-        );
-
         if ($this->getSetting('return_path') == 'yes') {
             $this->phpMailer->Sender = $this->phpMailer->From;
         }
@@ -76,6 +74,11 @@ class BaseHandler
     protected function isForced($key)
     {
         return $this->getSetting("force_{$key}") == 'yes';
+    }
+
+    public function isForcedEmail()
+    {
+        return $this->getSetting("force_from_email") != 'no';
     }
 
     public function isActive()
@@ -195,7 +198,7 @@ class BaseHandler
         $this->phpMailer->clearCustomHeaders();
 
         foreach ($customHeaders as $customHeader) {
-            $this->phpMailer->addCustomHeader($header[0], $header[1]);
+            $this->phpMailer->addCustomHeader($customHeader[0], $customHeader[1]);
         }
 
         return $headers;
@@ -250,32 +253,27 @@ class BaseHandler
 
     public function handleResponse($response)
     {
-        if (is_wp_error($response)) {
-            $message = 'Oops!';
-
+        if ( is_wp_error($response) ) {
             $code = $response->get_error_code();
 
             if (!is_numeric($code)) {
-                $message = ucwords(str_replace(['_', '-'], ' ', $code));
                 $code = 400;
             }
 
-            $response = [
+            $message = $response->get_error_message();
+
+            $errorResponse = [
                 'code'    => $code,
                 'message' => $message,
                 'errors'  => $response->get_error_messages()
             ];
 
-            $this->processResponse($response, false);
+            $this->processResponse($errorResponse, false);
 
-            $this->fireWPMailFailedAction($response);
+            throw new \PHPMailer\PHPMailer\Exception($message, $code);
 
         } else {
-            if ($this->isEmailSent()) {
-                return $this->handleSuccess();
-            } else {
-                return $this->handleFailure();
-            }
+            return $this->processResponse($response, true);
         }
     }
 
@@ -294,7 +292,29 @@ class BaseHandler
                 'extra'    => maybe_serialize($this->getExtraParams())
             ];
 
-            (new Logger)->add($data);
+            if($this->existing_row_id) {
+                $row = (new Logger())->find($this->existing_row_id);
+                if($row) {
+                    $row['response'] = (array) $row['response'];
+                    if($status) {
+                        $row['response']['fallback'] = 'Sent using fallback connection '.$this->attributes['from'];
+                        $row['response']['fallback_response'] = $response;
+                    } else {
+                        $row['response']['fallback'] = 'Tried to send using fallback but failed. '.$this->attributes['from'];
+                        $row['response']['fallback_response'] = $response;
+                    }
+
+                    $data['response'] = maybe_serialize( $row['response']);
+                    $data['retries'] = $row['retries'] + 1;
+                    (new Logger())->updateLog($data, ['id' => $row['id']]);
+                }
+            } else {
+                $logId = (new Logger)->add($data);
+                if(!$status) {
+                    // We have to fire an action for this failed job
+                    do_action('fluentmail_email_sending_failed', $logId, $this);
+                }
+            }
         }
 
         return $status;
@@ -302,6 +322,9 @@ class BaseHandler
 
     protected function shouldBeLogged($status)
     {
+        if($this->existing_row_id) {
+            return true;
+        }
         if (defined('FLUENTMAIL_LOG_OFF') && FLUENTMAIL_LOG_OFF) {
             return false;
         }
@@ -313,7 +336,7 @@ class BaseHandler
         $miscSettings = $this->manager->getConfig('misc');
         $isLogOn = $miscSettings['log_emails'] == 'yes';
 
-        return apply_filters('fluentmail_will_log_email', $isLogOn, $miscSettings);
+        return apply_filters('fluentmail_will_log_email', $isLogOn, $miscSettings, $this);
     }
 
     protected function fireWPMailFailedAction($data)
@@ -321,9 +344,14 @@ class BaseHandler
         $code = is_numeric($data['code']) ? $data['code'] : 400;
         $code = strlen($code) < 3 ? 400 : $code;
 
-        $this->app->doAction('wp_mail_failed', new \WP_Error(
-            $code, $data['message'], $data['errors']
-        ));
+        $mail_error_data['phpmailer_exception_code'] = $code;
+        $mail_error_data['errors'] = $data['errors'];
+
+        $error = new \WP_Error(
+            $code, $data['message'], $mail_error_data
+        );
+
+        $this->app->doAction('wp_mail_failed', $error);
     }
 
     protected function updatedLog($id, $data)
@@ -352,4 +380,15 @@ class BaseHandler
             'connection' => $connection
         ]);
     }
+
+    public function getPhpMailer()
+    {
+        return $this->phpMailer;
+    }
+
+    public function setRowId($id)
+    {
+        $this->existing_row_id = $id;
+    }
+
 }

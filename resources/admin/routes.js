@@ -4,6 +4,7 @@ import Connection from './Modules/Settings/Connection';
 import Logs from './Modules/Logger/Logs';
 import Test from './Modules/Test/Test';
 import Support from './Modules/Misc/Support';
+import Docs from './Modules/Misc/Docs';
 
 export default [
     {
@@ -41,5 +42,11 @@ export default [
         path: '/logs',
         meta: {},
         component: Logs
+    },
+    {
+        name: 'docs',
+        path: '/documentation',
+        meta: {},
+        component: Docs
     }
 ];

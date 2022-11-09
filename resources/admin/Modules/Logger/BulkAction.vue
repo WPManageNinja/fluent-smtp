@@ -6,15 +6,14 @@
                     clearable
                     v-model="action"
                     size="small"
-                    placeholder="Bulk Action"
-                    :disabled="!haslogs"
+                    :tplaceholder="$t('Bulk Action')"
                 >
-                    <el-option value="deleteall" label="Delete All" />
                     <el-option
                         value="deleteselected"
                         label="Delete Selected"
                         v-if="selected.length"
                     />
+                    <el-option v-if="is_failed_selected" value="resend_selected" :label="$t('Resend Selected Emails')" />
                 </el-select>
             </el-col>
 
@@ -25,7 +24,7 @@
                     type="primary"
                     :disabled="!action"
                     @click="applyBulkAction"
-                >Apply</el-button>
+                >{{$t('Apply')}}</el-button>
             </el-col>
         </el-row>
     </div>
@@ -34,11 +33,17 @@
 <script>
     export default {
         name: 'BulkAction',
-        props: ['selected', 'haslogs'],
+        props: ['selected'],
         data() {
             return {
-                action: ''
+                action: '',
+                resending: false
             };
+        },
+        computed: {
+            is_failed_selected() {
+                return !!this.selected.length;
+            }
         },
         methods: {
             applyBulkAction() {

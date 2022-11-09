@@ -88,14 +88,11 @@ final class Application extends Container
     /**
      * Require all the common files that needs to be loaded on each request
      *
-     * @param FluentMail\Includes\Core\Application $app [$app is being used inside required files]
+     * @param Application $app [$app is being used inside required files]
      * @return void
      */
     private function requireCommonFilesForRequest($app)
     {
-        // Require Pluggable Functions
-        require_once($app['path.app'] . '/Functions/pluggable.php');
-
         // Require Application Bindings
         require_once($app['path.app'] . '/Bindings.php');
 

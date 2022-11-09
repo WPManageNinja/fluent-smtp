@@ -31,7 +31,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        $this->handleFailure(new Exception('Something went wrong!', 0));
+        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
     }
 
     public function postSend()
@@ -39,9 +39,15 @@ class Handler extends BaseHandler
         $body = [
             'sender' => $this->getFrom(),
             'subject' => $this->getSubject(),
-            'htmlContent' => $this->getBody(),
-            'headers' => $this->getCustomEmailHeaders()
+            'htmlContent' => $this->getBody()
         ];
+
+        $contentType = $this->getParam('headers.content-type');
+
+        if($contentType == 'text/plain') {
+            $body['textContent'] = $this->getBody();
+            unset($body['htmlContent']);
+        }
 
         if ($replyTo = $this->getReplyTo()) {
             $body['replyTo'] = $replyTo;
@@ -62,7 +68,28 @@ class Handler extends BaseHandler
 
         $params = array_merge($params, $this->getDefaultParams());
 
-        $this->response = wp_safe_remote_post($this->url, $params);
+        $response = wp_safe_remote_post($this->url, $params);
+
+        if (is_wp_error($response)) {
+            $returnResponse = new \WP_Error($response->get_error_code(), $response->get_error_message(), $response->get_error_messages());
+        } else {
+            $responseBody = wp_remote_retrieve_body($response);
+            $responseCode = wp_remote_retrieve_response_code($response);
+
+            $isOKCode = $responseCode == $this->emailSentCode;
+
+            $responseBody = \json_decode($responseBody, true);
+
+            if($isOKCode) {
+                $returnResponse = [
+                    'messageId' => Arr::get($responseBody,'messageId')
+                ];
+            } else {
+                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'message', 'SendInBlueError API Error'), $responseBody);
+            }
+        }
+
+        $this->response = $returnResponse;
 
         return $this->handleResponse($this->response);
     }
@@ -156,72 +183,15 @@ class Handler extends BaseHandler
 
     protected function getCustomEmailHeaders()
     {
-        return [
-            'X-Mailer' => 'FluentMail - SendInBlue'
-        ];
+        return [];
     }
 
     protected function getRequestHeaders()
     {
         return [
-            'X-Mailer' => 'FluentMail-SendInBlue',
             'Api-Key' => $this->getSetting('api_key'),
             'Content-Type' => 'application/json',
             'Accept' => 'application/json'
-        ];
-    }
-
-    public function isEmailSent()
-    {
-        $isSent = wp_remote_retrieve_response_code($this->response) == $this->emailSentCode;
-
-        if (
-            $isSent &&
-            isset($this->response['body']) &&
-            !json_decode($this->response['body'], true)['messageId']
-        ) {
-            return false;
-        }
-
-        return $isSent;
-    }
-
-    protected function handleSuccess()
-    {
-        $response = $this->response['response'];
-
-        $body = (array) wp_remote_retrieve_body($this->response);
-        
-        $body = json_decode($body[0], true);
-
-        $response = array_merge($body, $response);
-
-        return $this->processResponse(['response' => $response], true);
-    }
-
-    protected function handleFailure()
-    {
-        $response = $this->getResponseError();
-
-        $this->processResponse(['response' => $response], false);
-
-        $this->fireWPMailFailedAction($response);
-    }
-
-    public function getResponseError()
-    {
-        $response = $this->response;
-        
-        $body = json_decode($response['body'], true);
-        
-        $response = $response['response'];
-
-        $message = ucwords($body['code']) . ' - ' . $body['message'];
-
-        return [
-            'message' => $response['message'],
-            'code' => $response['code'],
-            'errors' => [$message]
         ];
     }
 }

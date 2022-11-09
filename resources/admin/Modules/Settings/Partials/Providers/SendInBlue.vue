@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3 class="fs_config_title">SendInBlue API Settings</h3>
+        <h3 class="fs_config_title">Sendinblue API Settings</h3>
         <el-radio-group size="mini" v-model="connection.key_store">
             <el-radio-button label="db">Store API Keys in DB</el-radio-button>
             <el-radio-button label="wp_config">Store API Keys in Config File</el-radio-button>

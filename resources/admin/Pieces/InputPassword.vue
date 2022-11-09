@@ -8,11 +8,6 @@
             :disabled="disabled"
             @input="$emit('input', $event)"
         >
-            <template slot="append">
-                <el-button @click="toggle" :disabled="disabled">
-                    <i class="el-icon-view" :style="styleObject" />
-                </el-button>
-            </template>
         </el-input>
     </div>
 </template>

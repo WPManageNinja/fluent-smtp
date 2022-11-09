@@ -19,6 +19,7 @@ final class SimpleEmailServiceMessage {
     public $subjectCharset, $messageTextCharset, $messageHtmlCharset;
     public $attachments, $customHeaders, $configuration_set, $message_tags;
     public $is_clean, $raw_message;
+    public $mime;
 
     public function __construct() {
         $this->to = array();
@@ -550,6 +551,7 @@ final class SimpleEmailServiceMessage {
             $raw_message .= 'Content-Type: text/plain' . $charset . "\n\n";
             $raw_message .= $this->messagetext . "\n";
         }
+
 
         if ($this->messagehtml != null && strlen($this->messagehtml) > 0) {
             $charset = empty($this->messageHtmlCharset) ? '' : "; charset=\"{$this->messageHtmlCharset}\"";

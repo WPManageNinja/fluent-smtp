@@ -3,7 +3,7 @@
 namespace FluentMail\App\Models;
 
 use Exception;
-use FluentMail\App\Services\Mailer\EmailQueueProcessor;
+use FluentMail\Includes\Support\Arr;
 
 class Logger extends Model
 {
@@ -25,10 +25,7 @@ class Logger extends Model
     protected $searchables = [
         'to',
         'from',
-        'subject',
-        'body',
-        'response',
-        'extra'
+        'subject'
     ];
 
     protected $table = null;
@@ -42,47 +39,62 @@ class Logger extends Model
 
     public function get($data)
     {
-        foreach (['date', 'daterange'] as $field) {
-            if ($data['filter_by'] == $field) {
-                $data['filter_by'] = 'created_at';
-            }
-        }
-
-        $total = 0;
-        $page = intval($data['page']);
-        $perPage = intval($data['per_page']);
+        $db = $this->getDb();
+        $page = isset($data['page']) ? (int)$data['page'] : 1;
+        $perPage = isset($data['per_page']) ? (int)$data['per_page'] : 15;
         $offset = ($page - 1) * $perPage;
 
-        list($where, $args) = $this->buildWhere($data);
+        $query = $db->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
+            ->limit($perPage)
+            ->offset($offset)
+            ->orderBy('id', 'DESC');
 
-        $query = $this->db->prepare(
-            "SELECT * FROM `{$this->table}` {$where} ORDER BY id DESC LIMIT %d OFFSET %d",
-            array_merge($args, [$perPage, $offset])
-        );
-
-
-        $result = $this->db->get_results($query);
-
-        if ($this->db->num_rows) {
-            $total = (int)$this->db->get_var(
-                $this->db->prepare(
-                    "SELECT COUNT(id) FROM `{$this->table}` {$where}", $args
-                )
-            );
+        if (!empty($data['status'])) {
+            $query->where('status', sanitize_text_field($data['status']));
         }
 
-        $result = $this->formatResult($result);
+        if (!empty($data['date_range']) && is_array($data['date_range']) && count($data['date_range']) == 2) {
+            $dateRange = $data['date_range'];
+            $from = $dateRange[0] . ' 00:00:01';
+            $to = $dateRange[1] . ' 23:59:59';
+            $query->whereBetween('created_at', $from, $to);
+        }
 
-        return [
-            'data'  => $result,
-            'total' => $total
-        ];
+        if (!empty($data['search'])) {
+            $search = trim(sanitize_text_field($data['search']));
+            $query->where(function ($q) use ($search) {
+                $searchColumns = $this->searchables;
+
+                $columnSearch = false;
+                if (strpos($search, ':')) {
+                    $searchArray = explode(':', $search);
+                    $column = array_shift($searchArray);
+                    if (in_array($column, $this->fillables)) {
+                        $columnSearch = true;
+                        $q->where($column, 'LIKE', '%' . trim(implode(':', $searchArray)) . '%');
+                    }
+                }
+
+                if (!$columnSearch) {
+                    $firstColumn = array_shift($searchColumns);
+                    $q->where($firstColumn, 'LIKE', '%' . $search . '%');
+                    foreach ($searchColumns as $column) {
+                        $q->orWhere($column, 'LIKE', '%' . $search . '%');
+                    }
+                }
+
+            });
+        }
+        $result = $query->paginate();
+        $result['data'] = $this->formatResult($result['data']);
+
+        return $result;
     }
 
     protected function buildWhere($data)
     {
         $where = [];
-        
+
         if (isset($data['filter_by_value'])) {
             $where[$data['filter_by']] = $data['filter_by_value'];
         }
@@ -121,12 +133,12 @@ class Logger extends Model
                     $nestedOr = '';
                     $values = explode('|', $value);
                     foreach ($values as $itemValue) {
-                        $args[] = '%'.$this->db->esc_like($itemValue).'%';
+                        $args[] = '%' . $this->db->esc_like($itemValue) . '%';
                         $nestedOr .= " OR `{$key}` LIKE '%s'";
                     }
                     $orWhere .= ' OR (' . trim($nestedOr, 'OR ') . ')';
                 } else {
-                    $args[] = '%'.$this->db->esc_like($value).'%';
+                    $args[] = '%' . $this->db->esc_like($value) . '%';
                     $orWhere .= " OR `{$key}` LIKE '%s'";
                 }
             }
@@ -177,9 +189,9 @@ class Logger extends Model
                 'created_at' => current_time('mysql')
             ]);
 
-            $this->db->insert($this->table, $data);
+            return $this->getDb()->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
+                ->insert($data);
 
-            return $this->db->insert_id;
         } catch (Exception $e) {
             return $e;
         }
@@ -191,20 +203,22 @@ class Logger extends Model
             return $this->db->query("TRUNCATE TABLE {$this->table}");
         }
 
-        $placeHolders = array_fill(0, count($id), '%d');
+        $ids = array_filter($id, 'intval');
 
-        $query = $this->db->prepare(
-            "DELETE FROM {$this->table} WHERE id IN (" . implode(',', $placeHolders) . ")",
-            $id
-        );
+        if ($ids) {
+            return $this->getDb()->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
+                ->whereIn('id', $ids)
+                ->delete();
+        }
 
-        return $this->db->query($query);
+        return false;
     }
 
     public function navigate($data)
     {
+        $filterBy = Arr::get($data, 'filter_by');
         foreach (['date', 'daterange', 'datetime', 'datetimerange'] as $field) {
-            if ($data['filter_by'] == $field) {
+            if ($filterBy == $field) {
                 $data['filter_by'] = 'created_at';
             }
         }
@@ -261,18 +275,16 @@ class Logger extends Model
 
     public function find($id)
     {
-        $query = $this->db->prepare(
-            "SELECT * FROM `{$this->table}` WHERE `id` = %d",
-            [$id]
-        );
 
-        $row = $this->db->get_row($query, ARRAY_A);
+        $row = $this->getDb()->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
+            ->where('id', $id)
+            ->first();
 
-        $row['extra'] = maybe_unserialize($row['extra']);
+        $row->extra = maybe_unserialize($row->extra);
 
-        $row['response'] = maybe_unserialize($row['response']);
+        $row->response = maybe_unserialize($row->response);
 
-        return $row;
+        return (array)$row;
     }
 
     public function resendEmailFromLog($id, $type = 'retry')
@@ -324,7 +336,7 @@ class Logger extends Model
                 define('FLUENTMAIL_LOG_OFF', true);
             }
 
-            wp_mail(
+            $result = wp_mail(
                 $to,
                 $email['subject'],
                 $email['body'],
@@ -333,10 +345,14 @@ class Logger extends Model
             );
 
             $updateData = [
-                'status' => 'sent',
-                'updated_at' =>  current_time('mysql'),
+                'status'     => 'sent',
+                'updated_at' => current_time('mysql'),
             ];
-            
+
+            if (!$result && $type == 'check_realtime' && $email['status'] == 'failed') {
+                $updateData['status'] = 'failed';
+            }
+
             if ($type == 'resend') {
                 $updateData['resent_count'] = intval($email['resent_count']) + 1;
             } else {
@@ -376,10 +392,8 @@ class Logger extends Model
     {
         try {
 
-            $date = date('Y-m-d', current_time('timestamp') - $days * DAY_IN_SECONDS);
-
-            $query = "DELETE FROM {$this->table} WHERE `created_at` < $date";
-
+            $date = date('Y-m-d H:i:s', current_time('timestamp') - $days * DAY_IN_SECONDS);
+            $query = $this->db->prepare("DELETE FROM {$this->table} WHERE `created_at` < %s", $date);
             return $this->db->query($query);
 
         } catch (Exception $e) {
@@ -389,44 +403,67 @@ class Logger extends Model
         }
     }
 
-    public function hasPendingEmails()
+    public function getTotalCountStat($status, $startDate, $endDate = false)
     {
-        $status = 'pending';
+        if ($endDate) {
+            $query = $this->db->prepare(
+                "SELECT COUNT(*)
+                FROM {$this->table}
+                WHERE status = %s
+                AND created_at >= %s
+                AND created_at <= %s",
+                $status,
+                $startDate,
+                $endDate
+            );
+        } else {
+            $query = $this->db->prepare(
+                "SELECT COUNT(*)
+                FROM {$this->table}
+                WHERE status = %s
+                AND created_at >= %s",
+                $status,
+                $startDate
+            );
+        }
 
+        return (int)$this->db->get_var($query);
+    }
+
+    public function getSubjectCountStat($status, $startDate, $endDate)
+    {
         $query = $this->db->prepare(
-            "SELECT count(*) as total FROM `{$this->table}` WHERE status = '%s'",
+            "SELECT COUNT(DISTINCT(subject))
+			FROM {$this->table}
+			WHERE status = %s
+			AND created_at >= %s
+			AND created_at <= %s",
+            $status,
+            $startDate,
+            $endDate
+        );
+
+        return (int)$this->db->get_var($query);
+    }
+
+    public function getSubjectStat($status, $statDate, $endDate, $limit = 5)
+    {
+        $query = $this->db->prepare(
+            "SELECT subject,
+			COUNT(DISTINCT id) AS emails_sent
+			FROM {$this->table}
+			WHERE created_at >= %s
+			AND created_at <= %s
+			AND status = %s
+			GROUP BY subject
+			ORDER BY emails_sent DESC
+			LIMIT {$limit}",
+            $statDate,
+            $endDate,
             $status
         );
 
-        $col = $this->db->get_col($query);
-
-        return reset($col);
+        return $this->db->get_results($query, ARRAY_A);
     }
 
-    public function getPendingEmails($limit = 10, $order = 'ASC', $exclude = [])
-    {
-        return $this->getEmails($limit, $order, 'pending', $exclude);
-    }
-
-    public function getEmails($limit = 10, $order = 'ASC', $status = null, $exclude = [])
-    {
-        $where = '';
-
-        if (!$status) {
-            $where = "WHERE `status` != '{$status}'";
-        } else {
-            $where = "WHERE `status` = '{$status}'";
-        }
-
-        if (is_array($exclude) && $exclude) {
-            $ids = implode(',', $exclude);
-            $where .= " AND id NOT IN ({$ids})";
-        }
-
-        $orderBy = "ORDER BY `created_at` {$order}";
-
-        $query = "SELECT * FROM `{$this->table}` {$where} {$orderBy} LIMIT %d";
-        $query = $this->db->prepare($query, $limit);
-        return $this->db->get_results($query);
-    }
 }

@@ -17,11 +17,10 @@ class Handler extends BaseHandler
             if ($this->getSetting('auto_tls') == 'no') {
                 $this->phpMailer->SMTPAutoTLS = false;
             }
-
             return $this->postSend();
         }
 
-        $this->handleFailure(new \Exception('Something went wrong!', 0));
+        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
     }
 
     protected function postSend()
@@ -43,14 +42,13 @@ class Handler extends BaseHandler
 
             $fromEmail = $this->phpMailer->From;
 
-            if (!fluentMailIsListedSenderEmail($fromEmail)) {
+            if ($this->isForcedEmail() && !fluentMailIsListedSenderEmail($fromEmail)) {
                 $fromEmail = $this->getSetting('sender_email');
             }
 
             if (isset($this->phpMailer->FromName)) {
-                
                 $fromName = $this->phpMailer->FromName;
-                
+
                 if (
                     $this->getSetting('force_from_name') == 'yes' &&
                     $customFrom = $this->getSetting('sender_name')
@@ -111,35 +109,28 @@ class Handler extends BaseHandler
 
             $this->phpMailer->send();
 
-            return $this->handleSuccess();
+            $returnResponse = [
+                'response' => 'OK'
+            ];
 
-        } catch(\PHPMailer\PHPMailer\Exception $e) {
-            return $this->handleFailure($e);
+        } catch(\Exception $e) {
+            $returnResponse = new \WP_Error(423, $e->getMessage(), []);
         }
+
+        $this->response = $returnResponse;
+
+        return $this->handleResponse($this->response);
     }
 
-    protected function handleSuccess()
-    {   
-        $data = [
-            'response' => [
-                'code' => 200,
-                'message' => 'OK'
-            ]
-        ];
-
-        return $this->processResponse($data, true);
-    }
-
-    protected function handleFailure($exception)
+    public function setSettings($settings)
     {
-        $response = [
-            'code' => $exception->getCode(),
-            'message' => 'Oops!',
-            'errors' => [$exception->getMessage()]
-        ];
+        if (Arr::get($settings, 'key_store') == 'wp_config') {
+            $settings['username'] = defined('FLUENTMAIL_SMTP_USERNAME') ? FLUENTMAIL_SMTP_USERNAME : '';
+            $settings['password'] = defined('FLUENTMAIL_SMTP_PASSWORD') ? FLUENTMAIL_SMTP_PASSWORD : '';
+        }
 
-        $this->processResponse($response, false);
+        $this->settings = $settings;
 
-        $this->fireWPMailFailedAction($response);
+        return $this;
     }
 }

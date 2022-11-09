@@ -22,4 +22,9 @@ class Model
     {
         return call_user_func_array([$this->db, $method], $params);
     }
+
+    public function getDb()
+    {
+        return fluentMailDb();
+    }
 }

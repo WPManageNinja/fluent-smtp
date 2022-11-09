@@ -1,5 +1,88 @@
-import Vue from './elements';
+import Vue from 'vue';
+import lang from 'element-ui/lib/locale/lang/en';
+import locale from 'element-ui/lib/locale';
+
+import {
+    Tag,
+    Row,
+    Col,
+    Menu,
+    Form,
+    Alert,
+    Table,
+    Input,
+    Option,
+    Radio,
+    Button,
+    Select,
+    Dialog,
+    Popover,
+    Loading,
+    Tooltip,
+    MenuItem,
+    Checkbox,
+    FormItem,
+    Pagination,
+    DatePicker,
+    TimePicker,
+    RadioGroup,
+    MessageBox,
+    OptionGroup,
+    ButtonGroup,
+    TableColumn,
+    Notification,
+    CheckboxGroup,
+    RadioButton,
+    Switch,
+    Collapse,
+    CollapseItem,
+    Skeleton,
+    SkeletonItem
+} from 'element-ui';
+
+Vue.use(Row);
+Vue.use(Tag);
+Vue.use(Menu);
+Vue.use(Skeleton);
+Vue.use(SkeletonItem);
+Vue.use(Menu);
+Vue.use(MenuItem);
+Vue.use(Col);
+Vue.use(Collapse);
+Vue.use(CollapseItem);
+Vue.use(Form);
+Vue.use(Alert);
+Vue.use(Table);
+Vue.use(Input);
+Vue.use(Radio);
+Vue.use(RadioButton);
+Vue.use(Button);
+Vue.use(Select);
+Vue.use(Switch);
+Vue.use(Option);
+Vue.use(Dialog);
+Vue.use(Popover);
+Vue.use(Tooltip);
+Vue.use(Checkbox);
+Vue.use(FormItem);
+Vue.use(Pagination);
+Vue.use(DatePicker);
+Vue.use(TimePicker);
+Vue.use(RadioGroup);
+Vue.use(OptionGroup);
+Vue.use(ButtonGroup);
+Vue.use(TableColumn);
+Vue.use(CheckboxGroup);
+Vue.use(Loading.directive);
+
+Vue.prototype.$message = MessageBox.alert;
+Vue.prototype.$notify = Notification;
+
+locale.use(lang);
+
 import Router from 'vue-router';
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 import {
     applyFilters,
@@ -8,10 +91,6 @@ import {
     doAction,
     removeAllActions
 } from '@wordpress/hooks';
-
-const moment = require('moment');
-require('moment/locale/en-gb');
-moment.locale('en-gb');
 
 export default class FluentMail {
     constructor() {
@@ -45,9 +124,12 @@ export default class FluentMail {
                 ucFirst: self.ucFirst,
                 ucWords: self.ucWords,
                 slugify: self.slugify,
-                moment: moment,
+                dayjs: dayjs.extend(localizedFormat),
                 escapeHtml: self.escapeHtml,
-                hasPro: () => Boolean(window.FluentMail.appVars.has_pro)
+                hasPro: () => Boolean(window.FluentMail.appVars.has_pro),
+                $t(string) {
+                    return window.FluentMailAdmin.trans[string] || string;
+                }
             }
         });
 
@@ -94,7 +176,7 @@ export default class FluentMail {
 
     $get(url, options = {}) {
         options.action = this.appVars.slug + '-get-' + url;
-
+        options.nonce = this.appVars.nonce;
         return window.FluentMail.request('get', options);
     }
 
@@ -108,7 +190,7 @@ export default class FluentMail {
 
     dateFormat(date, format) {
         const dateString = (date === undefined) ? null : date;
-        const dateObj = moment(dateString);
+        const dateObj = dayjs(dateString);
         return dateObj.isValid() ? dateObj.format(format) : null;
     }
 
@@ -132,6 +214,9 @@ export default class FluentMail {
     }
 
     escapeHtml(text) {
+        if (!text) {
+            return text;
+        }
         const map = {
             '&': '&amp;',
             '<': '&lt;',
@@ -139,7 +224,7 @@ export default class FluentMail {
             '"': '&quot;',
             "'": '&#039;'
         };
-      
+
         return text.replace(/[&<>"']/g, (m) => map[m]);
     }
 }
