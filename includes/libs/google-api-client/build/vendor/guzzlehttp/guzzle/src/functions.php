@@ -16,14 +16,9 @@ use FluentSmtpLib\GuzzleHttp\Handler\StreamHandler;
  */
 function uri_template($template, array $variables)
 {
-    if (\extension_loaded('uri_template')) {
-        // @codeCoverageIgnoreStart
-        return \FluentSmtpLib\uri_template($template, $variables);
-        // @codeCoverageIgnoreEnd
-    }
     static $uriTemplate;
     if (!$uriTemplate) {
-        $uriTemplate = new UriTemplate();
+        $uriTemplate = new \FluentSmtpLib\GuzzleHttp\UriTemplate();
     }
     return $uriTemplate->expand($template, $variables);
 }
@@ -93,14 +88,14 @@ function choose_handler()
 {
     $handler = null;
     if (\function_exists('curl_multi_exec') && \function_exists('curl_exec')) {
-        $handler = Proxy::wrapSync(new CurlMultiHandler(), new CurlHandler());
+        $handler = \FluentSmtpLib\GuzzleHttp\Handler\Proxy::wrapSync(new \FluentSmtpLib\GuzzleHttp\Handler\CurlMultiHandler(), new \FluentSmtpLib\GuzzleHttp\Handler\CurlHandler());
     } elseif (\function_exists('curl_exec')) {
-        $handler = new CurlHandler();
+        $handler = new \FluentSmtpLib\GuzzleHttp\Handler\CurlHandler();
     } elseif (\function_exists('curl_multi_exec')) {
-        $handler = new CurlMultiHandler();
+        $handler = new \FluentSmtpLib\GuzzleHttp\Handler\CurlMultiHandler();
     }
     if (\ini_get('allow_url_fopen')) {
-        $handler = $handler ? Proxy::wrapStreaming($handler, new StreamHandler()) : new StreamHandler();
+        $handler = $handler ? \FluentSmtpLib\GuzzleHttp\Handler\Proxy::wrapStreaming($handler, new \FluentSmtpLib\GuzzleHttp\Handler\StreamHandler()) : new \FluentSmtpLib\GuzzleHttp\Handler\StreamHandler();
     } elseif (!$handler) {
         throw new \RuntimeException('GuzzleHttp requires cURL, the ' . 'allow_url_fopen ini setting, or a custom HTTP handler.');
     }
@@ -269,7 +264,7 @@ function json_decode($json, $assoc = \false, $depth = 512, $options = 0)
 {
     $data = \json_decode($json, $assoc, $depth, $options);
     if (\JSON_ERROR_NONE !== \json_last_error()) {
-        throw new Exception\InvalidArgumentException('json_decode error: ' . \json_last_error_msg());
+        throw new \FluentSmtpLib\GuzzleHttp\Exception\InvalidArgumentException('json_decode error: ' . \json_last_error_msg());
     }
     return $data;
 }
@@ -288,7 +283,7 @@ function json_encode($value, $options = 0, $depth = 512)
 {
     $json = \json_encode($value, $options, $depth);
     if (\JSON_ERROR_NONE !== \json_last_error()) {
-        throw new Exception\InvalidArgumentException('json_encode error: ' . \json_last_error_msg());
+        throw new \FluentSmtpLib\GuzzleHttp\Exception\InvalidArgumentException('json_encode error: ' . \json_last_error_msg());
     }
     return $json;
 }
