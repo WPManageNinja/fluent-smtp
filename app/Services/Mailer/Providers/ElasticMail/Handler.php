@@ -254,14 +254,14 @@ class Handler extends BaseHandler
                 continue;
             }
 
-            if (!is_file($attpath[0]) || !is_readable($attpath[0])) {
+            if (!is_readable($attpath[0]) || !is_file($attpath[0])) {
                 continue;
             }
 
             //Extracting the file name
-            $filenameonly = explode("/", $attpath[0]);
+            $filenameonly = explode(DIRECTORY_SEPARATOR, $attpath[0]);
 
-            $fname = $filenameonly[count($filenameonly) - 1];
+            $fname = end($filenameonly);
 
             $this->postbody[] = '--' . $this->boundary . "\r\n";
             $this->postbody[] = '--' . 'Content-Disposition: form-data; name="attachments' . ($i + 1) . '"; filename="' . $fname . '"' . "\r\n\r\n";
@@ -298,7 +298,9 @@ class Handler extends BaseHandler
         if ($settings['key_store'] == 'wp_config') {
             $settings['api_key'] = defined('FLUENTMAIL_ELASTICMAIL_API_KEY') ? FLUENTMAIL_ELASTICMAIL_API_KEY : '';
         }
+
         $this->settings = $settings;
+        
         return $this;
     }
 
