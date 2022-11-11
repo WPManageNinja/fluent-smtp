@@ -238,7 +238,12 @@ class SchedulerHandler
             $client->setAccessToken($tokens);
 
             $newTokens = $client->refreshToken($tokens['refresh_token']);
-            $this->saveNewGmailTokens($settings, $newTokens);
+            $result = $this->saveNewGmailTokens($settings, $newTokens);
+
+            if (!$result) {
+                return new \WP_Error('api_error', 'Failed to renew the token');
+            }
+
             return true;
         } catch (\Exception $exception) {
             return new \WP_Error('api_error', $exception->getMessage());

@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.5
 Tested up to: 6.1
-Stable tag: 2.2.1
+Stable tag: 2.2.2
 Requires PHP: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -281,6 +281,10 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.2.2 (Date: Nov 11, 2022) =
+* Fix vendor Conflict for Google/Gmail Connection
+* UI Improvement on Connection Wizard
 
 = 2.2.1 (Date: Nov 08, 2022) =
 * Refactored Google API integration

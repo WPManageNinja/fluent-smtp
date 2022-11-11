@@ -57,6 +57,11 @@ class Handler extends BaseHandler
 
         $file_size = strlen($message);
         $googleClient = $this->getApiClient($data);
+
+        if (is_wp_error($googleClient)) {
+            return $googleClient;
+        }
+
         $googleService = new \FluentSmtpLib\Google\Service\Gmail($googleClient);
 
         $result = array();
@@ -268,7 +273,18 @@ class Handler extends BaseHandler
         // check if expired or will be expired in 5 minutes
         if (($data['expire_stamp'] - 300) < time()) {
             $newTokens = $client->refreshToken($data['refresh_token']);
-            $this->saveNewTokens($data, $newTokens);
+
+            $result = $this->saveNewTokens($data, $newTokens);
+
+            if (!$result) {
+                $errorDescription = Arr::get($newTokens, 'error_description');
+                if (!$errorDescription) {
+                    $errorDescription = 'Failed to renew token with Gmail Api';
+                }
+
+                return new \WP_Error('api_error', $errorDescription);
+            }
+
             $client->setAccessToken($newTokens);
         }
 
@@ -288,7 +304,11 @@ class Handler extends BaseHandler
             require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/build/vendor/autoload.php';
         }
 
-        $this->getApiClient($connection);
+        $client = $this->getApiClient($connection);
+
+        if (is_wp_error($client)) {
+            return '<p style="color: red; text-align: center; font-size: 18px;">ERROR: ' . $connection->get_error_message() . '</p>';
+        }
 
         $info = fluentMailgetConnection($connection['sender_email']);
 
