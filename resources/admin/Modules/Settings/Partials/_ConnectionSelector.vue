@@ -10,7 +10,7 @@
         </div>
         <el-radio-group @change="showAll = false" v-else class="fss_connections" v-model="connection.provider">
             <el-radio-button :class="'con_'+providerName" v-for="(provider, providerName) in providers" :key="providerName" :label="providerName">
-                <img @click="showAll = false" :title="provider.title" :src="provider.image" />
+                <img :title="provider.title" :src="provider.image" />
             </el-radio-button>
         </el-radio-group>
     </div>

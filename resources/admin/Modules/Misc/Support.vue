@@ -41,9 +41,12 @@
                     <div class="content">
                         <p>FluentSMTP is powered by it's users like you. Feel free to contribute on Github. Thanks to
                             all of our contributors.</p>
-                        <a target="_blank" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
-                            <img title="Contributors" :src="appVars.images_url + 'contributors.png'"/>
-                        </a>
+                        <div style="text-align: center;">
+                            <a target="_blank" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
+                                <img title="Contributors" :src="appVars.images_url + 'contributors.png'"/>
+                            </a>
+                        </div>
+
                     </div>
                 </div>
             </el-col>

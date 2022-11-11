@@ -84,7 +84,7 @@
                         :provider="providers[connection.provider]"
                     />
                 </div>
-                <p v-if="providers[connection.provider].note" style="padding: 20px 0px;" v-html="providers[connection.provider].note"></p>
+                <p v-if="providers[connection.provider].note" style="padding: 5px 0px; font-size: 16px; color: #ff5722;" v-html="providers[connection.provider].note"></p>
                 <el-button v-loading="saving" @click="saveConnectionSettings()" type="success">{{$t('Save Connection Settings')}}</el-button>
             </template>
             <div v-else>
