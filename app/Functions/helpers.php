@@ -100,7 +100,7 @@ if (!function_exists('fluentMailGetProvider')) {
 
         $misc = $manager->getSettings('misc');
 
-        if (!empty($misc['simulate_emails']) && $misc['simulate_emails'] == 'yes') {
+        if ((!empty($misc['simulate_emails']) && $misc['simulate_emails'] == 'yes') || (defined('FLUENTMAIL_SIMULATE_EMAILS') && FLUENTMAIL_SIMULATE_EMAILS)) {
             $providers[$fromEmail] = new FluentMail\App\Services\Mailer\Providers\Simulator\Handler();
             return $providers[$fromEmail];
         }
