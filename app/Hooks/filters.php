@@ -1,7 +1,7 @@
 <?php
 
 
-add_filter('fluentcrm_quick_links', function ($links) {
+add_filter('fluent_crm/quick_links', function ($links) {
     $links[] = [
         'title' => __('SMTP/Mail Settings', 'fluent-smtp'),
         'url'   => admin_url('options-general.php?page=fluent-mail#/')
