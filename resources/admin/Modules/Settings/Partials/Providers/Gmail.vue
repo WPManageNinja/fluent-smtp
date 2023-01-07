@@ -4,7 +4,8 @@
             Google API version has been upgraded. Please <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">read the doc and upgrade your API connection</a>.
         </div>
         <h3>Gmail/Google Workspace API Settings</h3>
-        <p>Please <a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">check the documentation first</a> or <b><a target="_blank" rel="nofollow" href="https://www.youtube.com/watch?v=_d78bscNaX8">Watch the video tutorial</a></b> to create API keys at Google</p>
+        <p>Please <a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">check the documentation</a> to create API keys on the Google Cloud Platform.</p>
+        
         <el-radio-group size="mini" v-model="connection.key_store">
             <el-radio-button value="db" label="db">Store Application Keys in DB</el-radio-button>
             <el-radio-button value="wp_config" label="wp_config">Application Keys in Config File</el-radio-button>
@@ -54,6 +55,7 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
         </div>
         <el-form-item label="Authorized Redirect URI">
             <el-input :readonly="true" v-model="AuthorizedRedirectURI" />
+            <p>*** It is very important to put <b>https://fluentsmtp.com/gapi/</b> in the <b>Authorized Redirect URIs</b> option in the Google Cloud Project.</p>
         </el-form-item>
 
         <div v-if="!connection.access_token">
@@ -90,7 +92,7 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
     import Error from '@/Pieces/Error';
 
     export default {
-        name: 'Gamil',
+        name: 'Gmail',
         props: ['connection', 'errors'],
         components: {
             InputPassword,
