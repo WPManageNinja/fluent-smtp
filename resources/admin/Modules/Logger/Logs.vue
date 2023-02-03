@@ -50,7 +50,7 @@
                     <el-table-column type="selection" width="55"/>
                     <el-table-column :label="$t('Subject')">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.subject }}</span>
+                            <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
                             <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
                                   style="color: #ff0000;"> - Simulated</span>
                         </template>
