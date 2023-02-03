@@ -38,7 +38,7 @@ class AliasFacade {
     }
 
     /**
-     * @return \Viocon\Container $instance
+     * @return Container $instance
      */
     public static function getVioconInstance()
     {
