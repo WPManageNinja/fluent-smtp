@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.5
 Tested up to: 6.1
-Stable tag: 2.2.2
+Stable tag: 2.2.3
 Requires PHP: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -281,6 +281,13 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.2.3 (Date: Feb 04, 2023) =
+* Email preview is now sanitized
+* you can now define `FLUENTMAIL_SIMULATE_EMAILS` to simulate emails programtically
+* Fixed outlook API connection issues
+* Fixed inline documentation links
+* UX improvements
 
 = 2.2.2 (Date: Nov 11, 2022) =
 * Fix vendor Conflict for Google/Gmail Connection

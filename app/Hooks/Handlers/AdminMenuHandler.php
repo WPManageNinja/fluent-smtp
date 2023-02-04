@@ -156,7 +156,8 @@ class AdminMenuHandler
             'disable_installation'   => $disable_recommendation,
             'plugin_url'             => 'https://fluentsmtp.com/?utm_source=wp&utm_medium=install&utm_campaign=dashboard',
             'trans'                  => $this->getTrans(),
-            'recommended'            => $recommendedSettings
+            'recommended'            => $recommendedSettings,
+            'is_disabled_defined'    => defined('FLUENTMAIL_SIMULATE_EMAILS') && FLUENTMAIL_SIMULATE_EMAILS
         ]);
 
         do_action('fluent_mail_loading_app');

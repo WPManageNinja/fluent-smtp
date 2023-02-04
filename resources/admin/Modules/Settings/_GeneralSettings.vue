@@ -84,6 +84,7 @@
                     false-label="no"
                 >{{$t('Email_Simulation_Label')}}</el-checkbox>
                 <p style="color: red;" v-if="settings.misc.simulate_emails == 'yes'">{{$t('Email_Simulation_Yes')}}</p>
+                <p v-if="appVars.is_disabled_defined" style="color: red;">Emails are being simulated due to the definition of <b>FLUENTMAIL_SIMULATE_EMAILS</b> in your PHP code.</p>
             </el-form-item>
 
             <el-button
