@@ -237,7 +237,7 @@ class AdminMenuHandler
 
         $misc = $this->app->make(Manager::class)->getConfig('misc');
 
-        if (!empty($misc['simulate_emails']) && $misc['simulate_emails'] == 'yes') {
+        if ((!empty($misc['simulate_emails']) && $misc['simulate_emails'] == 'yes') || (defined('FLUENTMAIL_SIMULATE_EMAILS') && FLUENTMAIL_SIMULATE_EMAILS)) {
             $args = [
                 'parent' => 'top-secondary',
                 'id'     => 'fluentsmtp_simulated',
