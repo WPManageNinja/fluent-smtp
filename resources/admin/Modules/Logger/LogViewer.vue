@@ -105,10 +105,11 @@
                 <el-collapse v-model="activeName" style="margin-top:10px;">
                     <el-collapse-item name="email_body">
                         <template slot="title">
-                            <strong style="color:#606266">{{$t('Email Body')}}</strong>
+                            <strong style="color:#606266">{{$t('Email Body')}} (sanitized)</strong>
                         </template>
                         <hr class="log-border">
-                        <EmailbodyContainer :content="log.body" />
+                        <EmailbodyContainer :content="sanitize(log.body)" />
+                        <hr />
                     </el-collapse-item>
 
                     <el-collapse-item name="attachments">
@@ -259,6 +260,9 @@ export default {
             }).always(() => {
                 this.retrying = false;
             });
+        },
+        sanitize(html) {
+            return window.DOMPurify.sanitize(html);
         }
     },
     computed: {

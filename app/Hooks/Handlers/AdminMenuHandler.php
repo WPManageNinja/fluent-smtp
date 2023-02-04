@@ -118,7 +118,7 @@ class AdminMenuHandler
 
         wp_enqueue_script('fluentmail-chartjs', fluentMailMix('libs/chartjs/Chart.min.js'), [], FLUENTMAIL_PLUGIN_VERSION);
         wp_enqueue_script('fluentmail-vue-chartjs', fluentMailMix('libs/chartjs/vue-chartjs.min.js'), [], FLUENTMAIL_PLUGIN_VERSION);
-
+        wp_enqueue_script('dompurify', fluentMailMix('libs/purify/purify.min.js'), [], '2.4.3');
 
         wp_enqueue_style(
             'fluent_mail_admin_app', fluentMailMix('admin/css/fluent-mail-admin.css'), [], FLUENTMAIL_PLUGIN_VERSION
