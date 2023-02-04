@@ -98,7 +98,7 @@ return [
                 'api_key'         => '',
                 'key_store'       => 'db'
             ],
-            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-sendgrid-driver-in-fluent-smtp/" target="_blank" rel="noopener">Read the documentation</a> for how to configure sendgrid with FluentSMTP.'
+            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-sendgrid-driver-in-fluent-smtp/" target="_blank" rel="noopener">Read the documentation</a> for how to configure SendGrid with FluentSMTP.'
         ],
         'sendinblue'  => [
             'key'      => 'sendinblue',
@@ -172,7 +172,7 @@ return [
                 'mail_type'       => 'transactional',
                 'key_store'       => 'db'
             ],
-            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-elastic-mail-driver-in-fluent-smtp/">Read the documentation</a> for how to configure sendgrid with FluentSMTP.'
+            'note'     => '<a href="https://fluentsmtp.com/docs/configure-elastic-email-in-fluent-smtp/" target="_blank" rel="noopener">Read the documentation</a> for how to configure Elastic Email with FluentSMTP.'
         ],
         'gmail'       => [
             'key'      => 'gmail',
