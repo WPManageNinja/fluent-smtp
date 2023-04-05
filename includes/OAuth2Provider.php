@@ -100,7 +100,7 @@ class OAuth2Provider
      */
     protected function buildQueryString(array $params)
     {
-        return http_build_query($params, null, '&', \PHP_QUERY_RFC3986);
+        return http_build_query($params, '', '&', \PHP_QUERY_RFC3986);
     }
 
     /**
