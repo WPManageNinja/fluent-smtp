@@ -17,6 +17,8 @@
                     v-if="selectedLogs.length"
                 />
                 <div style="float:left;margin-top:6px;">{{ $t('Email Logs') }}</div>
+                <div style="float:right;margin-left: 6px;"><el-button @click="fetch" type="success" size="small" ><i class="el-icon-refresh"></i></el-button></div>
+
                 <LogFilter
                     :filter_query="filter_query"
                     @on-filter="fetch()"
