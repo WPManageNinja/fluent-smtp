@@ -11,50 +11,31 @@
                 </div>
             </div>
             <div class="header">
-                <LogBulkAction
-                    @on-bulk-action="handleBulkAction"
-                    :selected="selectedLogs"
-                    v-if="selectedLogs.length"
-                />
+                <LogBulkAction @on-bulk-action="handleBulkAction" :selected="selectedLogs" v-if="selectedLogs.length" />
                 <div style="float:left;margin-top:6px;">{{ $t('Email Logs') }}</div>
-                <div style="float:right;margin-left: 6px;"><el-button @click="fetch" type="success" size="small" ><i class="el-icon-refresh"></i></el-button></div>
+                <div style="float:right;margin-left: 6px;"><el-button @click="fetch" type="success" size="small"><i
+                            class="el-icon-refresh"></i></el-button></div>
 
-                <LogFilter
-                    :filter_query="filter_query"
-                    @on-filter="fetch()"
-                    @reset-page="pagination.current_page=1"
-                />
+                <LogFilter :filter_query="filter_query" @on-filter="fetch()" @reset-page="pagination.current_page = 1" />
 
                 <div style="float:right;">
-                    <el-input
-                        clearable
-                        size="small"
-                        v-model="filter_query.search"
-                        @clear="filter_query.search=''"
-                        @keyup.enter.native="fetch"
-                        :placeholder="$t('Type & press enter...')"
-                    >
-                        <el-button slot="append" icon="el-icon-search" @click="fetch"/>
+                    <el-input clearable size="small" v-model="filter_query.search" @clear="filter_query.search = ''"
+                        @keyup.enter.native="fetch" :placeholder="$t('Type & press enter...')">
+                        <el-button slot="append" icon="el-icon-search" @click="fetch" />
                     </el-input>
                 </div>
 
             </div>
 
             <div v-if="!loading" class="content">
-                <el-table
-                    stripe
-                    :data="logs"
-                    v-loading="loading"
-                    style="width:100%"
-                    :row-class-name="tableRowClassName"
-                    @selection-change="handleSelectionChange"
-                >
-                    <el-table-column type="selection" width="55"/>
+                <el-table stripe :data="logs" v-loading="loading" style="width:100%" :row-class-name="tableRowClassName"
+                    @selection-change="handleSelectionChange">
+                    <el-table-column type="selection" width="55" />
                     <el-table-column :label="$t('Subject')">
                         <template slot-scope="scope">
                             <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
-                            <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
-                                  style="color: #ff0000;"> - Simulated</span>
+                            <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'" style="color: #ff0000;">
+                                - Simulated</span>
                         </template>
                     </el-table-column>
 
@@ -78,40 +59,20 @@
 
                     <el-table-column :label="$t('Actions')" width="190px" align="right">
                         <template slot-scope="scope">
-                            <el-button
-                                size="mini"
-                                type="success"
-                                icon="el-icon-refresh"
-                                @click="handleRetry(scope.row, 'retry')"
-                                :plain="true"
-                                v-if="scope.row.status == 'failed'"
-                            >{{ $t('Retry') }}
+                            <el-button size="mini" type="success" icon="el-icon-refresh"
+                                @click="handleRetry(scope.row, 'retry')" :plain="true"
+                                v-if="scope.row.status == 'failed'">{{ $t('Retry') }}
                             </el-button>
-                            <el-button
-                                size="mini"
-                                type="success"
-                                icon="el-icon-refresh-right"
-                                @click="handleRetry(scope.row, 'resend')"
-                                v-if="scope.row.status == 'sent'"
-                            >
+                            <el-button size="mini" type="success" icon="el-icon-refresh-right"
+                                @click="handleRetry(scope.row, 'resend')" v-if="scope.row.status == 'sent'">
                                 {{ $t('Resend') }}
                                 <span v-if="scope.row.resent_count > 0">({{ scope.row.resent_count }})</span>
                             </el-button>
 
-                            <el-button
-                                size="mini"
-                                type="primary"
-                                icon="el-icon-view"
-                                @click="handleView(scope.row)"
-                            />
+                            <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.row)" />
 
                             <confirm @yes="handleDelete(scope.row.id)">
-                                <el-button
-                                    size="mini"
-                                    type="danger"
-                                    icon="el-icon-delete"
-                                    slot="reference"
-                                />
+                                <el-button size="mini" type="danger" icon="el-icon-delete" slot="reference" />
                             </confirm>
                         </template>
                     </el-table-column>
@@ -120,23 +81,43 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <div v-if="logs.length" style="margin-top:20px;">
-                            <confirm placement="right" message="Are you sure, you want to delete all the logs?"
-                                     @yes="handleDelete(['all'])">
-                                <el-button slot="reference" size="mini" type="info">Delete All Logs</el-button>
-                            </confirm>
+                            <el-row :gutter="20">
+                                <el-col :span="4">
+                                    <confirm placement="right" message="Are you sure, you want to delete all the logs?"
+                                        @yes="handleDelete(['all'])">
+                                        <el-button slot="reference" size="small" type="danger">Delete All Logs</el-button>
+                                    </confirm>
+                                </el-col>
+                                <el-col :span="10">
+                                    <el-row :gutter="10">
+                                        <el-col :span="10">
+                                            <el-select clearable v-model="selectedExportOptions" size="small">
+                                                <el-option v-for="option in exportOptions" :key="option.value"
+                                                    :value="option.value" :label="option.label" />
+                                            </el-select>
+                                        </el-col>
+
+                                        <el-col :span="2">
+                                            <el-button plain size="small" type="primary" :disabled="!selectedExportOptions"
+                                                @click="exportLogs">{{ $t('Export logs') }}</el-button>
+                                        </el-col>
+                                    </el-row>
+                                </el-col>
+                            </el-row>
+
                         </div>
                         <span v-else>&nbsp;</span>
                     </el-col>
                     <el-col :span="12">
                         <div style="margin-top:20px;text-align:right;">
-                            <pagination :pagination="pagination" @fetch="pageChanged"/>
+                            <pagination :pagination="pagination" @fetch="pageChanged" />
                         </div>
                     </el-col>
                 </el-row>
             </div>
             <el-skeleton :animated="true" v-else class="content" :rows="15"></el-skeleton>
 
-            <LogViewer :logViewerProps="logViewerProps"/>
+            <LogViewer :logViewerProps="logViewerProps" />
         </div>
     </div>
 </template>
@@ -181,11 +162,26 @@ export default {
             },
             selectedLogs: [],
             form: null,
-            logAlertInfo: null
+            logAlertInfo: null,
+            selectedExportOptions: 'txt',
+            exportOptions: [
+                {
+                    label: 'JSON',
+                    value: 'json'
+                },
+                {
+                    label: 'CSV',
+                    value: 'csv'
+                },
+                {
+                    label: 'Text',
+                    value: 'txt'
+                }
+            ]
         };
     },
     methods: {
-        tableRowClassName({row}) {
+        tableRowClassName({ row }) {
             return 'row_type_' + row.status;
         },
         pageChanged() {
@@ -201,7 +197,7 @@ export default {
                 search: this.filter_query.search
             };
 
-            this.$router.replace({query: data});
+            this.$router.replace({ query: data });
 
             this.$get('logs', data).then(res => {
                 this.logs = this.formatLogs(res.data);
@@ -253,7 +249,7 @@ export default {
                 return '';
             }
 
-            if(typeof addresses == 'string') {
+            if (typeof addresses == 'string') {
                 return addresses;
             }
 
@@ -283,7 +279,7 @@ export default {
             this.query = query;
             this.fetch();
         },
-        handleBulkAction({action}) {
+        handleBulkAction({ action }) {
             if (action === 'deleteall') {
                 return this.handleDelete('all');
             } else if (action === 'deleteselected') {
@@ -343,7 +339,7 @@ export default {
         },
         handleDelete(id) {
             this.deleting = true;
-            this.$post('logs/delete', {id: id}).then(res => {
+            this.$post('logs/delete', { id: id }).then(res => {
                 this.fetch();
                 this.$notify.success({
                     offset: 19,
@@ -419,8 +415,113 @@ export default {
                         message: error.responseJSON.data.message
                     });
                 }).always(() => {
-                this.loading = false;
+                    this.loading = false;
+                });
+        },
+
+        convertToCSV(objArray = this.logs) {
+            // Get the headers
+            const headers = Object.keys(objArray[0]).join(',') + '\n';
+
+            // Process each row
+            const rows = objArray.map((row) => {
+                // Create an array of values
+                const values = [];
+
+                // Process each property in the row
+                Object.keys(row).forEach((key) => {
+                    let value = row[key];
+
+                    // If the value is an object or array, convert to JSON string
+                    if (typeof value === 'object' || Array.isArray(value)) {
+                        value = JSON.stringify(value);
+                    }
+
+                    // Wrap the value in double quotes
+                    value = `"${value}"`;
+
+                    // Add the value to the array
+                    values.push(value);
+                });
+
+                // Join the values with commas and return the row as a string
+                return values.join(',') + '\n';
             });
+
+            // Join the headers and rows and return as CSV
+            return headers + rows.join('');
+
+        },
+
+        exportToCSV() {
+            const csv = this.convertToCSV();
+            const filename = 'fluent-smpt-log-' + Date.now() + '.csv';
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
+
+        exportToJSON(objArray = this.logs) {
+            const json = JSON.stringify(objArray, null, 4);
+            const filename = 'fluent-smpt-log-' + Date.now() + '.json';
+            const blob = new Blob([json], { type: 'text/json;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
+
+        exportToTxt(objArray = this.logs) {
+            const txt = objArray.map(log => {
+                return JSON.stringify(log, null, 4);
+            }).join('\n\n');
+
+            const filename = 'fluent-smpt-log-' + Date.now() + '.txt';
+            const blob = new Blob([txt], { type: 'text/plain;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        },
+        exportLogs() {
+            switch (this.selectedExportOptions) {
+                case 'csv':
+                    this.exportToCSV();
+                    break;
+                case 'json':
+                    this.exportToJSON();
+                    break;
+                case 'txt':
+                    this.exportToTxt();
+                    break;
+                default:
+                    this.$notify.error({
+                        offset: 19,
+                        title: 'Oops!!',
+                        message: 'Please select a valid export option'
+                    });
+                    break;
+            }
         }
     },
     computed: {
