@@ -419,109 +419,14 @@ export default {
                 });
         },
 
-        convertToCSV(objArray = this.logs) {
-            // Get the headers
-            const headers = Object.keys(objArray[0]).join(',') + '\n';
-
-            // Process each row
-            const rows = objArray.map((row) => {
-                // Create an array of values
-                const values = [];
-
-                // Process each property in the row
-                Object.keys(row).forEach((key) => {
-                    let value = row[key];
-
-                    // If the value is an object or array, convert to JSON string
-                    if (typeof value === 'object' || Array.isArray(value)) {
-                        value = JSON.stringify(value);
-                    }
-
-                    // Wrap the value in double quotes
-                    value = `"${value}"`;
-
-                    // Add the value to the array
-                    values.push(value);
-                });
-
-                // Join the values with commas and return the row as a string
-                return values.join(',') + '\n';
-            });
-
-            // Join the headers and rows and return as CSV
-            return headers + rows.join('');
-
-        },
-
-        exportToCSV() {
-            const csv = this.convertToCSV();
-            const filename = 'fluent-smpt-log-' + Date.now() + '.csv';
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-
-            link.setAttribute('href', url);
-            link.setAttribute('download', filename);
-            link.style.visibility = 'hidden';
-
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        },
-
-        exportToJSON(objArray = this.logs) {
-            const json = JSON.stringify(objArray, null, 4);
-            const filename = 'fluent-smpt-log-' + Date.now() + '.json';
-            const blob = new Blob([json], { type: 'text/json;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-
-            link.setAttribute('href', url);
-            link.setAttribute('download', filename);
-            link.style.visibility = 'hidden';
-
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        },
-
-        exportToTxt(objArray = this.logs) {
-            const txt = objArray.map(log => {
-                return JSON.stringify(log, null, 4);
-            }).join('\n\n');
-
-            const filename = 'fluent-smpt-log-' + Date.now() + '.txt';
-            const blob = new Blob([txt], { type: 'text/plain;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-
-            link.setAttribute('href', url);
-            link.setAttribute('download', filename);
-            link.style.visibility = 'hidden';
-
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        },
         exportLogs() {
-            switch (this.selectedExportOptions) {
-                case 'csv':
-                    this.exportToCSV();
-                    break;
-                case 'json':
-                    this.exportToJSON();
-                    break;
-                case 'txt':
-                    this.exportToTxt();
-                    break;
-                default:
-                    this.$notify.error({
-                        offset: 19,
-                        title: 'Oops!!',
-                        message: 'Please select a valid export option'
-                    });
-                    break;
-            }
+            const query = {
+                format: this.selectedExportOptions,
+                action: `${this.appVars.slug}-get-logs/export`,
+                nonce: this.appVars.nonce,
+            };
+            const queryString = new URLSearchParams(query).toString();
+            window.location.href = `${window.ajaxurl}?${queryString}`;
         }
     },
     computed: {
