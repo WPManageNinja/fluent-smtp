@@ -88,20 +88,18 @@
                                         <el-button slot="reference" size="small" type="danger">Delete All Logs</el-button>
                                     </confirm>
                                 </el-col>
-                                <el-col :span="10">
-                                    <el-row :gutter="10">
-                                        <el-col :span="10">
-                                            <el-select clearable v-model="selectedExportOptions" size="small">
-                                                <el-option v-for="option in exportOptions" :key="option.value"
-                                                    :value="option.value" :label="option.label" />
-                                            </el-select>
-                                        </el-col>
+                                <el-col :span="4">
+                                    <el-dropdown @command="exportLogs">
+                                        <el-button plain size="small" type="info" class="el-dropdown-link">
+                                            Export logs<i class="el-icon-arrow-down el-icon--right"></i>
+                                        </el-button>
+                                        <el-dropdown-menu slot="dropdown">
+                                            <el-dropdown-item command="txt">Export as Text(txt)</el-dropdown-item>
+                                            <el-dropdown-item command="json">Export as JSON data</el-dropdown-item>
+                                            <el-dropdown-item command="csv">Export as CSV</el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </el-dropdown>
 
-                                        <el-col :span="2">
-                                            <el-button plain size="small" type="primary" :disabled="!selectedExportOptions"
-                                                @click="exportLogs">{{ $t('Export logs') }}</el-button>
-                                        </el-col>
-                                    </el-row>
                                 </el-col>
                             </el-row>
 
@@ -162,22 +160,7 @@ export default {
             },
             selectedLogs: [],
             form: null,
-            logAlertInfo: null,
-            selectedExportOptions: 'txt',
-            exportOptions: [
-                {
-                    label: 'JSON',
-                    value: 'json'
-                },
-                {
-                    label: 'CSV',
-                    value: 'csv'
-                },
-                {
-                    label: 'Text',
-                    value: 'txt'
-                }
-            ]
+            logAlertInfo: null
         };
     },
     methods: {
@@ -418,10 +401,9 @@ export default {
                     this.loading = false;
                 });
         },
-
-        exportLogs() {
+        exportLogs(doc_type = 'txt') {
             const query = {
-                format: this.selectedExportOptions,
+                format: doc_type,
                 action: `${this.appVars.slug}-get-logs/export`,
                 nonce: this.appVars.nonce,
             };

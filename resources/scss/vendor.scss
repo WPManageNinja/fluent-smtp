@@ -33,6 +33,9 @@
 @import '~element-ui/lib/theme-chalk/switch.css';
 @import '~element-ui/lib/theme-chalk/skeleton.css';
 @import '~element-ui/lib/theme-chalk/skeleton-item.css';
+@import '~element-ui/lib/theme-chalk/dropdown.css';
+@import '~element-ui/lib/theme-chalk/dropdown-menu.css';
+@import '~element-ui/lib/theme-chalk/dropdown-item.css';
 
 .el {
   &-select {
@@ -181,3 +184,31 @@ ul.fc_list {
   }
 }
 
+.el-dropdown-menu {
+  margin-bottom: 0;
+  &__item {
+    line-height: 30px;
+    padding: 0 20px;
+    margin: 0;
+    font-size: 13px;
+    color: rgb(96, 98, 102);
+    cursor: pointer;
+    outline: 0;
+    text-align: left;
+    border-bottom: 1px solid rgb(245, 245, 245);
+  
+    &:last-child {
+        border-bottom: 0;
+        margin-bottom: 0;
+    }
+  }
+}
+
+.el-select-dropdown__item.selected {
+  color: #3f9eff !important;
+}
+
+.el-select-dropdown__item.hover,
+.el-select-dropdown__item:hover {
+  background-color: #F8F8F8;
+}
