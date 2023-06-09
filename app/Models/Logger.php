@@ -162,6 +162,7 @@ class Logger extends Model
             $result[$key]['id'] = (int)$result[$key]['id'];
             $result[$key]['retries'] = (int)$result[$key]['retries'];
             $result[$key]['from'] = htmlspecialchars($result[$key]['from']);
+            $result[$key]['subject'] = htmlspecialchars($result[$key]['subject']);
         }
 
         return $result;
