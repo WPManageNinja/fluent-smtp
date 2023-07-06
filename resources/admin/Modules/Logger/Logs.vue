@@ -223,25 +223,6 @@ export default {
         },
         formatLog(log) {
             log.to = this.formatAddresses(log.to);
-            if (log.headers && typeof log.headers == 'object') {
-                log.headers.cc = this.formatAddresses(log.headers.cc);
-                log.headers.bcc = this.formatAddresses(log.headers.bcc);
-                log.headers['reply-to'] = this.formatAddresses(log.headers['reply-to']);
-            } else {
-                log.headers = {};
-            }
-
-            const headers = {};
-            if (log.headers) {
-                jQuery.each(log.headers, (key, value) => {
-                    if (key && typeof key == 'string') {
-                        key = key.split('-').map(s => this.ucFirst(s)).join('-');
-                        headers[key] = value;
-                    }
-                });
-            }
-            log.headers = headers;
-
             return log;
         },
         formatAddresses(addresses) {

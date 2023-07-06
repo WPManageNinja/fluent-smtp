@@ -19,7 +19,7 @@
                             }">
                                 <span
                                     style="text-transform:capitalize;margin-right:10px;"
-                                >{{log.status}}</span>
+                                >{{ log.status }}</span>
 
                                 <el-button
                                     size="mini"
@@ -28,7 +28,7 @@
                                     @click="handleRetry(log, 'retry')"
                                     :plain="true"
                                     v-if="log.status == 'failed'"
-                                >{{$t('Retry')}}</el-button>
+                                >{{ $t('Retry') }}</el-button>
 
                                 <el-button
                                     size="mini"
@@ -37,24 +37,18 @@
                                     @click="handleRetry(log, 'resend')"
                                     v-if="log.status == 'sent'"
                                 >
-                                    {{$t('Resend')}}
+                                    {{ $t('Resend') }}
                                 </el-button>
                             </span>
                         </div>
                     </li>
                     <li>
-                        <div class="item_header">{{$t('Date-Time')}}:</div>
+                        <div class="item_header">{{ $t('Date-Time') }}:</div>
                         <div class="item_content">{{ log.created_at }}</div>
                     </li>
                     <li>
                         <div class="item_header">From:</div>
                         <div class="item_content"><span v-html="log.from"></span></div>
-                    </li>
-                    <li v-if="log.headers && log.headers['Reply-To']">
-                        <div class="item_header">Reply To:</div>
-                        <div class="item_content">
-                            <span v-html="log.headers['Reply-To']"></span>
-                        </div>
                     </li>
                     <li>
                         <div class="item_header">To:</div>
@@ -62,30 +56,16 @@
                             <span v-html="log.to"></span>
                         </div>
                     </li>
-                    <template v-if="log.headers">
-                        <li v-if="log.headers.Cc">
-                            <div class="item_header">CC:</div>
-                            <div class="item_content">
-                                <span v-html="log.headers.Cc"></span>
-                            </div>
-                        </li>
-                        <li v-if="log.headers.Bcc">
-                            <div class="item_header">BCC:</div>
-                            <div class="item_content">
-                                <span v-html="log.headers.Bcc"></span>
-                            </div>
-                        </li>
-                    </template>
                     <li v-if="log.resent_count > 0">
-                        <div class="item_header">{{$t('Resent Count')}}:</div>
+                        <div class="item_header">{{ $t('Resent Count') }}:</div>
                         <div class="item_content">
                             <span v-html="log.resent_count"></span>
                         </div>
                     </li>
                     <li>
-                        <div class="item_header">{{$t('Subject')}}:</div>
+                        <div class="item_header">{{ $t('Subject') }}:</div>
                         <div class="item_content">
-                            <span>{{log.subject}}</span>
+                            <span>{{ log.subject }}</span>
                         </div>
                     </li>
                     <li v-if="log.extra && log.extra.provider && settings.providers[log.extra.provider]">
@@ -105,17 +85,34 @@
                 <el-collapse v-model="activeName" style="margin-top:10px;">
                     <el-collapse-item name="email_body">
                         <template slot="title">
-                            <strong style="color:#606266">{{$t('Email Body')}} (sanitized)</strong>
+                            <strong style="color:#606266">{{ $t('Email Body') }} (sanitized)</strong>
                         </template>
                         <hr class="log-border">
-                        <EmailbodyContainer :content="sanitize(log.body)" />
-                        <hr />
+                        <EmailbodyContainer :content="sanitize(log.body)"/>
+                        <hr/>
                     </el-collapse-item>
+                    <p><strong>Server Response</strong></p>
+                    <el-row>
+                        <el-col>
+                            <pre>{{ log.response }}</pre>
+                        </el-col>
+                    </el-row>
+                    <hr/>
+                    <el-collapse-item name="tech_info">
+                        <template slot="title">
+                            <strong style="color:#606266">Email Headers</strong>
+                        </template>
+                        <div>
+                            <pre>{{ log.headers }}</pre>
+                            <pre v-if="log.extra.custom_headers">{{ log.extra.custom_headers }}</pre>
+                        </div>
+                    </el-collapse-item>
+
 
                     <el-collapse-item name="attachments">
                         <template slot="title">
                             <strong style="color:#606266">
-                                {{$t('Attachments')}} ({{getAttachments(log).length}})
+                                {{ $t('Attachments') }} ({{ getAttachments(log).length }})
                             </strong>
                         </template>
                         <hr class="log-border">
@@ -125,27 +122,6 @@
                             style="margin:5px 0 10px 0;"
                         >
                             ({{ key + 1 }}) {{ getAttachmentName(attachment) }}
-                        </div>
-                    </el-collapse-item>
-
-                    <el-collapse-item name="tech_info">
-                        <template slot="title">
-                            <strong style="color:#606266">Technical Information</strong>
-                        </template>
-                        <div>
-                            <hr><strong>Response
-                        </strong><hr>
-                            <el-row>
-                                <el-col><pre>{{log.response}}</pre></el-col>
-                            </el-row>
-                            <hr>
-
-                            <strong>Headers</strong><hr>
-                            <el-row>
-                                <el-col>
-                                    <pre v-html="{ ...log.headers, ...log.extra.custom_headers }" />
-                                </el-col>
-                            </el-row>
                         </div>
                     </el-collapse-item>
                 </el-collapse>
@@ -158,7 +134,7 @@
                             :disabled="!prev"
                             @click="navigate('prev')"
                         >
-                            <i class="el-icon-arrow-left"></i> {{$t('Prev')}}
+                            <i class="el-icon-arrow-left"></i> {{ $t('Prev') }}
                         </el-button>
                     </el-col>
                     <el-col :span="12">
@@ -168,7 +144,7 @@
                             :disabled="!next"
                             @click="navigate('next')"
                         >
-                            {{$t('Next')}} <i class="el-icon-arrow-right"></i>
+                            {{ $t('Next') }} <i class="el-icon-arrow-right"></i>
                         </el-button>
                     </el-col>
                 </el-row>
@@ -179,10 +155,11 @@
 
 <script>
 import EmailbodyContainer from './EmailbodyContainer';
+
 export default {
     name: 'LogViewer',
     props: ['logViewerProps'],
-    components: { EmailbodyContainer },
+    components: {EmailbodyContainer},
     data() {
         return {
             activeName: 'email_body',
@@ -270,14 +247,14 @@ export default {
             get() {
                 let log;
                 if (this.logViewerProps.log) {
-                    log = { ...this.logViewerProps.log };
-                    if(!log.headers) {
+                    log = {...this.logViewerProps.log};
+                    if (!log.headers) {
                         log.headers = {};
                     }
-                    if(!log.response) {
+                    if (!log.response) {
                         log.response = {};
                     }
-                    if(!log.extra) {
+                    if (!log.extra) {
                         log.extra = {};
                     }
                 }
