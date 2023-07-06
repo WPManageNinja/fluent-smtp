@@ -85,6 +85,7 @@ class Logger extends Model
 
             });
         }
+
         $result = $query->paginate();
         $result['data'] = $this->formatResult($result['data']);
 
@@ -158,10 +159,11 @@ class Logger extends Model
         $result = is_array($result) ? $result : func_get_args();
 
         foreach ($result as $key => $row) {
-            $result[$key] = array_map('maybe_unserialize', (array)$row);
+            $result[$key] = array_map('maybe_unserialize', (array) $row);
             $result[$key]['id'] = (int)$result[$key]['id'];
             $result[$key]['retries'] = (int)$result[$key]['retries'];
             $result[$key]['from'] = htmlspecialchars($result[$key]['from']);
+            $result[$key]['subject'] = esc_attr($result[$key]['subject']);
         }
 
         return $result;

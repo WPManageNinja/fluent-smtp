@@ -283,7 +283,7 @@ class BaseHandler
             $data = [
                 'to' => maybe_serialize($this->attributes['to']),
                 'from' => $this->attributes['from'],
-                'subject' => $this->attributes['subject'],
+                'subject' => sanitize_text_field($this->attributes['subject']),
                 'body' => $this->attributes['message'],
                 'attachments' => maybe_serialize($this->attributes['attachments']),
                 'status'   => $status ? 'sent' : 'failed',

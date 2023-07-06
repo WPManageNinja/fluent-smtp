@@ -85,7 +85,7 @@
                     <li>
                         <div class="item_header">{{$t('Subject')}}:</div>
                         <div class="item_content">
-                            <span v-html="log.subject"></span>
+                            <span>{{log.subject}}</span>
                         </div>
                     </li>
                     <li v-if="log.extra && log.extra.provider && settings.providers[log.extra.provider]">
