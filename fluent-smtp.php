@@ -1,9 +1,9 @@
-<?php defined('ABSPATH') or die;
+<?php
 /*
 Plugin Name:  FluentSMTP
 Plugin URI:   https://fluentsmtp.com
 Description:  The Ultimate SMTP Connection Plugin for WordPress.
-Version:      2.2.4
+Version:      2.2.5
 Author:       FluentSMTP & WPManageNinja Team
 Author URI:   https://fluentsmtp.com
 License:      GPL2
@@ -11,6 +11,8 @@ License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain:  fluent-smtp
 Domain Path:  /language
 */
+
+!defined('WPINC') && die;
 
 define('FLUENTMAIL_PLUGIN_FILE', __FILE__);
 

@@ -2,8 +2,8 @@
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.5
-Tested up to: 6.1
-Stable tag: 2.2.4
+Tested up to: 6.2
+Stable tag: 2.2.5
 Requires PHP: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -19,7 +19,7 @@ Our goal is to send your WordPress emails fast, secure, and reach the email inbo
 
 Fluent SMTP plugin fixes your email delivery issue by connecting WordPress Mail with your email service providers. These integrations are native, so it will send the emails superfast.
 
-Connect as many Email Service Providers as you want and FluentSMTP will route your transactional and marketing emails automatically. This is one of the unique features that FluentSMTP has to offer.
+Connect as many email Service Providers as you want and FluentSMTP will route your transactional and marketing emails automatically. This is one of the unique features that FluentSMTP has to offer.
 
 [youtube https://www.youtube.com/watch?v=Je0OPk1NnjI]
 
@@ -281,6 +281,12 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.2.5 (Date: Jul 06, 2023) =
+* (Security Fix) Email subject is now sanitized and escaped when preview
+* Showing Server Response by default on log
+* Fix http_build_query issue for latest version of PHP
+* Improved UI & UX for email preview
 
 = 2.2.4 (Date: Feb 04, 2023) =
 * Email preview is now sanitized
