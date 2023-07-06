@@ -1,4 +1,4 @@
-<?php
+<?php defined('ABSPATH') or die;
 /*
 Plugin Name:  FluentSMTP
 Plugin URI:   https://fluentsmtp.com
