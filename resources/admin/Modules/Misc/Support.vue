@@ -41,11 +41,20 @@
                     <div class="content">
                         <p>FluentSMTP is powered by it's users like you. Feel free to contribute on Github. Thanks to
                             all of our contributors.</p>
-                        <div style="text-align: center;">
-                            <a target="_blank" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
+
+                        <a target="_blank" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
+
+                            <ul v-if="contributors.length > 0" v-loading="contributorsLoading" style="list-style: none; display: flex; flex-direction: row; flex-wrap: wrap; ">
+                                <li v-for="contributor in contributors" :key="contributor.id" class="" >
+                                    <p :title="contributor.login">
+                                        <img :src="contributor.avatar_url" :alt="contributor.login" style="width: 60px; height: 60px; border-radius: 50%;"/>
+                                    </p>
+                                </li>
+                            </ul>
+                            <div v-else-if="!contributorsLoading && !contributors.length" style="text-align: center;">
                                 <img title="Contributors" :src="appVars.images_url + 'contributors.png'"/>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
 
                     </div>
                 </div>
@@ -152,8 +161,13 @@ export default {
             },
             installing: false,
             installed_info: false,
-            installed_message: ''
+            installed_message: '',
+            contributors: [],
+            contributorsLoading: false
         }
+    },
+    mounted() {
+        this.fetchContributors();
     },
     computed: {
         plugin() {
@@ -193,6 +207,19 @@ export default {
                 .always(() => {
                     this.installing = false;
                 });
+        },
+        async fetchContributors() {
+            this.contributorsLoading = true;
+            try {
+                await fetch('https://api.github.com/repos/WPManageNinja/fluent-smtp/contributors')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.contributors = data.slice(0, 20);
+                        this.contributorsLoading = false;
+                    })
+            } catch (e) {
+                this.contributorsLoading = false;
+            }
         }
     }
 }
