@@ -61,6 +61,9 @@ class SettingsController extends Controller
             $connection = $data['connection'];
 
             foreach ($connection as $index => $value) {
+                if ($index == 'password') {
+                    $connection['password'] = trim($value);
+                }
                 if ($index == 'sender_email') {
                     $connection['sender_email'] = sanitize_email($connection['sender_email']);
                 }
