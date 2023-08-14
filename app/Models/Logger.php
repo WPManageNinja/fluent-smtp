@@ -8,8 +8,8 @@ use FluentMail\Includes\Support\Arr;
 class Logger extends Model
 {
     const STATUS_PENDING = 'pending';
-    const STATUS_FAILED = 'failed';
-    const STATUS_SENT = 'sent';
+    const STATUS_FAILED  = 'failed';
+    const STATUS_SENT    = 'sent';
 
     protected $fillables = [
         'to',
@@ -39,10 +39,10 @@ class Logger extends Model
 
     public function get($data)
     {
-        $db = $this->getDb();
-        $page = isset($data['page']) ? (int)$data['page'] : 1;
+        $db      = $this->getDb();
+        $page    = isset($data['page']) ? (int)$data['page'] : 1;
         $perPage = isset($data['per_page']) ? (int)$data['per_page'] : 15;
-        $offset = ($page - 1) * $perPage;
+        $offset  = ($page - 1) * $perPage;
 
         $query = $db->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
             ->limit($perPage)
@@ -55,8 +55,8 @@ class Logger extends Model
 
         if (!empty($data['date_range']) && is_array($data['date_range']) && count($data['date_range']) == 2) {
             $dateRange = $data['date_range'];
-            $from = $dateRange[0] . ' 00:00:01';
-            $to = $dateRange[1] . ' 23:59:59';
+            $from      = $dateRange[0] . ' 00:00:01';
+            $to        = $dateRange[1] . ' 23:59:59';
             $query->whereBetween('created_at', $from, $to);
         }
 
@@ -159,10 +159,10 @@ class Logger extends Model
         $result = is_array($result) ? $result : func_get_args();
 
         foreach ($result as $key => $row) {
-            $result[$key] = array_map('maybe_unserialize', (array) $row);
-            $result[$key]['id'] = (int)$result[$key]['id'];
+            $result[$key]            = array_map('maybe_unserialize', (array) $row);
+            $result[$key]['id']      = (int)$result[$key]['id'];
             $result[$key]['retries'] = (int)$result[$key]['retries'];
-            $result[$key]['from'] = htmlspecialchars($result[$key]['from']);
+            $result[$key]['from']    = htmlspecialchars($result[$key]['from']);
             $result[$key]['subject'] = esc_attr($result[$key]['subject']);
         }
 
@@ -293,10 +293,10 @@ class Logger extends Model
     {
         $email = $this->find($id);
 
-        $email['to'] = maybe_unserialize($email['to']);
-        $email['headers'] = maybe_unserialize($email['headers']);
+        $email['to']          = maybe_unserialize($email['to']);
+        $email['headers']     = maybe_unserialize($email['headers']);
         $email['attachments'] = maybe_unserialize($email['attachments']);
-        $email['extra'] = maybe_unserialize($email['extra']);
+        $email['extra']       = maybe_unserialize($email['extra']);
 
         $headers = [];
 
@@ -362,11 +362,11 @@ class Logger extends Model
             }
 
             if ($this->updateLog($updateData, ['id' => $id])) {
-                $email = $this->find($id);
-                $email['to'] = maybe_unserialize($email['to']);
-                $email['headers'] = maybe_unserialize($email['headers']);
+                $email                = $this->find($id);
+                $email['to']          = maybe_unserialize($email['to']);
+                $email['headers']     = maybe_unserialize($email['headers']);
                 $email['attachments'] = maybe_unserialize($email['attachments']);
-                $email['extra'] = maybe_unserialize($email['extra']);
+                $email['extra']       = maybe_unserialize($email['extra']);
                 return $email;
             }
         } catch (\PHPMailer\PHPMailer\Exception $e) {

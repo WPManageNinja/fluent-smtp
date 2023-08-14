@@ -4,13 +4,13 @@ namespace FluentMail\App\Models;
 
 class Model
 {
-    protected $db = null;
+    protected $db  = null;
     protected $app = null;
 
     public function __construct()
     {
         $this->app = fluentMail();
-        $this->db = $GLOBALS['wpdb'];
+        $this->db  = $GLOBALS['wpdb'];
     }
 
     public function getTable()
