@@ -32,7 +32,7 @@
 
         <span class="small-help-text" style="display:block;margin-top:-10px">
             Follow this link to get an API Key:
-            <a target="_blank" href="https://account.sendinblue.com/advanced/api">Get v3 API Key.</a>
+            <a target="_blank" href="https://app.brevo.com/settings/keys/api">Get v3 API Key.</a>
         </span>
     </div>
 </template>
