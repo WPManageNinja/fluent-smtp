@@ -15,7 +15,7 @@ class Handler extends BaseHandler
     
     protected $emailSentCode = 201;
 
-    protected $url = 'https://api.sendinblue.com/v3/smtp/email';
+    protected $url = 'https://api.brevo.com/v3/smtp/email';
 
     protected $allowedAttachmentExts = [
         'xlsx', 'xls', 'ods', 'docx', 'docm', 'doc', 'csv', 'pdf', 'txt', 'gif',
