@@ -11,50 +11,31 @@
                 </div>
             </div>
             <div class="header">
-                <LogBulkAction
-                    @on-bulk-action="handleBulkAction"
-                    :selected="selectedLogs"
-                    v-if="selectedLogs.length"
-                />
+                <LogBulkAction @on-bulk-action="handleBulkAction" :selected="selectedLogs" v-if="selectedLogs.length" />
                 <div style="float:left;margin-top:6px;">{{ $t('Email Logs') }}</div>
-                <div style="float:right;margin-left: 6px;"><el-button @click="fetch" type="success" size="small" ><i class="el-icon-refresh"></i></el-button></div>
+                <div style="float:right;margin-left: 6px;"><el-button @click="fetch" type="success" size="small"><i
+                            class="el-icon-refresh"></i></el-button></div>
 
-                <LogFilter
-                    :filter_query="filter_query"
-                    @on-filter="fetch()"
-                    @reset-page="pagination.current_page=1"
-                />
+                <LogFilter :filter_query="filter_query" @on-filter="fetch()" @reset-page="pagination.current_page = 1" />
 
                 <div style="float:right;">
-                    <el-input
-                        clearable
-                        size="small"
-                        v-model="filter_query.search"
-                        @clear="filter_query.search=''"
-                        @keyup.enter.native="fetch"
-                        :placeholder="$t('Type & press enter...')"
-                    >
-                        <el-button slot="append" icon="el-icon-search" @click="fetch"/>
+                    <el-input clearable size="small" v-model="filter_query.search" @clear="filter_query.search = ''"
+                        @keyup.enter.native="fetch" :placeholder="$t('Type & press enter...')">
+                        <el-button slot="append" icon="el-icon-search" @click="fetch" />
                     </el-input>
                 </div>
 
             </div>
 
             <div v-if="!loading" class="content">
-                <el-table
-                    stripe
-                    :data="logs"
-                    v-loading="loading"
-                    style="width:100%"
-                    :row-class-name="tableRowClassName"
-                    @selection-change="handleSelectionChange"
-                >
-                    <el-table-column type="selection" width="55"/>
+                <el-table stripe :data="logs" v-loading="loading" style="width:100%" :row-class-name="tableRowClassName"
+                    @selection-change="handleSelectionChange">
+                    <el-table-column type="selection" width="55" />
                     <el-table-column :label="$t('Subject')">
                         <template slot-scope="scope">
                             <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
-                            <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
-                                  style="color: #ff0000;"> - Simulated</span>
+                            <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'" style="color: #ff0000;">
+                                - Simulated</span>
                         </template>
                     </el-table-column>
 
@@ -78,40 +59,20 @@
 
                     <el-table-column :label="$t('Actions')" width="190px" align="right">
                         <template slot-scope="scope">
-                            <el-button
-                                size="mini"
-                                type="success"
-                                icon="el-icon-refresh"
-                                @click="handleRetry(scope.row, 'retry')"
-                                :plain="true"
-                                v-if="scope.row.status == 'failed'"
-                            >{{ $t('Retry') }}
+                            <el-button size="mini" type="success" icon="el-icon-refresh"
+                                @click="handleRetry(scope.row, 'retry')" :plain="true"
+                                v-if="scope.row.status == 'failed'">{{ $t('Retry') }}
                             </el-button>
-                            <el-button
-                                size="mini"
-                                type="success"
-                                icon="el-icon-refresh-right"
-                                @click="handleRetry(scope.row, 'resend')"
-                                v-if="scope.row.status == 'sent'"
-                            >
+                            <el-button size="mini" type="success" icon="el-icon-refresh-right"
+                                @click="handleRetry(scope.row, 'resend')" v-if="scope.row.status == 'sent'">
                                 {{ $t('Resend') }}
                                 <span v-if="scope.row.resent_count > 0">({{ scope.row.resent_count }})</span>
                             </el-button>
 
-                            <el-button
-                                size="mini"
-                                type="primary"
-                                icon="el-icon-view"
-                                @click="handleView(scope.row)"
-                            />
+                            <el-button size="mini" type="primary" icon="el-icon-view" @click="handleView(scope.row)" />
 
                             <confirm @yes="handleDelete(scope.row.id)">
-                                <el-button
-                                    size="mini"
-                                    type="danger"
-                                    icon="el-icon-delete"
-                                    slot="reference"
-                                />
+                                <el-button size="mini" type="danger" icon="el-icon-delete" slot="reference" />
                             </confirm>
                         </template>
                     </el-table-column>
@@ -120,23 +81,41 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <div v-if="logs.length" style="margin-top:20px;">
-                            <confirm placement="right" message="Are you sure, you want to delete all the logs?"
-                                     @yes="handleDelete(['all'])">
-                                <el-button slot="reference" size="mini" type="info">Delete All Logs</el-button>
-                            </confirm>
+                            <el-row :gutter="20">
+                                <el-col :span="4">
+                                    <confirm placement="right" message="Are you sure, you want to delete all the logs?"
+                                        @yes="handleDelete(['all'])">
+                                        <el-button slot="reference" size="small" type="danger">Delete All Logs</el-button>
+                                    </confirm>
+                                </el-col>
+                                <el-col :span="4">
+                                    <el-dropdown @command="exportLogs">
+                                        <el-button plain size="small" type="info" class="el-dropdown-link">
+                                            Export logs<i class="el-icon-arrow-down el-icon--right"></i>
+                                        </el-button>
+                                        <el-dropdown-menu slot="dropdown">
+                                            <el-dropdown-item command="txt">Export as Text(txt)</el-dropdown-item>
+                                            <el-dropdown-item command="json">Export as JSON data</el-dropdown-item>
+                                            <el-dropdown-item command="csv">Export as CSV</el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </el-dropdown>
+
+                                </el-col>
+                            </el-row>
+
                         </div>
                         <span v-else>&nbsp;</span>
                     </el-col>
                     <el-col :span="12">
                         <div style="margin-top:20px;text-align:right;">
-                            <pagination :pagination="pagination" @fetch="pageChanged"/>
+                            <pagination :pagination="pagination" @fetch="pageChanged" />
                         </div>
                     </el-col>
                 </el-row>
             </div>
             <el-skeleton :animated="true" v-else class="content" :rows="15"></el-skeleton>
 
-            <LogViewer :logViewerProps="logViewerProps"/>
+            <LogViewer :logViewerProps="logViewerProps" />
         </div>
     </div>
 </template>
@@ -185,7 +164,7 @@ export default {
         };
     },
     methods: {
-        tableRowClassName({row}) {
+        tableRowClassName({ row }) {
             return 'row_type_' + row.status;
         },
         pageChanged() {
@@ -201,7 +180,7 @@ export default {
                 search: this.filter_query.search
             };
 
-            this.$router.replace({query: data});
+            this.$router.replace({ query: data });
 
             this.$get('logs', data).then(res => {
                 this.logs = this.formatLogs(res.data);
@@ -234,7 +213,7 @@ export default {
                 return '';
             }
 
-            if(typeof addresses == 'string') {
+            if (typeof addresses == 'string') {
                 return addresses;
             }
 
@@ -264,7 +243,7 @@ export default {
             this.query = query;
             this.fetch();
         },
-        handleBulkAction({action}) {
+        handleBulkAction({ action }) {
             if (action === 'deleteall') {
                 return this.handleDelete('all');
             } else if (action === 'deleteselected') {
@@ -324,7 +303,7 @@ export default {
         },
         handleDelete(id) {
             this.deleting = true;
-            this.$post('logs/delete', {id: id}).then(res => {
+            this.$post('logs/delete', { id: id }).then(res => {
                 this.fetch();
                 this.$notify.success({
                     offset: 19,
@@ -400,8 +379,17 @@ export default {
                         message: error.responseJSON.data.message
                     });
                 }).always(() => {
-                this.loading = false;
-            });
+                    this.loading = false;
+                });
+        },
+        exportLogs(doc_type = 'txt') {
+            const query = {
+                format: doc_type,
+                action: `${this.appVars.slug}-get-logs/export`,
+                nonce: this.appVars.nonce,
+            };
+            const queryString = new URLSearchParams(query).toString();
+            window.location.href = `${window.ajaxurl}?${queryString}`;
         }
     },
     computed: {

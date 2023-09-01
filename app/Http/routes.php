@@ -23,6 +23,7 @@ $app->get('/logs/show', 'LoggerController@show');
 $app->post('/logs/retry', 'LoggerController@retry');
 $app->post('/logs/retry-bulk', 'LoggerController@retryBulk');
 $app->post('/logs/delete', 'LoggerController@delete');
+$app->get('/logs/export', 'LoggerController@export');
 
 
 $app->post('install_plugin', 'SettingsController@installPlugin');

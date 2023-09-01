@@ -82,13 +82,21 @@ class Logger extends Model
                         $q->orWhere($column, 'LIKE', '%' . $search . '%');
                     }
                 }
-
             });
         }
 
         $result = $query->paginate();
         $result['data'] = $this->formatResult($result['data']);
 
+        return $result;
+    }
+
+    public function getAll()
+    {
+        $db = $this->getDb();
+        $query = $db->table(FLUENT_MAIL_DB_PREFIX . 'email_logs');
+        $result = $query->get();
+        $result = $this->formatResult($result);
         return $result;
     }
 
@@ -193,7 +201,6 @@ class Logger extends Model
 
             return $this->getDb()->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
                 ->insert($data);
-
         } catch (Exception $e) {
             return $e;
         }
@@ -397,7 +404,6 @@ class Logger extends Model
             $date = date('Y-m-d H:i:s', current_time('timestamp') - $days * DAY_IN_SECONDS);
             $query = $this->db->prepare("DELETE FROM {$this->table} WHERE `created_at` < %s", $date);
             return $this->db->query($query);
-
         } catch (Exception $e) {
             if (wp_get_environment_type() != 'production') {
                 error_log('Message: ' . $e->getMessage());
@@ -467,5 +473,4 @@ class Logger extends Model
 
         return $this->db->get_results($query, ARRAY_A);
     }
-
 }
