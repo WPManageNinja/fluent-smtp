@@ -94,6 +94,10 @@ class AdminMenuHandler
             $themeUrl = content_url('themes');
             $pluginUrl = plugins_url();
             foreach ($wp_scripts->queue as $script) {
+                if(empty($wp_scripts->registered[$script]) || empty($wp_scripts->registered[$script]->src)) {
+                    continue;
+                }
+
                 $src = $wp_scripts->registered[$script]->src;
                 $isMatched = strpos($src, $pluginUrl) !== false && !strpos($src, 'fluent-smtp') !== false;
                 if (!$isMatched) {
