@@ -32,7 +32,7 @@ if (!function_exists('fluentMailIsListedSenderEmail')) {
         static $settings;
 
         if (!$settings) {
-            $settings = get_option('fluentmail-settings');
+            $settings = fluentMailGetSettings();
         }
 
         if (!$settings) {
@@ -51,7 +51,7 @@ if (!function_exists('fluentMailDefaultConnection')) {
             return $defaultConnection;
         }
 
-        $settings = get_option('fluentmail-settings');
+        $settings = fluentMailGetSettings();
 
         if (!$settings) {
             return [];
@@ -61,10 +61,10 @@ if (!function_exists('fluentMailDefaultConnection')) {
             isset($settings['misc']['default_connection']) &&
             isset($settings['connections'][$settings['misc']['default_connection']])
         ) {
-            $default           = $settings['misc']['default_connection'];
+            $default = $settings['misc']['default_connection'];
             $defaultConnection = $settings['connections'][$default]['provider_settings'];
         } else if (count($settings['connections'])) {
-            $connection        = reset($settings['connections']);
+            $connection = reset($settings['connections']);
             $defaultConnection = $connection['provider_settings'];
         } else {
             $defaultConnection = [];
@@ -80,7 +80,7 @@ if (!function_exists('fluentMailgetConnection')) {
     {
         $factory = fluentMail(Factory::class);
         if (!($connection = $factory->get($email))) {
-            $connection   = fluentMailDefaultConnection();
+            $connection = fluentMailDefaultConnection();
         }
 
         return $connection;
@@ -110,8 +110,8 @@ if (!function_exists('fluentMailGetProvider')) {
         $connection = false;
 
         if (isset($mappings[$fromEmail])) {
-            $connectionId   = $mappings[$fromEmail];
-            $connections    = $manager->getSettings('connections');
+            $connectionId = $mappings[$fromEmail];
+            $connections = $manager->getSettings('connections');
             if (isset($connections[$connectionId])) {
                 $connection = $connections[$connectionId]['provider_settings'];
             }
@@ -125,8 +125,8 @@ if (!function_exists('fluentMailGetProvider')) {
         }
 
         if ($connection) {
-            $factory              = fluentMail(Factory::class);
-            $driver               = $factory->make($connection['provider']);
+            $factory = fluentMail(Factory::class);
+            $driver = $factory->make($connection['provider']);
             $driver->setSettings($connection);
             $providers[$fromEmail] = $driver;
         } else {
@@ -258,8 +258,8 @@ if (!function_exists('fluentMailSend')) {
         }
 
         // Headers.
-        $cc       = array();
-        $bcc      = array();
+        $cc = array();
+        $bcc = array();
         $reply_to = array();
 
         if (empty($headers)) {
@@ -452,7 +452,7 @@ if (!function_exists('fluentMailSend')) {
                     if (preg_match('/(.*)<(.+)>/', $address, $matches)) {
                         if (count($matches) == 3) {
                             $recipient_name = $matches[1];
-                            $address        = $matches[2];
+                            $address = $matches[2];
                         }
                     }
 
@@ -586,6 +586,19 @@ if (!function_exists('fluentMailSend')) {
         }
     }
 }
+
+if (!function_exists('fluentMailGetSettings')) {
+    function fluentMailGetSettings($defaults = [])
+    {
+        $settings = get_option('fluentmail-settings');
+        if (!$settings) {
+            return $defaults;
+        }
+        return $settings;
+    }
+}
+
+
 
 function fluentMailDb()
 {

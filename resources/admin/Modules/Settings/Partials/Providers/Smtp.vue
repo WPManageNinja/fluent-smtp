@@ -6,8 +6,8 @@
                     <label for="host">
                         SMTP Host
                     </label>
-                    <el-input id="host" v-model="connection.host" />
-                    <error :error="errors.get('host')" />
+                    <el-input placeholder="SMTP Host" id="host" v-model="connection.host"/>
+                    <error :error="errors.get('host')"/>
                 </el-form-item>
             </el-col>
             <el-col :md="12" :sm="24">
@@ -16,8 +16,8 @@
                         SMTP Port
                     </label>
 
-                    <el-input id="port" v-model="connection.port" />
-                    <error :error="errors.get('port')" />
+                    <el-input placeholder="SMTP Port" id="port" v-model="connection.port"/>
+                    <error :error="errors.get('port')"/>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -96,13 +96,14 @@
                             SMTP Username
                         </label>
 
-                        <InputPassword
-                            id="username"
-                            v-model="connection.username"
-                            :disabled="isDisabledUsername"
+                        <el-input type="text"
+                                  id="username"
+                                  placeholder="Your SMTP Username"
+                                  v-model="connection.username"
+                                  :disabled="isDisabledUsername"
                         />
 
-                        <error :error="errors.get('username')" />
+                        <error :error="errors.get('username')"/>
                     </el-form-item>
                 </el-col>
 
@@ -117,20 +118,21 @@
                             v-model="connection.password"
                             :disabled="isDisabledPassword"
                         />
-                        <error :error="errors.get('password')" />
+                        <error :error="errors.get('password')"/>
                     </el-form-item>
                 </el-col>
             </el-row>
 
             <div class="fss_condesnippet_wrapper" v-else-if="connection.key_store == 'wp_config'">
                 <el-form-item>
-                    <label>Simply copy the following snippet and replace the stars with the corresponding credential. Then simply paste to wp-config.php file of your WordPress installation</label>
+                    <label>Simply copy the following snippet and replace the stars with the corresponding credential.
+                        Then simply paste to wp-config.php file of your WordPress installation</label>
                     <div class="code_snippet">
                         <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_SMTP_USERNAME', '********************' );
 define( 'FLUENTMAIL_SMTP_PASSWORD', '********************' );</textarea>
                     </div>
-                    <error :error="errors.get('username')" />
-                    <error :error="errors.get('password')" />
+                    <error :error="errors.get('username')"/>
+                    <error :error="errors.get('password')"/>
                 </el-form-item>
             </div>
         </template>
@@ -138,41 +140,41 @@ define( 'FLUENTMAIL_SMTP_PASSWORD', '********************' );</textarea>
 </template>
 
 <script>
-    import InputPassword from '@/Pieces/InputPassword';
-    import Error from '@/Pieces/Error';
+import InputPassword from '@/Pieces/InputPassword';
+import Error from '@/Pieces/Error';
 
-    export default {
-        name: 'Smtp',
-        props: ['connection', 'errors'],
-        components: {
-            InputPassword,
-            Error
-        },
-        data() {
-            return {
-                app_ready: false
-            };
-        },
-        watch: {
-            'connection.key_store'(value) {
-                if (value === 'wp_config') {
-                    this.connection.password = '';
-                    this.connection.username = '';
-                }
-            }
-        },
-        computed: {
-            isDisabledUsername() {
-                return this.connection.auth === 'no';
-            },
-            isDisabledPassword() {
-                return this.connection.auth === 'no';
-            }
-        },
-        mounted() {
-            if (!this.connection.key_store) {
-                this.$set(this.connection, 'key_store', 'db');
+export default {
+    name: 'Smtp',
+    props: ['connection', 'errors'],
+    components: {
+        InputPassword,
+        Error
+    },
+    data() {
+        return {
+            app_ready: false
+        };
+    },
+    watch: {
+        'connection.key_store'(value) {
+            if (value === 'wp_config') {
+                this.connection.password = '';
+                this.connection.username = '';
             }
         }
-    };
+    },
+    computed: {
+        isDisabledUsername() {
+            return this.connection.auth === 'no';
+        },
+        isDisabledPassword() {
+            return this.connection.auth === 'no';
+        }
+    },
+    mounted() {
+        if (!this.connection.key_store) {
+            this.$set(this.connection, 'key_store', 'db');
+        }
+    }
+};
 </script>

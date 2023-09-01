@@ -26,7 +26,7 @@ class SchedulerHandler
 
     private function deleteOldEmails()
     {
-        $settings = get_option('fluentmail-settings', []);
+        $settings = fluentMailGetSettings();
         $logSaveDays = intval(Arr::get($settings, 'misc.log_saved_interval_days'));
         if ($logSaveDays) {
             (new \FluentMail\App\Models\Logger())->deleteLogsOlderThan($logSaveDays);
@@ -191,7 +191,7 @@ class SchedulerHandler
 
     public function renewGmailToken()
     {
-        $settings = get_option('fluentmail-settings');
+        $settings = fluentMailGetSettings();
 
         if (!$settings) {
             return;
