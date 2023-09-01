@@ -12,5 +12,17 @@ class Activator
         if (!wp_next_scheduled($emailReportHookName)) {
             wp_schedule_event(time(), 'daily', $emailReportHookName);
         }
+        
+        add_filter('pre_update_option_active_plugins', function ($plugins) {
+            $index = array_search('fluent-smtp/fluent-smtp.php', $plugins);
+            if ($index !== false) {
+                if ($index === 0) {
+                    return $plugins;
+                }
+                unset($plugins[$index]);
+                array_unshift($plugins, 'fluent-smtp/fluent-smtp.php');
+            }
+            return $plugins;
+        });
     }
 }

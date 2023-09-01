@@ -82,7 +82,7 @@
             }
         },
         created() {
-            jQuery('.update-nag,.notice, #wpbody-content > .updated, #wpbody-content > .error').remove();
+            jQuery('.update-nag,.notice:not(.fluentsmtp_urgent), #wpbody-content > .updated, #wpbody-content > .error').remove();
             this.logo = `<div class='logo'>${this.brandLogo}</div>`;
             this.setMenus();
         }

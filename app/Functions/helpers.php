@@ -644,6 +644,8 @@ if (!function_exists('fluentMailSetSettings')) {
     {
         $settings['use_encrypt'] = apply_filters('fluentsmtp_use_encrypt', 'yes');
 
+        $hasSecretField = false;
+
         if (!empty($settings['use_encrypt'])) {
             $providerKeyMaps = [
                 'smtp'        => 'password',
@@ -671,13 +673,25 @@ if (!function_exists('fluentMailSetSettings')) {
                         continue;
                     }
 
+                    $hasSecretField = true;
+
                     $settings['connections'][$key]['provider_settings'][$secretFieldKey] = fluentMailEncryptDecrypt($connection['provider_settings'][$secretFieldKey], 'e');
                 }
             }
-            $settings['test'] = fluentMailEncryptDecrypt('test', 'e');
         }
 
-        return update_option('fluentmail-settings', $settings);
+        if ($hasSecretField) {
+            $settings['test'] = fluentMailEncryptDecrypt('test', 'e');
+        } else {
+            $settings['test'] = '';
+            $settings['use_encrypt'] = '';
+        }
+
+        $result = update_option('fluentmail-settings', $settings);
+
+        fluentMailGetSettings([], false);
+
+        return $result;
     }
 }
 
@@ -742,4 +756,42 @@ function fluentMailDb()
 
     require_once(FLUENTMAIL_PLUGIN_PATH . 'app/Services/wpfluent/wpfluent.php');
     return FluentSmtpDb();
+}
+
+
+function fluentMailFuncCouldNotBeLoadedRecheckPluginsLoad()
+{
+    add_action('admin_notices', function () {
+        if (!current_user_can('manage_options')) {
+            return;
+        }
+        $details = new ReflectionFunction('wp_mail');
+        $hints = $details->getFileName() . ':' . $details->getStartLine();
+        ?>
+        <div class="notice notice-warning fluentsmtp_urgent is-dismissible">
+            <p>
+                <?php
+                echo sprintf(
+                    __('The <strong>FluentSMTP</strong> plugin depends on
+                                <a target="_blank" href="%1s">wp_mail</a> pluggable function and
+                                plugin is not able to extend it. Please check if another plugin is using this and disable it for <strong>FluentSMTP</strong> to work!',
+                        'fluent-smtp'), 'https://developer.wordpress.org/reference/functions/wp_mail/'
+                );
+                ?>
+            </p>
+            <p style="color: red;"><?php _e('Possible Conflict: ', 'fluent-smtp'); ?><?php echo $hints; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+        </div>
+        <?php
+    });
+
+    $activePlugins = get_option('active_plugins');
+    $index = array_search('fluent-smtp/fluent-smtp.php', $activePlugins);
+    if ($index !== false) {
+        if ($index === 0) {
+            return;
+        }
+        unset($activePlugins[$index]);
+        array_unshift($activePlugins, 'fluent-smtp/fluent-smtp.php');
+        update_option('active_plugins', $activePlugins, true);
+    }
 }

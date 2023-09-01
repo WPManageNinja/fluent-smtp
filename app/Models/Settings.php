@@ -14,7 +14,7 @@ class Settings
 
     public function get()
     {
-        return get_option($this->optionName, []);
+        return fluentMailGetSettings();
     }
 
     public function getSettings()

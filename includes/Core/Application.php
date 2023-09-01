@@ -27,6 +27,54 @@ final class Application extends Container
         $this->requireCommonFilesForRequest($this);
 
         load_plugin_textdomain('fluent-smtp', false, 'fluent-smtp/language/');
+
+        /*
+         * We are adding fluent-smtp/fluent-smtp.php at the top to load the wp_mail at the very first
+         * There has no other way to load a specific plugin at the first.
+         */
+        add_filter('pre_update_option_active_plugins', function ($plugins) {
+            $index = array_search('fluent-smtp/fluent-smtp.php', $plugins);
+            if ($index !== false) {
+                if ($index === 0) {
+                    return $plugins;
+                }
+                unset($plugins[$index]);
+                array_unshift($plugins, 'fluent-smtp/fluent-smtp.php');
+            }
+            return $plugins;
+        });
+
+        add_action('admin_notices', function () {
+            if (!current_user_can('manage_options')) {
+                return;
+            }
+
+            $settings = get_option('fluentmail-settings');
+
+            if (!$settings || empty($settings['use_encrypt']) || empty($settings['test'])) {
+                return;
+            }
+
+            $testData = fluentMailEncryptDecrypt($settings['test'], 'd');
+
+            if ($testData == 'test') {
+                return;
+            }
+
+            ?>
+            <div class="notice notice-warning fluentsmtp_urgent is-dismissible">
+                <p>
+                    <?php
+                    echo sprintf(
+                        __('FluentSMTP Plugin may not work properly. Looks like your Authentication unique keys and salts are changed.
+                                <a href="%1s"><b>Reconfigure SMTP Settings</b></a>',
+                            'fluent-smtp'), admin_url('options-general.php?page=fluent-mail#/connections')
+                    );
+                    ?>
+                </p>
+            </div>
+            <?php
+        });
     }
 
     private function setApplicationInstance()
@@ -35,7 +83,6 @@ final class Application extends Container
         $this->instance('app', $this);
         $this->instance(__CLASS__, $this);
     }
-
     private function registerPluginPathsAndUrls()
     {
         // Paths
