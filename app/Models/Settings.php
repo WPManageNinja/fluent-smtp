@@ -98,7 +98,7 @@ class Settings
             $settings['misc'] = $misc;
         }
 
-        update_option($this->optionName, $settings);
+        fluentMailSetSettings($settings);
 
         return $settings;
     }
@@ -110,7 +110,7 @@ class Settings
 
     public function saveGlobalSettings($data)
     {
-        return update_option($this->optionName, $data);
+        return fluentMailSetSettings($data);
     }
 
     public function delete($key)
@@ -142,7 +142,7 @@ class Settings
             Arr::set($settings, 'misc.fallback_connection', '');
         }
 
-        update_option($this->optionName, $settings);
+        fluentMailSetSettings($settings);
 
         return $settings;
     }

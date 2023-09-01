@@ -588,17 +588,151 @@ if (!function_exists('fluentMailSend')) {
 }
 
 if (!function_exists('fluentMailGetSettings')) {
-    function fluentMailGetSettings($defaults = [])
+    function fluentMailGetSettings($defaults = [], $cached = true)
     {
+        static $cachedSettings;
+        if ($cached && $cachedSettings) {
+            return $cachedSettings;
+        }
+
         $settings = get_option('fluentmail-settings');
+
         if (!$settings) {
             return $defaults;
         }
+
+        if (!empty($settings['use_encrypt'])) {
+            $providerKeyMaps = [
+                'smtp'        => 'password',
+                'ses'         => 'secret_key',
+                'mailgun'     => 'api_key',
+                'sendgrid'    => 'api_key',
+                'sendinblue'  => 'api_key',
+                'sparkpost'   => 'api_key',
+                'pepipost'    => 'api_key',
+                'postmark'    => 'api_key',
+                'elasticmail' => 'api_key',
+                'gmail'       => 'client_secret',
+                'outlook'     => 'client_secret',
+            ];
+            if (!empty($settings['connections']) && is_array($settings['connections'])) {
+                foreach ($settings['connections'] as $key => $connection) {
+                    $providerKey = $connection['provider_settings']['provider'];
+                    if (empty($providerKeyMaps[$providerKey])) {
+                        continue;
+                    }
+
+                    $secretFieldKey = $providerKeyMaps[$providerKey];
+
+                    if (empty($connection['provider_settings'][$secretFieldKey])) {
+                        continue;
+                    }
+
+                    $settings['connections'][$key]['provider_settings'][$secretFieldKey] = fluentMailEncryptDecrypt($connection['provider_settings'][$secretFieldKey], 'd');
+                }
+            }
+        }
+
+        $cachedSettings = $settings;
+
         return $settings;
     }
 }
 
+if (!function_exists('fluentMailSetSettings')) {
+    function fluentMailSetSettings($settings)
+    {
+        $settings['use_encrypt'] = apply_filters('fluentsmtp_use_encrypt', 'yes');
 
+        if (!empty($settings['use_encrypt'])) {
+            $providerKeyMaps = [
+                'smtp'        => 'password',
+                'ses'         => 'secret_key',
+                'mailgun'     => 'api_key',
+                'sendgrid'    => 'api_key',
+                'sendinblue'  => 'api_key',
+                'sparkpost'   => 'api_key',
+                'pepipost'    => 'api_key',
+                'postmark'    => 'api_key',
+                'elasticmail' => 'api_key',
+                'gmail'       => 'client_secret',
+                'outlook'     => 'client_secret',
+            ];
+            if (!empty($settings['connections']) && is_array($settings['connections'])) {
+                foreach ($settings['connections'] as $key => $connection) {
+                    $providerKey = $connection['provider_settings']['provider'];
+                    if (empty($providerKeyMaps[$providerKey])) {
+                        continue;
+                    }
+
+                    $secretFieldKey = $providerKeyMaps[$providerKey];
+
+                    if (empty($connection['provider_settings'][$secretFieldKey])) {
+                        continue;
+                    }
+
+                    $settings['connections'][$key]['provider_settings'][$secretFieldKey] = fluentMailEncryptDecrypt($connection['provider_settings'][$secretFieldKey], 'e');
+                }
+            }
+            $settings['test'] = fluentMailEncryptDecrypt('test', 'e');
+        }
+
+        return update_option('fluentmail-settings', $settings);
+    }
+}
+
+if (!function_exists('fluentMailEncryptDecrypt')) {
+    function fluentMailEncryptDecrypt($value, $type = 'e')
+    {
+        if (!$value) {
+            return $value;
+        }
+
+        if (!extension_loaded('openssl')) {
+            return $value;
+        }
+
+        if (defined('FLUENTMAIL_ENCRYPT_SALT')) {
+            $salt = FLUENTMAIL_ENCRYPT_SALT;
+        } else {
+            $salt = (defined('LOGGED_IN_SALT') && '' !== LOGGED_IN_SALT) ? LOGGED_IN_SALT : 'this-is-a-fallback-salt-but-not-secure';
+        }
+
+        if (defined('FLUENTMAIL_ENCRYPT_KEY')) {
+            $key = FLUENTMAIL_ENCRYPT_KEY;
+        } else {
+            $key = (defined('LOGGED_IN_KEY') && '' !== LOGGED_IN_KEY) ? LOGGED_IN_KEY : 'this-is-a-fallback-key-but-not-secure';
+        }
+
+        if ($type == 'e') {
+            $method = 'aes-256-ctr';
+            $ivlen = openssl_cipher_iv_length($method);
+            $iv = openssl_random_pseudo_bytes($ivlen);
+
+            $raw_value = openssl_encrypt($value . $salt, $method, $key, 0, $iv);
+            if (!$raw_value) {
+                return false;
+            }
+
+            return base64_encode($iv . $raw_value); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+        }
+
+        $raw_value = base64_decode($value, true); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+
+        $method = 'aes-256-ctr';
+        $ivlen = openssl_cipher_iv_length($method);
+        $iv = substr($raw_value, 0, $ivlen);
+
+        $raw_value = substr($raw_value, $ivlen);
+
+        $newValue = openssl_decrypt($raw_value, $method, $key, 0, $iv);
+        if (!$newValue || substr($newValue, -strlen($salt)) !== $salt) {
+            return false;
+        }
+
+        return substr($newValue, 0, -strlen($salt));
+    }
+}
 
 function fluentMailDb()
 {
