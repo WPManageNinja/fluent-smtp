@@ -20,7 +20,7 @@
   & .fluent-mail-body {
     margin-right: 20px;
 
-    & .header {
+    & .fss_header {
       display: block;
       width: auto;
       border-bottom: 1px solid #e3e8ee;
@@ -33,7 +33,7 @@
       color: #697386;
     }
 
-    & .content {
+    & .fss_content {
       padding: 20px;
       background-color: #fff;
     }
@@ -128,14 +128,14 @@ ul.fss_log_items li {
   }
 }
 
-.fluent-mail-app .dashboard .content .mailer-block {
+.fluent-mail-app .dashboard .fss_content .mailer-block {
   display: inline-block;
   width: 140px;
   margin: 0 5px;
   position: relative;
 }
 
-.fluent-mail-app .dashboard .content .fluent-mail-mailer-image {
+.fluent-mail-app .dashboard .fss_content .fluent-mail-mailer-image {
   background: #fff;
   text-align: center;
   cursor: auto;
@@ -152,11 +152,11 @@ ul.fss_log_items li {
   cursor: pointer;
 }
 
-.fluent-mail-app .dashboard .content .fluent-mail-mailer-image:hover {
+.fluent-mail-app .dashboard .fss_content .fluent-mail-mailer-image:hover {
   box-shadow: 0 0 5px 5px #ccc;
 }
 
-.fluent-mail-app .dashboard .content .fluent-mail-mailer-image img {
+.fluent-mail-app .dashboard .fss_content .fluent-mail-mailer-image img {
   max-width: 90%;
   max-height: 40px;
   display: block;
@@ -171,7 +171,7 @@ ul.fss_log_items li {
   transition: all 0.2s ease-in-out;
 }
 
-.fluent-mail-app .dashboard .content .email-stat {
+.fluent-mail-app .dashboard .fss_content .email-stat {
   padding: 20px;
   font-weight: 700;
   font-size: 15px;
@@ -180,7 +180,7 @@ ul.fss_log_items li {
   text-align: center;
 }
 
-.fluent-mail-app .dashboard .content .email-stat:hover {
+.fluent-mail-app .dashboard .fss_content .email-stat:hover {
   background: #ecf5ff;
   opacity: .7;
 }
@@ -322,7 +322,7 @@ ul.fss_dash_lists {
   }
 }
 
-span.header_action_right {
+span.fss_header_action_right {
   float: right;
   cursor: pointer;
 }
@@ -437,7 +437,7 @@ span.header_action_right {
   font-size: 12px;
   color: gray;
 }
-.fss_box_action .header {
+.fss_box_action .fss_header {
   cursor: pointer;
 }
 

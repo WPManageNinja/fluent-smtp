@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div class="header">
+        <div class="fss_header">
             Send Test Email
         </div>
-        <div class="content">
+        <div class="fss_content">
             <div class="test_form" v-if="!email_success">
                 <el-form ref="form" :model="form" label-position="left" label-width="120px">
 

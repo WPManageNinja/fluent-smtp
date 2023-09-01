@@ -51,6 +51,8 @@ class SettingsController extends Controller
     {
         $this->verify();
 
+        $passWordKeys = ['password', 'access_key', 'secret_key', 'api_key', 'client_id', 'client_secret', 'auth_token', 'access_token', 'refresh_token'];
+
         try {
             $data = $request->except(['action', 'nonce']);
 
@@ -61,12 +63,17 @@ class SettingsController extends Controller
             $connection = $data['connection'];
 
             foreach ($connection as $index => $value) {
-                if ($index == 'password') {
-                    $connection['password'] = trim($value);
-                }
                 if ($index == 'sender_email') {
                     $connection['sender_email'] = sanitize_email($connection['sender_email']);
                 }
+
+                if (in_array($index, $passWordKeys)) {
+                    if ($value) {
+                        $connection[$index] = trim($value);
+                    }
+                    continue;
+                }
+
                 if (is_string($value) && $value) {
                     $connection[$index] = sanitize_text_field($value);
                 }
@@ -489,13 +496,13 @@ class SettingsController extends Controller
         }
 
         $authUrl = add_query_arg([
-            'response_type' => 'code',
-            'access_type' => 'offline',
-            'client_id' => $clientId,
-            'redirect_uri' => apply_filters('fluentsmtp_gapi_callback', 'https://fluentsmtp.com/gapi/'),
-            'state' => admin_url('options-general.php?page=fluent-mail&gapi=1'),
-            'scope' => 'https://mail.google.com/',
-            'approval_prompt' => 'force',
+            'response_type'          => 'code',
+            'access_type'            => 'offline',
+            'client_id'              => $clientId,
+            'redirect_uri'           => apply_filters('fluentsmtp_gapi_callback', 'https://fluentsmtp.com/gapi/'),
+            'state'                  => admin_url('options-general.php?page=fluent-mail&gapi=1'),
+            'scope'                  => 'https://mail.google.com/',
+            'approval_prompt'        => 'force',
             'include_granted_scopes' => 'true'
         ], 'https://accounts.google.com/o/oauth2/auth');
 

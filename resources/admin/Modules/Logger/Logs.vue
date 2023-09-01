@@ -2,7 +2,7 @@
     <div class="logs">
         <div>
             <div v-if="!isLogsOn">
-                <div class="content">
+                <div class="fss_content">
                     <el-alert :closable="false" show-icon center>
                         Email Logging is currently turned off. Only Failed and resent emails will be shown here
                         <el-button type="text" @click="turnOnEmailLogging">{{ $t('Turn On') }}</el-button>
@@ -10,7 +10,7 @@
                     </el-alert>
                 </div>
             </div>
-            <div class="header">
+            <div class="fss_header">
                 <LogBulkAction
                     @on-bulk-action="handleBulkAction"
                     :selected="selectedLogs"
@@ -40,7 +40,7 @@
 
             </div>
 
-            <div v-if="!loading" class="content">
+            <div v-if="!loading" class="fss_content">
                 <el-table
                     stripe
                     :data="logs"
@@ -134,7 +134,7 @@
                     </el-col>
                 </el-row>
             </div>
-            <el-skeleton :animated="true" v-else class="content" :rows="15"></el-skeleton>
+            <el-skeleton :animated="true" v-else class="fss_content" :rows="15"></el-skeleton>
 
             <LogViewer :logViewerProps="logViewerProps"/>
         </div>

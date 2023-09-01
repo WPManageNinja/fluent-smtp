@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <el-skeleton :animated="true" v-else class="doc_body content" :rows="8"></el-skeleton>
+        <el-skeleton :animated="true" v-else class="doc_body fss_content" :rows="8"></el-skeleton>
 
     </div>
 </template>

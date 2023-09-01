@@ -1,9 +1,9 @@
 <template>
-    <div class="connections">
+    <div class="fluentmail_connections">
         <el-row :gutter="20">
             <el-col :md="14" :sm="24">
                 <div class="fss_content_box">
-                    <div class="header">
+                    <div class="fss_header">
                         <span style="float:left;">
                             {{$t('Active Email Connections')}}
                         </span>
@@ -14,7 +14,7 @@
                             <i class="el-icon-plus"></i> {{$t('Add Another Connection')}}
                         </span>
                     </div>
-                    <div class="content">
+                    <div class="fss_content">
                         <el-table stripe border :data="connections">
 
                             <el-table-column :label="$t('Provider')">
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div v-if="showing_connection" class="fss_content_box">
-                    <div class="header">
+                    <div class="fss_header">
                         <span style="float:left;">
                             {{$t('Connection Details')}}
                         </span>
@@ -65,25 +65,25 @@
                             {{$t('Close')}}
                         </span>
                     </div>
-                    <div class="content">
+                    <div class="fss_content">
                         <connection-details :connection_id="showing_connection" />
                     </div>
                 </div>
             </el-col>
             <el-col :md="10" :sm="24">
                 <div :class="{ fss_box_active: active_settings == 'general' }" style="margin-bottom: 0px;" class="fss_content_box fss_box_action">
-                    <div @click="active_settings = 'general'" class="header">
+                    <div @click="active_settings = 'general'" class="fss_header">
                         {{$t('General Settings')}}
                     </div>
-                    <div v-if="active_settings == 'general'" class="content">
+                    <div v-if="active_settings == 'general'" class="fss_content">
                         <general-settings />
                     </div>
                 </div>
                 <div :class="{ fss_box_active: active_settings == 'notification' }" class="fss_content_box fss_box_action">
-                    <div @click="active_settings = 'notification'" class="header">
+                    <div @click="active_settings = 'notification'" class="fss_header">
                         {{$t('Notification Settings')}}
                     </div>
-                    <div v-if="active_settings == 'notification'" class="content">
+                    <div v-if="active_settings == 'notification'" class="fss_content">
                         <notification-settings />
                     </div>
                 </div>

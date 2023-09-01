@@ -97,7 +97,7 @@ class Settings
             $misc['default_connection'] = $uniqueKey;
             $settings['misc'] = $misc;
         }
-
+        
         fluentMailSetSettings($settings);
 
         return $settings;

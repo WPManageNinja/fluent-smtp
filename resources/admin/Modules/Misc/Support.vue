@@ -3,8 +3,8 @@
         <el-row :gutter="20">
             <el-col :sm="24" :md="12">
                 <div class="fss_about">
-                    <div class="header">About</div>
-                    <div class="content">
+                    <div class="fss_header">About</div>
+                    <div class="fss_content">
                         <p>
                             <a :href="appVars.plugin_url" target="_blank" rel="noopener">FluentSMTP</a> is a free and
                             opensource WordPress Plugin. Our mission is to provide the ultimate
@@ -37,8 +37,8 @@
                     </div>
                 </div>
                 <div class="fss_about">
-                    <div class="header">Contributors</div>
-                    <div class="content">
+                    <div class="fss_header">Contributors</div>
+                    <div class="fss_content">
                         <p>FluentSMTP is powered by it's users like you. Feel free to contribute on Github. Thanks to
                             all of our contributors.</p>
 
@@ -62,8 +62,8 @@
             <el-col :sm="24" :md="12">
                 <div v-if="plugin || installed_info">
                     <div v-loading="installing" element-loading-text="Installing... Please wait" class="fss_about">
-                        <div class="header">Recommended Plugin</div>
-                        <div class="content">
+                        <div class="fss_header">Recommended Plugin</div>
+                        <div class="fss_content">
                             <div v-if="installed_info" class="install_success">
                                 <h3>{{ installed_message }}</h3>
                                 <a class="el-button el-button--success installed_dashboard_url"
@@ -91,8 +91,8 @@
                     </div>
                 </div>
                 <div class="fss_about">
-                    <div class="header">Community</div>
-                    <div class="content">
+                    <div class="fss_header">Community</div>
+                    <div class="fss_content">
                         <p>FluentSMTP is powered by community. We listen to our community users and build products that
                             add values to businesses and save time.</p>
                         <p>Join our communities and participate in great conversations.</p>

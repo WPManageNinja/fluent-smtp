@@ -1,6 +1,6 @@
 <template>
     <div class="dashboard">
-        <div v-if="is_new" class="content">
+        <div v-if="is_new" class="fss_content">
             <div class="fss_connection_intro">
                 <div class="fss_intro">
                     <h1>{{ $t('wizard_title') }}</h1>
@@ -27,7 +27,7 @@
         <div v-else>
             <el-row :gutter="20">
                 <el-col :sm="24" :md="16">
-                    <div class="header">
+                    <div class="fss_header">
                         {{$t('Sending Stats')}}
                         <span class="fss_to_right">
                             <el-date-picker
@@ -43,16 +43,16 @@
                             <el-button size="small" @click="filterReport" type="primary" plain>Apply</el-button>
                         </span>
                     </div>
-                    <div class="content">
+                    <div class="fss_content">
                         <emails-chart v-if="showing_chart" :date_range="date_range" />
                     </div>
                 </el-col>
                 <el-col :sm="24" :md="8">
                     <div class="fsm_card">
-                        <div class="header">
+                        <div class="fss_header">
                             {{$t('Quick Overview')}}
                         </div>
-                        <div class="content" v-if="!loading">
+                        <div class="fss_content" v-if="!loading">
                             <ul class="fss_dash_lists">
                                 <li v-if="settings_stat.log_enabled == 'yes'">
                                     {{$t('Total Email Sent (Logged):')}} <span>{{stats.sent}}</span>
@@ -80,16 +80,16 @@
                                 </li>
                             </ul>
                         </div>
-                        <el-skeleton v-else class="content" :rows="8"></el-skeleton>
+                        <el-skeleton v-else class="fss_content" :rows="8"></el-skeleton>
                     </div>
                     <div v-if="appVars.require_optin == 'yes' && stats.sent > 9" style="margin-top: 20px;" class="fsm_card">
-                        <div class="header">
+                        <div class="fss_header">
                             {{$t('Subscribe To Updates')}}
-                            <span class="header_action_right">
+                            <span class="fss_header_action_right">
                                 <subscribe-dismiss />
                             </span>
                         </div>
-                        <div class="content">
+                        <div class="fss_content">
                             <email-subscriber />
                         </div>
                     </div>
