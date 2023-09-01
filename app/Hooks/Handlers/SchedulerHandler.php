@@ -141,10 +141,10 @@ class SchedulerHandler
             'domain_name' => $this->getDomainName()
         ];
 
-        $emailBody = (string)fluentMail('view')->make('admin.digest_email', $data);
+        $emailBody    = (string)fluentMail('view')->make('admin.digest_email', $data);
         $emailSubject = $reportingDate . ' email sending stats for ' . $this->getDomainName();
 
-        $headers = array('Content-Type: text/html; charset=UTF-8');
+        $headers      = array('Content-Type: text/html; charset=UTF-8');
 
         update_option('_fluentmail_last_email_digest', date('Y-m-d H:i:s'));
 
@@ -155,7 +155,7 @@ class SchedulerHandler
     private function getDomainName()
     {
         $parts = parse_url(site_url());
-        $url = $parts['host'] . (isset($parts['path']) ? $parts['path'] : '');
+        $url   = $parts['host'] . (isset($parts['path']) ? $parts['path'] : '');
         return untrailingslashit($url);
     }
 
@@ -213,7 +213,7 @@ class SchedulerHandler
     public function callGmailApiForNewToken($settings)
     {
         if (Arr::get($settings, 'key_store') == 'wp_config') {
-            $settings['client_id'] = defined('FLUENTMAIL_GMAIL_CLIENT_ID') ? FLUENTMAIL_GMAIL_CLIENT_ID : '';
+            $settings['client_id']     = defined('FLUENTMAIL_GMAIL_CLIENT_ID') ? FLUENTMAIL_GMAIL_CLIENT_ID : '';
             $settings['client_secret'] = defined('FLUENTMAIL_GMAIL_CLIENT_SECRET') ? FLUENTMAIL_GMAIL_CLIENT_SECRET : '';
         }
 
@@ -258,10 +258,10 @@ class SchedulerHandler
 
         $senderEmail = $existingData['sender_email'];
 
-        $existingData['access_token'] = $tokens['access_token'];
+        $existingData['access_token']  = $tokens['access_token'];
         $existingData['refresh_token'] = $tokens['refresh_token'];
-        $existingData['expire_stamp'] = $tokens['expires_in'] + time();
-        $existingData['expires_in'] = $tokens['expires_in'];
+        $existingData['expire_stamp']  = $tokens['expires_in'] + time();
+        $existingData['expires_in']    = $tokens['expires_in'];
 
         (new Settings())->updateConnection($senderEmail, $existingData);
         fluentMailGetProvider($senderEmail, true); // we are clearing the static cache here

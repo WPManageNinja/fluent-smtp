@@ -24,10 +24,10 @@ class Settings
 
     public function store($inputs)
     {
-        $settings = $this->getSettings();   
-        $mappings = $this->getMappings($settings);
+        $settings    = $this->getSettings();
+        $mappings    = $this->getMappings($settings);
         $connections = $this->getConnections($settings);
-        $email = Arr::get($inputs, 'connection.sender_email');
+        $email       = Arr::get($inputs, 'connection.sender_email');
 
         $key = $inputs['connection_key'];
 
@@ -55,14 +55,14 @@ class Settings
         }
 
         $extraMappings[] = $email;
-        $extraMappings = array_unique($extraMappings);
-        $extraMappings = array_fill_keys($extraMappings, $uniqueKey);
+        $extraMappings   = array_unique($extraMappings);
+        $extraMappings   = array_fill_keys($extraMappings, $uniqueKey);
 
-        $mappings = array_merge($mappings, $extraMappings);
+        $mappings        = array_merge($mappings, $extraMappings);
 
-        $providers = fluentMail(Manager::class)->getConfig('providers');
+        $providers       = fluentMail(Manager::class)->getConfig('providers');
         
-        $title = $providers[$inputs['connection']['provider']]['title'];
+        $title           = $providers[$inputs['connection']['provider']]['title'];
 
         $connections[$uniqueKey] = [
             'title' => $title,
@@ -86,16 +86,16 @@ class Settings
 
         if(!$misc) {
             $misc = [
-                'log_emails' => 'yes',
+                'log_emails'              => 'yes',
                 'log_saved_interval_days' => '14',
-                'disable_fluentcrm_logs' => 'no',
-                'default_connection' => ''
+                'disable_fluentcrm_logs'   => 'no',
+                'default_connection'      => ''
             ];
         }
 
         if(empty($misc['default_connection']) || $misc['default_connection'] == $key) {
             $misc['default_connection'] = $uniqueKey;
-            $settings['misc'] = $misc;
+            $settings['misc']           = $misc;
         }
 
         update_option($this->optionName, $settings);
@@ -118,7 +118,7 @@ class Settings
         $settings = $this->getSettings();
 
 
-        $mappings = $settings['mappings'];
+        $mappings    = $settings['mappings'];
         $connections = $settings['connections'];
 
         unset($connections[$key]);
@@ -129,7 +129,7 @@ class Settings
             }
         }
 
-        $settings['mappings'] = $mappings;
+        $settings['mappings']    = $mappings;
         $settings['connections'] = $connections;
 
         if (Arr::get($settings, 'misc.default_connection') == $key) {
@@ -200,8 +200,8 @@ class Settings
 
     public function getConnection($email)
     {
-        $settings = $this->getSettings();
-        $mappings = $this->getMappings($settings);
+        $settings    = $this->getSettings();
+        $mappings    = $this->getMappings($settings);
         $connections = $this->getConnections($settings);
 
         if (isset($mappings[$email])) {
@@ -215,15 +215,15 @@ class Settings
 
     public function updateMiscSettings($misc)
     {
-        $settings = $this->get();
+        $settings         = $this->get();
         $settings['misc'] = $misc;
         $this->saveGlobalSettings($settings);
     }
 
     public function updateConnection($fromEmail, $connection)
     {
-        $key = $this->generateUniqueKey($fromEmail);
-        $settings = $this->getSettings();
+        $key                                                = $this->generateUniqueKey($fromEmail);
+        $settings                                           = $this->getSettings();
         $settings['connections'][$key]['provider_settings'] = $connection;
         $this->saveGlobalSettings($settings);
     }
@@ -231,9 +231,9 @@ class Settings
     public function notificationSettings()
     {
         $defaults = [
-            'enabled' => 'no',
+            'enabled'      => 'no',
             'notify_email' => '{site_admin}',
-            'notify_days' => ['Mon']
+            'notify_days'  => ['Mon']
         ];
 
         $settings = get_option('_fluent_smtp_notify_settings', []);
