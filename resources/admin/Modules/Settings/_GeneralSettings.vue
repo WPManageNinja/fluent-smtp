@@ -49,7 +49,6 @@
                         v-for="(connection, connectionId) in settings.connections"
                         :key="connectionId"
                         :value="connectionId"
-                        :disabled="settings.misc.fallback_connection == connectionId"
                         :label="connection.title +' - '+ connection.provider_settings.sender_email"
                     ></el-option>
                 </el-select>
@@ -121,6 +120,12 @@
         },
         methods: {
             saveMiscSettings() {
+
+                if(this.settings.misc.fallback_connection && this.settings.misc.default_connection && this.settings.misc.default_connection == this.settings.misc.fallback_connection) {
+                    this.$notify.error('Default and Fallback connection can not be same. Please select different connections.');
+                    return;
+                }
+
                 this.saving = true;
                 this.$post('misc-settings', {
                     settings: this.settings.misc

@@ -247,16 +247,6 @@ if (!function_exists('fluentMailSend')) {
             };
         }
 
-        if (($class = get_class($phpmailer)) != 'PHPMailer\PHPMailer\PHPMailer') {
-            do_action(
-                'wp_mail_failed',
-                new WP_Error(
-                    400,
-                    "Oops! PHPMailer is modified by $class."
-                )
-            );
-        }
-
         // Headers.
         $cc = array();
         $bcc = array();
@@ -352,6 +342,8 @@ if (!function_exists('fluentMailSend')) {
         $phpmailer->clearAttachments();
         $phpmailer->clearCustomHeaders();
         $phpmailer->clearReplyTos();
+        $phpmailer->Body = '';
+        $phpmailer->AltBody = '';
 
 
         /*
@@ -401,17 +393,16 @@ if (!function_exists('fluentMailSend')) {
              *
              */
             $from_email = apply_filters('wp_mail_from', $from_email);
-
-            /**
-             * Filters the name to associate with the "from" email address.
-             *
-             * @param string $from_name Name associated with the "from" email address.
-             * @since 2.3.0
-             *
-             */
-            $from_name = apply_filters('wp_mail_from_name', $from_name);
         }
 
+        /**
+         * Filters the name to associate with the "from" email address.
+         *
+         * @param string $from_name Name associated with the "from" email address.
+         * @since 2.3.0
+         *
+         */
+        $from_name = apply_filters('wp_mail_from_name', $from_name);
 
         try {
             $phpmailer->setFrom($from_email, $from_name, false);
@@ -553,17 +544,22 @@ if (!function_exists('fluentMailSend')) {
          */
         do_action_ref_array('phpmailer_init', array(&$phpmailer));
 
+        $mail_data = compact('to', 'subject', 'message', 'headers', 'attachments');
 
         // Send!
         try {
             // Trap the fluentSMTPMail mailer here
             $phpmailer = new FluentMail\App\Services\Mailer\FluentPHPMailer($phpmailer);
-            return $phpmailer->send();
+
+            $send = $phpmailer->send();
+
+            do_action('wp_mail_succeeded', $mail_data);
+
+            return $send;
 
         } catch (PHPMailer\PHPMailer\Exception $e) {
 
-            $mail_error_data = compact('to', 'subject', 'message', 'headers', 'attachments');
-            $mail_error_data['phpmailer_exception_code'] = $e->getCode();
+            $mail_data['phpmailer_exception_code'] = $e->getCode();
 
             /**
              * Fires after a PHPMailer\PHPMailer\Exception is caught.
@@ -573,15 +569,7 @@ if (!function_exists('fluentMailSend')) {
              * @since 4.4.0
              *
              */
-            do_action(
-                'wp_mail_failed',
-                new WP_Error(
-                    'wp_mail_failed',
-                    $e->getMessage(),
-                    $mail_error_data
-                )
-            );
-
+            do_action('wp_mail_failed', new WP_Error('wp_mail_failed', $e->getMessage(), $mail_data));
             return false;
         }
     }

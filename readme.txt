@@ -282,7 +282,7 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 == Changelog ==
 
-= 2.2.6 (Date: Sep 01, 2023) =
+= 2.2.6 (Date: Oct 01, 2023) =
 * Enable Encryption for All SMTP Connections Keys
 * Migrate SendInBlue API to Brevo API
 * Improved Plugin Conflict Detection and auto fix

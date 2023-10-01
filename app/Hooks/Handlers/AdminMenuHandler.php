@@ -63,7 +63,6 @@ class AdminMenuHandler
                 }
             }
         }
-
     }
 
     public function renderApp()
@@ -173,6 +172,14 @@ class AdminMenuHandler
             FLUENTMAIL_PLUGIN_VERSION,
             true
         );
+
+        add_filter('admin_footer_text', function ($text) {
+            return sprintf(
+                __('<b>FluentSMTP</b> is a free plugin & it will be always free %s. %s', 'fluent-smtp'),
+                '<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/" target="_blank" rel="noopener noreferrer">(Learn why it\'s free)</a>',
+                '<a href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5" target="_blank" rel="noopener noreferrer">Write a review ★★★★★</a>'
+            );
+        });
     }
 
     protected function getMailerSettings()
