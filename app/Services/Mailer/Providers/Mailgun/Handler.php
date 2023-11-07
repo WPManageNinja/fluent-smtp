@@ -65,6 +65,11 @@ class Handler extends BaseHandler
             $body = array_merge($body, $recipients);
         }
 
+        foreach ($this->getParam('custom_headers') as $header) {
+            $key = trim($header['key']);
+            $body['h:' . $key] = trim($header['value']);
+        }
+
         $params = [
             'body'    => $body,
             'headers' => $this->getRequestHeaders()
