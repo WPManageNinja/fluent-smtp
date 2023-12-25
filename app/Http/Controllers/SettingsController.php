@@ -16,10 +16,10 @@ class SettingsController extends Controller
         $this->verify();
 
         try {
-            $settings = $settings->get();
+            $setting = $settings->get();
 
             return $this->sendSuccess([
-                'settings' => $settings
+                'settings' => $setting
             ]);
 
         } catch (Exception $e) {

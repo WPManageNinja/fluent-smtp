@@ -3,7 +3,7 @@
         <el-row :gutter="20">
             <el-col :sm="24" :md="12">
                 <div class="fss_about">
-                    <div class="fss_header">Summary Email</div>
+                    <div class="fss_header">{{$t('Summary Email')}}</div>
                     <div class="fss_content">
                         <email-summary-form :notification_settings="notification_settings"/>
                     </div>
@@ -11,7 +11,7 @@
             </el-col>
             <el-col :sm="24" :md="12">
                 <div class="fss_about">
-                    <div class="fss_header">Failed Email Notification</div>
+                    <div class="fss_header">{{$t('Email Sending Error Notifications')}}</div>
                     <div v-if="notification_settings.telegram_notify_status" class="fss_content">
                         <telegram-notification :notification_settings="notification_settings"/>
                     </div>

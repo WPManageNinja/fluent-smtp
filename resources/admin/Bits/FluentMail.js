@@ -77,6 +77,7 @@ Vue.use(Loading.directive);
 
 Vue.prototype.$message = MessageBox.alert;
 Vue.prototype.$notify = Notification;
+Vue.prototype.$confirm = MessageBox.confirm;
 
 locale.use(lang);
 

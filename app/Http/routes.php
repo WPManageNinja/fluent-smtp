@@ -18,6 +18,14 @@ $app->post('settings/notification-settings', 'SettingsController@saveNotificatio
 $app->post('settings/gmail_auth_url', 'SettingsController@getGmailAuthUrl');
 $app->post('settings/outlook_auth_url', 'SettingsController@getOutlookAuthUrl');
 
+/*
+ * Telegram Routes
+ */
+$app->post('settings/telegram/issue-pin-code', 'TelegramController@issuePinCode');
+$app->post('settings/telegram/confirm', 'TelegramController@confirmConnection');
+$app->get('settings/telegram/info', 'TelegramController@getTelegramConnectionInfo');
+
+
 $app->get('/logs', 'LoggerController@get');
 $app->get('/logs/show', 'LoggerController@show');
 $app->post('/logs/retry', 'LoggerController@retry');
