@@ -570,9 +570,13 @@ class SettingsController extends Controller
 
     public function getNotificationSettings()
     {
+        $settings = (new Settings())->notificationSettings();
         $this->verify();
+
+        $settings['telegram_notify_token'] = '';
+
         return $this->sendSuccess([
-            'settings' => (new Settings())->notificationSettings()
+            'settings' => $settings
         ]);
     }
 
@@ -592,6 +596,9 @@ class SettingsController extends Controller
             'notify_email' => '{site_admin}',
             'notify_days'  => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         ];
+
+        $oldSettings = (new Settings())->notificationSettings();
+        $defaults = wp_parse_args($defaults, $oldSettings);
 
         $settings = wp_parse_args($settings, $defaults);
 

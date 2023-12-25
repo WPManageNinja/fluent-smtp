@@ -46,22 +46,6 @@
 
         <el-row>
             <el-col :md="12" :sm="24">
-                <!-- <el-checkbox
-                    v-model="schema.provider.options.force_from_email"
-                    true-label="yes"
-                    false-label="no"
-                >Force Sender Email</el-checkbox>
-
-                <el-tooltip effect="dark" placement="top-start">
-                    <div slot="content">
-                        If checked, the From Email setting above will be used for all emails, ignoring values set by other plugins.
-                    </div>
-                    <i class="el-icon-info"></i>
-                </el-tooltip> -->
-                &nbsp;
-            </el-col>
-            
-            <el-col :md="12" :sm="24">
                 <el-checkbox
                     v-model="schema.provider.options.force_from_name"
                     true-label="yes"

@@ -1,7 +1,8 @@
 <template>
-    <div v-loading="loading" class="fss_general_settings">
+    <div class="fss_general_settings">
         <el-form class="fss_compact_form" :data="notification_settings" label-position="top">
-            <el-form-item :label="$t('Enable Email Summary Notification')">
+            <p>Email summary is useful for getting weekly or daily emails about the all the email sending stats for this site.</p>
+            <el-form-item>
                 <el-checkbox
                     v-model="notification_settings.enabled"
                     true-label="yes"
@@ -18,11 +19,16 @@
                     </el-checkbox-group>
                 </el-form-item>
             </template>
-            <el-button
-                v-loading="saving"
-                @click="saveSettings()"
-                type="success"
-            >{{$t('Save Settings')}}</el-button>
+            <el-form-item>
+                <el-button
+                    :loading="saving"
+                    @click="saveSettings"
+                    type="primary"
+                    size="small"
+                >
+                    {{$t('Save Settings')}}
+                </el-button>
+            </el-form-item>
         </el-form>
     </div>
 </template>
@@ -32,9 +38,6 @@ export default {
     name: 'NotificationSettings',
     data() {
         return {
-            notification_settings: {},
-            loading: true,
-            saving: false,
             sending_days: {
                 Mon: 'Monday',
                 Tue: 'Tuesday',
@@ -43,23 +46,12 @@ export default {
                 Fri: 'Friday',
                 Sat: 'Saturday',
                 Sun: 'Sunday'
-            }
+            },
+            notification_settings: {},
+            saving: false,
         }
     },
     methods: {
-        getSettings() {
-            this.loading = true;
-            this.$get('settings/notification-settings')
-                .then((response) => {
-                    this.notification_settings = response.data.settings;
-                })
-                .catch((errors) => {
-                    console.log(errors);
-                })
-                .always(() => {
-                    this.loading = false;
-                });
-        },
         saveSettings() {
             this.saving = true;
             this.$post('settings/notification-settings', {
@@ -77,7 +69,6 @@ export default {
         }
     },
     mounted() {
-        this.getSettings();
     }
 }
 </script>

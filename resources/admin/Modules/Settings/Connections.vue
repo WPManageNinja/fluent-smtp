@@ -79,14 +79,6 @@
                         <general-settings />
                     </div>
                 </div>
-                <div :class="{ fss_box_active: active_settings == 'notification' }" class="fss_content_box fss_box_action">
-                    <div @click="active_settings = 'notification'" class="fss_header">
-                        {{$t('Notification Settings')}}
-                    </div>
-                    <div v-if="active_settings == 'notification'" class="fss_content">
-                        <notification-settings />
-                    </div>
-                </div>
             </el-col>
         </el-row>
     </div>
@@ -96,7 +88,7 @@
     import Confirm from '@/Pieces/Confirm';
     import isEmpty from 'lodash/isEmpty';
     import GeneralSettings from './_GeneralSettings'
-    import NotificationSettings from './_NotificationSettings'
+
     import ConnectionDetails from './ConnectionDetails'
 
     export default {
@@ -104,8 +96,7 @@
         components: {
             Confirm,
             GeneralSettings,
-            ConnectionDetails,
-            NotificationSettings
+            ConnectionDetails
         },
         data() {
             return {

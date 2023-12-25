@@ -5,6 +5,7 @@ import Logs from './Modules/Logger/Logs';
 import Test from './Modules/Test/Test';
 import Support from './Modules/Misc/Support';
 import Docs from './Modules/Misc/Docs';
+import NotificationSettings from './Modules/NotificationSettings/NotificationSettings.vue';
 
 export default [
     {
@@ -48,5 +49,11 @@ export default [
         path: '/documentation',
         meta: {},
         component: Docs
+    },
+    {
+        name: 'notification_settings',
+        path: '/notification-settings',
+        meta: {},
+        component: NotificationSettings
     }
 ];
