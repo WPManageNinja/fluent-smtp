@@ -69,7 +69,9 @@ class SlackController extends Controller
             ], 422);
         }
 
-        $result = NotificationHelper::sendTestSlackMessage(Arr::get($settings, 'slack.webhook_url'));
+        $message = 'This is a test message for ' . site_url() . '. If you get this message, then your site is connected successfully.';
+
+        $result = NotificationHelper::sendSlackMessage($message, Arr::get($settings, 'slack.webhook_url'));
 
         if (is_wp_error($result)) {
             return $this->sendError([
@@ -87,16 +89,16 @@ class SlackController extends Controller
     {
         $settings = (new Settings())->notificationSettings();
 
-        if (!isset($settings['telegram_notify_status']) || $settings['telegram_notify_status'] != 'yes') {
-            return $this->sendError([
-                'message' => __('Telegram notification is not enabled', 'fluent-smtp')
-            ], 422);
-        }
+        $settings['slack'] = [
+            'status'      => 'no',
+            'webhook_url' => '',
+            'token'       => ''
+        ];
 
-        NotificationHelper::disconnectTelegram($settings['telegram_notify_token']);
+        update_option('_fluent_smtp_notify_settings', $settings);
 
         return $this->sendSuccess([
-            'message' => __('Telegram connection has been disconnected successfully', 'fluent-smtp')
+            'message' => __('Slack connection has been disconnected successfully', 'fluent-smtp')
         ]);
     }
 

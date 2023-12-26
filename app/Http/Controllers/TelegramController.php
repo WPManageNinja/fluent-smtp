@@ -156,5 +156,4 @@ class TelegramController extends Controller
             'message' => __('Telegram connection has been disconnected successfully', 'fluent-smtp')
         ]);
     }
-
 }

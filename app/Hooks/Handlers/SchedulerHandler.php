@@ -19,6 +19,7 @@ class SchedulerHandler
         add_action('fluentsmtp_renew_gmail_token', array($this, 'renewGmailToken'));
 
         add_action('fluentmail_email_sending_failed_no_fallback', array($this, 'maybeSendNotification'), 10, 2);
+        
     }
 
     public function handleScheduledJobs()
@@ -258,29 +259,44 @@ class SchedulerHandler
 
     public function maybeSendNotification($rowId, $handler)
     {
-        $tokenId = NotificationHelper::getTelegramBotTokenId();
-
-        if (!$tokenId) {
-            return false;
-        }
-
-        $lastNotificationSent = get_option('_fsmtp_last_tele_sent');
-
+        $lastNotificationSent = get_option('_fsmtp_last_notification_sent');
         if ($lastNotificationSent && (time() - $lastNotificationSent) < 60) {
             return false;
         }
 
-        // send a non-blocking post request to the telegram server
-        $data = [
-            'token_id' => $tokenId,
-            'provider'   => $handler->getSetting('provider'),
-        ];
+        $tokenId = NotificationHelper::getTelegramBotTokenId();
+        if ($tokenId) {
+            // send a non-blocking post request to the telegram server
+            $data = [
+                'token_id' => $tokenId,
+                'provider' => $handler->getSetting('provider'),
+            ];
 
-        update_option('_fsmtp_last_tele_sent', time());
+            update_option('_fsmtp_last_notification_sent', time());
 
-        NotificationHelper::sendFailedNotificationTele($data);
+            NotificationHelper::sendFailedNotificationTele($data);
+
+            return true;
+        }
+
+        $slackWebhookUrl = NotificationHelper::getSlackWebhookUrl();
+        if (!$slackWebhookUrl) {
+            return false;
+        }
+
+        update_option('_fsmtp_last_notification_sent', time());
+
+        $siteUrl = site_url();
+        $domainName = parse_url($siteUrl, PHP_URL_HOST);
+        $provider = $handler->getSetting('provider');
+
+        $url = admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=');
+        $message = 'Attention: Your website \'' . $domainName . '\' encountered an issue while attempting to send an email via ' . $provider . '. To review the details of the failed email(s), please <' . $url . '|click here to view them>.';
+
+        NotificationHelper::sendSlackMessage($message, $slackWebhookUrl, false);
 
         return true;
+
     }
 
     private function saveNewGmailTokens($existingData, $tokens)

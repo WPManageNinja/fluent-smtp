@@ -4,6 +4,7 @@ namespace FluentMail\App\Services;
 
 
 use FluentMail\App\Models\Settings;
+use FluentMail\Includes\Support\Arr;
 
 class NotificationHelper
 {
@@ -73,6 +74,25 @@ class NotificationHelper
         return $token;
     }
 
+    public static function getSlackWebhookUrl()
+    {
+        static $url = null;
+
+        if ($url !== null) {
+            return $url;
+        }
+
+        $settings = (new Settings())->notificationSettings();
+
+        $url = Arr::get($settings, 'slack.webhook_url');
+
+        if (!$url) {
+            $url = false;
+        }
+
+        return $url;
+    }
+
     public static function sendFailedNotificationTele($data)
     {
         wp_remote_post(self::getRemoteServerUrl() . 'telegram/send-failed-notification', array(
@@ -88,7 +108,7 @@ class NotificationHelper
 
     private static function sendTeleRequest($route, $data = [], $method = 'POST', $token = '')
     {
-        $url = self::getRemoteServerUrl() .'telegram/'.$route;
+        $url = self::getRemoteServerUrl() . 'telegram/' . $route;
 
         if ($token) {
             $url .= '?site_token=' . $token;
@@ -125,7 +145,7 @@ class NotificationHelper
 
     private static function sendSlackRequest($route, $data = [], $method = 'POST', $token = '')
     {
-        $url = self::getRemoteServerUrl() .'slack/'.$route;
+        $url = self::getRemoteServerUrl() . 'slack/' . $route;
 
         if ($token) {
             $url .= '?site_token=' . $token;
@@ -161,4 +181,40 @@ class NotificationHelper
         return $responseData;
     }
 
+
+    public static function sendSlackMessage($message, $webhookUrl, $blocking = false)
+    {
+        $body = wp_json_encode(array('text' => $message));
+        $args = array(
+            'body'        => $body,
+            'headers'     => array(
+                'Content-Type' => 'application/json',
+            ),
+            'timeout'     => 60,
+            'redirection' => 5,
+            'blocking'    => true,
+            'httpversion' => '1.0',
+            'sslverify'   => false,
+            'data_format' => 'body',
+        );
+
+        if (!$blocking) {
+            $args['blocking'] = false;
+            $args['timeout'] = 0.01;
+        }
+
+
+        $response = wp_remote_post($webhookUrl, $args);
+
+        if (!$blocking) {
+            return true;
+        }
+
+        if (is_wp_error($response)) {
+            return $response;
+        }
+
+        $body = wp_remote_retrieve_body($response);
+        return json_decode($body, true);
+    }
 }
