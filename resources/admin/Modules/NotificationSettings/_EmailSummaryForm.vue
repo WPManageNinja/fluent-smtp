@@ -36,6 +36,12 @@
 <script type="text/babel">
 export default {
     name: 'NotificationSettings',
+    props: {
+        notification_settings: {
+            type: Object,
+            required: true
+        }
+    },
     data() {
         return {
             sending_days: {
@@ -47,7 +53,6 @@ export default {
                 Sat: 'Saturday',
                 Sun: 'Sunday'
             },
-            notification_settings: {},
             saving: false,
         }
     },
