@@ -77,7 +77,7 @@ class NotificationHelper
             'cookies'   => false,
             'sslverify' => false,
         ));
-        
+
         return true;
     }
 
