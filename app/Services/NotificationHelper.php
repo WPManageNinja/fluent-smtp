@@ -3,6 +3,8 @@
 namespace FluentMail\App\Services;
 
 
+use FluentMail\App\Models\Settings;
+
 class NotificationHelper
 {
     public static function getTelegramServerUrl()
@@ -16,38 +18,56 @@ class NotificationHelper
 
     public static function issueTelegramPinCode($data)
     {
-        $url = self::getTelegramServerUrl() . 'register-site';
-
-        $response = wp_remote_post($url, [
-            'body'      => $data,
-            'sslverify' => false,
-            'timeout'   => 50
-        ]);
-
-        if (is_wp_error($response)) {
-            return $response;
-        }
-
-        $responseCode = wp_remote_retrieve_response_code($response);
-
-        $body = wp_remote_retrieve_body($response);
-        $responseData = json_decode($body, true);
-
-        if (!$responseData || empty($responseData['success']) || $responseCode !== 200) {
-            return new \WP_Error('invalid_data', 'Something went wrong', $responseData);
-        }
-
-        return $responseData;
+        return self::sendTeleRequest('register-site', $data, 'POST');
     }
 
     public static function getTelegramConnectionInfo($token)
     {
-        $url = self::getTelegramServerUrl() . 'get-site-info?site_token=' . $token;
+        return self::sendTeleRequest('get-site-info', [], 'GET', $token);
+    }
 
-        $response = wp_remote_get($url, [
-            'sslverify' => false,
-            'timeout'   => 50
-        ]);
+    public static function sendTestTelegramMessage($token = '')
+    {
+        if (!$token) {
+            $settings = (new Settings())->notificationSettings();
+            $token = $settings['telegram_notify_token'];
+        }
+
+        return self::sendTeleRequest('send-test', [], 'POST', $token);
+    }
+
+    public static function disconnectTelegram($token)
+    {
+        self::sendTeleRequest('disconnect', [], 'POST', $token);
+
+        $settings = (new Settings())->notificationSettings();
+        $settings['telegram_notify_status'] = 'no';
+        $settings['telegram_notify_token'] = '';
+        update_option('_fluent_smtp_notify_settings', $settings, false);
+
+        return true;
+    }
+
+    private static function sendTeleRequest($route, $data = [], $method = 'POST', $token = '')
+    {
+        $url = self::getTelegramServerUrl() . $route;
+
+        if ($token) {
+            $url .= '?site_token=' . $token;
+        }
+
+        if ($method == 'POST') {
+            $response = wp_remote_post($url, [
+                'body'      => $data,
+                'sslverify' => false,
+                'timeout'   => 50
+            ]);
+        } else {
+            $response = wp_remote_get($url, [
+                'sslverify' => false,
+                'timeout'   => 50
+            ]);
+        }
 
         if (is_wp_error($response)) {
             return $response;
@@ -56,7 +76,6 @@ class NotificationHelper
         $responseCode = wp_remote_retrieve_response_code($response);
 
         $body = wp_remote_retrieve_body($response);
-
         $responseData = json_decode($body, true);
 
         if (!$responseData || empty($responseData['success']) || $responseCode !== 200) {

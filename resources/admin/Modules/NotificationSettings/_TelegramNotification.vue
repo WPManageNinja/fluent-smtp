@@ -69,7 +69,7 @@ export default {
     },
     data() {
         return {
-            configure_state: 'form',
+            configure_state: 'intro',
             processing: false,
             newForm: {
                 user_email: '',

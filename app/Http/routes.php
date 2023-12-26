@@ -24,6 +24,8 @@ $app->post('settings/outlook_auth_url', 'SettingsController@getOutlookAuthUrl');
 $app->post('settings/telegram/issue-pin-code', 'TelegramController@issuePinCode');
 $app->post('settings/telegram/confirm', 'TelegramController@confirmConnection');
 $app->get('settings/telegram/info', 'TelegramController@getTelegramConnectionInfo');
+$app->post('settings/telegram/send-test', 'TelegramController@sendTestMessage');
+$app->post('settings/telegram/disconnect', 'TelegramController@disconnect');
 
 
 $app->get('/logs', 'LoggerController@get');

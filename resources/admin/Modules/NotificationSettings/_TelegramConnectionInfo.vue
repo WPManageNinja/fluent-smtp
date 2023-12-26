@@ -12,9 +12,25 @@
                 </p>
                 <p>Receiver's Telegram Username: @{{ receiver.username }}</p>
                 <p>
-                    <el-button size="mini" type="text">Send Test Message</el-button>
+                    <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" size="mini"
+                               type="text">Send Test Message
+                    </el-button>
                     <el-button v-loading="disconnecting" @click="disconnect()" style="float: right;" size="mini"
                                type="text">Disconnect
+                    </el-button>
+                </p>
+            </div>
+            <div v-else>
+                <h3>Telegram Connection Status: {{ status }}</h3>
+                <p>We could not fetch the Telegram notification status. Here is the server response: </p>
+                <pre>{{errors}}</pre>
+                <p>
+                    <el-button @click="getInfo()" :disabled="sending_test" v-loading="sending_test" size="mini"
+                               type="text">
+                        Try Again
+                    </el-button>
+                    <el-button v-loading="disconnecting" @click="disconnect()" style="float: right;" size="mini"
+                               type="text">Disconnect & Reconnect
                     </el-button>
                 </p>
             </div>
@@ -30,7 +46,9 @@ export default {
             status: '',
             receiver: null,
             loading: false,
-            disconnecting: false
+            disconnecting: false,
+            sending_test: false,
+            errors: null
         }
     },
     methods: {
@@ -41,10 +59,13 @@ export default {
                     this.status = response.data.telegram_notify_status;
                     if (response.data.telegram_receiver) {
                         this.receiver = response.data.telegram_receiver;
+                    } else {
+                        this.errors = errors.responseJSON.data.errors;
                     }
                 })
                 .catch((errors) => {
                     this.$notify.error(errors.responseJSON.data.message);
+                    this.errors = errors.responseJSON.data.errors;
                 })
                 .always(() => {
                     this.loading = false;
@@ -69,6 +90,19 @@ export default {
                         .always(() => {
                             this.disconnecting = false;
                         });
+                });
+        },
+        sendTest() {
+            this.sending_test = true;
+            this.$post('settings/telegram/send-test')
+                .then((response) => {
+                    this.$notify.success(response.data.message);
+                })
+                .catch((errors) => {
+                    this.$notify.error(errors.responseJSON.data.message);
+                })
+                .always(() => {
+                    this.sending_test = false;
                 });
         }
     },
