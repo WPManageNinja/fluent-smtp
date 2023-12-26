@@ -273,7 +273,7 @@ class SchedulerHandler
         // send a non-blocking post request to the telegram server
         $data = [
             'token_id' => $tokenId,
-            'driver'   => $handler->getSetting('provider'),
+            'provider'   => $handler->getSetting('provider'),
         ];
 
         update_option('_fsmtp_last_tele_sent', time());
