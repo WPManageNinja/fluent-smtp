@@ -19,7 +19,7 @@ class SchedulerHandler
         add_action('fluentsmtp_renew_gmail_token', array($this, 'renewGmailToken'));
 
         add_action('fluentmail_email_sending_failed_no_fallback', array($this, 'maybeSendNotification'), 10, 2);
-        
+
     }
 
     public function handleScheduledJobs()
