@@ -6,7 +6,7 @@
         <template v-else-if="selectedDriver == 'slack'">
             <slack-notification :notification_settings="notification_settings"/>
         </template>
-        <template>
+        <template v-else>
             <h3>Configure Telegram Bot</h3>
             <telegram-notification :notification_settings="notification_settings"/>
             <hr style="margin: 20px 0;" />
@@ -37,7 +37,7 @@ export default {
             if (this.notification_settings.telegram_notify_status == 'yes') {
                 return 'telegram';
             }
-            if (this.notification_settings.slack_notify_status == 'yes') {
+            if (this.notification_settings.slack && this.notification_settings.slack.status == 'yes') {
                 return 'slack';
             }
 

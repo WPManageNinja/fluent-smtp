@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="notification_settings.telegram_notify_status != 'yes'">
+        <div v-if="!isConfigured">
             <div v-if="configure_state == 'intro'">
                 <p>
                     Get real-time notification on your Slack Channel on any email sending failure. Configure
@@ -35,23 +35,28 @@
             </div>
         </div>
         <div v-else>
-            <connection-info/>
+            <slack-info :notification_settings="notification_settings"/>
         </div>
     </div>
 </template>
 
 <script type="text/babel">
-import ConnectionInfo from './_TelegramConnectionInfo.vue';
+import SlackInfo from './_SlackWebhookInfo.vue';
 
 export default {
     name: 'SlackNotification',
-    components: {ConnectionInfo},
+    components: {SlackInfo},
     props: {
         notification_settings: {
             type: Object,
             default: () => {
                 return {}
             }
+        }
+    },
+    computed: {
+        isConfigured() {
+            return this.notification_settings.slack && this.notification_settings.slack.status == 'yes' && this.notification_settings.slack.webhook_url;
         }
     },
     data() {

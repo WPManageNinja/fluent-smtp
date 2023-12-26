@@ -236,10 +236,25 @@ class Settings
             'notify_days'            => ['Mon'],
             'telegram_notify_status' => 'no',
             'telegram_notify_token'  => '',
+            'slack'                  => [
+                'status'      => 'no',
+                'token'       => '',
+                'webhook_url' => ''
+            ]
         ];
 
         $settings = get_option('_fluent_smtp_notify_settings', []);
 
-        return wp_parse_args($settings, $defaults);
+        $settings = wp_parse_args($settings, $defaults);
+
+        if (empty($settings['slack'])) {
+            $settings['slack'] = [
+                'status'      => 'no',
+                'token'       => '',
+                'webhook_url' => ''
+            ];
+        }
+
+        return $settings;
     }
 }
