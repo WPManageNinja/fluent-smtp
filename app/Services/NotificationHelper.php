@@ -48,6 +48,39 @@ class NotificationHelper
         return true;
     }
 
+    public static function getTelegramBotTokenId()
+    {
+        static $token = null;
+
+        if ($token !== null) {
+            return $token;
+        }
+
+        $settings = (new Settings())->notificationSettings();
+
+        if (empty($settings['telegram_notify_token'])) {
+            $token = false;
+            return $token;
+        }
+
+        $token = $settings['telegram_notify_token'];
+
+        return $token;
+    }
+
+    public static function sendFailedNotificationTele($data)
+    {
+        wp_remote_post(self::getTelegramServerUrl() . 'send-failed-notification', array(
+            'timeout'   => 0.01,
+            'blocking'  => false,
+            'body'      => $data,
+            'cookies'   => false,
+            'sslverify' => false,
+        ));
+        
+        return true;
+    }
+
     private static function sendTeleRequest($route, $data = [], $method = 'POST', $token = '')
     {
         $url = self::getTelegramServerUrl() . $route;

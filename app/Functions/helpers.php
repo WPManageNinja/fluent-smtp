@@ -746,7 +746,6 @@ function fluentMailDb()
     return FluentSmtpDb();
 }
 
-
 function fluentMailFuncCouldNotBeLoadedRecheckPluginsLoad()
 {
     add_action('admin_notices', function () {
