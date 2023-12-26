@@ -29,6 +29,33 @@ class AdminMenuHandler
 
         add_action('admin_init', array($this, 'initAdminWidget'));
 
+
+        add_action('install_plugins_table_header', function () {
+            if (!isset($_REQUEST['s']) || empty($_REQUEST['s']) || empty($_REQUEST['tab']) || $_REQUEST['tab'] != 'search') {
+                return;
+            }
+
+            $search = str_replace(['%20', '_', '-'], ' ', $_REQUEST['s']);
+            $search = trim(strtolower(sanitize_text_field($search)));
+
+            $searchTerms = ['wp-mail-smtp', 'wp mail', 'wp mail smtp', 'post mailer', 'wp smtp', 'smtp mail', 'smtp', 'post smtp', 'easy smtp', 'easy wp smtp', 'smtp mailer', 'gmail smtp', 'offload ses'];
+
+            if(!strpos($search, 'smtp')) {
+                if (!in_array($search, $searchTerms)) {
+                    return;
+                }
+            }
+            ?>
+            <div style="background-color: #fff;border: 1px solid #dcdcde;box-sizing: border-box;padding: 20px;margin: 15px 0;" class="fluent_smtp_box">
+                <h3 style="margin: 0;">For SMTP, you already have FluentSMTP Installed</h3>
+                <p>You seem to be looking for an SMTP plugin, but there's no need for another one — FluentSMTP is already installed on your site. FluentSMTP is a comprehensive, free, and open-source plugin with full features available without any upsell (<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/">learn why it's free</a>). It's compatible with various SMTP services, including Amazon SES, SendGrid, MailGun, ElasticEmail, SendInBlue, Google, Microsoft, and others, providing you with a wide range of options for your email needs.</p>
+                <a href="<?php echo admin_url('options-general.php?page=fluent-mail#/'); ?>"
+                   class="wp-core-ui button button-primary">Go To FluentSMTP Settings</a>
+                <p style="font-size: 80%; margin: 15px 0 0;">This notice is from FluentSMTP plugin to prevent plugin conflict.</p>
+            </div>
+            <?php
+        }, 1);
+
     }
 
     public function addMenu()
@@ -45,24 +72,6 @@ class AdminMenuHandler
             16
         );
 
-
-        if (defined('WPFORMS_VERSION')) {
-            // As user is using FluentSMTP we want to remove other SMTP suggestions which will create conflicts
-            // and FluentSMTP will not work in that case, So we are removing from that menu
-            global $submenu;
-
-            if ($submenu && !empty($submenu['wpforms-overview'])) {
-                if (Arr::get($submenu, 'wpforms-overview.7.2') == 'wpforms-smtp') {
-                    unset($submenu['wpforms-overview'][7]);
-                } else {
-                    foreach ($submenu['wpforms-overview'] as $itemIndex => $item) {
-                        if (isset($item[2]) && $item[2] == 'wpforms-smtp') {
-                            unset($submenu['wpforms-overview'][$itemIndex]);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public function renderApp()
@@ -93,7 +102,7 @@ class AdminMenuHandler
             $themeUrl = content_url('themes');
             $pluginUrl = plugins_url();
             foreach ($wp_scripts->queue as $script) {
-                if(empty($wp_scripts->registered[$script]) || empty($wp_scripts->registered[$script]->src)) {
+                if (empty($wp_scripts->registered[$script]) || empty($wp_scripts->registered[$script]->src)) {
                     continue;
                 }
 
@@ -149,8 +158,8 @@ class AdminMenuHandler
             'nonce'                  => wp_create_nonce(FLUENTMAIL),
             'settings'               => $settings,
             'images_url'             => esc_url(fluentMailMix('images/')),
-            'has_fluentcrm'           => defined('FLUENTCRM'),
-            'has_fluentform'          => defined('FLUENTFORM'),
+            'has_fluentcrm'          => defined('FLUENTCRM'),
+            'has_fluentform'         => defined('FLUENTFORM'),
             'user_email'             => $user->user_email,
             'user_display_name'      => $displayName,
             'require_optin'          => $this->isRequireOptin(),
@@ -160,7 +169,7 @@ class AdminMenuHandler
             'plugin_url'             => 'https://fluentsmtp.com/?utm_source=wp&utm_medium=install&utm_campaign=dashboard',
             'trans'                  => $this->getTrans(),
             'recommended'            => $recommendedSettings,
-            'is_disabled_defined'     => defined('FLUENTMAIL_SIMULATE_EMAILS') && FLUENTMAIL_SIMULATE_EMAILS
+            'is_disabled_defined'    => defined('FLUENTMAIL_SIMULATE_EMAILS') && FLUENTMAIL_SIMULATE_EMAILS
         ]);
 
         do_action('fluent_mail_loading_app');
@@ -300,30 +309,30 @@ class AdminMenuHandler
 
     public function dashWidgetContent()
     {
-        $stats            = [];
-        $logModel         = new Logger();
+        $stats = [];
+        $logModel = new Logger();
         $currentTimeStamp = current_time('timestamp');
-        $startToday       = date('Y-m-d 00:00:01', $currentTimeStamp);
+        $startToday = date('Y-m-d 00:00:01', $currentTimeStamp);
 
-        $allTime          = $logModel->getStats();
+        $allTime = $logModel->getStats();
 
         $stats['today'] = [
-            'title'     => __('Today', 'fluent-smtp'),
-            'sent'      => ($allTime['sent']) ? $logModel->getTotalCountStat('sent', $startToday) : 0,
-            'failed'    => ($allTime['failed']) ? $logModel->getTotalCountStat('failed', $startToday) : 0
+            'title'  => __('Today', 'fluent-smtp'),
+            'sent'   => ($allTime['sent']) ? $logModel->getTotalCountStat('sent', $startToday) : 0,
+            'failed' => ($allTime['failed']) ? $logModel->getTotalCountStat('failed', $startToday) : 0
         ];
 
         $lastWeek = date('Y-m-d 00:00:01', strtotime('-7 days'));
         $stats['week'] = [
-            'title'    => __('Last 7 days', 'fluent-smtp'),
-            'sent'     => ($allTime['sent']) ? $logModel->getTotalCountStat('sent', $lastWeek) : 0,
-            'failed'   => ($allTime['failed']) ? $logModel->getTotalCountStat('failed', $lastWeek) : 0,
+            'title'  => __('Last 7 days', 'fluent-smtp'),
+            'sent'   => ($allTime['sent']) ? $logModel->getTotalCountStat('sent', $lastWeek) : 0,
+            'failed' => ($allTime['failed']) ? $logModel->getTotalCountStat('failed', $lastWeek) : 0,
         ];
 
         $stats['all_time'] = [
-            'title'        => __('All', 'fluent-smtp'),
-            'sent'         => $allTime['sent'],
-            'failed'       => $allTime['failed'],
+            'title'  => __('All', 'fluent-smtp'),
+            'sent'   => $allTime['sent'],
+            'failed' => $allTime['failed'],
         ];
 
         ?>
@@ -368,8 +377,8 @@ class AdminMenuHandler
             'Support'                                               => __('Support', 'fluent-smtp'),
             'Docs'                                                  => __('Docs', 'fluent-smtp'),
             'cancel'                                                => __('cancel', 'fluent-smtp'),
-            'confirm'                                                => __('confirm', 'fluent-smtp'),
-            'confirm_msg'                                            => __('Are you sure to delete this?', 'fluent-smtp'),
+            'confirm'                                               => __('confirm', 'fluent-smtp'),
+            'confirm_msg'                                           => __('Are you sure to delete this?', 'fluent-smtp'),
             'wizard_title'                                          => __('Welcome to FluentSMTP', 'fluent-smtp'),
             'wizard_sub'                                            => __('Thank you for installing FluentSMTP - The ultimate SMTP & Email Service Connection Plugin for WordPress', 'fluent-smtp'),
             'wizard_instruction'                                    => __('Please configure your first email service provider connection', 'fluent-smtp'),
@@ -436,15 +445,15 @@ class AdminMenuHandler
             'Connection Details'                                    => __('Connection Details', 'fluent-smtp'),
             'Close'                                                 => __('Close', 'fluent-smtp'),
             'General Settings'                                      => __('General Settings', 'fluent-smtp'),
-            'Notification Settings'                                  => __('Notification Settings', 'fluent-smtp'),
+            'Notification Settings'                                 => __('Notification Settings', 'fluent-smtp'),
             'Add Connection'                                        => __('Add Connection', 'fluent-smtp'),
             'Edit Connection'                                       => __('Edit Connection', 'fluent-smtp'),
             'routing_info'                                          => __('Your emails will be routed automatically based on From email address. No additional configuration is required.', 'fluent-smtp'),
             'Enable Email Summary'                                  => __('Enable Email Summary', 'fluent-smtp'),
-            'Enable Email Summary Notification'                      => __('Enable Email Summary Notification', 'fluent-smtp'),
-            'Notification Email Addresses'                           => __('Notification Email Addresses', 'fluent-smtp'),
+            'Enable Email Summary Notification'                     => __('Enable Email Summary Notification', 'fluent-smtp'),
+            'Notification Email Addresses'                          => __('Notification Email Addresses', 'fluent-smtp'),
             'Email Address'                                         => __('Email Address', 'fluent-smtp'),
-            'Notification Days'                                      => __('Notification Days', 'fluent-smtp'),
+            'Notification Days'                                     => __('Notification Days', 'fluent-smtp'),
             'Save Settings'                                         => __('Save Settings', 'fluent-smtp'),
             'Log All Emails for Reporting'                          => __('Log All Emails for Reporting', 'fluent-smtp'),
             'Disable Logging for FluentCRM Emails'                  => __('Disable Logging for FluentCRM Emails', 'fluent-smtp'),

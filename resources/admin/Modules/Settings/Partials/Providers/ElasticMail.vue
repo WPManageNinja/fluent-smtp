@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3 class="fs_config_title">ElasticMail API Settings</h3>
+        <h3 class="fs_config_title">ElasticEmail API Settings</h3>
         <el-radio-group size="mini" v-model="connection.key_store">
             <el-radio-button label="db">Store API Keys in DB</el-radio-button>
             <el-radio-button label="wp_config">Store API Keys in Config File</el-radio-button>
@@ -31,7 +31,7 @@
         </div>
 
         <span class="small-help-text" style="display:block;margin-top:-10px">
-            Follow this link to get an API Key from ElasticMail:
+            Follow this link to get an API Key from ElasticEmail:
             <a target="_blank" href="https://elasticemail.com/account#/settings/new/manage-api">Get API Key.</a>
         </span>
 

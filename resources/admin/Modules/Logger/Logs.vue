@@ -422,6 +422,14 @@ export default {
             this.pagination.current_page = Number(currentPage);
         }
 
+        if(this.$route.query.status) {
+            this.filter_query.status = this.$route.query.status;
+        }
+
+        if(this.$route.query.search) {
+            this.filter_query.search = this.$route.query.search;
+        }
+
         this.form = this.appVars.settings.misc;
 
         this.logAlertInfo = window.localStorage.getItem('log-settings');
@@ -434,7 +442,6 @@ export default {
         }
 
         this.logAlertInfo = JSON.parse(window.localStorage.getItem('log-settings'));
-        console.log('mounted');
         this.fetch();
     }
 };

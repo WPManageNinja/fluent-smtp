@@ -308,7 +308,7 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 = 2.2.1 (Date: Nov 08, 2022) =
 * Refactored Google API integration
 * Fix encoding issues for Outlook API connection
-* ElasticMail Attachment issues fixed
+* ElasticEmail Attachment issues fixed
 * Fixed digest email esc_* issues
 * Added contributors to the plugin's about page.
 * UI&UX Improvements

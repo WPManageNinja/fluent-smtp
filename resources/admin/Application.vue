@@ -58,6 +58,10 @@
                         title: this.$t('Email Logs')
                     },
                     {
+                        route: 'notification_settings',
+                        title: this.$t('Notification Settings')
+                    },
+                    {
                         route: 'support',
                         title: this.$t('About')
                     },

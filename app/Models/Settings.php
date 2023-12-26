@@ -97,7 +97,7 @@ class Settings
             $misc['default_connection'] = $uniqueKey;
             $settings['misc'] = $misc;
         }
-        
+
         fluentMailSetSettings($settings);
 
         return $settings;
@@ -231,9 +231,11 @@ class Settings
     public function notificationSettings()
     {
         $defaults = [
-            'enabled'      => 'no',
-            'notify_email' => '{site_admin}',
-            'notify_days'  => ['Mon']
+            'enabled'                => 'no',
+            'notify_email'           => '{site_admin}',
+            'notify_days'            => ['Mon'],
+            'telegram_notify_status' => 'no',
+            'telegram_notify_token'  => '',
         ];
 
         $settings = get_option('_fluent_smtp_notify_settings', []);
