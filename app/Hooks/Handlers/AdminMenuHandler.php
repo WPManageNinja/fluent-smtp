@@ -44,25 +44,7 @@ class AdminMenuHandler
             [$this, 'renderApp'],
             16
         );
-
-
-        if (defined('WPFORMS_VERSION')) {
-            // As user is using FluentSMTP we want to remove other SMTP suggestions which will create conflicts
-            // and FluentSMTP will not work in that case, So we are removing from that menu
-            global $submenu;
-
-            if ($submenu && !empty($submenu['wpforms-overview'])) {
-                if (Arr::get($submenu, 'wpforms-overview.7.2') == 'wpforms-smtp') {
-                    unset($submenu['wpforms-overview'][7]);
-                } else {
-                    foreach ($submenu['wpforms-overview'] as $itemIndex => $item) {
-                        if (isset($item[2]) && $item[2] == 'wpforms-smtp') {
-                            unset($submenu['wpforms-overview'][$itemIndex]);
-                        }
-                    }
-                }
-            }
-        }
+        
     }
 
     public function renderApp()
