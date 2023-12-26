@@ -27,6 +27,14 @@ $app->get('settings/telegram/info', 'TelegramController@getTelegramConnectionInf
 $app->post('settings/telegram/send-test', 'TelegramController@sendTestMessage');
 $app->post('settings/telegram/disconnect', 'TelegramController@disconnect');
 
+/*
+ * Slack Routes
+ */
+$app->post('settings/slack/register', 'SlackController@registerSite');
+$app->post('settings/slack/send-test', 'SlackController@sendTestMessage');
+$app->post('settings/slack/disconnect', 'SlackController@disconnect');
+
+
 
 $app->get('/logs', 'LoggerController@get');
 $app->get('/logs/show', 'LoggerController@show');

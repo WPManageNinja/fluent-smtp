@@ -3,7 +3,7 @@
         <el-row :gutter="20">
             <el-col :sm="24" :md="12">
                 <div class="fss_about">
-                    <div class="fss_header">{{$t('Summary Email')}}</div>
+                    <div class="fss_header">{{ $t('Summary Email') }}</div>
                     <div class="fss_content">
                         <email-summary-form :notification_settings="notification_settings"/>
                     </div>
@@ -11,9 +11,9 @@
             </el-col>
             <el-col :sm="24" :md="12">
                 <div class="fss_about">
-                    <div class="fss_header">{{$t('Email Sending Error Notifications')}}</div>
-                    <div v-if="notification_settings.telegram_notify_status" class="fss_content">
-                        <telegram-notification :notification_settings="notification_settings"/>
+                    <div class="fss_header">{{ $t('Email Sending Error Notifications') }}</div>
+                    <div class="fss_content">
+                        <notification-manager :notification_settings="notification_settings"/>
                     </div>
                 </div>
             </el-col>
@@ -23,11 +23,11 @@
 
 <script type="text/babel">
 import EmailSummaryForm from './_EmailSummaryForm.vue';
-import TelegramNotification from './_TelegramNotification.vue';
+import NotificationManager from './NotificationManager.vue';
 
 export default {
     name: 'NotificationSettingsRoot',
-    components: { EmailSummaryForm, TelegramNotification },
+    components: {EmailSummaryForm, NotificationManager},
     data() {
         return {
             notification_settings: {},

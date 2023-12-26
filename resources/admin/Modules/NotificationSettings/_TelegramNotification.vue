@@ -1,9 +1,9 @@
 <template>
     <div>
         <div v-if="notification_settings.telegram_notify_status != 'yes'">
-            <div v-if="configure_state == 'intro'" style="text-align: center;">
+            <div v-if="configure_state == 'intro'">
                 <p>Get real-time notification on your <a target="_blank" rel="noopener" href="https://telegram.org/">Telegram
-                    Messenger</a> on any email sending failure. Configure notification with our
+                    Messenger</a> on any email sending failure. Configure notification with FluentSMTP's
                     <a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot">
                         official telegram bot
                     </a> to start getting real time notifications.
@@ -12,7 +12,7 @@
                 </el-button>
             </div>
             <div v-else-if="configure_state == 'form'">
-                <el-form :data="newForm" label-position="top">
+                <el-form class="fss_compact_form" :data="newForm" label-position="top">
                     <el-form-item label="Your Email Address">
                         <el-input size="small" v-model="newForm.user_email" placeholder="Email Address"/>
                     </el-form-item>
