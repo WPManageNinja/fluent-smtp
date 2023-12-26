@@ -31,21 +31,15 @@ class AdminMenuHandler
 
 
         add_action('install_plugins_table_header', function () {
-
-            if (!isset($_REQUEST['s']) || empty($_REQUEST['s'])) {
+            if (!isset($_REQUEST['s']) || empty($_REQUEST['s']) || empty($_REQUEST['tab']) || $_REQUEST['tab'] != 'search') {
                 return;
             }
 
-            if (empty($_REQUEST['tab']) || $_REQUEST['tab'] != 'search') {
-                return;
-            }
-
-            $search = str_replace('%20', ' ', $_REQUEST['s']);
+            $search = str_replace(['%20', '_', '-'], ' ', $_REQUEST['s']);
             $search = trim(strtolower(sanitize_text_field($search)));
 
-            $searchTerms = ['wp-mail-smtp', 'wp mail', 'wp mail smtp', 'wp smtp', 'smtp mail', 'smtp', 'post smtp', 'easy smtp', 'easy wp smtp', 'smtp mailer', 'gmail smtp', 'offload ses'];
+            $searchTerms = ['wp-mail-smtp', 'wp mail', 'wp mail smtp', 'post mailer', 'wp smtp', 'smtp mail', 'smtp', 'post smtp', 'easy smtp', 'easy wp smtp', 'smtp mailer', 'gmail smtp', 'offload ses'];
 
-            
             if(!strpos($search, 'smtp')) {
                 if (!in_array($search, $searchTerms)) {
                     return;
@@ -54,7 +48,7 @@ class AdminMenuHandler
             ?>
             <div style="background-color: #fff;border: 1px solid #dcdcde;box-sizing: border-box;padding: 20px;margin: 15px 0;" class="fluent_smtp_box">
                 <h3 style="margin: 0;">For SMTP, you already have FluentSMTP Installed</h3>
-                <p>You seem to be looking for an SMTP plugin, but there's no need for another one — FluentSMTP is already installed on your site. FluentSMTP is a comprehensive, free, and open-source plugin with full features available without any upsell. It's compatible with various SMTP services, including Amazon SES, SendGrid, MailGun, ElasticEmail, SendInBlue, Google, Microsoft, and others, providing you with a wide range of options for your email needs.</p>
+                <p>You seem to be looking for an SMTP plugin, but there's no need for another one — FluentSMTP is already installed on your site. FluentSMTP is a comprehensive, free, and open-source plugin with full features available without any upsell (<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/">learn why it's free</a>). It's compatible with various SMTP services, including Amazon SES, SendGrid, MailGun, ElasticEmail, SendInBlue, Google, Microsoft, and others, providing you with a wide range of options for your email needs.</p>
                 <a href="<?php echo admin_url('options-general.php?page=fluent-mail#/'); ?>"
                    class="wp-core-ui button button-primary">Go To FluentSMTP Settings</a>
                 <p style="font-size: 80%; margin: 15px 0 0;">This notice is from FluentSMTP plugin to prevent plugin conflict.</p>
