@@ -4,6 +4,7 @@ namespace FluentMail\App\Services\Mailer\Providers\AmazonSes;
 
 use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\Mailer\BaseHandler;
+use FluentMail\Includes\Support\Arr;
 
 class Handler extends BaseHandler
 {
@@ -164,7 +165,7 @@ class Handler extends BaseHandler
         $addresses = [];
 
         if (is_wp_error($validSenders)) {
-            return $config['sender_email'];
+            return [$config['sender_email']];
         }
 
         if ($validSenders && isset($validSenders['Addresses'])) {
@@ -187,10 +188,56 @@ class Handler extends BaseHandler
         return apply_filters('fluentsmtp_ses_valid_senders', $addresses, $config);
     }
 
+    public function getValidSendingIdentities($config)
+    {
+        $config = $this->filterConnectionVars($config);
+
+        $region = 'email.' . $config['region'] . '.amazonaws.com';
+
+        $ses = new SimpleEmailService(
+            $config['access_key'],
+            $config['secret_key'],
+            $region,
+            static::TRIGGER_ERROR
+        );
+
+        $validSenders = $ses->listVerifiedEmailAddresses();
+
+        $addresses = [];
+
+        if (is_wp_error($validSenders)) {
+            return [
+                'emails'          => $config['sender_email'],
+                'verified_domain' => ''
+            ];
+        }
+
+        if ($validSenders && isset($validSenders['Addresses'])) {
+            $addresses = $validSenders['Addresses'];
+        }
+
+        $primaryEmail = $config['sender_email'];
+        $domainArray = explode('@', $primaryEmail);
+        $domainName = $domainArray[1];
+
+        if (apply_filters('fluent_mail_ses_primary_domain_only', true)) {
+            $addresses = array_filter($addresses, function ($email) use ($domainName) {
+                return !!strpos($email, $domainName);
+            });
+            $addresses = array_values($addresses);
+        }
+
+        return [
+            'emails'          => apply_filters('fluentsmtp_ses_valid_senders', $addresses, $config),
+            'verified_domain' => in_array($domainName, $validSenders['domains']) ? $domainName : ''
+        ];
+    }
+
+
     public function getConnectionInfo($connection)
     {
         $connection = $this->filterConnectionVars($connection);
-        $validSenders = $this->getValidSenders($connection);
+        $validSenders = $this->getValidSendingIdentities($connection);
 
         $stats = $this->getStats($connection);
         $error = '';
@@ -199,17 +246,42 @@ class Handler extends BaseHandler
             $stats = [];
         }
 
+        $verifiedDomain = Arr::get($validSenders, 'verified_domain', '');
+        if ($verifiedDomain) {
+            $settings = fluentMailGetSettings();
+            $mappings = Arr::get($settings, 'mappings', []);
+
+            $mapKey = md5($connection['sender_email']);
+            $mapSenders = array_filter($mappings, function ($key) use ($mapKey) {
+                return $key == $mapKey;
+            });
+
+            $mapSenders[$connection['sender_email']] = true;
+
+            foreach ($validSenders['emails'] as $email) {
+                $mapSenders[$email] = $email;
+            }
+
+            $mapSenders = array_keys($mapSenders);
+        } else {
+            $mapSenders = $validSenders['emails'];
+        }
+
         $info = (string)fluentMail('view')->make('admin.ses_connection_info', [
             'connection'    => $connection,
-            'valid_senders' => $validSenders,
+            'valid_senders' => $mapSenders,
             'stats'         => $stats,
             'error'         => $error
         ]);
 
         return [
-            'info' => $info
+            'info'                 => $info,
+            'verificationSettings' => [
+                'all_senders'      => $mapSenders,
+                'verified_senders' => $validSenders['emails'],
+                'verified_domain'  => $verifiedDomain
+            ]
         ];
-
     }
 
     private function getStats($config)
