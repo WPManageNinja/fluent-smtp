@@ -13,6 +13,9 @@ $app->post('/settings/test', 'SettingsController@sendTestEmil');
 $app->post('/settings/subscribe', 'SettingsController@subscribe');
 $app->post('/settings/subscribe-dismiss', 'SettingsController@subscribeDismiss');
 $app->get('settings/connection_info', 'SettingsController@getConnectionInfo');
+$app->post('settings/add_new_sender_email', 'SettingsController@addNewSenderEmail');
+
+
 $app->get('settings/notification-settings', 'SettingsController@getNotificationSettings');
 $app->post('settings/notification-settings', 'SettingsController@saveNotificationSettings');
 $app->post('settings/gmail_auth_url', 'SettingsController@getGmailAuthUrl');

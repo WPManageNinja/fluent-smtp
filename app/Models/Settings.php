@@ -31,7 +31,6 @@ class Settings
 
         $key = $inputs['connection_key'];
 
-
         if (isset($connections[$key])) {
             $mappings = array_filter($mappings, function ($mappingKey) use ($key) {
                 return $mappingKey != $key;

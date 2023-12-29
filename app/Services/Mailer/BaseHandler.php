@@ -397,4 +397,9 @@ class BaseHandler
         $this->existing_row_id = $id;
     }
 
+    public function addNewSenderEmail($connection, $email)
+    {
+        return new \WP_Error('not_implemented', 'Not implemented');
+    }
+
 }

@@ -151,41 +151,9 @@ class Handler extends BaseHandler
     {
         $config = $this->filterConnectionVars($config);
 
-        $region = 'email.' . $config['region'] . '.amazonaws.com';
+        $senders = $this->getSendersFromMappingsAndApi($config);
 
-        $ses = new SimpleEmailService(
-            $config['access_key'],
-            $config['secret_key'],
-            $region,
-            static::TRIGGER_ERROR
-        );
-
-        $validSenders = $ses->listVerifiedEmailAddresses();
-
-        $addresses = [];
-
-        if (is_wp_error($validSenders)) {
-            return [$config['sender_email']];
-        }
-
-        if ($validSenders && isset($validSenders['Addresses'])) {
-            $addresses = $validSenders['Addresses'];
-        }
-
-        if (apply_filters('fluent_mail_ses_primary_domain_only', true)) {
-            $primaryEmail = $config['sender_email'];
-
-            $domainArray = explode('@', $primaryEmail);
-            $domainName = $domainArray[1];
-
-            $addresses = array_filter($addresses, function ($email) use ($domainName) {
-                return !!strpos($email, $domainName);
-            });
-
-            $addresses = array_values($addresses);
-        }
-
-        return apply_filters('fluentsmtp_ses_valid_senders', $addresses, $config);
+        return $senders['all_senders'];
     }
 
     public function getValidSendingIdentities($config)
@@ -207,7 +175,7 @@ class Handler extends BaseHandler
 
         if (is_wp_error($validSenders)) {
             return [
-                'emails'          => $config['sender_email'],
+                'emails'          => [$config['sender_email']],
                 'verified_domain' => ''
             ];
         }
@@ -233,11 +201,9 @@ class Handler extends BaseHandler
         ];
     }
 
-
     public function getConnectionInfo($connection)
     {
         $connection = $this->filterConnectionVars($connection);
-        $validSenders = $this->getValidSendingIdentities($connection);
 
         $stats = $this->getStats($connection);
         $error = '';
@@ -246,30 +212,11 @@ class Handler extends BaseHandler
             $stats = [];
         }
 
-        $verifiedDomain = Arr::get($validSenders, 'verified_domain', '');
-        if ($verifiedDomain) {
-            $settings = fluentMailGetSettings();
-            $mappings = Arr::get($settings, 'mappings', []);
-
-            $mapKey = md5($connection['sender_email']);
-            $mapSenders = array_filter($mappings, function ($key) use ($mapKey) {
-                return $key == $mapKey;
-            });
-
-            $mapSenders[$connection['sender_email']] = true;
-
-            foreach ($validSenders['emails'] as $email) {
-                $mapSenders[$email] = $email;
-            }
-
-            $mapSenders = array_keys($mapSenders);
-        } else {
-            $mapSenders = $validSenders['emails'];
-        }
+        $validSenders = $this->getSendersFromMappingsAndApi($connection);
 
         $info = (string)fluentMail('view')->make('admin.ses_connection_info', [
             'connection'    => $connection,
-            'valid_senders' => $mapSenders,
+            'valid_senders' => $validSenders['all_senders'],
             'stats'         => $stats,
             'error'         => $error
         ]);
@@ -277,11 +224,40 @@ class Handler extends BaseHandler
         return [
             'info'                 => $info,
             'verificationSettings' => [
-                'all_senders'      => $mapSenders,
-                'verified_senders' => $validSenders['emails'],
-                'verified_domain'  => $verifiedDomain
+                'connection_name'  => 'Amazon SES',
+                'all_senders'      => $validSenders['all_senders'],
+                'verified_senders' => $validSenders['verified_senders'],
+                'verified_domain'  => $validSenders['verified_domain']
             ]
         ];
+    }
+
+    public function addNewSenderEmail($connection, $email)
+    {
+        $connection = $this->filterConnectionVars($connection);
+        $validSenders = $this->getValidSendingIdentities($connection);
+
+        $emailDomain = explode('@', $email);
+        $emailDomain = $emailDomain[1];
+
+        if ($emailDomain != $validSenders['verified_domain']) {
+            return new \WP_Error(422, 'Invalid email address! Please use a verified domain.');
+        }
+
+        $settings = fluentMailGetSettings();
+        $mappings = Arr::get($settings, 'mappings', []);
+
+        if (isset($mappings[$email])) {
+            return new \WP_Error(422, 'Email address already exists with another connection. Please choose a different email.');
+        }
+
+        $settings = get_option('fluentmail-settings');
+
+        $settings['mappings'][$email] = md5($connection['sender_email']);
+
+        update_option('fluentmail-settings', $settings);
+
+        return true;
     }
 
     private function getStats($config)
@@ -306,5 +282,37 @@ class Handler extends BaseHandler
         }
 
         return $connection;
+    }
+
+    private function getSendersFromMappingsAndApi($connection)
+    {
+        $validSenders = $this->getValidSendingIdentities($connection);
+        $verifiedDomain = Arr::get($validSenders, 'verified_domain', '');
+        if ($verifiedDomain) {
+            $settings = fluentMailGetSettings();
+            $mappings = Arr::get($settings, 'mappings', []);
+
+            $mapKey = md5($connection['sender_email']);
+            $mapSenders = array_filter($mappings, function ($key) use ($mapKey) {
+                return $key == $mapKey;
+            });
+
+            $mapSenders[$connection['sender_email']] = true;
+
+            foreach ($validSenders['emails'] as $email) {
+                $mapSenders[$email] = $email;
+            }
+
+            $mapSenders = array_keys($mapSenders);
+
+        } else {
+            $mapSenders = $validSenders['emails'];
+        }
+
+        return [
+            'all_senders'      => $mapSenders,
+            'verified_senders' => $validSenders['emails'],
+            'verified_domain'  => $verifiedDomain
+        ];
     }
 }
