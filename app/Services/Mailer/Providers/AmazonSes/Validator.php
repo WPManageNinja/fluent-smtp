@@ -35,7 +35,7 @@ class Validator
 
         $result = $ses->listVerifiedEmailAddresses();
 
-        if ($result) {
+        if ($result && !is_wp_error($result)) {
             $senderEmail = Arr::get(
                 $data, 'provider.options.sender_email'
             );

@@ -314,7 +314,7 @@ class SimpleEmailService
     /**
      * Lists the email addresses that have been verified and can be used as the 'From' address
      *
-     * @return array An array containing two items: a list of verified email addresses, and the request id.
+     * @return array|\WP_Error An array containing two items: a list of verified email addresses, and the request id.
      */
     public function listVerifiedEmailAddresses()
     {
@@ -327,8 +327,7 @@ class SimpleEmailService
             $ses_response->error = array('code' => $ses_response->code, 'message' => 'Unexpected HTTP status');
         }
         if ($ses_response->error !== false) {
-            $this->__triggerError('ListIdentities', $ses_response->error);
-            return [];
+            return new \WP_Error($ses_response->code, $this->getErrorMessage('ListIdentities', $ses_response->error), $ses_response->error);
         }
 
         $response = array();
@@ -336,14 +335,18 @@ class SimpleEmailService
             return $response;
         }
 
+        $domains = array();
         $addresses = array();
         foreach ($ses_response->body->ListIdentitiesResult->Identities->member as $address) {
-            if(is_email($address)) {
+            if (is_email($address)) {
                 $addresses[] = (string)$address;
+            } else {
+                $domains[] = (string)$address;
             }
         }
 
         $response['Addresses'] = $addresses;
+        $response['domains'] = $domains;
         $response['RequestId'] = (string)$ses_response->body->ResponseMetadata->RequestId;
 
         return $response;
@@ -407,7 +410,7 @@ class SimpleEmailService
      * Retrieves information on the current activity limits for this account.
      * See http://docs.amazonwebservices.com/ses/latest/APIReference/API_GetSendQuota.html
      *
-     * @return array An array containing information on this account's activity limits.
+     * @return array|\WP_Error An array containing information on this account's activity limits.
      */
     public function getSendQuota()
     {
@@ -415,12 +418,12 @@ class SimpleEmailService
         $ses_request->setParameter('Action', 'GetSendQuota');
 
         $ses_response = $ses_request->getResponse();
+
         if ($ses_response->error === false && $ses_response->code !== 200) {
             $ses_response->error = array('code' => $ses_response->code, 'message' => 'Unexpected HTTP status');
         }
         if ($ses_response->error !== false) {
-            $this->__triggerError('getSendQuota', $ses_response->error);
-            return false;
+            return new \WP_Error($ses_response->code, $this->getErrorMessage('getSendQuota', $ses_response->error), $ses_response->error);
         }
 
         $response = array();

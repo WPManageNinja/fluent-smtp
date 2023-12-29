@@ -21,8 +21,8 @@ class Handler extends BaseHandler
             $this->client = new SimpleEmailServiceMessage;
             return $this->postSend();
         }
-        
-        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
+
+        return $this->handleResponse(new \WP_Error(422, 'Something went wrong!', []));
     }
 
     public function postSend()
@@ -78,11 +78,11 @@ class Handler extends BaseHandler
 
     protected function getRecipients($recipients)
     {
-        $array = array_map(function($recipient) {
+        $array = array_map(function ($recipient) {
             return isset($recipient['name'])
-            ? $recipient['name'] . ' <' . $recipient['email'] . '>'
-            : $recipient['email'];
-       }, $recipients);
+                ? $recipient['name'] . ' <' . $recipient['email'] . '>'
+                : $recipient['email'];
+        }, $recipients);
 
         return implode(', ', $array);
     }
@@ -118,8 +118,8 @@ class Handler extends BaseHandler
             }
 
             $attachments[] = [
-                'type' => $filetype,
-                'name' => $fileName,
+                'type'    => $filetype,
+                'name'    => $fileName,
                 'content' => $file
             ];
         }
@@ -163,11 +163,15 @@ class Handler extends BaseHandler
 
         $addresses = [];
 
-        if($validSenders && isset($validSenders['Addresses'])) {
+        if (is_wp_error($validSenders)) {
+            return $config['sender_email'];
+        }
+
+        if ($validSenders && isset($validSenders['Addresses'])) {
             $addresses = $validSenders['Addresses'];
         }
 
-        if(apply_filters('fluent_mail_ses_primary_domain_only', true)) {
+        if (apply_filters('fluent_mail_ses_primary_domain_only', true)) {
             $primaryEmail = $config['sender_email'];
 
             $domainArray = explode('@', $primaryEmail);
@@ -176,6 +180,7 @@ class Handler extends BaseHandler
             $addresses = array_filter($addresses, function ($email) use ($domainName) {
                 return !!strpos($email, $domainName);
             });
+
             $addresses = array_values($addresses);
         }
 
@@ -185,13 +190,20 @@ class Handler extends BaseHandler
     public function getConnectionInfo($connection)
     {
         $connection = $this->filterConnectionVars($connection);
-
         $validSenders = $this->getValidSenders($connection);
+
         $stats = $this->getStats($connection);
-        return (string) fluentMail('view')->make('admin.ses_connection_info', [
-            'connection' => $connection,
+        $error = '';
+        if (is_wp_error($stats)) {
+            $error = $stats->get_error_message();
+            $stats = [];
+        }
+
+        return (string)fluentMail('view')->make('admin.ses_connection_info', [
+            'connection'    => $connection,
             'valid_senders' => $validSenders,
-            'stats' => $stats
+            'stats'         => $stats,
+            'error'         => $error
         ]);
     }
 
@@ -205,12 +217,13 @@ class Handler extends BaseHandler
             $region,
             static::TRIGGER_ERROR
         );
+
         return $ses->getSendQuota();
     }
 
     private function filterConnectionVars($connection)
     {
-        if($connection['key_store'] == 'wp_config') {
+        if ($connection['key_store'] == 'wp_config') {
             $connection['access_key'] = defined('FLUENTMAIL_AWS_ACCESS_KEY_ID') ? FLUENTMAIL_AWS_ACCESS_KEY_ID : '';
             $connection['secret_key'] = defined('FLUENTMAIL_AWS_SECRET_ACCESS_KEY') ? FLUENTMAIL_AWS_SECRET_ACCESS_KEY : '';
         }

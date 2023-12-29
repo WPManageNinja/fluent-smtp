@@ -178,7 +178,7 @@ class SettingsController extends Controller
         return $this->sendError([
             'message' => $response->get_error_message(),
             'errors'  => $response->get_error_data()
-        ], 423);
+        ], 422);
     }
 
     public function validateConnection($provider, $connection)
@@ -396,7 +396,7 @@ class SettingsController extends Controller
         if (!is_email($email)) {
             return $this->sendError([
                 'message' => 'Sorry! The provider email is not valid'
-            ], 423);
+            ], 422);
         }
 
         $shareEssentials = 'no';

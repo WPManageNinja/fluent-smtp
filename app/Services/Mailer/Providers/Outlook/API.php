@@ -41,7 +41,7 @@ class API
             $tokens = $fluentClient->getAccessToken($type, $params);
             return $tokens;
         } catch (\Exception$exception) {
-            return new \WP_Error(423, $exception->getMessage());
+            return new \WP_Error(422, $exception->getMessage());
         }
     }
 

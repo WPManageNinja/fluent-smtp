@@ -17,7 +17,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []));
+        return $this->handleResponse(new \WP_Error(422, 'Something went wrong!', []));
     }
 
     protected function postSend()
@@ -25,7 +25,7 @@ class Handler extends BaseHandler
         try {
             $returnResponse = $this->sendViaApi();
         } catch (\Exception $e) {
-            $returnResponse = new \WP_Error(423, $e->getMessage(), []);
+            $returnResponse = new \WP_Error(422, $e->getMessage(), []);
         }
 
         $this->response = $returnResponse;
@@ -59,7 +59,7 @@ class Handler extends BaseHandler
 
         if(is_wp_error($result)) {
             $errorMessage = $result->get_error_message();
-            return new \WP_Error(423, $errorMessage, []);
+            return new \WP_Error(422, $errorMessage, []);
         } else {
             return array(
                 'RequestId' => $result['request-id'],
