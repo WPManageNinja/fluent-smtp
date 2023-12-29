@@ -4,7 +4,7 @@
             <div v-if="configure_state == 'intro'">
                 <p>
                     Get real-time notification on your Slack Channel on any email sending failure. Configure
-                    notification with Slack Bot to start getting real time notifications.
+                    notification with Slack Bot to start getting real time notifications. <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">Read the documentation</a>.
                 </p>
                 <el-button @click="configure_state = 'form'" size="small" type="info">
                     Configure Slack Notification
@@ -29,8 +29,7 @@
                             Continue to Slack
                         </el-button>
                     </el-form-item>
-                    <p>FluentSMTP does not store your email notifications data. Feel free to check the project at <a
-                        target="_blank" href="https://github.com/WPManageNinja/fluent-smtp">Github</a></p>
+                    <p>FluentSMTP does not store your email notifications data. <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">Read the documentation</a>.</p>
                 </el-form>
             </div>
         </div>

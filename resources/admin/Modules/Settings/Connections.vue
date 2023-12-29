@@ -16,16 +16,17 @@
                     </div>
                     <div class="fss_content">
                         <el-table stripe border :data="connections">
-
                             <el-table-column :label="$t('Provider')">
                                 <template slot-scope="scope">
                                     {{ settings.providers[scope.row.provider].title }}
                                     <span style="color: red;" v-if="scope.row.provider == 'gmail' && !scope.row.version">(Re Authentication Required)</span>
                                 </template>
                             </el-table-column>
-
-                            <el-table-column prop="sender_email" :label="$t('From Email')"/>
-
+                            <el-table-column prop="sender_email" :label="$t('From Email')">
+                                <template slot-scope="scope">
+                                    <span style="cursor: pointer;" @click="showConnection(scope.row)">{{ scope.row.sender_email }}</span>
+                                </template>
+                            </el-table-column>
                             <el-table-column width="120" :label="$t('Actions')" align="center">
                                 <template slot-scope="scope">
                                     <el-button

@@ -6,9 +6,10 @@
                     Messenger</a> on any email sending failure. Configure notification with FluentSMTP's
                     <a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot">
                         official telegram bot
-                    </a> to start getting real time notifications.
+                    </a> to start getting real time notifications. <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-telegram/">Read the documentation</a>.
                 </p>
-                <el-button @click="configure_state = 'form'" size="small" type="info">Configure Telegram Notification
+                <el-button @click="configure_state = 'form'" size="small" type="info">
+                    Configure Telegram Notification
                 </el-button>
             </div>
             <div v-else-if="configure_state == 'form'">
@@ -30,8 +31,7 @@
                             Continue
                         </el-button>
                     </el-form-item>
-                    <p>FluentSMTP does not store your email notifications data. Feel free to check the project at <a
-                        target="_blank" href="https://github.com/WPManageNinja/fluent-smtp">Github</a></p>
+                    <p>FluentSMTP does not store your email notifications data. <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-telegram/">Read the documentation</a>.</p>
                 </el-form>
             </div>
             <div v-else-if="configure_state == 'pin'">
