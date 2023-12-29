@@ -2,8 +2,8 @@
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
 Requires at least: 5.5
-Tested up to: 6.3
-Stable tag: 2.2.6
+Tested up to: 6.4
+Stable tag: 2.2.7
 Requires PHP: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -281,6 +281,10 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.2.7 (Date: Dec 29, 2023) =
+* Added RealTime Email Failure Notification via Telegram / Slack
+* Improve the UI
 
 = 2.2.6 (Date: Oct 01, 2023) =
 * Enable Encryption for All SMTP Connections Keys
