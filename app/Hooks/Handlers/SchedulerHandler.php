@@ -14,11 +14,11 @@ class SchedulerHandler
     public function register()
     {
         add_action($this->dailyActionName, array($this, 'handleScheduledJobs'));
-        add_action('fluentmail_email_sending_failed', array($this, 'maybeHandleFallbackConnection'), 10, 2);
+        add_action('fluentmail_email_sending_failed', array($this, 'maybeHandleFallbackConnection'), 10, 3);
 
         add_action('fluentsmtp_renew_gmail_token', array($this, 'renewGmailToken'));
 
-        add_action('fluentmail_email_sending_failed_no_fallback', array($this, 'maybeSendNotification'), 10, 2);
+        add_action('fluentmail_email_sending_failed_no_fallback', array($this, 'maybeSendNotification'), 10, 3);
 
     }
 
@@ -163,7 +163,7 @@ class SchedulerHandler
         return untrailingslashit($url);
     }
 
-    public function maybeHandleFallbackConnection($logId, $handler)
+    public function maybeHandleFallbackConnection($logId, $handler, $data = [])
     {
         if (defined('FLUENTMAIL_EMAIL_TESTING')) {
             return false;
@@ -174,14 +174,14 @@ class SchedulerHandler
         $fallbackConnectionId = \FluentMail\Includes\Support\Arr::get($settings, 'misc.fallback_connection');
 
         if (!$fallbackConnectionId) {
-            do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler);
+            do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
             return false;
         }
 
         $fallbackConnection = \FluentMail\Includes\Support\Arr::get($settings, 'connections.' . $fallbackConnectionId);
 
         if (!$fallbackConnection) {
-            do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler);
+            do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
             return false;
         }
 
@@ -257,19 +257,21 @@ class SchedulerHandler
     }
 
 
-    public function maybeSendNotification($rowId, $handler)
+    public function maybeSendNotification($rowId, $handler, $logData = [])
     {
+
         $lastNotificationSent = get_option('_fsmtp_last_notification_sent');
         if ($lastNotificationSent && (time() - $lastNotificationSent) < 60) {
-            return false;
+              return false;
         }
 
         $tokenId = NotificationHelper::getTelegramBotTokenId();
         if ($tokenId) {
             // send a non-blocking post request to the telegram server
             $data = [
-                'token_id' => $tokenId,
-                'provider' => $handler->getSetting('provider'),
+                'token_id'      => $tokenId,
+                'provider'      => $handler->getSetting('provider'),
+                'error_message' => $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')))
             ];
 
             update_option('_fsmtp_last_notification_sent', time());
@@ -291,12 +293,23 @@ class SchedulerHandler
         $provider = $handler->getSetting('provider');
 
         $url = admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=');
-        $message = 'Attention: Your website \'' . $domainName . '\' encountered an issue while attempting to send an email via ' . $provider . '. To review the details of the failed email(s), please <' . $url . '|click here to view them>.';
+        $message = '*Attention:* Your website \'' . $domainName . '\' encountered an issue while attempting to send an email via ' . $provider . '.';
+
+        $error = $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')));
+
+        if (!empty($logData['subject'])) {
+            $message .= "\n*Email Subject:* " . $logData['subject']."\n";
+        }
+
+        if ($error) {
+            $message .= "\n*Error Message:* ```" . $error . "``` ";
+        }
+
+        $message .= "<" . $url . "|click here to view> the failed email(s).";
 
         NotificationHelper::sendSlackMessage($message, $slackWebhookUrl, false);
 
         return true;
-
     }
 
     private function saveNewGmailTokens($existingData, $tokens)
@@ -316,5 +329,28 @@ class SchedulerHandler
         fluentMailGetProvider($senderEmail, true); // we are clearing the static cache here
         wp_schedule_single_event($existingData['expire_stamp'] - 360, 'fluentsmtp_renew_gmail_token');
         return true;
+    }
+
+    private function getErrorMessageFromResponse($response)
+    {
+        if (!$response || !is_array($response)) {
+            return '';
+        }
+
+        if (!empty($response['fallback_response']['message'])) {
+            $message = $response['fallback_response']['message'];
+        } else {
+            $message = Arr::get($response, 'message');
+        }
+
+        if (!$message) {
+            return '';
+        }
+
+        if (!is_string($message)) {
+            $message = json_encode($message);
+        }
+
+        return $message;
     }
 }
