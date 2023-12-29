@@ -82,6 +82,7 @@ class SettingsController extends Controller
             $data['connection'] = $connection;
 
             $this->validateConnection($provider, $connection);
+
             $provider->checkConnection($connection);
 
             $data['valid_senders'] = $provider->getValidSenders($connection);
@@ -98,11 +99,11 @@ class SettingsController extends Controller
             ]);
 
         } catch (ValidationException $e) {
-            return $this->sendError($e->errors(), $e->getCode());
+            return $this->sendError($e->errors(), 422);
         } catch (Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage()
-            ], $e->getCode());
+            ], 422);
         }
     }
 

@@ -44,7 +44,7 @@
             <td>
                 <ul>
                     <?php foreach ($valid_senders as $sender): ?>
-                    <li><?php echo esc_html($sender); ?></li>
+                        <li><?php echo esc_html($sender); ?></li>
                     <?php endforeach; ?>
                 </ul>
             </td>

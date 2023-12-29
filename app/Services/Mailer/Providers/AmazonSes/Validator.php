@@ -21,21 +21,27 @@ class Validator
 
     public function validate()
     {
-        set_error_handler([$this, 'errorHandler']);
 
         $data = fluentMail('request')->except(['action', 'nonce']);
 
         $inputs = Arr::only(
-            $data['provider']['options'], ['access_key', 'secret_key']
+            $data['provider']['options'], ['access_key', 'secret_key', 'region']
         );
 
         $ses = new SimpleEmailService(
-            $inputs['access_key'], $inputs['secret_key']
+            $inputs['access_key'],
+            $inputs['secret_key'],
+            'email.' . $inputs['region'] . '.amazonaws.com',
+            false
         );
 
         $result = $ses->listVerifiedEmailAddresses();
 
-        if ($result && !is_wp_error($result)) {
+        if (is_wp_error($result)) {
+            throw new ValidationException($result->get_error_message(), 400);
+        }
+
+        if ($result) {
             $senderEmail = Arr::get(
                 $data, 'provider.options.sender_email'
             );

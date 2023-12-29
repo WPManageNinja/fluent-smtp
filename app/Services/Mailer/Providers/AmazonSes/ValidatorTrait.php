@@ -33,7 +33,6 @@ trait ValidatorTrait
             }
         }
 
-
         if ($errors) {
             $this->throwValidationException($errors);
         }
