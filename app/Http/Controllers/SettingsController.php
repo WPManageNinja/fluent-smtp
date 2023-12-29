@@ -220,9 +220,7 @@ class SettingsController extends Controller
 
         $provider = $factory->make($connection['provider']);
 
-        return $this->sendSuccess([
-            'info' => $provider->getConnectionInfo($connection)
-        ]);
+        return $this->sendSuccess($provider->getConnectionInfo($connection));
     }
 
     public function installPlugin(Request $request)

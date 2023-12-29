@@ -199,12 +199,17 @@ class Handler extends BaseHandler
             $stats = [];
         }
 
-        return (string)fluentMail('view')->make('admin.ses_connection_info', [
+        $info = (string)fluentMail('view')->make('admin.ses_connection_info', [
             'connection'    => $connection,
             'valid_senders' => $validSenders,
             'stats'         => $stats,
             'error'         => $error
         ]);
+
+        return [
+            'info' => $info
+        ];
+
     }
 
     private function getStats($config)

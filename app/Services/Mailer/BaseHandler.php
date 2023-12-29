@@ -380,9 +380,11 @@ class BaseHandler
 
     public function getConnectionInfo($connection)
     {
-        return (string) fluentMail('view')->make('admin.general_connection_info', [
-            'connection' => $connection
-        ]);
+        return [
+            'info' => (string) fluentMail('view')->make('admin.general_connection_info', [
+                'connection' => $connection
+            ])
+        ];
     }
 
     public function getPhpMailer()
