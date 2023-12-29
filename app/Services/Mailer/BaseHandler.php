@@ -402,4 +402,9 @@ class BaseHandler
         return new \WP_Error('not_implemented', 'Not implemented');
     }
 
+    public function removeSenderEmail($connection, $email)
+    {
+        return new \WP_Error('not_implemented', 'Not implemented');
+    }
+
 }

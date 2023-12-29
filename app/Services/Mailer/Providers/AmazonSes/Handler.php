@@ -260,6 +260,44 @@ class Handler extends BaseHandler
         return true;
     }
 
+    public function removeSenderEmail($connection, $email)
+    {
+        $connection = $this->filterConnectionVars($connection);
+        $validSenders = $this->getValidSendingIdentities($connection);
+
+        $emailDomain = explode('@', $email);
+        $emailDomain = $emailDomain[1];
+
+        if ($emailDomain != $validSenders['verified_domain']) {
+            return new \WP_Error(422, 'Invalid email address! Please use a verified domain.');
+        }
+
+        if (in_array($email, $validSenders['emails'])) {
+            return new \WP_Error(422, 'Sorry! you can not remove this email from this connection');
+        }
+
+        $settings = fluentMailGetSettings();
+        $mappings = Arr::get($settings, 'mappings', []);
+
+        if (!isset($mappings[$email])) {
+            return new \WP_Error(422, 'Email does not exists. Please try again.');
+        }
+
+        // check if the it's the same email or not
+        if ($mappings[$email] != md5($connection['sender_email'])) {
+            return new \WP_Error(422, 'Email does not exists. Please try again.');
+        }
+
+        $settings = get_option('fluentmail-settings');
+
+        unset($settings['mappings'][$email]);
+
+        update_option('fluentmail-settings', $settings);
+
+        return true;
+    }
+
+
     private function getStats($config)
     {
         $region = 'email.' . $config['region'] . '.amazonaws.com';

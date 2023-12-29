@@ -14,6 +14,7 @@ $app->post('/settings/subscribe', 'SettingsController@subscribe');
 $app->post('/settings/subscribe-dismiss', 'SettingsController@subscribeDismiss');
 $app->get('settings/connection_info', 'SettingsController@getConnectionInfo');
 $app->post('settings/add_new_sender_email', 'SettingsController@addNewSenderEmail');
+$app->post('settings/remove_sender_email', 'SettingsController@removeSenderEmail');
 
 
 $app->get('settings/notification-settings', 'SettingsController@getNotificationSettings');

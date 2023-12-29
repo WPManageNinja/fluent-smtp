@@ -261,6 +261,44 @@ class SettingsController extends Controller
 
     }
 
+    public function removeSenderEmail(Request $request, Settings $settings, Factory $factory)
+    {
+        $this->verify();
+
+        $connectionId = $request->get('connection_id');
+        $connections = $settings->getConnections();
+
+        if (!isset($connections[$connectionId]['provider_settings'])) {
+            return $this->sendSuccess([
+                'info' => __('Sorry no connection found. Please reload the page and try again', 'fluent-smtp')
+            ]);
+        }
+
+        $connection = $connections[$connectionId]['provider_settings'];
+
+        $provider = $factory->make($connection['provider']);
+        $email = sanitize_email($request->get('email'));
+
+        if (!is_email($email)) {
+            return $this->sendError([
+                'message' => __('Please provide a valid email address', 'fluent-smtp')
+            ]);
+        }
+
+        $result = $provider->removeSenderEmail($connection, $email);
+
+        if (is_wp_error($result)) {
+            return $this->sendError([
+                'message' => $result->get_error_message()
+            ]);
+        }
+
+        return $this->sendSuccess([
+            'message' => __('Email has been removed successfully', 'fluent-smtp')
+        ]);
+
+    }
+
     public function installPlugin(Request $request)
     {
         $this->verify();

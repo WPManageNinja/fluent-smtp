@@ -23,7 +23,10 @@
                 <table v-loading="loading" class="wp-list-table widefat striped">
                     <tbody>
                     <tr v-for="sender in verificationSettings.all_senders" :key="sender">
-                        <th>{{ sender }}</th>
+                        <th>
+                            {{ sender }}
+                            <el-button plain v-if="verificationSettings.verified_senders.indexOf(sender) === -1" type="danger" size="mini" @click="removeSender(sender)">Remove</el-button>
+                        </th>
                     </tr>
                     </tbody>
                 </table>
@@ -53,7 +56,6 @@ export default {
                 connection_id: this.connection_id
             })
                 .then(response => {
-                    console.log(response.data);
                     this.connection_content = response.data.info;
                     this.verificationSettings = response.data.verificationSettings;
                 })
@@ -112,6 +114,32 @@ export default {
                     this.addingNew = false;
                 });
 
+        },
+        removeSender(email) {
+            this.$confirm('Are you sure you want to remove this email address?', 'Warning', {
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No',
+                type: 'warning'
+            }).then(() => {
+                this.loading = true;
+                this.$post('settings/remove_sender_email', {
+                    connection_id: this.connection_id,
+                    email: email
+                })
+                    .then(response => {
+                        this.$notify.success(response.data.message);
+                    })
+                    .catch(errors => {
+                        this.$notify.error({
+                            title: 'Validation Failed',
+                            message: errors.responseJSON.data.message
+                        });
+                    })
+                    .always(() => {
+                        this.loading = false;
+                        this.fetchDetails();
+                    });
+            });
         }
     },
     created() {
