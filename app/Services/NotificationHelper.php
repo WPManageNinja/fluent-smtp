@@ -188,11 +188,13 @@ class NotificationHelper
     public static function sendSlackMessage($message, $webhookUrl, $blocking = false)
     {
         $body = wp_json_encode(array('text' => $message));
+
         $args = array(
             'body'        => $body,
             'headers'     => array(
                 'Content-Type' => 'application/json',
             ),
+            'cookies'     => null,
             'timeout'     => 60,
             'redirection' => 5,
             'blocking'    => true,
@@ -206,7 +208,6 @@ class NotificationHelper
             $args['timeout'] = 0.01;
         }
 
-
         $response = wp_remote_post($webhookUrl, $args);
 
         if (!$blocking) {
@@ -217,7 +218,10 @@ class NotificationHelper
             return $response;
         }
 
+
         $body = wp_remote_retrieve_body($response);
+
+
         return json_decode($body, true);
     }
 
@@ -227,6 +231,7 @@ class NotificationHelper
             'content'  => $message,
             'username' => 'FluentSMTP'
         ));
+
         $args = array(
             'body'        => $body,
             'headers'     => array(
@@ -271,7 +276,6 @@ class NotificationHelper
 
         $activeChannel = Arr::get($settings, 'active_channel', '');
 
-
         if (!$activeChannel) {
             $channel = false;
             return $channel;
@@ -288,5 +292,119 @@ class NotificationHelper
         $channel['driver'] = $activeChannel;
 
         return $channel;
+    }
+
+    public static function formatSlackMessageBlock($handler, $logData = [])
+    {
+        $sendingTo = maybe_unserialize(Arr::get($logData, 'to'));
+
+        if (is_array($sendingTo)) {
+            $sendingTo = Arr::get($sendingTo, '0.email', '');
+        }
+
+        if (is_array($sendingTo) || !$sendingTo) {
+            $sendingTo = Arr::get($logData, 'to');
+        }
+
+        $heading = sprintf('[%s] Failed to send email', get_bloginfo('name'));
+
+        return [
+            'text'   => $heading,
+            'blocks' => [
+                [
+                    'type' => 'header',
+                    'text' => [
+                        'type'  => 'plain_text',
+                        'text'  => $heading,
+                        "emoji" => true
+                    ]
+                ],
+                [
+                    'type'   => 'section',
+                    'fields' => [
+                        [
+                            'type' => "mrkdwn",
+                            'text' => "*Website URL:*\n " . site_url()
+                        ],
+                        [
+                            'type' => "mrkdwn",
+                            'text' => "*Sending Driver:*\n " . strtoupper($handler->getSetting('provider'))
+                        ],
+                        [
+                            'type' => "mrkdwn",
+                            'text' => "*To Email Address:*\n " . $sendingTo
+                        ],
+                        [
+                            'type' => "mrkdwn",
+                            'text' => "*Email Subject:*\n " . Arr::get($logData, 'subject')
+                        ]
+                    ]
+                ],
+                [
+                    'type' => 'section',
+                    'text' => [
+                        'type' => "mrkdwn",
+                        'text' => "*Error Message:*\n ```" . self::getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response'))) . "```"
+                    ]
+                ],
+                [
+                    'type' => 'section',
+                    'text' => [
+                        'type' => "mrkdwn",
+                        'text' => "<" . admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=') . "|View Failed Email(s)>"
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    public static function formatDiscordMessageBlock($handler, $logData = [])
+    {
+        $sendingTo = maybe_unserialize(Arr::get($logData, 'to'));
+
+        if (is_array($sendingTo)) {
+            $sendingTo = Arr::get($sendingTo, '0.email', '');
+        }
+
+        if (is_array($sendingTo) || !$sendingTo) {
+            $sendingTo = Arr::get($logData, 'to');
+        }
+
+        $heading = sprintf('[%s] Failed to send email', get_bloginfo('name'));
+
+        $content = '## ' . $heading . "\n";
+        $content .= '**Website URL:** ' . site_url() . "\n";
+        $content .= '**Sending Driver:** ' . strtoupper($handler->getSetting('provider')) . "\n";
+        $content .= '**To Email Address:** ' . $sendingTo . "\n";
+        $content .= '**Email Subject:** ' . Arr::get($logData, 'subject') . "\n";
+        $content .= '**Error Message:** ```' . self::getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response'))) . "```\n";
+        $content .= '[View Failed Email(s)](' . admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=') . ')';
+
+        return [
+            'content' => $content
+        ];
+    }
+
+    public static function getErrorMessageFromResponse($response)
+    {
+        if (!$response || !is_array($response)) {
+            return '';
+        }
+
+        if (!empty($response['fallback_response']['message'])) {
+            $message = $response['fallback_response']['message'];
+        } else {
+            $message = Arr::get($response, 'message');
+        }
+
+        if (!$message) {
+            return '';
+        }
+
+        if (!is_string($message)) {
+            $message = json_encode($message);
+        }
+
+        return $message;
     }
 }

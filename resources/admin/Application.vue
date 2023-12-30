@@ -59,7 +59,7 @@
                     },
                     {
                         route: 'notification_settings',
-                        title: this.$t('Notification Settings')
+                        title: this.$t('Alters')
                     },
                     {
                         route: 'support',

@@ -259,7 +259,6 @@ class SchedulerHandler
 
     public function maybeSendNotification($rowId, $handler, $logData = [])
     {
-        error_log('maybeSendNotification');
         $channel = NotificationHelper::getActiveChannelSettings();
         if (!$channel) {
             return false;
@@ -267,7 +266,7 @@ class SchedulerHandler
 
         $lastNotificationSent = get_option('_fsmtp_last_notification_sent');
         if ($lastNotificationSent && (time() - $lastNotificationSent) < 60) {
-          //  return false;
+            return false;
         }
 
         update_option('_fsmtp_last_notification_sent', time());
@@ -283,34 +282,12 @@ class SchedulerHandler
             return NotificationHelper::sendFailedNotificationTele($data);
         }
 
-        if ($driver == 'slack' || $driver == 'discord') {
-            $siteUrl = site_url();
-            $domainName = parse_url($siteUrl, PHP_URL_HOST);
-            $provider = $handler->getSetting('provider');
+        if ($driver == 'slack') {
+            return NotificationHelper::sendSlackMessage(NotificationHelper::formatSlackMessageBlock($handler, $logData), $channel['webhook_url'], false);
+        }
 
-            $url = admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=');
-            $message = '*Attention:* Your website \'' . $domainName . '\' encountered an issue while attempting to send an email via ' . $provider . '.';
-
-            $error = $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')));
-
-            if (!empty($logData['subject'])) {
-                $message .= "\n*Email Subject:* " . $logData['subject'] . "\n";
-            }
-
-            if ($error) {
-                $message .= "\n*Error Message:* ```" . $error . "``` ";
-            }
-
-            if ($driver == 'slack') {
-                $message .= "<" . $url . "|click here to view> the failed email(s).";
-                return NotificationHelper::sendSlackMessage($message, $channel['webhook_url'], false);
-            }
-
-            if ($driver == 'discord') {
-                $message .= "[click here to view](".$url.") the failed email(s).";
-                return NotificationHelper::sendDiscordMessage($message, $channel['webhook_url'], false);
-            }
-            return true;
+        if ($driver == 'discord') {
+            return NotificationHelper::sendSlackMessage(NotificationHelper::formatDiscordMessageBlock($handler, $logData), $channel['webhook_url'], false);
         }
 
         return false;

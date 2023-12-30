@@ -38,6 +38,8 @@ class AdminMenuHandler
                             'webhook_url' => sanitize_url(Arr::get($_REQUEST, 'slack_webhook'))
                         ];
 
+                        $settings['active_channel'] = 'slack';
+
                         update_option('_fluent_smtp_notify_settings', $settings);
                     }
 
@@ -477,7 +479,7 @@ class AdminMenuHandler
             'Connection Details'                                    => __('Connection Details', 'fluent-smtp'),
             'Close'                                                 => __('Close', 'fluent-smtp'),
             'General Settings'                                      => __('General Settings', 'fluent-smtp'),
-            'Notification Settings'                                 => __('Notification Settings', 'fluent-smtp'),
+            'Alters'                                 => __('Alters', 'fluent-smtp'),
             'Add Connection'                                        => __('Add Connection', 'fluent-smtp'),
             'Edit Connection'                                       => __('Edit Connection', 'fluent-smtp'),
             'routing_info'                                          => __('Your emails will be routed automatically based on From email address. No additional configuration is required.', 'fluent-smtp'),
