@@ -479,7 +479,7 @@ class AdminMenuHandler
             'Connection Details'                                    => __('Connection Details', 'fluent-smtp'),
             'Close'                                                 => __('Close', 'fluent-smtp'),
             'General Settings'                                      => __('General Settings', 'fluent-smtp'),
-            'Alters'                                 => __('Alters', 'fluent-smtp'),
+            'Alerts'                                 => __('Alerts', 'fluent-smtp'),
             'Add Connection'                                        => __('Add Connection', 'fluent-smtp'),
             'Edit Connection'                                       => __('Edit Connection', 'fluent-smtp'),
             'routing_info'                                          => __('Your emails will be routed automatically based on From email address. No additional configuration is required.', 'fluent-smtp'),
