@@ -3,6 +3,7 @@
         <el-skeleton :animated="true" v-if="loading" :rows="3"></el-skeleton>
         <template v-else>
             <div v-if="status == 'yes'">
+                <img style="max-height: 50px;" :src="`${appVars.images_url}tele.svg`"/>
                 <h3>Telegram Notifications Enabled</h3>
                 <p>
                     Your FluentSMTP plugin is currently integrated with Telegram. Receive timely notifications from <a
@@ -21,6 +22,7 @@
                 </p>
             </div>
             <div v-else>
+                <img style="max-height: 50px;" :src="`${appVars.images_url}tele.svg`"/>d
                 <h3>Telegram Connection Status: {{ status }}</h3>
                 <p>We could not fetch the Telegram notification status. Here is the server response: </p>
                 <pre>{{errors}}</pre>

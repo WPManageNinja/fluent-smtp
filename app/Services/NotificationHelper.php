@@ -36,7 +36,7 @@ class NotificationHelper
     {
         if (!$token) {
             $settings = (new Settings())->notificationSettings();
-            $token = $settings['telegram_notify_token'];
+            $token = Arr::get($settings, 'telegram.token');
         }
 
         return self::sendTeleRequest('send-test', [], 'POST', $token);
@@ -47,8 +47,13 @@ class NotificationHelper
         self::sendTeleRequest('disconnect', [], 'POST', $token);
 
         $settings = (new Settings())->notificationSettings();
-        $settings['telegram_notify_status'] = 'no';
-        $settings['telegram_notify_token'] = '';
+
+        $settings['telegram'] = [
+            'status' => 'no',
+            'token'  => ''
+        ];
+        $settings['active_channel'] = '';
+
         update_option('_fluent_smtp_notify_settings', $settings, false);
 
         return true;
@@ -64,12 +69,11 @@ class NotificationHelper
 
         $settings = (new Settings())->notificationSettings();
 
-        if (empty($settings['telegram_notify_token'])) {
-            $token = false;
-            return $token;
-        }
+        $token = Arr::get($settings, 'telegram.token', false);
 
-        $token = $settings['telegram_notify_token'];
+        if (!$token) {
+            $token = false;
+        }
 
         return $token;
     }
@@ -181,7 +185,6 @@ class NotificationHelper
         return $responseData;
     }
 
-
     public static function sendSlackMessage($message, $webhookUrl, $blocking = false)
     {
         $body = wp_json_encode(array('text' => $message));
@@ -216,5 +219,74 @@ class NotificationHelper
 
         $body = wp_remote_retrieve_body($response);
         return json_decode($body, true);
+    }
+
+    public static function sendDiscordMessage($message, $webhookUrl, $blocking = false)
+    {
+        $body = wp_json_encode(array(
+            'content'  => $message,
+            'username' => 'FluentSMTP'
+        ));
+        $args = array(
+            'body'        => $body,
+            'headers'     => array(
+                'Content-Type' => 'application/json',
+            ),
+            'timeout'     => 60,
+            'redirection' => 5,
+            'blocking'    => true,
+            'httpversion' => '1.0',
+            'sslverify'   => false,
+            'data_format' => 'body',
+        );
+
+        if (!$blocking) {
+            $args['blocking'] = false;
+            $args['timeout'] = 0.01;
+        }
+
+        $response = wp_remote_post($webhookUrl, $args);
+
+        if (!$blocking) {
+            return true;
+        }
+
+        if (is_wp_error($response)) {
+            return $response;
+        }
+
+        $body = wp_remote_retrieve_body($response);
+        return json_decode($body, true);
+    }
+
+    public static function getActiveChannelSettings()
+    {
+        static $channel = null;
+
+        if ($channel !== null) {
+            return $channel;
+        }
+
+        $settings = (new Settings())->notificationSettings();
+
+        $activeChannel = Arr::get($settings, 'active_channel', '');
+
+
+        if (!$activeChannel) {
+            $channel = false;
+            return $channel;
+        }
+
+        $channelSettings = Arr::get($settings, $activeChannel, []);
+
+        if (!$channelSettings || empty($channelSettings['status']) || $channelSettings['status'] != 'yes') {
+            $channel = false;
+            return $channel;
+        }
+
+        $channel = $channelSettings;
+        $channel['driver'] = $activeChannel;
+
+        return $channel;
     }
 }

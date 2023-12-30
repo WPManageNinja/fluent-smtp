@@ -73,8 +73,12 @@ class TelegramController extends Controller
         // Let's update the notification status
         $previousSettings = (new Settings())->notificationSettings();
 
-        $previousSettings['telegram_notify_status'] = 'yes';
-        $previousSettings['telegram_notify_token'] = $siteToken;
+        $previousSettings['telegram'] = [
+            'status' => 'yes',
+            'token'  => $siteToken
+        ];
+
+        $previousSettings['active_channel'] = 'telegram';
 
         update_option('_fluent_smtp_notify_settings', $previousSettings, false);
 
@@ -90,14 +94,14 @@ class TelegramController extends Controller
 
         $settings = (new Settings())->notificationSettings();
 
-        if ($settings['telegram_notify_status'] != 'yes') {
+        if (Arr::get($settings, 'telegram.status') != 'yes') {
             return $this->sendSuccess([
                 'message'                => __('Telegram notification is not enabled', 'fluent-smtp'),
                 'telegram_notify_status' => 'no'
             ], 200);
         }
 
-        $siteToken = $settings['telegram_notify_token'];
+        $siteToken = Arr::get($settings, 'telegram.token');
 
         $connectionInfo = NotificationHelper::getTelegramConnectionInfo($siteToken);
 
@@ -120,13 +124,13 @@ class TelegramController extends Controller
         // Let's update the notification status
         $settings = (new Settings())->notificationSettings();
 
-        if (!isset($settings['telegram_notify_status']) || $settings['telegram_notify_status'] != 'yes') {
+        if (Arr::get($settings, 'telegram.status') != 'yes') {
             return $this->sendError([
                 'message' => __('Telegram notification is not enabled', 'fluent-smtp')
             ], 422);
         }
 
-        $result = NotificationHelper::sendTestTelegramMessage($settings['telegram_notify_token']);
+        $result = NotificationHelper::sendTestTelegramMessage(Arr::get($settings, 'telegram.token'));
 
         if (is_wp_error($result)) {
             return $this->sendError([
@@ -144,13 +148,13 @@ class TelegramController extends Controller
     {
         $settings = (new Settings())->notificationSettings();
 
-        if (!isset($settings['telegram_notify_status']) || $settings['telegram_notify_status'] != 'yes') {
+        if (Arr::get($settings, 'telegram.status') != 'yes') {
             return $this->sendError([
                 'message' => __('Telegram notification is not enabled', 'fluent-smtp')
             ], 422);
         }
 
-        NotificationHelper::disconnectTelegram($settings['telegram_notify_token']);
+        NotificationHelper::disconnectTelegram(Arr::get($settings, 'telegram.token'));
 
         return $this->sendSuccess([
             'message' => __('Telegram connection has been disconnected successfully', 'fluent-smtp')

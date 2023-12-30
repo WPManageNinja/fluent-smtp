@@ -51,6 +51,27 @@
     margin-top: 20px;
     text-align: right;
   }
+
+  .fss_notification_channels {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 30px;
+    margin-top: 30px;
+    .fss_notification_item {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      text-align: center;
+      &:hover {
+        color: #409EFF;
+      }
+      img {
+        height: 50px;
+      }
+    }
+  }
 }
 
 .fss_config_section {

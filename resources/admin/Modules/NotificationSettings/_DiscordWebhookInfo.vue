@@ -1,13 +1,13 @@
 <template>
     <div>
-        <img style="max-height: 50px;" :src="`${appVars.images_url}slack.svg`"/>
-        <h3>Slack Notifications Enabled</h3>
+        <img style="max-height: 50px;" :src="`${appVars.images_url}disc.svg`"/>
+        <h3>Discord Notifications Enabled</h3>
         <p>
-            Your FluentSMTP plugin is currently integrated with your Slack Channel. Receive timely notifications on
-            Slack for any email sending issues from your website. This ongoing connection ensures you're always
+            Your FluentSMTP plugin is currently integrated with your Discord Channel. Receive timely notifications on
+            Discord for any email sending issues from your website. This ongoing connection ensures you're always
             informed about your email delivery status.
         </p>
-        <p>Slack Channel Details: @{{ notification_settings.slack.slack_team }}</p>
+        <p>Discord Channel Details: {{ notification_settings.discord.channel_name }}</p>
         <p>
             <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" size="mini" type="text">
                 Send Test Message
@@ -45,7 +45,7 @@ export default {
             })
                 .then(() => {
                     this.disconnecting = true;
-                    this.$post('settings/slack/disconnect')
+                    this.$post('settings/discord/disconnect')
                         .then((response) => {
                             this.$notify.success(response.data.message);
                             window.location.reload();
@@ -60,7 +60,7 @@ export default {
         },
         sendTest() {
             this.sending_test = true;
-            this.$post('settings/slack/send-test')
+            this.$post('settings/discord/send-test')
                 .then((response) => {
                     this.$notify.success(response.data.message);
                 })

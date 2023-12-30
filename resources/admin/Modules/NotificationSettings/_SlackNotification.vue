@@ -1,16 +1,12 @@
 <template>
     <div>
         <div v-if="!isConfigured">
-            <div v-if="configure_state == 'intro'">
+            <div v-if="configure_state == 'form'">
                 <p>
                     Get real-time notification on your Slack Channel on any email sending failure. Configure
                     notification with Slack Bot to start getting real time notifications. <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">Read the documentation</a>.
                 </p>
-                <el-button @click="configure_state = 'form'" size="small" type="info">
-                    Configure Slack Notification
-                </el-button>
-            </div>
-            <div v-else-if="configure_state == 'form'">
+
                 <el-form class="fss_compact_form" :data="newForm" label-position="top">
                     <el-form-item label="Your Email Address">
                         <el-input size="small" v-model="newForm.user_email" placeholder="Email Address"/>
@@ -60,12 +56,12 @@ export default {
     },
     data() {
         return {
-            configure_state: 'intro',
+            configure_state: 'form',
             processing: false,
             newForm: {
                 user_email: '',
                 terms: 'no',
-                site_pin: 'wp.lab-327372',
+                site_pin: '',
                 site_token: ''
             },
         }

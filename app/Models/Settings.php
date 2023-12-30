@@ -230,30 +230,28 @@ class Settings
     public function notificationSettings()
     {
         $defaults = [
-            'enabled'                => 'no',
-            'notify_email'           => '{site_admin}',
-            'notify_days'            => ['Mon'],
-            'telegram_notify_status' => 'no',
-            'telegram_notify_token'  => '',
-            'slack'                  => [
+            'enabled'        => 'no',
+            'notify_email'   => '{site_admin}',
+            'notify_days'    => ['Mon'],
+            'active_channel' => '',
+            'telegram'       => [
+                'status' => 'no',
+                'token'  => ''
+            ],
+            'slack'          => [
                 'status'      => 'no',
                 'token'       => '',
                 'webhook_url' => ''
-            ]
+            ],
+            'discord'        => [
+                'status'       => 'no',
+                'channel_name' => '',
+                'webhook_url'  => ''
+            ],
         ];
 
         $settings = get_option('_fluent_smtp_notify_settings', []);
 
-        $settings = wp_parse_args($settings, $defaults);
-
-        if (empty($settings['slack'])) {
-            $settings['slack'] = [
-                'status'      => 'no',
-                'token'       => '',
-                'webhook_url' => ''
-            ];
-        }
-
-        return $settings;
+        return wp_parse_args($settings, $defaults);
     }
 }

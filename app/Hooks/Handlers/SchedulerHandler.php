@@ -259,57 +259,61 @@ class SchedulerHandler
 
     public function maybeSendNotification($rowId, $handler, $logData = [])
     {
+        error_log('maybeSendNotification');
+        $channel = NotificationHelper::getActiveChannelSettings();
+        if (!$channel) {
+            return false;
+        }
 
         $lastNotificationSent = get_option('_fsmtp_last_notification_sent');
         if ($lastNotificationSent && (time() - $lastNotificationSent) < 60) {
-              return false;
-        }
-
-        $tokenId = NotificationHelper::getTelegramBotTokenId();
-        if ($tokenId) {
-            // send a non-blocking post request to the telegram server
-            $data = [
-                'token_id'      => $tokenId,
-                'provider'      => $handler->getSetting('provider'),
-                'error_message' => $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')))
-            ];
-
-            update_option('_fsmtp_last_notification_sent', time());
-
-            NotificationHelper::sendFailedNotificationTele($data);
-
-            return true;
-        }
-
-        $slackWebhookUrl = NotificationHelper::getSlackWebhookUrl();
-        if (!$slackWebhookUrl) {
-            return false;
+          //  return false;
         }
 
         update_option('_fsmtp_last_notification_sent', time());
 
-        $siteUrl = site_url();
-        $domainName = parse_url($siteUrl, PHP_URL_HOST);
-        $provider = $handler->getSetting('provider');
+        $driver = $channel['driver'];
+        if ($driver == 'telegram') {
+            $data = [
+                'token_id'      => $channel['token'],
+                'provider'      => $handler->getSetting('provider'),
+                'error_message' => $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')))
+            ];
 
-        $url = admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=');
-        $message = '*Attention:* Your website \'' . $domainName . '\' encountered an issue while attempting to send an email via ' . $provider . '.';
-
-        $error = $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')));
-
-        if (!empty($logData['subject'])) {
-            $message .= "\n*Email Subject:* " . $logData['subject']."\n";
+            return NotificationHelper::sendFailedNotificationTele($data);
         }
 
-        if ($error) {
-            $message .= "\n*Error Message:* ```" . $error . "``` ";
+        if ($driver == 'slack' || $driver == 'discord') {
+            $siteUrl = site_url();
+            $domainName = parse_url($siteUrl, PHP_URL_HOST);
+            $provider = $handler->getSetting('provider');
+
+            $url = admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=');
+            $message = '*Attention:* Your website \'' . $domainName . '\' encountered an issue while attempting to send an email via ' . $provider . '.';
+
+            $error = $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')));
+
+            if (!empty($logData['subject'])) {
+                $message .= "\n*Email Subject:* " . $logData['subject'] . "\n";
+            }
+
+            if ($error) {
+                $message .= "\n*Error Message:* ```" . $error . "``` ";
+            }
+
+            if ($driver == 'slack') {
+                $message .= "<" . $url . "|click here to view> the failed email(s).";
+                return NotificationHelper::sendSlackMessage($message, $channel['webhook_url'], false);
+            }
+
+            if ($driver == 'discord') {
+                $message .= "[click here to view](".$url.") the failed email(s).";
+                return NotificationHelper::sendDiscordMessage($message, $channel['webhook_url'], false);
+            }
+            return true;
         }
 
-        $message .= "<" . $url . "|click here to view> the failed email(s).";
-
-        NotificationHelper::sendSlackMessage($message, $slackWebhookUrl, false);
-
-        return true;
+        return false;
     }
 
     private function saveNewGmailTokens($existingData, $tokens)

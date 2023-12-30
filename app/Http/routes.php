@@ -38,6 +38,13 @@ $app->post('settings/slack/register', 'SlackController@registerSite');
 $app->post('settings/slack/send-test', 'SlackController@sendTestMessage');
 $app->post('settings/slack/disconnect', 'SlackController@disconnect');
 
+/*
+ * Discord Routes
+ */
+$app->post('settings/discord/register', 'DiscordController@registerSite');
+$app->post('settings/discord/send-test', 'DiscordController@sendTestMessage');
+$app->post('settings/discord/disconnect', 'DiscordController@disconnect');
+
 
 
 $app->get('/logs', 'LoggerController@get');
