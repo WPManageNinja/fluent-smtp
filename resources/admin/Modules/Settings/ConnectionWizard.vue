@@ -166,7 +166,10 @@
                 );
 
                 options.provider = value;
-                this.connection = options;
+
+                each(options, (value, key) => {
+                    this.$set(this.connection, key, value);
+                });
             }
         },
         methods: {
