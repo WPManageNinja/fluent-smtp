@@ -187,7 +187,12 @@ class NotificationHelper
 
     public static function sendSlackMessage($message, $webhookUrl, $blocking = false)
     {
-        $body = wp_json_encode(array('text' => $message));
+
+        if(is_array($message)) {
+            $body = wp_json_encode($message);
+        } else {
+            $body = wp_json_encode(array('text' => $message));
+        }
 
         $args = array(
             'body'        => $body,
@@ -380,9 +385,7 @@ class NotificationHelper
         $content .= '**Error Message:** ```' . self::getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response'))) . "```\n";
         $content .= '[View Failed Email(s)](' . admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=') . ')';
 
-        return [
-            'content' => $content
-        ];
+        return $content;
     }
 
     public static function getErrorMessageFromResponse($response)

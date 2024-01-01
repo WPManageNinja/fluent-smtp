@@ -260,6 +260,7 @@ class SchedulerHandler
     public function maybeSendNotification($rowId, $handler, $logData = [])
     {
         $channel = NotificationHelper::getActiveChannelSettings();
+
         if (!$channel) {
             return false;
         }
@@ -287,7 +288,7 @@ class SchedulerHandler
         }
 
         if ($driver == 'discord') {
-            return NotificationHelper::sendSlackMessage(NotificationHelper::formatDiscordMessageBlock($handler, $logData), $channel['webhook_url'], false);
+            return NotificationHelper::sendDiscordMessage(NotificationHelper::formatDiscordMessageBlock($handler, $logData), $channel['webhook_url'], false);
         }
 
         return false;
