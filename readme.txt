@@ -148,6 +148,9 @@ Do you want to know how many and which emails your site is sending? Fluent SMTP 
 
 Optionally, You can turn off this feature, and then only failed emails will be logged so you can take a look. Fluent SMTP uses a custom Database table so your WordPress Tables will not be bloated (we care).
 
+== 🚀 Realtime Notification on Email Failures via Telegram, Slack, and Discord 🚀 ==
+Fluent SMTP has a unique feature that will notify you in real-time if any email fails to send. You can set up your Telegram, Slack, or Discord channel and Fluent SMTP will send you a notification if any email fails to send. This is super helpful for debugging and monitoring your site's email health.
+
 == 🚀 Security 🚀 ==
 Fluent SMTP is built by professionals and security and scalability in mind. Fluent SMTP provides several options for you to keep your email sending secure and safe.
 
@@ -282,8 +285,9 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 == Changelog ==
 
-= 2.2.7 (Date: Dec 29, 2023) =
-* Added RealTime Email Failure Notification via Telegram / Slack
+= 2.2.7 (Date: Jan 01, 2024) =
+* Added RealTime Email Failure Notification via Telegram / Slack / Discord
+* Added Option to add additional email addresses for Amazon SES
 * Improve the UI
 
 = 2.2.6 (Date: Oct 01, 2023) =
