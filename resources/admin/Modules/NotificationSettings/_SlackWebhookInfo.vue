@@ -1,19 +1,17 @@
 <template>
     <div>
         <img style="max-height: 50px;" :src="`${appVars.images_url}slack.svg`"/>
-        <h3>Slack Notifications Enabled</h3>
+        <h3>{{ $t('Slack Notifications Enabled') }}</h3>
         <p>
-            Your FluentSMTP plugin is currently integrated with your Slack Channel. Receive timely notifications on
-            Slack for any email sending issues from your website. This ongoing connection ensures you're always
-            informed about your email delivery status.
+            {{ $t('Your FluentSMTP plugin is currently integrated with your Slack Channel. Receive timely notifications on Slack for any email sending issues from your website. This ongoing connection ensures you\'re always informed about your email delivery status.') }}
         </p>
-        <p>Slack Channel Details: @{{ notification_settings.slack.slack_team }}</p>
+        <p>{{ $t('Slack Channel Details: ') }}@{{ notification_settings.slack.slack_team }}</p>
         <p>
             <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" size="mini" type="text">
-                Send Test Message
+                {{ $t('Send Test Message') }}
             </el-button>
             <el-button v-loading="disconnecting" @click="disconnect()" style="float: right;" size="mini" type="text">
-                Disconnect
+                {{ $t('Disconnect') }}
             </el-button>
         </p>
     </div>
@@ -38,9 +36,9 @@ export default {
     },
     methods: {
         disconnect() {
-            this.$confirm('Are you sure you want to disconnect Slack notifications?', 'Warning', {
-                confirmButtonText: 'Yes, Disconnect',
-                cancelButtonText: 'cancel',
+            this.$confirm(this.$t('Are you sure you want to disconnect Slack notifications?'), 'Warning', {
+                confirmButtonText: this.$t('Yes, Disconnect'),
+                cancelButtonText: this.$t('Cancel'),
                 type: 'warning'
             })
                 .then(() => {

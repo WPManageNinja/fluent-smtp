@@ -1,7 +1,7 @@
 <template>
     <div class="fss_connection_wizard">
         <el-form :data="connection" label-position="top">
-            <el-form-item label="Connection Provider">
+            <el-form-item :label="$t('Connection Provider')">
                 <connection-provider :providers="providers" :connection="connection" />
             </el-form-item>
             <template v-if="connection.provider">
@@ -16,7 +16,7 @@
                                     :placeholder="$t('From Email')"
                                     v-model="connection.sender_email"
                                 ></el-input>
-                                <p style="color: red;" v-if="is_conflicted">Another connection with same email address exist. This connection will replace that connection</p>
+                                <p style="color: red;" v-if="is_conflicted">{{ $t('Another connection with same email address exist. This connection will replace that connection') }}</p>
                             </el-form-item>
                             <div v-if="connection.force_from_email != undefined">
                                 <el-checkbox
@@ -42,9 +42,7 @@
                                     {{$t('Set the return-path to match the From Email')}}
                                     <el-tooltip effect="dark" placement="top-start">
                                         <div slot="content">
-                                            Return Path indicates where non-delivery receipts - or bounce messages -<br />
-                                            are to be sent. If unchecked, bounce messages may be lost. With this enabled,<br />
-                                            you’ll be emailed using "From Email" if any messages bounce as a result of issues with the recipient’s email.
+                                            {{ $t('Return Path indicates where non - delivery receipts - or bounce messages - ') }} <br/> {{ $t(' are to be sent. If unchecked, bounce messages may be lost. With this enabled,') }} <br/> {{ $t(' you\'ll be emailed using "From Email" if any messages bounce as a result of issues with the recipient’s email.')}}
                                         </div>
                                         <i class="el-icon-info"></i>
                                     </el-tooltip>
@@ -90,7 +88,7 @@
             <div v-else>
                 <h3 style="text-align: center;">{{$t('save_connection_error_1')}}</h3>
             </div>
-            <p v-if="saving">{{ $t('Validating Data.Please wait') }}</p>
+            <p v-if="saving">{{ $t('Validating Data. Please wait...') }}</p>
             <el-alert style="margin-top: 20px" v-if="has_error" type="error">{{$t('save_connection_error_2')}}</el-alert>
         </el-form>
     </div>
