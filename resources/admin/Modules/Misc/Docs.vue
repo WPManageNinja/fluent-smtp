@@ -1,10 +1,8 @@
 <template>
     <div class="fc_docs">
         <div style="max-width: 800px; margin: 50px auto; padding: 0px 20px; text-align: center;" class="fc_doc_header text-align-center">
-            <h1>How can we help you?</h1>
-            <p>Please view the <a href="https://fluentsmtp.com/docs" target="_blank" rel="noopener">documentation</a> first. If you still can't find the
-                answer <a href="https://wpmanageninja.com/support-tickets/" target="_blank" rel="noopener">open a support ticket</a> and we will be
-                happy to answer your questions and assist you with any problems.</p>
+            <h1>{{ $t('How can we help you?') }}</h1>
+            <p>{{ $t('Please view the ') }}<a href="https://fluentsmtp.com/docs" target="_blank" rel="noopener">{{ $t('documentation') }}</a>{{ $t('first. If you still can\'t find the answer') }}<a href="https://wpmanageninja.com/support-tickets/" target="_blank" rel="noopener">{{ $t('open a support ticket') }}</a>{{ $t(' and we will be happy to answer your questions and assist you with any problems.') }}</p>
             <el-input
                 v-loading="fetching"
                 clearable
@@ -26,7 +24,7 @@
                                 <a target="_blank" :href="doc.link + utl_param" v-html="doc.title"></a>
                             </li>
                         </ul>
-                        <p v-else>Sorry! No docs found</p>
+                        <p v-else>{{ $t('Sorry! No docs found') }}</p>
                     </div>
                 </div>
             </div>

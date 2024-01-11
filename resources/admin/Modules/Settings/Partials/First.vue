@@ -4,12 +4,12 @@
             <el-col :md="12" :sm="24">
                 <el-form-item>
                     <label for="connection_name">
-                        Connection Name <error :error="schema.errors.get('connection_name')" />
+                        {{ $t('Connection Name ')}} <error :error="schema.errors.get('connection_name')" />
                     </label>
 
                     <el-tooltip effect="dark" placement="top-start">
                         <div slot="content">
-                            A name for the connection.
+                            {{ $t('A name for the connection.') }}
                         </div>
                         <i class="el-icon-info"></i>
                     </el-tooltip>
@@ -20,16 +20,16 @@
         
             <el-col :md="12" :sm="24">
                 <el-form-item>
-                    <label for="provider_name">Select Provider</label>
+                    <label for="provider_name">{{ $t('Select Provider') }}</label>
 
                     <el-tooltip effect="dark" placement="top-start">
                         <div slot="content">
-                            provider for the connection.
+                            {{ $t('provider for the connection.') }}
                         </div>
                         <i class="el-icon-info"></i>
                     </el-tooltip>
 
-                    <el-select id="provider_name" v-model="schema.provider_name" placeholder="Select">
+                    <el-select id="provider_name" v-model="schema.provider_name" :placeholder="$t('Select')">
                         <el-option
                             v-for="p in settings.providers"
                             :label="p.title"

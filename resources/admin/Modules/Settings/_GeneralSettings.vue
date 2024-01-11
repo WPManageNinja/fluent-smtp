@@ -2,7 +2,7 @@
     <div class="fss_general_settings">
         <el-form class="fss_compact_form" :data="settings.misc" label-position="top">
             
-            <el-form-item label="Log Emails">
+            <el-form-item :label="$t('Log Emails')">
                 <el-checkbox
                     v-model="settings.misc.log_emails"
                     true-label="yes"
@@ -56,7 +56,7 @@
 
             <el-form-item>
                 <label slot="label">
-                    Fallback Connection
+                    {{ $t('Fallback Connection') }}
                     <el-popover
                         width="400"
                         trigger="hover">
@@ -83,7 +83,7 @@
                     false-label="no"
                 >{{$t('Email_Simulation_Label')}}</el-checkbox>
                 <p style="color: red;" v-if="settings.misc.simulate_emails == 'yes'">{{$t('Email_Simulation_Yes')}}</p>
-                <p v-if="appVars.is_disabled_defined" style="color: red;">Emails are being simulated due to the definition of <b>FLUENTMAIL_SIMULATE_EMAILS</b> in your PHP code.</p>
+                <p v-if="appVars.is_disabled_defined" style="color: red;">{{ ('Emails are being simulated due to the definition of ') }} <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ (' in your PHP code.') }}</p>
             </el-form-item>
 
             <el-button
@@ -102,14 +102,14 @@
             return {
                 saving: false,
                 logging_days: {
-                    7: 'After 7 Days',
-                    14: 'After 14 Days',
-                    30: 'After 30 Days',
-                    60: 'After 60 Days',
-                    90: 'After 90 Days',
-                    180: 'After 6 Months',
-                    365: 'After 1 Year',
-                    730: 'After 2 Years'
+                    7: this.$t('After 7 Days'),
+                    14: this.$t('After 14 Days'),
+                    30: this.$t('After 30 Days'),
+                    60: this.$t('After 60 Days'),
+                    90: this.$t('After 90 Days'),
+                    180: this.$t('After 6 Months'),
+                    365: this.$t('After 1 Year'),
+                    730: this.$t('After 2 Years')
                 }
             }
         },
@@ -122,7 +122,7 @@
             saveMiscSettings() {
 
                 if(this.settings.misc.fallback_connection && this.settings.misc.default_connection && this.settings.misc.default_connection == this.settings.misc.fallback_connection) {
-                    this.$notify.error('Default and Fallback connection can not be same. Please select different connections.');
+                    this.$notify.error(this.$t('Default and Fallback connection can not be same. Please select different connections.'));
                     return;
                 }
 

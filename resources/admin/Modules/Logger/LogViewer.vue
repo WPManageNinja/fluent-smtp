@@ -2,7 +2,7 @@
     <div class="log-viewer">
         <el-dialog
             v-if="log"
-            title="Email Log"
+            :title="$t('Email Log')"
             @closed="closed"
             v-loading="retrying"
             :visible.sync="logViewerProps.dialogVisible"
@@ -10,7 +10,7 @@
             <div v-loading="loading">
                 <ul class="fss_log_items">
                     <li>
-                        <div class="item_header">Status:</div>
+                        <div class="item_header">{{ $t('Status:') }}</div>
                         <div class="item_content">
                             <span :class="{
                                 success: log.status == 'sent',
@@ -91,7 +91,7 @@
                         <EmailbodyContainer :content="sanitize(log.body)"/>
                         <hr/>
                     </el-collapse-item>
-                    <p><strong>Server Response</strong></p>
+                    <p><strong>{{ $t('Server Response') }}</strong></p>
                     <el-row>
                         <el-col>
                             <pre>{{ log.response }}</pre>
@@ -100,7 +100,7 @@
                     <hr/>
                     <el-collapse-item name="tech_info">
                         <template slot="title">
-                            <strong style="color:#606266">Email Headers</strong>
+                            <strong style="color:#606266">{{ $t('Email Headers') }}</strong>
                         </template>
                         <div>
                             <pre>{{ log.headers }}</pre>

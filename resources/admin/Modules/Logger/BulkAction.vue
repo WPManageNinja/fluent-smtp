@@ -10,7 +10,7 @@
                 >
                     <el-option
                         value="deleteselected"
-                        label="Delete Selected"
+                        :label="$t('Delete Selected')"
                         v-if="selected.length"
                     />
                     <el-option v-if="is_failed_selected" value="resend_selected" :label="$t('Resend Selected Emails')" />

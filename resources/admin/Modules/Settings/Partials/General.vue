@@ -4,12 +4,12 @@
             <el-col :md="12" :sm="24">
                 <el-form-item>
                     <label for="sender_email">
-                        Sender Email <error :error="schema.errors.get('sender_email')" />
+                        {{ $t('Sender Email ')}} <error :error="schema.errors.get('sender_email')" />
                     </label>
                     
                     <el-tooltip effect="dark" placement="top-start">
                         <div slot="content">
-                            The email address which emails are sent from.
+                            {{ $t('The email address which emails are sent from.') }}
                         </div>
                         <i class="el-icon-info"></i>
                     </el-tooltip>
@@ -17,7 +17,7 @@
                     <el-input
                         id="sender_email"
                         v-model="schema.provider.options.sender_email"
-                        placeholder="Sender Email Address"
+                        :placeholder="$t('Sender Email Address')"
                     >
                         <template slot="append"><slot></slot></template>
                     </el-input>
@@ -26,11 +26,11 @@
         
             <el-col :md="12" :sm="24">
                 <el-form-item>
-                    <label for="sender_name">Sender Name</label>
+                    <label for="sender_name">{{ $t('Sender Name') }}</label>
 
                     <el-tooltip effect="dark" placement="top-start">
                         <div slot="content">
-                            The name which emails are sent from.
+                            {{ $t('The name which emails are sent from.') }}
                         </div>
                         <i class="el-icon-info"></i>
                     </el-tooltip>
@@ -38,7 +38,7 @@
                     <el-input
                         id="sender_name"
                         v-model="schema.provider.options.sender_name"
-                        placeholder="Sender Name"
+                        :placeholder="$t('Sender Name')"
                     />
                 </el-form-item>
             </el-col>
@@ -50,11 +50,11 @@
                     v-model="schema.provider.options.force_from_name"
                     true-label="yes"
                     false-label="no"
-                >Force Sender Name</el-checkbox>
+                >{{ $t('Force Sender Name') }}</el-checkbox>
 
                 <el-tooltip effect="dark" placement="top-start">
                     <div slot="content">
-                        When checked, the From Name setting above will be used for all emails, ignoring values set by other plugins.
+                        {{ $t('When checked, the From Name setting above will be used for all emails, ignoring values set by other plugins.') }}
                     </div>
                     <i class="el-icon-info"></i>
                 </el-tooltip>

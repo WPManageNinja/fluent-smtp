@@ -17,7 +17,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, 'Something went wrong!', []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
     }
 
     protected function postSend()
@@ -79,7 +79,7 @@ class Handler extends BaseHandler
 
         if ($keyStoreType == 'db') {
             if (!$clientId) {
-                $errors['client_id']['required'] = __('Application Cluent ID is required.', 'fluent-smtp');
+                $errors['client_id']['required'] = __('Application Client ID is required.', 'fluent-smtp');
             }
 
             if (!$clientSecret) {

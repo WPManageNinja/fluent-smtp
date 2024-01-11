@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width">
-    <title>FluentSMTP Email Health Report</title>
+    <title><?php _e('FluentSMTP Email Health Report', 'fluent-smtp') ?></title>
     <style type="text/css">@media only screen and (max-width: 599px) {
             table.body .container {
                 width: 95% !important;
@@ -79,7 +79,7 @@
                         <table width="100%">
                             <tr>
                                 <td>
-                                    <h3 style="margin: 5px 0; color: white;">Email Sending Health</h3>
+                                    <h3 style="margin: 5px 0; color: white;"><?php _e('Email Sending Health', 'fluent-smtp') ?></h3>
                                     <p style="margin: 0;color: white;font-size: 12px;"><?php echo esc_html($date_range); ?></p>
                                 </td>
                                 <td style="text-align: right;">
@@ -197,7 +197,7 @@
                         <table width="100%">
                             <tr>
                                 <td>
-                                    <p style="font-size: 10px; line-height: 12px; color: white;">You received this email because the Email Sending Health Report is enabled in your FluentSMTP settings. Simply turn it off to stop these emails at <?php echo esc_html($domain_name); ?>.</p>
+                                    <p style="font-size: 10px; line-height: 12px; color: white;"><?php _e('You received this email because the Email Sending Health Report is enabled in your FluentSMTP settings. Simply turn it off to stop these emails at ', 'fluent-smtp') ?><?php echo esc_html($domain_name); ?>.</p>
                                 </td>
                                 <td style="text-align: right;width: 100px; padding-left: 15px;">
                                     <img src="<?php echo esc_url(fluentMailMix('images/fluentsmtp-white.png')); ?>"

@@ -311,7 +311,7 @@ class NotificationHelper
             $sendingTo = Arr::get($logData, 'to');
         }
 
-        $heading = sprintf('[%s] Failed to send email', get_bloginfo('name'));
+        $heading = __(sprintf('[%s] Failed to send email', get_bloginfo('name')), 'fluent-smtp');
 
         return [
             'text'   => $heading,
@@ -375,15 +375,15 @@ class NotificationHelper
             $sendingTo = Arr::get($logData, 'to');
         }
 
-        $heading = sprintf('[%s] Failed to send email', get_bloginfo('name'));
+        $heading = __(sprintf('[%s] Failed to send email', get_bloginfo('name')), 'fluent-smtp');
 
         $content = '## ' . $heading . "\n";
-        $content .= '**Website URL:** ' . site_url() . "\n";
-        $content .= '**Sending Driver:** ' . strtoupper($handler->getSetting('provider')) . "\n";
-        $content .= '**To Email Address:** ' . $sendingTo . "\n";
-        $content .= '**Email Subject:** ' . Arr::get($logData, 'subject') . "\n";
-        $content .= '**Error Message:** ```' . self::getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response'))) . "```\n";
-        $content .= '[View Failed Email(s)](' . admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=') . ')';
+        $content .= __('**Website URL:** ', 'fluent-smtp') . site_url() . "\n";
+        $content .= __('**Sending Driver:** ', 'fluent-smtp') . strtoupper($handler->getSetting('provider')) . "\n";
+        $content .= __('**To Email Address:** ', 'fluent-smtp') . $sendingTo . "\n";
+        $content .= __('**Email Subject:** ', 'fluent-smtp') . Arr::get($logData, 'subject') . "\n";
+        $content .= __('**Error Message:** ```', 'fluent-smtp') . self::getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response'))) . "```\n";
+        $content .= __('[View Failed Email(s)](', 'fluent-smtp') . admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=') . ')';
 
         return $content;
     }

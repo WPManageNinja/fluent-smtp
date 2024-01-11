@@ -4,7 +4,7 @@
             <div v-if="!isLogsOn">
                 <div class="fss_content">
                     <el-alert :closable="false" show-icon center>
-                        Email Logging is currently turned off. Only Failed and resent emails will be shown here
+                        {{ $t('Email Logging is currently turned off. Only Failed and resent emails will be shown here') }}
                         <el-button type="text" @click="turnOnEmailLogging">{{ $t('Turn On') }}</el-button>
                         .
                     </el-alert>
@@ -120,7 +120,7 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <div v-if="logs.length" style="margin-top:20px;">
-                            <confirm placement="right" message="Are you sure, you want to delete all the logs?"
+                            <confirm placement="right" :message="$t('Are you sure, you want to delete all the logs?')"
                                      @yes="handleDelete(['all'])">
                                 <el-button slot="reference" size="mini" type="info">Delete All Logs</el-button>
                             </confirm>

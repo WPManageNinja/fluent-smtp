@@ -4,28 +4,30 @@
         <div v-html="connection_content"></div>
 
         <template v-if="verificationSettings && verificationSettings.verified_domain">
-            <el-button @click="showEmailManageModal = true" type="primary">Add Additional Senders</el-button>
-            <el-dialog :visible.sync="showEmailManageModal" title="Manage Additional Senders" width="50%">
-                <p style="font-size: 16px;">You may add additional sending emails in this
-                    {{ verificationSettings.connection_name }} connection.</p>
+            <el-button @click="showEmailManageModal = true" type="primary">{{ $t('Add Additional Senders') }}</el-button>
+            <el-dialog :visible.sync="showEmailManageModal" :title="$t('Manage Additional Senders')" width="50%">
+                <p style="font-size: 16px;">{{ $t('You may add additional sending emails in this') }}
+                    {{ verificationSettings.connection_name }} {{ $t(' connection.') }}</p>
 
                 <el-input type="text"
-                          :placeholder="'Enter new email address ex: new_sender@'+verificationSettings.verified_domain"
+                          :placeholder="$t('Enter new email address ex: new_sender@') + verificationSettings.verified_domain"
                           v-model="newSender">
-                    <el-button :disabled="addingNew" v-loading="addingNew" @click="addNewSender()" slot="append" type="primary" icon="el-icon-plus">Add</el-button>
+                    <el-button :disabled="addingNew" v-loading="addingNew" @click="addNewSender()" slot="append" type="primary" icon="el-icon-plus">
+                        {{ $t('Add') }}</el-button>
                 </el-input>
 
-                <p>The email address must match the domain: <code>{{ verificationSettings.verified_domain }}</code></p>
+                <p>{{ $t('The email address must match the domain: ') }}<code>{{ verificationSettings.verified_domain }}</code></p>
 
                 <hr/>
 
-                <h3>Current verified senders:</h3>
+                <h3>{{ $t('Current verified senders:') }}</h3>
                 <table v-loading="loading" class="wp-list-table widefat striped">
                     <tbody>
                     <tr v-for="sender in verificationSettings.all_senders" :key="sender">
                         <th>
                             {{ sender }}
-                            <el-button plain v-if="verificationSettings.verified_senders.indexOf(sender) === -1" type="danger" size="mini" @click="removeSender(sender)">Remove</el-button>
+                            <el-button plain v-if="verificationSettings.verified_senders.indexOf(sender) === -1" type="danger" size="mini" @click="removeSender(sender)">
+                                {{ $t('Remove') }}</el-button>
                         </th>
                     </tr>
                     </tbody>
@@ -71,7 +73,7 @@ export default {
             if (!this.newSender) {
                 this.$notify.error({
                     title: 'Error',
-                    message: 'Please enter a valid email address'
+                    message: this.$t('Please enter a valid email address')
                 });
                 return;
             }
@@ -80,7 +82,7 @@ export default {
             if (this.verificationSettings.all_senders.indexOf(this.newSender) > -1) {
                 this.$notify.error({
                     title: 'Error',
-                    message: 'The email address already exists in the list'
+                    message: this.$t('The email address already exists in the list')
                 });
                 return;
             }
@@ -89,7 +91,7 @@ export default {
             if (this.newSender.split('@')[1] !== this.verificationSettings.verified_domain) {
                 this.$notify.error({
                     title: 'Error',
-                    message: 'The email address must match the domain: ' + this.verificationSettings.verified_domain
+                    message: this.$t('The email address must match the domain: ') + this.verificationSettings.verified_domain
                 });
                 return;
             }
@@ -116,7 +118,7 @@ export default {
 
         },
         removeSender(email) {
-            this.$confirm('Are you sure you want to remove this email address?', 'Warning', {
+            this.$confirm(this.$t('Are you sure you want to remove this email address?'), 'Warning', {
                 confirmButtonText: 'Yes',
                 cancelButtonText: 'No',
                 type: 'warning'

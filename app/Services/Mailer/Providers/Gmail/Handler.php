@@ -15,7 +15,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, 'Something went wrong!', []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
     }
 
     protected function postSend()
@@ -114,7 +114,7 @@ class Handler extends BaseHandler
 
         if ($keyStoreType == 'db') {
             if (!$clientId) {
-                $errors['client_id']['required'] = __('Application Cluent ID is required.', 'fluent-smtp');
+                $errors['client_id']['required'] = __('Application Client ID is required.', 'fluent-smtp');
             }
 
             if (!$clientSecret) {
@@ -279,7 +279,7 @@ class Handler extends BaseHandler
             if (!$result) {
                 $errorDescription = Arr::get($newTokens, 'error_description');
                 if (!$errorDescription) {
-                    $errorDescription = 'Failed to renew token with Gmail Api';
+                    $errorDescription = __('Failed to renew token with Gmail Api', 'fluent-smtp');
                 }
 
                 return new \WP_Error('api_error', $errorDescription);
@@ -320,7 +320,7 @@ class Handler extends BaseHandler
         ];
 
         if (($connection['expire_stamp']) < time()) {
-            $extraRow['content'] = 'Invalid. Please re-authenticate';
+            $extraRow['content'] = __('Invalid. Please re-authenticate', 'fluent-smtp');
         }
 
         $connection['extra_rows'] = [$extraRow];

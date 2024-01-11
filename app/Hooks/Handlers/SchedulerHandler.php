@@ -104,14 +104,14 @@ class SchedulerHandler
         }
 
         $sentSubTitle = sprintf(
-            __('Showing %1$s of %2$s different subject lines sent in the past %3$s'),
+            __('Showing %1$s of %2$s different subject lines sent in the past %3$s', 'fluent-smtp'),
             number_format_i18n(count($sentStats['subjects'])),
             number_format_i18n($sentStats['unique_subjects']),
             ($reportingDays < 2) ? 'day' : $reportingDays . ' days'
         );
 
         $failedSubTitle = sprintf(
-            __('Showing %1$s of %2$s different subject lines failed in the past %3$s'),
+            __('Showing %1$s of %2$s different subject lines failed in the past %3$s', 'fluent-smtp'),
             number_format_i18n(count($failedStats['subjects'])),
             number_format_i18n($failedStats['unique_subjects']),
             ($reportingDays < 2) ? 'day' : $reportingDays . ' days'
@@ -247,7 +247,7 @@ class SchedulerHandler
             $result = $this->saveNewGmailTokens($settings, $newTokens);
 
             if (!$result) {
-                return new \WP_Error('api_error', 'Failed to renew the token');
+                return new \WP_Error('api_error', __('Failed to renew the token', 'fluent-smtp'));
             }
 
             return true;

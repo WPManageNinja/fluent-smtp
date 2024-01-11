@@ -4,7 +4,7 @@
             :id="id"
             :type="type"
             :value="value"
-            :place-holder="placeholder"
+            :placeholder="placeholder"
             :disabled="disabled"
             @input="$emit('input', $event)"
         >
