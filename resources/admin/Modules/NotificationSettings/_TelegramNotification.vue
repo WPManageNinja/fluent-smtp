@@ -2,46 +2,46 @@
     <div>
         <div v-if="!notification_settings.telegram || notification_settings.telegram.status != 'yes'">
             <div v-if="configure_state == 'form'">
-                <p>Get real-time notification on your <a target="_blank" rel="noopener" href="https://telegram.org/">Telegram
-                    Messenger</a> on any email sending failure. Configure notification with FluentSMTP's
+                <p>{{ $t('Get real - time notification on your ') }}<a target="_blank" rel="noopener" href="https://telegram.org/">Telegram
+                    Messenger</a>{{ $t(' on any email sending failure.Configure notification with FluentSMTP\'s') }}
                     <a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot">
                         official telegram bot
-                    </a> to start getting real time notifications. <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-telegram/">Read the documentation</a>.
+                    </a>{{ $t(' to start getting real time notifications. ') }}<a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-telegram/">{{ $t('Read the documentation') }}</a>.
                 </p>
 
                 <el-form class="fss_compact_form" :data="newForm" label-position="top">
-                    <el-form-item label="Your Email Address">
-                        <el-input size="small" v-model="newForm.user_email" placeholder="Email Address"/>
+                    <el-form-item :label="$t('Your Email Address')">
+                        <el-input size="small" v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
                     </el-form-item>
                     <el-form-item>
                         <el-checkbox v-model="newForm.terms" true-label="yes" false-label="no">
-                            I agree to the <a target="_blank" rel="noopener"
+                            {{ $t('I agree to the ') }}<a target="_blank" rel="noopener"
                                               href="https://fluentsmtp.com/terms-and-conditions/">
-                            terms and conditions</a> of this telegram integration.
+                            {{ $t('terms and conditions') }}</a>{{ $t(' of this telegram integration.') }}
                         </el-checkbox>
                     </el-form-item>
                     <el-form-item>
                         <el-button @click="issuePinCode()" v-loading="processing"
                                    :disabled="newForm.terms != 'yes' || !newForm.user_email || processing"
                                    type="primary">
-                            Continue
+                            {{ $t('Continue') }}
                         </el-button>
                     </el-form-item>
-                    <p>FluentSMTP does not store your email notifications data.</p>
+                    <p>{{ $t('FluentSMTP does not store your email notifications data.') }}</p>
                 </el-form>
             </div>
             <div v-else-if="configure_state == 'pin'">
-                <h3>Last step!</h3>
-                <p>Please find <a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot"><span
-                    class="tele_bot">@fluentsmtp_bot</span></a> on telegram and send following text to activate this
-                    connection.</p>
-                <h3>Activation Pin</h3>
+                <h3>{{ $t('Last step!') }}</h3>
+                <p>{{ $t('Please find ') }}<a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot"><span
+                    class="tele_bot">@fluentsmtp_bot</span></a>{{ $t(' on telegram and send following text to activate this connection.')
+                    }}</p>
+                <h3>{{ $t('Activation Pin') }}</h3>
                 <p style="font-size: 20px;font-weight: bold;padding: 10px; margin: 15px 0; background: rgb(248 250 252);border-radius: 5px;border: 2px dashed #e8d100;">
-                    activate {{ newForm.site_pin }}
+                    {{ $t('activate ') }} {{ newForm.site_pin }}
                     <span @click="copyPin()"
-                          style="float: right; user-select: none; font-size: 14px;border: 1px solid #f0f0f1;padding: 2px 10px;line-height: 14px;background: white;border-radius: 5px;cursor: pointer;">copy</span>
+                          style="float: right; user-select: none; font-size: 14px;border: 1px solid #f0f0f1;padding: 2px 10px;line-height: 14px;background: white;border-radius: 5px;cursor: pointer;">{{ $t('copy') }}</span>
                 </p>
-                <el-button :disabled="processing" v-loading="processing" @click="confirmConnection()" size="medium" type="success">I have sent the code</el-button>
+                <el-button :disabled="processing" v-loading="processing" @click="confirmConnection()" size="medium" type="success">{{ $t('I have sent the code') }}</el-button>
             </div>
         </div>
         <div v-else>
@@ -118,7 +118,7 @@ export default {
             el.select();
             document.execCommand('copy');
             document.body.removeChild(el);
-            this.$notify.success('Pin copied to clipboard');
+            this.$notify.success(this.$t('Pin copied to clipboard'));
         }
     },
     mounted() {

@@ -4,35 +4,33 @@
         <template v-else>
             <div v-if="status == 'yes'">
                 <img style="max-height: 50px;" :src="`${appVars.images_url}tele.svg`"/>
-                <h3>Telegram Notifications Enabled</h3>
+                <h3>{{ $t('Telegram Notifications Enable') }}d</h3>
                 <p>
-                    Your FluentSMTP plugin is currently integrated with Telegram. Receive timely notifications from <a
-                    target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot">@fluentsmtp_bot</a> on Telegram
-                    for any email sending issues from your website. This ongoing connection ensures you're always
-                    informed about your email delivery status.
+                    {{ $t('Your FluentSMTP plugin is currently integrated with Telegram.Receive timely notifications from ')}}<a
+                    target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot">@fluentsmtp_bot</a> {{ $t(' on Telegram for any email sending issues from your website. This ongoing connection ensures you\'re always informed about your email delivery status.') }}
                 </p>
-                <p>Receiver's Telegram Username: @{{ receiver.username }}</p>
+                <p>{{ $t('Receiver\'s Telegram Username: ') }}@{{ receiver.username }}</p>
                 <p>
                     <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" size="mini"
-                               type="text">Send Test Message
+                               type="text">{{ $t('Send Test Message') }}
                     </el-button>
                     <el-button v-loading="disconnecting" @click="disconnect()" style="float: right;" size="mini"
-                               type="text">Disconnect
+                               type="text">{{ $t('Disconnect') }}
                     </el-button>
                 </p>
             </div>
             <div v-else>
                 <img style="max-height: 50px;" :src="`${appVars.images_url}tele.svg`"/>d
-                <h3>Telegram Connection Status: {{ status }}</h3>
-                <p>We could not fetch the Telegram notification status. Here is the server response: </p>
+                <h3>{{ $t('Telegram Connection Status: ') }}{{ status }}</h3>
+                <p>{{ $t('We could not fetch the Telegram notification status.Here is the server response: ') }}</p>
                 <pre>{{errors}}</pre>
                 <p>
                     <el-button @click="getInfo()" :disabled="sending_test" v-loading="sending_test" size="mini"
                                type="text">
-                        Try Again
+                        {{ $t('Try Again') }}
                     </el-button>
                     <el-button v-loading="disconnecting" @click="disconnect()" style="float: right;" size="mini"
-                               type="text">Disconnect & Reconnect
+                               type="text">{{ $t('Disconnect & Reconnect') }}
                     </el-button>
                 </p>
             </div>
@@ -74,9 +72,9 @@ export default {
                 });
         },
         disconnect() {
-            this.$confirm('Are you sure you want to disconnect Telegram notifications?', 'Warning', {
-                confirmButtonText: 'Yes, Disconnect',
-                cancelButtonText: 'cancel',
+            this.$confirm(this.$t('Are you sure you want to disconnect Telegram notifications?'), 'Warning', {
+                confirmButtonText: this.$t('Yes, Disconnect'),
+                cancelButtonText: this.$t('Cancel'),
                 type: 'warning'
             })
                 .then(() => {

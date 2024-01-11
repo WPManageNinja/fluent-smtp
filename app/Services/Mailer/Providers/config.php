@@ -67,7 +67,7 @@ return [
                 'af-south-1'     => __('Africa (Cape Town)', 'fluent-smtp'),
                 'cn-northwest-1' => __('China (Ningxia)', 'fluent-smtp')
             ],
-            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-amazon-ses-in-fluent-smtp/" target="_blank" rel="noopener">Read the documentation</a> for how to configure Amazon SES with FluentSMTP.'
+            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-amazon-ses-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure Amazon SES with FluentSMTP.', 'fluent-smtp')
         ],
         'mailgun'     => [
             'key'      => 'mailgun',
@@ -84,7 +84,7 @@ return [
                 'key_store'       => 'db',
                 'region'          => 'us'
             ],
-            'note'     => '<a href="https://fluentsmtp.com/docs/configure-mailgun-in-fluent-smtp-to-send-emails/" target="_blank" rel="noopener">Read the documentation</a> for how to configure Mailgun with FluentSMTP.'
+            'note'     => '<a href="https://fluentsmtp.com/docs/configure-mailgun-in-fluent-smtp-to-send-emails/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure Mailgun with FluentSMTP.', 'fluent-smtp')
         ],
         'sendgrid'    => [
             'key'      => 'sendgrid',
@@ -98,7 +98,7 @@ return [
                 'api_key'         => '',
                 'key_store'       => 'db'
             ],
-            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-sendgrid-driver-in-fluent-smtp/" target="_blank" rel="noopener">Read the documentation</a> for how to configure SendGrid with FluentSMTP.'
+            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-sendgrid-driver-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure SendGrid with FluentSMTP.', 'fluent-smtp')
         ],
         'sendinblue'  => [
             'key'      => 'sendinblue',
@@ -112,7 +112,7 @@ return [
                 'api_key'         => '',
                 'key_store'       => 'db'
             ],
-            'note'     => '<a href="https://fluentsmtp.com/docs/setting-up-sendinblue-mailer-in-fluent-smtp/" target="_blank" rel="noopener">Read the documentation</a> for how to configure Sendinblue with FluentSMTP.'
+            'note'     => '<a href="https://fluentsmtp.com/docs/setting-up-sendinblue-mailer-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure Sendinblue with FluentSMTP.', 'fluent-smtp')
         ],
         'sparkpost'   => [
             'key'      => 'sparkpost',
@@ -126,7 +126,7 @@ return [
                 'api_key'         => '',
                 'key_store'       => 'db'
             ],
-            'note'     => '<a href="https://fluentsmtp.com/docs/configure-sparkpost-in-fluent-smtp-to-send-emails/" target="_blank" rel="noopener">Read the documentation</a> for how to configure SparkPost with FluentSMTP.'
+            'note'     => '<a href="https://fluentsmtp.com/docs/configure-sparkpost-in-fluent-smtp-to-send-emails/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure SparkPost with FluentSMTP.', 'fluent-smtp')
         ],
         'pepipost'    => [
             'key'      => 'pepipost',
@@ -140,7 +140,7 @@ return [
                 'api_key'         => '',
                 'key_store'       => 'db'
             ],
-            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/" target="_blank" rel="noopener">Read the documentation</a> for how to configure Pepipost with FluentSMTP.'
+            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-pepipost-mailer-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure Netcore (formerly Pepipost) with FluentSMTP.', 'fluent-smtp')
         ],
         'postmark'    => [
             'key'      => 'postmark',
@@ -157,7 +157,7 @@ return [
                 'message_stream'  => 'outbound',
                 'key_store'       => 'db'
             ],
-            'note'     => '<a href="https://fluentsmtp.com/docs/configure-postmark-in-fluent-smtp-to-send-emails/" target="_blank" rel="noopener">Read the documentation</a> for how to configure Postmark with FluentSMTP.'
+            'note'     => '<a href="https://fluentsmtp.com/docs/configure-postmark-in-fluent-smtp-to-send-emails/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure Postmark with FluentSMTP.', 'fluent-smtp')
         ],
         'elasticmail' => [
             'key'      => 'elasticmail',
@@ -172,7 +172,7 @@ return [
                 'mail_type'       => 'transactional',
                 'key_store'       => 'db'
             ],
-            'note'     => '<a href="https://fluentsmtp.com/docs/configure-elastic-email-in-fluent-smtp/" target="_blank" rel="noopener">Read the documentation</a> for how to configure Elastic Email with FluentSMTP.'
+            'note'     => '<a href="https://fluentsmtp.com/docs/configure-elastic-email-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure Elastic Email with FluentSMTP.', 'fluent-smtp')
         ],
         'gmail'       => [
             'key'      => 'gmail',

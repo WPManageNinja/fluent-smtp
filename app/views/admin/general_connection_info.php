@@ -1,19 +1,19 @@
 <div class="fss_connection_info">
     <table class="wp-list-table widefat striped">
         <tr>
-            <th>Connection Type</th>
+            <th><?php _e('Connection Type', 'fluent-smtp') ?></th>
             <td><?php echo esc_html($connection['provider']); ?></td>
         </tr>
         <tr>
-            <th>Sender Email</th>
+            <th><?php _e('Sender Email', 'fluent-smtp') ?></th>
             <td><?php echo esc_html($connection['sender_email']); ?></td>
         </tr>
         <tr>
-            <th>Sender Name</th>
+            <th><?php _e('Sender Name', 'fluent-smtp') ?></th>
             <td><?php echo esc_html($connection['sender_name']); ?></td>
         </tr>
         <tr>
-            <th>Force Sender Name</th>
+            <th><?php _e('Force Sender Name', 'fluent-smtp') ?></th>
             <td><?php echo ucfirst($connection['force_from_name']); ?></td>
         </tr>
         <?php if(isset($connection['extra_rows'])) : ?>

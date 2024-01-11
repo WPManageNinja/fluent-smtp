@@ -42,7 +42,7 @@ class Factory
         
 
         throw new InvalidArgumentException(
-            "There is no matching provider found by email: {$email}"
+            __('There is no matching provider found by email: ') . $email
         );
     }
 

@@ -5,7 +5,7 @@
         v-model="visible"
         :placement="placement">
 
-        <p v-html="message"></p>
+        <p v-html="$t(message)"></p>
 
         <div class="action-buttons">
             <el-button
