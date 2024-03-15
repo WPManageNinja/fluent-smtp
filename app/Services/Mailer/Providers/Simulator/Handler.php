@@ -10,7 +10,14 @@ class Handler extends BaseHandler
     public function send()
     {
         if($this->shouldBeLogged(true)) {
-            $this->setAttributes();
+            $atts = $this->setAttributes();
+
+            $customHeaders = $atts['custom_headers'];
+            $headers = $atts['headers'];
+            foreach ($customHeaders as $customHeader) {
+                $headers[$customHeader['key']] = $customHeader['value'];
+            }
+
             $logData = [
                 'to' => maybe_serialize($this->setRecipientsArray($this->phpMailer->getToAddresses())),
                 'from' => maybe_serialize($this->phpMailer->From),
@@ -19,7 +26,7 @@ class Handler extends BaseHandler
                 'attachments' => maybe_serialize($this->phpMailer->getAttachments()),
                 'status'   => 'sent',
                 'response' => maybe_serialize(['status' => 'Email sending was simulated, No Email was sent originally']),
-                'headers'  => maybe_serialize($this->phpMailer->getCustomHeaders()),
+                'headers'  => maybe_serialize($headers),
                 'extra'    => maybe_serialize(['provider' => 'Simulator'])
             ];
             (new Logger)->add($logData);
