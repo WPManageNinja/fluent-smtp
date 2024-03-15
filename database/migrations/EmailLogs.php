@@ -34,7 +34,8 @@ class EmailLogs
                 `resent_count` INT UNSIGNED NULL DEFAULT 0,
                 `source` VARCHAR(255) NULL,
                 `created_at` TIMESTAMP NULL,
-                `updated_at` TIMESTAMP NULL
+                `updated_at` TIMESTAMP NULL,
+                INDEX `status` (`status`)
             ) $charsetCollate;";
 
             dbDelta($sql);
