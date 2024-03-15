@@ -1,7 +1,7 @@
-<?php namespace FluentSmtpDb;
+<?php namespace FluentMail\App\Services\DB;
 
-use FluentSmtpDb\QueryBuilder\QueryBuilderHandler;
-use FluentSmtpDb\QueryBuilder\Raw;
+use FluentMail\App\Services\DB\QueryBuilder\QueryBuilderHandler;
+use FluentMail\App\Services\DB\QueryBuilder\Raw;
 
 class EventHandler
 {
@@ -63,12 +63,13 @@ class EventHandler
     }
 
     /**
-     * @param QueryBuilderHandler $queryBuilder
+     * @param \FluentMail\App\Services\DB\src\QueryBuilder\QueryBuilderHandler $queryBuilder
      * @param                     $event
      * @return mixed
      */
     public function fireEvents($queryBuilder, $event)
     {
+        $originalArgs = func_get_args();
         $statements = $queryBuilder->getStatements();
         $tables = isset($statements['tables']) ? $statements['tables'] : array();
 
@@ -84,7 +85,7 @@ class EventHandler
                 $eventId = $event . $table;
 
                 // Fire event
-                $handlerParams = func_get_args();
+                $handlerParams = $originalArgs;
                 unset($handlerParams[1]); // we do not need $event
                 // Add to fired list
                 $this->firedEvents[] = $eventId;

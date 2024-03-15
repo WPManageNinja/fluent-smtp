@@ -742,7 +742,7 @@ function fluentMailDb()
         return FluentSmtpDb();
     }
 
-    require_once(FLUENTMAIL_PLUGIN_PATH . 'app/Services/wpfluent/wpfluent.php');
+    require_once(FLUENTMAIL_PLUGIN_PATH . 'app/Services/DB/wpfluent.php');
     return FluentSmtpDb();
 }
 

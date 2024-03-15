@@ -1,4 +1,4 @@
-<?php namespace FluentSmtpDb\QueryBuilder;
+<?php namespace FluentMail\App\Services\DB\QueryBuilder;
 
 class JoinBuilder extends QueryBuilderHandler
 {

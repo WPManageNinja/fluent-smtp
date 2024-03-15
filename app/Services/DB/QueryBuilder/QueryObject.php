@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentSmtpDb\QueryBuilder;
+namespace FluentMail\App\Services\DB\QueryBuilder;
 
 class QueryObject
 {

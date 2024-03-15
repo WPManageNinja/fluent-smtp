@@ -1,18 +1,18 @@
-<?php namespace FluentSmtpDb\QueryBuilder\Adapters;
+<?php namespace FluentMail\App\Services\DB\QueryBuilder\Adapters;
 
-use FluentSmtpDb\Connection;
-use FluentSmtpDb\Exception;
-use FluentSmtpDb\QueryBuilder\Raw;
+use FluentMail\App\Services\DB\Connection;
+use FluentMail\App\Services\DB\Exception;
+use FluentMail\App\Services\DB\QueryBuilder\Raw;
 
 abstract class BaseAdapter
 {
     /**
-     * @var \FluentSmtpDb\Connection
+     * @var \FluentMail\App\Services\DB\Connection
      */
     protected $connection;
 
     /**
-     * @var \FluentSmtpDb\Viocon\Container
+     * @var \FluentMail\App\Services\DB\Viocon\Container
      */
     protected $container;
 
@@ -27,8 +27,8 @@ abstract class BaseAdapter
      *
      * @param $statements
      *
-     * @throws Exception
      * @return array
+     * @throws \FluentMail\App\Services\DB\Exception
      */
     public function select($statements)
     {
@@ -126,7 +126,7 @@ abstract class BaseAdapter
      * @param array $data
      *
      * @return array
-     * @throws Exception
+     * @throws \FluentMail\App\Services\DB\Exception
      */
     private function doInsert($statements, array $data, $type)
     {
@@ -177,7 +177,7 @@ abstract class BaseAdapter
      * @param array $data
      *
      * @return array
-     * @throws Exception
+     * @throws \FluentMail\App\Services\DB\Exception
      */
     public function insert($statements, array $data)
     {
@@ -191,7 +191,7 @@ abstract class BaseAdapter
      * @param array $data
      *
      * @return array
-     * @throws Exception
+     * @throws \FluentMail\App\Services\DB\Exception
      */
     public function insertIgnore($statements, array $data)
     {
@@ -205,7 +205,7 @@ abstract class BaseAdapter
      * @param array $data
      *
      * @return array
-     * @throws Exception
+     * @throws \FluentMail\App\Services\DB\Exception
      */
     public function replace($statements, array $data)
     {
@@ -245,7 +245,7 @@ abstract class BaseAdapter
      * @param array $data
      *
      * @return array
-     * @throws Exception
+     * @throws \FluentMail\App\Services\DB\Exception
      */
     public function update($statements, array $data)
     {
@@ -287,7 +287,7 @@ abstract class BaseAdapter
      * @param $statements
      *
      * @return array
-     * @throws Exception
+     * @throws \FluentMail\App\Services\DB\src\Exception
      */
     public function delete($statements)
     {
@@ -380,7 +380,7 @@ abstract class BaseAdapter
                 // Build a new NestedCriteria class, keep it by reference so any changes made
                 // in the closure should reflect here
                 $nestedCriteria = $this->container->build(
-                    '\\FluentSmtpDb\\QueryBuilder\\NestedCriteria',
+                    '\\FluentMail\\App\\Services\\DB\\QueryBuilder\\NestedCriteria',
                     array($this->connection)
                 );
 

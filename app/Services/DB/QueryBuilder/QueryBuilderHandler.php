@@ -1,18 +1,18 @@
-<?php namespace FluentSmtpDb\QueryBuilder;
+<?php namespace FluentMail\App\Services\DB\QueryBuilder;
 
-use FluentSmtpDb\Connection;
-use FluentSmtpDb\Exception;
+use FluentMail\App\Services\DB\Connection;
+use FluentMail\App\Services\DB\Exception;
 
 class QueryBuilderHandler
 {
 
     /**
-     * @var \FluentSmtpDb\Viocon\Container
+     * @var \FluentMail\App\Services\DB\Viocon\Container
      */
     protected $container;
 
     /**
-     * @var Connection
+     * @var \FluentMail\App\Services\DB\src\Connection
      */
     protected $connection;
 
@@ -37,7 +37,7 @@ class QueryBuilderHandler
     protected $tablePrefix = null;
 
     /**
-     * @var \FluentSmtpDb\QueryBuilder\Adapters\BaseAdapter
+     * @var \FluentMail\App\Services\DB\QueryBuilder\Adapters\BaseAdapter
      */
     protected $adapterInstance;
 
@@ -49,9 +49,9 @@ class QueryBuilderHandler
     protected $fetchParameters = array(\PDO::FETCH_OBJ);
 
     /**
-     * @param null|\FluentSmtpDb\Connection $connection
+     * @param null|\FluentMail\App\Services\DB\Connection $connection
      *
-     * @throws \FluentSmtpDb\Exception
+     * @throws \FluentMail\App\Services\DB\Exception
      */
     public function __construct(Connection $connection = null)
     {
@@ -70,10 +70,9 @@ class QueryBuilderHandler
         if (isset($this->adapterConfig['prefix'])) {
             $this->tablePrefix = $this->adapterConfig['prefix'];
         }
-
         // Query builder adapter instance
         $this->adapterInstance = $this->container->build(
-            '\\FluentSmtpDb\\QueryBuilder\\Adapters\\' . ucfirst($this->adapter),
+            '\\FluentMail\\App\\Services\\DB\\QueryBuilder\\Adapters\\' . ucfirst($this->adapter),
             array($this->connection)
         );
     }
@@ -106,7 +105,7 @@ class QueryBuilderHandler
     }
 
     /**
-     * @param null|\FluentSmtpDb\Connection $connection
+     * @param null|\FluentMail\App\Services\DB\Connection $connection
      *
      * @return static
      */
@@ -128,7 +127,7 @@ class QueryBuilderHandler
     public function query($sql, $bindings = array())
     {
         $this->dbStatement = $this->container->build(
-            '\\FluentSmtpDb\\QueryBuilder\\QueryObject',
+            '\\FluentMail\\App\\Services\\DB\\QueryBuilder\\QueryObject',
             array($sql, $bindings)
         )->getRawSql();
 
@@ -153,7 +152,7 @@ class QueryBuilderHandler
      * Get all rows
      *
      * @return array|object|null
-     * @throws \FluentSmtpDb\Exception
+     * @throws \FluentMail\App\Services\DB\Exception
      */
     public function get()
     {
@@ -284,7 +283,7 @@ class QueryBuilderHandler
         $queryArr = $this->adapterInstance->$type($this->statements, $dataToBePassed);
         
         return  $this->container->build(
-            '\\FluentSmtpDb\\QueryBuilder\\QueryObject',
+            '\\FluentMail\\App\\Services\\DB\\QueryBuilder\\QueryObject',
             array($queryArr['sql'], $queryArr['bindings'])
         );
     }
@@ -310,7 +309,7 @@ class QueryBuilderHandler
      * @param $data
      *
      * @return array|string
-     * @throws \FluentSmtpDb\Exception
+     * @throws \FluentMail\App\Services\DB\Exception
      */
     private function doInsert($data, $type)
     {
@@ -383,7 +382,7 @@ class QueryBuilderHandler
     /**
      * @param $data
      *
-     * @throws \FluentSmtpDb\Exception
+     * @throws \FluentMail\App\Services\DB\Exception
      */
     public function update($data)
     {
@@ -428,7 +427,7 @@ class QueryBuilderHandler
 
     /**
      * @return mixed
-     * @throws \FluentSmtpDb\Exception
+     * @throws \FluentMail\App\Services\DB\Exception
      */
     public function delete()
     {
@@ -456,7 +455,7 @@ class QueryBuilderHandler
         if (! is_array($tables)) {
             // because a single table is converted to an array anyways,
             // this makes sense.
-            $tables = func_get_args();
+            $tables = array($tables);
         }
 
         $instance = new static($this->connection);
@@ -474,7 +473,7 @@ class QueryBuilderHandler
     public function from($tables)
     {
         if (! is_array($tables)) {
-            $tables = func_get_args();
+            $tables = array($tables);
         }
 
         $tables = $this->addTablePrefix($tables, false);
@@ -491,7 +490,7 @@ class QueryBuilderHandler
     public function select($fields)
     {
         if (! is_array($fields)) {
-            $fields = func_get_args();
+            $fields = array($fields);
         }
 
         $fields = $this->addTablePrefix($fields);
@@ -811,7 +810,7 @@ class QueryBuilderHandler
 
         // Build a new JoinBuilder class, keep it by reference so any changes made
         // in the closure should reflect here
-        $joinBuilder = $this->container->build('\\FluentSmtpDb\\QueryBuilder\\JoinBuilder', array($this->connection));
+        $joinBuilder = $this->container->build('\\FluentMail\\App\\Services\\DB\\QueryBuilder\\JoinBuilder', array($this->connection));
         $joinBuilder = & $joinBuilder;
         // Call the closure with our new joinBuilder object
         $key($joinBuilder);
@@ -837,7 +836,7 @@ class QueryBuilderHandler
 
             // Get the Transaction class
             $transaction = $this->container->build(
-                '\\FluentSmtpDb\\QueryBuilder\\Transaction',
+                '\\FluentMail\\App\\Services\\DB\\QueryBuilder\\Transaction',
                 array($this->connection)
             );
 
@@ -909,7 +908,7 @@ class QueryBuilderHandler
      */
     public function raw($value, $bindings = array())
     {
-        return $this->container->build('\\FluentSmtpDb\\QueryBuilder\\Raw', array($value, $bindings));
+        return $this->container->build('\\FluentMail\\App\\Services\\DB\\QueryBuilder\\Raw', array($value, $bindings));
     }
 
     /**
@@ -923,7 +922,7 @@ class QueryBuilderHandler
     }
 
     /**
-     * @param Connection $connection
+     * @param \FluentMail\App\Services\DB\Connection $connection
      *
      * @return $this
      */
@@ -935,7 +934,7 @@ class QueryBuilderHandler
     }
 
     /**
-     * @return Connection
+     * @return \FluentMail\App\Services\DB\Connection
      */
     public function getConnection()
     {
