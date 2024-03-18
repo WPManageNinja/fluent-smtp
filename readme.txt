@@ -1,9 +1,9 @@
 === FluentSMTP - WP Mail SMTP, Amazon SES, SendGrid, MailGun and Any SMTP Connector Plugin ===
 Contributors: techjewel, wpmanageninja, heera, adreastrian
-Tags: smtp, amazon ses, fluent smtp, wordpress smtp, sendgrid smtp, mailgun smtp, mail, mailer, phpmailer, wp_mail, email, sendinblue, wp smtp
+Tags: smtp, amazon ses, wordpress smtp, mail, wp mail smtp
 Requires at least: 5.5
 Tested up to: 6.4
-Stable tag: 2.2.71
+Stable tag: 2.2.72
 Requires PHP: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -284,6 +284,10 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.2.72 (Date: Mar 16, 2024) =
+* Compatibility with PHP 8.4
+* Fix Slack Notification Issue
 
 = 2.2.71 (Date: Jan 01, 2024 =
 * Hot Fix: Fixing the issue with Input Fields
