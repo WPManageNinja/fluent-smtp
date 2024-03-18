@@ -47,6 +47,14 @@ class QueryBuilderHandler
      * @var array
      */
     protected $fetchParameters = array(\PDO::FETCH_OBJ);
+    /**
+     * @var string
+     */
+    private $adapter;
+    /**
+     * @var array
+     */
+    private $adapterConfig;
 
     /**
      * @param null|\FluentMail\App\Services\DB\Connection $connection
