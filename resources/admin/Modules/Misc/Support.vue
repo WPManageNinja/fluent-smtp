@@ -42,6 +42,8 @@
                         <p>FluentSMTP is powered by it's users like you. Feel free to contribute on Github. Thanks to
                             all of our contributors.</p>
 
+                        <el-skeleton :rows="4" :animated="true" v-if="contributorsLoading" />
+
                         <a target="_blank" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
 
                             <ul v-if="contributors.length > 0" v-loading="contributorsLoading" style="list-style: none; display: flex; flex-direction: row; flex-wrap: wrap; ">
