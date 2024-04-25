@@ -32,9 +32,9 @@ class AdminMenuHandler
 
                     if ($token == Arr::get($settings, 'slack.token')) {
                         $settings['slack'] = [
-                            'status'       => 'yes',
-                            'token'        => sanitize_text_field($token),
-                            'slack_team'   => sanitize_text_field(Arr::get($_REQUEST, 'slack_team')),
+                            'status'      => 'yes',
+                            'token'       => sanitize_text_field($token),
+                            'slack_team'  => sanitize_text_field(Arr::get($_REQUEST, 'slack_team')),
                             'webhook_url' => sanitize_url(Arr::get($_REQUEST, 'slack_webhook'))
                         ];
 
@@ -53,7 +53,6 @@ class AdminMenuHandler
         add_action('admin_bar_menu', array($this, 'addSimulationBar'), 999);
 
         add_action('admin_init', array($this, 'initAdminWidget'));
-
 
         add_action('install_plugins_table_header', function () {
             if (!isset($_REQUEST['s']) || empty($_REQUEST['s']) || empty($_REQUEST['tab']) || $_REQUEST['tab'] != 'search') {
@@ -89,6 +88,19 @@ class AdminMenuHandler
             </div>
             <?php
         }, 1);
+
+        add_action('wp_ajax_fluent_smtp_get_dashboard_html', function () {
+            // This widget should be displayed for certain high-level users only.
+            if (!current_user_can('manage_options') || apply_filters('fluent_mail_disable_dashboard_widget', false)) {
+                wp_send_json([
+                    'html' => 'You do not have permission to see this data'
+                ]);
+            }
+
+            wp_send_json([
+                'html' => $this->getDashboardWidgetHtml()
+            ]);
+        });
 
     }
 
@@ -337,11 +349,52 @@ class AdminMenuHandler
                 esc_html__('Fluent SMTP', 'fluent-smtp'),
                 [$this, 'dashWidgetContent']
             );
+
         });
+
 
     }
 
     public function dashWidgetContent()
+    {
+        ?>
+        <style type="text/css">
+            td.fstmp_failed {
+                color: red;
+                font-weight: bold;
+            }
+        </style>
+        <div id="fsmtp_dashboard_widget_html" class="fsmtp_dash_wrapper">
+            <h3 style="min-height: 170px;">Loading data....</h3>
+        </div>
+        <?php
+        add_action('admin_footer', function () {
+            ?>
+            <script type="application/javascript">
+                document.addEventListener('DOMContentLoaded', function () {
+                    // send an ajax request to ajax url with raw javascript
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', '<?php echo admin_url('admin-ajax.php?action=fluent_smtp_get_dashboard_html'); ?>', true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response && response.html) {
+                                document.getElementById('fsmtp_dashboard_widget_html').innerHTML = response.html;
+                            } else {
+                                document.getElementById('fsmtp_dashboard_widget_html').innerHTML = '<h3>Failed to load FluentSMTP Reports</h3>';
+                            }
+                        }
+                    };
+
+                    xhr.send();
+                });
+            </script>
+            <?php
+        });
+    }
+
+    protected function getDashboardWidgetHtml()
     {
         $stats = [];
         $logModel = new Logger();
@@ -368,38 +421,32 @@ class AdminMenuHandler
             'sent'   => $allTime['sent'],
             'failed' => $allTime['failed'],
         ];
-
+        ob_start();
         ?>
-        <style type="text/css">
-            td.fstmp_failed {
-                color: red;
-                font-weight: bold;
-            }
-        </style>
-        <div class="fsmtp_dash_wrapper">
-            <table class="fsmtp_dash_table wp-list-table widefat fixed striped">
-                <thead>
+        <table class="fsmtp_dash_table wp-list-table widefat fixed striped">
+            <thead>
+            <tr>
+                <th><?php _e('Date', 'fluent-smtp'); ?></th>
+                <th><?php _e('Sent', 'fluent-smtp'); ?></th>
+                <th><?php _e('Failed', 'fluent-smtp'); ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($stats as $stat): ?>
                 <tr>
-                    <th><?php _e('Date', 'fluent-smtp'); ?></th>
-                    <th><?php _e('Sent', 'fluent-smtp'); ?></th>
-                    <th><?php _e('Failed', 'fluent-smtp'); ?></th>
+                    <td><?php echo $stat['title']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
+                    <td><?php echo $stat['sent']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
+                    <td class="<?php echo ($stat['failed']) ? 'fstmp_failed' : ''; ?>"><?php echo $stat['failed']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
                 </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($stats as $stat): ?>
-                    <tr>
-                        <td><?php echo $stat['title']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
-                        <td><?php echo $stat['sent']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
-                        <td class="<?php echo ($stat['failed']) ? 'fstmp_failed' : ''; ?>"><?php echo $stat['failed']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
-            </table>
-            <a style="text-decoration: none; padding-top: 10px; display: block"
-               href="<?php echo admin_url('options-general.php?page=fluent-mail#/'); ?>"
-               class=""><?php _e('View All', 'fluent-smtp'); ?></a>
-        </div>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <a style="text-decoration: none; padding-top: 10px; display: block"
+           href="<?php echo admin_url('options-general.php?page=fluent-mail#/'); ?>"
+           class=""><?php _e('View All', 'fluent-smtp'); ?></a>
         <?php
+
+        return ob_get_clean();
     }
 
     public function getTrans()
@@ -479,7 +526,7 @@ class AdminMenuHandler
             'Connection Details'                                    => __('Connection Details', 'fluent-smtp'),
             'Close'                                                 => __('Close', 'fluent-smtp'),
             'General Settings'                                      => __('General Settings', 'fluent-smtp'),
-            'Alerts'                                 => __('Alerts', 'fluent-smtp'),
+            'Alerts'                                                => __('Alerts', 'fluent-smtp'),
             'Add Connection'                                        => __('Add Connection', 'fluent-smtp'),
             'Edit Connection'                                       => __('Edit Connection', 'fluent-smtp'),
             'routing_info'                                          => __('Your emails will be routed automatically based on From email address. No additional configuration is required.', 'fluent-smtp'),
