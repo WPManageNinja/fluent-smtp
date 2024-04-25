@@ -549,6 +549,12 @@ class AdminMenuHandler
             'Email Simulation'                                      => __('Email Simulation', 'fluent-smtp'),
             'Email_Simulation_Label'                                => __('Disable sending all emails. If you enable this, no email will be sent.', 'fluent-smtp'),
             'Email_Simulation_Yes'                                  => __('No Emails will be sent from your WordPress.', 'fluent-smtp'),
+            'Sending by time of day'                                => __('Sending by time of day', 'fluent-smtp'),
+            'More'                                                  => __('More', 'fluent-smtp'),
+            'Less'                                                  => __('Less', 'fluent-smtp'),
+            'Last 7 Days'                                           => __('Last 7 Days', 'fluent-smtp'),
+            'Last 30 Days'                                          => __('Last 30 Days', 'fluent-smtp'),
+            'All Time'                                              => __('All Time', 'fluent-smtp')
         ];
     }
 }

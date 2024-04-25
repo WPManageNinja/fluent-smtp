@@ -31,6 +31,15 @@
       background-color: #f7fafc;
       font-weight: 700;
       color: #697386;
+
+      &.fss_widget_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        h3 {
+          margin: 0;
+        }
+      }
     }
 
     & .fss_content {
