@@ -1,4 +1,4 @@
-=== FluentSMTP - WP Mail SMTP, Amazon SES, SendGrid, MailGun, Postmark and Any SMTP Connector Plugin ===
+=== FluentSMTP - WP SMTP Plugin with Amazon SES, SendGrid, MailGun, Postmark, Google and Any SMTP Provider ===
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, wordpress smtp, mail, wp mail smtp
 Requires at least: 5.5
@@ -8,7 +8,7 @@ Requires PHP: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The Ultimate Free Forever Mail SMTP Plugin for WordPress. Connect with any SMTP, SendGrid, Mailgun, Amazon SES, Brevo, Postmark, Sparkpost, Google, Microsoft and more.
+The Ultimate Forever Free Mail SMTP Plugin for WordPress. Connect with any SMTP, SendGrid, Mailgun, Amazon SES, Brevo, Postmark, Sparkpost, Google...
 
 == Description ==
 
@@ -153,9 +153,6 @@ Fluent SMTP has a unique feature that will notify you in real-time if any email 
 
 == 🚀 Security 🚀 ==
 Fluent SMTP is built by professionals and security and scalability in mind. Fluent SMTP provides several options for you to keep your email sending secure and safe.
-
-== 🚀 One Click Migration From WP Mail SMTP by WPForms 🚀 ==
-If you use other WP SMTP plugin like "WP Mail SMTP by WPForms", you can just install Fluent SMTP Plugin and migrate the settings by a single click.
 
 * Ability to store your SMTP / API credentials on the wp-config.php file
 * Ability to auto-delete old email logs
