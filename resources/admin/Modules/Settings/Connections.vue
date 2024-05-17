@@ -19,7 +19,7 @@
                             <el-table-column :label="$t('Provider')">
                                 <template slot-scope="scope">
                                     {{ settings.providers[scope.row.provider].title }}
-                                    <span style="color: red;" v-if="scope.row.provider == 'gmail' && !scope.row.version">(Re Authentication Required)</span>
+                                    <span style="color: red;" v-if="scope.row.provider == 'gmail' && !scope.row.version">{{ $t('(Re Authentication Required)') }}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="sender_email" :label="$t('From Email')">
@@ -139,7 +139,7 @@
 
                 this.$notify.success({
                     title: 'Great!',
-                    message: 'Connection deleted Successfully.',
+                    message: this.$t('Connection deleted Successfully.'),
                     offset: 19
                 });
             },

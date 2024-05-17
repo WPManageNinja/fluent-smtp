@@ -3,29 +3,28 @@
         <div v-if="!isConfigured">
             <div v-if="configure_state == 'form'">
                 <p>
-                    Get real-time notification on your Slack Channel on any email sending failure. Configure
-                    notification with Slack Bot to start getting real time notifications. <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">Read the documentation</a>.
+                    {{ $t('Get real-time notification on your Slack Channel on any email sending failure. Configure notification with Slack Bot to start getting real time notifications.') }} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.
                 </p>
 
                 <el-form class="fss_compact_form" :data="newForm" label-position="top">
                     <el-form-item label="Your Email Address">
-                        <el-input size="small" v-model="newForm.user_email" placeholder="Email Address"/>
+                        <el-input size="small" v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
                     </el-form-item>
                     <el-form-item>
                         <el-checkbox v-model="newForm.terms" true-label="yes" false-label="no">
-                            I agree to the <a target="_blank" rel="noopener"
+                            {{ $t('I agree to the ') }} <a target="_blank" rel="noopener"
                                               href="https://fluentsmtp.com/terms-and-conditions/">
-                            terms and conditions</a> of this slack integration.
+                            {{ $t('terms and conditions') }}</a> {{ $t(' of this slack integration.') }}
                         </el-checkbox>
                     </el-form-item>
                     <el-form-item>
                         <el-button @click="registerSite()" v-loading="processing"
                                    :disabled="newForm.terms != 'yes' || !newForm.user_email || processing"
                                    type="primary">
-                            Continue to Slack
+                            {{ $t('Continue to Slack') }}
                         </el-button>
                     </el-form-item>
-                    <p>FluentSMTP does not store your email notifications data. <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">Read the documentation</a>.</p>
+                    <p>{{ $t('FluentSMTP does not store your email notifications data. ')}}<a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.</p>
                 </el-form>
             </div>
         </div>

@@ -37,8 +37,8 @@
                                     type="daterange"
                                     :picker-options="pickerOptions"
                                     range-separator="To"
-                                    start-placeholder="Start date"
-                                    end-placeholder="End date"
+                                    :start-placeholder="$t('Start date')"
+                                    :end-placeholder="$t('End date')"
                                     value-format="yyyy-MM-dd"
                                 ></el-date-picker>
                                 <el-button size="small" @click="filterReport" type="primary" plain>Apply</el-button>

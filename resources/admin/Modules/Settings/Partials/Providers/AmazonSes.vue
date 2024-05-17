@@ -1,14 +1,14 @@
 <template>
     <div>
         <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button label="db">Store Access Keys in DB</el-radio-button>
-            <el-radio-button label="wp_config">Access Keys in Config File</el-radio-button>
+            <el-radio-button label="db">{{ $t('Store Access Keys in DB') }}</el-radio-button>
+            <el-radio-button label="wp_config">{{ $t('Access Keys in Config File') }}</el-radio-button>
         </el-radio-group>
         <el-row v-if="connection.key_store == 'db'" :gutter="20">
             <el-col :md="12" :sm="24">
                 <el-form-item for="access_key">
                     <label for="access_key">
-                        Access Key
+                        {{ $t('Access Key') }}
                     </label>
                     
                     <InputPassword
@@ -22,7 +22,7 @@
             <el-col  :md="12" :sm="24">
                 <el-form-item>
                     <label for="ses-key">
-                        Secret Key
+                        {{ $t('Secret Key') }}
                     </label>
 
                     <InputPassword
@@ -36,7 +36,7 @@
         </el-row>
         <div class="fss_condesnippet_wrapper" v-else-if="connection.key_store == 'wp_config'">
             <el-form-item>
-                <label>Simply copy the following snippet and replace the stars with the corresponding credential. Then simply paste to wp-config.php file of your WordPress installation</label>
+                <label>{{ $t('Simply copy the following snippet and replace the stars with the corresponding credential. Then simply paste to wp-config.php file of your WordPress installation') }}</label>
                 <div class="code_snippet">
                     <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_AWS_ACCESS_KEY_ID', '********************' );
 define( 'FLUENTMAIL_AWS_SECRET_ACCESS_KEY', '********************' );</textarea>
@@ -48,15 +48,15 @@ define( 'FLUENTMAIL_AWS_SECRET_ACCESS_KEY', '********************' );</textarea>
 
         <el-form-item>
             <label for="ses-region">
-                Region <span
+                {{ $t('Region ') }}<span
                     class="small-help-text"
-                >(Default: US East (N. Virginia)/us-east-1)</span>
+                >{{ $t('(Default: US East(N.Virginia) / us - east - 1)') }}</span>
             </label>
 
             <el-select
                 id="ses-region"
                 v-model="connection.region"
-                placeholder="Select Region"
+                :placeholder="$t('Select Region')"
             >
                 <el-option
                     v-for="(label, value) in provider.regions"

@@ -1,7 +1,9 @@
 <template>
     <div class="fss_general_settings">
         <el-form class="fss_compact_form" :data="notification_settings" label-position="top">
-            <p>Email summary is useful for getting weekly or daily emails about the all the email sending stats for this site.</p>
+            <p>
+                {{ $t('Email summary is useful for getting weekly or daily emails about the all the email sending stats for this site.') }}
+            </p>
             <el-form-item>
                 <el-checkbox
                     v-model="notification_settings.enabled"
@@ -15,7 +17,7 @@
                 </el-form-item>
                 <el-form-item :label="$t('Notification Days')">
                     <el-checkbox-group v-model="notification_settings.notify_days">
-                        <el-checkbox v-for="(day, dayLabel) in sending_days" :key="day" :value="day" :label="dayLabel"></el-checkbox>
+                        <el-checkbox v-for="(day, dayLabel) in sending_days" :key="day" :value="day" :label="$t(dayLabel)"></el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
             </template>
