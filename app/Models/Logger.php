@@ -163,7 +163,7 @@ class Logger extends Model
             $result[$key]['id']      = (int)$result[$key]['id'];
             $result[$key]['retries'] = (int)$result[$key]['retries'];
             $result[$key]['from']    = htmlspecialchars($result[$key]['from']);
-            $result[$key]['subject'] = esc_attr($result[$key]['subject']);
+            $result[$key]['subject'] = wp_kses_post(wp_unslash($result[$key]['subject']));
         }
 
         return $result;
