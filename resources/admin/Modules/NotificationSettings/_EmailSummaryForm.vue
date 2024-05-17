@@ -2,7 +2,7 @@
     <div class="fss_general_settings">
         <el-form class="fss_compact_form" :data="notification_settings" label-position="top">
             <p>
-                {{ $t('Email summary is useful for getting weekly or daily emails about the all the email sending stats for this site.') }}
+                {{ $t('__EMAIL_SUMMARY_INTRO') }}
             </p>
             <el-form-item>
                 <el-checkbox

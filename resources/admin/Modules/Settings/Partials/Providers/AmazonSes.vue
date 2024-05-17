@@ -36,7 +36,7 @@
         </el-row>
         <div class="fss_condesnippet_wrapper" v-else-if="connection.key_store == 'wp_config'">
             <el-form-item>
-                <label>{{ $t('Simply copy the following snippet and replace the stars with the corresponding credential. Then simply paste to wp-config.php file of your WordPress installation') }}</label>
+                <label>{{ $t('__WP_CONFIG_INSTRUCTION') }}</label>
                 <div class="code_snippet">
                     <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_AWS_ACCESS_KEY_ID', '********************' );
 define( 'FLUENTMAIL_AWS_SECRET_ACCESS_KEY', '********************' );</textarea>

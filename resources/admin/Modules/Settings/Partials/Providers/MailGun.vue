@@ -51,7 +51,7 @@
 
         <div class="fss_condesnippet_wrapper" v-else-if="connection.key_store == 'wp_config'">
             <el-form-item>
-                <label>{{ $t('Simply copy the following snippet and replace the stars with the corresponding credential. Then simply paste to wp-config.php file of your WordPress installation') }}</label>
+                <label>{{ $t('__WP_CONFIG_INSTRUCTION') }}</label>
                 <div class="code_snippet">
                     <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_MAILGUN_API_KEY', '********************' );
 define( 'FLUENTMAIL_MAILGUN_DOMAIN', '********************' );</textarea>
@@ -71,13 +71,10 @@ define( 'FLUENTMAIL_MAILGUN_DOMAIN', '********************' );</textarea>
             
             <el-alert :closable="false">
                 <span>
-                    {{ $t('Define which endpoint you want to use for sending messages.') }}
+                    {{ $t('__MAILGUN_URL_TIP') }}
                 </span>
                 
-                <span>
-                    {{ $t('If you are operating under EU laws, you may be required to use EU region.') }}
-                    <a target="_blank" href="https://www.mailgun.com/regions">{{ $t('More information') }}</a> {{ $t(' on Mailgun.com.') }}
-                </span>
+                <span v-html="$t('__MAILGUN_REGION')"></span>
             </el-alert>
         </el-form-item>
     </div>

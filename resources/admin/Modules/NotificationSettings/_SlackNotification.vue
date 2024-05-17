@@ -3,7 +3,7 @@
         <div v-if="!isConfigured">
             <div v-if="configure_state == 'form'">
                 <p>
-                    {{ $t('Get real-time notification on your Slack Channel on any email sending failure. Configure notification with Slack Bot to start getting real time notifications.') }} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.
+                    {{ $t('__SLACK_INTRO') }} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.
                 </p>
 
                 <el-form class="fss_compact_form" :data="newForm" label-position="top">
@@ -12,9 +12,7 @@
                     </el-form-item>
                     <el-form-item>
                         <el-checkbox v-model="newForm.terms" true-label="yes" false-label="no">
-                            {{ $t('I agree to the ') }} <a target="_blank" rel="noopener"
-                                              href="https://fluentsmtp.com/terms-and-conditions/">
-                            {{ $t('terms and conditions') }}</a> {{ $t(' of this slack integration.') }}
+                            <div v-html="$t('__SLACK_TERMS')"></div>
                         </el-checkbox>
                     </el-form-item>
                     <el-form-item>
@@ -24,7 +22,7 @@
                             {{ $t('Continue to Slack') }}
                         </el-button>
                     </el-form-item>
-                    <p>{{ $t('FluentSMTP does not store your email notifications data. ')}}<a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.</p>
+                    <p>{{ $t('FluentSMTP does not store your email notifications data. ')}} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.</p>
                 </el-form>
             </div>
         </div>

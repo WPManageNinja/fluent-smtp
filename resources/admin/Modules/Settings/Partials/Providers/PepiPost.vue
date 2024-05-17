@@ -22,7 +22,7 @@
 
         <div class="fss_condesnippet_wrapper" v-else-if="connection.key_store == 'wp_config'">
             <el-form-item>
-                <label>{{ $t('Simply copy the following snippet and replace the stars with the corresponding credential. Then simply paste to wp-config.php file of your WordPress installation') }}</label>
+                <label>{{ $t('__WP_CONFIG_INSTRUCTION') }}</label>
                 <div class="code_snippet">
                     <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_PEPIPOST_API_KEY', '********************' );</textarea>
                 </div>
@@ -31,7 +31,7 @@
         </div>
 
         <span class="small-help-text" style="display:block;margin-top:-10px">
-            {{ $t('Follow this link to get an API Key from Pepipost(Click Show button on Settings Page):') }}
+            {{ $t('__PEPIPOST_HELP') }}
             <a target="_blank" href="https://app.pepipost.com/app/settings/integration">{{ $t('Get API Key.') }}</a>
         </span>
     </div>

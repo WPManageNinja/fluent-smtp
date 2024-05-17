@@ -54,7 +54,7 @@
 
                 <el-tooltip effect="dark" placement="top-start">
                     <div slot="content">
-                        {{ $t('When checked, the From Name setting above will be used for all emails, ignoring values set by other plugins.') }}
+                        {{ $t('__FORCE_SENDER_NAME_TIP') }}
                     </div>
                     <i class="el-icon-info"></i>
                 </el-tooltip>

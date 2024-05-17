@@ -2,7 +2,7 @@
     <div class="fst_subscribe_form">
         <template v-if="!subscribed">
             <p style="margin-top: 0;">
-                {{ $t('Subscribe with your email to know about this plugin updates, releases and useful tips.') }}
+                {{ $t('__SUBSCRIBE_INTRO') }}
             </p>
             <div class="fsmtp_subscribe">
                 <el-form label-position="right" label-width="100px">
@@ -15,8 +15,8 @@
                 </el-form>
 
                 <el-checkbox true-label="yes" false-label="no" v-model="share_details">
-                    {{ $t('(Optional) Share Non - Sensitive Data.It will help us to improve the integrations') }}
-                    <el-tooltip class="item" effect="dark" :content="$t('Access Data: Active SMTP Connection Provider, installed plugin names, php & mysql version')" placement="top-end">
+                    (Optional) Share Non - Sensitive Data.It will help us to improve the integrations
+                    <el-tooltip class="item" effect="dark" content="Access Data: Active SMTP Connection Provider, installed plugin names, php & mysql version" placement="top-end">
                         <i class="el-icon el-icon-info"></i>
                     </el-tooltip>
                 </el-checkbox>

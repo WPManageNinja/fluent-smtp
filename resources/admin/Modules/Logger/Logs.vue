@@ -4,7 +4,7 @@
             <div v-if="!isLogsOn">
                 <div class="fss_content">
                     <el-alert :closable="false" show-icon center>
-                        {{ $t('Email Logging is currently turned off. Only Failed and resent emails will be shown here') }}
+                        {{ $t('__EMAIL_LOGGING_OFF') }}
                         <el-button type="text" @click="turnOnEmailLogging">{{ $t('Turn On') }}</el-button>
                         .
                     </el-alert>

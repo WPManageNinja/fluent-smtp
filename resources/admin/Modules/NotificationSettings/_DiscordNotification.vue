@@ -3,7 +3,7 @@
         <div v-if="!isConfigured">
             <div>
                 <p>
-                    {{ $t('Get real - time notification on your Discord Channel on any email sending failure.Configure notification with Discord to start getting real time notifications.') }}<a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-discord/">{{ $t('Read the documentation') }}</a>.
+                    {{ $t('__DISCORD_INTRO') }}<a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-discord/">{{ $t('Read the documentation') }}</a>.
                 </p>
                 <el-form class="fss_compact_form" :data="newForm" label-position="top">
                     <el-form-item :label="$t('Your Discord Channel Name (For Internal Use)')">

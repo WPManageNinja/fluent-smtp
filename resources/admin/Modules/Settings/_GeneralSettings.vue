@@ -40,7 +40,7 @@
                     <el-popover
                         width="400"
                         trigger="hover">
-                        <p>{{$t('default_connection_popover')}}</p>
+                        <p>{{$t('__default_connection_popover')}}</p>
                         <i slot="reference" class="el-icon el-icon-info"></i>
                     </el-popover>
                 </label>
@@ -60,7 +60,7 @@
                     <el-popover
                         width="400"
                         trigger="hover">
-                        <p>{{$t('fallback_connection_popover')}}</p>
+                        <p>{{$t('__fallback_connection_popover')}}</p>
                         <i slot="reference" class="el-icon el-icon-info"></i>
                     </el-popover>
                 </label>
@@ -81,8 +81,8 @@
                     v-model="settings.misc.simulate_emails"
                     true-label="yes"
                     false-label="no"
-                >{{$t('Email_Simulation_Label')}}</el-checkbox>
-                <p style="color: red;" v-if="settings.misc.simulate_emails == 'yes'">{{$t('Email_Simulation_Yes')}}</p>
+                >{{$t('__Email_Simulation_Label')}}</el-checkbox>
+                <p style="color: red;" v-if="settings.misc.simulate_emails == 'yes'">{{$t('__Email_Simulation_Yes')}}</p>
                 <p v-if="appVars.is_disabled_defined" style="color: red;">{{ ('Emails are being simulated due to the definition of ') }} <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ (' in your PHP code.') }}</p>
             </el-form-item>
 
@@ -122,7 +122,7 @@
             saveMiscSettings() {
 
                 if(this.settings.misc.fallback_connection && this.settings.misc.default_connection && this.settings.misc.default_connection == this.settings.misc.fallback_connection) {
-                    this.$notify.error(this.$t('Default and Fallback connection can not be same. Please select different connections.'));
+                    this.$notify.error(this.$t('__DEFAULT_CONNECTION_CONFLICT'));
                     return;
                 }
 

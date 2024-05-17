@@ -1,10 +1,9 @@
 <template>
     <div>
-        <div v-if="connection_key && !connection.version" class="ff_smtp_warn">
-            {{ $t('Google API version has been upgraded.Please ') }}<a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">{{ $t('read the doc and upgrade your API connection') }}</a>.
+        <div v-if="connection_key && !connection.version" v-html="$t('__GCP_INTRO')" class="ff_smtp_warn">
         </div>
         <h3>{{ $t('Gmail / Google Workspace API Settings') }}</h3>
-        <p>{{ $t('Please ') }}<a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">{{ $t('check the documentation') }}</a>{{ $t(' to create API keys on the Google Cloud Platform.') }}</p>
+        <p v-html="$t('__GCP_API_INST')"></p>
         
         <el-radio-group size="mini" v-model="connection.key_store">
             <el-radio-button value="db" label="db">{{ $t('Store Application Keys in DB') }}</el-radio-button>
@@ -44,7 +43,7 @@
 
         <div class="fss_condesnippet_wrapper" v-else-if="connection.key_store == 'wp_config'">
             <el-form-item>
-                <label>{{ $t('Simply copy the following snippet and replace the stars with the corresponding credential.Then simply paste to wp-config.php file of your WordPress installation') }}</label>
+                <label>{{ $t('__GMAIL_CODE_INSTRUCTION') }}</label>
                 <div class="code_snippet">
                     <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_GMAIL_CLIENT_ID', '********************' );
 define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
@@ -82,7 +81,7 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
             </el-row>
         </div>
         <div style="text-align: center;" v-else>
-            <h3>{{ $t('Your Gmail / Google Workspace Authentication has been enabled. No further action is needed. If you want to re-authenticate, ') }}<a @click.prevent="connection.access_token = ''" href="#">{{ $t('click here') }}</a></h3>
+            <h3>{{ $t('__GMAIL_SUCCESS') }} <a @click.prevent="connection.access_token = ''" href="#">{{ $t('click here') }}</a></h3>
         </div>
 
     </div>

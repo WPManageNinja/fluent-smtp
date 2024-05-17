@@ -2,7 +2,7 @@
     <div class="fc_docs">
         <div style="max-width: 800px; margin: 50px auto; padding: 0px 20px; text-align: center;" class="fc_doc_header text-align-center">
             <h1>{{ $t('How can we help you?') }}</h1>
-            <p>{{ $t('Please view the ') }}<a href="https://fluentsmtp.com/docs" target="_blank" rel="noopener">{{ $t('documentation') }}</a>{{ $t('first. If you still can\'t find the answer') }}<a href="https://wpmanageninja.com/support-tickets/" target="_blank" rel="noopener">{{ $t('open a support ticket') }}</a>{{ $t(' and we will be happy to answer your questions and assist you with any problems.') }}</p>
+            <p v-html="$t('__SUPPORT_INTRO')"></p>
             <el-input
                 v-loading="fetching"
                 clearable

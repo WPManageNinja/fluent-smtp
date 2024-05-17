@@ -3,7 +3,7 @@
         <img style="max-height: 50px;" :src="`${appVars.images_url}disc.svg`"/>
         <h3>{{ $t('Discord Notifications Enabled') }}</h3>
         <p>
-            {{ $t('Your FluentSMTP plugin is currently integrated with your Discord Channel.Receive timely notifications on Discord for any email sending issues from your website.This ongoing connection ensures you\'re always informed about your email delivery status.') }}
+            {{ $t('__DISCORD_NOTIFICATION_ENABLED') }}
         </p>
         <p>{{ $t('Discord Channel Details: ') }}{{ notification_settings.discord.channel_name }}</p>
         <p>

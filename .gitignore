@@ -7,3 +7,4 @@ assets
 package-lock.json
 .DS_Store
 *.sublime-*
+translationStrings.php

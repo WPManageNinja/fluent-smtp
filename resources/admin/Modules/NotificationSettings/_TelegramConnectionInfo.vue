@@ -6,8 +6,7 @@
                 <img style="max-height: 50px;" :src="`${appVars.images_url}tele.svg`"/>
                 <h3>{{ $t('Telegram Notifications Enable') }}d</h3>
                 <p>
-                    {{ $t('Your FluentSMTP plugin is currently integrated with Telegram.Receive timely notifications from ')}}<a
-                    target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot">@fluentsmtp_bot</a> {{ $t(' on Telegram for any email sending issues from your website. This ongoing connection ensures you\'re always informed about your email delivery status.') }}
+                    {{$t('__TELEGRAM_NOTIFICATION_ENABLED') }}
                 </p>
                 <p>{{ $t('Receiver\'s Telegram Username: ') }}@{{ receiver.username }}</p>
                 <p>
@@ -22,7 +21,7 @@
             <div v-else>
                 <img style="max-height: 50px;" :src="`${appVars.images_url}tele.svg`"/>d
                 <h3>{{ $t('Telegram Connection Status: ') }}{{ status }}</h3>
-                <p>{{ $t('We could not fetch the Telegram notification status.Here is the server response: ') }}</p>
+                <p>{{ $t('__TELE_RESPONSE_ERROR') }}</p>
                 <pre>{{errors}}</pre>
                 <p>
                     <el-button @click="getInfo()" :disabled="sending_test" v-loading="sending_test" size="mini"

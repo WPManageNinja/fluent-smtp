@@ -53,7 +53,7 @@
                             </el-table-column>
                         </el-table>
                         <el-alert :closable="false" style="margin-top: 20px" type="info" v-if="connections.length > 1">
-                            {{ $t('routing_info') }}
+                            {{ $t('__routing_info') }}
                         </el-alert>
                     </div>
                 </div>

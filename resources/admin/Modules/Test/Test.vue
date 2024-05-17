@@ -25,7 +25,7 @@
                         <el-input id="from" v-model="form.email" />
 
                         <span class="small-help-text" style="display:block;margin-top:-10px">
-                            {{ $t('Enter email address where test email will be sent (By default, logged in user email will be used if email address is not provided).') }}
+                            {{ $t('__TEST_EMAIL_INST') }}
                         </span>
                     </el-form-item>
 

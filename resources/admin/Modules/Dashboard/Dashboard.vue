@@ -3,8 +3,8 @@
         <div v-if="is_new" class="fss_content">
             <div class="fss_connection_intro">
                 <div class="fss_intro">
-                    <h1>{{ $t('wizard_title') }}</h1>
-                    <p>{{ $t('wizard_sub') }}</p>
+                    <h1>{{ $t('__wizard_title') }}</h1>
+                    <p>{{ $t('__wizard_sub') }}</p>
                 </div>
 
                 <div v-if="recommended && !skip_recommended" class="fsmtp_recommened">
@@ -14,7 +14,7 @@
                     <el-button @click="skip_recommended = true" type="info">Skip</el-button>
                 </div>
                 <template v-else>
-                    <h2>{{ $t('wizard_instruction') }}</h2>
+                    <h2>{{ $t('__wizard_instruction') }}</h2>
                     <connection-wizard
                         :connection="new_connection"
                         :is_new="true"

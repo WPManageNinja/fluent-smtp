@@ -3,7 +3,7 @@
         <img style="max-height: 50px;" :src="`${appVars.images_url}slack.svg`"/>
         <h3>{{ $t('Slack Notifications Enabled') }}</h3>
         <p>
-            {{ $t('Your FluentSMTP plugin is currently integrated with your Slack Channel. Receive timely notifications on Slack for any email sending issues from your website. This ongoing connection ensures you\'re always informed about your email delivery status.') }}
+            {{$t('__SLACK_NOTIFICATION_ENABLED')}}
         </p>
         <p>{{ $t('Slack Channel Details: ') }}@{{ notification_settings.slack.slack_team }}</p>
         <p>

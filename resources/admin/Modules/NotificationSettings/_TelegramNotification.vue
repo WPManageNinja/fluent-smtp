@@ -2,12 +2,8 @@
     <div>
         <div v-if="!notification_settings.telegram || notification_settings.telegram.status != 'yes'">
             <div v-if="configure_state == 'form'">
-                <p>{{ $t('Get real - time notification on your ') }}<a target="_blank" rel="noopener" href="https://telegram.org/">Telegram
-                    Messenger</a>{{ $t(' on any email sending failure.Configure notification with FluentSMTP\'s') }}
-                    <a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot">
-                        official telegram bot
-                    </a>{{ $t(' to start getting real time notifications. ') }}<a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-telegram/">{{ $t('Read the documentation') }}</a>.
-                </p>
+                <p v-html="$t('__TELE_INTRO')"></p>
+                <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-telegram/">{{ $t('Read the documentation') }}</a>.
 
                 <el-form class="fss_compact_form" :data="newForm" label-position="top">
                     <el-form-item :label="$t('Your Email Address')">
@@ -15,9 +11,7 @@
                     </el-form-item>
                     <el-form-item>
                         <el-checkbox v-model="newForm.terms" true-label="yes" false-label="no">
-                            {{ $t('I agree to the ') }}<a target="_blank" rel="noopener"
-                                              href="https://fluentsmtp.com/terms-and-conditions/">
-                            {{ $t('terms and conditions') }}</a>{{ $t(' of this telegram integration.') }}
+                            <div v-html="$t('__TELE_TERMS')"></div>
                         </el-checkbox>
                     </el-form-item>
                     <el-form-item>
@@ -32,9 +26,7 @@
             </div>
             <div v-else-if="configure_state == 'pin'">
                 <h3>{{ $t('Last step!') }}</h3>
-                <p>{{ $t('Please find ') }}<a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot"><span
-                    class="tele_bot">@fluentsmtp_bot</span></a>{{ $t(' on telegram and send following text to activate this connection.')
-                    }}</p>
+                <p v-html="$t('__TELE_LAST_STEP')"></p>
                 <h3>{{ $t('Activation Pin') }}</h3>
                 <p style="font-size: 20px;font-weight: bold;padding: 10px; margin: 15px 0; background: rgb(248 250 252);border-radius: 5px;border: 2px dashed #e8d100;">
                     {{ $t('activate ') }} {{ newForm.site_pin }}
