@@ -1,13 +1,13 @@
-<?php namespace FluentSmtpDb;
+<?php namespace FluentMail\App\Services\DB;
 
-use FluentSmtpDb\QueryBuilder\QueryBuilderHandler;
+use FluentMail\App\Services\DB\QueryBuilder\QueryBuilderHandler;
 
 /**
  * This class gives the ability to access non-static methods statically
  *
  * Class AliasFacade
  *
- * @package FluentSmtpDb
+ * @package FluentAuthDb
  */
 class AliasFacade
 {

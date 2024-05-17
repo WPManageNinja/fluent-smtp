@@ -10,7 +10,14 @@ class Handler extends BaseHandler
     public function send()
     {
         if($this->shouldBeLogged(true)) {
-            $this->setAttributes();
+            $atts = $this->setAttributes();
+
+            $customHeaders = $atts['custom_headers'];
+            $headers = $atts['headers'];
+            foreach ($customHeaders as $customHeader) {
+                $headers[$customHeader['key']] = $customHeader['value'];
+            }
+
             $logData = [
                 'to' => maybe_serialize($this->setRecipientsArray($this->phpMailer->getToAddresses())),
                 'from' => maybe_serialize($this->phpMailer->From),

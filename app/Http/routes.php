@@ -1,6 +1,7 @@
 <?php
 
 $app->get('/', 'DashboardController@index');
+$app->get('/day-time-stats', 'DashboardController@getDayTimeStats');
 $app->get('sending_stats', 'DashboardController@getSendingStats');
 
 $app->get('/settings', 'SettingsController@index');
