@@ -6,50 +6,53 @@
 
 ![FluentSMTP Banner](https://ps.w.org/fluent-smtp/assets/banner-1544x500.png)
 
-Are you having problems with your WordPress not sending emails? This is the plugin that will solve your email deliverability problem.
+Are you having problems with your WordPress emails not sending? This is the plugin that will solve your email deliverability problem.
 FluentSMTP is the ultimate WP Mail Plugin that connects with your Email Service Provider natively and makes sure your emails are delivered 💯.
 
-Our goal is to send your WordPress emails delivery fast, secure, and make sure your WordPress emails reach the email inbox.
+Our goal is to send your WordPress emails fast, secure, and have them reach the inbox.
 
-Fluent SMTP plugin fixes your email delivery issue by connecting WordPress Mail with your email service providers. These integrations are native so it will send the emails super fast.
+Fluent SMTP plugin fixes your email delivery issue by connecting WordPress Mail with your email service providers. These integrations are native so it will send the emails superfast.
 
-Connect as many Email Service Providers as you want and FluentCRM will route your transactional and marketing emails automatically. This is one of the unique features that FluentCRM has.
+Connect as many email Service Providers as you want, and FluentSMTP will route your transactional and marketing emails automatically. This is one of the unique features that FluentSMTP has to offer.
 
-#### 🎉 AVAILABLE EMAIL SERVICE CONNECTIONS
+#### 🎉 Available Email Service Connections
 - Amazon SES
+- Gmail OAuth
+- Google Workspace OAuth
+- Outlook OAuth
 - SendGrid
 - Mailgun
-- Sendinblue
+- Brevo (Sendinblue)
 - Pepipost
+- Postmark
+- Zoho ZeptoMail (TransMail)
 - SparkPost
-- Gmail OAuth API Connection
-- Google Workspace OAuth API Connection
-- Gmail via SMTP
+- Elastic Mail
 - Zoho via SMTP
-- Outlook OAuth API Connection
-- All Other SMTP
+- Any SMTP email provider
 - More native integrations coming soon
 
-#### 🎉 Fluent SMTP Features
-Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin in the market. We crafted this plugin for speed, reliability, scalability.
+#### 🎉 Fluent SMTP features
+Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin on the market. We crafted this plugin for speed, reliability and scalability.
 
 * Real-Time Email Delivery
 * Email Routing to multiple email connections
 * Connect with Any Email Service Providers
-* Email Logs
-* Resend Any Emails
-* In Details Reporting
-* Super-fast UI powered by VueJS
+* Fallback Email Connection
+* Email Logging
+* Resend Emails
+* Detailed Reporting
+* Super fast UI powered by VueJS
 
-Most importantly, This is plugin is free and always will be free.
+Most importantly, this plugin is free and will always be free.
 👉 <a href="https://fluentsmtp.com/why-we-build-fluentsmtp-plugin/">Read Why it's 100% free (always)</a> 👈
 
 #### Contribute
-FluentSMTP is built with VueJS, ElementUI (frontend). For backend communication, it based on WordPress standard ajax endpoints.
+FluentSMTP is built with VueJS and ElementUI (frontend). It's backend communication is based on standard WordPress AJAX endpoints.
 
-Please check `app/Http/routes.php` to see all the endpoints.
+All endpoints can be found in `app/Http/routes.php`.
 
-All the email connect drivers are at: `app/Services/Mailer/Providers`
+All the email connection drivers can be found in `app/Services/Mailer/Providers`.
 
 **Thanks to our contributors**
 
@@ -58,11 +61,11 @@ All the email connect drivers are at: `app/Services/Mailer/Providers`
 
 #### Build JavaScript source
 
-- Clone this project
-- open the project in terminal
-- run `npm install`
-- then `npx mix watch` for development
-- `npx mix --production` to build the project
+- Clone this project.
+- Open the project in the terminal.
+- Run `npm install`.
+- Run `npx mix watch` for development.
+- Run `npx mix --production` to build the project.
 
-All the VueJS source are at: `resources/admin` folder
+All VueJS code can be found in `resources/admin`.
 
