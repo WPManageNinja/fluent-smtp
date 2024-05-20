@@ -56,7 +56,7 @@ Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin on the m
 * Detailed Reporting
 * Super fast UI powered by VueJS
 
-Most importantly, this is plugin is free and will always be free.
+Most importantly, this plugin is free and will always be free.
 👉 <a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/">Read why it's 100% free (always)</a> 👈
 
 == How does Fluent SMTP work? ==
