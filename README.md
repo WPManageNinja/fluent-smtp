@@ -44,7 +44,7 @@ Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin on the m
 * Detailed Reporting
 * Super fast UI powered by VueJS
 
-Most importantly, this is plugin is free and will always be free.
+Most importantly, this plugin is free and will always be free.
 👉 <a href="https://fluentsmtp.com/why-we-build-fluentsmtp-plugin/">Read Why it's 100% free (always)</a> 👈
 
 #### Contribute
@@ -62,7 +62,7 @@ All the email connection drivers can be found in `app/Services/Mailer/Providers`
 #### Build JavaScript source
 
 - Clone this project.
-- Open the project in terminal.
+- Open the project in the terminal.
 - Run `npm install`.
 - Run `npx mix watch` for development.
 - Run `npx mix --production` to build the project.
