@@ -174,6 +174,20 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/configure-elastic-email-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure Elastic Email with FluentSMTP.', 'fluent-smtp')
         ],
+        'sweego' => [
+            'key'      => 'sweego',
+            'title'    => __('Sweego', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-sweego.svg'),
+            'provider' => 'Sweego',
+            'options'  => [
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'api_key'         => '',
+                'key_store'       => 'db'
+            ],
+            'note'     => '<a href="https://fluentsmtp.com/docs/configure-sweego-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure Sweego with FluentSMTP.', 'fluent-smtp')
+        ],
         'gmail'       => [
             'key'      => 'gmail',
             'title'    => __('Gmail or Google Workspace', 'fluent-smtp'),
