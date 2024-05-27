@@ -40,6 +40,7 @@ Our parent company <a title="WP Manage Ninja" href="https://wpmanageninja.com">W
 * Zoho ZeptoMail (TransMail)
 * SparkPost
 * Elastic Mail
+* Sweego
 * Zoho via SMTP
 * Any SMTP email provider
 * More native integrations coming soon
@@ -112,6 +113,11 @@ Read about <a href="https://fluentsmtp.com/docs/configure-sparkpost-in-fluent-sm
 
 == 🎉 Elastic Email API Connection ==
 Elastic Email is a great solution for sending transactional and marketing emails with a user-friendly dashboard and many extensive functions such as statistics and real-time information. Fluent SMTP plugin is fully compatible with their official API and you can use it to send your WordPress emails via Elastic Email
+
+== 🎉 Sweego Email API Connection ==
+Sweego is a multi-channel notification platform specialized in sending transactional emails, providing advanced features such as real-time statistics and logs, as well as the ability to automate event management via webhooks.
+
+With Fluent SMTP connection, You can set up your Sweego email service in minute and send your first emails easily.
 
 == 🎉 Outlook or Office365 API Connection ==
 Fluent SMTP provides you options to connect with your Outlook or Office 365 emails and send emails over their API. It's fast and secure. Using oAuth2 authentication system for the connection, You can easily setup the connection and send your emails with Office 365 / Outlook emails.
@@ -262,6 +268,10 @@ Yes, when you create your connection you can choose how you want to store your c
 = Can I send WordPress mails with Pepipost? =
 
 Yes, FluentSMTP let you connect your Pepipost email sending service via secure API Key.
+
+= Can I send WordPress mails with Sweego? =
+
+Yes, FluentSMTP let you connect your Sweego email sending service via secure API Key.
 
 = I am a developer, Where I can contribute to this project? =
 
