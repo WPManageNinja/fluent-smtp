@@ -28,6 +28,7 @@ Connect as many email Service Providers as you want, and FluentSMTP will route y
 - Zoho ZeptoMail (TransMail)
 - SparkPost
 - Elastic Mail
+- Sweego
 - Zoho via SMTP
 - Any SMTP email provider
 - More native integrations coming soon
