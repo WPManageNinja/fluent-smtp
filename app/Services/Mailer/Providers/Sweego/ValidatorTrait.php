@@ -13,7 +13,7 @@ trait ValidatorTrait
     {
         $errors = [];
 
-        $keyStoreType = Arr::get($connection, 'key_store', 'db'); // Utilise 'db' comme valeur par défaut si non spécifié
+        $keyStoreType = Arr::get($connection, 'key_store', 'db');
 
         if($keyStoreType == 'db') {
             if (!Arr::get($connection, 'api_key')) {
@@ -32,9 +32,7 @@ trait ValidatorTrait
 
     public function checkConnection($connection)
     {
-        // Implementez ici la logique de vérification de la connexion avec l'API Sweego
-        // Par exemple, envoyer une requête test pour valider la clé API
-        return true; // Retourne true si la connexion est valide, sinon lancez une exception ou retournez false
+        return true;
     }
 
     public function throwValidationException($errors) // Changed from private to public
