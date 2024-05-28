@@ -27,13 +27,11 @@ class Handler extends BaseHandler
     public function postSend()
     {
         $subject = $this->getParam('subject');
-        error_log('Subject field: ' . print_r($subject, true)); 
 
         if (empty($subject)) {
             throw new Exception(__('The "subject" field is required.', 'fluent-smtp'), 422);
         }
 
-        // Construisez le corps de la requête
         $body = [
             'channel' => 'email',
             'provider' => 'sweego',
@@ -64,8 +62,6 @@ class Handler extends BaseHandler
         }
 
         $this->addOptionalParameters($body);
-
-        error_log(print_r($body, true));
 
         $params = [
             'body' => json_encode($body),
