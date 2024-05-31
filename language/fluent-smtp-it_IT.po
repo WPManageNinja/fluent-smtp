@@ -78,6 +78,7 @@ msgstr "Amazon SES"
 #: app/Services/Mailer/Providers/PepiPost/ValidatorTrait.php:20
 #: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:19
 #: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:19
+#: app/Services/Mailer/Providers/Sweego/ValidatorTrait.php:22
 msgid "Api key is required."
 msgstr "Api key obbligatoria."
 
@@ -674,6 +675,10 @@ msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
 msgid "Please define FLUENTMAIL_SPARKPOST_API_KEY in wp-config.php file."
 msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
 
+#: app/Services/Mailer/Providers/Sweego</ValidatorTrait.php:26
+msgid "Please define FLUENTMAIL_SENDGRID_API_KEY in wp-config.php file."
+msgstr "Inserire FLUENTMAIL_AWS_ACCESS_KEY_ID nel file wp-config.php."
+
 #: app/Http/Controllers/SettingsController.php:246
 #: app/Http/Controllers/SettingsController.php:284
 msgid "Please provide a valid email address"
@@ -808,6 +813,10 @@ msgstr "Impostazioni mittente"
 #, fuzzy
 msgid "SendGrid"
 msgstr "SendGrid"
+
+#: app/Services/Mailer/Providers/config.php:179
+msgid "Sweego"
+msgstr "Sweego"
 
 #: app/Services/Mailer/Providers/config.php:105
 #, fuzzy

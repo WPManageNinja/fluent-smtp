@@ -87,7 +87,17 @@ class Converter
             ];
             $commonSettings = wp_parse_args($commonSettings, $localSettings);
             unset($commonSettings['force_from_email']);
-        } else if ($mailer == 'amazonses') {
+        } else if ($mailer == 'sweego') {
+            $sweego = Arr::get($wpMailSettings, 'sweego', []);
+            $localSettings = [
+                'api_key'     => $this->maybeFromWPMailDefined('sweego', 'api_key', Arr::get($sweego, 'api_key')),
+                'domain_name' => $this->maybeFromWPMailDefined('sweego', 'domain', Arr::get($sweego, 'domain')),
+                'key_store'   => 'db',
+                'provider'    => 'sweego'
+            ];
+            $commonSettings = wp_parse_args($commonSettings, $localSettings);
+            unset($commonSettings['force_from_email']);
+         } else if ($mailer == 'amazonses') {
             $local = Arr::get($wpMailSettings, $mailer, []);
             $localSettings = [
                 'access_key' => $this->maybeFromWPMailDefined($mailer, 'client_id', Arr::get($local, 'client_id')),

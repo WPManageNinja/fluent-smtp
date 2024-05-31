@@ -600,6 +600,7 @@ if (!function_exists('fluentMailGetSettings')) {
                 'pepipost'    => 'api_key',
                 'postmark'    => 'api_key',
                 'elasticmail' => 'api_key',
+                'sweego'      => 'api_key',
                 'gmail'       => 'client_secret',
                 'outlook'     => 'client_secret',
             ];
@@ -645,6 +646,7 @@ if (!function_exists('fluentMailSetSettings')) {
                 'pepipost'    => 'api_key',
                 'postmark'    => 'api_key',
                 'elasticmail' => 'api_key',
+                'sweego'      => 'api_key',
                 'gmail'       => 'client_secret',
                 'outlook'     => 'client_secret',
             ];

@@ -11,6 +11,7 @@
     import sendgrid from './Providers/SendGrid';
     import sendinblue from './Providers/SendInBlue';
     import AmazonSes from './Providers/AmazonSes';
+    import Sweego from './Providers/Sweego';
     import smtp from './Providers/Smtp';
 
     export default {
