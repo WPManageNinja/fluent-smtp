@@ -23,16 +23,16 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []) );
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
     }
 
     public function postSend()
     {
         $body = [
-            'from' => $this->getFrom(),
+            'from'             => $this->getFrom(),
             'personalizations' => $this->getRecipients(),
-            'subject' => $this->getSubject(),
-            'content' => $this->getBody()
+            'subject'          => $this->getSubject(),
+            'content'          => $this->getBody()
         ];
 
         if ($replyTo = $this->getReplyTo()) {
@@ -45,7 +45,7 @@ class Handler extends BaseHandler
         }
 
         $params = [
-            'body' => json_encode($body),
+            'body'    => json_encode($body),
             'headers' => $this->getRequestHeaders()
         ];
 
@@ -61,9 +61,9 @@ class Handler extends BaseHandler
             $isOKCode = $responseCode == $this->emailSentCode;
             $responseBody = \json_decode($responseBody, true);
 
-            if($isOKCode) {
+            if ($isOKCode) {
                 $returnResponse = [
-                    'code' => 202,
+                    'code'    => 202,
                     'message' => Arr::get($responseBody, 'message')
                 ];
             } else {
@@ -99,19 +99,19 @@ class Handler extends BaseHandler
     protected function getRecipients()
     {
         $recipients = [
-            'to' => $this->getTo(),
-            'cc' => $this->getCarbonCopy(),
+            'to'  => $this->getTo(),
+            'cc'  => $this->getCarbonCopy(),
             'bcc' => $this->getBlindCarbonCopy(),
         ];
 
         $recipients = array_filter($recipients);
 
         foreach ($recipients as $key => $recipient) {
-            $array = array_map(function($recipient) {
+            $array = array_map(function ($recipient) {
                 return isset($recipient['name'])
-                ? $recipient['name'] . ' <' . $recipient['email'] . '>'
-                : $recipient['email'];
-           }, $recipient);
+                    ? $recipient['name'] . ' <' . $recipient['email'] . '>'
+                    : $recipient['email'];
+            }, $recipient);
 
             $this->attributes['formatted'][$key] = implode(', ', $array);
         }
@@ -131,17 +131,33 @@ class Handler extends BaseHandler
 
     protected function getBlindCarbonCopy()
     {
-       return $this->getParam('headers.bcc');
+        return $this->getParam('headers.bcc');
     }
 
     protected function getBody()
     {
+        $contentType = $this->getParam('headers.content-type');
+
+        if ($contentType == 'multipart/alternative') {
+            return [
+                [
+                    'value' => $this->phpMailer->AltBody,
+                    'type'  => 'text/plain'
+                ],
+                [
+                    'value' => $this->getParam('message'),
+                    'type'  => 'text/html'
+                ]
+            ];
+        }
+
         return [
             [
                 'value' => $this->getParam('message'),
-                'type' => $this->getParam('headers.content-type')
+                'type'  => $contentType
             ]
         ];
+
     }
 
     protected function getAttachments()
@@ -168,11 +184,11 @@ class Handler extends BaseHandler
             }
 
             $data[] = [
-                'type' => $filetype,
-                'filename' => $fileName,
+                'type'        => $filetype,
+                'filename'    => $fileName,
                 'disposition' => 'attachment',
                 'content_id'  => $contentId,
-                'content' => base64_encode($file)
+                'content'     => base64_encode($file)
             ];
         }
 
@@ -187,14 +203,14 @@ class Handler extends BaseHandler
     protected function getRequestHeaders()
     {
         return [
-            'Content-Type' => 'application/json',
+            'Content-Type'  => 'application/json',
             'Authorization' => 'Bearer ' . $this->getSetting('api_key')
         ];
     }
 
     public function setSettings($settings)
     {
-        if($settings['key_store'] == 'wp_config') {
+        if ($settings['key_store'] == 'wp_config') {
             $settings['api_key'] = defined('FLUENTMAIL_SENDGRID_API_KEY') ? FLUENTMAIL_SENDGRID_API_KEY : '';
         }
         $this->settings = $settings;

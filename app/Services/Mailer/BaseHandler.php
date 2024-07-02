@@ -120,6 +120,7 @@ class BaseHandler
             'to' => $recipients['to'],
             'subject' => $this->phpMailer->Subject,
             'message' => $this->phpMailer->Body,
+            'alt_body' => $this->phpMailer->AltBody,
             'attachments' => $this->phpMailer->getAttachments(),
             'custom_headers' => $customHeaders,
             'headers' => [

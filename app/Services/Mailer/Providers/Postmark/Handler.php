@@ -43,7 +43,9 @@ class Handler extends BaseHandler
             $body['Cc'] = $cc;
         }
 
-        if ($this->getHeader('content-type') == 'text/html') {
+        $contentType = $this->getHeader('content-type');
+
+        if ($contentType == 'text/html') {
             $body['HtmlBody'] = $this->getParam('message');
 
             if ($this->getSetting('track_opens') == 'yes') {
@@ -53,7 +55,9 @@ class Handler extends BaseHandler
             if ($this->getSetting('track_links') == 'yes') {
                 $body['TrackLinks'] = 'HtmlOnly';
             }
-
+        } else if ($contentType == 'multipart/alternative') {
+            $body['HtmlBody'] = $this->getParam('message');
+            $body['TextBody'] = $this->phpMailer->AltBody;
         } else {
             $body['TextBody'] = $this->getParam('message');
         }

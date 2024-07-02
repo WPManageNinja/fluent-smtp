@@ -29,6 +29,7 @@ class Handler extends BaseHandler
                 'headers'  => maybe_serialize($this->phpMailer->getCustomHeaders()),
                 'extra'    => maybe_serialize(['provider' => 'Simulator'])
             ];
+
             (new Logger)->add($logData);
         }
 

@@ -749,6 +749,9 @@ class AdminMenuHandler
             '__GCP_API_INST'                                                               => __(sprintf('Please %s to create API keys on the Google Cloud Platform.', '<a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">' . __('check the documentation', 'fluent-smtp') . '</a>'), 'fluent-smtp'),
             '__GCP_INTRO'                                                                  => __(sprintf('Google API version has been upgraded. Please %s.', '<a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">' . __('read the doc and upgrade your API connection', 'fluent-smtp') . '</a>'), 'fluent-smtp'),
             '__MAILGUN_REGION'                                                             => __(sprintf('If you are operating under EU laws, you may be required to use EU region. %s.', '<a target="_blank" href="https://www.mailgun.com/regions">' . __('More information on Mailgun.com', 'fluent-smtp') . '</a>'), 'fluent-smtp'),
+            '__Email_TEXT_PART_Label'                                                      => __('Enable Multi-Part Plain Text version of your HTML Emails. This feature is in beta', 'fluent-smtp'),
+            '__PASSWORD_ENCRYPT_HELP'                                                      => __('This input will be securely encrypted using WP SALTS as encryption keys before save.', 'fluent-smtp'),
+            '__PASSWORD_ENCRYPT_TIP'                                                       => __('If you change your WordPress SALT Keys, this credential will become invalid. Please update this credential whenever the WP SALTS are modified.', 'fluent-smtp'),
             'activate '                                                                    => __('activate ', 'fluent-smtp'),
             'cancel'                                                                       => __('cancel', 'fluent-smtp'),
             'check the documentation first to create API keys at Microsoft'                => __('check the documentation first to create API keys at Microsoft', 'fluent-smtp'),
@@ -762,7 +765,7 @@ class AdminMenuHandler
             'read the documentation here'                                                  => __('read the documentation here', 'fluent-smtp'),
             'save_connection_error_1'                                                      => __('Please select your email service provider', 'fluent-smtp'),
             'save_connection_error_2'                                                      => __('Credential Verification Failed. Please check your inputs', 'fluent-smtp'),
-            'write a review for FluentSMTP'                                                => __('write a review for FluentSMTP', 'fluent-smtp')
+            'write a review for FluentSMTP'                                                => __('write a review for FluentSMTP', 'fluent-smtp'),
         ];
     }
 
@@ -828,6 +831,9 @@ class AdminMenuHandler
 //            'save_connection_error_2'                                                      => __('Credential Verification Failed. Please check your inputs', 'fluent-smtp'),
 //        'delete_logs_info'                                      => __('Select how many days, the logs will be saved. If you select 7 days, then logs older than 7 days will be deleted automatically.', 'fluent-smtp'),
 //        'force_sender_tooltip'                                  => __('When checked, the From Name setting above will be used for all emails, ignoring values set by other plugins.', 'fluent-smtp'),
+//        '__Email_TEXT_PART_Label'                                                      => __('Enable Multi-Part Plain Text version of your HTML Emails. This feature is in beta', 'fluent-smtp'),
+//            '__PASSWORD_ENCRYPT_HELP'                                                      => __('This input will be securely encrypted using WP SALTS as encryption keys before save.', 'fluent-smtp'),
+//            '__PASSWORD_ENCRYPT_TIP'                                                       => __('If you change your WordPress SALT Keys, this credential will become invalid. Please update this credential whenever the WP SALTS are modified.', 'fluent-smtp'),
 
 //        ];
     }

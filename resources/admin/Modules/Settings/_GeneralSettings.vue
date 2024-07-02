@@ -86,6 +86,14 @@
                 <p v-if="appVars.is_disabled_defined" style="color: red;">{{ ('Emails are being simulated due to the definition of ') }} <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ (' in your PHP code.') }}</p>
             </el-form-item>
 
+            <el-form-item :label="$t('Add Multi-Part Plain Text for HTML Emails (beta)')">
+                <el-checkbox
+                    v-model="settings.misc.send_as_text"
+                    true-label="yes"
+                    false-label="no"
+                >{{$t('__Email_TEXT_PART_Label')}}</el-checkbox>
+            </el-form-item>
+
             <el-button
                 v-loading="saving"
                 @click="saveMiscSettings()"

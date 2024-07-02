@@ -69,6 +69,9 @@ class Handler extends BaseHandler
 
         if ($this->phpMailer->ContentType == 'text/html') {
             $body['htmlbody'] = $this->getBody();
+        } else if ($this->phpMailer->ContentType == 'multipart/alternative') {
+            $body['htmlbody'] = $this->getBody();
+            $body['textbody'] = $this->getParam('alt_body');
         } else {
             $body['textbody'] = $this->getBody();
         }

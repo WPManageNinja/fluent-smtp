@@ -20,7 +20,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []) );
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
     }
 
     protected function postSend()
@@ -99,13 +99,18 @@ class Handler extends BaseHandler
                 }
             }
 
-            if ($this->getParam('headers.content-type') == 'text/html') {
+            if ($this->getParam('headers.content-type') == 'text/html' || $this->getParam('headers.content-type') == 'multipart/alternative') {
                 $this->phpMailer->isHTML(true);
             }
 
             $this->phpMailer->Subject = $this->getSubject();
-            
+
             $this->phpMailer->Body = $this->getParam('message');
+
+            if ($this->getParam('headers.content-type') == 'multipart/alternative') {
+                $this->phpMailer->AltBody = $this->getParam('alt_body');
+                $this->phpMailer->ContentType = 'multipart/alternative';
+            }
 
             $this->phpMailer->send();
 
@@ -113,7 +118,7 @@ class Handler extends BaseHandler
                 'response' => 'OK'
             ];
 
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $returnResponse = new \WP_Error(422, $e->getMessage(), []);
         }
 

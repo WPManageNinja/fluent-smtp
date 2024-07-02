@@ -233,6 +233,7 @@ if (!function_exists('fluentMailSend')) {
             $attachments = explode("\n", str_replace("\r\n", "\n", $attachments));
         }
 
+
         global $phpmailer;
 
         // (Re)create it, if it's gone missing.
@@ -491,6 +492,17 @@ if (!function_exists('fluentMailSend')) {
         // Set whether it's plaintext, depending on $content_type.
         if ('text/html' === $content_type) {
             $phpmailer->isHTML(true);
+
+            if (fluentMailSendMultiPartText()) {
+                $phpmailer->AltBody = (new \FluentMail\App\Services\Html2Text($message))->getText();
+
+                if ($phpmailer->AltBody) {
+                    // Set multipart
+                    $phpmailer->ContentType = 'multipart/alternative';
+                }
+
+            }
+
         }
 
         // If we don't have a charset from the input headers.
@@ -781,4 +793,10 @@ function fluentMailFuncCouldNotBeLoadedRecheckPluginsLoad()
         array_unshift($activePlugins, 'fluent-smtp/fluent-smtp.php');
         update_option('active_plugins', $activePlugins, true);
     }
+}
+
+function fluentMailSendMultiPartText()
+{
+    $settings = fluentMailGetSettings();
+    return isset($settings['misc']['send_as_text']) && $settings['misc']['send_as_text'] == 'yes';
 }
