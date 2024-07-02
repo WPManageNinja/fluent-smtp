@@ -1,9 +1,9 @@
 === FluentSMTP - WP SMTP Plugin with Amazon SES, SendGrid, MailGun, Postmark, Google and Any SMTP Provider ===
 Contributors: techjewel, wpmanageninja, heera, adreastrian
-Tags: smtp, amazon ses, wordpress smtp, mail, wp mail smtp
+Tags: smtp, amazon ses, wordpress mail smtp, mail, mail smtp
 Requires at least: 5.5
 Tested up to: 6.5
-Stable tag: 2.2.73
+Stable tag: 2.2.80
 Requires PHP: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -158,6 +158,9 @@ Fluent SMTP is built by professionals and security and scalability in mind. Flue
 * Ability to auto-delete old email logs.
 * Fluent SMTP connects your email service providers directly via an API.
 
+= 🚀Plan-Text Support with HTML Email on the fly 🚀=
+FluentSMTP will automatically convert your HTML email to Plan-Text email on the fly. Then it will send your emails with multi-part mime type. This is super helpful for email deliverability and spam score. Please make sure, you activate that from the settings.
+
 == 👉 Credits 👈 ==
 Fluent SMTP is built by <a href="https://wpmanageninja.com">WPManageNinja LLC</a>. And yes, It's built by the creator of popular plugins like <a href="https://wordpress.org/plugins/fluentform">FluentForms</a>, <a href="https://wordpress.org/plugins/fluent-crm">FluentCRM</a>, <a href="https://wordpress.org/plugins/ninja-tables/">Ninja Tables</a>.
 
@@ -281,6 +284,11 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.2.80 (Date: July 02, 2024) =
+* Added Plan-Text Support with HTML Email on the fly
+* Improved Translations
+* Improved Internal Code Base
 
 = 2.2.73 (Date: Apr 25, 2024) =
 * Compatibility with PHP 8.X

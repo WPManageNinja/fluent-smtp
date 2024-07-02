@@ -124,9 +124,6 @@
                     .always(() => {
                         this.fetching = false;
                     });
-            },
-            $t(string) {
-                return string;
             }
         },
         mounted() {
