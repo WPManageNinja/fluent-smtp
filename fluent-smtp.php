@@ -16,7 +16,7 @@ Domain Path:  /language
 
 define('FLUENTMAIL_PLUGIN_FILE', __FILE__);
 
-require_once(plugin_dir_path(__FILE__) . 'boot.php');
+require_once plugin_dir_path(__FILE__) . 'boot.php';
 
 register_activation_hook(
     __FILE__, array('\FluentMail\Includes\Activator', 'handle')
@@ -26,8 +26,16 @@ register_deactivation_hook(
     __FILE__, array('\FluentMail\Includes\Deactivator', 'handle')
 );
 
-function fluentSmtpInit()
-{
+/**
+ * Initializes the Fluent SMTP plugin.
+ *
+ * This function creates a new instance of the FluentMail\Includes\Core\Application class and registers
+ * an action hook to be executed when the plugins are loaded. Inside the action hook, the 'fluentMail_loaded'
+ * action is triggered with the application instance as a parameter.
+ *
+ * @since 1.0.0
+ */
+function fluentSmtpInit() {
     $application = new FluentMail\Includes\Core\Application;
     add_action('plugins_loaded', function () use ($application) {
         do_action('fluentMail_loaded', $application);
@@ -36,12 +44,11 @@ function fluentSmtpInit()
 
 fluentSmtpInit();
 
-if (!function_exists('wp_mail')) :
-    function wp_mail($to, $subject, $message, $headers = '', $attachments = array())
-    {
+if (!function_exists('wp_mail')):
+    function wp_mail($to, $subject, $message, $headers = '', $attachments = array()) {
         return fluentMailSend($to, $subject, $message, $headers, $attachments);
     }
-else:
+ else :
     if (!(defined('DOING_AJAX') && DOING_AJAX)):
         add_action('init', 'fluentMailFuncCouldNotBeLoadedRecheckPluginsLoad');
     endif;
