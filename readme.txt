@@ -158,8 +158,8 @@ Fluent SMTP is built by professionals and security and scalability in mind. Flue
 * Ability to auto-delete old email logs.
 * Fluent SMTP connects your email service providers directly via an API.
 
-= 🚀Plan-Text Support with HTML Email on the fly 🚀=
-FluentSMTP will automatically convert your HTML email to Plan-Text email on the fly. Then it will send your emails with multi-part mime type. This is super helpful for email deliverability and spam score. Please make sure, you activate that from the settings.
+= 🚀Plain-Text Support with HTML Email on the fly 🚀=
+FluentSMTP will automatically convert your HTML email to Plain-Text email on the fly. Then it will send your emails with multi-part mime type. This is super helpful for email deliverability and spam score. Please make sure, you activate that from the settings.
 
 == 👉 Credits 👈 ==
 Fluent SMTP is built by <a href="https://wpmanageninja.com">WPManageNinja LLC</a>. And yes, It's built by the creator of popular plugins like <a href="https://wordpress.org/plugins/fluentform">FluentForms</a>, <a href="https://wordpress.org/plugins/fluent-crm">FluentCRM</a>, <a href="https://wordpress.org/plugins/ninja-tables/">Ninja Tables</a>.
@@ -286,7 +286,7 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 == Changelog ==
 
 = 2.2.80 (Date: July 02, 2024) =
-* Added Plan-Text Support with HTML Email on the fly
+* Added Plain Text Support: Convert HTML Emails to Plain Text and send as multi-part email
 * Improved Translations
 * Improved Internal Code Base
 
@@ -304,7 +304,7 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 = 2.2.7 (Date: Jan 01, 2024) =
 * Added RealTime Email Failure Notification via Telegram / Slack / Discord
 * Added Option to add additional email addresses for Amazon SES
-* Improve the UI
+* UI Improvements
 
 = 2.2.6 (Date: Oct 01, 2023) =
 * Enable Encryption for All SMTP Connections Keys
