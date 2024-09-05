@@ -6,6 +6,9 @@
   max-width: 100%;
   display: block;
   width: 100%;
+  * {
+    box-sizing: border-box;
+  }
 
   & .fluent-mail-main-menu-items {
     margin-bottom: 20px;
@@ -45,6 +48,25 @@
     & .fss_content {
       padding: 20px;
       background-color: #fff;
+      .fss_general_settings {
+        .el-form {
+          .el-form-item {
+            .el-form-item__label {
+              margin-bottom: 8px;
+            }
+            .el-checkbox {
+              display: flex;
+              align-items: flex-start;
+              .el-checkbox__input {
+                margin-top: 2px;
+              }
+              .el-checkbox__label {
+                white-space: normal;
+              }
+            }
+          }
+        }
+      }
     }
   }
 
