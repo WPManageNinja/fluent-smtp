@@ -301,6 +301,11 @@ class Logger extends Model
         $headers = [];
 
         foreach ($email['headers'] as $key => $value) {
+
+            if($key == 'content-type' && $value == 'multipart/alternative') {
+                $value = 'text/html';
+            }
+
             if (is_array($value)) {
                 $values = [];
                 $value = array_filter($value);

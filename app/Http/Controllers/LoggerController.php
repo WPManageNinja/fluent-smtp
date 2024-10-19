@@ -57,7 +57,7 @@ class LoggerController extends Controller
                 $log['retries'] = $log['retries'] + 1;
                 $logger->updateLog($log, ['id' => $id]);
 
-                $this->sendError([
+                return $this->sendError([
                     'message' => $response->get_error_message(),
                     'errors' => $response->get_error_data()
                 ], $response->get_error_code());

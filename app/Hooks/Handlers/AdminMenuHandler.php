@@ -27,19 +27,23 @@ class AdminMenuHandler
 
             if (isset($_REQUEST['sub_action']) && $_REQUEST['sub_action'] == 'slack_success') {
                 add_action('admin_init', function () {
+                    $nonce = Arr::get($_REQUEST, '_slacK_nonce');
+                    if (!wp_verify_nonce($nonce, 'fluent_smtp_slack_register_site')) {
+                        wp_redirect(admin_url('options-general.php?page=fluent-mail&slack_security_failed=1#/notification-settings'));
+                        die();
+                    }
+
                     $settings = (new Settings())->notificationSettings();
                     $token = Arr::get($_REQUEST, 'site_token');
 
-                    if ($token == Arr::get($settings, 'slack.token')) {
+                    if ($token && $token == Arr::get($settings, 'slack.token')) {
                         $settings['slack'] = [
                             'status'      => 'yes',
                             'token'       => sanitize_text_field($token),
                             'slack_team'  => sanitize_text_field(Arr::get($_REQUEST, 'slack_team')),
                             'webhook_url' => sanitize_url(Arr::get($_REQUEST, 'slack_webhook'))
                         ];
-
                         $settings['active_channel'] = 'slack';
-
                         update_option('_fluent_smtp_notify_settings', $settings);
                     }
 
