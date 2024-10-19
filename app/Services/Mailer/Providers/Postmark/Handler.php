@@ -65,7 +65,19 @@ class Handler extends BaseHandler
         if (!empty($this->getParam('attachments'))) {
             $body['Attachments'] = $this->getAttachments();
         }
+        
+        // Add any custom headers
+        $customHeaders = $this->phpMailer->getCustomHeaders();
+        if (!empty($customHeaders)) {
+            foreach ($customHeaders as $header) {
+                $body['Headers'][] = [
+                    'Name'  => $header[0],
+                    'Value' => $header[1]
+                ];
+            }
+        }
 
+        
         // Handle apostrophes in email address From names by escaping them for the Postmark API.
         $from_regex = "/(\"From\": \"[a-zA-Z\\d]+)*[\\\\]{2,}'/";
 
