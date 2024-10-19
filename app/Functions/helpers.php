@@ -538,22 +538,6 @@
 
             $phpmailer->ContentType = $content_type;
 
-            // Set whether it's plaintext, depending on $content_type.
-            if ('text/html' === $content_type) {
-                $phpmailer->isHTML(true);
-
-                if (fluentMailSendMultiPartText()) {
-                    $phpmailer->AltBody = (new \FluentMail\App\Services\Html2Text($message))->getText();
-
-                    if ($phpmailer->AltBody) {
-                        // Set multipart
-                        $phpmailer->ContentType = 'multipart/alternative';
-                    }
-
-                }
-
-            }
-
             // If we don't have a charset from the input headers.
             if (!isset($charset)) {
                 $charset = get_bloginfo('charset');
@@ -586,6 +570,7 @@
                 }
             }
 
+
             if (!empty($attachments)) {
                 foreach ($attachments as $attachment) {
                     try {
@@ -605,13 +590,24 @@
              */
             do_action_ref_array('phpmailer_init', array(&$phpmailer));
 
+            // Set whether it's plaintext, depending on $content_type.
+            if ('text/html' === $phpmailer->ContentType) {
+                $phpmailer->isHTML(true);
+                if (fluentMailSendMultiPartText() && !$phpmailer->AltBody) {
+                    $phpmailer->AltBody = (new \FluentMail\App\Services\Html2Text($message))->getText();
+                    if ($phpmailer->AltBody) {
+                        // Set multipart
+                        $phpmailer->ContentType = 'multipart/alternative';
+                    }
+                }
+            }
+
             $mail_data = compact('to', 'subject', 'message', 'headers', 'attachments');
 
             // Send!
             try {
                 // Trap the fluentSMTPMail mailer here
                 $phpmailer = new FluentMail\App\Services\Mailer\FluentPHPMailer($phpmailer);
-
                 $send = $phpmailer->send();
 
                 /**
