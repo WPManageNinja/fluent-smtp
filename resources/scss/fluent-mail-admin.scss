@@ -268,7 +268,9 @@ ul.fss_dash_lists {
     padding: 0px 10px;
     color: #697485;
     border-bottom: 1px solid #e3e8ed;
-    line-height: 40px;
+    line-height: 44px;
+    transition: all 0.3s ease;
+    margin-bottom: 0;
 
     span {
       float: right;
@@ -277,7 +279,7 @@ ul.fss_dash_lists {
 
     &:hover {
       background: #f7fafc;
-      border-bottom: 1px solid black;
+      border-bottom: 1px solid #d2d2df;
     }
 
     &:last-child {
