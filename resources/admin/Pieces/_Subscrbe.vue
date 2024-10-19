@@ -40,7 +40,7 @@
                     email: window.FluentMailAdmin.user_email,
                     display_name: window.FluentMailAdmin.user_display_name
                 },
-                share_details: 'no',
+                share_details: 'yes',
                 saving: false,
                 subscribed: false
             }
