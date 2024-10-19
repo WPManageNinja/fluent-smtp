@@ -541,17 +541,13 @@
             // Set whether it's plaintext, depending on $content_type.
             if ('text/html' === $content_type) {
                 $phpmailer->isHTML(true);
-
-                if (fluentMailSendMultiPartText()) {
+                if (fluentMailSendMultiPartText() && !empty($boundary)) {
                     $phpmailer->AltBody = (new \FluentMail\App\Services\Html2Text($message))->getText();
-
                     if ($phpmailer->AltBody) {
                         // Set multipart
                         $phpmailer->ContentType = 'multipart/alternative';
                     }
-
                 }
-
             }
 
             // If we don't have a charset from the input headers.
@@ -567,7 +563,6 @@
              *
              */
             $phpmailer->CharSet = apply_filters('wp_mail_charset', $charset);
-
             // Set custom headers.
             if (!empty($headers)) {
                 foreach ((array) $headers as $name => $content) {
@@ -580,10 +575,10 @@
                         }
                     }
                 }
+            }
 
-                if (false !== stripos($content_type, 'multipart') && !empty($boundary)) {
-                    $phpmailer->addCustomHeader(sprintf('Content-Type: %s; boundary="%s"', $content_type, $boundary));
-                }
+            if (false !== stripos($content_type, 'multipart') && !empty($boundary) && $phpmailer->AltBody) {
+                $phpmailer->addCustomHeader(sprintf('Content-Type: %1s; boundary="%2s"', $content_type, $boundary));
             }
 
             if (!empty($attachments)) {
