@@ -64,13 +64,7 @@ final class Application extends Container
             ?>
             <div class="notice notice-warning fluentsmtp_urgent is-dismissible">
                 <p>
-                    <?php
-                    echo sprintf(
-                        __('FluentSMTP Plugin may not work properly. Looks like your Authentication unique keys and salts are changed.
-                                <a href="%1s"><b>Reconfigure SMTP Settings</b></a>',
-                            'fluent-smtp'), admin_url('options-general.php?page=fluent-mail#/connections')
-                    );
-                    ?>
+                    FluentSMTP Plugin may not work properly. Looks like your Authentication unique keys and salts are changed. <a href="<?php echo esc_url(admin_url('options-general.php?page=fluent-mail#/connections')); ?>"><b>Reconfigure SMTP Settings</b></a>
                 </p>
             </div>
             <?php

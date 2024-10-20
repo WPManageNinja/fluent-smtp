@@ -80,7 +80,7 @@ class AdminMenuHandler
                 <h3 style="margin: 0;"><?php __('For SMTP, you already have FluentSMTP Installed', 'fluent-smtp'); ?></h3>
                 <p><?php __('You seem to be looking for an SMTP plugin, but there\'s no need for another one — FluentSMTP is already installed on your site. FluentSMTP is a comprehensive, free, and open-source plugin with full features available without any upsell', 'fluent-smtp'); ?>
                     (<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/"><?php __('learn why it\'s free', 'fluent-smtp'); ?></a>)<?php __('. It\'s compatible with various SMTP services, including Amazon SES, SendGrid, MailGun, ElasticEmail, SendInBlue, Google, Microsoft, and others, providing you with a wide range of options for your email needs.', 'fluent-smtp'); ?>
-                </p><a href="<?php echo admin_url('options-general.php?page=fluent-mail#/'); ?>"
+                </p><a href="<?php echo esc_url(admin_url('options-general.php?page=fluent-mail#/')); ?>"
                        class="wp-core-ui button button-primary"><?php __('Go To FluentSMTP Settings', 'fluent-smtp'); ?></a>
                 <p style="font-size: 80%; margin: 15px 0 0;"><?php __('This notice is from FluentSMTP plugin to prevent plugin
                     conflict.', 'fluent-smtp') ?></p>
@@ -229,7 +229,7 @@ class AdminMenuHandler
 
         add_filter('admin_footer_text', function ($text) {
             return sprintf(
-                __('<b>FluentSMTP</b> is a free plugin & it will be always free %s. %s', 'fluent-smtp'),
+                __('<b>FluentSMTP</b> is a free plugin & it will be always free %1$s. %2$s', 'fluent-smtp'),
                 '<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/" target="_blank" rel="noopener noreferrer">(Learn why it\'s free)</a>',
                 '<a href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5" target="_blank" rel="noopener noreferrer">Write a review ★★★★★</a>'
             );
@@ -275,19 +275,19 @@ class AdminMenuHandler
         if ($requireUpdate) { ?>
             <div class="notice notice-warning">
                 <p>
-                    <?php echo sprintf(__('WordPress version 5.5 or greater is required for FluentSMTP. You are using version %s currently. Please update your WordPress Core to use FluentSMTP Plugin.', 'fluent-smtp'), $wp_version); ?>
+                    <?php echo esc_html(sprintf(__('WordPress version 5.5 or greater is required for FluentSMTP. You are using version %s currently. Please update your WordPress Core to use FluentSMTP Plugin.', 'fluent-smtp'), $wp_version)); ?>
                 </p>
             </div>
         <?php } else if (empty($connections)) {
             ?>
             <div class="notice notice-warning">
                 <p>
-                    <?php _e('FluentSMTP needs to be configured for it to work.', 'fluent-smtp'); ?>
+                    <?php esc_html_e('FluentSMTP needs to be configured for it to work.', 'fluent-smtp'); ?>
                 </p>
                 <p>
-                    <a href="<?php echo admin_url('options-general.php?page=fluent-mail#/'); ?>"
+                    <a href="<?php echo esc_url(admin_url('options-general.php?page=fluent-mail#/')); ?>"
                        class="button button-primary">
-                        <?php _e('Configure FluentSMTP', 'fluent-smtp'); ?>
+                        <?php esc_html_e('Configure FluentSMTP', 'fluent-smtp'); ?>
                     </a>
                 </p>
             </div>
@@ -373,7 +373,7 @@ class AdminMenuHandler
                 document.addEventListener('DOMContentLoaded', function () {
                     // send an ajax request to ajax url with raw javascript
                     var xhr = new XMLHttpRequest();
-                    xhr.open('POST', '<?php echo admin_url('admin-ajax.php?action=fluent_smtp_get_dashboard_html'); ?>', true);
+                    xhr.open('POST', '<?php echo esc_url(admin_url('admin-ajax.php?action=fluent_smtp_get_dashboard_html')); ?>', true);
                     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -398,7 +398,7 @@ class AdminMenuHandler
         $stats = [];
         $logModel = new Logger();
         $currentTimeStamp = current_time('timestamp');
-        $startToday = date('Y-m-d 00:00:01', $currentTimeStamp);
+        $startToday = gmdate('Y-m-d 00:00:01', $currentTimeStamp);
 
         $allTime = $logModel->getStats();
 
@@ -408,7 +408,7 @@ class AdminMenuHandler
             'failed' => ($allTime['failed']) ? $logModel->getTotalCountStat('failed', $startToday) : 0
         ];
 
-        $lastWeek = date('Y-m-d 00:00:01', strtotime('-7 days'));
+        $lastWeek = gmdate('Y-m-d 00:00:01', strtotime('-7 days'));
         $stats['week'] = [
             'title'  => __('Last 7 days', 'fluent-smtp'),
             'sent'   => ($allTime['sent']) ? $logModel->getTotalCountStat('sent', $lastWeek) : 0,
@@ -425,9 +425,9 @@ class AdminMenuHandler
         <table class="fsmtp_dash_table wp-list-table widefat fixed striped">
             <thead>
             <tr>
-                <th><?php _e('Date', 'fluent-smtp'); ?></th>
-                <th><?php _e('Sent', 'fluent-smtp'); ?></th>
-                <th><?php _e('Failed', 'fluent-smtp'); ?></th>
+                <th><?php esc_html_e('Date', 'fluent-smtp'); ?></th>
+                <th><?php esc_html_e('Sent', 'fluent-smtp'); ?></th>
+                <th><?php esc_html_e('Failed', 'fluent-smtp'); ?></th>
             </tr>
             </thead>
             <tbody>
@@ -441,8 +441,8 @@ class AdminMenuHandler
             </tbody>
         </table>
         <a style="text-decoration: none; padding-top: 10px; display: block"
-           href="<?php echo admin_url('options-general.php?page=fluent-mail#/'); ?>"
-           class=""><?php _e('View All', 'fluent-smtp'); ?></a>
+           href="<?php echo esc_url(admin_url('options-general.php?page=fluent-mail#/')); ?>"
+           class=""><?php esc_html_e('View All', 'fluent-smtp'); ?></a>
         <?php
 
         return ob_get_clean();
@@ -710,7 +710,7 @@ class AdminMenuHandler
             '__Email_Simulation_Label'                                                     => __('Disable sending all emails. If you enable this, no email will be sent.', 'fluent-smtp'),
             '__Email_Simulation_Yes'                                                       => __('No Emails will be sent from your WordPress.', 'fluent-smtp'),
             '__RETURN_PATH_ALERT'                                                          => __('Return Path indicates where non-delivery receipts - or bounce messages - are to be sent. If unchecked, bounce messages may be lost. With this enabled, you\'ll be emailed using "From Email" if any messages bounce as a result of issues with the recipient’s email.', 'fluent-smtp'),
-            '__RETURN_PATH_TOOLTIP'                                                        => __(sprintf('Return Path indicates where non - delivery receipts - or bounce messages - %1s are to be sent. If unchecked, bounce messages may be lost. With this enabled, %2s you\'ll be emailed using "From Email" if any messages bounce as a result of issues with the recipient\'s email.', '<br />', '<br />'), 'fluent-smtp'),
+            '__RETURN_PATH_TOOLTIP'                                                        => sprintf(__('Return Path indicates where non - delivery receipts - or bounce messages - %1$s are to be sent. If unchecked, bounce messages may be lost. With this enabled, %2$s you\'ll be emailed using "From Email" if any messages bounce as a result of issues with the recipient\'s email.', 'fluent-smtp'), '<br />', '<br />'),
             '__TEST_EMAIL_INST'                                                            => __('Enter email address where test email will be sent (By default, logged in user email will be used if email address is not provided).', 'fluent-smtp'),
             '__ABOUT_INTRO'                                                                => __('is a free and opensource WordPress Plugin. Our mission is to provide the ultimate email delivery solution with your favorite Email sending service.FluentSMTP is built for performance and speed.', 'fluent-smtp'),
             '__ABOUT_BY'                                                                   => __('FluentSMTP is free and will be always free.This is our pledge to WordPress community from WPManageNinja LLC.', 'fluent-smtp'),
@@ -728,7 +728,7 @@ class AdminMenuHandler
             '__FF_DESC'                                                                    => __('is the ultimate user-friendly, fast, customizable drag-and-drop WordPress Contact Form Plugin that offers you all the premium features, plus many more completely unique additional features.', 'fluent-smtp'),
             '__NT_DESC'                                                                    => __('Looking for a WordPress table plugin for your website? Then you’re in the right place.', 'fluent-smtp'),
             '__NT_DESC_EXT'                                                                => __('the best WP table plugin that comes with all the solutions to the problems you face while creating tables on your posts/pages.', 'fluent-smtp'),
-            '__TELEGRAM_NOTIFICATION_ENABLED'                                              => __(sprintf('Your FluentSMTP plugin is currently integrated with Telegram.Receive timely notifications from %s on Telegram for any email sending issues from your website. This ongoing connection ensures you\'re always informed about your email delivery status.', '<a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot">@fluentsmtp_bot</a>'), 'fluent-smtp'),
+            '__TELEGRAM_NOTIFICATION_ENABLED'                                              => sprintf(__('Your FluentSMTP plugin is currently integrated with Telegram.Receive timely notifications from %s on Telegram for any email sending issues from your website. This ongoing connection ensures you\'re always informed about your email delivery status.', 'fluent-smtp'), '<a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot">@fluentsmtp_bot</a>'),
             '__TLS_HELP'                                                                   => __('(By default, the TLS encryption would be used if the server supports it. On some servers, it could be a problem and may need to be disabled.)', 'fluent-smtp'),
             '__SMTP_CRED_HELP'                                                             => __('(If you need to provide your SMTP server\'s credentials (username and password) enable the authentication, in most cases this is required.)', 'fluent-smtp'),
             '__ANOTHER_CONNECTION_NOTICE'                                                  => __('Another connection with same email address exist. This connection will replace that connection', 'fluent-smtp'),
@@ -738,21 +738,22 @@ class AdminMenuHandler
             '__DEFAULT_MAIl_WARNING'                                                       => __('The Default(none) option does not use SMTP and will not improve email delivery on your site.', 'fluent-smtp'),
             '__TELE_RESPONSE_ERROR'                                                        => __('We could not fetch the Telegram notification status.Here is the server response: ', 'fluent-smtp'),
             '__FORCE_SENDER_NAME_TIP'                                                      => __('When checked, the From Name setting above will be used for all emails, ignoring values set by other plugins.', 'fluent-smtp'),
-            '__SUPPORT_INTRO'                                                              => __(sprintf('Please view the %1s first. If you still can\'t find the answer %2s  and we will be happy to answer your questions and assist you with any problems.', '<a href="https://fluentsmtp.com/docs" target="_blank" rel="noopener">' . __('documentation', 'fluent-smtp') . '</a>', '<a href="https://github.com/WPManageNinja/fluent-smtp" target="_blank" rel="noopener">' . __('open a github issue', 'fluent-smtp') . '</a>'), 'fluent-smtp'),
+            '__SUPPORT_INTRO'                                                              => sprintf(__('Please view the %1$s first. If you still can\'t find the answer %2$s  and we will be happy to answer your questions and assist you with any problems.', 'fluent-smtp'), '<a href="https://fluentsmtp.com/docs" target="_blank" rel="noopener">' . __('documentation', 'fluent-smtp') . '</a>', '<a href="https://github.com/WPManageNinja/fluent-smtp" target="_blank" rel="noopener">' . __('open a github issue', 'fluent-smtp') . '</a>'),
             '__DEFAULT_CONNECTION_CONFLICT'                                                => __('Default and Fallback connection can not be same. Please select different connections.', 'fluent-smtp'),
             '__MAILGUN_URL_TIP'                                                            => __('Define which endpoint you want to use for sending messages.', 'fluent-smtp'),
             '__PEPIPOST_HELP'                                                              => __('Follow this link to get an API Key from Pepipost(Click Show button on Settings Page):', 'fluent-smtp'),
             '__POSTMARK_HELP'                                                              => __('Follow this link to get an API Key from Postmark(Your API key is in the API Tokens tab of your):', 'fluent-smtp'),
-            '__TELE_INTRO'                                                                 => __(sprintf('Get real - time notification on your %1s on any email sending failure. Configure notification with FluentSMTP\'s official %2s to start getting real time notifications. ', '<a target="_blank" rel="noopener" href="https://telegram.org/">Telegram Messenger</a>', '<a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot">telegram bot</a>'), 'fluent-smtp'),
-            '__SLACK_TERMS'                                                                => __(sprintf('I agree to the %1s of this slack integration.', '<a target="_blank" rel="noopener" href="https://fluentsmtp.com/terms-and-conditions/">' . __('terms and conditions', 'fluent-smtp') . '</a>'), 'fluent-smtp'),
-            '__GIT_CONTRIBUTE'                                                             => __(sprintf('If you are a developer and would like to contribute to the project, Please %s', '<a target="_blank" rel="nofollow" href="https://github.com/WPManageNinja/fluent-smtp/">' . __('contribute on GitHub', 'fluent-smtp') . '</a>'), 'fluent-smtp'), 'If you are operating under EU laws, you may be required to use EU region.' => __('If you are operating under EU laws, you may be required to use EU region.', 'fluent-smtp'),
+            '__TELE_INTRO'                                                                 => sprintf(__('Get real - time notification on your %1$s on any email sending failure. Configure notification with FluentSMTP\'s official %2$s to start getting real time notifications. ', 'fluent-smtp'), '<a target="_blank" rel="noopener" href="https://telegram.org/">Telegram Messenger</a>', '<a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot">telegram bot</a>'),
+            '__SLACK_TERMS'                                                                => sprintf(__('I agree to the %1s of this slack integration.', 'fluent-smtp'), '<a target="_blank" rel="noopener" href="https://fluentsmtp.com/terms-and-conditions/">' . __('terms and conditions', 'fluent-smtp') . '</a>'),
+            '__GIT_CONTRIBUTE'                                                             => sprintf(__('If you are a developer and would like to contribute to the project, Please %s', 'fluent-smtp'), '<a target="_blank" rel="nofollow" href="https://github.com/WPManageNinja/fluent-smtp/">' . __('contribute on GitHub', 'fluent-smtp') . '</a>'),
+            'If you are operating under EU laws, you may be required to use EU region.' => __('If you are operating under EU laws, you may be required to use EU region.', 'fluent-smtp'),
             '__POSTMARK_CLICK'                                                             => __('If you enable this then link tracking header will be added to the email for postmark.', 'fluent-smtp'),
             '__POSTMARK_OPEN'                                                              => __('If you enable this then open tracking header will be added to the email for postmark.', 'fluent-smtp'),
-            '__TELE_LAST_STEP'                                                             => __(sprintf('Please find %s on telegram and send following text to activate this connection.', '<a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot"><span class="tele_bot">@fluentsmtp_bot</span></a>'), 'fluent-smtp'),
-            '__TELE_TERMS'                                                                 => __(sprintf('I agree to the  %s of this telegram integration.', '<a target="_blank" rel="noopener" href="https://fluentsmtp.com/terms-and-conditions/">' . __('terms and conditions', 'fluent-smtp') . '</a>'), 'fluent-smtp'),
-            '__GCP_API_INST'                                                               => __(sprintf('Please %s to create API keys on the Google Cloud Platform.', '<a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">' . __('check the documentation', 'fluent-smtp') . '</a>'), 'fluent-smtp'),
-            '__GCP_INTRO'                                                                  => __(sprintf('Google API version has been upgraded. Please %s.', '<a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">' . __('read the doc and upgrade your API connection', 'fluent-smtp') . '</a>'), 'fluent-smtp'),
-            '__MAILGUN_REGION'                                                             => __(sprintf('If you are operating under EU laws, you may be required to use EU region. %s.', '<a target="_blank" href="https://www.mailgun.com/regions">' . __('More information on Mailgun.com', 'fluent-smtp') . '</a>'), 'fluent-smtp'),
+            '__TELE_LAST_STEP'                                                             => sprintf(__('Please find %s on telegram and send following text to activate this connection.', 'fluent-smtp'), '<a target="_blank" rel="noopener" href="https://t.me/fluentsmtp_bot"><span class="tele_bot">@fluentsmtp_bot</span></a>'),
+            '__TELE_TERMS'                                                                 => sprintf(__('I agree to the  %s of this telegram integration.', 'fluent-smtp'), '<a target="_blank" rel="noopener" href="https://fluentsmtp.com/terms-and-conditions/">' . __('terms and conditions', 'fluent-smtp') . '</a>'),
+            '__GCP_API_INST'                                                               => sprintf(__('Please %s to create API keys on the Google Cloud Platform.', 'fluent-smtp'), '<a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">' . __('check the documentation', 'fluent-smtp') . '</a>'),
+            '__GCP_INTRO'                                                                  => sprintf(__('Google API version has been upgraded. Please %s.', 'fluent-smtp'), '<a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/">' . __('read the doc and upgrade your API connection', 'fluent-smtp') . '</a>'),
+            '__MAILGUN_REGION'                                                             => sprintf(__('If you are operating under EU laws, you may be required to use EU region. %s.', 'fluent-smtp'), '<a target="_blank" href="https://www.mailgun.com/regions">' . __('More information on Mailgun.com', 'fluent-smtp') . '</a>'),
             '__Email_TEXT_PART_Label'                                                      => __('Enable Multi-Part Plain Text version of your HTML Emails. This feature is in beta', 'fluent-smtp'),
             '__PASSWORD_ENCRYPT_HELP'                                                      => __('This input will be securely encrypted using WP SALTS as encryption keys before save.', 'fluent-smtp'),
             '__PASSWORD_ENCRYPT_TIP'                                                       => __('If you change your WordPress SALT Keys, this credential will become invalid. Please update this credential whenever the WP SALTS are modified.', 'fluent-smtp'),

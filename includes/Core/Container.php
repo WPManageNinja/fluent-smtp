@@ -772,7 +772,7 @@ class Container implements ArrayAccess, ContainerContract
         // no binding registered for the abstractions so we need to bail out.
         if (!$reflector->isInstantiable()) {
             $message = "Target [{$concrete}] is not instantiable.";
-            throw new BindingResolutionException($message);
+            throw new BindingResolutionException($message); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
 
         $this->buildStack[] = $concrete;
@@ -855,7 +855,7 @@ class Container implements ArrayAccess, ContainerContract
         
         $message = "Unresolvable dependency resolving [{$parameter}] in class {$parameter->getDeclaringClass()->getName()}";
         
-        throw new BindingResolutionException($message);
+        throw new BindingResolutionException($message); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
     }
 
     /**

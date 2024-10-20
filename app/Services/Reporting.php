@@ -49,7 +49,7 @@ class Reporting
 
     protected function makeToDate($to)
     {
-        $to = $to ? date('Y-m-d', strtotime( $to . " +1 days")) : '+1 days';
+        $to = $to ? gmdate('Y-m-d', strtotime( $to . " +1 days")) : '+1 days';
         return new \DateTime($to);
     }
 

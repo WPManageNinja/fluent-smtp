@@ -19,7 +19,7 @@ class TelegramController extends Controller
 
         if (!is_email($userEmail)) {
             return $this->sendError([
-                'message' => __('Please provide a valid email address', 'fluent-mail')
+                'message' => __('Please provide a valid email address', 'fluent-smtp')
             ], 422);
         }
 

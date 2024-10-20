@@ -116,7 +116,7 @@ class OAuth2Provider
 
         if (!empty($missing)) {
             throw new \InvalidArgumentException(
-                'Required options not defined: ' . implode(', ', array_keys($missing))
+                'Required options not defined: ' . implode(', ', array_keys($missing)) // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
             );
         }
     }
@@ -181,7 +181,7 @@ class OAuth2Provider
 
         if (is_wp_error($response)) {
             throw new \Exception(
-                $response->get_error_message()
+                wp_kses_post($response->get_error_message())
             );
         }
 

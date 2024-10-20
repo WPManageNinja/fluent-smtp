@@ -38,7 +38,7 @@ class Validator
         $result = $ses->listVerifiedEmailAddresses();
 
         if (is_wp_error($result)) {
-            throw new ValidationException($result->get_error_message(), 400);
+            throw new ValidationException(wp_kses_post($result->get_error_message()), 400);
         }
 
         if ($result) {
@@ -47,7 +47,7 @@ class Validator
             );
 
             if (!in_array($senderEmail, $result['Addresses'])) {
-                throw new \Exception(__('The from email is not verified', 'fluent-smtp'), 400);
+                throw new \Exception(esc_html__('The from email is not verified', 'fluent-smtp'), 400);
             }
 
             fluentMail(Settings::class)->saveVerifiedEmails($result['Addresses']);

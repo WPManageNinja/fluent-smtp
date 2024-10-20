@@ -308,7 +308,7 @@ class Html2Text
      */
     public function print_text()
     {
-        print $this->getText();
+        print $this->getText(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 
     /**

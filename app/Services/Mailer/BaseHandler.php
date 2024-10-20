@@ -271,7 +271,7 @@ class BaseHandler
 
             $this->processResponse($errorResponse, false);
 
-            throw new \PHPMailer\PHPMailer\Exception($message, $code);
+            throw new \PHPMailer\PHPMailer\Exception($message, $code); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 
         } else {
             return $this->processResponse($response, true);

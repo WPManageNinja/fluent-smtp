@@ -311,7 +311,7 @@ class NotificationHelper
             $sendingTo = Arr::get($logData, 'to');
         }
 
-        $heading = __(sprintf('[%s] Failed to send email', get_bloginfo('name')), 'fluent-smtp');
+        $heading = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), get_bloginfo('name'));
 
         return [
             'text'   => $heading,
@@ -375,7 +375,7 @@ class NotificationHelper
             $sendingTo = Arr::get($logData, 'to');
         }
 
-        $heading = __(sprintf('[%s] Failed to send email', get_bloginfo('name')), 'fluent-smtp');
+        $heading = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), get_bloginfo('name'));
 
         $content = '## ' . $heading . "\n";
         $content .= __('**Website URL:** ', 'fluent-smtp') . site_url() . "\n";

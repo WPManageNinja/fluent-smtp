@@ -10,7 +10,7 @@ trait SendTestEmailTrait
 
         $to = $data['email'];
 
-        $subject = __(sprintf('Fluent SMTP: Test Email - %s', get_bloginfo('name')));
+        $subject = sprintf(__('Fluent SMTP: Test Email - %s', 'fluent-smtp'), get_bloginfo('name'));
 
         if ($data['isHtml'] == 'true') {
             $headers[] = 'Content-Type: text/html; charset=UTF-8';

@@ -632,7 +632,7 @@ class SimpleEmailService
      */
     public function __triggerError($functionname, $error)
     {
-        trigger_error($this->getErrorMessage($functionname, $error), E_USER_WARNING);
+        trigger_error($this->getErrorMessage($functionname, $error), E_USER_WARNING); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }
 
     public function getErrorMessage($functionname, $error)

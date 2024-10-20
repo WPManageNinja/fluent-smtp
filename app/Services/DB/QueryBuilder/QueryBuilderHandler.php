@@ -285,7 +285,7 @@ class QueryBuilderHandler
         $allowedTypes = array('select', 'insert', 'insertignore', 'replace', 'delete', 'update', 'criteriaonly');
 
         if (! in_array(strtolower($type), $allowedTypes)) {
-            throw new Exception($type . ' is not a known type.', 2);
+            throw new Exception(wp_kses_post($type . ' is not a known type.'), 2);
         }
 
         $queryArr = $this->adapterInstance->$type($this->statements, $dataToBePassed);

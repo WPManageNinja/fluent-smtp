@@ -2,8 +2,8 @@
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, wordpress mail smtp, mail, mail smtp
 Requires at least: 5.5
-Tested up to: 6.5
-Stable tag: 2.2.80
+Tested up to: 6.6
+Stable tag: 2.2.81
 Requires PHP: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -284,6 +284,12 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.2.81 (Date: Oct 20, 2024) =
+* Security: Nonce Verification fixed for slack REQUEST (props to patchstack)
+* Fixed WooCommerce Emailing Issue fixed when enabled text mode
+* Fixed Translation issues
+* Custom Header support for Postmark
 
 = 2.2.80 (Date: July 02, 2024) =
 * Added Plain Text Support: Convert HTML Emails to Plain Text and send as multi-part email

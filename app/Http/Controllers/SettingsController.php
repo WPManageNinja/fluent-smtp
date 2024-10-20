@@ -199,7 +199,7 @@ class SettingsController extends Controller
         }
 
         if ($errors) {
-            throw new ValidationException(__('Unprocessable Entity', 'fluent-smtp'), 422, null, $errors);
+            throw new ValidationException(esc_html__('Unprocessable Entity', 'fluent-smtp'), 422, null, $errors); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
     }
 
@@ -396,20 +396,20 @@ class SettingsController extends Controller
                     );
 
                     if (is_wp_error($plugin_information)) {
-                        throw new \Exception($plugin_information->get_error_message());
+                        throw new \Exception(wp_kses_post($plugin_information->get_error_message()));
                     }
 
                     $package = $plugin_information->download_link;
                     $download = $upgrader->download_package($package);
 
                     if (is_wp_error($download)) {
-                        throw new \Exception($download->get_error_message());
+                        throw new \Exception(wp_kses_post($download->get_error_message()));
                     }
 
                     $working_dir = $upgrader->unpack_package($download, true);
 
                     if (is_wp_error($working_dir)) {
-                        throw new \Exception($working_dir->get_error_message());
+                        throw new \Exception(wp_kses_post($working_dir->get_error_message()));
                     }
 
                     $result = $upgrader->install_package(
@@ -427,13 +427,13 @@ class SettingsController extends Controller
                     );
 
                     if (is_wp_error($result)) {
-                        throw new \Exception($result->get_error_message());
+                        throw new \Exception(wp_kses_post($result->get_error_message()));
                     }
 
                     $activate = true;
 
                 } catch (\Exception $e) {
-                    throw new \Exception($e->getMessage());
+                    throw new \Exception(esc_html($e->getMessage()));
                 }
 
                 // Discard feedback.
@@ -448,10 +448,10 @@ class SettingsController extends Controller
                     $result = activate_plugin($installed ? $installed_plugins[$plugin_file] : $plugin_slug . '/' . $plugin_file);
 
                     if (is_wp_error($result)) {
-                        throw new \Exception($result->get_error_message());
+                        throw new \Exception(esc_html($result->get_error_message()));
                     }
                 } catch (\Exception $e) {
-                    throw new \Exception($e->getMessage());
+                    throw new \Exception(esc_html($e->getMessage()));
                 }
             }
         }
@@ -460,7 +460,7 @@ class SettingsController extends Controller
     public function subscribe()
     {
         $this->verify();
-        $email = sanitize_text_field($_REQUEST['email']);
+        $email = sanitize_text_field($_REQUEST['email']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         $displayName = '';
 
@@ -515,7 +515,7 @@ class SettingsController extends Controller
         }
 
         wp_remote_post($url, [
-            'body' => json_encode([
+            'body' => json_encode([ // phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode
                 'full_name'       => $displayName,
                 'email'           => $optinEmail,
                 'source'          => 'smtp',

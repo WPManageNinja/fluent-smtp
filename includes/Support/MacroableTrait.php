@@ -50,7 +50,7 @@ trait MacroableTrait {
 			return call_user_func_array(static::$macros[$method], $parameters);
 		}
 
-		throw new \BadMethodCallException("Method {$method} does not exist.");
+		throw new \BadMethodCallException("Method {$method} does not exist."); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 	}
 
 	/**
