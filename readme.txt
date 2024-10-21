@@ -274,6 +274,9 @@ Thank you so much. We really appreciate it. Please check <a href="https://github
 
 Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in our support portal</a>. If you are a developer please <a href="https://github.com/WPManageNinja/fluent-smtp">create a github issue</a>.
 
+= I found a security issue, where can I report it? =
+We use Patchstack to manage our security report. <a href="https://patchstack.com/database/vdp/fluent-smtp">Please report in the patchstack page</a>.
+
 == Screenshots ==
 1. FluentSMTP Dashboard
 2. Setting up a connection
