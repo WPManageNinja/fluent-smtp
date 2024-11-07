@@ -54,7 +54,7 @@
                         <template slot-scope="scope">
                             <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
                             <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
-                                  style="color: #ff0000;"> - Simulated</span>
+                                  style="color: #ff0000;">{{ $t(' - Simulated') }}</span>
                         </template>
                     </el-table-column>
 
@@ -122,7 +122,7 @@
                         <div v-if="logs.length" style="margin-top:20px;">
                             <confirm placement="right" :message="$t('Are you sure, you want to delete all the logs?')"
                                      @yes="handleDelete(['all'])">
-                                <el-button slot="reference" size="mini" type="info">Delete All Logs</el-button>
+                                <el-button slot="reference" size="mini" type="info">{{ $t('Delete All Logs') }}</el-button>
                             </confirm>
                         </div>
                         <span v-else>&nbsp;</span>
