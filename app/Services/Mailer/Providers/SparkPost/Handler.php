@@ -30,23 +30,16 @@ class Handler extends BaseHandler
     {
         $body = [
             'options' => [
-                'sandbox' => defined('FLUENTMAIL_TEST_EMAIL')
+                'sandbox' => false
             ],
             'content' => [
                 'from' => $this->getFrom(),
                 'subject' => $this->getSubject(),
                 'html' => $this->phpMailer->Body,
                 'text' => $this->phpMailer->AltBody,
-                'headers' => []
+                'headers' => (object) []
             ],
-            'recipients' => [
-                [
-                    'address' => [
-                        'name' => $this->getParam('sender_name'),
-                        'email' => $this->getParam('sender_email')
-                    ]
-                ]
-            ],
+            'recipients' => $this->getTo(),
             'cc' => $this->getCarbonCopy(),
             'bcc' => $this->getBlindCarbonCopy()
         ];
@@ -112,6 +105,21 @@ class Handler extends BaseHandler
         }
 
         return $from;
+    }
+
+    protected function getTo()
+    {
+        $address = [];
+
+        foreach ($this->getParam('to') as $to) {
+            $address[] = [
+                'address' => [
+                    'email' => $to['email']
+                ]
+            ];
+        }
+
+        return $address;
     }
 
     protected function getReplyTo()
