@@ -37,7 +37,7 @@ class Handler extends BaseHandler
                 'subject' => $this->getSubject(),
                 'html' => $this->phpMailer->Body,
                 'text' => $this->phpMailer->AltBody,
-                'headers' => []
+                'headers' => (object) []
             ],
             'recipients' => $this->getTo(),
             'cc' => $this->getCarbonCopy(),
