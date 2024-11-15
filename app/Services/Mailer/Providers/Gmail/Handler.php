@@ -15,7 +15,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
     }
 
     protected function postSend()
@@ -23,7 +23,7 @@ class Handler extends BaseHandler
         try {
             $returnResponse = $this->sendViaApi();
         } catch (\Exception $e) {
-            $returnResponse = new \WP_Error(423, $e->getMessage(), []);
+            $returnResponse = new \WP_Error(422, $e->getMessage(), []);
         }
 
         $this->response = $returnResponse;
@@ -57,6 +57,11 @@ class Handler extends BaseHandler
 
         $file_size = strlen($message);
         $googleClient = $this->getApiClient($data);
+
+        if (is_wp_error($googleClient)) {
+            return $googleClient;
+        }
+
         $googleService = new \FluentSmtpLib\Google\Service\Gmail($googleClient);
 
         $result = array();
@@ -90,7 +95,7 @@ class Handler extends BaseHandler
 
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
-            return new \WP_Error(423, $errorMessage, []);
+            return new \WP_Error(422, $errorMessage, []);
         }
 
         return array(
@@ -109,7 +114,7 @@ class Handler extends BaseHandler
 
         if ($keyStoreType == 'db') {
             if (!$clientId) {
-                $errors['client_id']['required'] = __('Application Cluent ID is required.', 'fluent-smtp');
+                $errors['client_id']['required'] = __('Application Client ID is required.', 'fluent-smtp');
             }
 
             if (!$clientSecret) {
@@ -200,7 +205,7 @@ class Handler extends BaseHandler
 
         if (is_wp_error($request)) {
             $message = $request->get_error_message();
-            return new \WP_Error(423, $message);
+            return new \WP_Error(422, $message);
         }
 
         $body = json_decode(wp_remote_retrieve_body($request), true);
@@ -212,7 +217,7 @@ class Handler extends BaseHandler
             } else if (!empty($body['error']['message'])) {
                 $error = $body['error']['message'];
             }
-            return new \WP_Error(423, $error);
+            return new \WP_Error(422, $error);
         }
 
         return $body;
@@ -268,7 +273,18 @@ class Handler extends BaseHandler
         // check if expired or will be expired in 5 minutes
         if (($data['expire_stamp'] - 300) < time()) {
             $newTokens = $client->refreshToken($data['refresh_token']);
-            $this->saveNewTokens($data, $newTokens);
+
+            $result = $this->saveNewTokens($data, $newTokens);
+
+            if (!$result) {
+                $errorDescription = Arr::get($newTokens, 'error_description');
+                if (!$errorDescription) {
+                    $errorDescription = __('Failed to renew token with Gmail Api', 'fluent-smtp');
+                }
+
+                return new \WP_Error('api_error', $errorDescription);
+            }
+
             $client->setAccessToken($newTokens);
         }
 
@@ -288,7 +304,11 @@ class Handler extends BaseHandler
             require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/build/vendor/autoload.php';
         }
 
-        $this->getApiClient($connection);
+        $client = $this->getApiClient($connection);
+
+        if (is_wp_error($client)) {
+            return '<p style="color: red; text-align: center; font-size: 18px;">ERROR: ' . $connection->get_error_message() . '</p>';
+        }
 
         $info = fluentMailgetConnection($connection['sender_email']);
 
@@ -300,13 +320,15 @@ class Handler extends BaseHandler
         ];
 
         if (($connection['expire_stamp']) < time()) {
-            $extraRow['content'] = 'Invalid. Please re-authenticate';
+            $extraRow['content'] = __('Invalid. Please re-authenticate', 'fluent-smtp');
         }
 
         $connection['extra_rows'] = [$extraRow];
 
-        return (string)fluentMail('view')->make('admin.general_connection_info', [
-            'connection' => $connection
-        ]);
+        return [
+            'info' => (string)fluentMail('view')->make('admin.general_connection_info', [
+                'connection' => $connection
+            ])
+        ];
     }
 }

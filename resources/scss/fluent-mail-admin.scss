@@ -6,6 +6,9 @@
   max-width: 100%;
   display: block;
   width: 100%;
+  * {
+    box-sizing: border-box;
+  }
 
   & .fluent-mail-main-menu-items {
     margin-bottom: 20px;
@@ -20,22 +23,50 @@
   & .fluent-mail-body {
     margin-right: 20px;
 
-    & .header {
+    & .fss_header {
       display: block;
       width: auto;
       border-bottom: 1px solid #e3e8ee;
       clear: both;
       overflow: hidden;
       margin: 0;
-      padding: 10px 15px;
+      padding: 15px;
       background-color: #f7fafc;
       font-weight: 700;
       color: #697386;
+
+      &.fss_widget_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        h3 {
+          margin: 0;
+        }
+      }
     }
 
-    & .content {
+    & .fss_content {
       padding: 20px;
       background-color: #fff;
+      .fss_general_settings {
+        .el-form {
+          .el-form-item {
+            .el-form-item__label {
+              margin-bottom: 8px;
+            }
+            .el-checkbox {
+              display: flex;
+              align-items: flex-start;
+              .el-checkbox__input {
+                margin-top: 2px;
+              }
+              .el-checkbox__label {
+                white-space: normal;
+              }
+            }
+          }
+        }
+      }
     }
   }
 
@@ -50,6 +81,27 @@
   & .pager-wrap {
     margin-top: 20px;
     text-align: right;
+  }
+
+  .fss_notification_channels {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 30px;
+    margin-top: 30px;
+    .fss_notification_item {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      text-align: center;
+      &:hover {
+        color: #409EFF;
+      }
+      img {
+        height: 50px;
+      }
+    }
   }
 }
 
@@ -128,14 +180,14 @@ ul.fss_log_items li {
   }
 }
 
-.fluent-mail-app .dashboard .content .mailer-block {
+.fluent-mail-app .dashboard .fss_content .mailer-block {
   display: inline-block;
   width: 140px;
   margin: 0 5px;
   position: relative;
 }
 
-.fluent-mail-app .dashboard .content .fluent-mail-mailer-image {
+.fluent-mail-app .dashboard .fss_content .fluent-mail-mailer-image {
   background: #fff;
   text-align: center;
   cursor: auto;
@@ -152,11 +204,11 @@ ul.fss_log_items li {
   cursor: pointer;
 }
 
-.fluent-mail-app .dashboard .content .fluent-mail-mailer-image:hover {
+.fluent-mail-app .dashboard .fss_content .fluent-mail-mailer-image:hover {
   box-shadow: 0 0 5px 5px #ccc;
 }
 
-.fluent-mail-app .dashboard .content .fluent-mail-mailer-image img {
+.fluent-mail-app .dashboard .fss_content .fluent-mail-mailer-image img {
   max-width: 90%;
   max-height: 40px;
   display: block;
@@ -171,7 +223,7 @@ ul.fss_log_items li {
   transition: all 0.2s ease-in-out;
 }
 
-.fluent-mail-app .dashboard .content .email-stat {
+.fluent-mail-app .dashboard .fss_content .email-stat {
   padding: 20px;
   font-weight: 700;
   font-size: 15px;
@@ -180,7 +232,7 @@ ul.fss_log_items li {
   text-align: center;
 }
 
-.fluent-mail-app .dashboard .content .email-stat:hover {
+.fluent-mail-app .dashboard .fss_content .email-stat:hover {
   background: #ecf5ff;
   opacity: .7;
 }
@@ -216,7 +268,9 @@ ul.fss_dash_lists {
     padding: 0px 10px;
     color: #697485;
     border-bottom: 1px solid #e3e8ed;
-    line-height: 40px;
+    line-height: 44px;
+    transition: all 0.3s ease;
+    margin-bottom: 0;
 
     span {
       float: right;
@@ -225,7 +279,7 @@ ul.fss_dash_lists {
 
     &:hover {
       background: #f7fafc;
-      border-bottom: 1px solid black;
+      border-bottom: 1px solid #d2d2df;
     }
 
     &:last-child {
@@ -322,7 +376,7 @@ ul.fss_dash_lists {
   }
 }
 
-span.header_action_right {
+span.fss_header_action_right {
   float: right;
   cursor: pointer;
 }
@@ -437,7 +491,7 @@ span.header_action_right {
   font-size: 12px;
   color: gray;
 }
-.fss_box_action .header {
+.fss_box_action .fss_header {
   cursor: pointer;
 }
 

@@ -4,6 +4,7 @@ namespace FluentMail\App\Hooks\Handlers;
 
 use FluentMail\App\Models\Logger;
 use FluentMail\App\Models\Settings;
+use FluentMail\App\Services\NotificationHelper;
 use FluentMail\Includes\Support\Arr;
 
 class SchedulerHandler
@@ -13,9 +14,12 @@ class SchedulerHandler
     public function register()
     {
         add_action($this->dailyActionName, array($this, 'handleScheduledJobs'));
-        add_action('fluentmail_email_sending_failed', array($this, 'maybeHandleFallbackConnection'), 10, 2);
+        add_action('fluentmail_email_sending_failed', array($this, 'maybeHandleFallbackConnection'), 10, 3);
 
         add_action('fluentsmtp_renew_gmail_token', array($this, 'renewGmailToken'));
+
+        add_action('fluentmail_email_sending_failed_no_fallback', array($this, 'maybeSendNotification'), 10, 3);
+
     }
 
     public function handleScheduledJobs()
@@ -26,7 +30,7 @@ class SchedulerHandler
 
     private function deleteOldEmails()
     {
-        $settings = get_option('fluentmail-settings', []);
+        $settings = fluentMailGetSettings();
         $logSaveDays = intval(Arr::get($settings, 'misc.log_saved_interval_days'));
         if ($logSaveDays) {
             (new \FluentMail\App\Models\Logger())->deleteLogsOlderThan($logSaveDays);
@@ -41,7 +45,7 @@ class SchedulerHandler
             return;
         }
 
-        $currentDay = date('D');
+        $currentDay = gmdate('D');
         if (!in_array($currentDay, $settings['notify_days'])) {
             return;
         }
@@ -66,12 +70,12 @@ class SchedulerHandler
                 return false; // we don't want to send another email if sent time within 20 hours
             }
         } else {
-            $lastDigestSent = date('Y-m-d', strtotime('-7 days'));
+            $lastDigestSent = gmdate('Y-m-d', strtotime('-7 days'));
         }
 
         // Let's create the stats
-        $startDate = date('Y-m-d 00:00:01', (strtotime($lastDigestSent) - 86400));
-        $endDate = date('Y-m-d 23:59:59', strtotime('-1 days'));
+        $startDate = gmdate('Y-m-d 00:00:01', (strtotime($lastDigestSent) - 86400));
+        $endDate = gmdate('Y-m-d 23:59:59', strtotime('-1 days'));
 
         $reportingDays = floor((strtotime($endDate) - strtotime($startDate)) / 86400);
 
@@ -100,14 +104,14 @@ class SchedulerHandler
         }
 
         $sentSubTitle = sprintf(
-            __('Showing %1$s of %2$s different subject lines sent in the past %3$s'),
+            __('Showing %1$s of %2$s different subject lines sent in the past %3$s', 'fluent-smtp'),
             number_format_i18n(count($sentStats['subjects'])),
             number_format_i18n($sentStats['unique_subjects']),
             ($reportingDays < 2) ? 'day' : $reportingDays . ' days'
         );
 
         $failedSubTitle = sprintf(
-            __('Showing %1$s of %2$s different subject lines failed in the past %3$s'),
+            __('Showing %1$s of %2$s different subject lines failed in the past %3$s', 'fluent-smtp'),
             number_format_i18n(count($failedStats['subjects'])),
             number_format_i18n($failedStats['unique_subjects']),
             ($reportingDays < 2) ? 'day' : $reportingDays . ' days'
@@ -122,7 +126,7 @@ class SchedulerHandler
             $failedTitle .= ' <span style="font-size: 12px; vertical-align: middle;">(' . number_format_i18n($failedCount) . ')</span>';
         }
 
-        $reportingDate = date(get_option('date_format'), strtotime($startDate));
+        $reportingDate = gmdate(get_option('date_format'), strtotime($startDate));
 
         $data = [
             'sent'        => [
@@ -146,7 +150,7 @@ class SchedulerHandler
 
         $headers = array('Content-Type: text/html; charset=UTF-8');
 
-        update_option('_fluentmail_last_email_digest', date('Y-m-d H:i:s'));
+        update_option('_fluentmail_last_email_digest', gmdate('Y-m-d H:i:s'));
 
         return wp_mail($sendToArray, $emailSubject, $emailBody, $headers);
 
@@ -159,7 +163,7 @@ class SchedulerHandler
         return untrailingslashit($url);
     }
 
-    public function maybeHandleFallbackConnection($logId, $handler)
+    public function maybeHandleFallbackConnection($logId, $handler, $data = [])
     {
         if (defined('FLUENTMAIL_EMAIL_TESTING')) {
             return false;
@@ -170,12 +174,14 @@ class SchedulerHandler
         $fallbackConnectionId = \FluentMail\Includes\Support\Arr::get($settings, 'misc.fallback_connection');
 
         if (!$fallbackConnectionId) {
+            do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
             return false;
         }
 
         $fallbackConnection = \FluentMail\Includes\Support\Arr::get($settings, 'connections.' . $fallbackConnectionId);
 
         if (!$fallbackConnection) {
+            do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
             return false;
         }
 
@@ -191,7 +197,7 @@ class SchedulerHandler
 
     public function renewGmailToken()
     {
-        $settings = get_option('fluentmail-settings');
+        $settings = fluentMailGetSettings();
 
         if (!$settings) {
             return;
@@ -238,11 +244,54 @@ class SchedulerHandler
             $client->setAccessToken($tokens);
 
             $newTokens = $client->refreshToken($tokens['refresh_token']);
-            $this->saveNewGmailTokens($settings, $newTokens);
+            $result = $this->saveNewGmailTokens($settings, $newTokens);
+
+            if (!$result) {
+                return new \WP_Error('api_error', __('Failed to renew the token', 'fluent-smtp'));
+            }
+
             return true;
         } catch (\Exception $exception) {
             return new \WP_Error('api_error', $exception->getMessage());
         }
+    }
+
+
+    public function maybeSendNotification($rowId, $handler, $logData = [])
+    {
+        $channel = NotificationHelper::getActiveChannelSettings();
+
+        if (!$channel) {
+            return false;
+        }
+
+        $lastNotificationSent = get_option('_fsmtp_last_notification_sent');
+        if ($lastNotificationSent && (time() - $lastNotificationSent) < 60) {
+            return false;
+        }
+
+        update_option('_fsmtp_last_notification_sent', time());
+
+        $driver = $channel['driver'];
+        if ($driver == 'telegram') {
+            $data = [
+                'token_id'      => $channel['token'],
+                'provider'      => $handler->getSetting('provider'),
+                'error_message' => $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')))
+            ];
+
+            return NotificationHelper::sendFailedNotificationTele($data);
+        }
+
+        if ($driver == 'slack') {
+            return NotificationHelper::sendSlackMessage(NotificationHelper::formatSlackMessageBlock($handler, $logData), $channel['webhook_url'], false);
+        }
+
+        if ($driver == 'discord') {
+            return NotificationHelper::sendDiscordMessage(NotificationHelper::formatDiscordMessageBlock($handler, $logData), $channel['webhook_url'], false);
+        }
+
+        return false;
     }
 
     private function saveNewGmailTokens($existingData, $tokens)
@@ -262,5 +311,28 @@ class SchedulerHandler
         fluentMailGetProvider($senderEmail, true); // we are clearing the static cache here
         wp_schedule_single_event($existingData['expire_stamp'] - 360, 'fluentsmtp_renew_gmail_token');
         return true;
+    }
+
+    private function getErrorMessageFromResponse($response)
+    {
+        if (!$response || !is_array($response)) {
+            return '';
+        }
+
+        if (!empty($response['fallback_response']['message'])) {
+            $message = $response['fallback_response']['message'];
+        } else {
+            $message = Arr::get($response, 'message');
+        }
+
+        if (!$message) {
+            return '';
+        }
+
+        if (!is_string($message)) {
+            $message = json_encode($message);
+        }
+
+        return $message;
     }
 }

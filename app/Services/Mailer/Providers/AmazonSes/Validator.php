@@ -21,19 +21,25 @@ class Validator
 
     public function validate()
     {
-        set_error_handler([$this, 'errorHandler']);
 
         $data = fluentMail('request')->except(['action', 'nonce']);
 
         $inputs = Arr::only(
-            $data['provider']['options'], ['access_key', 'secret_key']
+            $data['provider']['options'], ['access_key', 'secret_key', 'region']
         );
 
         $ses = new SimpleEmailService(
-            $inputs['access_key'], $inputs['secret_key']
+            $inputs['access_key'],
+            $inputs['secret_key'],
+            'email.' . $inputs['region'] . '.amazonaws.com',
+            false
         );
 
         $result = $ses->listVerifiedEmailAddresses();
+
+        if (is_wp_error($result)) {
+            throw new ValidationException(wp_kses_post($result->get_error_message()), 400);
+        }
 
         if ($result) {
             $senderEmail = Arr::get(
@@ -41,7 +47,7 @@ class Validator
             );
 
             if (!in_array($senderEmail, $result['Addresses'])) {
-                throw new \Exception('The from email is not verified', 400);
+                throw new \Exception(esc_html__('The from email is not verified', 'fluent-smtp'), 400);
             }
 
             fluentMail(Settings::class)->saveVerifiedEmails($result['Addresses']);

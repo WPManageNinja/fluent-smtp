@@ -2,21 +2,23 @@
     <div class="logs">
         <div>
             <div v-if="!isLogsOn">
-                <div class="content">
+                <div class="fss_content">
                     <el-alert :closable="false" show-icon center>
-                        Email Logging is currently turned off. Only Failed and resent emails will be shown here
+                        {{ $t('__EMAIL_LOGGING_OFF') }}
                         <el-button type="text" @click="turnOnEmailLogging">{{ $t('Turn On') }}</el-button>
                         .
                     </el-alert>
                 </div>
             </div>
-            <div class="header">
+            <div class="fss_header">
                 <LogBulkAction
                     @on-bulk-action="handleBulkAction"
                     :selected="selectedLogs"
                     v-if="selectedLogs.length"
                 />
                 <div style="float:left;margin-top:6px;">{{ $t('Email Logs') }}</div>
+                <div style="float:right;margin-left: 6px;"><el-button @click="fetch" type="success" size="small" ><i class="el-icon-refresh"></i></el-button></div>
+
                 <LogFilter
                     :filter_query="filter_query"
                     @on-filter="fetch()"
@@ -38,7 +40,7 @@
 
             </div>
 
-            <div v-if="!loading" class="content">
+            <div v-if="!loading" class="fss_content">
                 <el-table
                     stripe
                     :data="logs"
@@ -50,7 +52,7 @@
                     <el-table-column type="selection" width="55"/>
                     <el-table-column :label="$t('Subject')">
                         <template slot-scope="scope">
-                            <span>{{ scope.row.subject }}</span>
+                            <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
                             <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
                                   style="color: #ff0000;"> - Simulated</span>
                         </template>
@@ -118,7 +120,7 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <div v-if="logs.length" style="margin-top:20px;">
-                            <confirm placement="right" message="Are you sure, you want to delete all the logs?"
+                            <confirm placement="right" :message="$t('Are you sure, you want to delete all the logs?')"
                                      @yes="handleDelete(['all'])">
                                 <el-button slot="reference" size="mini" type="info">Delete All Logs</el-button>
                             </confirm>
@@ -132,7 +134,7 @@
                     </el-col>
                 </el-row>
             </div>
-            <el-skeleton :animated="true" v-else class="content" :rows="15"></el-skeleton>
+            <el-skeleton :animated="true" v-else class="fss_content" :rows="15"></el-skeleton>
 
             <LogViewer :logViewerProps="logViewerProps"/>
         </div>
@@ -221,25 +223,6 @@ export default {
         },
         formatLog(log) {
             log.to = this.formatAddresses(log.to);
-            if (log.headers && typeof log.headers == 'object') {
-                log.headers.cc = this.formatAddresses(log.headers.cc);
-                log.headers.bcc = this.formatAddresses(log.headers.bcc);
-                log.headers['reply-to'] = this.formatAddresses(log.headers['reply-to']);
-            } else {
-                log.headers = {};
-            }
-
-            const headers = {};
-            if (log.headers) {
-                jQuery.each(log.headers, (key, value) => {
-                    if (key && typeof key == 'string') {
-                        key = key.split('-').map(s => this.ucFirst(s)).join('-');
-                        headers[key] = value;
-                    }
-                });
-            }
-            log.headers = headers;
-
             return log;
         },
         formatAddresses(addresses) {
@@ -439,6 +422,14 @@ export default {
             this.pagination.current_page = Number(currentPage);
         }
 
+        if(this.$route.query.status) {
+            this.filter_query.status = this.$route.query.status;
+        }
+
+        if(this.$route.query.search) {
+            this.filter_query.search = this.$route.query.search;
+        }
+
         this.form = this.appVars.settings.misc;
 
         this.logAlertInfo = window.localStorage.getItem('log-settings');
@@ -451,7 +442,6 @@ export default {
         }
 
         this.logAlertInfo = JSON.parse(window.localStorage.getItem('log-settings'));
-        console.log('mounted');
         this.fetch();
     }
 };

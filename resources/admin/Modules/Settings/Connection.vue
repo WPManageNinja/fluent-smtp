@@ -1,10 +1,10 @@
 <template>
     <div class="connection">
-        <div class="header">
+        <div class="fss_header">
             {{ title }}
         </div>
 
-        <div class="content">
+        <div class="fss_content">
             <div class="fss_connection_intro">
                 <connection-wizard
                     :connection="provider"

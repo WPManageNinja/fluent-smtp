@@ -19,7 +19,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
     }
 
     public function postSend()
@@ -43,7 +43,9 @@ class Handler extends BaseHandler
             $body['Cc'] = $cc;
         }
 
-        if ($this->getHeader('content-type') == 'text/html') {
+        $contentType = $this->getHeader('content-type');
+
+        if ($contentType == 'text/html') {
             $body['HtmlBody'] = $this->getParam('message');
 
             if ($this->getSetting('track_opens') == 'yes') {
@@ -53,7 +55,9 @@ class Handler extends BaseHandler
             if ($this->getSetting('track_links') == 'yes') {
                 $body['TrackLinks'] = 'HtmlOnly';
             }
-
+        } else if ($contentType == 'multipart/alternative') {
+            $body['HtmlBody'] = $this->getParam('message');
+            $body['TextBody'] = $this->phpMailer->AltBody;
         } else {
             $body['TextBody'] = $this->getParam('message');
         }
@@ -61,7 +65,19 @@ class Handler extends BaseHandler
         if (!empty($this->getParam('attachments'))) {
             $body['Attachments'] = $this->getAttachments();
         }
+        
+        // Add any custom headers
+        $customHeaders = $this->phpMailer->getCustomHeaders();
+        if (!empty($customHeaders)) {
+            foreach ($customHeaders as $header) {
+                $body['Headers'][] = [
+                    'Name'  => $header[0],
+                    'Value' => $header[1]
+                ];
+            }
+        }
 
+        
         // Handle apostrophes in email address From names by escaping them for the Postmark API.
         $from_regex = "/(\"From\": \"[a-zA-Z\\d]+)*[\\\\]{2,}'/";
 

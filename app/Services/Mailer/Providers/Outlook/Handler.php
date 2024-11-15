@@ -17,7 +17,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
     }
 
     protected function postSend()
@@ -25,7 +25,7 @@ class Handler extends BaseHandler
         try {
             $returnResponse = $this->sendViaApi();
         } catch (\Exception $e) {
-            $returnResponse = new \WP_Error(423, $e->getMessage(), []);
+            $returnResponse = new \WP_Error(422, $e->getMessage(), []);
         }
 
         $this->response = $returnResponse;
@@ -59,7 +59,7 @@ class Handler extends BaseHandler
 
         if(is_wp_error($result)) {
             $errorMessage = $result->get_error_message();
-            return new \WP_Error(423, $errorMessage, []);
+            return new \WP_Error(422, $errorMessage, []);
         } else {
             return array(
                 'RequestId' => $result['request-id'],
@@ -79,7 +79,7 @@ class Handler extends BaseHandler
 
         if ($keyStoreType == 'db') {
             if (!$clientId) {
-                $errors['client_id']['required'] = __('Application Cluent ID is required.', 'fluent-smtp');
+                $errors['client_id']['required'] = __('Application Client ID is required.', 'fluent-smtp');
             }
 
             if (!$clientSecret) {
@@ -199,8 +199,10 @@ class Handler extends BaseHandler
 
         $connection['extra_rows'] = [$extraRow];
 
-        return (string)fluentMail('view')->make('admin.general_connection_info', [
-            'connection' => $connection
-        ]);
+        return [
+            'info' => (string)fluentMail('view')->make('admin.general_connection_info', [
+                'connection' => $connection
+            ])
+        ];
     }
 }

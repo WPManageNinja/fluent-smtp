@@ -1,14 +1,14 @@
 <template>
     <div>
-        <h3 class="fs_config_title">SendGrid API Settings</h3>
+        <h3 class="fs_config_title">{{ $t('SendGrid API Settings') }}</h3>
         <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button label="db">Store API Keys in DB</el-radio-button>
-            <el-radio-button label="wp_config">Store API Keys in Config File</el-radio-button>
+            <el-radio-button label="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
+            <el-radio-button label="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
         </el-radio-group>
 
         <el-form-item v-if="connection.key_store == 'db'">
             <label for="sendgrid-key">
-                API Key
+                {{ $t('API Key') }}
             </label>
             <InputPassword
                 id="sendgrid-key"
@@ -18,7 +18,7 @@
         </el-form-item>
         <div class="fss_condesnippet_wrapper" v-else-if="connection.key_store == 'wp_config'">
             <el-form-item>
-                <label>Simply copy the following snippet and replace the stars with the corresponding credential. Then simply paste to wp-config.php file of your WordPress installation</label>
+                <label>{{ $t('__WP_CONFIG_INSTRUCTION') }}</label>
                 <div class="code_snippet">
                     <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_SENDGRID_API_KEY', '********************' );</textarea>
                 </div>
@@ -27,9 +27,9 @@
         </div>
 
         <span class="small-help-text" style="display:block;margin-top:-10px">
-            Follow this link to get an API Key from SendGrid:
-            <a target="_blank" href="https://app.sendgrid.com/settings/api_keys">Create API Key.</a>
-            To send emails you will need only a Mail Send access level for this API key.
+            {{ $t('Follow this link to get an API Key from SendGrid:') }}
+            <a target="_blank" href="https://app.sendgrid.com/settings/api_keys">{{ $t('Create API Key.') }}</a>
+            {{ $t('To send emails you will need only a Mail Send access level for this API key.') }}
         </span>
     </div>
 </template>

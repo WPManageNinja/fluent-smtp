@@ -948,7 +948,7 @@ class File extends SplFileInfo implements FileInterface
         error_reporting($level);
         if (false === $content) {
             $error = error_get_last();
-            throw new \RuntimeException($error['message']);
+            throw new \RuntimeException($error['message']); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
 
         return $content;

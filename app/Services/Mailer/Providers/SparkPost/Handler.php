@@ -23,30 +23,23 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []) );
     }
 
     public function postSend()
     {
         $body = [
             'options' => [
-                'sandbox' => defined('FLUENTMAIL_TEST_EMAIL')
+                'sandbox' => false
             ],
             'content' => [
                 'from' => $this->getFrom(),
                 'subject' => $this->getSubject(),
                 'html' => $this->phpMailer->Body,
                 'text' => $this->phpMailer->AltBody,
-                'headers' => []
+                'headers' => (object) []
             ],
-            'recipients' => [
-                [
-                    'address' => [
-                        'name' => $this->getParam('sender_name'),
-                        'email' => $this->getParam('sender_email')
-                    ]
-                ]
-            ],
+            'recipients' => $this->getTo(),
             'cc' => $this->getCarbonCopy(),
             'bcc' => $this->getBlindCarbonCopy()
         ];
@@ -83,7 +76,7 @@ class Handler extends BaseHandler
                     'response' => $responseBody
                 ];
             } else {
-                $returnResponse = new \WP_Error($responseCode, 'SparkPost API Error', $responseBody);
+                $returnResponse = new \WP_Error($responseCode, __('SparkPost API Error', 'fluent-smtp'), $responseBody);
             }
         }
 
@@ -112,6 +105,21 @@ class Handler extends BaseHandler
         }
 
         return $from;
+    }
+
+    protected function getTo()
+    {
+        $address = [];
+
+        foreach ($this->getParam('to') as $to) {
+            $address[] = [
+                'address' => [
+                    'email' => $to['email']
+                ]
+            ];
+        }
+
+        return $address;
     }
 
     protected function getReplyTo()

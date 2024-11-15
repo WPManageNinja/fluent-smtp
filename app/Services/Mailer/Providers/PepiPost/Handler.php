@@ -18,22 +18,22 @@ class Handler extends BaseHandler
     protected $url = 'https://api.pepipost.com/v5/mail/send';
 
     public function send()
-    {   
+    {
         if ($this->preSend()) {
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
     }
 
     public function postSend()
     {
         $body = [
-            'from' => $this->getFrom(),
+            'from'             => $this->getFrom(),
             'personalizations' => $this->getRecipients(),
-            'subject' => $this->getSubject(),
-            'content' => $this->getBody(),
-            'headers' => $this->getCustomEmailHeaders()
+            'subject'          => $this->getSubject(),
+            'content'          => $this->getBody(),
+            'headers'          => $this->getCustomEmailHeaders()
         ];
 
         if ($replyTo = $this->getReplyTo()) {
@@ -45,7 +45,7 @@ class Handler extends BaseHandler
         }
 
         $params = [
-            'body' => json_encode($body),
+            'body'    => json_encode($body),
             'headers' => $this->getRequestHeaders()
         ];
 
@@ -64,9 +64,9 @@ class Handler extends BaseHandler
 
             $responseBody = \json_decode($responseBody, true);
 
-            if($isOKCode) {
+            if ($isOKCode) {
                 $returnResponse = [
-                    'id' => Arr::get($responseBody,'data.message_id'),
+                    'id'      => Arr::get($responseBody, 'data.message_id'),
                     'message' => Arr::get($responseBody, 'message_id')
                 ];
             } else {
@@ -81,7 +81,7 @@ class Handler extends BaseHandler
 
     public function setSettings($settings)
     {
-        if($settings['key_store'] == 'wp_config') {
+        if ($settings['key_store'] == 'wp_config') {
             $settings['api_key'] = defined('FLUENTMAIL_PEPIPOST_API_KEY') ? FLUENTMAIL_PEPIPOST_API_KEY : '';
         }
 
@@ -92,7 +92,7 @@ class Handler extends BaseHandler
     protected function getFrom()
     {
         return [
-            'name' => $this->getParam('sender_name'),
+            'name'  => $this->getParam('sender_name'),
             'email' => $this->getParam('sender_email')
         ];
     }
@@ -101,7 +101,7 @@ class Handler extends BaseHandler
     {
         if ($replyTo = $this->getParam('headers.reply-to')) {
             $replyTo = reset($replyTo);
-        
+
             return $replyTo['email'];
         }
     }
@@ -109,19 +109,19 @@ class Handler extends BaseHandler
     protected function getRecipients()
     {
         $recipients = [
-            'to' => $this->getTo(),
-            'cc' => $this->getCarbonCopy(),
+            'to'  => $this->getTo(),
+            'cc'  => $this->getCarbonCopy(),
             'bcc' => $this->getBlindCarbonCopy(),
         ];
 
         $recipients = array_filter($recipients);
 
         foreach ($recipients as $key => $recipient) {
-            $array = array_map(function($recipient) {
+            $array = array_map(function ($recipient) {
                 return isset($recipient['name'])
-                ? $recipient['name'] . ' <' . $recipient['email'] . '>'
-                : $recipient['email'];
-           }, $recipient);
+                    ? $recipient['name'] . ' <' . $recipient['email'] . '>'
+                    : $recipient['email'];
+            }, $recipient);
 
             $this->attributes['formatted'][$key] = implode(', ', $array);
         }
@@ -136,26 +136,35 @@ class Handler extends BaseHandler
 
     protected function getCarbonCopy()
     {
-        return array_map(function($cc) {
+        return array_map(function ($cc) {
             return ['email' => $cc['email']];
         }, $this->getParam('headers.cc'));
     }
 
     protected function getBlindCarbonCopy()
     {
-       return array_map(function($bcc) {
+        return array_map(function ($bcc) {
             return ['email' => $bcc['email']];
         }, $this->getParam('headers.bcc'));
     }
 
     protected function getBody()
     {
-        return [
+        $return = [
             [
-                'type' => 'html',
+                'type'  => 'html',
                 'value' => $this->getParam('message')
             ]
         ];
+
+        if ($this->phpMailer->contentType == 'multipart/alternative') {
+            $return[] = [
+                'type'  => 'amp',
+                'value' => $this->phpMailer->AltBody
+            ];
+        }
+
+        return $return;
     }
 
     protected function getAttachments()
@@ -179,7 +188,7 @@ class Handler extends BaseHandler
             }
 
             $data[] = [
-                'name' => $fileName,
+                'name'    => $fileName,
                 'content' => base64_encode($file)
             ];
         }
@@ -196,7 +205,7 @@ class Handler extends BaseHandler
     {
         return [
             'content-type' => 'application/json',
-            'api_key' => $this->getSetting('api_key')
+            'api_key'      => $this->getSetting('api_key')
         ];
     }
 }

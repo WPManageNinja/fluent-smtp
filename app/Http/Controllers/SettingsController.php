@@ -16,10 +16,10 @@ class SettingsController extends Controller
         $this->verify();
 
         try {
-            $settings = $settings->get();
+            $setting = $settings->get();
 
             return $this->sendSuccess([
-                'settings' => $settings
+                'settings' => $setting
             ]);
 
         } catch (Exception $e) {
@@ -51,6 +51,8 @@ class SettingsController extends Controller
     {
         $this->verify();
 
+        $passWordKeys = ['password', 'access_key', 'secret_key', 'api_key', 'client_id', 'client_secret', 'auth_token', 'access_token', 'refresh_token'];
+
         try {
             $data = $request->except(['action', 'nonce']);
 
@@ -64,6 +66,14 @@ class SettingsController extends Controller
                 if ($index == 'sender_email') {
                     $connection['sender_email'] = sanitize_email($connection['sender_email']);
                 }
+
+                if (in_array($index, $passWordKeys)) {
+                    if ($value) {
+                        $connection[$index] = trim($value);
+                    }
+                    continue;
+                }
+
                 if (is_string($value) && $value) {
                     $connection[$index] = sanitize_text_field($value);
                 }
@@ -72,6 +82,7 @@ class SettingsController extends Controller
             $data['connection'] = $connection;
 
             $this->validateConnection($provider, $connection);
+
             $provider->checkConnection($connection);
 
             $data['valid_senders'] = $provider->getValidSenders($connection);
@@ -81,18 +92,18 @@ class SettingsController extends Controller
             $settings->store($data);
 
             return $this->sendSuccess([
-                'message'     => 'Settings saved successfully.',
+                'message'     => __('Settings saved successfully.', 'fluent-smtp'),
                 'connections' => $settings->getConnections(),
                 'mappings'    => $settings->getMappings(),
                 'misc'        => $settings->getMisc()
             ]);
 
         } catch (ValidationException $e) {
-            return $this->sendError($e->errors(), $e->getCode());
+            return $this->sendError($e->errors(), 422);
         } catch (Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage()
-            ], $e->getCode());
+            ], 422);
         }
     }
 
@@ -168,7 +179,7 @@ class SettingsController extends Controller
         return $this->sendError([
             'message' => $response->get_error_message(),
             'errors'  => $response->get_error_data()
-        ], 423);
+        ], 422);
     }
 
     public function validateConnection($provider, $connection)
@@ -188,7 +199,7 @@ class SettingsController extends Controller
         }
 
         if ($errors) {
-            throw new ValidationException('Unprocessable Entity', 422, null, $errors);
+            throw new ValidationException(esc_html__('Unprocessable Entity', 'fluent-smtp'), 422, null, $errors); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         }
     }
 
@@ -209,9 +220,83 @@ class SettingsController extends Controller
 
         $provider = $factory->make($connection['provider']);
 
+        return $this->sendSuccess($provider->getConnectionInfo($connection));
+    }
+
+    public function addNewSenderEmail(Request $request, Settings $settings, Factory $factory)
+    {
+        $this->verify();
+
+        $connectionId = $request->get('connection_id');
+        $connections = $settings->getConnections();
+
+        if (!isset($connections[$connectionId]['provider_settings'])) {
+            return $this->sendSuccess([
+                'info' => __('Sorry no connection found. Please reload the page and try again', 'fluent-smtp')
+            ]);
+        }
+
+        $connection = $connections[$connectionId]['provider_settings'];
+
+        $provider = $factory->make($connection['provider']);
+        $email = sanitize_email($request->get('new_sender'));
+
+        if (!is_email($email)) {
+            return $this->sendError([
+                'message' => __('Please provide a valid email address', 'fluent-smtp')
+            ]);
+        }
+
+        $result = $provider->addNewSenderEmail($connection, $email);
+
+        if (is_wp_error($result)) {
+            return $this->sendError([
+                'message' => $result->get_error_message()
+            ]);
+        }
+
         return $this->sendSuccess([
-            'info' => $provider->getConnectionInfo($connection)
+            'message' => __('Email has been added successfully', 'fluent-smtp')
         ]);
+
+    }
+
+    public function removeSenderEmail(Request $request, Settings $settings, Factory $factory)
+    {
+        $this->verify();
+
+        $connectionId = $request->get('connection_id');
+        $connections = $settings->getConnections();
+
+        if (!isset($connections[$connectionId]['provider_settings'])) {
+            return $this->sendSuccess([
+                'info' => __('Sorry no connection found. Please reload the page and try again', 'fluent-smtp')
+            ]);
+        }
+
+        $connection = $connections[$connectionId]['provider_settings'];
+
+        $provider = $factory->make($connection['provider']);
+        $email = sanitize_email($request->get('email'));
+
+        if (!is_email($email)) {
+            return $this->sendError([
+                'message' => __('Please provide a valid email address', 'fluent-smtp')
+            ]);
+        }
+
+        $result = $provider->removeSenderEmail($connection, $email);
+
+        if (is_wp_error($result)) {
+            return $this->sendError([
+                'message' => $result->get_error_message()
+            ]);
+        }
+
+        return $this->sendSuccess([
+            'message' => __('Email has been removed successfully', 'fluent-smtp')
+        ]);
+
     }
 
     public function installPlugin(Request $request)
@@ -270,7 +355,7 @@ class SettingsController extends Controller
 
             $skin = new \Automatic_Upgrader_Skin();
             $upgrader = new \WP_Upgrader($skin);
-            $installed_plugins = array_reduce(array_keys(\get_plugins()), array($this, 'associate_plugin_file'), array());
+            $installed_plugins = array_keys(\get_plugins());
             $plugin_slug = $plugin_to_install['repo-slug'];
             $plugin_file = isset($plugin_to_install['file']) ? $plugin_to_install['file'] : $plugin_slug . '.php';
             $installed = false;
@@ -311,20 +396,20 @@ class SettingsController extends Controller
                     );
 
                     if (is_wp_error($plugin_information)) {
-                        throw new \Exception($plugin_information->get_error_message());
+                        throw new \Exception(wp_kses_post($plugin_information->get_error_message()));
                     }
 
                     $package = $plugin_information->download_link;
                     $download = $upgrader->download_package($package);
 
                     if (is_wp_error($download)) {
-                        throw new \Exception($download->get_error_message());
+                        throw new \Exception(wp_kses_post($download->get_error_message()));
                     }
 
                     $working_dir = $upgrader->unpack_package($download, true);
 
                     if (is_wp_error($working_dir)) {
-                        throw new \Exception($working_dir->get_error_message());
+                        throw new \Exception(wp_kses_post($working_dir->get_error_message()));
                     }
 
                     $result = $upgrader->install_package(
@@ -342,13 +427,13 @@ class SettingsController extends Controller
                     );
 
                     if (is_wp_error($result)) {
-                        throw new \Exception($result->get_error_message());
+                        throw new \Exception(wp_kses_post($result->get_error_message()));
                     }
 
                     $activate = true;
 
                 } catch (\Exception $e) {
-                    throw new \Exception($e->getMessage());
+                    throw new \Exception(esc_html($e->getMessage()));
                 }
 
                 // Discard feedback.
@@ -363,10 +448,10 @@ class SettingsController extends Controller
                     $result = activate_plugin($installed ? $installed_plugins[$plugin_file] : $plugin_slug . '/' . $plugin_file);
 
                     if (is_wp_error($result)) {
-                        throw new \Exception($result->get_error_message());
+                        throw new \Exception(esc_html($result->get_error_message()));
                     }
                 } catch (\Exception $e) {
-                    throw new \Exception($e->getMessage());
+                    throw new \Exception(esc_html($e->getMessage()));
                 }
             }
         }
@@ -375,7 +460,7 @@ class SettingsController extends Controller
     public function subscribe()
     {
         $this->verify();
-        $email = sanitize_text_field($_REQUEST['email']);
+        $email = sanitize_text_field($_REQUEST['email']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         $displayName = '';
 
@@ -386,7 +471,7 @@ class SettingsController extends Controller
         if (!is_email($email)) {
             return $this->sendError([
                 'message' => 'Sorry! The provider email is not valid'
-            ], 423);
+            ], 422);
         }
 
         $shareEssentials = 'no';
@@ -430,7 +515,7 @@ class SettingsController extends Controller
         }
 
         wp_remote_post($url, [
-            'body' => json_encode([
+            'body' => json_encode([ // phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode
                 'full_name'       => $displayName,
                 'email'           => $optinEmail,
                 'source'          => 'smtp',
@@ -454,7 +539,7 @@ class SettingsController extends Controller
             } else {
                 return $this->sendError([
                     'client_id' => [
-                        'required' => 'Please define FLUENTMAIL_GMAIL_CLIENT_ID in your wp-config.php file'
+                        'required' => __('Please define FLUENTMAIL_GMAIL_CLIENT_ID in your wp-config.php file', 'fluent-smtp')
                     ]
                 ]);
             }
@@ -463,7 +548,7 @@ class SettingsController extends Controller
             } else {
                 return $this->sendError([
                     'client_secret' => [
-                        'required' => 'Please define FLUENTMAIL_GMAIL_CLIENT_SECRET in your wp-config.php file'
+                        'required' => __('Please define FLUENTMAIL_GMAIL_CLIENT_SECRET in your wp-config.php file', 'fluent-smtp')
                     ]
                 ]);
             }
@@ -472,7 +557,7 @@ class SettingsController extends Controller
         if (!$clientId) {
             return $this->sendError([
                 'client_id' => [
-                    'required' => 'Please provide application client id'
+                    'required' => __('Please provide application client id', 'fluent-smtp')
                 ]
             ]);
         }
@@ -480,19 +565,19 @@ class SettingsController extends Controller
         if (!$clientSecret) {
             return $this->sendError([
                 'client_secret' => [
-                    'required' => 'Please provide application client secret'
+                    'required' => __('Please provide application client secret', 'fluent-smtp')
                 ]
             ]);
         }
 
         $authUrl = add_query_arg([
-            'response_type' => 'code',
-            'access_type' => 'offline',
-            'client_id' => $clientId,
-            'redirect_uri' => apply_filters('fluentsmtp_gapi_callback', 'https://fluentsmtp.com/gapi/'),
-            'state' => admin_url('options-general.php?page=fluent-mail&gapi=1'),
-            'scope' => 'https://mail.google.com/',
-            'approval_prompt' => 'force',
+            'response_type'          => 'code',
+            'access_type'            => 'offline',
+            'client_id'              => $clientId,
+            'redirect_uri'           => apply_filters('fluentsmtp_gapi_callback', 'https://fluentsmtp.com/gapi/'),
+            'state'                  => admin_url('options-general.php?page=fluent-mail&gapi=1'),
+            'scope'                  => 'https://mail.google.com/',
+            'approval_prompt'        => 'force',
             'include_granted_scopes' => 'true'
         ], 'https://accounts.google.com/o/oauth2/auth');
 
@@ -517,7 +602,7 @@ class SettingsController extends Controller
             } else {
                 return $this->sendError([
                     'client_id' => [
-                        'required' => 'Please define FLUENTMAIL_OUTLOOK_CLIENT_ID in your wp-config.php file'
+                        'required' => __('Please define FLUENTMAIL_OUTLOOK_CLIENT_ID in your wp-config.php file', 'fluent-smtp')
                     ]
                 ]);
             }
@@ -526,7 +611,7 @@ class SettingsController extends Controller
             } else {
                 return $this->sendError([
                     'client_secret' => [
-                        'required' => 'Please define FLUENTMAIL_OUTLOOK_CLIENT_SECRET in your wp-config.php file'
+                        'required' => __('Please define FLUENTMAIL_OUTLOOK_CLIENT_SECRET in your wp-config.php file', 'fluent-smtp')
                     ]
                 ]);
             }
@@ -540,7 +625,7 @@ class SettingsController extends Controller
         if (!$clientId) {
             return $this->sendError([
                 'client_id' => [
-                    'required' => 'Please provide application client id'
+                    'required' => __('Please provide application client id', 'fluent-smtp')
                 ]
             ]);
         }
@@ -548,7 +633,7 @@ class SettingsController extends Controller
         if (!$clientSecret) {
             return $this->sendError([
                 'client_secret' => [
-                    'required' => 'Please provide application client secret'
+                    'required' => __('Please provide application client secret', 'fluent-smtp')
                 ]
             ]);
         }
@@ -560,9 +645,13 @@ class SettingsController extends Controller
 
     public function getNotificationSettings()
     {
+        $settings = (new Settings())->notificationSettings();
         $this->verify();
+
+        $settings['telegram_notify_token'] = '';
+
         return $this->sendSuccess([
-            'settings' => (new Settings())->notificationSettings()
+            'settings' => $settings
         ]);
     }
 
@@ -583,12 +672,15 @@ class SettingsController extends Controller
             'notify_days'  => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         ];
 
+        $oldSettings = (new Settings())->notificationSettings();
+        $defaults = wp_parse_args($defaults, $oldSettings);
+
         $settings = wp_parse_args($settings, $defaults);
 
         update_option('_fluent_smtp_notify_settings', $settings, false);
 
         return $this->sendSuccess([
-            'message' => 'Settings has been updated successfully'
+            'message' => __('Settings has been updated successfully', 'fluent-smtp')
         ]);
     }
 

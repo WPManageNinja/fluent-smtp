@@ -63,7 +63,7 @@ class Converter
                 'auto_tls'   => $this->maybeFromWPMailDefined('smtp', 'auto_tls', Arr::get($smtp, 'auto_tls')) == 1 ? 'yes' : 'no',
                 'encryption' => $this->maybeFromWPMailDefined('smtp', 'encryption', Arr::get($smtp, 'encryption', 'none')),
                 'key_store'  => 'db',
-                'provider'     => 'smtp'
+                'provider'   => 'smtp'
             ];
 
             $commonSettings = wp_parse_args($commonSettings, $localSettings);
@@ -74,7 +74,7 @@ class Converter
                 'domain_name' => $this->maybeFromWPMailDefined('mailgun', 'domain', Arr::get($mailgun, 'domain')),
                 'key_store'   => 'db',
                 'region'      => strtolower($this->maybeFromWPMailDefined('mailgun', 'region', Arr::get($mailgun, 'region'))),
-                'provider'      => 'mailgun'
+                'provider'    => 'mailgun'
             ];
             $commonSettings = wp_parse_args($commonSettings, $localSettings);
             unset($commonSettings['force_from_email']);
@@ -83,7 +83,7 @@ class Converter
             $localSettings = [
                 'api_key'   => $this->maybeFromWPMailDefined($mailer, 'api_key', Arr::get($local, 'api_key')),
                 'key_store' => 'db',
-                'provider'    => ($mailer == 'pepipostapi') ? 'pepipost' : $mailer
+                'provider'  => ($mailer == 'pepipostapi') ? 'pepipost' : $mailer
             ];
             $commonSettings = wp_parse_args($commonSettings, $localSettings);
             unset($commonSettings['force_from_email']);
@@ -94,7 +94,7 @@ class Converter
                 'secret_key' => $this->maybeFromWPMailDefined($mailer, 'client_secret', Arr::get($local, 'client_secret')),
                 'region'     => $this->maybeFromWPMailDefined($mailer, 'region', Arr::get($local, 'region')),
                 'key_store'  => 'db',
-                'provider'     => 'ses'
+                'provider'   => 'ses'
             ];
 
             $commonSettings = wp_parse_args($commonSettings, $localSettings);
@@ -105,10 +105,10 @@ class Converter
         }
 
         return [
-            'title'       => 'Import data from your current plugin (WP Mail SMTP)',
-            'subtitle'    => 'We have detected other SMTP plugin\'s settings available on your site. Click bellow to pre-populate the values',
+            'title'       => __('Import data from your current plugin (WP Mail SMTP)', 'fluent-smtp'),
+            'subtitle'    => __('We have detected other SMTP plugin\'s settings available on your site. Click bellow to pre-populate the values', 'fluent-smtp'),
             'settings'    => $commonSettings,
-            'button_text' => 'Import From WP Mail SMTP'
+            'button_text' => __('Import From WP Mail SMTP', 'fluent-smtp')
         ];
     }
 
@@ -393,15 +393,15 @@ class Converter
             'auto_tls'         => Arr::get($settings, 'smtp_settings.password') == 1 ? 'yes' : 'no',
             'encryption'       => Arr::get($settings, 'smtp_settings.type_encryption'),
             'key_store'        => 'db',
-            'provider'           => 'smtp'
+            'provider'         => 'smtp'
         ];
 
         return [
-            'title'       => 'Import data from your current plugin (Easy WP SMTP)',
-            'subtitle'    => 'We have detected other SMTP plugin\'s settings available on your site. Click bellow to pre-populate the values',
+            'title'       => __('Import data from your current plugin (Easy WP SMTP)', 'fluent-smtp'),
+            'subtitle'    => __('We have detected other SMTP plugin\'s settings available on your site. Click bellow to pre-populate the values', 'fluent-smtp'),
             'driver'      => 'smtp',
             'settings'    => $commonSettings,
-            'button_text' => 'Import From Easy WP SMTP'
+            'button_text' => __('Import From Easy WP SMTP', 'fluent-smtp')
         ];
 
     }

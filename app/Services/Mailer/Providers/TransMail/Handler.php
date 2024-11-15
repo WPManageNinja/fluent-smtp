@@ -20,7 +20,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
     }
 
     protected function setUrl()
@@ -69,6 +69,9 @@ class Handler extends BaseHandler
 
         if ($this->phpMailer->ContentType == 'text/html') {
             $body['htmlbody'] = $this->getBody();
+        } else if ($this->phpMailer->ContentType == 'multipart/alternative') {
+            $body['htmlbody'] = $this->getBody();
+            $body['textbody'] = $this->getParam('alt_body');
         } else {
             $body['textbody'] = $this->getBody();
         }
@@ -107,7 +110,7 @@ class Handler extends BaseHandler
                     'message' => Arr::get($responseBody, 'message')
                 ];
             } else {
-                $returnResponse = new \WP_Error($responseCode, 'Mailgun API Error', $responseBody);
+                $returnResponse = new \WP_Error($responseCode, __('Mailgun API Error', 'fluent-smtp'), $responseBody);
             }
         }
 

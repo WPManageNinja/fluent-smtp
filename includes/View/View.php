@@ -44,7 +44,7 @@ class View
 			return $this;
 		}
 
-		throw new Exception("The view file [{$this->path}] doesn't exists!");
+		throw new Exception("The view file [{$this->path}] doesn't exists!"); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 	}
 
 	/**

@@ -14,7 +14,7 @@ class Settings
 
     public function get()
     {
-        return get_option($this->optionName, []);
+        return fluentMailGetSettings();
     }
 
     public function getSettings()
@@ -24,16 +24,15 @@ class Settings
 
     public function store($inputs)
     {
-        $settings = $this->getSettings();   
+        $settings = $this->getSettings();
         $mappings = $this->getMappings($settings);
         $connections = $this->getConnections($settings);
         $email = Arr::get($inputs, 'connection.sender_email');
 
         $key = $inputs['connection_key'];
 
-
         if (isset($connections[$key])) {
-            $mappings = array_filter($mappings, function($mappingKey) use ($key) {
+            $mappings = array_filter($mappings, function ($mappingKey) use ($key) {
                 return $mappingKey != $key;
             });
             unset($connections[$key]);
@@ -49,7 +48,7 @@ class Settings
         $extraMappings = $inputs['valid_senders'];
 
         foreach ($extraMappings as $emailIndex => $email) {
-            if(in_array($email, $primaryEmails)) {
+            if (in_array($email, $primaryEmails)) {
                 unset($extraMappings[$emailIndex]);
             }
         }
@@ -61,11 +60,11 @@ class Settings
         $mappings = array_merge($mappings, $extraMappings);
 
         $providers = fluentMail(Manager::class)->getConfig('providers');
-        
+
         $title = $providers[$inputs['connection']['provider']]['title'];
 
         $connections[$uniqueKey] = [
-            'title' => $title,
+            'title'             => $title,
             'provider_settings' => $inputs['connection']
         ];
 
@@ -74,7 +73,7 @@ class Settings
         $settings['connections'] = $connections;
 
 
-        if($settings['mappings'] && $settings['connections']) {
+        if ($settings['mappings'] && $settings['connections']) {
             $validMappings = array_keys(Arr::get($settings, 'connections', []));
 
             $settings['mappings'] = array_filter($settings['mappings'], function ($key) use ($validMappings) {
@@ -84,21 +83,21 @@ class Settings
 
         $misc = $this->getMisc();
 
-        if(!$misc) {
+        if (!$misc) {
             $misc = [
-                'log_emails' => 'yes',
+                'log_emails'              => 'yes',
                 'log_saved_interval_days' => '14',
-                'disable_fluentcrm_logs' => 'no',
-                'default_connection' => ''
+                'disable_fluentcrm_logs'  => 'no',
+                'default_connection'      => ''
             ];
         }
 
-        if(empty($misc['default_connection']) || $misc['default_connection'] == $key) {
+        if (empty($misc['default_connection']) || $misc['default_connection'] == $key) {
             $misc['default_connection'] = $uniqueKey;
             $settings['misc'] = $misc;
         }
 
-        update_option($this->optionName, $settings);
+        fluentMailSetSettings($settings);
 
         return $settings;
     }
@@ -110,7 +109,7 @@ class Settings
 
     public function saveGlobalSettings($data)
     {
-        return update_option($this->optionName, $data);
+        return fluentMailSetSettings($data);
     }
 
     public function delete($key)
@@ -124,7 +123,7 @@ class Settings
         unset($connections[$key]);
 
         foreach ($mappings as $mapKey => $mapValue) {
-            if($mapValue == $key) {
+            if ($mapValue == $key) {
                 unset($mappings[$mapKey]);
             }
         }
@@ -142,7 +141,7 @@ class Settings
             Arr::set($settings, 'misc.fallback_connection', '');
         }
 
-        update_option($this->optionName, $settings);
+        fluentMailSetSettings($settings);
 
         return $settings;
     }
@@ -156,7 +155,7 @@ class Settings
         );
 
         return [
-            'sender_name' => $url,
+            'sender_name'  => $url,
             'sender_email' => get_option('admin_email')
         ];
     }
@@ -180,14 +179,14 @@ class Settings
     public function getConnections($settings = null)
     {
         $settings = $settings ?: $this->getSettings();
-        
+
         return Arr::get($settings, 'connections', []);
     }
 
     public function getMappings($settings = null)
     {
         $settings = $settings ?: $this->getSettings();
-        
+
         return Arr::get($settings, 'mappings', []);
     }
 
@@ -209,7 +208,7 @@ class Settings
                 return $connections[$mappings[$email]];
             }
         }
-        
+
         return [];
     }
 
@@ -231,9 +230,24 @@ class Settings
     public function notificationSettings()
     {
         $defaults = [
-            'enabled' => 'no',
-            'notify_email' => '{site_admin}',
-            'notify_days' => ['Mon']
+            'enabled'        => 'no',
+            'notify_email'   => '{site_admin}',
+            'notify_days'    => ['Mon'],
+            'active_channel' => '',
+            'telegram'       => [
+                'status' => 'no',
+                'token'  => ''
+            ],
+            'slack'          => [
+                'status'      => 'no',
+                'token'       => '',
+                'webhook_url' => ''
+            ],
+            'discord'        => [
+                'status'       => 'no',
+                'channel_name' => '',
+                'webhook_url'  => ''
+            ],
         ];
 
         $settings = get_option('_fluent_smtp_notify_settings', []);

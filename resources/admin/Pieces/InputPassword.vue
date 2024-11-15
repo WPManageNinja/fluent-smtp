@@ -4,11 +4,20 @@
             :id="id"
             :type="type"
             :value="value"
-            :place-holder="placeholder"
+            :placeholder="placeholder"
             :disabled="disabled"
             @input="$emit('input', $event)"
         >
         </el-input>
+        <p class="small-help-text" style="font-size: 80%; margin: 3px 0 0 0">
+            {{$t('__PASSWORD_ENCRYPT_HELP')}}
+            <el-popover
+                width="400"
+                trigger="hover">
+                <p>{{$t('__PASSWORD_ENCRYPT_TIP')}}</p>
+                <i slot="reference" class="el-icon el-icon-info"></i>
+            </el-popover>
+        </p>
     </div>
 </template>
 

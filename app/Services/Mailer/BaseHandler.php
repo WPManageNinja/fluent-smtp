@@ -120,6 +120,7 @@ class BaseHandler
             'to' => $recipients['to'],
             'subject' => $this->phpMailer->Subject,
             'message' => $this->phpMailer->Body,
+            'alt_body' => $this->phpMailer->AltBody,
             'attachments' => $this->phpMailer->getAttachments(),
             'custom_headers' => $customHeaders,
             'headers' => [
@@ -270,7 +271,7 @@ class BaseHandler
 
             $this->processResponse($errorResponse, false);
 
-            throw new \PHPMailer\PHPMailer\Exception($message, $code);
+            throw new \PHPMailer\PHPMailer\Exception($message, $code); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 
         } else {
             return $this->processResponse($response, true);
@@ -283,7 +284,7 @@ class BaseHandler
             $data = [
                 'to' => maybe_serialize($this->attributes['to']),
                 'from' => $this->attributes['from'],
-                'subject' => $this->attributes['subject'],
+                'subject' => sanitize_text_field($this->attributes['subject']),
                 'body' => $this->attributes['message'],
                 'attachments' => maybe_serialize($this->attributes['attachments']),
                 'status'   => $status ? 'sent' : 'failed',
@@ -297,22 +298,26 @@ class BaseHandler
                 if($row) {
                     $row['response'] = (array) $row['response'];
                     if($status) {
-                        $row['response']['fallback'] = 'Sent using fallback connection '.$this->attributes['from'];
+                        $row['response']['fallback'] = __('Sent using fallback connection ', 'fluent-smtp') . $this->attributes['from'];
                         $row['response']['fallback_response'] = $response;
                     } else {
-                        $row['response']['fallback'] = 'Tried to send using fallback but failed. '.$this->attributes['from'];
+                        $row['response']['fallback'] = __('Tried to send using fallback but failed. ', 'fluent-smtp') . $this->attributes['from'];
                         $row['response']['fallback_response'] = $response;
                     }
 
                     $data['response'] = maybe_serialize( $row['response']);
                     $data['retries'] = $row['retries'] + 1;
                     (new Logger())->updateLog($data, ['id' => $row['id']]);
+
+                    if(!$status) {
+                        do_action('fluentmail_email_sending_failed_no_fallback', $row['id'], $this, $data);
+                    }
                 }
             } else {
                 $logId = (new Logger)->add($data);
                 if(!$status) {
                     // We have to fire an action for this failed job
-                    do_action('fluentmail_email_sending_failed', $logId, $this);
+                    do_action('fluentmail_email_sending_failed', $logId, $this, $data);
                 }
             }
         }
@@ -376,9 +381,11 @@ class BaseHandler
 
     public function getConnectionInfo($connection)
     {
-        return (string) fluentMail('view')->make('admin.general_connection_info', [
-            'connection' => $connection
-        ]);
+        return [
+            'info' => (string) fluentMail('view')->make('admin.general_connection_info', [
+                'connection' => $connection
+            ])
+        ];
     }
 
     public function getPhpMailer()
@@ -389,6 +396,16 @@ class BaseHandler
     public function setRowId($id)
     {
         $this->existing_row_id = $id;
+    }
+
+    public function addNewSenderEmail($connection, $email)
+    {
+        return new \WP_Error('not_implemented', __('Not implemented', 'fluent-smtp'));
+    }
+
+    public function removeSenderEmail($connection, $email)
+    {
+        return new \WP_Error('not_implemented', __('Not implemented', 'fluent-smtp'));
     }
 
 }

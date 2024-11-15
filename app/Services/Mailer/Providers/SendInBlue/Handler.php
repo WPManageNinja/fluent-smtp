@@ -12,10 +12,10 @@ use FluentMail\App\Services\Mailer\Providers\SendInBlue\ValidatorTrait;
 class Handler extends BaseHandler
 {
     use ValidatorTrait;
-    
+
     protected $emailSentCode = 201;
 
-    protected $url = 'https://api.sendinblue.com/v3/smtp/email';
+    protected $url = 'https://api.brevo.com/v3/smtp/email';
 
     protected $allowedAttachmentExts = [
         'xlsx', 'xls', 'ods', 'docx', 'docm', 'doc', 'csv', 'pdf', 'txt', 'gif',
@@ -31,20 +31,22 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []) );
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
     }
 
     public function postSend()
     {
         $body = [
-            'sender' => $this->getFrom(),
-            'subject' => $this->getSubject(),
+            'sender'      => $this->getFrom(),
+            'subject'     => $this->getSubject(),
             'htmlContent' => $this->getBody()
         ];
-
+        
         $contentType = $this->getParam('headers.content-type');
 
-        if($contentType == 'text/plain') {
+        if ($contentType == 'multipart/alternative') {
+            $body['textContent'] = $this->phpMailer->AltBody;
+        } else if ($contentType == 'text/plain') {
             $body['textContent'] = $this->getBody();
             unset($body['htmlContent']);
         }
@@ -52,7 +54,7 @@ class Handler extends BaseHandler
         if ($replyTo = $this->getReplyTo()) {
             $body['replyTo'] = $replyTo;
         }
-        
+
         $recipients = $this->setRecipients();
 
         $body = array_merge($body, $recipients);
@@ -62,7 +64,7 @@ class Handler extends BaseHandler
         }
 
         $params = [
-            'body' => json_encode($body),
+            'body'    => json_encode($body),
             'headers' => $this->getRequestHeaders()
         ];
 
@@ -80,12 +82,12 @@ class Handler extends BaseHandler
 
             $responseBody = \json_decode($responseBody, true);
 
-            if($isOKCode) {
+            if ($isOKCode) {
                 $returnResponse = [
-                    'messageId' => Arr::get($responseBody,'messageId')
+                    'messageId' => Arr::get($responseBody, 'messageId')
                 ];
             } else {
-                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'message', 'SendInBlueError API Error'), $responseBody);
+                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'message', __('SendInBlueError API Error', 'fluent-smtp')), $responseBody);
             }
         }
 
@@ -96,7 +98,7 @@ class Handler extends BaseHandler
 
     public function setSettings($settings)
     {
-        if($settings['key_store'] == 'wp_config') {
+        if ($settings['key_store'] == 'wp_config') {
             $settings['api_key'] = defined('FLUENTMAIL_SENDINBLUE_API_KEY') ? FLUENTMAIL_SENDINBLUE_API_KEY : '';
         }
         $this->settings = $settings;
@@ -106,7 +108,7 @@ class Handler extends BaseHandler
     protected function getFrom()
     {
         return [
-            'name' => $this->getParam('sender_name'),
+            'name'  => $this->getParam('sender_name'),
             'email' => $this->getParam('sender_email')
         ];
     }
@@ -121,19 +123,19 @@ class Handler extends BaseHandler
     protected function setRecipients()
     {
         $recipients = [
-            'to' => $this->getTo(),
-            'cc' => $this->getCarbonCopy(),
+            'to'  => $this->getTo(),
+            'cc'  => $this->getCarbonCopy(),
             'bcc' => $this->getBlindCarbonCopy()
         ];
 
         $recipients = array_filter($recipients);
 
         foreach ($recipients as $key => $recipient) {
-            $array = array_map(function($recipient) {
+            $array = array_map(function ($recipient) {
                 return isset($recipient['name'])
-                ? $recipient['name'] . ' <' . $recipient['email'] . '>'
-                : $recipient['email'];
-           }, $recipient);
+                    ? $recipient['name'] . ' <' . $recipient['email'] . '>'
+                    : $recipient['email'];
+            }, $recipient);
 
             $this->attributes['formatted'][$key] = implode(', ', $array);
         }
@@ -153,7 +155,7 @@ class Handler extends BaseHandler
 
     protected function getBlindCarbonCopy()
     {
-       return $this->getParam('headers.bcc');
+        return $this->getParam('headers.bcc');
     }
 
     protected function getBody()
@@ -171,7 +173,7 @@ class Handler extends BaseHandler
 
                 if (in_array($ext, $this->allowedAttachmentExts, true)) {
                     $files[] = [
-                        'name' => basename($attachment[0]),
+                        'name'    => basename($attachment[0]),
                         'content' => base64_encode(file_get_contents($attachment[0]))
                     ];
                 }
@@ -189,9 +191,9 @@ class Handler extends BaseHandler
     protected function getRequestHeaders()
     {
         return [
-            'Api-Key' => $this->getSetting('api_key'),
+            'Api-Key'      => $this->getSetting('api_key'),
             'Content-Type' => 'application/json',
-            'Accept' => 'application/json'
+            'Accept'       => 'application/json'
         ];
     }
 }

@@ -2,7 +2,7 @@
     <div class="fss_general_settings">
         <el-form class="fss_compact_form" :data="settings.misc" label-position="top">
             
-            <el-form-item label="Log Emails">
+            <el-form-item :label="$t('Log Emails')">
                 <el-checkbox
                     v-model="settings.misc.log_emails"
                     true-label="yes"
@@ -40,7 +40,7 @@
                     <el-popover
                         width="400"
                         trigger="hover">
-                        <p>{{$t('default_connection_popover')}}</p>
+                        <p>{{$t('__default_connection_popover')}}</p>
                         <i slot="reference" class="el-icon el-icon-info"></i>
                     </el-popover>
                 </label>
@@ -49,7 +49,6 @@
                         v-for="(connection, connectionId) in settings.connections"
                         :key="connectionId"
                         :value="connectionId"
-                        :disabled="settings.misc.fallback_connection == connectionId"
                         :label="connection.title +' - '+ connection.provider_settings.sender_email"
                     ></el-option>
                 </el-select>
@@ -57,11 +56,11 @@
 
             <el-form-item>
                 <label slot="label">
-                    Fallback Connection
+                    {{ $t('Fallback Connection') }}
                     <el-popover
                         width="400"
                         trigger="hover">
-                        <p>{{$t('fallback_connection_popover')}}</p>
+                        <p>{{$t('__fallback_connection_popover')}}</p>
                         <i slot="reference" class="el-icon el-icon-info"></i>
                     </el-popover>
                 </label>
@@ -82,8 +81,17 @@
                     v-model="settings.misc.simulate_emails"
                     true-label="yes"
                     false-label="no"
-                >{{$t('Email_Simulation_Label')}}</el-checkbox>
-                <p style="color: red;" v-if="settings.misc.simulate_emails == 'yes'">{{$t('Email_Simulation_Yes')}}</p>
+                >{{$t('__Email_Simulation_Label')}}</el-checkbox>
+                <p style="color: red;" v-if="settings.misc.simulate_emails == 'yes'">{{$t('__Email_Simulation_Yes')}}</p>
+                <p v-if="appVars.is_disabled_defined" style="color: red;">{{ ('Emails are being simulated due to the definition of ') }} <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ (' in your PHP code.') }}</p>
+            </el-form-item>
+
+            <el-form-item :label="$t('Add Multi-Part Plain Text for HTML Emails (beta)')">
+                <el-checkbox
+                    v-model="settings.misc.send_as_text"
+                    true-label="yes"
+                    false-label="no"
+                >{{$t('__Email_TEXT_PART_Label')}}</el-checkbox>
             </el-form-item>
 
             <el-button
@@ -102,14 +110,14 @@
             return {
                 saving: false,
                 logging_days: {
-                    7: 'After 7 Days',
-                    14: 'After 14 Days',
-                    30: 'After 30 Days',
-                    60: 'After 60 Days',
-                    90: 'After 90 Days',
-                    180: 'After 6 Months',
-                    365: 'After 1 Year',
-                    730: 'After 2 Years'
+                    7: this.$t('After 7 Days'),
+                    14: this.$t('After 14 Days'),
+                    30: this.$t('After 30 Days'),
+                    60: this.$t('After 60 Days'),
+                    90: this.$t('After 90 Days'),
+                    180: this.$t('After 6 Months'),
+                    365: this.$t('After 1 Year'),
+                    730: this.$t('After 2 Years')
                 }
             }
         },
@@ -120,6 +128,12 @@
         },
         methods: {
             saveMiscSettings() {
+
+                if(this.settings.misc.fallback_connection && this.settings.misc.default_connection && this.settings.misc.default_connection == this.settings.misc.fallback_connection) {
+                    this.$notify.error(this.$t('__DEFAULT_CONNECTION_CONFLICT'));
+                    return;
+                }
+
                 this.saving = true;
                 this.$post('misc-settings', {
                     settings: this.settings.misc

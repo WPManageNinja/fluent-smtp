@@ -21,7 +21,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(423, 'Something went wrong!', []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
     }
 
     public function postSend()
@@ -49,6 +49,9 @@ class Handler extends BaseHandler
 
         if ($this->phpMailer->ContentType == 'text/html') {
             $postData['bodyHtml'] = $this->getBody();
+        } else if ($this->phpMailer->ContentType == 'multipart/alternative') {
+            $postData['bodyHtml'] = $this->getBody();
+            $postData['bodyText'] = $this->phpMailer->AltBody;
         } else {
             $postData['bodyText'] = $this->getBody();
         }
@@ -300,7 +303,7 @@ class Handler extends BaseHandler
         }
 
         $this->settings = $settings;
-        
+
         return $this;
     }
 

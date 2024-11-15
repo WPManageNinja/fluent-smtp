@@ -1,5 +1,5 @@
 <template>
-    <div @mouseover="onMouseOver" @mouseleave="onMouseOut">
+    <div>
         <iframe
             ref="ifr"
             frameborder="0"
@@ -35,12 +35,6 @@ export default {
                 const doc = ifr.contentDocument || ifr.contentWindow.document;
                 doc.body.innerHTML = body;
             });
-        },
-        onMouseOver() {
-            this.$refs.fullscreen.classList.add('show');
-        },
-        onMouseOut() {
-            this.$refs.fullscreen.classList.remove('show');
         },
         fullScreen() {
             const d = document;

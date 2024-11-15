@@ -43,7 +43,7 @@ class LoggerController extends Controller
         }
         
         return $this->sendSuccess([
-            'message' => "{$subject} deleted successfully."
+            'message' => sprintf(__('%s deleted successfully.', 'fluent-smtp'), $subject)
         ]);
     }
 
@@ -57,7 +57,7 @@ class LoggerController extends Controller
                 $log['retries'] = $log['retries'] + 1;
                 $logger->updateLog($log, ['id' => $id]);
 
-                $this->sendError([
+                return $this->sendError([
                     'message' => $response->get_error_message(),
                     'errors' => $response->get_error_data()
                 ], $response->get_error_code());
@@ -70,7 +70,7 @@ class LoggerController extends Controller
                 ]);
             }
 
-            throw new \Exception('Something went wrong', 400);
+            throw new \Exception(esc_html__('Something went wrong', 'fluent-smtp'), 400);
 
         } catch (\Exception $e) {
             return $this->sendError([
@@ -99,14 +99,14 @@ class LoggerController extends Controller
                 $failedInitiated++;
             }
         }
-        $message = 'Selected Emails have been proceed to send.';
+        $message = __('Selected Emails have been proceed to send.', 'fluent-smtp');
 
-        if($failedCount) {
-            $message .= ' But '.$failedCount.' emails are reported to failed to send.';
+        if ($failedCount) {
+            $message .= sprintf(__(' But %d emails are reported to failed to send.', 'fluent-smtp'), $failedCount);
         }
 
-        if($failedInitiated) {
-            $message .= ' And '.$failedInitiated.' emails are failed to init the emails';
+        if ($failedInitiated) {
+            $message .= sprintf(__(' And %d emails are failed to init the emails', 'fluent-smtp'), $failedInitiated);
         }
 
         return $this->sendSuccess([

@@ -33,7 +33,7 @@ trait ValidatorTrait
     public function throwValidationException($errors)
     {
         throw new ValidationException(
-            'Unprocessable Entity', 422, null, $errors
+            esc_html__('Unprocessable Entity', 'fluent-smtp'), 422, null, $errors // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         );
     }
 }

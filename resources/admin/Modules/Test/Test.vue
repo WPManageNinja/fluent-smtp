@@ -1,14 +1,14 @@
 <template>
     <div>
-        <div class="header">
-            Send Test Email
+        <div class="fss_header">
+            {{ $t('Send Test Email') }}
         </div>
-        <div class="content">
+        <div class="fss_content">
             <div class="test_form" v-if="!email_success">
                 <el-form ref="form" :model="form" label-position="left" label-width="120px">
 
-                    <el-form-item for="email" label="From">
-                        <el-select placeholder="Select Email or Type" :allow-create="true" :filterable="true" v-model="form.from">
+                    <el-form-item for="email" :label="$t('From')">
+                        <el-select :placeholder="$t('Select Email or Type')" :allow-create="true" :filterable="true" v-model="form.from">
                             <el-option
                                 v-for="(emailHash, email) in sender_emails"
                                 :key="email" :label="email"
@@ -17,7 +17,7 @@
                         </el-select>
 
                         <span class="small-help-text" style="display:block;margin-top:-10px">
-                            Enter the sender email address (optional).
+                            {{ $t('Enter the sender email address(optional).') }}
                         </span>
                     </el-form-item>
 
@@ -25,7 +25,7 @@
                         <el-input id="from" v-model="form.email" />
 
                         <span class="small-help-text" style="display:block;margin-top:-10px">
-                            Enter email address where test email will be sent (By default, logged in user email will be used if email address is not provided).
+                            {{ $t('__TEST_EMAIL_INST') }}
                         </span>
                     </el-form-item>
 
@@ -34,12 +34,12 @@
                             v-model="form.isHtml"
                             active-color="#13ce66"
                             inactive-color="#dcdfe6"
-                            active-text="On"
-                            inactive-text="Off"
+                            :active-text="$t('On')"
+                            :inactive-text="$t('Off')"
                         />
 
                         <span class="small-help-text" style="display:block;margin-top:-10px">
-                            Send this email in HTML or in plain text format.
+                            {{ $t('Send this email in HTML or in plain text format.') }}
                         </span>
                     </el-form-item>
 
@@ -51,26 +51,31 @@
                             :loading="loading"
                             @click="sendEmail"
                             :disabled="!maybeEnabled"
-                        >Send Test Email</el-button>
+                        >{{ $t('Send Test Email') }}</el-button>
 
                         <el-alert
                             v-if="!maybeEnabled"
                             :closable="false"
                             type="warning"
                             style="display:inline;margin-left:20px;"
-                        >{{ inactiveMessage }}</el-alert>
+                        >{{ this.$t(inactiveMessage) }}</el-alert>
                     </el-form-item>
                 </el-form>
                 <el-alert v-if="debug_info" type="error" :title="debug_info.message" show-icon />
             </div>
             <div v-else class="success_wrapper">
                 <h1><i class="el-icon el-icon-success"></i></h1>
-                <h3>Test Email Has been successfully sent</h3>
+                <h3>{{ $t('Test Email Has been successfully sent') }}</h3>
                 <hr />
                 <div v-if="appVars.require_optin == 'yes'" style="margin-top: 10px;">
                     <email-subscriber />
                 </div>
-                <el-button v-else @click="email_success = false" v-else>Run Another Test Email</el-button>
+                <el-button v-else @click="email_success = false" v-else>{{ $t('Run Another Test Email') }}</el-button>
+
+                <div v-if="appVars.require_optin != 'yes'" style="margin-top: 50px;">
+                    {{ $t('If you have a minute, consider ') }} <a target="_blank" href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5">{{ $t('write a review for FluentSMTP') }}</a>
+                </div>
+
             </div>
         </div>
     </div>

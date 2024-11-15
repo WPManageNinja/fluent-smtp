@@ -42,7 +42,7 @@ class Factory
         
 
         throw new InvalidArgumentException(
-            "There is no matching provider found by email: {$email}"
+            esc_html__('There is no matching provider found by email: ', 'fluent-smtp') . $email // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
         );
     }
 

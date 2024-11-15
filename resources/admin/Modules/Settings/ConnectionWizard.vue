@@ -1,7 +1,7 @@
 <template>
     <div class="fss_connection_wizard">
         <el-form :data="connection" label-position="top">
-            <el-form-item label="Connection Provider">
+            <el-form-item :label="$t('Connection Provider')">
                 <connection-provider :providers="providers" :connection="connection" />
             </el-form-item>
             <template v-if="connection.provider">
@@ -16,7 +16,7 @@
                                     :placeholder="$t('From Email')"
                                     v-model="connection.sender_email"
                                 ></el-input>
-                                <p style="color: red;" v-if="is_conflicted">Another connection with same email address exist. This connection will replace that connection</p>
+                                <p style="color: red;" v-if="is_conflicted">{{ $t('__ANOTHER_CONNECTION_NOTICE') }}</p>
                             </el-form-item>
                             <div v-if="connection.force_from_email != undefined">
                                 <el-checkbox
@@ -27,7 +27,7 @@
                                     {{$t('Force From Email (Recommended Settings: Enable)')}}
                                     <el-tooltip effect="dark" placement="top-start">
                                         <div slot="content">
-                                            {{$t('from_email_tooltip')}}
+                                            {{$t('__from_email_tooltip')}}
                                         </div>
                                         <i class="el-icon-info"></i>
                                     </el-tooltip>
@@ -41,10 +41,7 @@
                                 >
                                     {{$t('Set the return-path to match the From Email')}}
                                     <el-tooltip effect="dark" placement="top-start">
-                                        <div slot="content">
-                                            Return Path indicates where non-delivery receipts - or bounce messages -<br />
-                                            are to be sent. If unchecked, bounce messages may be lost. With this enabled,<br />
-                                            you’ll be emailed using "From Email" if any messages bounce as a result of issues with the recipient’s email.
+                                        <div slot="content" v-html="$t('__RETURN_PATH_TOOLTIP')">
                                         </div>
                                         <i class="el-icon-info"></i>
                                     </el-tooltip>
@@ -84,13 +81,13 @@
                         :provider="providers[connection.provider]"
                     />
                 </div>
-                <p v-if="providers[connection.provider].note" style="padding: 20px 0px;" v-html="providers[connection.provider].note"></p>
+                <p v-if="providers[connection.provider].note" style="padding: 5px 0px; font-size: 16px; color: #ff5722;" v-html="providers[connection.provider].note"></p>
                 <el-button v-loading="saving" @click="saveConnectionSettings()" type="success">{{$t('Save Connection Settings')}}</el-button>
             </template>
             <div v-else>
                 <h3 style="text-align: center;">{{$t('save_connection_error_1')}}</h3>
             </div>
-            <p v-if="saving">{{ $t('Validating Data.Please wait') }}</p>
+            <p v-if="saving">{{ $t('Validating Data. Please wait...') }}</p>
             <el-alert style="margin-top: 20px" v-if="has_error" type="error">{{$t('save_connection_error_2')}}</el-alert>
         </el-form>
     </div>
@@ -166,7 +163,10 @@
                 );
 
                 options.provider = value;
-                this.connection = options;
+
+                each(options, (value, key) => {
+                    this.$set(this.connection, key, value);
+                });
             }
         },
         methods: {
