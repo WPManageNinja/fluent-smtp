@@ -159,7 +159,7 @@ class Logger extends Model
         $result = is_array($result) ? $result : func_get_args();
 
         foreach ($result as $key => $row) {
-            $result[$key]            = array_map('maybe_unserialize', (array) $row);
+            $result[$key]            = array_map([$this, 'unserialize'], (array) $row);
             $result[$key]['id']      = (int)$result[$key]['id'];
             $result[$key]['retries'] = (int)$result[$key]['retries'];
             $result[$key]['from']    = htmlspecialchars($result[$key]['from']);
@@ -167,6 +167,15 @@ class Logger extends Model
         }
 
         return $result;
+    }
+
+    protected function unserialize($data)
+    {
+        if (is_serialized($data)) {
+            return unserialize(trim($data), ['allow_classes' => false]);
+        }
+
+        return $data;
     }
 
     protected function formatHeaders($headers)
@@ -282,9 +291,9 @@ class Logger extends Model
             ->where('id', $id)
             ->first();
 
-        $row->extra = maybe_unserialize($row->extra);
+        $row->extra = $this->unserialize($row->extra);
 
-        $row->response = maybe_unserialize($row->response);
+        $row->response = $this->unserialize($row->response);
 
         return (array)$row;
     }
@@ -293,10 +302,10 @@ class Logger extends Model
     {
         $email = $this->find($id);
 
-        $email['to']          = maybe_unserialize($email['to']);
-        $email['headers']     = maybe_unserialize($email['headers']);
-        $email['attachments'] = maybe_unserialize($email['attachments']);
-        $email['extra']       = maybe_unserialize($email['extra']);
+        $email['to']          = $this->unserialize($email['to']);
+        $email['headers']     = $this->unserialize($email['headers']);
+        $email['attachments'] = $this->unserialize($email['attachments']);
+        $email['extra']       = $this->unserialize($email['extra']);
 
         $headers = [];
 
@@ -368,10 +377,10 @@ class Logger extends Model
 
             if ($this->updateLog($updateData, ['id' => $id])) {
                 $email                = $this->find($id);
-                $email['to']          = maybe_unserialize($email['to']);
-                $email['headers']     = maybe_unserialize($email['headers']);
-                $email['attachments'] = maybe_unserialize($email['attachments']);
-                $email['extra']       = maybe_unserialize($email['extra']);
+                $email['to']          = $this->unserialize($email['to']);
+                $email['headers']     = $this->unserialize($email['headers']);
+                $email['attachments'] = $this->unserialize($email['attachments']);
+                $email['extra']       = $this->unserialize($email['extra']);
                 return $email;
             }
         } catch (\PHPMailer\PHPMailer\Exception $e) {
