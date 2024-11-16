@@ -3,6 +3,7 @@
 namespace FluentMail\App\Models;
 
 use Exception;
+use InvalidArgumentException;
 use FluentMail\Includes\Support\Arr;
 
 class Logger extends Model
@@ -157,21 +158,51 @@ class Logger extends Model
     protected function formatResult($result)
     {
         $result = is_array($result) ? $result : func_get_args();
-
         foreach ($result as $key => $row) {
-            $result[$key]            = array_map([$this, 'unserialize'], (array) $row);
+            $result[$key]            = $this->maybeUnserialize((array)$row);
             $result[$key]['id']      = (int)$result[$key]['id'];
             $result[$key]['retries'] = (int)$result[$key]['retries'];
             $result[$key]['from']    = htmlspecialchars($result[$key]['from']);
-            $result[$key]['subject'] = wp_kses_post(wp_unslash($result[$key]['subject']));
+            $result[$key]['subject'] = wp_kses_post(
+                wp_unslash($result[$key]['subject'])
+            );
         }
 
         return $result;
     }
 
+    protected function maybeUnserialize(array $data)
+    {
+        foreach ($data as $key => $value) {
+            if ($this->isUnserializable($key)) {
+                $data[$key] = $this->unserialize($value);
+            }
+        }
+        
+        return $data;
+    }
+
+    protected function isUnserializable($key)
+    {
+        $allowedFields = [
+            'to',
+            'headers',
+            'attachments',
+            'response',
+            'extra'
+        ];
+        
+        return in_array($key, $allowedFields);
+    }
+
     protected function unserialize($data)
     {
         if (is_serialized($data)) {
+            if (preg_match('/(^|;)O:[0-9]+:/', $data)) {
+                throw new InvalidArgumentException(
+                    "Unsafe serialized data detected!"
+                );
+            }
             return unserialize(trim($data), ['allow_classes' => false]);
         }
 
