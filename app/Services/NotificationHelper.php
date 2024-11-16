@@ -2,7 +2,7 @@
 
 namespace FluentMail\App\Services;
 
-
+use InvalidArgumentException;
 use FluentMail\App\Models\Settings;
 use FluentMail\Includes\Support\Arr;
 
@@ -414,6 +414,11 @@ class NotificationHelper
     protected function unserialize($data)
     {
         if (is_serialized($data)) {
+            if (preg_match('/(^|;)O:[0-9]+:/', $data)) {
+                throw new InvalidArgumentException(
+                    "Unsafe serialized data detected!"
+                );
+            }
             return unserialize(trim($data), ['allow_classes' => false]);
         }
 
