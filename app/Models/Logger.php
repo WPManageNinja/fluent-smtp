@@ -199,11 +199,9 @@ class Logger extends Model
     {
         if (is_serialized($data)) {
             if (preg_match('/(^|;)O:[0-9]+:/', $data)) {
-                throw new InvalidArgumentException(
-                    "Unsafe serialized data detected!"
-                );
+                return $data;
             }
-            return unserialize(trim($data), ['allow_classes' => false]);
+            return unserialize(trim($data), ['allowed_classes' => false]);
         }
 
         return $data;

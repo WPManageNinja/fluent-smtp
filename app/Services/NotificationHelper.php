@@ -419,7 +419,7 @@ class NotificationHelper
                     "Unsafe serialized data detected!"
                 );
             }
-            return unserialize(trim($data), ['allow_classes' => false]);
+            return unserialize(trim($data), ['allowed_classes' => false]);
         }
 
         return $data;
