@@ -68,6 +68,11 @@
         }
       }
     }
+    .el-date-editor{
+      .el-range-separator{
+        z-index: 1;
+      }
+    }
   }
 
   & .fluent-mail-navigation.el-menu--horizontal.el-menu .el-menu-item.is-active {
