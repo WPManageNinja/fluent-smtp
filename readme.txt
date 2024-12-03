@@ -2,8 +2,8 @@
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, wordpress mail smtp, mail, mail smtp
 Requires at least: 5.5
-Tested up to: 6.6
-Stable tag: 2.2.81
+Tested up to: 6.7
+Stable tag: 2.2.83
 Requires PHP: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -274,6 +274,9 @@ Thank you so much. We really appreciate it. Please check <a href="https://github
 
 Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in our support portal</a>. If you are a developer please <a href="https://github.com/WPManageNinja/fluent-smtp">create a github issue</a>.
 
+= I found a security issue, where can I report it? =
+We use Patchstack to manage our security report. <a href="https://patchstack.com/database/vdp/fluent-smtp">Please report in the patchstack page</a>.
+
 == Screenshots ==
 1. FluentSMTP Dashboard
 2. Setting up a connection
@@ -284,6 +287,13 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 
 
 == Changelog ==
+
+= 2.2.83 (Date: Nov 22, 2024) =
+- Fix unserialize parameter issue
+
+= 2.2.82 (Date: Nov 22, 2024) =
+- Security: Data Un-serialization issue fixed
+- Sparkpost Recipient Issue fixed
 
 = 2.2.81 (Date: Oct 20, 2024) =
 * Security: Nonce Verification fixed for slack REQUEST (props to patchstack)
