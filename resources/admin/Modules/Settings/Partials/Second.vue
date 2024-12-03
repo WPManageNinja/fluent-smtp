@@ -10,6 +10,7 @@
     import pepipost from './Providers/PepiPost';
     import sendgrid from './Providers/SendGrid';
     import sendinblue from './Providers/SendInBlue';
+    import smtp2go from './Providers/Smtp2Go';
     import AmazonSes from './Providers/AmazonSes';
     import smtp from './Providers/Smtp';
 
@@ -23,6 +24,7 @@
             pepipost,
             sendgrid,
             sendinblue,
+            smtp2go,
             smtp
         },
         data() {

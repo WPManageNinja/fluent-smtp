@@ -78,7 +78,7 @@ class Converter
             ];
             $commonSettings = wp_parse_args($commonSettings, $localSettings);
             unset($commonSettings['force_from_email']);
-        } else if ($mailer == 'sendinblue' || $mailer == 'sendgrid' || $mailer == 'pepipostapi') {
+        } else if ($mailer == 'sendinblue' || $mailer == 'sendgrid' || $mailer == 'pepipostapi' || $mailer == 'smtp2go') {
             $local = Arr::get($wpMailSettings, $mailer, []);
             $localSettings = [
                 'api_key'   => $this->maybeFromWPMailDefined($mailer, 'api_key', Arr::get($local, 'api_key')),

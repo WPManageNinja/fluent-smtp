@@ -13,7 +13,8 @@ $singletons = [
     'gmail'       => 'FluentMail\App\Services\Mailer\Providers\Gmail\Handler',
     'outlook'     => 'FluentMail\App\Services\Mailer\Providers\Outlook\Handler',
     'postmark'    => 'FluentMail\App\Services\Mailer\Providers\Postmark\Handler',
-    'elasticmail' => 'FluentMail\App\Services\Mailer\Providers\ElasticMail\Handler'
+    'elasticmail' => 'FluentMail\App\Services\Mailer\Providers\ElasticMail\Handler',
+    'smtp2go'     => 'FluentMail\App\Services\Mailer\Providers\Smtp2Go\Handler',
 ];
 
 foreach ($singletons as $key => $className) {
