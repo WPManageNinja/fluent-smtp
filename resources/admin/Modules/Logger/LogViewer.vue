@@ -47,11 +47,11 @@
                         <div class="item_content">{{ log.created_at }}</div>
                     </li>
                     <li>
-                        <div class="item_header">From:</div>
+                        <div class="item_header">{ $t('From:') }}:</div>
                         <div class="item_content"><span v-html="log.from"></span></div>
                     </li>
                     <li>
-                        <div class="item_header">To:</div>
+                        <div class="item_header">{ $t('To:') }}:</div>
                         <div class="item_content">
                             <span v-html="log.to"></span>
                         </div>
@@ -69,13 +69,13 @@
                         </div>
                     </li>
                     <li v-if="log.extra && log.extra.provider && settings.providers[log.extra.provider]">
-                        <div class="item_header">Mailer:</div>
+                        <div class="item_header">{ $t('Mailer:</div>
                         <div class="item_content">
                             <span>{{ settings.providers[log.extra.provider].title }}</span>
                         </div>
                     </li>
                     <li v-else-if="log.extra && log.extra.provider">
-                        <div class="item_header">Mailer:</div>
+                        <div class="item_header">{ $t('Mailer:</div>
                         <div class="item_content">
                             <span>{{ log.extra.provider }}</span>
                         </div>
