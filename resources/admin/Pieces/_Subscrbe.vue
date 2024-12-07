@@ -15,7 +15,7 @@
                 </el-form>
 
                 <el-checkbox true-label="yes" false-label="no" v-model="share_details">
-                    (Optional) Share Non - Sensitive Data.It will help us to improve the integrations
+                    {{ $t('(Optional) Share Non - Sensitive Data.It will help us to improve the integrations') }}
                     <el-tooltip class="item" effect="dark" content="Access Data: Active SMTP Connection Provider, installed plugin names, php & mysql version" placement="top-end">
                         <i class="el-icon el-icon-info"></i>
                     </el-tooltip>
