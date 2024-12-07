@@ -47,11 +47,11 @@
                         <div class="item_content">{{ log.created_at }}</div>
                     </li>
                     <li>
-                        <div class="item_header">{ $t('From:') }}:</div>
+                        <div class="item_header">{ $t('From') }}:</div>
                         <div class="item_content"><span v-html="log.from"></span></div>
                     </li>
                     <li>
-                        <div class="item_header">{ $t('To:') }}:</div>
+                        <div class="item_header">{ $t('To') }}:</div>
                         <div class="item_content">
                             <span v-html="log.to"></span>
                         </div>
