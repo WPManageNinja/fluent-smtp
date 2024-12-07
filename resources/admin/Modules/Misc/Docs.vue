@@ -73,15 +73,15 @@
 
                 const items = {
                     item_4: {
-                        label: 'Getting Started',
+                        label: this.$t('Getting Started'),
                         docs: []
                     },
                     item_5: {
-                        label: 'Connect With Your Email Providers',
+                        label: this.$t('Connect With Your Email Providers'),
                         docs: []
                     },
                     item_6: {
-                        label: 'Functionalities',
+                        label: this.$t('Functionalities'),
                         docs: []
                     }
                 };
