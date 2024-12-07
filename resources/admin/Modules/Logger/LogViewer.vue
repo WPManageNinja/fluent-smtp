@@ -69,13 +69,13 @@
                         </div>
                     </li>
                     <li v-if="log.extra && log.extra.provider && settings.providers[log.extra.provider]">
-                        <div class="item_header">{ $t('Mailer:</div>
+                        <div class="item_header">{ $t('Mailer') }}:</div>
                         <div class="item_content">
                             <span>{{ settings.providers[log.extra.provider].title }}</span>
                         </div>
                     </li>
                     <li v-else-if="log.extra && log.extra.provider">
-                        <div class="item_header">{ $t('Mailer:</div>
+                        <div class="item_header">{ $t('Mailer') }}:</div>
                         <div class="item_content">
                             <span>{{ log.extra.provider }}</span>
                         </div>
