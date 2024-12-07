@@ -39,7 +39,7 @@
                 default: 'top-end'
             },
             message: {
-                default: 'Are you sure to delete this?'
+                default: $t('Are you sure to delete this?')
             }
         },
         data() {
