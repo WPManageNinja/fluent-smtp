@@ -92,7 +92,7 @@ class AdminMenuHandler
             // This widget should be displayed for certain high-level users only.
             if (!current_user_can('manage_options') || apply_filters('fluent_mail_disable_dashboard_widget', false)) {
                 wp_send_json([
-                    'html' => _('You do not have permission to see this data', 'fluent-smtp')
+                    'html' => __('You do not have permission to see this data', 'fluent-smtp')
                 ]);
             }
 
