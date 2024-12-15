@@ -57,8 +57,8 @@
             </el-col>
             <el-col :sm="24" :md="12">
                 <div v-if="plugin || installed_info">
-                    <div v-loading="installing" element-loading-text="Installing... Please wait" class="fss_about">
-                        <div class="fss_header">Recommended Plugin</div>
+                    <div v-loading="installing" element-loading-text="$t('Installing... Please wait')" class="fss_about">
+                        <div class="fss_header">{{ $t('Recommended Plugin') }}</div>
                         <div class="fss_content">
                             <div v-if="installed_info" class="install_success">
                                 <h3>{{ installed_message }}</h3>
@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="fss_about">
-                    <div class="fss_header">Community</div>
+                    <div class="fss_header">{{ $t('Community') }}</div>
                     <div class="fss_content">
                         <p>{{ $t('__ABOUT_COMMUNITY') }}</p>
                         <p>{{ $t('__ABOUT_JOIN') }}</p>
@@ -100,7 +100,7 @@
                             </li>
                             <li>
                                 <a target="_blank" rel="nofollow"
-                                   href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5">{{ $t('Write a review (really appreciate 😊)') }}</a>
+                                   href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5">{{ $t('Write a review (really appreciated 😊)') }}</a>
                             </li>
                             <li>
                                 <a target="_blank" rel="noopener" href="http://fluentsmtp.com/docs">{{ $t('Read the documentation') }}</a>

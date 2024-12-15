@@ -47,13 +47,13 @@ export default {
     data() {
         return {
             sending_days: {
-                Mon: 'Monday',
-                Tue: 'Tuesday',
-                Wed: 'Wednesday',
-                Thu: 'Thursday',
-                Fri: 'Friday',
-                Sat: 'Saturday',
-                Sun: 'Sunday'
+                Mon: this.$t('Monday'),
+                Tue: this.$t('Tuesday'),
+                Wed: this.$t('Wednesday'),
+                Thu: this.$t('Thursday'),
+                Fri: this.$t('Friday'),
+                Sat: this.$t('Saturday'),
+                Sun: this.$t('Sunday')
             },
             saving: false,
         }

@@ -55,7 +55,7 @@
                 };
 
                 const cumulativeItems = {
-                    label: 'Cumulative',
+                    label: this.$t('Cumulative'),
                     backgroundColor: 'rgba(55, 162, 235, 0.1)',
                     borderColor: '#37a2eb',
                     data: [],

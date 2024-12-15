@@ -92,7 +92,7 @@ class AdminMenuHandler
             // This widget should be displayed for certain high-level users only.
             if (!current_user_can('manage_options') || apply_filters('fluent_mail_disable_dashboard_widget', false)) {
                 wp_send_json([
-                    'html' => 'You do not have permission to see this data'
+                    'html' => __('You do not have permission to see this data', 'fluent-smtp')
                 ]);
             }
 
@@ -230,8 +230,8 @@ class AdminMenuHandler
         add_filter('admin_footer_text', function ($text) {
             return sprintf(
                 __('<b>FluentSMTP</b> is a free plugin & it will be always free %1$s. %2$s', 'fluent-smtp'),
-                '<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/" target="_blank" rel="noopener noreferrer">(Learn why it\'s free)</a>',
-                '<a href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5" target="_blank" rel="noopener noreferrer">Write a review ★★★★★</a>'
+                '<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('(Learn why it\'s free)', 'fluent-smtp'); ?></a>',
+                '<a href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Write a review ★★★★★', 'fluent-smtp'); ?></a>'
             );
         });
     }
@@ -364,7 +364,7 @@ class AdminMenuHandler
             }
         </style>
         <div id="fsmtp_dashboard_widget_html" class="fsmtp_dash_wrapper">
-            <h3 style="min-height: 170px;">Loading data....</h3>
+            <h3 style="min-height: 170px;"><?php esc_html_e('Loading data...', 'fluent-smtp'); ?></h3>
         </div>
         <?php
         add_action('admin_footer', function () {

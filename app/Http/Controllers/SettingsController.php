@@ -470,7 +470,7 @@ class SettingsController extends Controller
 
         if (!is_email($email)) {
             return $this->sendError([
-                'message' => 'Sorry! The provider email is not valid'
+                'message' => __('Sorry! The provider email is not valid', 'fluent-smtp')
             ], 422);
         }
 
@@ -486,7 +486,7 @@ class SettingsController extends Controller
         $this->pushData($email, $shareEssentials, $displayName);
 
         return $this->sendSuccess([
-            'message' => 'You are subscribed to plugin update and monthly tips'
+            'message' => __('You are subscribed to plugin update and monthly tips', 'fluent-smtp')
         ]);
     }
 
