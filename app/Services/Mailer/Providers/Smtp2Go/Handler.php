@@ -36,8 +36,9 @@ class Handler extends BaseHandler {
         ];
 
         if ($replyTo = $this->getReplyTo()) {
-            $body['custom_headers'] = [
-                'Reply-To' => $replyTo
+            $body['custom_headers'][] = [
+                'header' => 'Reply-To',
+                'value'  => $replyTo
             ];
         }
 
@@ -90,7 +91,9 @@ class Handler extends BaseHandler {
 
     protected function getReplyTo() {
         if ($replyTo = $this->getParam('headers.reply-to')) {
-            return reset($replyTo);
+            $replyTo = reset($replyTo);
+
+            return $replyTo['email'];
         }
     }
 
