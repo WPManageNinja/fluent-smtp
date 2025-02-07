@@ -105,6 +105,7 @@
     import outlook from './Partials/Providers/Outlook';
     import postmark from './Partials/Providers/PostMark';
     import elasticmail from './Partials/Providers/ElasticMail';
+    import smtp2go from './Partials/Providers/Smtp2Go';
     import Errors from '@/Bits/Errors';
     import Error from '@/Pieces/Error';
     import each from 'lodash/each';
@@ -125,6 +126,7 @@
             outlook,
             postmark,
             elasticmail,
+            smtp2go,
             Error,
             ConnectionProvider
         },
