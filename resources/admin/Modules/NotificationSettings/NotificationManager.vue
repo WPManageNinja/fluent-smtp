@@ -11,7 +11,7 @@
         </template>
         <div style="text-align: center;" v-else>
             <h3>{{ $t('Real-Time Email Failure Notifications') }}</h3>
-            <p>{{ $t('Get real-time notification on your favorite messaging channel on any email sending failure. Configure any of the following channel to start getting real time notifications.') }}</p>
+            <p>{{ $t('__REAL_NOTIFCATION_DESC') }}</p>
 
             <div class="fss_notification_channels">
                 <div v-for="(channel, channelKey) in channels" :key="channelKey" class="fss_notification_channel">

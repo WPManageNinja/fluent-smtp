@@ -1,8 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
-const targetDir = 'resources'; // Define the starting directory
+let reservedStrings = require('./resources/reservedStrings.json'); // Load reserved words from JSON file
+let reservedPhpStrings = require('./resources/reservedPhpStrings.json'); // Load reserved words from JSON file
 
+const targetDir = 'resources'; // Define the starting directory
+// const targetDir = 'research'; // Define the starting directory
+const namespace = 'fluent-smtp'; // Define the namespace for the translation strings
+
+const finalFile = 'app/Services/TransStrings.php'; // Define the file to replace the translation strings
 
 function modifyAndReconstructSprintf(s) {
     // Extract the entire sprintf call excluding 'sprintf(' and the closing ')'
@@ -65,8 +71,8 @@ function readDirRecursively(dir, allFiles = []) {
 // Function to extract strings from $t() in file content
 function extractStrings(files) {
     const results = {};
-    // Updated regex to capture strings with mixed quotes
-    const regex = /\$t\(['"]([^'"]*?(?:\\['"][^'"]*?)*?)['"]\)/g;
+    // Updated regex to capture the first argument of $t() with multiple arguments
+    const regex = /\$t\(\s*['"]([^'"]*?(?:\\['"][^'"]*?)*?)['"]\s*(?:,\s*[^)]*)?\)/g;
 
     files.forEach(file => {
         const content = fs.readFileSync(file, 'utf8');
@@ -77,22 +83,50 @@ function extractStrings(files) {
         }
     });
 
+    // Extract the strings from $_n('string 1', 'string 2', var) calls
+    const nRegex = /\$_n\(['"]([^'"]*?(?:\\['"][^'"]*?)*?)['"],\s*['"]([^'"]*?(?:\\['"][^'"]*?)*?)['"]/g;
+    files.forEach(file => {
+        const content = fs.readFileSync(file, 'utf8');
+        let match;
+
+        while ((match = nRegex.exec(content)) !== null) {
+            results[match[1]] = true; // Use the match as a key to avoid duplicates
+            results[match[2]] = true; // Use the match as a key to avoid duplicates
+        }
+    });
+
     return Object.keys(results); // Return unique strings only
 }
 
 // Write results to a text file in PHP array format
 function writeResults(strings) {
+    // add reservedWords if not exist
+    for (const key in reservedStrings) {
+        if (!strings.includes(key)) {
+            strings.push(key);
+        }
+    }
+
     const sortedStrings = strings.sort(); // Sort strings in ascending order
     const formattedStrings = sortedStrings.map((str) => {
-        return `'${str}' => __('${str}', 'fluent-smtp')`;
-    }).join(",\n");
-    const finalData = "<?php [\n" + formattedStrings + "\n];";
+        if(reservedPhpStrings[str]) {
+            return `            '${str}' => ${reservedPhpStrings[str]}`;
+        }
 
-    fs.writeFile('translationStrings.php', finalData, err => {
+        if(reservedStrings[str]) {
+            return `            '${str}' => __('${reservedStrings[str]}', '${namespace}')`;
+        }
+
+        return `            '${str}' => __('${str}', '${namespace}')`;
+    }).join(",\n");
+
+    const finalData = "<?php \n\nnamespace FluentMail\\App\\Services;\n\n//This is a auto-generated file. Please do not modify\nclass TransStrings\n{\n    public static function getStrings()\n    {\n        return [\n" + formattedStrings + "\n];\n    }\n}";
+
+    fs.writeFile(finalFile, finalData, err => {
         if (err) {
             console.error('Error writing to file:', err);
         } else {
-            console.log('Saved translation strings to translationStrings.php');
+            console.log('Saved translation strings to ' + finalFile);
         }
     });
 }
@@ -101,6 +135,7 @@ function writeResults(strings) {
 function processVueFiles() {
     const vueFiles = readDirRecursively(targetDir);
     const uniqueStrings = extractStrings(vueFiles);
+
     writeResults(uniqueStrings);
 }
 
