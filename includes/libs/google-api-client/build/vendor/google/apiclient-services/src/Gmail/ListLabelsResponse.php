@@ -20,7 +20,7 @@ namespace FluentSmtpLib\Google\Service\Gmail;
 class ListLabelsResponse extends \FluentSmtpLib\Google\Collection
 {
     protected $collection_key = 'labels';
-    protected $labelsType = Label::class;
+    protected $labelsType = \FluentSmtpLib\Google\Service\Gmail\Label::class;
     protected $labelsDataType = 'array';
     /**
      * @param Label[]
@@ -38,4 +38,4 @@ class ListLabelsResponse extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ListLabelsResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListLabelsResponse');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\ListLabelsResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListLabelsResponse');

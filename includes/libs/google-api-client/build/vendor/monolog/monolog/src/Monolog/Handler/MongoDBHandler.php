@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -10,43 +11,69 @@
  */
 namespace FluentSmtpLib\Monolog\Handler;
 
+use MongoDB\Driver\BulkWrite;
+use MongoDB\Driver\Manager;
+use FluentSmtpLib\MongoDB\Client;
 use FluentSmtpLib\Monolog\Logger;
-use FluentSmtpLib\Monolog\Formatter\NormalizerFormatter;
+use FluentSmtpLib\Monolog\Formatter\FormatterInterface;
+use FluentSmtpLib\Monolog\Formatter\MongoDBFormatter;
 /**
  * Logs to a MongoDB database.
  *
- * usage example:
+ * Usage example:
  *
- *   $log = new Logger('application');
- *   $mongodb = new MongoDBHandler(new \Mongo("mongodb://localhost:27017"), "logs", "prod");
+ *   $log = new \Monolog\Logger('application');
+ *   $client = new \MongoDB\Client('mongodb://localhost:27017');
+ *   $mongodb = new \Monolog\Handler\MongoDBHandler($client, 'logs', 'prod');
  *   $log->pushHandler($mongodb);
  *
- * @author Thomas Tourlourat <thomas@tourlourat.com>
+ * The above examples uses the MongoDB PHP library's client class; however, the
+ * MongoDB\Driver\Manager class from ext-mongodb is also supported.
  */
-class MongoDBHandler extends AbstractProcessingHandler
+class MongoDBHandler extends \FluentSmtpLib\Monolog\Handler\AbstractProcessingHandler
 {
-    protected $mongoCollection;
-    public function __construct($mongo, $database, $collection, $level = Logger::DEBUG, $bubble = \true)
+    /** @var \MongoDB\Collection */
+    private $collection;
+    /** @var Client|Manager */
+    private $manager;
+    /** @var string */
+    private $namespace;
+    /**
+     * Constructor.
+     *
+     * @param Client|Manager $mongodb    MongoDB library or driver client
+     * @param string         $database   Database name
+     * @param string         $collection Collection name
+     */
+    public function __construct($mongodb, string $database, string $collection, $level = \FluentSmtpLib\Monolog\Logger::DEBUG, bool $bubble = \true)
     {
-        if (!($mongo instanceof \MongoClient || $mongo instanceof \Mongo || $mongo instanceof \FluentSmtpLib\MongoDB\Client)) {
-            throw new \InvalidArgumentException('MongoClient, Mongo or MongoDB\\Client instance required');
+        if (!($mongodb instanceof \FluentSmtpLib\MongoDB\Client || $mongodb instanceof \MongoDB\Driver\Manager)) {
+            throw new \InvalidArgumentException('MongoDB\\Client or MongoDB\\Driver\\Manager instance required');
         }
-        $this->mongoCollection = $mongo->selectCollection($database, $collection);
+        if ($mongodb instanceof \FluentSmtpLib\MongoDB\Client) {
+            $this->collection = $mongodb->selectCollection($database, $collection);
+        } else {
+            $this->manager = $mongodb;
+            $this->namespace = $database . '.' . $collection;
+        }
         parent::__construct($level, $bubble);
     }
-    protected function write(array $record)
+    protected function write(array $record) : void
     {
-        if ($this->mongoCollection instanceof \FluentSmtpLib\MongoDB\Collection) {
-            $this->mongoCollection->insertOne($record["formatted"]);
-        } else {
-            $this->mongoCollection->save($record["formatted"]);
+        if (isset($this->collection)) {
+            $this->collection->insertOne($record['formatted']);
+        }
+        if (isset($this->manager, $this->namespace)) {
+            $bulk = new \MongoDB\Driver\BulkWrite();
+            $bulk->insert($record["formatted"]);
+            $this->manager->executeBulkWrite($this->namespace, $bulk);
         }
     }
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter() : \FluentSmtpLib\Monolog\Formatter\FormatterInterface
     {
-        return new NormalizerFormatter();
+        return new \FluentSmtpLib\Monolog\Formatter\MongoDBFormatter();
     }
 }

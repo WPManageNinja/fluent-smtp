@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -29,75 +30,90 @@ use FluentSmtpLib\Monolog\Formatter\FormatterInterface;
  *
  * @author Alexey Karapetov <alexey@karapetov.com>
  */
-class HandlerWrapper implements HandlerInterface, ResettableInterface
+class HandlerWrapper implements \FluentSmtpLib\Monolog\Handler\HandlerInterface, \FluentSmtpLib\Monolog\Handler\ProcessableHandlerInterface, \FluentSmtpLib\Monolog\Handler\FormattableHandlerInterface, \FluentSmtpLib\Monolog\ResettableInterface
 {
     /**
      * @var HandlerInterface
      */
     protected $handler;
-    /**
-     * HandlerWrapper constructor.
-     * @param HandlerInterface $handler
-     */
-    public function __construct(HandlerInterface $handler)
+    public function __construct(\FluentSmtpLib\Monolog\Handler\HandlerInterface $handler)
     {
         $this->handler = $handler;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function isHandling(array $record)
+    public function isHandling(array $record) : bool
     {
         return $this->handler->isHandling($record);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handle(array $record)
+    public function handle(array $record) : bool
     {
         return $this->handler->handle($record);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handleBatch(array $records)
+    public function handleBatch(array $records) : void
     {
-        return $this->handler->handleBatch($records);
+        $this->handler->handleBatch($records);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function pushProcessor($callback)
+    public function close() : void
     {
-        $this->handler->pushProcessor($callback);
-        return $this;
+        $this->handler->close();
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function popProcessor()
+    public function pushProcessor(callable $callback) : \FluentSmtpLib\Monolog\Handler\HandlerInterface
     {
-        return $this->handler->popProcessor();
+        if ($this->handler instanceof \FluentSmtpLib\Monolog\Handler\ProcessableHandlerInterface) {
+            $this->handler->pushProcessor($callback);
+            return $this;
+        }
+        throw new \LogicException('The wrapped handler does not implement ' . \FluentSmtpLib\Monolog\Handler\ProcessableHandlerInterface::class);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter)
+    public function popProcessor() : callable
     {
-        $this->handler->setFormatter($formatter);
-        return $this;
+        if ($this->handler instanceof \FluentSmtpLib\Monolog\Handler\ProcessableHandlerInterface) {
+            return $this->handler->popProcessor();
+        }
+        throw new \LogicException('The wrapped handler does not implement ' . \FluentSmtpLib\Monolog\Handler\ProcessableHandlerInterface::class);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getFormatter()
+    public function setFormatter(\FluentSmtpLib\Monolog\Formatter\FormatterInterface $formatter) : \FluentSmtpLib\Monolog\Handler\HandlerInterface
     {
-        return $this->handler->getFormatter();
+        if ($this->handler instanceof \FluentSmtpLib\Monolog\Handler\FormattableHandlerInterface) {
+            $this->handler->setFormatter($formatter);
+            return $this;
+        }
+        throw new \LogicException('The wrapped handler does not implement ' . \FluentSmtpLib\Monolog\Handler\FormattableHandlerInterface::class);
+    }
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormatter() : \FluentSmtpLib\Monolog\Formatter\FormatterInterface
+    {
+        if ($this->handler instanceof \FluentSmtpLib\Monolog\Handler\FormattableHandlerInterface) {
+            return $this->handler->getFormatter();
+        }
+        throw new \LogicException('The wrapped handler does not implement ' . \FluentSmtpLib\Monolog\Handler\FormattableHandlerInterface::class);
     }
     public function reset()
     {
-        if ($this->handler instanceof ResettableInterface) {
-            return $this->handler->reset();
+        if ($this->handler instanceof \FluentSmtpLib\Monolog\ResettableInterface) {
+            $this->handler->reset();
         }
     }
 }

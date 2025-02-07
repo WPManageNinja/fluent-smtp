@@ -53,7 +53,7 @@ use FluentSmtpLib\Psr\Log\AbstractLogger;
  * @method bool hasInfoThatPasses($message)
  * @method bool hasDebugThatPasses($message)
  */
-class TestLogger extends AbstractLogger
+class TestLogger extends \FluentSmtpLib\Psr\Log\AbstractLogger
 {
     /**
      * @var array

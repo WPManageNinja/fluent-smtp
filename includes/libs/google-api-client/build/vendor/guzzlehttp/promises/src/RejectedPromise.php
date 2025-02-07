@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 namespace FluentSmtpLib\GuzzleHttp\Promise;
 
 /**
@@ -7,10 +8,15 @@ namespace FluentSmtpLib\GuzzleHttp\Promise;
  *
  * Thenning off of this promise will invoke the onRejected callback
  * immediately and ignore other callbacks.
+ *
+ * @final
  */
-class RejectedPromise implements PromiseInterface
+class RejectedPromise implements \FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface
 {
     private $reason;
+    /**
+     * @param mixed $reason
+     */
     public function __construct($reason)
     {
         if (\is_object($reason) && \method_exists($reason, 'then')) {
@@ -18,24 +24,21 @@ class RejectedPromise implements PromiseInterface
         }
         $this->reason = $reason;
     }
-    public function then(callable $onFulfilled = null, callable $onRejected = null)
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null) : \FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface
     {
         // If there's no onRejected callback then just return self.
         if (!$onRejected) {
             return $this;
         }
-        $queue = Utils::queue();
+        $queue = \FluentSmtpLib\GuzzleHttp\Promise\Utils::queue();
         $reason = $this->reason;
-        $p = new Promise([$queue, 'run']);
-        $queue->add(static function () use($p, $reason, $onRejected) {
-            if (Is::pending($p)) {
+        $p = new \FluentSmtpLib\GuzzleHttp\Promise\Promise([$queue, 'run']);
+        $queue->add(static function () use($p, $reason, $onRejected) : void {
+            if (\FluentSmtpLib\GuzzleHttp\Promise\Is::pending($p)) {
                 try {
                     // Return a resolved promise if onRejected does not throw.
                     $p->resolve($onRejected($reason));
                 } catch (\Throwable $e) {
-                    // onRejected threw, so return a rejected promise.
-                    $p->reject($e);
-                } catch (\Exception $e) {
                     // onRejected threw, so return a rejected promise.
                     $p->reject($e);
                 }
@@ -43,32 +46,32 @@ class RejectedPromise implements PromiseInterface
         });
         return $p;
     }
-    public function otherwise(callable $onRejected)
+    public function otherwise(callable $onRejected) : \FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface
     {
         return $this->then(null, $onRejected);
     }
-    public function wait($unwrap = \true, $defaultDelivery = null)
+    public function wait(bool $unwrap = \true)
     {
         if ($unwrap) {
-            throw Create::exceptionFor($this->reason);
+            throw \FluentSmtpLib\GuzzleHttp\Promise\Create::exceptionFor($this->reason);
         }
         return null;
     }
-    public function getState()
+    public function getState() : string
     {
         return self::REJECTED;
     }
-    public function resolve($value)
+    public function resolve($value) : void
     {
-        throw new \LogicException("Cannot resolve a rejected promise");
+        throw new \LogicException('Cannot resolve a rejected promise');
     }
-    public function reject($reason)
+    public function reject($reason) : void
     {
         if ($reason !== $this->reason) {
-            throw new \LogicException("Cannot reject a rejected promise");
+            throw new \LogicException('Cannot reject a rejected promise');
         }
     }
-    public function cancel()
+    public function cancel() : void
     {
         // pass
     }

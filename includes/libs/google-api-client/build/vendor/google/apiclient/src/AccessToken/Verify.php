@@ -22,6 +22,7 @@ use DomainException;
 use Exception;
 use FluentSmtpLib\ExpiredException;
 use FluentSmtpLib\Firebase\JWT\ExpiredException as ExpiredExceptionV3;
+use FluentSmtpLib\Firebase\JWT\JWT;
 use FluentSmtpLib\Firebase\JWT\Key;
 use FluentSmtpLib\Firebase\JWT\SignatureInvalidException;
 use FluentSmtpLib\Google\Auth\Cache\MemoryCacheItemPool;
@@ -30,9 +31,9 @@ use FluentSmtpLib\GuzzleHttp\Client;
 use FluentSmtpLib\GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
 use LogicException;
+use FluentSmtpLib\phpseclib3\Crypt\AES;
 use FluentSmtpLib\phpseclib3\Crypt\PublicKeyLoader;
-use FluentSmtpLib\phpseclib3\Crypt\RSA\PublicKey;
-// Firebase v2
+use FluentSmtpLib\phpseclib3\Math\BigInteger;
 use FluentSmtpLib\Psr\Cache\CacheItemPoolInterface;
 /**
  * Wrapper around Google Access Tokens which provides convenience functions
@@ -59,13 +60,13 @@ class Verify
      * Instantiates the class, but does not initiate the login flow, leaving it
      * to the discretion of the caller.
      */
-    public function __construct(ClientInterface $http = null, CacheItemPoolInterface $cache = null, $jwt = null)
+    public function __construct(?\FluentSmtpLib\GuzzleHttp\ClientInterface $http = null, ?\FluentSmtpLib\Psr\Cache\CacheItemPoolInterface $cache = null, $jwt = null)
     {
         if (null === $http) {
-            $http = new Client();
+            $http = new \FluentSmtpLib\GuzzleHttp\Client();
         }
         if (null === $cache) {
-            $cache = new MemoryCacheItemPool();
+            $cache = new \FluentSmtpLib\Google\Auth\Cache\MemoryCacheItemPool();
         }
         $this->http = $http;
         $this->cache = $cache;
@@ -84,7 +85,7 @@ class Verify
     public function verifyIdToken($idToken, $audience = null)
     {
         if (empty($idToken)) {
-            throw new LogicException('id_token cannot be null');
+            throw new \LogicException('id_token cannot be null');
         }
         // set phpseclib constants if applicable
         $this->setPhpsecConstants();
@@ -94,8 +95,8 @@ class Verify
             try {
                 $args = [$idToken];
                 $publicKey = $this->getPublicKey($cert);
-                if (\class_exists(Key::class)) {
-                    $args[] = new Key($publicKey, 'RS256');
+                if (\class_exists(\FluentSmtpLib\Firebase\JWT\Key::class)) {
+                    $args[] = new \FluentSmtpLib\Firebase\JWT\Key($publicKey, 'RS256');
                 } else {
                     $args[] = $publicKey;
                     $args[] = ['RS256'];
@@ -113,14 +114,14 @@ class Verify
                     return \false;
                 }
                 return (array) $payload;
-            } catch (ExpiredException $e) {
+            } catch (\FluentSmtpLib\ExpiredException $e) {
                 // @phpstan-ignore-line
                 return \false;
-            } catch (ExpiredExceptionV3 $e) {
+            } catch (\FluentSmtpLib\Firebase\JWT\ExpiredException $e) {
                 return \false;
-            } catch (SignatureInvalidException $e) {
+            } catch (\FluentSmtpLib\Firebase\JWT\SignatureInvalidException $e) {
                 // continue
-            } catch (DomainException $e) {
+            } catch (\DomainException $e) {
                 // continue
             }
         }
@@ -142,7 +143,7 @@ class Verify
         // If we're retrieving a local file, just grab it.
         if (0 !== \strpos($url, 'http')) {
             if (!($file = \file_get_contents($url))) {
-                throw new GoogleException("Failed to retrieve verification certificates: '" . $url . "'.");
+                throw new \FluentSmtpLib\Google\Exception("Failed to retrieve verification certificates: '" . $url . "'.");
             }
             return \json_decode($file, \true);
         }
@@ -151,7 +152,7 @@ class Verify
         if ($response->getStatusCode() == 200) {
             return \json_decode((string) $response->getBody(), \true);
         }
-        throw new GoogleException(\sprintf('Failed to retrieve verification certificates: "%s".', $response->getBody()->getContents()), $response->getStatusCode());
+        throw new \FluentSmtpLib\Google\Exception(\sprintf('Failed to retrieve verification certificates: "%s".', $response->getBody()->getContents()), $response->getStatusCode());
     }
     // Gets federated sign-on certificates to use for verifying identity tokens.
     // Returns certs as array structure, where keys are key ids, and values
@@ -166,78 +167,33 @@ class Verify
         if (!$certs) {
             $certs = $this->retrieveCertsFromLocation(self::FEDERATED_SIGNON_CERT_URL);
             if ($cache) {
-                $cacheItem->expiresAt(new DateTime('+1 hour'));
+                $cacheItem->expiresAt(new \DateTime('+1 hour'));
                 $cacheItem->set($certs);
                 $cache->save($cacheItem);
             }
         }
         if (!isset($certs['keys'])) {
-            throw new InvalidArgumentException('federated sign-on certs expects "keys" to be set');
+            throw new \InvalidArgumentException('federated sign-on certs expects "keys" to be set');
         }
         return $certs['keys'];
     }
     private function getJwtService()
     {
-        $jwtClass = 'JWT';
-        if (\class_exists('FluentSmtpLib\\Firebase\\JWT\\JWT')) {
-            $jwtClass = 'FluentSmtpLib\\Firebase\\JWT\\JWT';
-        }
-        if (\property_exists($jwtClass, 'leeway') && $jwtClass::$leeway < 1) {
+        $jwt = new \FluentSmtpLib\Firebase\JWT\JWT();
+        if ($jwt::$leeway < 1) {
             // Ensures JWT leeway is at least 1
             // @see https://github.com/google/google-api-php-client/issues/827
-            $jwtClass::$leeway = 1;
+            $jwt::$leeway = 1;
         }
-        // @phpstan-ignore-next-line
-        return new $jwtClass();
+        return $jwt;
     }
     private function getPublicKey($cert)
     {
-        $bigIntClass = $this->getBigIntClass();
-        $modulus = new $bigIntClass($this->jwt->urlsafeB64Decode($cert['n']), 256);
-        $exponent = new $bigIntClass($this->jwt->urlsafeB64Decode($cert['e']), 256);
+        $modulus = new \FluentSmtpLib\phpseclib3\Math\BigInteger($this->jwt->urlsafeB64Decode($cert['n']), 256);
+        $exponent = new \FluentSmtpLib\phpseclib3\Math\BigInteger($this->jwt->urlsafeB64Decode($cert['e']), 256);
         $component = ['n' => $modulus, 'e' => $exponent];
-        if (\class_exists('FluentSmtpLib\\phpseclib3\\Crypt\\RSA\\PublicKey')) {
-            /** @var PublicKey $loader */
-            $loader = PublicKeyLoader::load($component);
-            return $loader->toString('PKCS8');
-        }
-        $rsaClass = $this->getRsaClass();
-        $rsa = new $rsaClass();
-        $rsa->loadKey($component);
-        return $rsa->getPublicKey();
-    }
-    private function getRsaClass()
-    {
-        if (\class_exists('FluentSmtpLib\\phpseclib3\\Crypt\\RSA')) {
-            return 'FluentSmtpLib\\phpseclib3\\Crypt\\RSA';
-        }
-        if (\class_exists('FluentSmtpLib\\phpseclib\\Crypt\\RSA')) {
-            return 'FluentSmtpLib\\phpseclib\\Crypt\\RSA';
-        }
-        return 'Crypt_RSA';
-    }
-    private function getBigIntClass()
-    {
-        if (\class_exists('FluentSmtpLib\\phpseclib3\\Math\\BigInteger')) {
-            return 'FluentSmtpLib\\phpseclib3\\Math\\BigInteger';
-        }
-        if (\class_exists('FluentSmtpLib\\phpseclib\\Math\\BigInteger')) {
-            return 'FluentSmtpLib\\phpseclib\\Math\\BigInteger';
-        }
-        return 'Math_BigInteger';
-    }
-    private function getOpenSslConstant()
-    {
-        if (\class_exists('FluentSmtpLib\\phpseclib3\\Crypt\\AES')) {
-            return 'phpseclib3\\Crypt\\AES::ENGINE_OPENSSL';
-        }
-        if (\class_exists('FluentSmtpLib\\phpseclib\\Crypt\\RSA')) {
-            return 'phpseclib\\Crypt\\RSA::MODE_OPENSSL';
-        }
-        if (\class_exists('FluentSmtpLib\\Crypt_RSA')) {
-            return 'CRYPT_RSA_MODE_OPENSSL';
-        }
-        throw new Exception('Cannot find RSA class');
+        $loader = \FluentSmtpLib\phpseclib3\Crypt\PublicKeyLoader::load($component);
+        return $loader->toString('PKCS8');
     }
     /**
      * phpseclib calls "phpinfo" by default, which requires special
@@ -250,11 +206,11 @@ class Verify
     private function setPhpsecConstants()
     {
         if (\filter_var(\getenv('GAE_VM'), \FILTER_VALIDATE_BOOLEAN)) {
-            if (!\defined('MATH_BIGINTEGER_OPENSSL_ENABLED')) {
-                \define('MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
+            if (!\defined('FluentSmtpLib\\MATH_BIGINTEGER_OPENSSL_ENABLED')) {
+                \define('FluentSmtpLib\\MATH_BIGINTEGER_OPENSSL_ENABLED', \true);
             }
-            if (!\defined('CRYPT_RSA_MODE')) {
-                \define('CRYPT_RSA_MODE', \constant($this->getOpenSslConstant()));
+            if (!\defined('FluentSmtpLib\\CRYPT_RSA_MODE')) {
+                \define('FluentSmtpLib\\CRYPT_RSA_MODE', \FluentSmtpLib\phpseclib3\Crypt\AES::ENGINE_OPENSSL);
             }
         }
     }

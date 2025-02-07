@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -17,18 +18,32 @@ use FluentSmtpLib\Monolog\Logger;
  * @author Eric Clemmons (@ericclemmons) <eric@uxdriven.com>
  * @author Christophe Coevoet <stof@notk.org>
  * @author Kirill chEbba Chebunin <iam@chebba.org>
+ *
+ * @phpstan-import-type Level from \Monolog\Logger
  */
-class WildfireFormatter extends NormalizerFormatter
+class WildfireFormatter extends \FluentSmtpLib\Monolog\Formatter\NormalizerFormatter
 {
-    const TABLE = 'table';
     /**
      * Translates Monolog log levels to Wildfire levels.
+     *
+     * @var array<Level, string>
      */
-    private $logLevels = array(Logger::DEBUG => 'LOG', Logger::INFO => 'INFO', Logger::NOTICE => 'INFO', Logger::WARNING => 'WARN', Logger::ERROR => 'ERROR', Logger::CRITICAL => 'ERROR', Logger::ALERT => 'ERROR', Logger::EMERGENCY => 'ERROR');
+    private $logLevels = [\FluentSmtpLib\Monolog\Logger::DEBUG => 'LOG', \FluentSmtpLib\Monolog\Logger::INFO => 'INFO', \FluentSmtpLib\Monolog\Logger::NOTICE => 'INFO', \FluentSmtpLib\Monolog\Logger::WARNING => 'WARN', \FluentSmtpLib\Monolog\Logger::ERROR => 'ERROR', \FluentSmtpLib\Monolog\Logger::CRITICAL => 'ERROR', \FluentSmtpLib\Monolog\Logger::ALERT => 'ERROR', \FluentSmtpLib\Monolog\Logger::EMERGENCY => 'ERROR'];
     /**
-     * {@inheritdoc}
+     * @param string|null $dateFormat The format of the timestamp: one supported by DateTime::format
      */
-    public function format(array $record)
+    public function __construct(?string $dateFormat = null)
+    {
+        parent::__construct($dateFormat);
+        // http headers do not like non-ISO-8559-1 characters
+        $this->removeJsonEncodeOption(\JSON_UNESCAPED_UNICODE);
+    }
+    /**
+     * {@inheritDoc}
+     *
+     * @return string
+     */
+    public function format(array $record) : string
     {
         // Retrieve the line and file if set and remove them from the formatted extra
         $file = $line = '';
@@ -40,8 +55,9 @@ class WildfireFormatter extends NormalizerFormatter
             $line = $record['extra']['line'];
             unset($record['extra']['line']);
         }
+        /** @var mixed[] $record */
         $record = $this->normalize($record);
-        $message = array('message' => $record['message']);
+        $message = ['message' => $record['message']];
         $handleError = \false;
         if ($record['context']) {
             $message['context'] = $record['context'];
@@ -54,26 +70,36 @@ class WildfireFormatter extends NormalizerFormatter
         if (\count($message) === 1) {
             $message = \reset($message);
         }
-        if (isset($record['context'][self::TABLE])) {
+        if (isset($record['context']['table'])) {
             $type = 'TABLE';
             $label = $record['channel'] . ': ' . $record['message'];
-            $message = $record['context'][self::TABLE];
+            $message = $record['context']['table'];
         } else {
             $type = $this->logLevels[$record['level']];
             $label = $record['channel'];
         }
         // Create JSON object describing the appearance of the message in the console
-        $json = $this->toJson(array(array('Type' => $type, 'File' => $file, 'Line' => $line, 'Label' => $label), $message), $handleError);
+        $json = $this->toJson([['Type' => $type, 'File' => $file, 'Line' => $line, 'Label' => $label], $message], $handleError);
         // The message itself is a serialization of the above JSON object + it's length
-        return \sprintf('%s|%s|', \strlen($json), $json);
+        return \sprintf('%d|%s|', \strlen($json), $json);
     }
+    /**
+     * {@inheritDoc}
+     *
+     * @phpstan-return never
+     */
     public function formatBatch(array $records)
     {
         throw new \BadMethodCallException('Batch formatting does not make sense for the WildfireFormatter');
     }
-    protected function normalize($data, $depth = 0)
+    /**
+     * {@inheritDoc}
+     *
+     * @return null|scalar|array<array|scalar|null>|object
+     */
+    protected function normalize($data, int $depth = 0)
     {
-        if (\is_object($data) && !$data instanceof \DateTime) {
+        if (\is_object($data) && !$data instanceof \DateTimeInterface) {
             return $data;
         }
         return parent::normalize($data, $depth);

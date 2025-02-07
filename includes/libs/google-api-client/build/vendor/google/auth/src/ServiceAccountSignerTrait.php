@@ -17,7 +17,8 @@
  */
 namespace FluentSmtpLib\Google\Auth;
 
-use FluentSmtpLib\phpseclib\Crypt\RSA;
+use FluentSmtpLib\phpseclib3\Crypt\PublicKeyLoader;
+use FluentSmtpLib\phpseclib3\Crypt\RSA;
 /**
  * Sign a string using a Service Account private key.
  */
@@ -35,11 +36,9 @@ trait ServiceAccountSignerTrait
     {
         $privateKey = $this->auth->getSigningKey();
         $signedString = '';
-        if (\class_exists('FluentSmtpLib\\phpseclib\\Crypt\\RSA') && !$forceOpenssl) {
-            $rsa = new RSA();
-            $rsa->loadKey($privateKey);
-            $rsa->setSignatureMode(RSA::SIGNATURE_PKCS1);
-            $rsa->setHash('sha256');
+        if (\class_exists(\FluentSmtpLib\Google\Auth\phpseclib3\Crypt\RSA::class) && !$forceOpenssl) {
+            $key = \FluentSmtpLib\phpseclib3\Crypt\PublicKeyLoader::load($privateKey);
+            $rsa = $key->withHash('sha256')->withPadding(\FluentSmtpLib\phpseclib3\Crypt\RSA::SIGNATURE_PKCS1);
             $signedString = $rsa->sign($stringToSign);
         } elseif (\extension_loaded('openssl')) {
             \openssl_sign($stringToSign, $signedString, $privateKey, 'sha256WithRSAEncryption');

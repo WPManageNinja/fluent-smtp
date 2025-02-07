@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -15,6 +16,7 @@ use FluentSmtpLib\Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
 use FluentSmtpLib\Monolog\Logger;
 use FluentSmtpLib\Monolog\ResettableInterface;
 use FluentSmtpLib\Monolog\Formatter\FormatterInterface;
+use FluentSmtpLib\Psr\Log\LogLevel;
 /**
  * Buffers all records until a certain level is reached
  *
@@ -22,36 +24,65 @@ use FluentSmtpLib\Monolog\Formatter\FormatterInterface;
  * Only requests which actually trigger an error (or whatever your actionLevel is) will be
  * in the logs, but they will contain all records, not only those above the level threshold.
  *
+ * You can then have a passthruLevel as well which means that at the end of the request,
+ * even if it did not get activated, it will still send through log records of e.g. at least a
+ * warning level.
+ *
  * You can find the various activation strategies in the
  * Monolog\Handler\FingersCrossed\ namespace.
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class FingersCrossedHandler extends AbstractHandler
+class FingersCrossedHandler extends \FluentSmtpLib\Monolog\Handler\Handler implements \FluentSmtpLib\Monolog\Handler\ProcessableHandlerInterface, \FluentSmtpLib\Monolog\ResettableInterface, \FluentSmtpLib\Monolog\Handler\FormattableHandlerInterface
 {
-    protected $handler;
-    protected $activationStrategy;
-    protected $buffering = \true;
-    protected $bufferSize;
-    protected $buffer = array();
-    protected $stopBuffering;
-    protected $passthruLevel;
+    use ProcessableHandlerTrait;
     /**
-     * @param callable|HandlerInterface       $handler            Handler or factory callable($record|null, $fingersCrossedHandler).
-     * @param int|ActivationStrategyInterface $activationStrategy Strategy which determines when this handler takes action
-     * @param int                             $bufferSize         How many entries should be buffered at most, beyond that the oldest items are removed from the buffer.
-     * @param bool                            $bubble             Whether the messages that are handled can bubble up the stack or not
-     * @param bool                            $stopBuffering      Whether the handler should stop buffering after being triggered (default true)
-     * @param int                             $passthruLevel      Minimum level to always flush to handler on close, even if strategy not triggered
+     * @var callable|HandlerInterface
+     * @phpstan-var callable(?Record, HandlerInterface): HandlerInterface|HandlerInterface
      */
-    public function __construct($handler, $activationStrategy = null, $bufferSize = 0, $bubble = \true, $stopBuffering = \true, $passthruLevel = null)
+    protected $handler;
+    /** @var ActivationStrategyInterface */
+    protected $activationStrategy;
+    /** @var bool */
+    protected $buffering = \true;
+    /** @var int */
+    protected $bufferSize;
+    /** @var Record[] */
+    protected $buffer = [];
+    /** @var bool */
+    protected $stopBuffering;
+    /**
+     * @var ?int
+     * @phpstan-var ?Level
+     */
+    protected $passthruLevel;
+    /** @var bool */
+    protected $bubble;
+    /**
+     * @psalm-param HandlerInterface|callable(?Record, HandlerInterface): HandlerInterface $handler
+     *
+     * @param callable|HandlerInterface              $handler            Handler or factory callable($record|null, $fingersCrossedHandler).
+     * @param int|string|ActivationStrategyInterface $activationStrategy Strategy which determines when this handler takes action, or a level name/value at which the handler is activated
+     * @param int                                    $bufferSize         How many entries should be buffered at most, beyond that the oldest items are removed from the buffer.
+     * @param bool                                   $bubble             Whether the messages that are handled can bubble up the stack or not
+     * @param bool                                   $stopBuffering      Whether the handler should stop buffering after being triggered (default true)
+     * @param int|string                             $passthruLevel      Minimum level to always flush to handler on close, even if strategy not triggered
+     *
+     * @phpstan-param Level|LevelName|LogLevel::* $passthruLevel
+     * @phpstan-param Level|LevelName|LogLevel::*|ActivationStrategyInterface $activationStrategy
+     */
+    public function __construct($handler, $activationStrategy = null, int $bufferSize = 0, bool $bubble = \true, bool $stopBuffering = \true, $passthruLevel = null)
     {
         if (null === $activationStrategy) {
-            $activationStrategy = new ErrorLevelActivationStrategy(Logger::WARNING);
+            $activationStrategy = new \FluentSmtpLib\Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy(\FluentSmtpLib\Monolog\Logger::WARNING);
         }
         // convert simple int activationStrategy to an object
-        if (!$activationStrategy instanceof ActivationStrategyInterface) {
-            $activationStrategy = new ErrorLevelActivationStrategy($activationStrategy);
+        if (!$activationStrategy instanceof \FluentSmtpLib\Monolog\Handler\FingersCrossed\ActivationStrategyInterface) {
+            $activationStrategy = new \FluentSmtpLib\Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy($activationStrategy);
         }
         $this->handler = $handler;
         $this->activationStrategy = $activationStrategy;
@@ -59,39 +90,38 @@ class FingersCrossedHandler extends AbstractHandler
         $this->bubble = $bubble;
         $this->stopBuffering = $stopBuffering;
         if ($passthruLevel !== null) {
-            $this->passthruLevel = Logger::toMonologLevel($passthruLevel);
+            $this->passthruLevel = \FluentSmtpLib\Monolog\Logger::toMonologLevel($passthruLevel);
         }
-        if (!$this->handler instanceof HandlerInterface && !\is_callable($this->handler)) {
+        if (!$this->handler instanceof \FluentSmtpLib\Monolog\Handler\HandlerInterface && !\is_callable($this->handler)) {
             throw new \RuntimeException("The given handler (" . \json_encode($this->handler) . ") is not a callable nor a Monolog\\Handler\\HandlerInterface object");
         }
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function isHandling(array $record)
+    public function isHandling(array $record) : bool
     {
         return \true;
     }
     /**
      * Manually activate this logger regardless of the activation strategy
      */
-    public function activate()
+    public function activate() : void
     {
         if ($this->stopBuffering) {
             $this->buffering = \false;
         }
         $this->getHandler(\end($this->buffer) ?: null)->handleBatch($this->buffer);
-        $this->buffer = array();
+        $this->buffer = [];
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handle(array $record)
+    public function handle(array $record) : bool
     {
         if ($this->processors) {
-            foreach ($this->processors as $processor) {
-                $record = \call_user_func($processor, $record);
-            }
+            /** @var Record $record */
+            $record = $this->processRecord($record);
         }
         if ($this->buffering) {
             $this->buffer[] = $record;
@@ -107,17 +137,18 @@ class FingersCrossedHandler extends AbstractHandler
         return \false === $this->bubble;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function close()
+    public function close() : void
     {
         $this->flushBuffer();
+        $this->getHandler()->close();
     }
     public function reset()
     {
         $this->flushBuffer();
-        parent::reset();
-        if ($this->getHandler() instanceof ResettableInterface) {
+        $this->resetProcessors();
+        if ($this->getHandler() instanceof \FluentSmtpLib\Monolog\ResettableInterface) {
             $this->getHandler()->reset();
         }
     }
@@ -126,15 +157,15 @@ class FingersCrossedHandler extends AbstractHandler
      *
      * It also resets the handler to its initial buffering state.
      */
-    public function clear()
+    public function clear() : void
     {
-        $this->buffer = array();
+        $this->buffer = [];
         $this->reset();
     }
     /**
      * Resets the state of the handler. Stops forwarding records to the wrapped handler.
      */
-    private function flushBuffer()
+    private function flushBuffer() : void
     {
         if (null !== $this->passthruLevel) {
             $level = $this->passthruLevel;
@@ -142,10 +173,10 @@ class FingersCrossedHandler extends AbstractHandler
                 return $record['level'] >= $level;
             });
             if (\count($this->buffer) > 0) {
-                $this->getHandler(\end($this->buffer) ?: null)->handleBatch($this->buffer);
+                $this->getHandler(\end($this->buffer))->handleBatch($this->buffer);
             }
         }
-        $this->buffer = array();
+        $this->buffer = [];
         $this->buffering = \true;
     }
     /**
@@ -154,30 +185,40 @@ class FingersCrossedHandler extends AbstractHandler
      * If the handler was provided as a factory callable, this will trigger the handler's instantiation.
      *
      * @return HandlerInterface
+     *
+     * @phpstan-param Record $record
      */
-    public function getHandler(array $record = null)
+    public function getHandler(?array $record = null)
     {
-        if (!$this->handler instanceof HandlerInterface) {
-            $this->handler = \call_user_func($this->handler, $record, $this);
-            if (!$this->handler instanceof HandlerInterface) {
+        if (!$this->handler instanceof \FluentSmtpLib\Monolog\Handler\HandlerInterface) {
+            $this->handler = ($this->handler)($record, $this);
+            if (!$this->handler instanceof \FluentSmtpLib\Monolog\Handler\HandlerInterface) {
                 throw new \RuntimeException("The factory callable should return a HandlerInterface");
             }
         }
         return $this->handler;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter)
+    public function setFormatter(\FluentSmtpLib\Monolog\Formatter\FormatterInterface $formatter) : \FluentSmtpLib\Monolog\Handler\HandlerInterface
     {
-        $this->getHandler()->setFormatter($formatter);
-        return $this;
+        $handler = $this->getHandler();
+        if ($handler instanceof \FluentSmtpLib\Monolog\Handler\FormattableHandlerInterface) {
+            $handler->setFormatter($formatter);
+            return $this;
+        }
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getFormatter()
+    public function getFormatter() : \FluentSmtpLib\Monolog\Formatter\FormatterInterface
     {
-        return $this->getHandler()->getFormatter();
+        $handler = $this->getHandler();
+        if ($handler instanceof \FluentSmtpLib\Monolog\Handler\FormattableHandlerInterface) {
+            return $handler->getFormatter();
+        }
+        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
     }
 }

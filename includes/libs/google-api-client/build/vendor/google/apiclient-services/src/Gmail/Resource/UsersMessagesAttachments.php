@@ -23,7 +23,7 @@ use FluentSmtpLib\Google\Service\Gmail\MessagePartBody;
  * Typical usage is:
  *  <code>
  *   $gmailService = new Google\Service\Gmail(...);
- *   $attachments = $gmailService->attachments;
+ *   $attachments = $gmailService->users_messages_attachments;
  *  </code>
  */
 class UsersMessagesAttachments extends \FluentSmtpLib\Google\Service\Resource
@@ -36,14 +36,17 @@ class UsersMessagesAttachments extends \FluentSmtpLib\Google\Service\Resource
      * @param string $messageId The ID of the message containing the attachment.
      * @param string $id The ID of the attachment.
      * @param array $optParams Optional parameters.
+     *
+     * @opt_param bool temporaryEeccBypass
      * @return MessagePartBody
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $messageId, $id, $optParams = [])
     {
         $params = ['userId' => $userId, 'messageId' => $messageId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], MessagePartBody::class);
+        return $this->call('get', [$params], \FluentSmtpLib\Google\Service\Gmail\MessagePartBody::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(UsersMessagesAttachments::class, 'FluentSmtpLib\\Google_Service_Gmail_Resource_UsersMessagesAttachments');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Resource\UsersMessagesAttachments::class, 'FluentSmtpLib\\Google_Service_Gmail_Resource_UsersMessagesAttachments');

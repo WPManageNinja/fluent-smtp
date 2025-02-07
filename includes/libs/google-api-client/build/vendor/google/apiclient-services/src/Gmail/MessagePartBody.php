@@ -75,4 +75,4 @@ class MessagePartBody extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(MessagePartBody::class, 'FluentSmtpLib\\Google_Service_Gmail_MessagePartBody');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\MessagePartBody::class, 'FluentSmtpLib\\Google_Service_Gmail_MessagePartBody');

@@ -24,7 +24,7 @@ use FluentSmtpLib\Google\Service\Gmail\ListLabelsResponse;
  * Typical usage is:
  *  <code>
  *   $gmailService = new Google\Service\Gmail(...);
- *   $labels = $gmailService->labels;
+ *   $labels = $gmailService->users_labels;
  *  </code>
  */
 class UsersLabels extends \FluentSmtpLib\Google\Service\Resource
@@ -37,12 +37,13 @@ class UsersLabels extends \FluentSmtpLib\Google\Service\Resource
      * @param Label $postBody
      * @param array $optParams Optional parameters.
      * @return Label
+     * @throws \Google\Service\Exception
      */
-    public function create($userId, Label $postBody, $optParams = [])
+    public function create($userId, \FluentSmtpLib\Google\Service\Gmail\Label $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], Label::class);
+        return $this->call('create', [$params], \FluentSmtpLib\Google\Service\Gmail\Label::class);
     }
     /**
      * Immediately and permanently deletes the specified label and removes it from
@@ -52,6 +53,7 @@ class UsersLabels extends \FluentSmtpLib\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param string $id The ID of the label to delete.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($userId, $id, $optParams = [])
     {
@@ -67,12 +69,13 @@ class UsersLabels extends \FluentSmtpLib\Google\Service\Resource
      * @param string $id The ID of the label to retrieve.
      * @param array $optParams Optional parameters.
      * @return Label
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $id, $optParams = [])
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], Label::class);
+        return $this->call('get', [$params], \FluentSmtpLib\Google\Service\Gmail\Label::class);
     }
     /**
      * Lists all labels in the user's mailbox. (labels.listUsersLabels)
@@ -81,12 +84,13 @@ class UsersLabels extends \FluentSmtpLib\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param array $optParams Optional parameters.
      * @return ListLabelsResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersLabels($userId, $optParams = [])
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], ListLabelsResponse::class);
+        return $this->call('list', [$params], \FluentSmtpLib\Google\Service\Gmail\ListLabelsResponse::class);
     }
     /**
      * Patch the specified label. (labels.patch)
@@ -97,12 +101,13 @@ class UsersLabels extends \FluentSmtpLib\Google\Service\Resource
      * @param Label $postBody
      * @param array $optParams Optional parameters.
      * @return Label
+     * @throws \Google\Service\Exception
      */
-    public function patch($userId, $id, Label $postBody, $optParams = [])
+    public function patch($userId, $id, \FluentSmtpLib\Google\Service\Gmail\Label $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'id' => $id, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], Label::class);
+        return $this->call('patch', [$params], \FluentSmtpLib\Google\Service\Gmail\Label::class);
     }
     /**
      * Updates the specified label. (labels.update)
@@ -113,13 +118,14 @@ class UsersLabels extends \FluentSmtpLib\Google\Service\Resource
      * @param Label $postBody
      * @param array $optParams Optional parameters.
      * @return Label
+     * @throws \Google\Service\Exception
      */
-    public function update($userId, $id, Label $postBody, $optParams = [])
+    public function update($userId, $id, \FluentSmtpLib\Google\Service\Gmail\Label $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'id' => $id, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], Label::class);
+        return $this->call('update', [$params], \FluentSmtpLib\Google\Service\Gmail\Label::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(UsersLabels::class, 'FluentSmtpLib\\Google_Service_Gmail_Resource_UsersLabels');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Resource\UsersLabels::class, 'FluentSmtpLib\\Google_Service_Gmail_Resource_UsersLabels');

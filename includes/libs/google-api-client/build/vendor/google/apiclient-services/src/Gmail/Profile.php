@@ -93,4 +93,4 @@ class Profile extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Profile::class, 'FluentSmtpLib\\Google_Service_Gmail_Profile');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Profile::class, 'FluentSmtpLib\\Google_Service_Gmail_Profile');

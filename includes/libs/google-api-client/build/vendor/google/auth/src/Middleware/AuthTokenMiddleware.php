@@ -17,8 +17,11 @@
  */
 namespace FluentSmtpLib\Google\Auth\Middleware;
 
+use FluentSmtpLib\Google\Auth\FetchAuthTokenCache;
 use FluentSmtpLib\Google\Auth\FetchAuthTokenInterface;
 use FluentSmtpLib\Google\Auth\GetQuotaProjectInterface;
+use FluentSmtpLib\Google\Auth\UpdateMetadataInterface;
+use FluentSmtpLib\GuzzleHttp\Psr7\Utils;
 use FluentSmtpLib\Psr\Http\Message\RequestInterface;
 /**
  * AuthTokenMiddleware is a Guzzle Middleware that adds an Authorization header
@@ -34,15 +37,18 @@ use FluentSmtpLib\Psr\Http\Message\RequestInterface;
 class AuthTokenMiddleware
 {
     /**
-     * @var callback
+     * @var callable
      */
     private $httpHandler;
     /**
+     * It must be an implementation of FetchAuthTokenInterface.
+     * It may also implement UpdateMetadataInterface allowing direct
+     * retrieval of auth related headers
      * @var FetchAuthTokenInterface
      */
     private $fetcher;
     /**
-     * @var callable
+     * @var ?callable
      */
     private $tokenCallback;
     /**
@@ -52,7 +58,7 @@ class AuthTokenMiddleware
      * @param callable $httpHandler (optional) callback which delivers psr7 request
      * @param callable $tokenCallback (optional) function to be called when a new token is fetched.
      */
-    public function __construct(FetchAuthTokenInterface $fetcher, callable $httpHandler = null, callable $tokenCallback = null)
+    public function __construct(\FluentSmtpLib\Google\Auth\FetchAuthTokenInterface $fetcher, ?callable $httpHandler = null, ?callable $tokenCallback = null)
     {
         $this->fetcher = $fetcher;
         $this->httpHandler = $httpHandler;
@@ -85,41 +91,48 @@ class AuthTokenMiddleware
      */
     public function __invoke(callable $handler)
     {
-        return function (RequestInterface $request, array $options) use($handler) {
+        return function (\FluentSmtpLib\Psr\Http\Message\RequestInterface $request, array $options) use($handler) {
             // Requests using "auth"="google_auth" will be authorized.
             if (!isset($options['auth']) || $options['auth'] !== 'google_auth') {
                 return $handler($request, $options);
             }
-            $request = $request->withHeader('authorization', 'Bearer ' . $this->fetchToken());
+            $request = $this->addAuthHeaders($request);
             if ($quotaProject = $this->getQuotaProject()) {
-                $request = $request->withHeader(GetQuotaProjectInterface::X_GOOG_USER_PROJECT_HEADER, $quotaProject);
+                $request = $request->withHeader(\FluentSmtpLib\Google\Auth\GetQuotaProjectInterface::X_GOOG_USER_PROJECT_HEADER, $quotaProject);
             }
             return $handler($request, $options);
         };
     }
     /**
-     * Call fetcher to fetch the token.
+     * Adds auth related headers to the request.
      *
-     * @return string
+     * @param RequestInterface $request
+     * @return RequestInterface
      */
-    private function fetchToken()
+    private function addAuthHeaders(\FluentSmtpLib\Psr\Http\Message\RequestInterface $request)
     {
-        $auth_tokens = $this->fetcher->fetchAuthToken($this->httpHandler);
-        if (\array_key_exists('access_token', $auth_tokens)) {
-            // notify the callback if applicable
-            if ($this->tokenCallback) {
-                \call_user_func($this->tokenCallback, $this->fetcher->getCacheKey(), $auth_tokens['access_token']);
+        if (!$this->fetcher instanceof \FluentSmtpLib\Google\Auth\UpdateMetadataInterface || $this->fetcher instanceof \FluentSmtpLib\Google\Auth\FetchAuthTokenCache && !$this->fetcher->getFetcher() instanceof \FluentSmtpLib\Google\Auth\UpdateMetadataInterface) {
+            $token = $this->fetcher->fetchAuthToken();
+            $request = $request->withHeader('authorization', 'Bearer ' . ($token['access_token'] ?? $token['id_token'] ?? ''));
+        } else {
+            $headers = $this->fetcher->updateMetadata($request->getHeaders(), null, $this->httpHandler);
+            $request = \FluentSmtpLib\GuzzleHttp\Psr7\Utils::modifyRequest($request, ['set_headers' => $headers]);
+        }
+        if ($this->tokenCallback && ($token = $this->fetcher->getLastReceivedToken())) {
+            if (\array_key_exists('access_token', $token)) {
+                \call_user_func($this->tokenCallback, $this->fetcher->getCacheKey(), $token['access_token']);
             }
-            return $auth_tokens['access_token'];
         }
-        if (\array_key_exists('id_token', $auth_tokens)) {
-            return $auth_tokens['id_token'];
-        }
+        return $request;
     }
+    /**
+     * @return string|null
+     */
     private function getQuotaProject()
     {
-        if ($this->fetcher instanceof GetQuotaProjectInterface) {
+        if ($this->fetcher instanceof \FluentSmtpLib\Google\Auth\GetQuotaProjectInterface) {
             return $this->fetcher->getQuotaProject();
         }
+        return null;
     }
 }

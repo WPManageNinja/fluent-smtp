@@ -1,43 +1,36 @@
 <?php
 
+declare (strict_types=1);
 namespace FluentSmtpLib\GuzzleHttp\Promise;
 
 final class Is
 {
     /**
      * Returns true if a promise is pending.
-     *
-     * @return bool
      */
-    public static function pending(PromiseInterface $promise)
+    public static function pending(\FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface $promise) : bool
     {
-        return $promise->getState() === PromiseInterface::PENDING;
+        return $promise->getState() === \FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface::PENDING;
     }
     /**
      * Returns true if a promise is fulfilled or rejected.
-     *
-     * @return bool
      */
-    public static function settled(PromiseInterface $promise)
+    public static function settled(\FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface $promise) : bool
     {
-        return $promise->getState() !== PromiseInterface::PENDING;
+        return $promise->getState() !== \FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface::PENDING;
     }
     /**
      * Returns true if a promise is fulfilled.
-     *
-     * @return bool
      */
-    public static function fulfilled(PromiseInterface $promise)
+    public static function fulfilled(\FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface $promise) : bool
     {
-        return $promise->getState() === PromiseInterface::FULFILLED;
+        return $promise->getState() === \FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface::FULFILLED;
     }
     /**
      * Returns true if a promise is rejected.
-     *
-     * @return bool
      */
-    public static function rejected(PromiseInterface $promise)
+    public static function rejected(\FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface $promise) : bool
     {
-        return $promise->getState() === PromiseInterface::REJECTED;
+        return $promise->getState() === \FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface::REJECTED;
     }
 }

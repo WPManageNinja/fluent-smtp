@@ -57,4 +57,4 @@ class MessagePartHeader extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(MessagePartHeader::class, 'FluentSmtpLib\\Google_Service_Gmail_MessagePartHeader');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\MessagePartHeader::class, 'FluentSmtpLib\\Google_Service_Gmail_MessagePartHeader');

@@ -24,15 +24,15 @@ class History extends \FluentSmtpLib\Google\Collection
      * @var string
      */
     public $id;
-    protected $labelsAddedType = HistoryLabelAdded::class;
+    protected $labelsAddedType = \FluentSmtpLib\Google\Service\Gmail\HistoryLabelAdded::class;
     protected $labelsAddedDataType = 'array';
-    protected $labelsRemovedType = HistoryLabelRemoved::class;
+    protected $labelsRemovedType = \FluentSmtpLib\Google\Service\Gmail\HistoryLabelRemoved::class;
     protected $labelsRemovedDataType = 'array';
-    protected $messagesType = Message::class;
+    protected $messagesType = \FluentSmtpLib\Google\Service\Gmail\Message::class;
     protected $messagesDataType = 'array';
-    protected $messagesAddedType = HistoryMessageAdded::class;
+    protected $messagesAddedType = \FluentSmtpLib\Google\Service\Gmail\HistoryMessageAdded::class;
     protected $messagesAddedDataType = 'array';
-    protected $messagesDeletedType = HistoryMessageDeleted::class;
+    protected $messagesDeletedType = \FluentSmtpLib\Google\Service\Gmail\HistoryMessageDeleted::class;
     protected $messagesDeletedDataType = 'array';
     /**
      * @param string
@@ -120,4 +120,4 @@ class History extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(History::class, 'FluentSmtpLib\\Google_Service_Gmail_History');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\History::class, 'FluentSmtpLib\\Google_Service_Gmail_History');

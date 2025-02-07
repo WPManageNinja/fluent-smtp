@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -11,6 +12,7 @@
 namespace FluentSmtpLib\Monolog\Handler;
 
 use FluentSmtpLib\Monolog\Formatter\LineFormatter;
+use FluentSmtpLib\Monolog\Formatter\FormatterInterface;
 use FluentSmtpLib\Monolog\Logger;
 /**
  * Logs to a Redis key using rpush
@@ -22,20 +24,23 @@ use FluentSmtpLib\Monolog\Logger;
  *   $log->pushHandler($redis);
  *
  * @author Thomas Tourlourat <thomas@tourlourat.com>
+ *
+ * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
  */
-class RedisHandler extends AbstractProcessingHandler
+class RedisHandler extends \FluentSmtpLib\Monolog\Handler\AbstractProcessingHandler
 {
+    /** @var \Predis\Client<\Predis\Client>|\Redis */
     private $redisClient;
+    /** @var string */
     private $redisKey;
+    /** @var int */
     protected $capSize;
     /**
-     * @param \Predis\Client|\Redis $redis   The redis instance
+     * @param \Predis\Client<\Predis\Client>|\Redis $redis   The redis instance
      * @param string                $key     The key name to push records to
-     * @param int                   $level   The minimum logging level at which this handler will be triggered
-     * @param bool                  $bubble  Whether the messages that are handled can bubble up the stack or not
-     * @param int|false             $capSize Number of entries to limit list size to
+     * @param int                   $capSize Number of entries to limit list size to, 0 = unlimited
      */
-    public function __construct($redis, $key, $level = Logger::DEBUG, $bubble = \true, $capSize = \false)
+    public function __construct($redis, string $key, $level = \FluentSmtpLib\Monolog\Logger::DEBUG, bool $bubble = \true, int $capSize = 0)
     {
         if (!($redis instanceof \FluentSmtpLib\Predis\Client || $redis instanceof \Redis)) {
             throw new \InvalidArgumentException('Predis\\Client or Redis instance required');
@@ -48,7 +53,7 @@ class RedisHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record)
+    protected function write(array $record) : void
     {
         if ($this->capSize) {
             $this->writeCapped($record);
@@ -60,10 +65,9 @@ class RedisHandler extends AbstractProcessingHandler
      * Write and cap the collection
      * Writes the record to the redis list and caps its
      *
-     * @param  array $record associative record array
-     * @return void
+     * @phpstan-param FormattedRecord $record
      */
-    protected function writeCapped(array $record)
+    protected function writeCapped(array $record) : void
     {
         if ($this->redisClient instanceof \Redis) {
             $mode = \defined('\\Redis::MULTI') ? \Redis::MULTI : 1;
@@ -80,8 +84,8 @@ class RedisHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter() : \FluentSmtpLib\Monolog\Formatter\FormatterInterface
     {
-        return new LineFormatter();
+        return new \FluentSmtpLib\Monolog\Formatter\LineFormatter();
     }
 }

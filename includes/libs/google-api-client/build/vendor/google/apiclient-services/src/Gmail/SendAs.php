@@ -43,7 +43,7 @@ class SendAs extends \FluentSmtpLib\Google\Model
      * @var string
      */
     public $signature;
-    protected $smtpMsaType = SmtpMsa::class;
+    protected $smtpMsaType = \FluentSmtpLib\Google\Service\Gmail\SmtpMsa::class;
     protected $smtpMsaDataType = '';
     /**
      * @var bool
@@ -140,7 +140,7 @@ class SendAs extends \FluentSmtpLib\Google\Model
     /**
      * @param SmtpMsa
      */
-    public function setSmtpMsa(SmtpMsa $smtpMsa)
+    public function setSmtpMsa(\FluentSmtpLib\Google\Service\Gmail\SmtpMsa $smtpMsa)
     {
         $this->smtpMsa = $smtpMsa;
     }
@@ -181,4 +181,4 @@ class SendAs extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(SendAs::class, 'FluentSmtpLib\\Google_Service_Gmail_SendAs');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\SendAs::class, 'FluentSmtpLib\\Google_Service_Gmail_SendAs');

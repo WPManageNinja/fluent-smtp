@@ -93,4 +93,4 @@ class ImapSettings extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ImapSettings::class, 'FluentSmtpLib\\Google_Service_Gmail_ImapSettings');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\ImapSettings::class, 'FluentSmtpLib\\Google_Service_Gmail_ImapSettings');

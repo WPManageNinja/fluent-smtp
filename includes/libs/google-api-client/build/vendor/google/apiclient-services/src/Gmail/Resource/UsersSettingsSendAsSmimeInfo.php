@@ -24,7 +24,7 @@ use FluentSmtpLib\Google\Service\Gmail\SmimeInfo;
  * Typical usage is:
  *  <code>
  *   $gmailService = new Google\Service\Gmail(...);
- *   $smimeInfo = $gmailService->smimeInfo;
+ *   $smimeInfo = $gmailService->users_settings_sendAs_smimeInfo;
  *  </code>
  */
 class UsersSettingsSendAsSmimeInfo extends \FluentSmtpLib\Google\Service\Resource
@@ -39,6 +39,7 @@ class UsersSettingsSendAsSmimeInfo extends \FluentSmtpLib\Google\Service\Resourc
      * header for mail sent using this alias.
      * @param string $id The immutable ID for the SmimeInfo.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($userId, $sendAsEmail, $id, $optParams = [])
     {
@@ -57,12 +58,13 @@ class UsersSettingsSendAsSmimeInfo extends \FluentSmtpLib\Google\Service\Resourc
      * @param string $id The immutable ID for the SmimeInfo.
      * @param array $optParams Optional parameters.
      * @return SmimeInfo
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $sendAsEmail, $id, $optParams = [])
     {
         $params = ['userId' => $userId, 'sendAsEmail' => $sendAsEmail, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], SmimeInfo::class);
+        return $this->call('get', [$params], \FluentSmtpLib\Google\Service\Gmail\SmimeInfo::class);
     }
     /**
      * Insert (upload) the given S/MIME config for the specified send-as alias. Note
@@ -75,12 +77,13 @@ class UsersSettingsSendAsSmimeInfo extends \FluentSmtpLib\Google\Service\Resourc
      * @param SmimeInfo $postBody
      * @param array $optParams Optional parameters.
      * @return SmimeInfo
+     * @throws \Google\Service\Exception
      */
-    public function insert($userId, $sendAsEmail, SmimeInfo $postBody, $optParams = [])
+    public function insert($userId, $sendAsEmail, \FluentSmtpLib\Google\Service\Gmail\SmimeInfo $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'sendAsEmail' => $sendAsEmail, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('insert', [$params], SmimeInfo::class);
+        return $this->call('insert', [$params], \FluentSmtpLib\Google\Service\Gmail\SmimeInfo::class);
     }
     /**
      * Lists S/MIME configs for the specified send-as alias.
@@ -92,12 +95,13 @@ class UsersSettingsSendAsSmimeInfo extends \FluentSmtpLib\Google\Service\Resourc
      * header for mail sent using this alias.
      * @param array $optParams Optional parameters.
      * @return ListSmimeInfoResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersSettingsSendAsSmimeInfo($userId, $sendAsEmail, $optParams = [])
     {
         $params = ['userId' => $userId, 'sendAsEmail' => $sendAsEmail];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], ListSmimeInfoResponse::class);
+        return $this->call('list', [$params], \FluentSmtpLib\Google\Service\Gmail\ListSmimeInfoResponse::class);
     }
     /**
      * Sets the default S/MIME config for the specified send-as alias.
@@ -109,6 +113,7 @@ class UsersSettingsSendAsSmimeInfo extends \FluentSmtpLib\Google\Service\Resourc
      * header for mail sent using this alias.
      * @param string $id The immutable ID for the SmimeInfo.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function setDefault($userId, $sendAsEmail, $id, $optParams = [])
     {
@@ -118,4 +123,4 @@ class UsersSettingsSendAsSmimeInfo extends \FluentSmtpLib\Google\Service\Resourc
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(UsersSettingsSendAsSmimeInfo::class, 'FluentSmtpLib\\Google_Service_Gmail_Resource_UsersSettingsSendAsSmimeInfo');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Resource\UsersSettingsSendAsSmimeInfo::class, 'FluentSmtpLib\\Google_Service_Gmail_Resource_UsersSettingsSendAsSmimeInfo');

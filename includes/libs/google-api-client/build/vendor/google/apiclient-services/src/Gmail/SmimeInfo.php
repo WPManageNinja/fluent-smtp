@@ -147,4 +147,4 @@ class SmimeInfo extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(SmimeInfo::class, 'FluentSmtpLib\\Google_Service_Gmail_SmimeInfo');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\SmimeInfo::class, 'FluentSmtpLib\\Google_Service_Gmail_SmimeInfo');

@@ -40,4 +40,4 @@ class BatchDeleteMessagesRequest extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(BatchDeleteMessagesRequest::class, 'FluentSmtpLib\\Google_Service_Gmail_BatchDeleteMessagesRequest');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\BatchDeleteMessagesRequest::class, 'FluentSmtpLib\\Google_Service_Gmail_BatchDeleteMessagesRequest');

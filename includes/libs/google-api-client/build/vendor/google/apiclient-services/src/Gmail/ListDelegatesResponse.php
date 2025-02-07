@@ -20,7 +20,7 @@ namespace FluentSmtpLib\Google\Service\Gmail;
 class ListDelegatesResponse extends \FluentSmtpLib\Google\Collection
 {
     protected $collection_key = 'delegates';
-    protected $delegatesType = Delegate::class;
+    protected $delegatesType = \FluentSmtpLib\Google\Service\Gmail\Delegate::class;
     protected $delegatesDataType = 'array';
     /**
      * @param Delegate[]
@@ -38,4 +38,4 @@ class ListDelegatesResponse extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ListDelegatesResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListDelegatesResponse');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\ListDelegatesResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListDelegatesResponse');

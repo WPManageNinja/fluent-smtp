@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -10,12 +11,12 @@
  */
 namespace FluentSmtpLib\Monolog\Handler;
 
-use Exception;
 use FluentSmtpLib\Monolog\Formatter\LineFormatter;
+use FluentSmtpLib\Monolog\Formatter\FormatterInterface;
 use FluentSmtpLib\Monolog\Logger;
 use FluentSmtpLib\Monolog\Utils;
 use FluentSmtpLib\PhpConsole\Connector;
-use FluentSmtpLib\PhpConsole\Handler;
+use FluentSmtpLib\PhpConsole\Handler as VendorPhpConsoleHandler;
 use FluentSmtpLib\PhpConsole\Helper;
 /**
  * Monolog handler for Google Chrome extension "PHP Console"
@@ -23,7 +24,7 @@ use FluentSmtpLib\PhpConsole\Helper;
  * Display PHP error/debug log messages in Google Chrome console and notification popups, executes PHP code remotely
  *
  * Usage:
- * 1. Install Google Chrome extension https://chrome.google.com/webstore/detail/php-console/nfhmhhlpfleoednkpnnnkolmclajemef
+ * 1. Install Google Chrome extension [now dead and removed from the chrome store]
  * 2. See overview https://github.com/barbushin/php-console#overview
  * 3. Install PHP Console library https://github.com/barbushin/php-console#installation
  * 4. Example (result will looks like http://i.hizliresim.com/vg3Pz4.png)
@@ -31,19 +32,23 @@ use FluentSmtpLib\PhpConsole\Helper;
  *      $logger = new \Monolog\Logger('all', array(new \Monolog\Handler\PHPConsoleHandler()));
  *      \Monolog\ErrorHandler::register($logger);
  *      echo $undefinedVar;
- *      $logger->addDebug('SELECT * FROM users', array('db', 'time' => 0.012));
+ *      $logger->debug('SELECT * FROM users', array('db', 'time' => 0.012));
  *      PC::debug($_SERVER); // PHP Console debugger for any type of vars
  *
  * @author Sergey Barbushin https://www.linkedin.com/in/barbushin
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
+ * @deprecated Since 2.8.0 and 3.2.0, PHPConsole is abandoned and thus we will drop this handler in Monolog 4
  */
-class PHPConsoleHandler extends AbstractProcessingHandler
+class PHPConsoleHandler extends \FluentSmtpLib\Monolog\Handler\AbstractProcessingHandler
 {
-    private $options = array(
+    /** @var array<string, mixed> */
+    private $options = [
         'enabled' => \true,
         // bool Is PHP Console server enabled
-        'classesPartialsTraceIgnore' => array('Monolog\\'),
+        'classesPartialsTraceIgnore' => ['Monolog\\'],
         // array Hide calls of classes started with...
-        'debugTagsKeysInContext' => array(0, 'tag'),
+        'debugTagsKeysInContext' => [0, 'tag'],
         // bool Is PHP Console server enabled
         'useOwnErrorsHandler' => \false,
         // bool Enable errors handling
@@ -61,7 +66,7 @@ class PHPConsoleHandler extends AbstractProcessingHandler
         // string|null Protect PHP Console connection by password
         'enableSslOnlyMode' => \false,
         // bool Force connection by SSL for clients with PHP Console installed
-        'ipMasks' => array(),
+        'ipMasks' => [],
         // array Set IP masks of clients that will be allowed to connect to PHP Console: array('192.168.*.*', '127.0.0.1')
         'enableEvalListener' => \false,
         // bool Enable eval request to be handled by eval dispatcher(if enabled, 'password' option is also required)
@@ -78,47 +83,50 @@ class PHPConsoleHandler extends AbstractProcessingHandler
         'detectDumpTraceAndSource' => \false,
         // bool Autodetect and append trace data to debug
         'dataStorage' => null,
-    );
+    ];
     /** @var Connector */
     private $connector;
     /**
-     * @param  array          $options   See \Monolog\Handler\PHPConsoleHandler::$options for more details
-     * @param  Connector|null $connector Instance of \PhpConsole\Connector class (optional)
-     * @param  int            $level
-     * @param  bool           $bubble
-     * @throws Exception
+     * @param  array<string, mixed> $options   See \Monolog\Handler\PHPConsoleHandler::$options for more details
+     * @param  Connector|null       $connector Instance of \PhpConsole\Connector class (optional)
+     * @throws \RuntimeException
      */
-    public function __construct(array $options = array(), Connector $connector = null, $level = Logger::DEBUG, $bubble = \true)
+    public function __construct(array $options = [], ?\FluentSmtpLib\PhpConsole\Connector $connector = null, $level = \FluentSmtpLib\Monolog\Logger::DEBUG, bool $bubble = \true)
     {
         if (!\class_exists('FluentSmtpLib\\PhpConsole\\Connector')) {
-            throw new Exception('PHP Console library not found. See https://github.com/barbushin/php-console#installation');
+            throw new \RuntimeException('PHP Console library not found. See https://github.com/barbushin/php-console#installation');
         }
         parent::__construct($level, $bubble);
         $this->options = $this->initOptions($options);
         $this->connector = $this->initConnector($connector);
     }
-    private function initOptions(array $options)
+    /**
+     * @param array<string, mixed> $options
+     *
+     * @return array<string, mixed>
+     */
+    private function initOptions(array $options) : array
     {
         $wrongOptions = \array_diff(\array_keys($options), \array_keys($this->options));
         if ($wrongOptions) {
-            throw new Exception('Unknown options: ' . \implode(', ', $wrongOptions));
+            throw new \RuntimeException('Unknown options: ' . \implode(', ', $wrongOptions));
         }
         return \array_replace($this->options, $options);
     }
-    private function initConnector(Connector $connector = null)
+    private function initConnector(?\FluentSmtpLib\PhpConsole\Connector $connector = null) : \FluentSmtpLib\PhpConsole\Connector
     {
         if (!$connector) {
             if ($this->options['dataStorage']) {
-                Connector::setPostponeStorage($this->options['dataStorage']);
+                \FluentSmtpLib\PhpConsole\Connector::setPostponeStorage($this->options['dataStorage']);
             }
-            $connector = Connector::getInstance();
+            $connector = \FluentSmtpLib\PhpConsole\Connector::getInstance();
         }
-        if ($this->options['registerHelper'] && !Helper::isRegistered()) {
-            Helper::register();
+        if ($this->options['registerHelper'] && !\FluentSmtpLib\PhpConsole\Helper::isRegistered()) {
+            \FluentSmtpLib\PhpConsole\Helper::register();
         }
         if ($this->options['enabled'] && $connector->isActiveClient()) {
             if ($this->options['useOwnErrorsHandler'] || $this->options['useOwnExceptionsHandler']) {
-                $handler = Handler::getInstance();
+                $handler = \FluentSmtpLib\PhpConsole\Handler::getInstance();
                 $handler->setHandleErrors($this->options['useOwnErrorsHandler']);
                 $handler->setHandleExceptions($this->options['useOwnExceptionsHandler']);
                 $handler->start();
@@ -156,15 +164,18 @@ class PHPConsoleHandler extends AbstractProcessingHandler
         }
         return $connector;
     }
-    public function getConnector()
+    public function getConnector() : \FluentSmtpLib\PhpConsole\Connector
     {
         return $this->connector;
     }
-    public function getOptions()
+    /**
+     * @return array<string, mixed>
+     */
+    public function getOptions() : array
     {
         return $this->options;
     }
-    public function handle(array $record)
+    public function handle(array $record) : bool
     {
         if ($this->options['enabled'] && $this->connector->isActiveClient()) {
             return parent::handle($record);
@@ -173,38 +184,48 @@ class PHPConsoleHandler extends AbstractProcessingHandler
     }
     /**
      * Writes the record down to the log of the implementing handler
-     *
-     * @param  array $record
-     * @return void
      */
-    protected function write(array $record)
+    protected function write(array $record) : void
     {
-        if ($record['level'] < Logger::NOTICE) {
+        if ($record['level'] < \FluentSmtpLib\Monolog\Logger::NOTICE) {
             $this->handleDebugRecord($record);
-        } elseif (isset($record['context']['exception']) && $record['context']['exception'] instanceof Exception) {
+        } elseif (isset($record['context']['exception']) && $record['context']['exception'] instanceof \Throwable) {
             $this->handleExceptionRecord($record);
         } else {
             $this->handleErrorRecord($record);
         }
     }
-    private function handleDebugRecord(array $record)
+    /**
+     * @phpstan-param Record $record
+     */
+    private function handleDebugRecord(array $record) : void
     {
         $tags = $this->getRecordTags($record);
         $message = $record['message'];
         if ($record['context']) {
-            $message .= ' ' . Utils::jsonEncode($this->connector->getDumper()->dump(\array_filter($record['context'])), null, \true);
+            $message .= ' ' . \FluentSmtpLib\Monolog\Utils::jsonEncode($this->connector->getDumper()->dump(\array_filter($record['context'])), null, \true);
         }
         $this->connector->getDebugDispatcher()->dispatchDebug($message, $tags, $this->options['classesPartialsTraceIgnore']);
     }
-    private function handleExceptionRecord(array $record)
+    /**
+     * @phpstan-param Record $record
+     */
+    private function handleExceptionRecord(array $record) : void
     {
         $this->connector->getErrorsDispatcher()->dispatchException($record['context']['exception']);
     }
-    private function handleErrorRecord(array $record)
+    /**
+     * @phpstan-param Record $record
+     */
+    private function handleErrorRecord(array $record) : void
     {
         $context = $record['context'];
-        $this->connector->getErrorsDispatcher()->dispatchError(isset($context['code']) ? $context['code'] : null, isset($context['message']) ? $context['message'] : $record['message'], isset($context['file']) ? $context['file'] : null, isset($context['line']) ? $context['line'] : null, $this->options['classesPartialsTraceIgnore']);
+        $this->connector->getErrorsDispatcher()->dispatchError($context['code'] ?? null, $context['message'] ?? $record['message'], $context['file'] ?? null, $context['line'] ?? null, $this->options['classesPartialsTraceIgnore']);
     }
+    /**
+     * @phpstan-param Record $record
+     * @return string
+     */
     private function getRecordTags(array &$record)
     {
         $tags = null;
@@ -227,8 +248,8 @@ class PHPConsoleHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter() : \FluentSmtpLib\Monolog\Formatter\FormatterInterface
     {
-        return new LineFormatter('%message%');
+        return new \FluentSmtpLib\Monolog\Formatter\LineFormatter('%message%');
     }
 }

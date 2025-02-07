@@ -27,6 +27,7 @@ use FluentSmtpLib\Google\Auth\Credentials\ServiceAccountCredentials;
 use FluentSmtpLib\Google\Auth\Credentials\UserRefreshCredentials;
 use FluentSmtpLib\Google\Auth\CredentialsLoader;
 use FluentSmtpLib\Google\Auth\FetchAuthTokenCache;
+use FluentSmtpLib\Google\Auth\GetUniverseDomainInterface;
 use FluentSmtpLib\Google\Auth\HttpHandler\HttpHandlerFactory;
 use FluentSmtpLib\Google\Auth\OAuth2;
 use FluentSmtpLib\Google\AuthHandler\AuthHandlerFactory;
@@ -54,7 +55,7 @@ class Client
     const USER_AGENT_SUFFIX = "google-api-php-client/";
     const OAUTH2_REVOKE_URI = 'https://oauth2.googleapis.com/revoke';
     const OAUTH2_TOKEN_URI = 'https://oauth2.googleapis.com/token';
-    const OAUTH2_AUTH_URL = 'https://accounts.google.com/o/oauth2/auth';
+    const OAUTH2_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
     const API_BASE_PATH = 'https://www.googleapis.com';
     /**
      * @var ?OAuth2 $auth
@@ -94,69 +95,80 @@ class Client
     /**
      * Construct the Google Client.
      *
-     * @param array $config
+     * @param array $config {
+     *     An array of required and optional arguments.
+     *
+     *     @type string $application_name
+     *           The name of your application
+     *     @type string $base_path
+     *           The base URL for the service. This is only accounted for when calling
+     *           {@see Client::authorize()} directly.
+     *     @type string $client_id
+     *           Your Google Cloud client ID found in https://developers.google.com/console
+     *     @type string $client_secret
+     *           Your Google Cloud client secret found in https://developers.google.com/console
+     *     @type string|array|CredentialsLoader $credentials
+     *           Can be a path to JSON credentials or an array representing those
+     *           credentials (@see Google\Client::setAuthConfig), or an instance of
+     *           {@see CredentialsLoader}.
+     *     @type string|array $scopes
+     *           {@see Google\Client::setScopes}
+     *     @type string $quota_project
+     *           Sets X-Goog-User-Project, which specifies a user project to bill
+     *           for access charges associated with the request.
+     *     @type string $redirect_uri
+     *     @type string $state
+     *     @type string $developer_key
+     *           Simple API access key, also from the API console. Ensure you get
+     *           a Server key, and not a Browser key.
+     *           **NOTE:** The universe domain is assumed to be "googleapis.com" unless
+     *           explicitly set. When setting an API ley directly via this option, there
+     *           is no way to verify the universe domain. Be sure to set the
+     *           "universe_domain" option if "googleapis.com" is not intended.
+     *     @type bool $use_application_default_credentials
+     *           For use with Google Cloud Platform
+     *           fetch the ApplicationDefaultCredentials, if applicable
+     *           {@see https://developers.google.com/identity/protocols/application-default-credentials}
+     *     @type string $signing_key
+     *     @type string $signing_algorithm
+     *     @type string $subject
+     *     @type string $hd
+     *     @type string $prompt
+     *     @type string $openid
+     *     @type bool $include_granted_scopes
+     *     @type string $login_hint
+     *     @type string $request_visible_actions
+     *     @type string $access_type
+     *     @type string $approval_prompt
+     *     @type array $retry
+     *           Task Runner retry configuration
+     *           {@see \Google\Task\Runner}
+     *     @type array $retry_map
+     *     @type CacheItemPoolInterface $cache
+     *           Cache class implementing {@see CacheItemPoolInterface}. Defaults
+     *           to {@see MemoryCacheItemPool}.
+     *     @type array $cache_config
+     *           Cache config for downstream auth caching.
+     *     @type callable $token_callback
+     *           Function to be called when an access token is fetched. Follows
+     *           the signature `function (string $cacheKey, string $accessToken)`.
+     *     @type \Firebase\JWT $jwt
+     *           Service class used in {@see Client::verifyIdToken()}. Explicitly
+     *           pass this in to avoid setting {@see \Firebase\JWT::$leeway}
+     *     @type bool $api_format_v2
+     *           Setting api_format_v2 will return more detailed error messages
+     *           from certain APIs.
+     *     @type string $universe_domain
+     *           Setting the universe domain will change the default rootUrl of the service.
+     *           If not set explicitly, the universe domain will be the value provided in the
+     *.          "GOOGLE_CLOUD_UNIVERSE_DOMAIN" environment variable, or "googleapis.com".
+     *  }
      */
     public function __construct(array $config = [])
     {
-        $this->config = \array_merge([
-            'application_name' => '',
-            // Don't change these unless you're working against a special development
-            // or testing environment.
-            'base_path' => self::API_BASE_PATH,
-            // https://developers.google.com/console
-            'client_id' => '',
-            'client_secret' => '',
-            // Can be a path to JSON credentials or an array representing those
-            // credentials (@see Google\Client::setAuthConfig), or an instance of
-            // Google\Auth\CredentialsLoader.
-            'credentials' => null,
-            // @see Google\Client::setScopes
-            'scopes' => null,
-            // Sets X-Goog-User-Project, which specifies a user project to bill
-            // for access charges associated with the request
-            'quota_project' => null,
-            'redirect_uri' => null,
-            'state' => null,
-            // Simple API access key, also from the API console. Ensure you get
-            // a Server key, and not a Browser key.
-            'developer_key' => '',
-            // For use with Google Cloud Platform
-            // fetch the ApplicationDefaultCredentials, if applicable
-            // @see https://developers.google.com/identity/protocols/application-default-credentials
-            'use_application_default_credentials' => \false,
-            'signing_key' => null,
-            'signing_algorithm' => null,
-            'subject' => null,
-            // Other OAuth2 parameters.
-            'hd' => '',
-            'prompt' => '',
-            'openid.realm' => '',
-            'include_granted_scopes' => null,
-            'login_hint' => '',
-            'request_visible_actions' => '',
-            'access_type' => 'online',
-            'approval_prompt' => 'auto',
-            // Task Runner retry configuration
-            // @see Google\Task\Runner
-            'retry' => [],
-            'retry_map' => null,
-            // Cache class implementing Psr\Cache\CacheItemPoolInterface.
-            // Defaults to Google\Auth\Cache\MemoryCacheItemPool.
-            'cache' => null,
-            // cache config for downstream auth caching
-            'cache_config' => [],
-            // function to be called when an access token is fetched
-            // follows the signature function ($cacheKey, $accessToken)
-            'token_callback' => null,
-            // Service class used in Google\Client::verifyIdToken.
-            // Explicitly pass this in to avoid setting JWT::$leeway
-            'jwt' => null,
-            // Setting api_format_v2 will return more detailed error messages
-            // from certain APIs.
-            'api_format_v2' => \false,
-        ], $config);
+        $this->config = \array_merge(['application_name' => '', 'base_path' => self::API_BASE_PATH, 'client_id' => '', 'client_secret' => '', 'credentials' => null, 'scopes' => null, 'quota_project' => null, 'redirect_uri' => null, 'state' => null, 'developer_key' => '', 'use_application_default_credentials' => \false, 'signing_key' => null, 'signing_algorithm' => null, 'subject' => null, 'hd' => '', 'prompt' => '', 'openid.realm' => '', 'include_granted_scopes' => null, 'login_hint' => '', 'request_visible_actions' => '', 'access_type' => 'online', 'approval_prompt' => 'auto', 'retry' => [], 'retry_map' => null, 'cache' => null, 'cache_config' => [], 'token_callback' => null, 'jwt' => null, 'api_format_v2' => \false, 'universe_domain' => \getenv('GOOGLE_CLOUD_UNIVERSE_DOMAIN') ?: \FluentSmtpLib\Google\Auth\GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN], $config);
         if (!\is_null($this->config['credentials'])) {
-            if ($this->config['credentials'] instanceof CredentialsLoader) {
+            if ($this->config['credentials'] instanceof \FluentSmtpLib\Google\Auth\CredentialsLoader) {
                 $this->credentials = $this->config['credentials'];
             } else {
                 $this->setAuthConfig($this->config['credentials']);
@@ -209,17 +221,21 @@ class Client
      * Helper wrapped around the OAuth 2.0 implementation.
      *
      * @param string $code code from accounts.google.com
+     * @param string $codeVerifier the code verifier used for PKCE (if applicable)
      * @return array access token
      */
-    public function fetchAccessTokenWithAuthCode($code)
+    public function fetchAccessTokenWithAuthCode($code, $codeVerifier = null)
     {
         if (\strlen($code) == 0) {
-            throw new InvalidArgumentException("Invalid code");
+            throw new \InvalidArgumentException("Invalid code");
         }
         $auth = $this->getOAuth2Service();
         $auth->setCode($code);
         $auth->setRedirectUri($this->getRedirectUri());
-        $httpHandler = HttpHandlerFactory::build($this->getHttpClient());
+        if ($codeVerifier) {
+            $auth->setCodeVerifier($codeVerifier);
+        }
+        $httpHandler = \FluentSmtpLib\Google\Auth\HttpHandler\HttpHandlerFactory::build($this->getHttpClient());
         $creds = $auth->fetchAuthToken($httpHandler);
         if ($creds && isset($creds['access_token'])) {
             $creds['created'] = \time();
@@ -243,14 +259,14 @@ class Client
      * @param ClientInterface $authHttp optional.
      * @return array access token
      */
-    public function fetchAccessTokenWithAssertion(ClientInterface $authHttp = null)
+    public function fetchAccessTokenWithAssertion(?\FluentSmtpLib\GuzzleHttp\ClientInterface $authHttp = null)
     {
         if (!$this->isUsingApplicationDefaultCredentials()) {
-            throw new DomainException('set the JSON service account credentials using' . ' Google\\Client::setAuthConfig or set the path to your JSON file' . ' with the "GOOGLE_APPLICATION_CREDENTIALS" environment variable' . ' and call Google\\Client::useApplicationDefaultCredentials to' . ' refresh a token with assertion.');
+            throw new \DomainException('set the JSON service account credentials using' . ' Google\\Client::setAuthConfig or set the path to your JSON file' . ' with the "GOOGLE_APPLICATION_CREDENTIALS" environment variable' . ' and call Google\\Client::useApplicationDefaultCredentials to' . ' refresh a token with assertion.');
         }
         $this->getLogger()->log('info', 'OAuth2 access token refresh with Signed JWT assertion grants.');
         $credentials = $this->createApplicationDefaultCredentials();
-        $httpHandler = HttpHandlerFactory::build($authHttp);
+        $httpHandler = \FluentSmtpLib\Google\Auth\HttpHandler\HttpHandlerFactory::build($authHttp);
         $creds = $credentials->fetchAuthToken($httpHandler);
         if ($creds && isset($creds['access_token'])) {
             $creds['created'] = \time();
@@ -278,14 +294,14 @@ class Client
     {
         if (null === $refreshToken) {
             if (!isset($this->token['refresh_token'])) {
-                throw new LogicException('refresh token must be passed in or set as part of setAccessToken');
+                throw new \LogicException('refresh token must be passed in or set as part of setAccessToken');
             }
             $refreshToken = $this->token['refresh_token'];
         }
         $this->getLogger()->info('OAuth2 access token refresh');
         $auth = $this->getOAuth2Service();
         $auth->setRefreshToken($refreshToken);
-        $httpHandler = HttpHandlerFactory::build($this->getHttpClient());
+        $httpHandler = \FluentSmtpLib\Google\Auth\HttpHandler\HttpHandlerFactory::build($this->getHttpClient());
         $creds = $auth->fetchAuthToken($httpHandler);
         if ($creds && isset($creds['access_token'])) {
             $creds['created'] = \time();
@@ -301,9 +317,10 @@ class Client
      * The authorization endpoint allows the user to first
      * authenticate, and then grant/deny the access request.
      * @param string|array $scope The scope is expressed as an array or list of space-delimited strings.
+     * @param array $queryParams Querystring params to add to the authorization URL.
      * @return string
      */
-    public function createAuthUrl($scope = null)
+    public function createAuthUrl($scope = null, array $queryParams = [])
     {
         if (empty($scope)) {
             $scope = $this->prepareScopes();
@@ -315,7 +332,7 @@ class Client
         $approvalPrompt = $this->config['prompt'] ? null : $this->config['approval_prompt'];
         // include_granted_scopes should be string "true", string "false", or null
         $includeGrantedScopes = $this->config['include_granted_scopes'] === null ? null : \var_export($this->config['include_granted_scopes'], \true);
-        $params = \array_filter(['access_type' => $this->config['access_type'], 'approval_prompt' => $approvalPrompt, 'hd' => $this->config['hd'], 'include_granted_scopes' => $includeGrantedScopes, 'login_hint' => $this->config['login_hint'], 'openid.realm' => $this->config['openid.realm'], 'prompt' => $this->config['prompt'], 'response_type' => 'code', 'scope' => $scope, 'state' => $this->config['state']]);
+        $params = \array_filter(['access_type' => $this->config['access_type'], 'approval_prompt' => $approvalPrompt, 'hd' => $this->config['hd'], 'include_granted_scopes' => $includeGrantedScopes, 'login_hint' => $this->config['login_hint'], 'openid.realm' => $this->config['openid.realm'], 'prompt' => $this->config['prompt'], 'redirect_uri' => $this->config['redirect_uri'], 'response_type' => 'code', 'scope' => $scope, 'state' => $this->config['state']]) + $queryParams;
         // If the list of scopes contains plus.login, add request_visible_actions
         // to auth URL.
         $rva = $this->config['request_visible_actions'];
@@ -332,7 +349,7 @@ class Client
      * @param ClientInterface $http the http client object.
      * @return ClientInterface the http client object
      */
-    public function authorize(ClientInterface $http = null)
+    public function authorize(?\FluentSmtpLib\GuzzleHttp\ClientInterface $http = null)
     {
         $http = $http ?: $this->getHttpClient();
         $authHandler = $this->getAuthHandler();
@@ -343,10 +360,12 @@ class Client
         //   3b. If access token exists but is expired, try to refresh it
         //   4.  Check for API Key
         if ($this->credentials) {
+            $this->checkUniverseDomain($this->credentials);
             return $authHandler->attachCredentials($http, $this->credentials, $this->config['token_callback']);
         }
         if ($this->isUsingApplicationDefaultCredentials()) {
             $credentials = $this->createApplicationDefaultCredentials();
+            $this->checkUniverseDomain($credentials);
             return $authHandler->attachCredentialsCache($http, $credentials, $this->config['token_callback']);
         }
         if ($token = $this->getAccessToken()) {
@@ -354,6 +373,7 @@ class Client
             // add refresh subscriber to request a new token
             if (isset($token['refresh_token']) && $this->isAccessTokenExpired()) {
                 $credentials = $this->createUserRefreshCredentials($scopes, $token['refresh_token']);
+                $this->checkUniverseDomain($credentials);
                 return $authHandler->attachCredentials($http, $credentials, $this->config['token_callback']);
             }
             return $authHandler->attachToken($http, $token, (array) $scopes);
@@ -396,6 +416,11 @@ class Client
      * as calling `clear()` will remove all cache items, including any items not
      * related to Google API PHP Client.)
      *
+     * **NOTE:** The universe domain is assumed to be "googleapis.com" unless
+     * explicitly set. When setting an access token directly via this method, there
+     * is no way to verify the universe domain. Be sure to set the "universe_domain"
+     * option if "googleapis.com" is not intended.
+     *
      * @param string|array $token
      * @throws InvalidArgumentException
      */
@@ -410,10 +435,10 @@ class Client
             }
         }
         if ($token == null) {
-            throw new InvalidArgumentException('invalid json token');
+            throw new \InvalidArgumentException('invalid json token');
         }
         if (!isset($token['access_token'])) {
-            throw new InvalidArgumentException("Invalid token format");
+            throw new \InvalidArgumentException("Invalid token format");
         }
         $this->token = $token;
     }
@@ -469,14 +494,14 @@ class Client
      */
     public function getAuth()
     {
-        throw new BadMethodCallException('This function no longer exists. See UPGRADING.md for more information');
+        throw new \BadMethodCallException('This function no longer exists. See UPGRADING.md for more information');
     }
     /**
      * @deprecated See UPGRADING.md for more information
      */
     public function setAuth($auth)
     {
-        throw new BadMethodCallException('This function no longer exists. See UPGRADING.md for more information');
+        throw new \BadMethodCallException('This function no longer exists. See UPGRADING.md for more information');
     }
     /**
      * Set the OAuth 2.0 Client ID.
@@ -641,7 +666,7 @@ class Client
      */
     public function revokeToken($token = null)
     {
-        $tokenRevoker = new Revoke($this->getHttpClient());
+        $tokenRevoker = new \FluentSmtpLib\Google\AccessToken\Revoke($this->getHttpClient());
         return $tokenRevoker->revokeToken($token ?: $this->getAccessToken());
     }
     /**
@@ -656,11 +681,11 @@ class Client
      */
     public function verifyIdToken($idToken = null)
     {
-        $tokenVerifier = new Verify($this->getHttpClient(), $this->getCache(), $this->config['jwt']);
+        $tokenVerifier = new \FluentSmtpLib\Google\AccessToken\Verify($this->getHttpClient(), $this->getCache(), $this->config['jwt']);
         if (null === $idToken) {
             $token = $this->getAccessToken();
             if (!isset($token['id_token'])) {
-                throw new LogicException('id_token must be passed in or set as part of setAccessToken');
+                throw new \LogicException('id_token must be passed in or set as part of setAccessToken');
             }
             $idToken = $token['id_token'];
         }
@@ -726,7 +751,7 @@ class Client
      * @throws \Google\Exception
      * @return mixed|T|ResponseInterface
      */
-    public function execute(RequestInterface $request, $expectedClass = null)
+    public function execute(\FluentSmtpLib\Psr\Http\Message\RequestInterface $request, $expectedClass = null)
     {
         $request = $request->withHeader('User-Agent', \sprintf('%s %s%s', $this->config['application_name'], self::USER_AGENT_SUFFIX, $this->getLibraryVersion()))->withHeader('x-goog-api-client', \sprintf('gl-php/%s gdcl/%s', \phpversion(), $this->getLibraryVersion()));
         if ($this->config['api_format_v2']) {
@@ -735,7 +760,7 @@ class Client
         // call the authorize method
         // this is where most of the grunt work is done
         $http = $this->authorize();
-        return REST::execute($http, $request, $expectedClass, $this->config['retry'], $this->config['retry_map']);
+        return \FluentSmtpLib\Google\Http\REST::execute($http, $request, $expectedClass, $this->config['retry'], $this->config['retry_map']);
     }
     /**
      * Declare whether batch calls should be used. This may increase throughput
@@ -789,11 +814,11 @@ class Client
     {
         if (\is_string($config)) {
             if (!\file_exists($config)) {
-                throw new InvalidArgumentException(\sprintf('file "%s" does not exist', $config));
+                throw new \InvalidArgumentException(\sprintf('file "%s" does not exist', $config));
             }
             $json = \file_get_contents($config);
             if (!($config = \json_decode($json, \true))) {
-                throw new LogicException('invalid json for auth config');
+                throw new \LogicException('invalid json for auth config');
             }
         }
         $key = isset($config['installed']) ? 'installed' : 'web';
@@ -863,14 +888,14 @@ class Client
      */
     protected function createOAuth2Service()
     {
-        $auth = new OAuth2(['clientId' => $this->getClientId(), 'clientSecret' => $this->getClientSecret(), 'authorizationUri' => self::OAUTH2_AUTH_URL, 'tokenCredentialUri' => self::OAUTH2_TOKEN_URI, 'redirectUri' => $this->getRedirectUri(), 'issuer' => $this->config['client_id'], 'signingKey' => $this->config['signing_key'], 'signingAlgorithm' => $this->config['signing_algorithm']]);
+        $auth = new \FluentSmtpLib\Google\Auth\OAuth2(['clientId' => $this->getClientId(), 'clientSecret' => $this->getClientSecret(), 'authorizationUri' => self::OAUTH2_AUTH_URL, 'tokenCredentialUri' => self::OAUTH2_TOKEN_URI, 'redirectUri' => $this->getRedirectUri(), 'issuer' => $this->config['client_id'], 'signingKey' => $this->config['signing_key'], 'signingAlgorithm' => $this->config['signing_algorithm']]);
         return $auth;
     }
     /**
      * Set the Cache object
      * @param CacheItemPoolInterface $cache
      */
-    public function setCache(CacheItemPoolInterface $cache)
+    public function setCache(\FluentSmtpLib\Psr\Cache\CacheItemPoolInterface $cache)
     {
         $this->cache = $cache;
     }
@@ -895,7 +920,7 @@ class Client
      * Set the Logger object
      * @param LoggerInterface $logger
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(\FluentSmtpLib\Psr\Log\LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
@@ -911,24 +936,24 @@ class Client
     }
     protected function createDefaultLogger()
     {
-        $logger = new Logger('google-api-php-client');
+        $logger = new \FluentSmtpLib\Monolog\Logger('google-api-php-client');
         if ($this->isAppEngine()) {
-            $handler = new MonologSyslogHandler('app', \LOG_USER, Logger::NOTICE);
+            $handler = new \FluentSmtpLib\Monolog\Handler\SyslogHandler('app', \LOG_USER, \FluentSmtpLib\Monolog\Logger::NOTICE);
         } else {
-            $handler = new MonologStreamHandler('php://stderr', Logger::NOTICE);
+            $handler = new \FluentSmtpLib\Monolog\Handler\StreamHandler('php://stderr', \FluentSmtpLib\Monolog\Logger::NOTICE);
         }
         $logger->pushHandler($handler);
         return $logger;
     }
     protected function createDefaultCache()
     {
-        return new MemoryCacheItemPool();
+        return new \FluentSmtpLib\Google\Auth\Cache\MemoryCacheItemPool();
     }
     /**
      * Set the Http Client object
      * @param ClientInterface $http
      */
-    public function setHttpClient(ClientInterface $http)
+    public function setHttpClient(\FluentSmtpLib\GuzzleHttp\ClientInterface $http)
     {
         $this->http = $http;
     }
@@ -957,17 +982,16 @@ class Client
     {
         $guzzleVersion = null;
         if (\defined('\\FluentSmtpLib\\GuzzleHttp\\ClientInterface::MAJOR_VERSION')) {
-            $guzzleVersion = ClientInterface::MAJOR_VERSION;
+            $guzzleVersion = \FluentSmtpLib\GuzzleHttp\ClientInterface::MAJOR_VERSION;
         } elseif (\defined('\\FluentSmtpLib\\GuzzleHttp\\ClientInterface::VERSION')) {
-            // @phpstan-ignore-next-line
-            $guzzleVersion = (int) \substr(ClientInterface::VERSION, 0, 1);
+            $guzzleVersion = (int) \substr(\FluentSmtpLib\GuzzleHttp\ClientInterface::VERSION, 0, 1);
         }
         if (5 === $guzzleVersion) {
             $options = ['base_url' => $this->config['base_path'], 'defaults' => ['exceptions' => \false]];
             if ($this->isAppEngine()) {
-                if (\class_exists(StreamHandler::class)) {
+                if (\class_exists(\FluentSmtpLib\GuzzleHttp\Ring\Client\StreamHandler::class)) {
                     // set StreamHandler on AppEngine by default
-                    $options['handler'] = new StreamHandler();
+                    $options['handler'] = new \FluentSmtpLib\GuzzleHttp\Ring\Client\StreamHandler();
                     $options['defaults']['verify'] = '/etc/ca-certificates.crt';
                 }
             }
@@ -975,9 +999,9 @@ class Client
             // guzzle 6 or 7
             $options = ['base_uri' => $this->config['base_path'], 'http_errors' => \false];
         } else {
-            throw new LogicException('Could not find supported version of Guzzle.');
+            throw new \LogicException('Could not find supported version of Guzzle.');
         }
-        return new GuzzleClient($options);
+        return new \FluentSmtpLib\GuzzleHttp\Client($options);
     }
     /**
      * @return FetchAuthTokenCache
@@ -990,24 +1014,24 @@ class Client
         // create credentials using values supplied in setAuthConfig
         if ($signingKey) {
             $serviceAccountCredentials = ['client_id' => $this->config['client_id'], 'client_email' => $this->config['client_email'], 'private_key' => $signingKey, 'type' => 'service_account', 'quota_project_id' => $this->config['quota_project']];
-            $credentials = CredentialsLoader::makeCredentials($scopes, $serviceAccountCredentials);
+            $credentials = \FluentSmtpLib\Google\Auth\CredentialsLoader::makeCredentials($scopes, $serviceAccountCredentials);
         } else {
             // When $sub is provided, we cannot pass cache classes to ::getCredentials
             // because FetchAuthTokenCache::setSub does not exist.
             // The result is when $sub is provided, calls to ::onGce are not cached.
-            $credentials = ApplicationDefaultCredentials::getCredentials($scopes, null, $sub ? null : $this->config['cache_config'], $sub ? null : $this->getCache(), $this->config['quota_project']);
+            $credentials = \FluentSmtpLib\Google\Auth\ApplicationDefaultCredentials::getCredentials($scopes, null, $sub ? null : $this->config['cache_config'], $sub ? null : $this->getCache(), $this->config['quota_project']);
         }
         // for service account domain-wide authority (impersonating a user)
         // @see https://developers.google.com/identity/protocols/OAuth2ServiceAccount
         if ($sub) {
-            if (!$credentials instanceof ServiceAccountCredentials) {
-                throw new DomainException('domain-wide authority requires service account credentials');
+            if (!$credentials instanceof \FluentSmtpLib\Google\Auth\Credentials\ServiceAccountCredentials) {
+                throw new \DomainException('domain-wide authority requires service account credentials');
             }
             $credentials->setSub($sub);
         }
         // If we are not using FetchAuthTokenCache yet, create it now
-        if (!$credentials instanceof FetchAuthTokenCache) {
-            $credentials = new FetchAuthTokenCache($credentials, $this->config['cache_config'], $this->getCache());
+        if (!$credentials instanceof \FluentSmtpLib\Google\Auth\FetchAuthTokenCache) {
+            $credentials = new \FluentSmtpLib\Google\Auth\FetchAuthTokenCache($credentials, $this->config['cache_config'], $this->getCache());
         }
         return $credentials;
     }
@@ -1018,11 +1042,22 @@ class Client
         // sessions.
         //
         // @see https://github.com/google/google-api-php-client/issues/821
-        return AuthHandlerFactory::build($this->getCache(), $this->config['cache_config']);
+        return \FluentSmtpLib\Google\AuthHandler\AuthHandlerFactory::build($this->getCache(), $this->config['cache_config']);
     }
     private function createUserRefreshCredentials($scope, $refreshToken)
     {
         $creds = \array_filter(['client_id' => $this->getClientId(), 'client_secret' => $this->getClientSecret(), 'refresh_token' => $refreshToken]);
-        return new UserRefreshCredentials($scope, $creds);
+        return new \FluentSmtpLib\Google\Auth\Credentials\UserRefreshCredentials($scope, $creds);
+    }
+    private function checkUniverseDomain($credentials)
+    {
+        $credentialsUniverse = $credentials instanceof \FluentSmtpLib\Google\Auth\GetUniverseDomainInterface ? $credentials->getUniverseDomain() : \FluentSmtpLib\Google\Auth\GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN;
+        if ($credentialsUniverse !== $this->getUniverseDomain()) {
+            throw new \DomainException(\sprintf('The configured universe domain (%s) does not match the credential universe domain (%s)', $this->getUniverseDomain(), $credentialsUniverse));
+        }
+    }
+    public function getUniverseDomain()
+    {
+        return $this->config['universe_domain'];
     }
 }

@@ -19,7 +19,7 @@ namespace FluentSmtpLib\Google\Service\Gmail;
 
 class Label extends \FluentSmtpLib\Google\Model
 {
-    protected $colorType = LabelColor::class;
+    protected $colorType = \FluentSmtpLib\Google\Service\Gmail\LabelColor::class;
     protected $colorDataType = '';
     /**
      * @var string
@@ -60,7 +60,7 @@ class Label extends \FluentSmtpLib\Google\Model
     /**
      * @param LabelColor
      */
-    public function setColor(LabelColor $color)
+    public function setColor(\FluentSmtpLib\Google\Service\Gmail\LabelColor $color)
     {
         $this->color = $color;
     }
@@ -199,4 +199,4 @@ class Label extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Label::class, 'FluentSmtpLib\\Google_Service_Gmail_Label');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Label::class, 'FluentSmtpLib\\Google_Service_Gmail_Label');

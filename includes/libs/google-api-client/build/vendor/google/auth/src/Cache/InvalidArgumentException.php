@@ -18,6 +18,6 @@
 namespace FluentSmtpLib\Google\Auth\Cache;
 
 use FluentSmtpLib\Psr\Cache\InvalidArgumentException as PsrInvalidArgumentException;
-class InvalidArgumentException extends \InvalidArgumentException implements PsrInvalidArgumentException
+class InvalidArgumentException extends \InvalidArgumentException implements \FluentSmtpLib\Psr\Cache\InvalidArgumentException
 {
 }

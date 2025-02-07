@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -16,17 +17,18 @@ namespace FluentSmtpLib\Monolog\Processor;
  * @see Monolog\Processor\MemoryProcessor::__construct() for options
  * @author Rob Jensen
  */
-class MemoryUsageProcessor extends MemoryProcessor
+class MemoryUsageProcessor extends \FluentSmtpLib\Monolog\Processor\MemoryProcessor
 {
     /**
-     * @param  array $record
-     * @return array
+     * {@inheritDoc}
      */
-    public function __invoke(array $record)
+    public function __invoke(array $record) : array
     {
-        $bytes = \memory_get_usage($this->realUsage);
-        $formatted = $this->formatBytes($bytes);
-        $record['extra']['memory_usage'] = $formatted;
+        $usage = \memory_get_usage($this->realUsage);
+        if ($this->useFormatting) {
+            $usage = $this->formatBytes($usage);
+        }
+        $record['extra']['memory_usage'] = $usage;
         return $record;
     }
 }

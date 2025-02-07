@@ -2,6 +2,7 @@
 
 namespace FluentSmtpLib\GuzzleHttp;
 
+use FluentSmtpLib\GuzzleHttp\Promise as P;
 use FluentSmtpLib\GuzzleHttp\Promise\EachPromise;
 use FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface;
 use FluentSmtpLib\GuzzleHttp\Promise\PromisorInterface;
@@ -16,27 +17,28 @@ use FluentSmtpLib\Psr\Http\Message\RequestInterface;
  * When a function is yielded by the iterator, the function is provided the
  * "request_options" array that should be merged on top of any existing
  * options, and the function MUST then return a wait-able promise.
+ *
+ * @final
  */
-class Pool implements PromisorInterface
+class Pool implements \FluentSmtpLib\GuzzleHttp\Promise\PromisorInterface
 {
-    /** @var EachPromise */
+    /**
+     * @var EachPromise
+     */
     private $each;
     /**
      * @param ClientInterface $client   Client used to send the requests.
      * @param array|\Iterator $requests Requests or functions that return
      *                                  requests to send concurrently.
      * @param array           $config   Associative array of options
-     *     - concurrency: (int) Maximum number of requests to send concurrently
-     *     - options: Array of request options to apply to each request.
-     *     - fulfilled: (callable) Function to invoke when a request completes.
-     *     - rejected: (callable) Function to invoke when a request is rejected.
+     *                                  - concurrency: (int) Maximum number of requests to send concurrently
+     *                                  - options: Array of request options to apply to each request.
+     *                                  - fulfilled: (callable) Function to invoke when a request completes.
+     *                                  - rejected: (callable) Function to invoke when a request is rejected.
      */
-    public function __construct(ClientInterface $client, $requests, array $config = [])
+    public function __construct(\FluentSmtpLib\GuzzleHttp\ClientInterface $client, $requests, array $config = [])
     {
-        // Backwards compatibility.
-        if (isset($config['pool_size'])) {
-            $config['concurrency'] = $config['pool_size'];
-        } elseif (!isset($config['concurrency'])) {
+        if (!isset($config['concurrency'])) {
             $config['concurrency'] = 25;
         }
         if (isset($config['options'])) {
@@ -45,26 +47,24 @@ class Pool implements PromisorInterface
         } else {
             $opts = [];
         }
-        $iterable = \FluentSmtpLib\GuzzleHttp\Promise\iter_for($requests);
-        $requests = function () use($iterable, $client, $opts) {
+        $iterable = \FluentSmtpLib\GuzzleHttp\Promise\Create::iterFor($requests);
+        $requests = static function () use($iterable, $client, $opts) {
             foreach ($iterable as $key => $rfn) {
-                if ($rfn instanceof RequestInterface) {
+                if ($rfn instanceof \FluentSmtpLib\Psr\Http\Message\RequestInterface) {
                     (yield $key => $client->sendAsync($rfn, $opts));
                 } elseif (\is_callable($rfn)) {
                     (yield $key => $rfn($opts));
                 } else {
-                    throw new \InvalidArgumentException('Each value yielded by ' . 'the iterator must be a Psr7\\Http\\Message\\RequestInterface ' . 'or a callable that returns a promise that fulfills ' . 'with a Psr7\\Message\\Http\\ResponseInterface object.');
+                    throw new \InvalidArgumentException('Each value yielded by the iterator must be a Psr7\\Http\\Message\\RequestInterface or a callable that returns a promise that fulfills with a Psr7\\Message\\Http\\ResponseInterface object.');
                 }
             }
         };
-        $this->each = new EachPromise($requests(), $config);
+        $this->each = new \FluentSmtpLib\GuzzleHttp\Promise\EachPromise($requests(), $config);
     }
     /**
      * Get promise
-     *
-     * @return PromiseInterface
      */
-    public function promise()
+    public function promise() : \FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface
     {
         return $this->each->promise();
     }
@@ -79,13 +79,14 @@ class Pool implements PromisorInterface
      * @param ClientInterface $client   Client used to send the requests
      * @param array|\Iterator $requests Requests to send concurrently.
      * @param array           $options  Passes through the options available in
-     *                                  {@see GuzzleHttp\Pool::__construct}
+     *                                  {@see \GuzzleHttp\Pool::__construct}
      *
      * @return array Returns an array containing the response or an exception
      *               in the same order that the requests were sent.
+     *
      * @throws \InvalidArgumentException if the event format is incorrect.
      */
-    public static function batch(ClientInterface $client, $requests, array $options = [])
+    public static function batch(\FluentSmtpLib\GuzzleHttp\ClientInterface $client, $requests, array $options = []) : array
     {
         $res = [];
         self::cmpCallback($options, 'fulfilled', $res);
@@ -97,18 +98,16 @@ class Pool implements PromisorInterface
     }
     /**
      * Execute callback(s)
-     *
-     * @return void
      */
-    private static function cmpCallback(array &$options, $name, array &$results)
+    private static function cmpCallback(array &$options, string $name, array &$results) : void
     {
         if (!isset($options[$name])) {
-            $options[$name] = function ($v, $k) use(&$results) {
+            $options[$name] = static function ($v, $k) use(&$results) {
                 $results[$k] = $v;
             };
         } else {
             $currentFn = $options[$name];
-            $options[$name] = function ($v, $k) use(&$results, $currentFn) {
+            $options[$name] = static function ($v, $k) use(&$results, $currentFn) {
                 $currentFn($v, $k);
                 $results[$k] = $v;
             };

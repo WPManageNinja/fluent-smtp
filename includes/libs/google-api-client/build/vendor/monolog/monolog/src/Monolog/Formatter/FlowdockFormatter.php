@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -14,8 +15,9 @@ namespace FluentSmtpLib\Monolog\Formatter;
  * formats the record to be used in the FlowdockHandler
  *
  * @author Dominik Liebler <liebler.dominik@gmail.com>
+ * @deprecated Since 2.9.0 and 3.3.0, Flowdock was shutdown we will thus drop this handler in Monolog 4
  */
-class FlowdockFormatter implements FormatterInterface
+class FlowdockFormatter implements \FluentSmtpLib\Monolog\Formatter\FormatterInterface
 {
     /**
      * @var string
@@ -25,45 +27,40 @@ class FlowdockFormatter implements FormatterInterface
      * @var string
      */
     private $sourceEmail;
-    /**
-     * @param string $source
-     * @param string $sourceEmail
-     */
-    public function __construct($source, $sourceEmail)
+    public function __construct(string $source, string $sourceEmail)
     {
         $this->source = $source;
         $this->sourceEmail = $sourceEmail;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return mixed[]
      */
-    public function format(array $record)
+    public function format(array $record) : array
     {
-        $tags = array('#logs', '#' . \strtolower($record['level_name']), '#' . $record['channel']);
+        $tags = ['#logs', '#' . \strtolower($record['level_name']), '#' . $record['channel']];
         foreach ($record['extra'] as $value) {
             $tags[] = '#' . $value;
         }
         $subject = \sprintf('in %s: %s - %s', $this->source, $record['level_name'], $this->getShortMessage($record['message']));
-        $record['flowdock'] = array('source' => $this->source, 'from_address' => $this->sourceEmail, 'subject' => $subject, 'content' => $record['message'], 'tags' => $tags, 'project' => $this->source);
+        $record['flowdock'] = ['source' => $this->source, 'from_address' => $this->sourceEmail, 'subject' => $subject, 'content' => $record['message'], 'tags' => $tags, 'project' => $this->source];
         return $record;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @return mixed[][]
      */
-    public function formatBatch(array $records)
+    public function formatBatch(array $records) : array
     {
-        $formatted = array();
+        $formatted = [];
         foreach ($records as $record) {
             $formatted[] = $this->format($record);
         }
         return $formatted;
     }
-    /**
-     * @param string $message
-     *
-     * @return string
-     */
-    public function getShortMessage($message)
+    public function getShortMessage(string $message) : string
     {
         static $hasMbString;
         if (null === $hasMbString) {

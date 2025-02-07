@@ -76,4 +76,4 @@ class FilterAction extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(FilterAction::class, 'FluentSmtpLib\\Google_Service_Gmail_FilterAction');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\FilterAction::class, 'FluentSmtpLib\\Google_Service_Gmail_FilterAction');

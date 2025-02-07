@@ -28,7 +28,7 @@ class Thread extends \FluentSmtpLib\Google\Collection
      * @var string
      */
     public $id;
-    protected $messagesType = Message::class;
+    protected $messagesType = \FluentSmtpLib\Google\Service\Gmail\Message::class;
     protected $messagesDataType = 'array';
     /**
      * @var string
@@ -92,4 +92,4 @@ class Thread extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Thread::class, 'FluentSmtpLib\\Google_Service_Gmail_Thread');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Thread::class, 'FluentSmtpLib\\Google_Service_Gmail_Thread');

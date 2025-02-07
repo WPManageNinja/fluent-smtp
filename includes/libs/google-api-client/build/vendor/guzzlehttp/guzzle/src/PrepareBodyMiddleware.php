@@ -3,30 +3,27 @@
 namespace FluentSmtpLib\GuzzleHttp;
 
 use FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface;
-use FluentSmtpLib\GuzzleHttp\Psr7;
 use FluentSmtpLib\Psr\Http\Message\RequestInterface;
 /**
  * Prepares requests that contain a body, adding the Content-Length,
  * Content-Type, and Expect headers.
+ *
+ * @final
  */
 class PrepareBodyMiddleware
 {
-    /** @var callable  */
+    /**
+     * @var callable(RequestInterface, array): PromiseInterface
+     */
     private $nextHandler;
     /**
-     * @param callable $nextHandler Next handler to invoke.
+     * @param callable(RequestInterface, array): PromiseInterface $nextHandler Next handler to invoke.
      */
     public function __construct(callable $nextHandler)
     {
         $this->nextHandler = $nextHandler;
     }
-    /**
-     * @param RequestInterface $request
-     * @param array            $options
-     *
-     * @return PromiseInterface
-     */
-    public function __invoke(RequestInterface $request, array $options)
+    public function __invoke(\FluentSmtpLib\Psr\Http\Message\RequestInterface $request, array $options) : \FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface
     {
         $fn = $this->nextHandler;
         // Don't do anything if the request has no body.
@@ -37,7 +34,7 @@ class PrepareBodyMiddleware
         // Add a default content-type if possible.
         if (!$request->hasHeader('Content-Type')) {
             if ($uri = $request->getBody()->getMetadata('uri')) {
-                if ($type = Psr7\mimetype_from_filename($uri)) {
+                if (\is_string($uri) && ($type = \FluentSmtpLib\GuzzleHttp\Psr7\MimeType::fromFilename($uri))) {
                     $modify['set_headers']['Content-Type'] = $type;
                 }
             }
@@ -53,22 +50,20 @@ class PrepareBodyMiddleware
         }
         // Add the expect header if needed.
         $this->addExpectHeader($request, $options, $modify);
-        return $fn(Psr7\modify_request($request, $modify), $options);
+        return $fn(\FluentSmtpLib\GuzzleHttp\Psr7\Utils::modifyRequest($request, $modify), $options);
     }
     /**
      * Add expect header
-     *
-     * @return void
      */
-    private function addExpectHeader(RequestInterface $request, array $options, array &$modify)
+    private function addExpectHeader(\FluentSmtpLib\Psr\Http\Message\RequestInterface $request, array $options, array &$modify) : void
     {
         // Determine if the Expect header should be used
         if ($request->hasHeader('Expect')) {
             return;
         }
-        $expect = isset($options['expect']) ? $options['expect'] : null;
-        // Return if disabled or if you're not using HTTP/1.1 or HTTP/2.0
-        if ($expect === \false || $request->getProtocolVersion() < 1.1) {
+        $expect = $options['expect'] ?? null;
+        // Return if disabled or using HTTP/1.0
+        if ($expect === \false || $request->getProtocolVersion() === '1.0') {
             return;
         }
         // The expect header is unconditionally enabled

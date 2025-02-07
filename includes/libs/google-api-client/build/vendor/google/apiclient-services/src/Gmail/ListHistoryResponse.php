@@ -20,7 +20,7 @@ namespace FluentSmtpLib\Google\Service\Gmail;
 class ListHistoryResponse extends \FluentSmtpLib\Google\Collection
 {
     protected $collection_key = 'history';
-    protected $historyType = History::class;
+    protected $historyType = \FluentSmtpLib\Google\Service\Gmail\History::class;
     protected $historyDataType = 'array';
     /**
      * @var string
@@ -74,4 +74,4 @@ class ListHistoryResponse extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ListHistoryResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListHistoryResponse');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\ListHistoryResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListHistoryResponse');

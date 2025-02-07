@@ -57,4 +57,4 @@ class LabelColor extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(LabelColor::class, 'FluentSmtpLib\\Google_Service_Gmail_LabelColor');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\LabelColor::class, 'FluentSmtpLib\\Google_Service_Gmail_LabelColor');

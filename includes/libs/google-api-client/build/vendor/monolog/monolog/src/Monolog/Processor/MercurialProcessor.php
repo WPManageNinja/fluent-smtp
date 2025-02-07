@@ -1,9 +1,10 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
- * (c) Jonathan A. Schweder <jonathanschweder@gmail.com>
+ * (c) Jordi Boggiano <j.boggiano@seld.be>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,24 +12,34 @@
 namespace FluentSmtpLib\Monolog\Processor;
 
 use FluentSmtpLib\Monolog\Logger;
+use FluentSmtpLib\Psr\Log\LogLevel;
 /**
  * Injects Hg branch and Hg revision number in all records
  *
  * @author Jonathan A. Schweder <jonathanschweder@gmail.com>
+ *
+ * @phpstan-import-type LevelName from \Monolog\Logger
+ * @phpstan-import-type Level from \Monolog\Logger
  */
-class MercurialProcessor implements ProcessorInterface
+class MercurialProcessor implements \FluentSmtpLib\Monolog\Processor\ProcessorInterface
 {
+    /** @var Level */
     private $level;
-    private static $cache;
-    public function __construct($level = Logger::DEBUG)
+    /** @var array{branch: string, revision: string}|array<never>|null */
+    private static $cache = null;
+    /**
+     * @param int|string $level The minimum logging level at which this Processor will be triggered
+     *
+     * @phpstan-param Level|LevelName|LogLevel::* $level
+     */
+    public function __construct($level = \FluentSmtpLib\Monolog\Logger::DEBUG)
     {
-        $this->level = Logger::toMonologLevel($level);
+        $this->level = \FluentSmtpLib\Monolog\Logger::toMonologLevel($level);
     }
     /**
-     * @param  array $record
-     * @return array
+     * {@inheritDoc}
      */
-    public function __invoke(array $record)
+    public function __invoke(array $record) : array
     {
         // return if the level is not high enough
         if ($record['level'] < $this->level) {
@@ -37,15 +48,18 @@ class MercurialProcessor implements ProcessorInterface
         $record['extra']['hg'] = self::getMercurialInfo();
         return $record;
     }
-    private static function getMercurialInfo()
+    /**
+     * @return array{branch: string, revision: string}|array<never>
+     */
+    private static function getMercurialInfo() : array
     {
         if (self::$cache) {
             return self::$cache;
         }
         $result = \explode(' ', \trim(`hg id -nb`));
         if (\count($result) >= 3) {
-            return self::$cache = array('branch' => $result[1], 'revision' => $result[2]);
+            return self::$cache = ['branch' => $result[1], 'revision' => $result[2]];
         }
-        return self::$cache = array();
+        return self::$cache = [];
     }
 }

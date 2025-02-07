@@ -57,4 +57,4 @@ class PopSettings extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(PopSettings::class, 'FluentSmtpLib\\Google_Service_Gmail_PopSettings');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\PopSettings::class, 'FluentSmtpLib\\Google_Service_Gmail_PopSettings');

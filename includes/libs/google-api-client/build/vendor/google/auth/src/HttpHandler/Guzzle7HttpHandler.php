@@ -17,6 +17,6 @@
  */
 namespace FluentSmtpLib\Google\Auth\HttpHandler;
 
-class Guzzle7HttpHandler extends Guzzle6HttpHandler
+class Guzzle7HttpHandler extends \FluentSmtpLib\Google\Auth\HttpHandler\Guzzle6HttpHandler
 {
 }

@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -18,9 +19,9 @@ use FluentSmtpLib\Monolog\Utils;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class PsrLogMessageProcessor implements ProcessorInterface
+class PsrLogMessageProcessor implements \FluentSmtpLib\Monolog\Processor\ProcessorInterface
 {
-    const SIMPLE_DATE = "Y-m-d\\TH:i:s.uP";
+    public const SIMPLE_DATE = "Y-m-d\\TH:i:s.uP";
     /** @var string|null */
     private $dateFormat;
     /** @var bool */
@@ -29,21 +30,20 @@ class PsrLogMessageProcessor implements ProcessorInterface
      * @param string|null $dateFormat              The format of the timestamp: one supported by DateTime::format
      * @param bool        $removeUsedContextFields If set to true the fields interpolated into message gets unset
      */
-    public function __construct($dateFormat = null, $removeUsedContextFields = \false)
+    public function __construct(?string $dateFormat = null, bool $removeUsedContextFields = \false)
     {
         $this->dateFormat = $dateFormat;
         $this->removeUsedContextFields = $removeUsedContextFields;
     }
     /**
-     * @param  array $record
-     * @return array
+     * {@inheritDoc}
      */
-    public function __invoke(array $record)
+    public function __invoke(array $record) : array
     {
         if (\false === \strpos($record['message'], '{')) {
             return $record;
         }
-        $replacements = array();
+        $replacements = [];
         foreach ($record['context'] as $key => $val) {
             $placeholder = '{' . $key . '}';
             if (\strpos($record['message'], $placeholder) === \false) {
@@ -51,12 +51,20 @@ class PsrLogMessageProcessor implements ProcessorInterface
             }
             if (\is_null($val) || \is_scalar($val) || \is_object($val) && \method_exists($val, "__toString")) {
                 $replacements[$placeholder] = $val;
-            } elseif ($val instanceof \DateTime) {
-                $replacements[$placeholder] = $val->format($this->dateFormat ?: static::SIMPLE_DATE);
+            } elseif ($val instanceof \DateTimeInterface) {
+                if (!$this->dateFormat && $val instanceof \FluentSmtpLib\Monolog\DateTimeImmutable) {
+                    // handle monolog dates using __toString if no specific dateFormat was asked for
+                    // so that it follows the useMicroseconds flag
+                    $replacements[$placeholder] = (string) $val;
+                } else {
+                    $replacements[$placeholder] = $val->format($this->dateFormat ?: static::SIMPLE_DATE);
+                }
+            } elseif ($val instanceof \UnitEnum) {
+                $replacements[$placeholder] = $val instanceof \BackedEnum ? $val->value : $val->name;
             } elseif (\is_object($val)) {
-                $replacements[$placeholder] = '[object ' . Utils::getClass($val) . ']';
+                $replacements[$placeholder] = '[object ' . \FluentSmtpLib\Monolog\Utils::getClass($val) . ']';
             } elseif (\is_array($val)) {
-                $replacements[$placeholder] = 'array' . Utils::jsonEncode($val, null, \true);
+                $replacements[$placeholder] = 'array' . \FluentSmtpLib\Monolog\Utils::jsonEncode($val, null, \true);
             } else {
                 $replacements[$placeholder] = '[' . \gettype($val) . ']';
             }

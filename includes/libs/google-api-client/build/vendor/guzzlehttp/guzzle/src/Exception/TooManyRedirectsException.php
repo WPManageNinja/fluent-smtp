@@ -2,6 +2,6 @@
 
 namespace FluentSmtpLib\GuzzleHttp\Exception;
 
-class TooManyRedirectsException extends RequestException
+class TooManyRedirectsException extends \FluentSmtpLib\GuzzleHttp\Exception\RequestException
 {
 }

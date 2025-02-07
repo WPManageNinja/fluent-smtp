@@ -5,7 +5,6 @@ namespace FluentSmtpLib\GuzzleHttp;
 use FluentSmtpLib\GuzzleHttp\Exception\BadResponseException;
 use FluentSmtpLib\GuzzleHttp\Exception\TooManyRedirectsException;
 use FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface;
-use FluentSmtpLib\GuzzleHttp\Psr7;
 use FluentSmtpLib\Psr\Http\Message\RequestInterface;
 use FluentSmtpLib\Psr\Http\Message\ResponseInterface;
 use FluentSmtpLib\Psr\Http\Message\UriInterface;
@@ -14,28 +13,29 @@ use FluentSmtpLib\Psr\Http\Message\UriInterface;
  *
  * Apply this middleware like other middleware using
  * {@see \GuzzleHttp\Middleware::redirect()}.
+ *
+ * @final
  */
 class RedirectMiddleware
 {
-    const HISTORY_HEADER = 'X-Guzzle-Redirect-History';
-    const STATUS_HISTORY_HEADER = 'X-Guzzle-Redirect-Status-History';
+    public const HISTORY_HEADER = 'X-Guzzle-Redirect-History';
+    public const STATUS_HISTORY_HEADER = 'X-Guzzle-Redirect-Status-History';
+    /**
+     * @var array
+     */
     public static $defaultSettings = ['max' => 5, 'protocols' => ['http', 'https'], 'strict' => \false, 'referer' => \false, 'track_redirects' => \false];
-    /** @var callable  */
+    /**
+     * @var callable(RequestInterface, array): PromiseInterface
+     */
     private $nextHandler;
     /**
-     * @param callable $nextHandler Next handler to invoke.
+     * @param callable(RequestInterface, array): PromiseInterface $nextHandler Next handler to invoke.
      */
     public function __construct(callable $nextHandler)
     {
         $this->nextHandler = $nextHandler;
     }
-    /**
-     * @param RequestInterface $request
-     * @param array            $options
-     *
-     * @return PromiseInterface
-     */
-    public function __invoke(RequestInterface $request, array $options)
+    public function __invoke(\FluentSmtpLib\Psr\Http\Message\RequestInterface $request, array $options) : \FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface
     {
         $fn = $this->nextHandler;
         if (empty($options['allow_redirects'])) {
@@ -52,32 +52,27 @@ class RedirectMiddleware
         if (empty($options['allow_redirects']['max'])) {
             return $fn($request, $options);
         }
-        return $fn($request, $options)->then(function (ResponseInterface $response) use($request, $options) {
+        return $fn($request, $options)->then(function (\FluentSmtpLib\Psr\Http\Message\ResponseInterface $response) use($request, $options) {
             return $this->checkRedirect($request, $options, $response);
         });
     }
     /**
-     * @param RequestInterface  $request
-     * @param array             $options
-     * @param ResponseInterface $response
-     *
      * @return ResponseInterface|PromiseInterface
      */
-    public function checkRedirect(RequestInterface $request, array $options, ResponseInterface $response)
+    public function checkRedirect(\FluentSmtpLib\Psr\Http\Message\RequestInterface $request, array $options, \FluentSmtpLib\Psr\Http\Message\ResponseInterface $response)
     {
-        if (\substr($response->getStatusCode(), 0, 1) != '3' || !$response->hasHeader('Location')) {
+        if (\strpos((string) $response->getStatusCode(), '3') !== 0 || !$response->hasHeader('Location')) {
             return $response;
         }
-        $this->guardMax($request, $options);
+        $this->guardMax($request, $response, $options);
         $nextRequest = $this->modifyRequest($request, $options, $response);
         // If authorization is handled by curl, unset it if URI is cross-origin.
-        if (Psr7\UriComparator::isCrossOrigin($request->getUri(), $nextRequest->getUri()) && \defined('\\CURLOPT_HTTPAUTH')) {
+        if (\FluentSmtpLib\GuzzleHttp\Psr7\UriComparator::isCrossOrigin($request->getUri(), $nextRequest->getUri()) && \defined('\\CURLOPT_HTTPAUTH')) {
             unset($options['curl'][\CURLOPT_HTTPAUTH], $options['curl'][\CURLOPT_USERPWD]);
         }
         if (isset($options['allow_redirects']['on_redirect'])) {
-            \call_user_func($options['allow_redirects']['on_redirect'], $request, $response, $nextRequest->getUri());
+            $options['allow_redirects']['on_redirect']($request, $response, $nextRequest->getUri());
         }
-        /** @var PromiseInterface|ResponseInterface $promise */
         $promise = $this($nextRequest, $options);
         // Add headers to be able to track history of redirects.
         if (!empty($options['allow_redirects']['track_redirects'])) {
@@ -87,46 +82,35 @@ class RedirectMiddleware
     }
     /**
      * Enable tracking on promise.
-     *
-     * @return PromiseInterface
      */
-    private function withTracking(PromiseInterface $promise, $uri, $statusCode)
+    private function withTracking(\FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface $promise, string $uri, int $statusCode) : \FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface
     {
-        return $promise->then(function (ResponseInterface $response) use($uri, $statusCode) {
+        return $promise->then(static function (\FluentSmtpLib\Psr\Http\Message\ResponseInterface $response) use($uri, $statusCode) {
             // Note that we are pushing to the front of the list as this
             // would be an earlier response than what is currently present
             // in the history header.
             $historyHeader = $response->getHeader(self::HISTORY_HEADER);
             $statusHeader = $response->getHeader(self::STATUS_HISTORY_HEADER);
             \array_unshift($historyHeader, $uri);
-            \array_unshift($statusHeader, $statusCode);
+            \array_unshift($statusHeader, (string) $statusCode);
             return $response->withHeader(self::HISTORY_HEADER, $historyHeader)->withHeader(self::STATUS_HISTORY_HEADER, $statusHeader);
         });
     }
     /**
      * Check for too many redirects.
      *
-     * @return void
-     *
      * @throws TooManyRedirectsException Too many redirects.
      */
-    private function guardMax(RequestInterface $request, array &$options)
+    private function guardMax(\FluentSmtpLib\Psr\Http\Message\RequestInterface $request, \FluentSmtpLib\Psr\Http\Message\ResponseInterface $response, array &$options) : void
     {
-        $current = isset($options['__redirect_count']) ? $options['__redirect_count'] : 0;
+        $current = $options['__redirect_count'] ?? 0;
         $options['__redirect_count'] = $current + 1;
         $max = $options['allow_redirects']['max'];
         if ($options['__redirect_count'] > $max) {
-            throw new TooManyRedirectsException("Will not follow more than {$max} redirects", $request);
+            throw new \FluentSmtpLib\GuzzleHttp\Exception\TooManyRedirectsException("Will not follow more than {$max} redirects", $request, $response);
         }
     }
-    /**
-     * @param RequestInterface  $request
-     * @param array             $options
-     * @param ResponseInterface $response
-     *
-     * @return RequestInterface
-     */
-    public function modifyRequest(RequestInterface $request, array $options, ResponseInterface $response)
+    public function modifyRequest(\FluentSmtpLib\Psr\Http\Message\RequestInterface $request, array $options, \FluentSmtpLib\Psr\Http\Message\ResponseInterface $response) : \FluentSmtpLib\Psr\Http\Message\RequestInterface
     {
         // Request modifications to apply.
         $modify = [];
@@ -136,16 +120,18 @@ class RedirectMiddleware
         // would do.
         $statusCode = $response->getStatusCode();
         if ($statusCode == 303 || $statusCode <= 302 && !$options['allow_redirects']['strict']) {
-            $modify['method'] = 'GET';
+            $safeMethods = ['GET', 'HEAD', 'OPTIONS'];
+            $requestMethod = $request->getMethod();
+            $modify['method'] = \in_array($requestMethod, $safeMethods) ? $requestMethod : 'GET';
             $modify['body'] = '';
         }
         $uri = self::redirectUri($request, $response, $protocols);
         if (isset($options['idn_conversion']) && $options['idn_conversion'] !== \false) {
             $idnOptions = $options['idn_conversion'] === \true ? \IDNA_DEFAULT : $options['idn_conversion'];
-            $uri = Utils::idnUriConvert($uri, $idnOptions);
+            $uri = \FluentSmtpLib\GuzzleHttp\Utils::idnUriConvert($uri, $idnOptions);
         }
         $modify['uri'] = $uri;
-        Psr7\rewind_body($request);
+        \FluentSmtpLib\GuzzleHttp\Psr7\Message::rewindBody($request);
         // Add the Referer header if it is told to do so and only
         // add the header if we are not redirecting from https to http.
         if ($options['allow_redirects']['referer'] && $modify['uri']->getScheme() === $request->getUri()->getScheme()) {
@@ -155,27 +141,21 @@ class RedirectMiddleware
             $modify['remove_headers'][] = 'Referer';
         }
         // Remove Authorization and Cookie headers if URI is cross-origin.
-        if (Psr7\UriComparator::isCrossOrigin($request->getUri(), $modify['uri'])) {
+        if (\FluentSmtpLib\GuzzleHttp\Psr7\UriComparator::isCrossOrigin($request->getUri(), $modify['uri'])) {
             $modify['remove_headers'][] = 'Authorization';
             $modify['remove_headers'][] = 'Cookie';
         }
-        return Psr7\modify_request($request, $modify);
+        return \FluentSmtpLib\GuzzleHttp\Psr7\Utils::modifyRequest($request, $modify);
     }
     /**
      * Set the appropriate URL on the request based on the location header.
-     *
-     * @param RequestInterface  $request
-     * @param ResponseInterface $response
-     * @param array             $protocols
-     *
-     * @return UriInterface
      */
-    private static function redirectUri(RequestInterface $request, ResponseInterface $response, array $protocols)
+    private static function redirectUri(\FluentSmtpLib\Psr\Http\Message\RequestInterface $request, \FluentSmtpLib\Psr\Http\Message\ResponseInterface $response, array $protocols) : \FluentSmtpLib\Psr\Http\Message\UriInterface
     {
-        $location = Psr7\UriResolver::resolve($request->getUri(), new Psr7\Uri($response->getHeaderLine('Location')));
+        $location = \FluentSmtpLib\GuzzleHttp\Psr7\UriResolver::resolve($request->getUri(), new \FluentSmtpLib\GuzzleHttp\Psr7\Uri($response->getHeaderLine('Location')));
         // Ensure that the redirect URI is allowed based on the protocols.
         if (!\in_array($location->getScheme(), $protocols)) {
-            throw new BadResponseException(\sprintf('Redirect URI, %s, does not use one of the allowed redirect protocols: %s', $location, \implode(', ', $protocols)), $request, $response);
+            throw new \FluentSmtpLib\GuzzleHttp\Exception\BadResponseException(\sprintf('Redirect URI, %s, does not use one of the allowed redirect protocols: %s', $location, \implode(', ', $protocols)), $request, $response);
         }
         return $location;
     }

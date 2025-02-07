@@ -75,4 +75,4 @@ class AutoForwarding extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(AutoForwarding::class, 'FluentSmtpLib\\Google_Service_Gmail_AutoForwarding');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\AutoForwarding::class, 'FluentSmtpLib\\Google_Service_Gmail_AutoForwarding');

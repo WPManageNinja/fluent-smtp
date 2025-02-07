@@ -165,4 +165,4 @@ class VacationSettings extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(VacationSettings::class, 'FluentSmtpLib\\Google_Service_Gmail_VacationSettings');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\VacationSettings::class, 'FluentSmtpLib\\Google_Service_Gmail_VacationSettings');

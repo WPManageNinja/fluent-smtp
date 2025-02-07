@@ -183,4 +183,4 @@ class FilterCriteria extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(FilterCriteria::class, 'FluentSmtpLib\\Google_Service_Gmail_FilterCriteria');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\FilterCriteria::class, 'FluentSmtpLib\\Google_Service_Gmail_FilterCriteria');

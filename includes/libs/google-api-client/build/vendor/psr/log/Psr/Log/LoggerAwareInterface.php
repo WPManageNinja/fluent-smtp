@@ -14,5 +14,5 @@ interface LoggerAwareInterface
      *
      * @return void
      */
-    public function setLogger(LoggerInterface $logger);
+    public function setLogger(\FluentSmtpLib\Psr\Log\LoggerInterface $logger);
 }

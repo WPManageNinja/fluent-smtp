@@ -57,4 +57,4 @@ class ForwardingAddress extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ForwardingAddress::class, 'FluentSmtpLib\\Google_Service_Gmail_ForwardingAddress');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\ForwardingAddress::class, 'FluentSmtpLib\\Google_Service_Gmail_ForwardingAddress');

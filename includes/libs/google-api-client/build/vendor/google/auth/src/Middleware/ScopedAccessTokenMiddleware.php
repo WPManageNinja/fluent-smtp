@@ -37,30 +37,22 @@ class ScopedAccessTokenMiddleware
     use CacheTrait;
     const DEFAULT_CACHE_LIFETIME = 1500;
     /**
-     * @var CacheItemPoolInterface
-     */
-    private $cache;
-    /**
-     * @var array configuration
-     */
-    private $cacheConfig;
-    /**
      * @var callable
      */
     private $tokenFunc;
     /**
-     * @var array|string
+     * @var array<string>|string
      */
     private $scopes;
     /**
      * Creates a new ScopedAccessTokenMiddleware.
      *
      * @param callable $tokenFunc a token generator function
-     * @param array|string $scopes the token authentication scopes
-     * @param array $cacheConfig configuration for the cache when it's present
+     * @param array<string>|string $scopes the token authentication scopes
+     * @param array<mixed> $cacheConfig configuration for the cache when it's present
      * @param CacheItemPoolInterface $cache an implementation of CacheItemPoolInterface
      */
-    public function __construct(callable $tokenFunc, $scopes, array $cacheConfig = null, CacheItemPoolInterface $cache = null)
+    public function __construct(callable $tokenFunc, $scopes, ?array $cacheConfig = null, ?\FluentSmtpLib\Psr\Cache\CacheItemPoolInterface $cache = null)
     {
         $this->tokenFunc = $tokenFunc;
         if (!(\is_string($scopes) || \is_array($scopes))) {
@@ -106,7 +98,7 @@ class ScopedAccessTokenMiddleware
      */
     public function __invoke(callable $handler)
     {
-        return function (RequestInterface $request, array $options) use($handler) {
+        return function (\FluentSmtpLib\Psr\Http\Message\RequestInterface $request, array $options) use($handler) {
             // Requests using "auth"="scoped" will be authorized.
             if (!isset($options['auth']) || $options['auth'] !== 'scoped') {
                 return $handler($request, $options);

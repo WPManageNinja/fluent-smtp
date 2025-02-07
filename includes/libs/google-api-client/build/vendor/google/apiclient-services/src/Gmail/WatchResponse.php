@@ -57,4 +57,4 @@ class WatchResponse extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(WatchResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_WatchResponse');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\WatchResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_WatchResponse');

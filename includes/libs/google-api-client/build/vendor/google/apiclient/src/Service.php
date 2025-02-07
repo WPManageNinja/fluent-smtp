@@ -22,7 +22,11 @@ use TypeError;
 class Service
 {
     public $batchPath;
+    /**
+     * Only used in getBatch
+     */
     public $rootUrl;
+    public $rootUrlTemplate;
     public $version;
     public $servicePath;
     public $serviceName;
@@ -31,14 +35,14 @@ class Service
     private $client;
     public function __construct($clientOrConfig = [])
     {
-        if ($clientOrConfig instanceof Client) {
+        if ($clientOrConfig instanceof \FluentSmtpLib\Google\Client) {
             $this->client = $clientOrConfig;
         } elseif (\is_array($clientOrConfig)) {
-            $this->client = new Client($clientOrConfig ?: []);
+            $this->client = new \FluentSmtpLib\Google\Client($clientOrConfig ?: []);
         } else {
             $errorMessage = 'FluentSmtpLib\\constructor must be array or instance of Google\\Client';
             if (\class_exists('TypeError')) {
-                throw new TypeError($errorMessage);
+                throw new \TypeError($errorMessage);
             }
             \trigger_error($errorMessage, \E_USER_ERROR);
         }
@@ -58,6 +62,6 @@ class Service
      */
     public function createBatch()
     {
-        return new Batch($this->client, \false, $this->rootUrl, $this->batchPath);
+        return new \FluentSmtpLib\Google\Http\Batch($this->client, \false, $this->rootUrlTemplate ?? $this->rootUrl, $this->batchPath);
     }
 }

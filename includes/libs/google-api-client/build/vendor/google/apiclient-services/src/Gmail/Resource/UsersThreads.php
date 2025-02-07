@@ -25,7 +25,7 @@ use FluentSmtpLib\Google\Service\Gmail\Thread;
  * Typical usage is:
  *  <code>
  *   $gmailService = new Google\Service\Gmail(...);
- *   $threads = $gmailService->threads;
+ *   $threads = $gmailService->users_threads;
  *  </code>
  */
 class UsersThreads extends \FluentSmtpLib\Google\Service\Resource
@@ -39,6 +39,7 @@ class UsersThreads extends \FluentSmtpLib\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param string $id ID of the Thread to delete.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($userId, $id, $optParams = [])
     {
@@ -57,13 +58,15 @@ class UsersThreads extends \FluentSmtpLib\Google\Service\Resource
      * @opt_param string format The format to return the messages in.
      * @opt_param string metadataHeaders When given and format is METADATA, only
      * include headers specified.
+     * @opt_param bool temporaryEeccBypass
      * @return Thread
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $id, $optParams = [])
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], Thread::class);
+        return $this->call('get', [$params], \FluentSmtpLib\Google\Service\Gmail\Thread::class);
     }
     /**
      * Lists the threads in the user's mailbox. (threads.listUsersThreads)
@@ -84,13 +87,15 @@ class UsersThreads extends \FluentSmtpLib\Google\Service\Resource
      * Supports the same query format as the Gmail search box. For example,
      * `"from:someuser@example.com rfc822msgid: is:unread"`. Parameter cannot be
      * used when accessing the api using the gmail.metadata scope.
+     * @opt_param bool temporaryEeccBypass
      * @return ListThreadsResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersThreads($userId, $optParams = [])
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], ListThreadsResponse::class);
+        return $this->call('list', [$params], \FluentSmtpLib\Google\Service\Gmail\ListThreadsResponse::class);
     }
     /**
      * Modifies the labels applied to the thread. This applies to all messages in
@@ -102,12 +107,13 @@ class UsersThreads extends \FluentSmtpLib\Google\Service\Resource
      * @param ModifyThreadRequest $postBody
      * @param array $optParams Optional parameters.
      * @return Thread
+     * @throws \Google\Service\Exception
      */
-    public function modify($userId, $id, ModifyThreadRequest $postBody, $optParams = [])
+    public function modify($userId, $id, \FluentSmtpLib\Google\Service\Gmail\ModifyThreadRequest $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'id' => $id, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('modify', [$params], Thread::class);
+        return $this->call('modify', [$params], \FluentSmtpLib\Google\Service\Gmail\Thread::class);
     }
     /**
      * Moves the specified thread to the trash. Any messages that belong to the
@@ -118,12 +124,13 @@ class UsersThreads extends \FluentSmtpLib\Google\Service\Resource
      * @param string $id The ID of the thread to Trash.
      * @param array $optParams Optional parameters.
      * @return Thread
+     * @throws \Google\Service\Exception
      */
     public function trash($userId, $id, $optParams = [])
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('trash', [$params], Thread::class);
+        return $this->call('trash', [$params], \FluentSmtpLib\Google\Service\Gmail\Thread::class);
     }
     /**
      * Removes the specified thread from the trash. Any messages that belong to the
@@ -134,13 +141,14 @@ class UsersThreads extends \FluentSmtpLib\Google\Service\Resource
      * @param string $id The ID of the thread to remove from Trash.
      * @param array $optParams Optional parameters.
      * @return Thread
+     * @throws \Google\Service\Exception
      */
     public function untrash($userId, $id, $optParams = [])
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('untrash', [$params], Thread::class);
+        return $this->call('untrash', [$params], \FluentSmtpLib\Google\Service\Gmail\Thread::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(UsersThreads::class, 'FluentSmtpLib\\Google_Service_Gmail_Resource_UsersThreads');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Resource\UsersThreads::class, 'FluentSmtpLib\\Google_Service_Gmail_Resource_UsersThreads');

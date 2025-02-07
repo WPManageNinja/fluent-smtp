@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -11,27 +12,32 @@
 namespace FluentSmtpLib\Monolog\Handler;
 
 use FluentSmtpLib\Monolog\Logger;
+use FluentSmtpLib\Monolog\Formatter\FormatterInterface;
 use FluentSmtpLib\Monolog\Formatter\LineFormatter;
 /**
  * Common syslog functionality
+ *
+ * @phpstan-import-type Level from \Monolog\Logger
  */
-abstract class AbstractSyslogHandler extends AbstractProcessingHandler
+abstract class AbstractSyslogHandler extends \FluentSmtpLib\Monolog\Handler\AbstractProcessingHandler
 {
+    /** @var int */
     protected $facility;
     /**
      * Translates Monolog log levels to syslog log priorities.
+     * @var array
+     * @phpstan-var array<Level, int>
      */
-    protected $logLevels = array(Logger::DEBUG => \LOG_DEBUG, Logger::INFO => \LOG_INFO, Logger::NOTICE => \LOG_NOTICE, Logger::WARNING => \LOG_WARNING, Logger::ERROR => \LOG_ERR, Logger::CRITICAL => \LOG_CRIT, Logger::ALERT => \LOG_ALERT, Logger::EMERGENCY => \LOG_EMERG);
+    protected $logLevels = [\FluentSmtpLib\Monolog\Logger::DEBUG => \LOG_DEBUG, \FluentSmtpLib\Monolog\Logger::INFO => \LOG_INFO, \FluentSmtpLib\Monolog\Logger::NOTICE => \LOG_NOTICE, \FluentSmtpLib\Monolog\Logger::WARNING => \LOG_WARNING, \FluentSmtpLib\Monolog\Logger::ERROR => \LOG_ERR, \FluentSmtpLib\Monolog\Logger::CRITICAL => \LOG_CRIT, \FluentSmtpLib\Monolog\Logger::ALERT => \LOG_ALERT, \FluentSmtpLib\Monolog\Logger::EMERGENCY => \LOG_EMERG];
     /**
      * List of valid log facility names.
+     * @var array<string, int>
      */
-    protected $facilities = array('auth' => \LOG_AUTH, 'authpriv' => \LOG_AUTHPRIV, 'cron' => \LOG_CRON, 'daemon' => \LOG_DAEMON, 'kern' => \LOG_KERN, 'lpr' => \LOG_LPR, 'mail' => \LOG_MAIL, 'news' => \LOG_NEWS, 'syslog' => \LOG_SYSLOG, 'user' => \LOG_USER, 'uucp' => \LOG_UUCP);
+    protected $facilities = ['auth' => \LOG_AUTH, 'authpriv' => \LOG_AUTHPRIV, 'cron' => \LOG_CRON, 'daemon' => \LOG_DAEMON, 'kern' => \LOG_KERN, 'lpr' => \LOG_LPR, 'mail' => \LOG_MAIL, 'news' => \LOG_NEWS, 'syslog' => \LOG_SYSLOG, 'user' => \LOG_USER, 'uucp' => \LOG_UUCP];
     /**
-     * @param mixed $facility
-     * @param int   $level The minimum logging level at which this handler will be triggered
-     * @param bool  $bubble Whether the messages that are handled can bubble up the stack or not
+     * @param string|int $facility Either one of the names of the keys in $this->facilities, or a LOG_* facility constant
      */
-    public function __construct($facility = \LOG_USER, $level = Logger::DEBUG, $bubble = \true)
+    public function __construct($facility = \LOG_USER, $level = \FluentSmtpLib\Monolog\Logger::DEBUG, bool $bubble = \true)
     {
         parent::__construct($level, $bubble);
         if (!\defined('PHP_WINDOWS_VERSION_BUILD')) {
@@ -62,7 +68,7 @@ abstract class AbstractSyslogHandler extends AbstractProcessingHandler
             // LOG_LOCAL7
         }
         // convert textual description of facility to syslog constant
-        if (\array_key_exists(\strtolower($facility), $this->facilities)) {
+        if (\is_string($facility) && \array_key_exists(\strtolower($facility), $this->facilities)) {
             $facility = $this->facilities[\strtolower($facility)];
         } elseif (!\in_array($facility, \array_values($this->facilities), \true)) {
             throw new \UnexpectedValueException('Unknown facility value "' . $facility . '" given');
@@ -70,10 +76,10 @@ abstract class AbstractSyslogHandler extends AbstractProcessingHandler
         $this->facility = $facility;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter() : \FluentSmtpLib\Monolog\Formatter\FormatterInterface
     {
-        return new LineFormatter('%channel%.%level_name%: %message% %context% %extra%');
+        return new \FluentSmtpLib\Monolog\Formatter\LineFormatter('%channel%.%level_name%: %message% %context% %extra%');
     }
 }

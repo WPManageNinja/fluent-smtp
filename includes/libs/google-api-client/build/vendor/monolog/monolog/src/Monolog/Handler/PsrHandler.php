@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -12,12 +13,17 @@ namespace FluentSmtpLib\Monolog\Handler;
 
 use FluentSmtpLib\Monolog\Logger;
 use FluentSmtpLib\Psr\Log\LoggerInterface;
+use FluentSmtpLib\Monolog\Formatter\FormatterInterface;
 /**
  * Proxies log messages to an existing PSR-3 compliant logger.
  *
+ * If a formatter is configured, the formatter's output MUST be a string and the
+ * formatted message will be fed to the wrapped PSR logger instead of the original
+ * log record's message.
+ *
  * @author Michael Moussa <michael.moussa@gmail.com>
  */
-class PsrHandler extends AbstractHandler
+class PsrHandler extends \FluentSmtpLib\Monolog\Handler\AbstractHandler implements \FluentSmtpLib\Monolog\Handler\FormattableHandlerInterface
 {
     /**
      * PSR-3 compliant logger
@@ -26,11 +32,13 @@ class PsrHandler extends AbstractHandler
      */
     protected $logger;
     /**
-     * @param LoggerInterface $logger The underlying PSR-3 compliant logger to which messages will be proxied
-     * @param int             $level  The minimum logging level at which this handler will be triggered
-     * @param bool            $bubble Whether the messages that are handled can bubble up the stack or not
+     * @var FormatterInterface|null
      */
-    public function __construct(LoggerInterface $logger, $level = Logger::DEBUG, $bubble = \true)
+    protected $formatter;
+    /**
+     * @param LoggerInterface $logger The underlying PSR-3 compliant logger to which messages will be proxied
+     */
+    public function __construct(\FluentSmtpLib\Psr\Log\LoggerInterface $logger, $level = \FluentSmtpLib\Monolog\Logger::DEBUG, bool $bubble = \true)
     {
         parent::__construct($level, $bubble);
         $this->logger = $logger;
@@ -38,12 +46,39 @@ class PsrHandler extends AbstractHandler
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record)
+    public function handle(array $record) : bool
     {
         if (!$this->isHandling($record)) {
             return \false;
         }
-        $this->logger->log(\strtolower($record['level_name']), $record['message'], $record['context']);
+        if ($this->formatter) {
+            $formatted = $this->formatter->format($record);
+            $this->logger->log(\strtolower($record['level_name']), (string) $formatted, $record['context']);
+        } else {
+            $this->logger->log(\strtolower($record['level_name']), $record['message'], $record['context']);
+        }
         return \false === $this->bubble;
+    }
+    /**
+     * Sets the formatter.
+     *
+     * @param FormatterInterface $formatter
+     */
+    public function setFormatter(\FluentSmtpLib\Monolog\Formatter\FormatterInterface $formatter) : \FluentSmtpLib\Monolog\Handler\HandlerInterface
+    {
+        $this->formatter = $formatter;
+        return $this;
+    }
+    /**
+     * Gets the formatter.
+     *
+     * @return FormatterInterface
+     */
+    public function getFormatter() : \FluentSmtpLib\Monolog\Formatter\FormatterInterface
+    {
+        if (!$this->formatter) {
+            throw new \LogicException('No formatter has been set and this handler does not have a default formatter');
+        }
+        return $this->formatter;
     }
 }

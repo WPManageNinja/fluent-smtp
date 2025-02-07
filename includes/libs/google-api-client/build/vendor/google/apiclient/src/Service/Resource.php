@@ -32,8 +32,8 @@ class Resource
 {
     // Valid query parameters that work, but don't appear in discovery.
     private $stackParameters = ['alt' => ['type' => 'string', 'location' => 'query'], 'fields' => ['type' => 'string', 'location' => 'query'], 'trace' => ['type' => 'string', 'location' => 'query'], 'userIp' => ['type' => 'string', 'location' => 'query'], 'quotaUser' => ['type' => 'string', 'location' => 'query'], 'data' => ['type' => 'string', 'location' => 'body'], 'mimeType' => ['type' => 'string', 'location' => 'header'], 'uploadType' => ['type' => 'string', 'location' => 'query'], 'mediaUpload' => ['type' => 'complex', 'location' => 'query'], 'prettyPrint' => ['type' => 'string', 'location' => 'query']];
-    /** @var string $rootUrl */
-    private $rootUrl;
+    /** @var string $rootUrlTemplate */
+    private $rootUrlTemplate;
     /** @var \Google\Client $client */
     private $client;
     /** @var string $serviceName */
@@ -46,7 +46,7 @@ class Resource
     private $methods;
     public function __construct($service, $serviceName, $resourceName, $resource)
     {
-        $this->rootUrl = $service->rootUrl;
+        $this->rootUrlTemplate = $service->rootUrlTemplate ?? $service->rootUrl;
         $this->client = $service->getClient();
         $this->servicePath = $service->servicePath;
         $this->serviceName = $serviceName;
@@ -67,7 +67,7 @@ class Resource
     {
         if (!isset($this->methods[$name])) {
             $this->client->getLogger()->error('Service method unknown', ['service' => $this->serviceName, 'resource' => $this->resourceName, 'method' => $name]);
-            throw new GoogleException("Unknown function: " . "{$this->serviceName}->{$this->resourceName}->{$name}()");
+            throw new \FluentSmtpLib\Google\Exception("Unknown function: " . "{$this->serviceName}->{$this->resourceName}->{$name}()");
         }
         $method = $this->methods[$name];
         $parameters = $arguments[0];
@@ -75,7 +75,7 @@ class Resource
         // document as parameter, but we abuse the param entry for storing it.
         $postBody = null;
         if (isset($parameters['postBody'])) {
-            if ($parameters['postBody'] instanceof Model) {
+            if ($parameters['postBody'] instanceof \FluentSmtpLib\Google\Model) {
                 // In the cases the post body is an existing object, we want
                 // to use the smart method to create a simple object for
                 // for JSONification.
@@ -102,13 +102,13 @@ class Resource
         foreach ($parameters as $key => $val) {
             if ($key != 'postBody' && !isset($method['parameters'][$key])) {
                 $this->client->getLogger()->error('Service parameter unknown', ['service' => $this->serviceName, 'resource' => $this->resourceName, 'method' => $name, 'parameter' => $key]);
-                throw new GoogleException("({$name}) unknown parameter: '{$key}'");
+                throw new \FluentSmtpLib\Google\Exception("({$name}) unknown parameter: '{$key}'");
             }
         }
         foreach ($method['parameters'] as $paramName => $paramSpec) {
             if (isset($paramSpec['required']) && $paramSpec['required'] && !isset($parameters[$paramName])) {
                 $this->client->getLogger()->error('Service parameter missing', ['service' => $this->serviceName, 'resource' => $this->resourceName, 'method' => $name, 'parameter' => $paramName]);
-                throw new GoogleException("({$name}) missing required param: '{$paramName}'");
+                throw new \FluentSmtpLib\Google\Exception("({$name}) missing required param: '{$paramName}'");
             }
             if (isset($parameters[$paramName])) {
                 $value = $parameters[$paramName];
@@ -126,12 +126,12 @@ class Resource
         // NOTE: because we're creating the request by hand,
         // and because the service has a rootUrl property
         // the "base_uri" of the Http Client is not accounted for
-        $request = new Request($method['httpMethod'], $url, ['content-type' => 'application/json'], $postBody ? \json_encode($postBody) : '');
+        $request = new \FluentSmtpLib\GuzzleHttp\Psr7\Request($method['httpMethod'], $url, $postBody ? ['content-type' => 'application/json'] : [], $postBody ? \json_encode($postBody) : '');
         // support uploads
         if (isset($parameters['data'])) {
             $mimeType = isset($parameters['mimeType']) ? $parameters['mimeType']['value'] : 'application/octet-stream';
             $data = $parameters['data']['value'];
-            $upload = new MediaFileUpload($this->client, $request, $mimeType, $data);
+            $upload = new \FluentSmtpLib\Google\Http\MediaFileUpload($this->client, $request, $mimeType, $data);
             // pull down the modified request
             $request = $upload->getRequest();
         }
@@ -177,12 +177,14 @@ class Resource
         } else {
             $requestUrl = $this->servicePath . $restPath;
         }
-        // code for leading slash
-        if ($this->rootUrl) {
-            if ('/' !== \substr($this->rootUrl, -1) && '/' !== \substr($requestUrl, 0, 1)) {
+        if ($this->rootUrlTemplate) {
+            // code for universe domain
+            $rootUrl = \str_replace('UNIVERSE_DOMAIN', $this->client->getUniverseDomain(), $this->rootUrlTemplate);
+            // code for leading slash
+            if ('/' !== \substr($rootUrl, -1) && '/' !== \substr($requestUrl, 0, 1)) {
                 $requestUrl = '/' . $requestUrl;
             }
-            $requestUrl = $this->rootUrl . $requestUrl;
+            $requestUrl = $rootUrl . $requestUrl;
         }
         $uriTemplateVars = [];
         $queryVars = [];
@@ -203,7 +205,7 @@ class Resource
             }
         }
         if (\count($uriTemplateVars)) {
-            $uriTemplateParser = new UriTemplate();
+            $uriTemplateParser = new \FluentSmtpLib\Google\Utils\UriTemplate();
             $requestUrl = $uriTemplateParser->parse($requestUrl, $uriTemplateVars);
         }
         if (\count($queryVars)) {

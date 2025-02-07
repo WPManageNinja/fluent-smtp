@@ -20,7 +20,7 @@ namespace FluentSmtpLib\Google\Service\Gmail;
 class ListForwardingAddressesResponse extends \FluentSmtpLib\Google\Collection
 {
     protected $collection_key = 'forwardingAddresses';
-    protected $forwardingAddressesType = ForwardingAddress::class;
+    protected $forwardingAddressesType = \FluentSmtpLib\Google\Service\Gmail\ForwardingAddress::class;
     protected $forwardingAddressesDataType = 'array';
     /**
      * @param ForwardingAddress[]
@@ -38,4 +38,4 @@ class ListForwardingAddressesResponse extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ListForwardingAddressesResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListForwardingAddressesResponse');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\ListForwardingAddressesResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListForwardingAddressesResponse');

@@ -24,7 +24,7 @@ use FluentSmtpLib\Google\Service\Gmail\ListFiltersResponse;
  * Typical usage is:
  *  <code>
  *   $gmailService = new Google\Service\Gmail(...);
- *   $filters = $gmailService->filters;
+ *   $filters = $gmailService->users_settings_filters;
  *  </code>
  */
 class UsersSettingsFilters extends \FluentSmtpLib\Google\Service\Resource
@@ -38,12 +38,13 @@ class UsersSettingsFilters extends \FluentSmtpLib\Google\Service\Resource
      * @param Filter $postBody
      * @param array $optParams Optional parameters.
      * @return Filter
+     * @throws \Google\Service\Exception
      */
-    public function create($userId, Filter $postBody, $optParams = [])
+    public function create($userId, \FluentSmtpLib\Google\Service\Gmail\Filter $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], Filter::class);
+        return $this->call('create', [$params], \FluentSmtpLib\Google\Service\Gmail\Filter::class);
     }
     /**
      * Immediately and permanently deletes the specified filter. (filters.delete)
@@ -52,6 +53,7 @@ class UsersSettingsFilters extends \FluentSmtpLib\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param string $id The ID of the filter to be deleted.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($userId, $id, $optParams = [])
     {
@@ -67,12 +69,13 @@ class UsersSettingsFilters extends \FluentSmtpLib\Google\Service\Resource
      * @param string $id The ID of the filter to be fetched.
      * @param array $optParams Optional parameters.
      * @return Filter
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $id, $optParams = [])
     {
         $params = ['userId' => $userId, 'id' => $id];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], Filter::class);
+        return $this->call('get', [$params], \FluentSmtpLib\Google\Service\Gmail\Filter::class);
     }
     /**
      * Lists the message filters of a Gmail user. (filters.listUsersSettingsFilters)
@@ -81,13 +84,14 @@ class UsersSettingsFilters extends \FluentSmtpLib\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param array $optParams Optional parameters.
      * @return ListFiltersResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersSettingsFilters($userId, $optParams = [])
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], ListFiltersResponse::class);
+        return $this->call('list', [$params], \FluentSmtpLib\Google\Service\Gmail\ListFiltersResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(UsersSettingsFilters::class, 'FluentSmtpLib\\Google_Service_Gmail_Resource_UsersSettingsFilters');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Resource\UsersSettingsFilters::class, 'FluentSmtpLib\\Google_Service_Gmail_Resource_UsersSettingsFilters');

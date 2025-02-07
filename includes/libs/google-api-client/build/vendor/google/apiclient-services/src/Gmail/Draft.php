@@ -23,7 +23,7 @@ class Draft extends \FluentSmtpLib\Google\Model
      * @var string
      */
     public $id;
-    protected $messageType = Message::class;
+    protected $messageType = \FluentSmtpLib\Google\Service\Gmail\Message::class;
     protected $messageDataType = '';
     /**
      * @param string
@@ -42,7 +42,7 @@ class Draft extends \FluentSmtpLib\Google\Model
     /**
      * @param Message
      */
-    public function setMessage(Message $message)
+    public function setMessage(\FluentSmtpLib\Google\Service\Gmail\Message $message)
     {
         $this->message = $message;
     }
@@ -55,4 +55,4 @@ class Draft extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Draft::class, 'FluentSmtpLib\\Google_Service_Gmail_Draft');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Draft::class, 'FluentSmtpLib\\Google_Service_Gmail_Draft');

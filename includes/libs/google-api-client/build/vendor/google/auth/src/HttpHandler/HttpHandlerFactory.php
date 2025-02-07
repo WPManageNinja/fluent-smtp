@@ -17,33 +17,44 @@
  */
 namespace FluentSmtpLib\Google\Auth\HttpHandler;
 
+use FluentSmtpLib\GuzzleHttp\BodySummarizer;
 use FluentSmtpLib\GuzzleHttp\Client;
 use FluentSmtpLib\GuzzleHttp\ClientInterface;
+use FluentSmtpLib\GuzzleHttp\HandlerStack;
+use FluentSmtpLib\GuzzleHttp\Middleware;
 class HttpHandlerFactory
 {
     /**
      * Builds out a default http handler for the installed version of guzzle.
      *
      * @param ClientInterface $client
-     * @return Guzzle5HttpHandler|Guzzle6HttpHandler|Guzzle7HttpHandler
+     * @return Guzzle6HttpHandler|Guzzle7HttpHandler
      * @throws \Exception
      */
-    public static function build(ClientInterface $client = null)
+    public static function build(?\FluentSmtpLib\GuzzleHttp\ClientInterface $client = null)
     {
-        $client = $client ?: new Client();
+        if (\is_null($client)) {
+            $stack = null;
+            if (\class_exists(\FluentSmtpLib\GuzzleHttp\BodySummarizer::class)) {
+                // double the # of characters before truncation by default
+                $bodySummarizer = new \FluentSmtpLib\GuzzleHttp\BodySummarizer(240);
+                $stack = \FluentSmtpLib\GuzzleHttp\HandlerStack::create();
+                $stack->remove('http_errors');
+                $stack->unshift(\FluentSmtpLib\GuzzleHttp\Middleware::httpErrors($bodySummarizer), 'http_errors');
+            }
+            $client = new \FluentSmtpLib\GuzzleHttp\Client(['handler' => $stack]);
+        }
         $version = null;
-        if (\defined('\\FluentSmtpLib\\GuzzleHttp\\ClientInterface::MAJOR_VERSION')) {
-            $version = ClientInterface::MAJOR_VERSION;
-        } elseif (\defined('\\FluentSmtpLib\\GuzzleHttp\\ClientInterface::VERSION')) {
-            $version = (int) \substr(ClientInterface::VERSION, 0, 1);
+        if (\defined('FluentSmtpLib\\GuzzleHttp\\ClientInterface::MAJOR_VERSION')) {
+            $version = \FluentSmtpLib\GuzzleHttp\ClientInterface::MAJOR_VERSION;
+        } elseif (\defined('FluentSmtpLib\\GuzzleHttp\\ClientInterface::VERSION')) {
+            $version = (int) \substr(\FluentSmtpLib\GuzzleHttp\ClientInterface::VERSION, 0, 1);
         }
         switch ($version) {
-            case 5:
-                return new Guzzle5HttpHandler($client);
             case 6:
-                return new Guzzle6HttpHandler($client);
+                return new \FluentSmtpLib\Google\Auth\HttpHandler\Guzzle6HttpHandler($client);
             case 7:
-                return new Guzzle7HttpHandler($client);
+                return new \FluentSmtpLib\Google\Auth\HttpHandler\Guzzle7HttpHandler($client);
             default:
                 throw new \Exception('Version not supported');
         }

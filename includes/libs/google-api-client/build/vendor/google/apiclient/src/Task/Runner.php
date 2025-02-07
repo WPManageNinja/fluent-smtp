@@ -97,36 +97,36 @@ class Runner
     {
         if (isset($config['initial_delay'])) {
             if ($config['initial_delay'] < 0) {
-                throw new GoogleTaskException('Task configuration `initial_delay` must not be negative.');
+                throw new \FluentSmtpLib\Google\Task\Exception('Task configuration `initial_delay` must not be negative.');
             }
             $this->delay = $config['initial_delay'];
         }
         if (isset($config['max_delay'])) {
             if ($config['max_delay'] <= 0) {
-                throw new GoogleTaskException('Task configuration `max_delay` must be greater than 0.');
+                throw new \FluentSmtpLib\Google\Task\Exception('Task configuration `max_delay` must be greater than 0.');
             }
             $this->maxDelay = $config['max_delay'];
         }
         if (isset($config['factor'])) {
             if ($config['factor'] <= 0) {
-                throw new GoogleTaskException('Task configuration `factor` must be greater than 0.');
+                throw new \FluentSmtpLib\Google\Task\Exception('Task configuration `factor` must be greater than 0.');
             }
             $this->factor = $config['factor'];
         }
         if (isset($config['jitter'])) {
             if ($config['jitter'] <= 0) {
-                throw new GoogleTaskException('Task configuration `jitter` must be greater than 0.');
+                throw new \FluentSmtpLib\Google\Task\Exception('Task configuration `jitter` must be greater than 0.');
             }
             $this->jitter = $config['jitter'];
         }
         if (isset($config['retries'])) {
             if ($config['retries'] < 0) {
-                throw new GoogleTaskException('Task configuration `retries` must not be negative.');
+                throw new \FluentSmtpLib\Google\Task\Exception('Task configuration `retries` must not be negative.');
             }
             $this->maxAttempts += $config['retries'];
         }
         if (!\is_callable($action)) {
-            throw new GoogleTaskException('Task argument `$action` must be a valid callable.');
+            throw new \FluentSmtpLib\Google\Task\Exception('Task argument `$action` must be a valid callable.');
         }
         $this->action = $action;
         $this->arguments = $arguments;
@@ -151,7 +151,7 @@ class Runner
         while ($this->attempt()) {
             try {
                 return \call_user_func_array($this->action, $this->arguments);
-            } catch (GoogleServiceException $exception) {
+            } catch (\FluentSmtpLib\Google\Service\Exception $exception) {
                 $allowedRetries = $this->allowedRetries($exception->getCode(), $exception->getErrors());
                 if (!$this->canAttempt() || !$allowedRetries) {
                     throw $exception;

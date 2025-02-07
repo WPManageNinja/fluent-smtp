@@ -18,6 +18,6 @@
 namespace FluentSmtpLib\Google;
 
 use Exception as BaseException;
-class Exception extends BaseException
+class Exception extends \Exception
 {
 }

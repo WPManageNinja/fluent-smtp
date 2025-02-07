@@ -28,7 +28,7 @@ use FluentSmtpLib\Psr\Http\Message\RequestInterface;
 class SimpleMiddleware
 {
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $config;
     /**
@@ -37,7 +37,7 @@ class SimpleMiddleware
      * The configuration array expects one option
      * - key: required, otherwise InvalidArgumentException is thrown
      *
-     * @param array $config Configuration array
+     * @param array<mixed> $config Configuration array
      */
     public function __construct(array $config)
     {
@@ -71,14 +71,14 @@ class SimpleMiddleware
      */
     public function __invoke(callable $handler)
     {
-        return function (RequestInterface $request, array $options) use($handler) {
+        return function (\FluentSmtpLib\Psr\Http\Message\RequestInterface $request, array $options) use($handler) {
             // Requests using "auth"="scoped" will be authorized.
             if (!isset($options['auth']) || $options['auth'] !== 'simple') {
                 return $handler($request, $options);
             }
-            $query = Query::parse($request->getUri()->getQuery());
+            $query = \FluentSmtpLib\GuzzleHttp\Psr7\Query::parse($request->getUri()->getQuery());
             $params = \array_merge($query, $this->config);
-            $uri = $request->getUri()->withQuery(Query::build($params));
+            $uri = $request->getUri()->withQuery(\FluentSmtpLib\GuzzleHttp\Psr7\Query::build($params));
             $request = $request->withUri($uri);
             return $handler($request, $options);
         };

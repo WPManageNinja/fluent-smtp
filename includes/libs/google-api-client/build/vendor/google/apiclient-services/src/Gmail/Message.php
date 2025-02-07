@@ -36,7 +36,7 @@ class Message extends \FluentSmtpLib\Google\Collection
      * @var string[]
      */
     public $labelIds;
-    protected $payloadType = MessagePart::class;
+    protected $payloadType = \FluentSmtpLib\Google\Service\Gmail\MessagePart::class;
     protected $payloadDataType = '';
     /**
      * @var string
@@ -113,7 +113,7 @@ class Message extends \FluentSmtpLib\Google\Collection
     /**
      * @param MessagePart
      */
-    public function setPayload(MessagePart $payload)
+    public function setPayload(\FluentSmtpLib\Google\Service\Gmail\MessagePart $payload)
     {
         $this->payload = $payload;
     }
@@ -182,4 +182,4 @@ class Message extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Message::class, 'FluentSmtpLib\\Google_Service_Gmail_Message');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Message::class, 'FluentSmtpLib\\Google_Service_Gmail_Message');

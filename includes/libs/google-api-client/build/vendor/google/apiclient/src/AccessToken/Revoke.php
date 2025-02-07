@@ -36,7 +36,7 @@ class Revoke
      * Instantiates the class, but does not initiate the login flow, leaving it
      * to the discretion of the caller.
      */
-    public function __construct(ClientInterface $http = null)
+    public function __construct(?\FluentSmtpLib\GuzzleHttp\ClientInterface $http = null)
     {
         $this->http = $http;
     }
@@ -56,9 +56,9 @@ class Revoke
                 $token = $token['access_token'];
             }
         }
-        $body = Psr7\Utils::streamFor(\http_build_query(['token' => $token]));
-        $request = new Request('POST', Client::OAUTH2_REVOKE_URI, ['Cache-Control' => 'no-store', 'Content-Type' => 'application/x-www-form-urlencoded'], $body);
-        $httpHandler = HttpHandlerFactory::build($this->http);
+        $body = \FluentSmtpLib\GuzzleHttp\Psr7\Utils::streamFor(\http_build_query(['token' => $token]));
+        $request = new \FluentSmtpLib\GuzzleHttp\Psr7\Request('POST', \FluentSmtpLib\Google\Client::OAUTH2_REVOKE_URI, ['Cache-Control' => 'no-store', 'Content-Type' => 'application/x-www-form-urlencoded'], $body);
+        $httpHandler = \FluentSmtpLib\Google\Auth\HttpHandler\HttpHandlerFactory::build($this->http);
         $response = $httpHandler($request);
         return $response->getStatusCode() == 200;
     }

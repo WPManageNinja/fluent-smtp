@@ -39,4 +39,4 @@ class LanguageSettings extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(LanguageSettings::class, 'FluentSmtpLib\\Google_Service_Gmail_LanguageSettings');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\LanguageSettings::class, 'FluentSmtpLib\\Google_Service_Gmail_LanguageSettings');

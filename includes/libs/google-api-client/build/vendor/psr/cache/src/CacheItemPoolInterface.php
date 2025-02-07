@@ -108,7 +108,7 @@ interface CacheItemPoolInterface
      * @return bool
      *   True if the item was successfully persisted. False if there was an error.
      */
-    public function save(CacheItemInterface $item);
+    public function save(\FluentSmtpLib\Psr\Cache\CacheItemInterface $item);
     /**
      * Sets a cache item to be persisted later.
      *
@@ -118,7 +118,7 @@ interface CacheItemPoolInterface
      * @return bool
      *   False if the item could not be queued or if a commit was attempted and failed. True otherwise.
      */
-    public function saveDeferred(CacheItemInterface $item);
+    public function saveDeferred(\FluentSmtpLib\Psr\Cache\CacheItemInterface $item);
     /**
      * Persists any deferred cache items.
      *

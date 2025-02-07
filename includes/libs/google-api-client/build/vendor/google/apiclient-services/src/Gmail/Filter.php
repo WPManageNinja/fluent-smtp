@@ -19,9 +19,9 @@ namespace FluentSmtpLib\Google\Service\Gmail;
 
 class Filter extends \FluentSmtpLib\Google\Model
 {
-    protected $actionType = FilterAction::class;
+    protected $actionType = \FluentSmtpLib\Google\Service\Gmail\FilterAction::class;
     protected $actionDataType = '';
-    protected $criteriaType = FilterCriteria::class;
+    protected $criteriaType = \FluentSmtpLib\Google\Service\Gmail\FilterCriteria::class;
     protected $criteriaDataType = '';
     /**
      * @var string
@@ -30,7 +30,7 @@ class Filter extends \FluentSmtpLib\Google\Model
     /**
      * @param FilterAction
      */
-    public function setAction(FilterAction $action)
+    public function setAction(\FluentSmtpLib\Google\Service\Gmail\FilterAction $action)
     {
         $this->action = $action;
     }
@@ -44,7 +44,7 @@ class Filter extends \FluentSmtpLib\Google\Model
     /**
      * @param FilterCriteria
      */
-    public function setCriteria(FilterCriteria $criteria)
+    public function setCriteria(\FluentSmtpLib\Google\Service\Gmail\FilterCriteria $criteria)
     {
         $this->criteria = $criteria;
     }
@@ -71,4 +71,4 @@ class Filter extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Filter::class, 'FluentSmtpLib\\Google_Service_Gmail_Filter');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Filter::class, 'FluentSmtpLib\\Google_Service_Gmail_Filter');

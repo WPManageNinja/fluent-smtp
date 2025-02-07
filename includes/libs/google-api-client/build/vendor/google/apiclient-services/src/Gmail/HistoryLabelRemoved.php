@@ -24,7 +24,7 @@ class HistoryLabelRemoved extends \FluentSmtpLib\Google\Collection
      * @var string[]
      */
     public $labelIds;
-    protected $messageType = Message::class;
+    protected $messageType = \FluentSmtpLib\Google\Service\Gmail\Message::class;
     protected $messageDataType = '';
     /**
      * @param string[]
@@ -43,7 +43,7 @@ class HistoryLabelRemoved extends \FluentSmtpLib\Google\Collection
     /**
      * @param Message
      */
-    public function setMessage(Message $message)
+    public function setMessage(\FluentSmtpLib\Google\Service\Gmail\Message $message)
     {
         $this->message = $message;
     }
@@ -56,4 +56,4 @@ class HistoryLabelRemoved extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(HistoryLabelRemoved::class, 'FluentSmtpLib\\Google_Service_Gmail_HistoryLabelRemoved');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\HistoryLabelRemoved::class, 'FluentSmtpLib\\Google_Service_Gmail_HistoryLabelRemoved');

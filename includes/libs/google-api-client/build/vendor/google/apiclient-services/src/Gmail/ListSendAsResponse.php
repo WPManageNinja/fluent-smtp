@@ -20,7 +20,7 @@ namespace FluentSmtpLib\Google\Service\Gmail;
 class ListSendAsResponse extends \FluentSmtpLib\Google\Collection
 {
     protected $collection_key = 'sendAs';
-    protected $sendAsType = SendAs::class;
+    protected $sendAsType = \FluentSmtpLib\Google\Service\Gmail\SendAs::class;
     protected $sendAsDataType = 'array';
     /**
      * @param SendAs[]
@@ -38,4 +38,4 @@ class ListSendAsResponse extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ListSendAsResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListSendAsResponse');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\ListSendAsResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListSendAsResponse');

@@ -57,4 +57,4 @@ class Delegate extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Delegate::class, 'FluentSmtpLib\\Google_Service_Gmail_Delegate');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Delegate::class, 'FluentSmtpLib\\Google_Service_Gmail_Delegate');

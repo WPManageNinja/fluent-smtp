@@ -19,12 +19,12 @@ namespace FluentSmtpLib\Google\Service\Gmail;
 
 class HistoryMessageDeleted extends \FluentSmtpLib\Google\Model
 {
-    protected $messageType = Message::class;
+    protected $messageType = \FluentSmtpLib\Google\Service\Gmail\Message::class;
     protected $messageDataType = '';
     /**
      * @param Message
      */
-    public function setMessage(Message $message)
+    public function setMessage(\FluentSmtpLib\Google\Service\Gmail\Message $message)
     {
         $this->message = $message;
     }
@@ -37,4 +37,4 @@ class HistoryMessageDeleted extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(HistoryMessageDeleted::class, 'FluentSmtpLib\\Google_Service_Gmail_HistoryMessageDeleted');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\HistoryMessageDeleted::class, 'FluentSmtpLib\\Google_Service_Gmail_HistoryMessageDeleted');

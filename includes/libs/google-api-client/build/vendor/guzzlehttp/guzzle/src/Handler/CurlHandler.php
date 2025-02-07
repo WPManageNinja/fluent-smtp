@@ -2,7 +2,7 @@
 
 namespace FluentSmtpLib\GuzzleHttp\Handler;
 
-use FluentSmtpLib\GuzzleHttp\Psr7;
+use FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface;
 use FluentSmtpLib\Psr\Http\Message\RequestInterface;
 /**
  * HTTP handler that uses cURL easy handles as a transport layer.
@@ -10,23 +10,27 @@ use FluentSmtpLib\Psr\Http\Message\RequestInterface;
  * When using the CurlHandler, custom curl options can be specified as an
  * associative array of curl option constants mapping to values in the
  * **curl** key of the "client" key of the request.
+ *
+ * @final
  */
 class CurlHandler
 {
-    /** @var CurlFactoryInterface */
+    /**
+     * @var CurlFactoryInterface
+     */
     private $factory;
     /**
      * Accepts an associative array of options:
      *
-     * - factory: Optional curl factory used to create cURL handles.
+     * - handle_factory: Optional curl factory used to create cURL handles.
      *
-     * @param array $options Array of options to use with the handler
+     * @param array{handle_factory?: ?CurlFactoryInterface} $options Array of options to use with the handler
      */
     public function __construct(array $options = [])
     {
-        $this->factory = isset($options['handle_factory']) ? $options['handle_factory'] : new CurlFactory(3);
+        $this->factory = $options['handle_factory'] ?? new \FluentSmtpLib\GuzzleHttp\Handler\CurlFactory(3);
     }
-    public function __invoke(RequestInterface $request, array $options)
+    public function __invoke(\FluentSmtpLib\Psr\Http\Message\RequestInterface $request, array $options) : \FluentSmtpLib\GuzzleHttp\Promise\PromiseInterface
     {
         if (isset($options['delay'])) {
             \usleep($options['delay'] * 1000);
@@ -34,6 +38,6 @@ class CurlHandler
         $easy = $this->factory->create($request, $options);
         \curl_exec($easy->handle);
         $easy->errno = \curl_errno($easy->handle);
-        return CurlFactory::finish($this, $easy, $this->factory);
+        return \FluentSmtpLib\GuzzleHttp\Handler\CurlFactory::finish($this, $easy, $this->factory);
     }
 }

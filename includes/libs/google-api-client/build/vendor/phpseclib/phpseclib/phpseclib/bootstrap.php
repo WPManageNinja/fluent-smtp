@@ -5,6 +5,10 @@ namespace FluentSmtpLib;
 /**
  * Bootstrapping File for phpseclib
  *
+ * composer isn't a requirement for phpseclib 2.0 but this file isn't really required
+ * either. it's a bonus for those using composer but if you're not phpseclib will
+ * still work
+ *
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  */
 if (\extension_loaded('mbstring')) {

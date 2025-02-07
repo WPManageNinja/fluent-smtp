@@ -24,7 +24,7 @@ use FluentSmtpLib\Google\Service\Gmail\SendAs;
  * Typical usage is:
  *  <code>
  *   $gmailService = new Google\Service\Gmail(...);
- *   $sendAs = $gmailService->sendAs;
+ *   $sendAs = $gmailService->users_settings_sendAs;
  *  </code>
  */
 class UsersSettingsSendAs extends \FluentSmtpLib\Google\Service\Resource
@@ -45,12 +45,13 @@ class UsersSettingsSendAs extends \FluentSmtpLib\Google\Service\Resource
      * @param SendAs $postBody
      * @param array $optParams Optional parameters.
      * @return SendAs
+     * @throws \Google\Service\Exception
      */
-    public function create($userId, SendAs $postBody, $optParams = [])
+    public function create($userId, \FluentSmtpLib\Google\Service\Gmail\SendAs $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], SendAs::class);
+        return $this->call('create', [$params], \FluentSmtpLib\Google\Service\Gmail\SendAs::class);
     }
     /**
      * Deletes the specified send-as alias. Revokes any verification that may have
@@ -61,6 +62,7 @@ class UsersSettingsSendAs extends \FluentSmtpLib\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param string $sendAsEmail The send-as alias to be deleted.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($userId, $sendAsEmail, $optParams = [])
     {
@@ -77,12 +79,13 @@ class UsersSettingsSendAs extends \FluentSmtpLib\Google\Service\Resource
      * @param string $sendAsEmail The send-as alias to be retrieved.
      * @param array $optParams Optional parameters.
      * @return SendAs
+     * @throws \Google\Service\Exception
      */
     public function get($userId, $sendAsEmail, $optParams = [])
     {
         $params = ['userId' => $userId, 'sendAsEmail' => $sendAsEmail];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], SendAs::class);
+        return $this->call('get', [$params], \FluentSmtpLib\Google\Service\Gmail\SendAs::class);
     }
     /**
      * Lists the send-as aliases for the specified account. The result includes the
@@ -93,12 +96,13 @@ class UsersSettingsSendAs extends \FluentSmtpLib\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param array $optParams Optional parameters.
      * @return ListSendAsResponse
+     * @throws \Google\Service\Exception
      */
     public function listUsersSettingsSendAs($userId, $optParams = [])
     {
         $params = ['userId' => $userId];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], ListSendAsResponse::class);
+        return $this->call('list', [$params], \FluentSmtpLib\Google\Service\Gmail\ListSendAsResponse::class);
     }
     /**
      * Patch the specified send-as alias. (sendAs.patch)
@@ -109,12 +113,13 @@ class UsersSettingsSendAs extends \FluentSmtpLib\Google\Service\Resource
      * @param SendAs $postBody
      * @param array $optParams Optional parameters.
      * @return SendAs
+     * @throws \Google\Service\Exception
      */
-    public function patch($userId, $sendAsEmail, SendAs $postBody, $optParams = [])
+    public function patch($userId, $sendAsEmail, \FluentSmtpLib\Google\Service\Gmail\SendAs $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'sendAsEmail' => $sendAsEmail, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], SendAs::class);
+        return $this->call('patch', [$params], \FluentSmtpLib\Google\Service\Gmail\SendAs::class);
     }
     /**
      * Updates a send-as alias. If a signature is provided, Gmail will sanitize the
@@ -128,12 +133,13 @@ class UsersSettingsSendAs extends \FluentSmtpLib\Google\Service\Resource
      * @param SendAs $postBody
      * @param array $optParams Optional parameters.
      * @return SendAs
+     * @throws \Google\Service\Exception
      */
-    public function update($userId, $sendAsEmail, SendAs $postBody, $optParams = [])
+    public function update($userId, $sendAsEmail, \FluentSmtpLib\Google\Service\Gmail\SendAs $postBody, $optParams = [])
     {
         $params = ['userId' => $userId, 'sendAsEmail' => $sendAsEmail, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('update', [$params], SendAs::class);
+        return $this->call('update', [$params], \FluentSmtpLib\Google\Service\Gmail\SendAs::class);
     }
     /**
      * Sends a verification email to the specified send-as alias address. The
@@ -145,6 +151,7 @@ class UsersSettingsSendAs extends \FluentSmtpLib\Google\Service\Resource
      * used to indicate the authenticated user.
      * @param string $sendAsEmail The send-as alias to be verified.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function verify($userId, $sendAsEmail, $optParams = [])
     {
@@ -154,4 +161,4 @@ class UsersSettingsSendAs extends \FluentSmtpLib\Google\Service\Resource
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(UsersSettingsSendAs::class, 'FluentSmtpLib\\Google_Service_Gmail_Resource_UsersSettingsSendAs');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\Resource\UsersSettingsSendAs::class, 'FluentSmtpLib\\Google_Service_Gmail_Resource_UsersSettingsSendAs');

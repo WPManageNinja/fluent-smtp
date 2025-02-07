@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -10,26 +11,35 @@
  */
 namespace FluentSmtpLib\Monolog\Handler;
 
-use FluentSmtpLib\Monolog\ResettableInterface;
 /**
- * Base Handler class providing the Handler structure
+ * Base Handler class providing the Handler structure, including processors and formatters
  *
  * Classes extending it should (in most cases) only implement write($record)
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @author Christophe Coevoet <stof@notk.org>
+ *
+ * @phpstan-import-type LevelName from \Monolog\Logger
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type Record from \Monolog\Logger
+ * @phpstan-type FormattedRecord array{message: string, context: mixed[], level: Level, level_name: LevelName, channel: string, datetime: \DateTimeImmutable, extra: mixed[], formatted: mixed}
  */
-abstract class AbstractProcessingHandler extends AbstractHandler
+abstract class AbstractProcessingHandler extends \FluentSmtpLib\Monolog\Handler\AbstractHandler implements \FluentSmtpLib\Monolog\Handler\ProcessableHandlerInterface, \FluentSmtpLib\Monolog\Handler\FormattableHandlerInterface
 {
+    use ProcessableHandlerTrait;
+    use FormattableHandlerTrait;
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handle(array $record)
+    public function handle(array $record) : bool
     {
         if (!$this->isHandling($record)) {
             return \false;
         }
-        $record = $this->processRecord($record);
+        if ($this->processors) {
+            /** @var Record $record */
+            $record = $this->processRecord($record);
+        }
         $record['formatted'] = $this->getFormatter()->format($record);
         $this->write($record);
         return \false === $this->bubble;
@@ -37,23 +47,15 @@ abstract class AbstractProcessingHandler extends AbstractHandler
     /**
      * Writes the record down to the log of the implementing handler
      *
-     * @param  array $record
+     * @phpstan-param FormattedRecord $record
+     */
+    protected abstract function write(array $record) : void;
+    /**
      * @return void
      */
-    protected abstract function write(array $record);
-    /**
-     * Processes a record.
-     *
-     * @param  array $record
-     * @return array
-     */
-    protected function processRecord(array $record)
+    public function reset()
     {
-        if ($this->processors) {
-            foreach ($this->processors as $processor) {
-                $record = \call_user_func($processor, $record);
-            }
-        }
-        return $record;
+        parent::reset();
+        $this->resetProcessors();
     }
 }

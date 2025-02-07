@@ -16,29 +16,26 @@ use FluentSmtpLib\Monolog\Formatter\LineFormatter;
 /**
  * Helper trait for implementing FormattableInterface
  *
- * This trait is present in monolog 1.x to ease forward compatibility.
- *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
 trait FormattableHandlerTrait
 {
     /**
-     * @var FormatterInterface
+     * @var ?FormatterInterface
      */
     protected $formatter;
     /**
-     * {@inheritdoc}
-     * @suppress PhanTypeMismatchReturn
+     * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
+    public function setFormatter(\FluentSmtpLib\Monolog\Formatter\FormatterInterface $formatter) : \FluentSmtpLib\Monolog\Handler\HandlerInterface
     {
         $this->formatter = $formatter;
         return $this;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getFormatter() : FormatterInterface
+    public function getFormatter() : \FluentSmtpLib\Monolog\Formatter\FormatterInterface
     {
         if (!$this->formatter) {
             $this->formatter = $this->getDefaultFormatter();
@@ -50,8 +47,8 @@ trait FormattableHandlerTrait
      *
      * Overwrite this if the LineFormatter is not a good default for your handler.
      */
-    protected function getDefaultFormatter() : FormatterInterface
+    protected function getDefaultFormatter() : \FluentSmtpLib\Monolog\Formatter\FormatterInterface
     {
-        return new LineFormatter();
+        return new \FluentSmtpLib\Monolog\Formatter\LineFormatter();
     }
 }

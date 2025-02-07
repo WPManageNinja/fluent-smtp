@@ -67,7 +67,7 @@ class MediaFileUpload
      * @param int $chunkSize File will be uploaded in chunks of this many bytes.
      * only used if resumable=True
      */
-    public function __construct(Client $client, RequestInterface $request, $mimeType, $data, $resumable = \false, $chunkSize = 0)
+    public function __construct(\FluentSmtpLib\Google\Client $client, \FluentSmtpLib\Psr\Http\Message\RequestInterface $request, $mimeType, $data, $resumable = \false, $chunkSize = 0)
     {
         $this->client = $client;
         $this->request = $request;
@@ -107,7 +107,7 @@ class MediaFileUpload
         }
         $lastBytePos = $this->progress + \strlen($chunk) - 1;
         $headers = ['content-range' => "bytes {$this->progress}-{$lastBytePos}/{$this->size}", 'content-length' => (string) \strlen($chunk), 'expect' => ''];
-        $request = new Request('PUT', $resumeUri, $headers, Psr7\Utils::streamFor($chunk));
+        $request = new \FluentSmtpLib\GuzzleHttp\Psr7\Request('PUT', $resumeUri, $headers, \FluentSmtpLib\GuzzleHttp\Psr7\Utils::streamFor($chunk));
         return $this->makePutRequest($request);
     }
     /**
@@ -127,7 +127,7 @@ class MediaFileUpload
      * @return false|mixed false when the upload is unfinished or the decoded http response
      *
      */
-    private function makePutRequest(RequestInterface $request)
+    private function makePutRequest(\FluentSmtpLib\Psr\Http\Message\RequestInterface $request)
     {
         $response = $this->client->execute($request);
         $this->httpResultCode = $response->getStatusCode();
@@ -146,7 +146,7 @@ class MediaFileUpload
             // No problems, but upload not complete.
             return \false;
         }
-        return REST::decodeHttpResponse($response, $this->request);
+        return \FluentSmtpLib\Google\Http\REST::decodeHttpResponse($response, $this->request);
     }
     /**
      * Resume a previously unfinished upload
@@ -156,7 +156,7 @@ class MediaFileUpload
     {
         $this->resumeUri = $resumeUri;
         $headers = ['content-range' => "bytes */{$this->size}", 'content-length' => '0'];
-        $httpRequest = new Request('PUT', $this->resumeUri, $headers);
+        $httpRequest = new \FluentSmtpLib\GuzzleHttp\Psr7\Request('PUT', $this->resumeUri, $headers);
         return $this->makePutRequest($httpRequest);
     }
     /**
@@ -171,7 +171,7 @@ class MediaFileUpload
         $contentType = \false;
         $meta = \json_decode((string) $request->getBody(), \true);
         $uploadType = $this->getUploadType($meta);
-        $request = $request->withUri(Uri::withQueryValue($request->getUri(), 'uploadType', $uploadType));
+        $request = $request->withUri(\FluentSmtpLib\GuzzleHttp\Psr7\Uri::withQueryValue($request->getUri(), 'uploadType', $uploadType));
         $mimeType = $this->mimeType ?: $request->getHeaderLine('content-type');
         if (self::UPLOAD_RESUMABLE_TYPE == $uploadType) {
             $contentType = $mimeType;
@@ -194,7 +194,7 @@ class MediaFileUpload
             $related .= "--{$boundary}--";
             $postBody = $related;
         }
-        $request = $request->withBody(Psr7\Utils::streamFor($postBody));
+        $request = $request->withBody(\FluentSmtpLib\GuzzleHttp\Psr7\Utils::streamFor($postBody));
         if ($contentType) {
             $request = $request->withHeader('content-type', $contentType);
         }
@@ -250,7 +250,7 @@ class MediaFileUpload
         }
         $error = "Failed to start the resumable upload (HTTP {$message})";
         $this->client->getLogger()->error($error);
-        throw new GoogleException($error);
+        throw new \FluentSmtpLib\Google\Exception($error);
     }
     private function transformToUploadUrl()
     {
@@ -259,7 +259,7 @@ class MediaFileUpload
             $parts['path'] = '';
         }
         $parts['path'] = '/upload' . $parts['path'];
-        $uri = Uri::fromParts($parts);
+        $uri = \FluentSmtpLib\GuzzleHttp\Psr7\Uri::fromParts($parts);
         $this->request = $this->request->withUri($uri);
     }
     public function setChunkSize($chunkSize)

@@ -28,7 +28,7 @@ class ListThreadsResponse extends \FluentSmtpLib\Google\Collection
      * @var string
      */
     public $resultSizeEstimate;
-    protected $threadsType = Thread::class;
+    protected $threadsType = \FluentSmtpLib\Google\Service\Gmail\Thread::class;
     protected $threadsDataType = 'array';
     /**
      * @param string
@@ -74,4 +74,4 @@ class ListThreadsResponse extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ListThreadsResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListThreadsResponse');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\ListThreadsResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListThreadsResponse');

@@ -111,4 +111,4 @@ class SmtpMsa extends \FluentSmtpLib\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(SmtpMsa::class, 'FluentSmtpLib\\Google_Service_Gmail_SmtpMsa');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\SmtpMsa::class, 'FluentSmtpLib\\Google_Service_Gmail_SmtpMsa');

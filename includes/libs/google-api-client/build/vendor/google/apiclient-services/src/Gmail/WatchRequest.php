@@ -25,6 +25,10 @@ class WatchRequest extends \FluentSmtpLib\Google\Collection
      */
     public $labelFilterAction;
     /**
+     * @var string
+     */
+    public $labelFilterBehavior;
+    /**
      * @var string[]
      */
     public $labelIds;
@@ -45,6 +49,20 @@ class WatchRequest extends \FluentSmtpLib\Google\Collection
     public function getLabelFilterAction()
     {
         return $this->labelFilterAction;
+    }
+    /**
+     * @param string
+     */
+    public function setLabelFilterBehavior($labelFilterBehavior)
+    {
+        $this->labelFilterBehavior = $labelFilterBehavior;
+    }
+    /**
+     * @return string
+     */
+    public function getLabelFilterBehavior()
+    {
+        return $this->labelFilterBehavior;
     }
     /**
      * @param string[]
@@ -76,4 +94,4 @@ class WatchRequest extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(WatchRequest::class, 'FluentSmtpLib\\Google_Service_Gmail_WatchRequest');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\WatchRequest::class, 'FluentSmtpLib\\Google_Service_Gmail_WatchRequest');

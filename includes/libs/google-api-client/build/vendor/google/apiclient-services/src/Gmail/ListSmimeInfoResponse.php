@@ -20,7 +20,7 @@ namespace FluentSmtpLib\Google\Service\Gmail;
 class ListSmimeInfoResponse extends \FluentSmtpLib\Google\Collection
 {
     protected $collection_key = 'smimeInfo';
-    protected $smimeInfoType = SmimeInfo::class;
+    protected $smimeInfoType = \FluentSmtpLib\Google\Service\Gmail\SmimeInfo::class;
     protected $smimeInfoDataType = 'array';
     /**
      * @param SmimeInfo[]
@@ -38,4 +38,4 @@ class ListSmimeInfoResponse extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ListSmimeInfoResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListSmimeInfoResponse');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\ListSmimeInfoResponse::class, 'FluentSmtpLib\\Google_Service_Gmail_ListSmimeInfoResponse');

@@ -20,7 +20,7 @@ namespace FluentSmtpLib\Google\Auth;
 /**
  * Describes a class which supports signing arbitrary strings.
  */
-interface SignBlobInterface extends FetchAuthTokenInterface
+interface SignBlobInterface extends \FluentSmtpLib\Google\Auth\FetchAuthTokenInterface
 {
     /**
      * Sign a string using the method which is best for a given credentials type.
@@ -39,5 +39,5 @@ interface SignBlobInterface extends FetchAuthTokenInterface
      *     one is required to obtain a client name.
      * @return string
      */
-    public function getClientName(callable $httpHandler = null);
+    public function getClientName(?callable $httpHandler = null);
 }

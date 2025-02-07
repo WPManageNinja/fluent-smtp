@@ -18,6 +18,6 @@
 namespace FluentSmtpLib\Google\Task;
 
 use FluentSmtpLib\Google\Exception as GoogleException;
-class Exception extends GoogleException
+class Exception extends \FluentSmtpLib\Google\Exception
 {
 }

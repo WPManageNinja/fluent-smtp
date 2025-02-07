@@ -1,18 +1,46 @@
 {
-    "require": {
-        "google/apiclient": "v2.12.6",
-        "guzzlehttp/guzzle": "6.5.8",
-        "guzzlehttp/psr7": "^1.7",
-        "monolog/monolog": "^1.17",
-        "phpseclib/phpseclib": "~2.0",
-        "firebase/php-jwt": "~2.0"
+  "name": "fluent-smtp/fluent-smtp-3rd-party",
+  "description": "FluentSMTP 3rd pary Libs",
+  "license": "Apache-2.0",
+  "type": "wordpress-plugin",
+  "homepage": "https://fluentsmtp.com",
+  "require-dev": {},
+  "require": {
+    "google/apiclient": "^2.14.0"
+  },
+  "extra": {
+    "google/apiclient-services": [
+      "Gmail"
+    ]
+  },
+  "config": {
+    "platform": {
+      "php": "7.4.33"
     },
-    "scripts": {
-        "pre-autoload-dump": "Google\\Task\\Composer::cleanup"
-    },
-    "extra": {
-        "google/apiclient-services": [
-            "Gmail"
-        ]
-    }
+    "sort-packages": true
+  },
+  "autoload": {
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "@prefix-dependencies"
+    ],
+    "post-update-cmd": [
+      "@prefix-dependencies"
+    ],
+    "prefix-dependencies": [
+      "mkdir -p php-scoper && echo '{ \"require\": { \"humbug/php-scoper\": \"^0.13.0\" }, \"config\": { \"platform\": { \"php\": \"7.4\" }, \"allow-plugins\": { \"composer/package-versions-deprecated\": true } }, \"minimum-stability\": \"dev\", \"prefer-stable\": true }' > php-scoper/composer.json",
+      "@composer --working-dir=php-scoper install",
+      "@php -dxdebug.mode=off php-scoper/vendor/bin/php-scoper add --output-dir=./build/vendor --force --quiet",
+      "rm -rf php-scoper",
+      "@autoload-third-party"
+    ],
+    "autoload-third-party": [
+      "echo '{ \"autoload\": { \"classmap\": [\"\"] } }' > build/composer.json",
+      "@composer --working-dir=build dump-autoload --classmap-authoritative --no-interaction",
+      "cp vendor/composer/autoload_files.php build/vendor/composer",
+      "rm -rf vendor && rm -rf composer.lock",
+      "rm -rf build/vendor/scoper-autoload.php"
+    ]
+  }
 }

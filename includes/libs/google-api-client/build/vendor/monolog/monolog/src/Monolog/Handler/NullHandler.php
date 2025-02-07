@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -11,6 +12,7 @@
 namespace FluentSmtpLib\Monolog\Handler;
 
 use FluentSmtpLib\Monolog\Logger;
+use FluentSmtpLib\Psr\Log\LogLevel;
 /**
  * Blackhole
  *
@@ -18,24 +20,37 @@ use FluentSmtpLib\Monolog\Logger;
  * to put on top of an existing stack to override it temporarily.
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class NullHandler extends AbstractHandler
+class NullHandler extends \FluentSmtpLib\Monolog\Handler\Handler
 {
     /**
-     * @param int $level The minimum logging level at which this handler will be triggered
+     * @var int
      */
-    public function __construct($level = Logger::DEBUG)
+    private $level;
+    /**
+     * @param string|int $level The minimum logging level at which this handler will be triggered
+     *
+     * @phpstan-param Level|LevelName|LogLevel::* $level
+     */
+    public function __construct($level = \FluentSmtpLib\Monolog\Logger::DEBUG)
     {
-        parent::__construct($level, \false);
+        $this->level = \FluentSmtpLib\Monolog\Logger::toMonologLevel($level);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handle(array $record)
+    public function isHandling(array $record) : bool
     {
-        if ($record['level'] < $this->level) {
-            return \false;
-        }
-        return \true;
+        return $record['level'] >= $this->level;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    public function handle(array $record) : bool
+    {
+        return $record['level'] >= $this->level;
     }
 }

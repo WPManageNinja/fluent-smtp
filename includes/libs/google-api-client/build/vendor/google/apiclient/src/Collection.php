@@ -7,7 +7,7 @@ namespace FluentSmtpLib\Google;
  * exposes the items array for iteration, so you can just
  * iterate over the object rather than a reference inside.
  */
-class Collection extends Model implements \Iterator, \Countable
+class Collection extends \FluentSmtpLib\Google\Model implements \Iterator, \Countable
 {
     protected $collection_key = 'items';
     /** @return void */
@@ -67,6 +67,7 @@ class Collection extends Model implements \Iterator, \Countable
         return isset($this->{$this->collection_key}[$offset]);
     }
     /** @return mixed */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (!\is_numeric($offset)) {

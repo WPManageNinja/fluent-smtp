@@ -58,4 +58,4 @@ class ModifyThreadRequest extends \FluentSmtpLib\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(ModifyThreadRequest::class, 'FluentSmtpLib\\Google_Service_Gmail_ModifyThreadRequest');
+\class_alias(\FluentSmtpLib\Google\Service\Gmail\ModifyThreadRequest::class, 'FluentSmtpLib\\Google_Service_Gmail_ModifyThreadRequest');
