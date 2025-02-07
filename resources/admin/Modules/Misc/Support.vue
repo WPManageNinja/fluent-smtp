@@ -57,7 +57,7 @@
             </el-col>
             <el-col :sm="24" :md="12">
                 <div v-if="plugin || installed_info">
-                    <div v-loading="installing" element-loading-text="$t('Installing... Please wait')" class="fss_about">
+                    <div v-loading="installing" :element-loading-text="$t('Installing... Please wait')" class="fss_about">
                         <div class="fss_header">{{ $t('Recommended Plugin') }}</div>
                         <div class="fss_content">
                             <div v-if="installed_info" class="install_success">

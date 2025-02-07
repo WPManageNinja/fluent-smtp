@@ -229,9 +229,10 @@ class AdminMenuHandler
 
         add_filter('admin_footer_text', function ($text) {
             return sprintf(
-                __('<b>FluentSMTP</b> is a free plugin & it will be always free %1$s. %2$s', 'fluent-smtp'),
-                '<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('(Learn why it\'s free)', 'fluent-smtp'); ?></a>',
-                '<a href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Write a review ★★★★★', 'fluent-smtp'); ?></a>'
+                __('%1$s is a free plugin & it will be always free %2$s. %3$s', 'fluent-smtp'),
+                '<b>FluentSMTP</b>',
+                '<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/" target="_blank" rel="noopener noreferrer">'. esc_html__('(Learn why it\'s free)', 'fluent-smtp') .'</a>',
+                '<a href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5" target="_blank" rel="noopener noreferrer">'. esc_html__('Write a review ★★★★★', 'fluent-smtp') .'</a>'
             );
         });
     }

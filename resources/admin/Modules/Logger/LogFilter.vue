@@ -18,7 +18,7 @@
                     v-model="filter_query.date_range"
                     type="daterange"
                     :placeholder="$t('Select date and time')"
-                    range-separator="$t('To')"
+                    :range-separator="$t('To')"
                     :start-placeholder="$t('Start date')"
                     :end-placeholder="$t('End date')"
                     style="width:100%"

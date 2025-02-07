@@ -6,7 +6,7 @@
                     clearable
                     v-model="action"
                     size="small"
-                    :tplaceholder="$t('Bulk Action')"
+                    :placeholder="$t('Bulk Action')"
                 >
                     <el-option
                         value="deleteselected"

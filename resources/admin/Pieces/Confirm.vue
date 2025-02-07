@@ -5,7 +5,7 @@
         v-model="visible"
         :placement="placement">
 
-        <p v-html="$t(message)"></p>
+        <p v-html="message"></p>
 
         <div class="action-buttons">
             <el-button
@@ -39,7 +39,7 @@
                 default: 'top-end'
             },
             message: {
-                default: this.$t('Are you sure to delete this?')
+                default: 'Are you sure to delete this?'
             }
         },
         data() {

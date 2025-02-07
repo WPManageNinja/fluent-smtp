@@ -21,7 +21,7 @@
                         </span>
                     </el-form-item>
 
-                    <el-form-item for="from" label="$t('Send To')">
+                    <el-form-item for="from" :label="$t('Send To')">
                         <el-input id="from" v-model="form.email" />
 
                         <span class="small-help-text" style="display:block;margin-top:-10px">
@@ -58,7 +58,7 @@
                             :closable="false"
                             type="warning"
                             style="display:inline;margin-left:20px;"
-                        >{{ this.$t(inactiveMessage) }}</el-alert>
+                        >{{ inactiveMessage }}</el-alert>
                     </el-form-item>
                 </el-form>
                 <el-alert v-if="debug_info" type="error" :title="debug_info.message" show-icon />
