@@ -30,7 +30,7 @@
                     </label>
 
                     <div class="small-help-text" style="display:inline-block;">
-                        Select <strong>ssl</strong> on port <strong>465</strong>, or <strong>tls</strong> on port <strong>25</strong> or <strong>587</strong>
+                        {{ $t('Select <strong>ssl</strong> on port <strong>465</strong>, or <strong>tls</strong> on port <strong>25</strong> or <strong>587') }}</strong>
                     </div>
 
                     <div style="display:inline-block;margin-left: 20px;">

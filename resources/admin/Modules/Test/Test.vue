@@ -21,7 +21,7 @@
                         </span>
                     </el-form-item>
 
-                    <el-form-item for="from" label="Send To">
+                    <el-form-item for="from" label="$t('Send To')">
                         <el-input id="from" v-model="form.email" />
 
                         <span class="small-help-text" style="display:block;margin-top:-10px">
@@ -109,7 +109,7 @@
 
                 this.$post('settings/test', { ...this.form }).then(res => {
                     this.$notify.success({
-                        title: 'Great!',
+                        title: this.$t('Great!'),
                         offset: 19,
                         message: res.data.message
                     });
@@ -117,7 +117,7 @@
                 }).fail(res => {
                     if (Number(res.status) === 504) {
                         return this.$notify.error({
-                            title: 'Oops!',
+                            title: this.$t('Oops!'),
                             offset: 19,
                             message: '504 Gateway Time-out.'
                         });
@@ -127,7 +127,7 @@
 
                     if (responseJSON.data.email_error) {
                         return this.$notify.error({
-                            title: 'Oops!',
+                            title: this.$t('Oops!'),
                             offset: 19,
                             message: responseJSON.data.email_error
                         });
