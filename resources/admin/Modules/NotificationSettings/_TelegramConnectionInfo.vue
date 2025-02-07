@@ -5,8 +5,7 @@
             <div v-if="status == 'yes'">
                 <img style="max-height: 50px;" :src="`${appVars.images_url}tele.svg`"/>
                 <h3>{{ $t('Telegram Notifications Enable') }}d</h3>
-                <p>
-                    {{$t('__TELEGRAM_NOTIFICATION_ENABLED') }}
+                <p v-html="$t('__TELEGRAM_NOTIFICATION_ENABLED')">
                 </p>
                 <p>{{ $t('Receiver\'s Telegram Username: ') }}@{{ receiver.username }}</p>
                 <p>
