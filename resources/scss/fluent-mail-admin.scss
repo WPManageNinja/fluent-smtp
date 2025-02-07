@@ -179,9 +179,11 @@ ul.fss_log_items li {
 
 .el-table .el-table__row.row_type_failed, .el-table .el-table__row--striped.el-table__row.row_type_failed {
   background: rgb(253, 226, 226) !important;
-
+  &:hover {
+    background: rgb(255 193 193) !important
+  }
   td {
-    background: transparent;
+    background: transparent !important;
   }
 }
 

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FluentSMTP\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-20 14:19+0000\n"
+"POT-Creation-Date: 2025-02-07 12:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -16,6 +16,10 @@ msgstr ""
 "X-Loco-Version: 2.5.0; wp-5.6\n"
 "X-Domain: fluent-smtp"
 
+#: app/Services/TransStrings.php:11
+msgid " - Simulated"
+msgstr ""
+
 #: app/Http/Controllers/LoggerController.php:109
 msgid " And %d emails are failed to init the emails"
 msgstr ""
@@ -24,12 +28,16 @@ msgstr ""
 msgid " But %d emails are reported to failed to send."
 msgstr ""
 
-#: translationStrings.php:3 app/Hooks/Handlers/AdminMenuHandler.php:454
+#: app/Services/TransStrings.php:12
 msgid " connection."
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:70
 msgid " for how to configure Amazon SES with FluentSMTP."
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:29
+msgid " for how to configure any SMTP with FluentSMTP."
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:175
@@ -60,21 +68,17 @@ msgstr ""
 msgid " for how to configure SparkPost with FluentSMTP."
 msgstr ""
 
-#: translationStrings.php:4 app/Hooks/Handlers/AdminMenuHandler.php:455
+#: app/Services/TransStrings.php:13
 msgid " in the "
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:727
-msgid ""
-" is the best and complete feature-rich Email Marketing & CRM solution. It is "
-"also the simplest and fastest CRM and Marketing Plugin on WordPress. Manage "
-"your customer relationships, build your email lists, send email campaigns, "
-"build funnels, and make more profit and increase your conversion rates. (Yes,"
-" It’s Free!)"
+#: app/Services/TransStrings.php:14
+msgid " option in the Google Cloud Project."
 msgstr ""
 
-#: translationStrings.php:5 app/Hooks/Handlers/AdminMenuHandler.php:456
-msgid " option in the Google Cloud Project."
+#: app/Hooks/Handlers/AdminMenuHandler.php:233
+#, php-format
+msgid "%1$s is a free plugin & it will be always free %2$s. %3$s"
 msgstr ""
 
 #: app/Http/Controllers/LoggerController.php:46
@@ -82,27 +86,37 @@ msgstr ""
 msgid "%s deleted successfully."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:732
+#: app/Services/TransStrings.php:335
 msgid ""
 "(By default, the TLS encryption would be used if the server supports it. On "
 "some servers, it could be a problem and may need to be disabled.)"
 msgstr ""
 
-#: translationStrings.php:6 app/Hooks/Handlers/AdminMenuHandler.php:457
+#: app/Services/TransStrings.php:15
 msgid "(Default: US East(N.Virginia) / us - east - 1)"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:733
+#: app/Services/TransStrings.php:326
 msgid ""
 "(If you need to provide your SMTP server's credentials (username and "
 "password) enable the authentication, in most cases this is required.)"
 msgstr ""
 
-#: translationStrings.php:7 app/Hooks/Handlers/AdminMenuHandler.php:458
+#: app/Hooks/Handlers/AdminMenuHandler.php:235
+msgid "(Learn why it's free)"
+msgstr ""
+
+#: app/Services/TransStrings.php:16
+msgid ""
+"(Optional) Share Non - Sensitive Data.It will help us to improve the "
+"integrations"
+msgstr ""
+
+#: app/Services/TransStrings.php:17
 msgid "(Re Authentication Required)"
 msgstr ""
 
-#: translationStrings.php:8 app/Hooks/Handlers/AdminMenuHandler.php:459
+#: app/Services/TransStrings.php:18
 msgid "*** It is very important to put "
 msgstr ""
 
@@ -126,16 +140,11 @@ msgstr ""
 msgid "**Website URL:** "
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:82
+#: app/Hooks/Handlers/AdminMenuHandler.php:83
 msgid ""
 ". It's compatible with various SMTP services, including Amazon SES, SendGrid,"
 " MailGun, ElasticEmail, SendInBlue, Google, Microsoft, and others, providing "
 "you with a wide range of options for your email needs."
-msgstr ""
-
-#: app/Hooks/Handlers/AdminMenuHandler.php:232
-#, php-format
-msgid "<b>FluentSMTP</b> is a free plugin & it will be always free %1$s. %2$s"
 msgstr ""
 
 #: app/Services/NotificationHelper.php:314
@@ -148,227 +157,25 @@ msgstr ""
 msgid "[View Failed Email(s)]("
 msgstr ""
 
-#: translationStrings.php:252
-msgid "__ABOUT_BY"
-msgstr ""
-
-#: translationStrings.php:253
-msgid "__ABOUT_COMMUNITY"
-msgstr ""
-
-#: translationStrings.php:254
-msgid "__ABOUT_INTRO"
-msgstr ""
-
-#: translationStrings.php:255
-msgid "__ABOUT_JOIN"
-msgstr ""
-
-#: translationStrings.php:256
-msgid "__ABOUT_POWERED"
-msgstr ""
-
-#: translationStrings.php:257
-msgid "__ANOTHER_CONNECTION_NOTICE"
-msgstr ""
-
-#: translationStrings.php:258
-msgid "__DEFAULT_CONNECTION_CONFLICT"
-msgstr ""
-
-#: translationStrings.php:298
-msgid "__default_connection_popover"
-msgstr ""
-
-#: translationStrings.php:259
+#: app/Services/TransStrings.php:294
 msgid "__DEFAULT_MAIl_WARNING"
 msgstr ""
 
-#: translationStrings.php:260
-msgid "__DISCORD_INTRO"
-msgstr ""
-
-#: translationStrings.php:261
-msgid "__DISCORD_NOTIFICATION_ENABLED"
-msgstr ""
-
-#: translationStrings.php:262
-msgid "__EMAIL_LOGGING_OFF"
-msgstr ""
-
-#: translationStrings.php:264
-msgid "__Email_Simulation_Label"
-msgstr ""
-
-#: translationStrings.php:265
-msgid "__Email_Simulation_Yes"
-msgstr ""
-
-#: translationStrings.php:263
-msgid "__EMAIL_SUMMARY_INTRO"
-msgstr ""
-
-#: translationStrings.php:299
-msgid "__fallback_connection_popover"
-msgstr ""
-
-#: translationStrings.php:266
-msgid "__FC_DESC"
-msgstr ""
-
-#: translationStrings.php:267
-msgid "__FF_DESC"
-msgstr ""
-
-#: translationStrings.php:268
-msgid "__FORCE_SENDER_NAME_TIP"
-msgstr ""
-
-#: translationStrings.php:300
-msgid "__from_email_tooltip"
-msgstr ""
-
-#: translationStrings.php:269
-msgid "__GCP_API_INST"
-msgstr ""
-
-#: translationStrings.php:270
-msgid "__GCP_INTRO"
-msgstr ""
-
-#: translationStrings.php:271
-msgid "__GIT_CONTRIBUTE"
-msgstr ""
-
-#: translationStrings.php:272
-msgid "__GMAIL_CODE_INSTRUCTION"
-msgstr ""
-
-#: translationStrings.php:273
-msgid "__GMAIL_SUCCESS"
-msgstr ""
-
-#: translationStrings.php:274
-msgid "__MAILGUN_REGION"
-msgstr ""
-
-#: translationStrings.php:275
-msgid "__MAILGUN_URL_TIP"
-msgstr ""
-
-#: translationStrings.php:276
-msgid "__NT_DESC"
-msgstr ""
-
-#: translationStrings.php:277
-msgid "__NT_DESC_EXT"
-msgstr ""
-
-#: translationStrings.php:278
-msgid "__PEPIPOST_HELP"
-msgstr ""
-
-#: translationStrings.php:279
-msgid "__POSTMARK_CLICK"
-msgstr ""
-
-#: translationStrings.php:280
-msgid "__POSTMARK_HELP"
-msgstr ""
-
-#: translationStrings.php:281
-msgid "__POSTMARK_OPEN"
-msgstr ""
-
-#: translationStrings.php:282
-msgid "__RETURN_PATH_ALERT"
-msgstr ""
-
-#: translationStrings.php:283
-msgid "__RETURN_PATH_TOOLTIP"
-msgstr ""
-
-#: translationStrings.php:301
-msgid "__routing_info"
-msgstr ""
-
-#: translationStrings.php:284
-msgid "__SLACK_INTRO"
-msgstr ""
-
-#: translationStrings.php:285
-msgid "__SLACK_NOTIFICATION_ENABLED"
-msgstr ""
-
-#: translationStrings.php:286
-msgid "__SLACK_TERMS"
-msgstr ""
-
-#: translationStrings.php:287
-msgid "__SMTP_CRED_HELP"
-msgstr ""
-
-#: translationStrings.php:288
-msgid "__SUBSCRIBE_INTRO"
-msgstr ""
-
-#: translationStrings.php:289
-msgid "__SUPPORT_INTRO"
-msgstr ""
-
-#: translationStrings.php:291
-msgid "__TELE_INTRO"
-msgstr ""
-
-#: translationStrings.php:292
-msgid "__TELE_LAST_STEP"
-msgstr ""
-
-#: translationStrings.php:293
-msgid "__TELE_RESPONSE_ERROR"
-msgstr ""
-
-#: translationStrings.php:294
-msgid "__TELE_TERMS"
-msgstr ""
-
-#: translationStrings.php:290
-msgid "__TELEGRAM_NOTIFICATION_ENABLED"
-msgstr ""
-
-#: translationStrings.php:295
-msgid "__TEST_EMAIL_INST"
-msgstr ""
-
-#: translationStrings.php:296
-msgid "__TLS_HELP"
-msgstr ""
-
-#: translationStrings.php:302
-msgid "__wizard_instruction"
-msgstr ""
-
-#: translationStrings.php:303
-msgid "__wizard_sub"
-msgstr ""
-
-#: translationStrings.php:304
-msgid "__wizard_title"
-msgstr ""
-
-#: translationStrings.php:297
-msgid "__WP_CONFIG_INSTRUCTION"
-msgstr ""
-
-#: translationStrings.php:9 app/Hooks/Handlers/AdminMenuHandler.php:460
+#: app/Services/TransStrings.php:19
 msgid "A name for the connection."
 msgstr ""
 
-#: translationStrings.php:11 app/Hooks/Handlers/AdminMenuHandler.php:462
+#: app/Services/TransStrings.php:21
 msgid "About"
 msgstr ""
 
-#: translationStrings.php:12 app/Hooks/Handlers/AdminMenuHandler.php:463
+#: app/Services/TransStrings.php:22
+msgid ""
+"Access Data: Active SMTP Connection Provider, installed plugin names, php & "
+"mysql version"
+msgstr ""
+
+#: app/Services/TransStrings.php:23
 msgid "Access Key"
 msgstr ""
 
@@ -376,99 +183,103 @@ msgstr ""
 msgid "Access key is required."
 msgstr ""
 
-#: translationStrings.php:13 app/Hooks/Handlers/AdminMenuHandler.php:464
+#: app/Services/TransStrings.php:24
 msgid "Access Keys in Config File"
 msgstr ""
 
-#: translationStrings.php:14 app/Hooks/Handlers/AdminMenuHandler.php:465
+#: app/Services/TransStrings.php:25
 msgid "Access Token"
 msgstr ""
 
-#: translationStrings.php:15 app/Hooks/Handlers/AdminMenuHandler.php:466
+#: app/Services/TransStrings.php:26
 msgid "Actions"
 msgstr ""
 
-#: translationStrings.php:305 app/Hooks/Handlers/AdminMenuHandler.php:760
+#: app/Services/TransStrings.php:344
 msgid "activate "
 msgstr ""
 
-#: translationStrings.php:16 app/Hooks/Handlers/AdminMenuHandler.php:467
+#: app/Services/TransStrings.php:27
 msgid "Activation Pin"
 msgstr ""
 
-#: translationStrings.php:17 app/Hooks/Handlers/AdminMenuHandler.php:468
+#: app/Services/TransStrings.php:28
 msgid "Active Connections:"
 msgstr ""
 
-#: translationStrings.php:18 app/Hooks/Handlers/AdminMenuHandler.php:469
+#: app/Services/TransStrings.php:29
 msgid "Active Email Connections"
 msgstr ""
 
-#: translationStrings.php:19 app/Hooks/Handlers/AdminMenuHandler.php:470
+#: app/Services/TransStrings.php:30
 msgid "Active Senders:"
 msgstr ""
 
-#: translationStrings.php:20 app/Hooks/Handlers/AdminMenuHandler.php:471
+#: app/Services/TransStrings.php:31
 msgid "Add"
 msgstr ""
 
-#: translationStrings.php:21 app/Hooks/Handlers/AdminMenuHandler.php:472
+#: app/Services/TransStrings.php:32
 msgid "Add Additional Senders"
 msgstr ""
 
-#: translationStrings.php:22 app/Hooks/Handlers/AdminMenuHandler.php:473
+#: app/Services/TransStrings.php:33
 msgid "Add Another Connection"
+msgstr ""
+
+#: app/Services/TransStrings.php:34
+msgid "Add Multi-Part Plain Text for HTML Emails (beta)"
 msgstr ""
 
 #: app/Services/Mailer/Providers/config.php:67
 msgid "Africa (Cape Town)"
 msgstr ""
 
-#: translationStrings.php:23 app/Hooks/Handlers/AdminMenuHandler.php:474
+#: app/Services/TransStrings.php:35
 msgid "After 1 Year"
 msgstr ""
 
-#: translationStrings.php:24 app/Hooks/Handlers/AdminMenuHandler.php:475
+#: app/Services/TransStrings.php:36
 msgid "After 14 Days"
 msgstr ""
 
-#: translationStrings.php:25 app/Hooks/Handlers/AdminMenuHandler.php:476
+#: app/Services/TransStrings.php:37
 msgid "After 2 Years"
 msgstr ""
 
-#: translationStrings.php:26 app/Hooks/Handlers/AdminMenuHandler.php:477
+#: app/Services/TransStrings.php:38
 msgid "After 30 Days"
 msgstr ""
 
-#: translationStrings.php:27 app/Hooks/Handlers/AdminMenuHandler.php:478
+#: app/Services/TransStrings.php:39
 msgid "After 6 Months"
 msgstr ""
 
-#: translationStrings.php:28 app/Hooks/Handlers/AdminMenuHandler.php:479
+#: app/Services/TransStrings.php:40
 msgid "After 60 Days"
 msgstr ""
 
-#: translationStrings.php:29 app/Hooks/Handlers/AdminMenuHandler.php:480
+#: app/Services/TransStrings.php:41
 msgid "After 7 Days"
 msgstr ""
 
-#: translationStrings.php:30 app/Hooks/Handlers/AdminMenuHandler.php:481
+#: app/Services/TransStrings.php:42
 msgid "After 90 Days"
 msgstr ""
 
-#: translationStrings.php:31 app/Hooks/Handlers/AdminMenuHandler.php:482
+#: app/Services/TransStrings.php:43
 msgid "Alerts"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:419
+#: app/Hooks/Handlers/AdminMenuHandler.php:421
 msgid "All"
 msgstr ""
 
-#: translationStrings.php:32 app/Hooks/Handlers/AdminMenuHandler.php:483
+#: app/Services/TransStrings.php:44
 msgid "All Statuses"
 msgstr ""
 
-#: translationStrings.php:33 app/Hooks/Handlers/AdminMenuHandler.php:484
+#: app/Services/TransStrings.php:45
 msgid "All Time"
 msgstr ""
 
@@ -476,13 +287,13 @@ msgstr ""
 msgid "Amazon SES"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:734
+#: app/Services/TransStrings.php:291
 msgid ""
-"Another connection with same email address exist. This connection will "
+"Another connection with same email address exists. This connection will "
 "replace that connection"
 msgstr ""
 
-#: translationStrings.php:10 app/Hooks/Handlers/AdminMenuHandler.php:461
+#: app/Services/TransStrings.php:20
 msgid "API Key"
 msgstr ""
 
@@ -493,15 +304,16 @@ msgstr ""
 #: app/Services/Mailer/Providers/SendInBlue/ValidatorTrait.php:19
 #: app/Services/Mailer/Providers/PepiPost/ValidatorTrait.php:20
 #: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:19
+#: app/Services/Mailer/Providers/Smtp2Go/ValidatorTrait.php:20
 #: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:19
 msgid "Api key is required."
 msgstr ""
 
-#: translationStrings.php:34 app/Hooks/Handlers/AdminMenuHandler.php:485
+#: app/Services/TransStrings.php:46
 msgid "App Callback URL(Use this URL to your APP)"
 msgstr ""
 
-#: translationStrings.php:35 app/Hooks/Handlers/AdminMenuHandler.php:486
+#: app/Services/TransStrings.php:47
 msgid "Application Client ID"
 msgstr ""
 
@@ -510,7 +322,7 @@ msgstr ""
 msgid "Application Client ID is required."
 msgstr ""
 
-#: translationStrings.php:36 app/Hooks/Handlers/AdminMenuHandler.php:487
+#: app/Services/TransStrings.php:48
 msgid "Application Client Secret"
 msgstr ""
 
@@ -519,31 +331,31 @@ msgstr ""
 msgid "Application Client Secret key is required."
 msgstr ""
 
-#: translationStrings.php:37 app/Hooks/Handlers/AdminMenuHandler.php:488
+#: app/Services/TransStrings.php:49
 msgid "Application Keys in Config File"
 msgstr ""
 
-#: translationStrings.php:38 app/Hooks/Handlers/AdminMenuHandler.php:489
+#: app/Services/TransStrings.php:50
 msgid "Apply"
 msgstr ""
 
-#: translationStrings.php:39 app/Hooks/Handlers/AdminMenuHandler.php:490
+#: app/Services/TransStrings.php:51
 msgid "Are you sure you want to disconnect Discord notifications?"
 msgstr ""
 
-#: translationStrings.php:40 app/Hooks/Handlers/AdminMenuHandler.php:491
+#: app/Services/TransStrings.php:52
 msgid "Are you sure you want to disconnect Slack notifications?"
 msgstr ""
 
-#: translationStrings.php:41 app/Hooks/Handlers/AdminMenuHandler.php:492
+#: app/Services/TransStrings.php:53
 msgid "Are you sure you want to disconnect Telegram notifications?"
 msgstr ""
 
-#: translationStrings.php:42 app/Hooks/Handlers/AdminMenuHandler.php:493
+#: app/Services/TransStrings.php:54
 msgid "Are you sure you want to remove this email address?"
 msgstr ""
 
-#: translationStrings.php:43 app/Hooks/Handlers/AdminMenuHandler.php:494
+#: app/Services/TransStrings.php:55
 msgid "Are you sure, you want to delete all the logs?"
 msgstr ""
 
@@ -567,27 +379,27 @@ msgstr ""
 msgid "Asia Pacific (Tokyo)"
 msgstr ""
 
-#: translationStrings.php:44 app/Hooks/Handlers/AdminMenuHandler.php:495
+#: app/Services/TransStrings.php:56
 msgid "Attachments"
 msgstr ""
 
-#: translationStrings.php:45 app/Hooks/Handlers/AdminMenuHandler.php:496
+#: app/Services/TransStrings.php:57
 msgid "Authenticate with Google & Get Access Token"
 msgstr ""
 
-#: translationStrings.php:46 app/Hooks/Handlers/AdminMenuHandler.php:497
+#: app/Services/TransStrings.php:58
 msgid "Authenticate with Office365 & Get Access Token"
 msgstr ""
 
-#: translationStrings.php:47 app/Hooks/Handlers/AdminMenuHandler.php:498
+#: app/Services/TransStrings.php:59
 msgid "Authentication"
 msgstr ""
 
-#: translationStrings.php:48 app/Hooks/Handlers/AdminMenuHandler.php:499
+#: app/Services/TransStrings.php:60
 msgid "Authorized Redirect URI"
 msgstr ""
 
-#: translationStrings.php:49 app/Hooks/Handlers/AdminMenuHandler.php:500
+#: app/Services/TransStrings.php:61
 msgid "Authorized Redirect URIs"
 msgstr ""
 
@@ -599,7 +411,7 @@ msgstr ""
 msgid "Awesome! Please activate the connection from your telegram account."
 msgstr ""
 
-#: translationStrings.php:50 app/Hooks/Handlers/AdminMenuHandler.php:501
+#: app/Services/TransStrings.php:62
 msgid "Awesome! Please check your email inbox and confirm your subscription."
 msgstr ""
 
@@ -611,15 +423,15 @@ msgstr ""
 msgid "AWS GovCloud (US)"
 msgstr ""
 
-#: translationStrings.php:51 app/Hooks/Handlers/AdminMenuHandler.php:502
+#: app/Services/TransStrings.php:63
 msgid "Best WP DataTables Plugin for WordPress"
 msgstr ""
 
-#: translationStrings.php:52 app/Hooks/Handlers/AdminMenuHandler.php:503
+#: app/Services/TransStrings.php:64
 msgid "Bulk Action"
 msgstr ""
 
-#: translationStrings.php:53 app/Hooks/Handlers/AdminMenuHandler.php:504
+#: app/Services/TransStrings.php:65
 msgid "By Date"
 msgstr ""
 
@@ -627,23 +439,27 @@ msgstr ""
 msgid "Canada (Central)"
 msgstr ""
 
-#: translationStrings.php:54 app/Hooks/Handlers/AdminMenuHandler.php:505
+#: app/Services/TransStrings.php:66
 msgid "Cancel"
 msgstr ""
 
-#: translationStrings.php:306 app/Hooks/Handlers/AdminMenuHandler.php:761
+#: app/Services/TransStrings.php:345
 msgid "cancel"
+msgstr ""
+
+#: app/Services/TransStrings.php:346
+msgid "change"
 msgstr ""
 
 #: app/Http/Controllers/DiscordController.php:26
 msgid "Channel Name required"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:754
+#: app/Services/TransStrings.php:305
 msgid "check the documentation"
 msgstr ""
 
-#: translationStrings.php:307 app/Hooks/Handlers/AdminMenuHandler.php:762
+#: app/Services/TransStrings.php:347
 msgid "check the documentation first to create API keys at Microsoft"
 msgstr ""
 
@@ -651,23 +467,27 @@ msgstr ""
 msgid "China (Ningxia)"
 msgstr ""
 
-#: translationStrings.php:308 app/Hooks/Handlers/AdminMenuHandler.php:763
+#: app/Services/TransStrings.php:348
 msgid "click here"
 msgstr ""
 
-#: translationStrings.php:55 app/Hooks/Handlers/AdminMenuHandler.php:506
+#: app/Services/TransStrings.php:67
 msgid "Close"
 msgstr ""
 
-#: translationStrings.php:56 app/Hooks/Handlers/AdminMenuHandler.php:507
+#: app/Services/TransStrings.php:68
+msgid "Community"
+msgstr ""
+
+#: app/Services/TransStrings.php:69
 msgid "Configure Discord Notification"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:290
+#: app/Hooks/Handlers/AdminMenuHandler.php:292
 msgid "Configure FluentSMTP"
 msgstr ""
 
-#: translationStrings.php:309 app/Hooks/Handlers/AdminMenuHandler.php:764
+#: app/Services/TransStrings.php:349
 msgid "confirm"
 msgstr ""
 
@@ -675,11 +495,15 @@ msgstr ""
 msgid "Congrats, test email was sent successfully!"
 msgstr ""
 
-#: translationStrings.php:60 app/Hooks/Handlers/AdminMenuHandler.php:511
+#: app/Services/TransStrings.php:70
+msgid "Connect With Your Email Providers"
+msgstr ""
+
+#: app/Services/TransStrings.php:74
 msgid "Connection deleted Successfully."
 msgstr ""
 
-#: translationStrings.php:57 app/Hooks/Handlers/AdminMenuHandler.php:508
+#: app/Services/TransStrings.php:71
 msgid "Connection Details"
 msgstr ""
 
@@ -687,11 +511,11 @@ msgstr ""
 msgid "Connection Error: "
 msgstr ""
 
-#: translationStrings.php:58 app/Hooks/Handlers/AdminMenuHandler.php:509
+#: app/Services/TransStrings.php:72
 msgid "Connection Name "
 msgstr ""
 
-#: translationStrings.php:59 app/Hooks/Handlers/AdminMenuHandler.php:510
+#: app/Services/TransStrings.php:73
 msgid "Connection Provider"
 msgstr ""
 
@@ -704,97 +528,105 @@ msgstr ""
 msgid "Connection Type"
 msgstr ""
 
-#: translationStrings.php:61 app/Hooks/Handlers/AdminMenuHandler.php:512
+#: app/Services/TransStrings.php:75
 msgid "Continue"
 msgstr ""
 
-#: translationStrings.php:62 app/Hooks/Handlers/AdminMenuHandler.php:513
+#: app/Services/TransStrings.php:76
 msgid "Continue to Slack"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:748
+#: app/Services/TransStrings.php:307
 msgid "contribute on GitHub"
 msgstr ""
 
-#: translationStrings.php:63 app/Hooks/Handlers/AdminMenuHandler.php:514
+#: app/Services/TransStrings.php:77
 msgid "Contributors"
 msgstr ""
 
-#: translationStrings.php:310 app/Hooks/Handlers/AdminMenuHandler.php:765
+#: app/Services/TransStrings.php:350
 msgid "copy"
 msgstr ""
 
-#: translationStrings.php:64 app/Hooks/Handlers/AdminMenuHandler.php:515
+#: app/Services/TransStrings.php:78
 msgid "Create API Key."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:772
+#: app/Services/TransStrings.php:357
 msgid "Credential Verification Failed. Please check your inputs"
 msgstr ""
 
-#: translationStrings.php:65 app/Hooks/Handlers/AdminMenuHandler.php:516
+#: app/Services/TransStrings.php:79
+msgid "Cumulative"
+msgstr ""
+
+#: app/Services/TransStrings.php:80
 msgid "Current verified senders:"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:428
+#: app/Hooks/Handlers/AdminMenuHandler.php:430
 msgid "Date"
 msgstr ""
 
-#: translationStrings.php:66 app/Hooks/Handlers/AdminMenuHandler.php:517
+#: app/Services/TransStrings.php:81
 msgid "Date-Time"
 msgstr ""
 
-#: translationStrings.php:67 app/Hooks/Handlers/AdminMenuHandler.php:518
+#: app/Services/TransStrings.php:82
 msgid "Days"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:742
+#: app/Services/TransStrings.php:292
 msgid ""
-"Default and Fallback connection can not be same. Please select different "
+"Default and Fallback connection cannot be the same. Please select different "
 "connections."
 msgstr ""
 
-#: translationStrings.php:68 app/Hooks/Handlers/AdminMenuHandler.php:519
+#: app/Services/TransStrings.php:83
 msgid "Default Connection"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:743
+#: app/Services/TransStrings.php:311
 msgid "Define which endpoint you want to use for sending messages."
 msgstr ""
 
-#: translationStrings.php:69 app/Hooks/Handlers/AdminMenuHandler.php:520
+#: app/Services/TransStrings.php:84
+msgid "Delete All Logs"
+msgstr ""
+
+#: app/Services/TransStrings.php:85
 msgid "Delete Logs"
 msgstr ""
 
-#: translationStrings.php:70 app/Hooks/Handlers/AdminMenuHandler.php:521
+#: app/Services/TransStrings.php:86
 msgid "Delete Logs:"
 msgstr ""
 
-#: translationStrings.php:71 app/Hooks/Handlers/AdminMenuHandler.php:522
+#: app/Services/TransStrings.php:87
 msgid "Delete Selected"
 msgstr ""
 
-#: translationStrings.php:311
+#: app/Services/TransStrings.php:351
 msgid "delete_logs_info"
 msgstr ""
 
-#: translationStrings.php:72 app/Hooks/Handlers/AdminMenuHandler.php:523
+#: app/Services/TransStrings.php:88
 msgid "Disable Logging for FluentCRM Emails"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:710
+#: app/Services/TransStrings.php:299
 msgid "Disable sending all emails. If you enable this, no email will be sent."
 msgstr ""
 
-#: translationStrings.php:73 app/Hooks/Handlers/AdminMenuHandler.php:524
+#: app/Services/TransStrings.php:89
 msgid "Disconnect"
 msgstr ""
 
-#: translationStrings.php:74 app/Hooks/Handlers/AdminMenuHandler.php:525
+#: app/Services/TransStrings.php:90
 msgid "Disconnect & Reconnect"
 msgstr ""
 
-#: translationStrings.php:75 app/Hooks/Handlers/AdminMenuHandler.php:526
+#: app/Services/TransStrings.php:91
 msgid "Discord Channel Details: "
 msgstr ""
 
@@ -802,23 +634,23 @@ msgstr ""
 msgid "Discord connection has been disconnected successfully"
 msgstr ""
 
-#: translationStrings.php:76 app/Hooks/Handlers/AdminMenuHandler.php:527
+#: app/Services/TransStrings.php:92
 msgid "Discord Notifications Enabled"
 msgstr ""
 
-#: translationStrings.php:77 app/Hooks/Handlers/AdminMenuHandler.php:528
+#: app/Services/TransStrings.php:93
 msgid "Discord Webhook URL"
 msgstr ""
 
-#: translationStrings.php:78 app/Hooks/Handlers/AdminMenuHandler.php:529
+#: app/Services/TransStrings.php:94
 msgid "Documentation"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:741
+#: app/Services/TransStrings.php:328
 msgid "documentation"
 msgstr ""
 
-#: translationStrings.php:79 app/Hooks/Handlers/AdminMenuHandler.php:530
+#: app/Services/TransStrings.php:95
 msgid "Domain Name"
 msgstr ""
 
@@ -827,7 +659,7 @@ msgstr ""
 msgid "Domain name is required."
 msgstr ""
 
-#: translationStrings.php:80 app/Hooks/Handlers/AdminMenuHandler.php:531
+#: app/Services/TransStrings.php:96
 msgid "Edit Connection"
 msgstr ""
 
@@ -835,11 +667,11 @@ msgstr ""
 msgid "Elastic Email"
 msgstr ""
 
-#: translationStrings.php:81 app/Hooks/Handlers/AdminMenuHandler.php:532
+#: app/Services/TransStrings.php:97
 msgid "ElasticEmail API Settings"
 msgstr ""
 
-#: translationStrings.php:82 app/Hooks/Handlers/AdminMenuHandler.php:533
+#: app/Services/TransStrings.php:98
 msgid "Email Address"
 msgstr ""
 
@@ -849,7 +681,7 @@ msgid ""
 "different email."
 msgstr ""
 
-#: translationStrings.php:83 app/Hooks/Handlers/AdminMenuHandler.php:534
+#: app/Services/TransStrings.php:99
 msgid "Email Body"
 msgstr ""
 
@@ -857,7 +689,7 @@ msgstr ""
 msgid "Email delivered successfully."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:310
+#: app/Hooks/Handlers/AdminMenuHandler.php:312
 msgid "Email Disabled"
 msgstr ""
 
@@ -866,7 +698,7 @@ msgstr ""
 msgid "Email does not exists. Please try again."
 msgstr ""
 
-#: translationStrings.php:84 app/Hooks/Handlers/AdminMenuHandler.php:535
+#: app/Services/TransStrings.php:100
 msgid "Email Failed:"
 msgstr ""
 
@@ -882,29 +714,29 @@ msgstr ""
 msgid "Email has been removed successfully"
 msgstr ""
 
-#: translationStrings.php:85 app/Hooks/Handlers/AdminMenuHandler.php:536
+#: app/Services/TransStrings.php:101
 msgid "Email Headers"
 msgstr ""
 
-#: translationStrings.php:86 app/Hooks/Handlers/AdminMenuHandler.php:537
+#: app/Services/TransStrings.php:102
 msgid "Email Log"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:735
+#: app/Services/TransStrings.php:297
 msgid ""
 "Email Logging is currently turned off. Only Failed and resent emails will be "
 "shown here"
 msgstr ""
 
-#: translationStrings.php:87 app/Hooks/Handlers/AdminMenuHandler.php:538
+#: app/Services/TransStrings.php:103
 msgid "Email Logs"
 msgstr ""
 
-#: translationStrings.php:88 app/Hooks/Handlers/AdminMenuHandler.php:539
+#: app/Services/TransStrings.php:104
 msgid "Email Marketing Automation and CRM Plugin for WordPress"
 msgstr ""
 
-#: translationStrings.php:89 app/Hooks/Handlers/AdminMenuHandler.php:540
+#: app/Services/TransStrings.php:105
 msgid "Email Sending Error Notifications"
 msgstr ""
 
@@ -920,21 +752,21 @@ msgstr ""
 msgid "Email sent successfully."
 msgstr ""
 
-#: translationStrings.php:90 app/Hooks/Handlers/AdminMenuHandler.php:541
+#: app/Services/TransStrings.php:106
 msgid "Email Simulation"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:736
+#: app/Services/TransStrings.php:298
 msgid ""
-"Email summary is useful for getting weekly or daily emails about the all the "
+"Email summary is useful for getting weekly or daily emails about all the "
 "email sending stats for this site."
 msgstr ""
 
-#: translationStrings.php:91 app/Hooks/Handlers/AdminMenuHandler.php:542
+#: app/Services/TransStrings.php:107
 msgid "Email Test"
 msgstr ""
 
-#: translationStrings.php:92 app/Hooks/Handlers/AdminMenuHandler.php:543
+#: app/Services/TransStrings.php:108
 msgid "Email Type"
 msgstr ""
 
@@ -943,47 +775,47 @@ msgstr ""
 msgid "Emails Sent"
 msgstr ""
 
-#: translationStrings.php:94 app/Hooks/Handlers/AdminMenuHandler.php:545
+#: app/Services/TransStrings.php:110
 msgid "Enable email opens tracking on postmark(For HTML Emails only)."
 msgstr ""
 
-#: translationStrings.php:93 app/Hooks/Handlers/AdminMenuHandler.php:544
+#: app/Services/TransStrings.php:109
 msgid "Enable Email Summary"
 msgstr ""
 
-#: translationStrings.php:95 app/Hooks/Handlers/AdminMenuHandler.php:546
+#: app/Services/TransStrings.php:111
 msgid "Enable link tracking on postmark (For HTML Emails only)."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:757
+#: app/Services/TransStrings.php:301
 msgid ""
 "Enable Multi-Part Plain Text version of your HTML Emails. This feature is in "
 "beta"
 msgstr ""
 
-#: translationStrings.php:96 app/Hooks/Handlers/AdminMenuHandler.php:547
+#: app/Services/TransStrings.php:112
 msgid "Encryption"
 msgstr ""
 
-#: translationStrings.php:97 app/Hooks/Handlers/AdminMenuHandler.php:548
+#: app/Services/TransStrings.php:113
 msgid "End date"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:714
+#: app/Services/TransStrings.php:334
 msgid ""
 "Enter email address where test email will be sent (By default, logged in "
 "user email will be used if email address is not provided)."
 msgstr ""
 
-#: translationStrings.php:98 app/Hooks/Handlers/AdminMenuHandler.php:549
+#: app/Services/TransStrings.php:114
 msgid "Enter Full Screen"
 msgstr ""
 
-#: translationStrings.php:99 app/Hooks/Handlers/AdminMenuHandler.php:550
+#: app/Services/TransStrings.php:115
 msgid "Enter new email address ex: new_sender@"
 msgstr ""
 
-#: translationStrings.php:100 app/Hooks/Handlers/AdminMenuHandler.php:551
+#: app/Services/TransStrings.php:116
 msgid "Enter the sender email address(optional)."
 msgstr ""
 
@@ -1011,8 +843,8 @@ msgstr ""
 msgid "Europe (Stockholm)"
 msgstr ""
 
-#: translationStrings.php:101 app/Hooks/Handlers/AdminMenuHandler.php:430
-#: app/Hooks/Handlers/AdminMenuHandler.php:552
+#: app/Services/TransStrings.php:117
+#: app/Hooks/Handlers/AdminMenuHandler.php:432
 msgid "Failed"
 msgstr ""
 
@@ -1028,25 +860,25 @@ msgstr ""
 msgid "Failed to renew token with Gmail Api"
 msgstr ""
 
-#: translationStrings.php:102 app/Hooks/Handlers/AdminMenuHandler.php:553
+#: app/Services/TransStrings.php:118
 msgid "Fallback Connection"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:709
+#: app/Services/TransStrings.php:338
 msgid ""
 "Fallback Connection will be used if an email is failed to send in one "
 "connection. Please select a different connection than the default connection"
 msgstr ""
 
-#: translationStrings.php:103 app/Hooks/Handlers/AdminMenuHandler.php:554
+#: app/Services/TransStrings.php:119
 msgid "Fastest Contact Form Builder Plugin for WordPress"
 msgstr ""
 
-#: translationStrings.php:104 app/Hooks/Handlers/AdminMenuHandler.php:555
+#: app/Services/TransStrings.php:120
 msgid "Filter"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:348
+#: app/Hooks/Handlers/AdminMenuHandler.php:350
 msgid "Fluent SMTP"
 msgstr ""
 
@@ -1055,12 +887,12 @@ msgstr ""
 msgid "Fluent SMTP: Test Email - %s"
 msgstr ""
 
-#: translationStrings.php:105 app/Hooks/Handlers/AdminMenuHandler.php:556
+#: app/Services/TransStrings.php:121
 msgid "FluentCRM Email Logging"
 msgstr ""
 
 #. Name of the plugin
-#: app/Hooks/Handlers/AdminMenuHandler.php:108
+#: app/Hooks/Handlers/AdminMenuHandler.php:109
 msgid "FluentSMTP"
 msgstr ""
 
@@ -1068,11 +900,11 @@ msgstr ""
 msgid "FluentSMTP & WPManageNinja Team"
 msgstr ""
 
-#: translationStrings.php:106 app/Hooks/Handlers/AdminMenuHandler.php:557
+#: app/Services/TransStrings.php:122
 msgid "FluentSMTP does not store your email notifications data."
 msgstr ""
 
-#: translationStrings.php:107 app/Hooks/Handlers/AdminMenuHandler.php:558
+#: app/Services/TransStrings.php:123
 msgid "FluentSMTP does not store your email notifications data. "
 msgstr ""
 
@@ -1084,30 +916,30 @@ msgstr ""
 msgid "FluentSMTP is a free opensource plugin and it will be always free "
 msgstr ""
 
-#: translationStrings.php:108 app/Hooks/Handlers/AdminMenuHandler.php:559
+#: app/Services/TransStrings.php:124
 msgid ""
 "FluentSMTP is built using the following open-source libraries and software"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:716
+#: app/Services/TransStrings.php:286
 msgid ""
-"FluentSMTP is free and will be always free.This is our pledge to WordPress "
+"FluentSMTP is free and will be always free. This is our pledge to WordPress "
 "community from WPManageNinja LLC."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:718
+#: app/Services/TransStrings.php:287
 msgid ""
-"FluentSMTP is powered by community.We listen to our community users and "
-"build products that add values to businesses and save time."
+"FluentSMTP is powered by community. We listen to our community users and "
+"build products that add value to businesses and save time."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:717
+#: app/Services/TransStrings.php:290
 msgid ""
-"FluentSMTP is powered by it's users like you. Feel free to contribute on "
+"FluentSMTP is powered by its users like you. Feel free to contribute on "
 "Github. Thanks to all of our contributors."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:285
+#: app/Hooks/Handlers/AdminMenuHandler.php:287
 msgid "FluentSMTP needs to be configured for it to work."
 msgstr ""
 
@@ -1115,69 +947,80 @@ msgstr ""
 msgid "FluentSMTP Test Email"
 msgstr ""
 
-#: translationStrings.php:109 app/Hooks/Handlers/AdminMenuHandler.php:560
+#: app/Services/TransStrings.php:125
 msgid "Follow this link to get a Domain Name from Mailgun:"
 msgstr ""
 
-#: translationStrings.php:110 app/Hooks/Handlers/AdminMenuHandler.php:561
+#: app/Services/TransStrings.php:126
 msgid "Follow this link to get an API Key from ElasticEmail: "
 msgstr ""
 
-#: translationStrings.php:111 app/Hooks/Handlers/AdminMenuHandler.php:562
+#: app/Services/TransStrings.php:127
 msgid "Follow this link to get an API Key from Mailgun:"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:744
+#: app/Services/TransStrings.php:316
 msgid ""
-"Follow this link to get an API Key from Pepipost(Click Show button on "
+"Follow this link to get an API Key from Pepipost (Click Show button on "
 "Settings Page):"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:745
+#: app/Services/TransStrings.php:318
 msgid ""
-"Follow this link to get an API Key from Postmark(Your API key is in the API "
+"Follow this link to get an API Key from Postmark (Your API key is in the API "
 "Tokens tab of your):"
 msgstr ""
 
-#: translationStrings.php:112 app/Hooks/Handlers/AdminMenuHandler.php:563
+#: app/Services/TransStrings.php:129
 msgid "Follow this link to get an API Key from SendGrid:"
 msgstr ""
 
-#: translationStrings.php:113 app/Hooks/Handlers/AdminMenuHandler.php:564
+#: app/Services/TransStrings.php:128
+msgid "Follow this link to get an API Key from SMTP2GO:"
+msgstr ""
+
+#: app/Services/TransStrings.php:130
 msgid "Follow this link to get an API Key:"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:80
+#: app/Hooks/Handlers/AdminMenuHandler.php:81
 msgid "For SMTP, you already have FluentSMTP Installed"
 msgstr ""
 
-#: translationStrings.php:114 app/Hooks/Handlers/AdminMenuHandler.php:565
+#: app/Services/TransStrings.php:131
 msgid "Force From Email (Recommended Settings: Enable)"
 msgstr ""
 
-#: translationStrings.php:115 app/Hooks/Handlers/AdminMenuHandler.php:566
-#: app/views/admin/ses_connection_info.php:39
+#: app/Services/TransStrings.php:132 app/views/admin/ses_connection_info.php:39
 #: app/views/admin/general_connection_info.php:16
 msgid "Force Sender Name"
 msgstr ""
 
-#: translationStrings.php:312
+#: app/Services/TransStrings.php:352
 msgid "force_sender_tooltip"
 msgstr ""
 
-#: translationStrings.php:116 app/Hooks/Handlers/AdminMenuHandler.php:567
+#: app/Services/TransStrings.php:133
+msgid "Friday"
+msgstr ""
+
+#: app/Services/TransStrings.php:134
 msgid "From"
 msgstr ""
 
-#: translationStrings.php:117 app/Hooks/Handlers/AdminMenuHandler.php:568
+#: app/Services/TransStrings.php:135
 msgid "From Email"
 msgstr ""
 
-#: translationStrings.php:118 app/Hooks/Handlers/AdminMenuHandler.php:569
+#: app/Services/TransStrings.php:136
 msgid "From Name"
 msgstr ""
 
-#: translationStrings.php:119 app/Hooks/Handlers/AdminMenuHandler.php:570
+#: app/Services/TransStrings.php:137
+msgid "Functionalities"
+msgstr ""
+
+#: app/Services/TransStrings.php:138
 msgid "General Settings"
 msgstr ""
 
@@ -1185,53 +1028,64 @@ msgstr ""
 msgid "General Settings has been updated"
 msgstr ""
 
-#: translationStrings.php:121 app/Hooks/Handlers/AdminMenuHandler.php:572
+#: app/Services/TransStrings.php:140
 msgid "Get a Domain Name."
 msgstr ""
 
-#: translationStrings.php:122 app/Hooks/Handlers/AdminMenuHandler.php:573
+#: app/Services/TransStrings.php:141
 msgid "Get a Private API Key."
 msgstr ""
 
-#: translationStrings.php:120 app/Hooks/Handlers/AdminMenuHandler.php:571
+#: app/Services/TransStrings.php:139
 msgid "Get API Key."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:746
-#, php-format
+#: app/Services/TransStrings.php:295
 msgid ""
-"Get real - time notification on your %1$s on any email sending failure. "
-"Configure notification with FluentSMTP's official %2$s to start getting real "
-"time notifications. "
-msgstr ""
-
-#: app/Hooks/Handlers/AdminMenuHandler.php:726
-msgid ""
-"Get real - time notification on your Discord Channel on any email sending "
-"failure.Configure notification with Discord to start getting real time "
+"Get real-time notification on your Discord Channel on any email sending "
+"failure. Configure notification with Discord to start getting real time "
 "notifications."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:725
+#: app/Services/TransStrings.php:320
+msgid ""
+"Get real-time notification on your favorite messaging channel on any email "
+"sending failure. Configure any of the following channel to start getting "
+"real time notifications."
+msgstr ""
+
+#: app/Services/TransStrings.php:323
 msgid ""
 "Get real-time notification on your Slack Channel on any email sending "
 "failure. Configure notification with Slack Bot to start getting real time "
 "notifications."
 msgstr ""
 
-#: translationStrings.php:123 app/Hooks/Handlers/AdminMenuHandler.php:574
+#: app/Services/TransStrings.php:330
+#, php-format
+msgid ""
+"Get real-time notifications on your %1$s for any email sending failures. "
+"Configure notifications with FluentSMTP's official %2$s to start receiving "
+"real-time alerts."
+msgstr ""
+
+#: app/Services/TransStrings.php:142
 msgid "Get v3 API Key."
 msgstr ""
 
-#: translationStrings.php:124 app/Hooks/Handlers/AdminMenuHandler.php:575
+#: app/Services/TransStrings.php:143
+msgid "Getting Started"
+msgstr ""
+
+#: app/Services/TransStrings.php:144
 msgid "Gmail / Google Workspace API Settings"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:179
+#: app/Services/Mailer/Providers/config.php:192
 msgid "Gmail or Google Workspace"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:194
+#: app/Services/Mailer/Providers/config.php:207
 msgid ""
 "Gmail/Google Workspace is not recommended for sending mass marketing emails."
 msgstr ""
@@ -1248,7 +1102,7 @@ msgstr ""
 msgid "Go to FluentCRM Dashboard"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:84
+#: app/Hooks/Handlers/AdminMenuHandler.php:85
 msgid "Go To FluentSMTP Settings"
 msgstr ""
 
@@ -1256,12 +1110,16 @@ msgstr ""
 msgid "Go to Ninja Tables Dashboard"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:755
+#: app/Services/TransStrings.php:306
 #, php-format
 msgid "Google API version has been upgraded. Please %s."
 msgstr ""
 
-#: translationStrings.php:125 app/Hooks/Handlers/AdminMenuHandler.php:576
+#: app/Services/TransStrings.php:145
+msgid "Great!"
+msgstr ""
+
+#: app/Services/TransStrings.php:146
 msgid "How can we help you?"
 msgstr ""
 
@@ -1270,21 +1128,21 @@ msgstr ""
 msgid "https://fluentsmtp.com"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:753
+#: app/Services/TransStrings.php:325
 #, php-format
-msgid "I agree to the  %s of this telegram integration."
+msgid "I agree to the %1$s of this Slack integration."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:747
+#: app/Services/TransStrings.php:333
 #, php-format
-msgid "I agree to the %1s of this slack integration."
+msgid "I agree to the %s of this Telegram integration."
 msgstr ""
 
-#: translationStrings.php:126 app/Hooks/Handlers/AdminMenuHandler.php:577
+#: app/Services/TransStrings.php:147
 msgid "I have sent the code"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:703
+#: app/Services/TransStrings.php:339
 msgid ""
 "If checked, the From Email setting above will be used for all emails (It "
 "will check if the from email is listed to available connections)."
@@ -1294,46 +1152,42 @@ msgstr ""
 msgid "If this is unusual you should probably check if your site is broken."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:748
+#: app/Services/TransStrings.php:307
 #, php-format
 msgid ""
-"If you are a developer and would like to contribute to the project, Please %s"
+"If you are a developer and would like to contribute to the project, please %s"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:749
-msgid ""
-"If you are operating under EU laws, you may be required to use EU region."
-msgstr ""
-
-#: app/Hooks/Handlers/AdminMenuHandler.php:756
+#: app/Services/TransStrings.php:310
 #, php-format
 msgid ""
-"If you are operating under EU laws, you may be required to use EU region. %s."
+"If you are operating under EU laws, you may be required to use the EU region."
+" %s."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:759
+#: app/Services/TransStrings.php:315
 msgid ""
 "If you change your WordPress SALT Keys, this credential will become invalid. "
 "Please update this credential whenever the WP SALTS are modified."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:750
+#: app/Services/TransStrings.php:317
 msgid ""
 "If you enable this then link tracking header will be added to the email for "
-"postmark."
+"Postmark."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:751
+#: app/Services/TransStrings.php:319
 msgid ""
 "If you enable this then open tracking header will be added to the email for "
-"postmark."
+"Postmark."
 msgstr ""
 
-#: translationStrings.php:127 app/Hooks/Handlers/AdminMenuHandler.php:578
+#: app/Services/TransStrings.php:148
 msgid "If you find an issue or have a suggestion please "
 msgstr ""
 
-#: translationStrings.php:128 app/Hooks/Handlers/AdminMenuHandler.php:579
+#: app/Services/TransStrings.php:149
 msgid "If you have a minute, consider "
 msgstr ""
 
@@ -1357,16 +1211,20 @@ msgstr ""
 msgid "Increase Sending Limits"
 msgstr ""
 
-#: translationStrings.php:129 app/Hooks/Handlers/AdminMenuHandler.php:580
+#: app/Services/TransStrings.php:150
 msgid "Install Fluent Forms (Free)"
 msgstr ""
 
-#: translationStrings.php:130 app/Hooks/Handlers/AdminMenuHandler.php:581
+#: app/Services/TransStrings.php:151
 msgid "Install FluentCRM (Free)"
 msgstr ""
 
-#: translationStrings.php:131 app/Hooks/Handlers/AdminMenuHandler.php:582
+#: app/Services/TransStrings.php:152
 msgid "Install Ninja Tables (Free)"
+msgstr ""
+
+#: app/Services/TransStrings.php:153
+msgid "Installing... Please wait"
 msgstr ""
 
 #: app/Services/Mailer/Providers/AmazonSes/Handler.php:244
@@ -1382,57 +1240,66 @@ msgstr ""
 msgid "Invalid. Please re-authenticate"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:715
+#: app/Services/TransStrings.php:288
 msgid ""
-"is a free and opensource WordPress Plugin. Our mission is to provide the "
-"ultimate email delivery solution with your favorite Email sending service."
+"is a free and open-source WordPress Plugin. Our mission is to provide the "
+"ultimate email delivery solution with your favorite Email sending service. "
 "FluentSMTP is built for performance and speed."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:728
+#: app/Services/TransStrings.php:302
+msgid ""
+"is the best and complete feature-rich Email Marketing & CRM solution. It is "
+"also the simplest and fastest CRM and Marketing Plugin on WordPress. Manage "
+"your customer relationships, build your email lists, send email campaigns, "
+"build funnels, and make more profit and increase your conversion rates. (Yes,"
+" It’s Free!)"
+msgstr ""
+
+#: app/Services/TransStrings.php:303
 msgid ""
 "is the ultimate user-friendly, fast, customizable drag-and-drop WordPress "
 "Contact Form Plugin that offers you all the premium features, plus many more "
 "completely unique additional features."
 msgstr ""
 
-#: translationStrings.php:132 app/Hooks/Handlers/AdminMenuHandler.php:583
+#: app/Services/TransStrings.php:154
 msgid "Join FluentCRM Facebook Community"
 msgstr ""
 
-#: translationStrings.php:133 app/Hooks/Handlers/AdminMenuHandler.php:584
+#: app/Services/TransStrings.php:155
 msgid "Join FluentForms Facebook Community"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:719
+#: app/Services/TransStrings.php:289
 msgid "Join our communities and participate in great conversations."
 msgstr ""
 
-#: translationStrings.php:134 app/Hooks/Handlers/AdminMenuHandler.php:585
+#: app/Services/TransStrings.php:156
 msgid "Last 3 months"
 msgstr ""
 
-#: translationStrings.php:135 app/Hooks/Handlers/AdminMenuHandler.php:586
+#: app/Services/TransStrings.php:157
 msgid "Last 30 Days"
 msgstr ""
 
-#: translationStrings.php:136 app/Hooks/Handlers/AdminMenuHandler.php:587
+#: app/Services/TransStrings.php:158
 msgid "Last 7 Days"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:413
+#: app/Hooks/Handlers/AdminMenuHandler.php:415
 msgid "Last 7 days"
 msgstr ""
 
-#: translationStrings.php:137 app/Hooks/Handlers/AdminMenuHandler.php:588
+#: app/Services/TransStrings.php:159
 msgid "Last month"
 msgstr ""
 
-#: translationStrings.php:138 app/Hooks/Handlers/AdminMenuHandler.php:589
+#: app/Services/TransStrings.php:160
 msgid "Last step!"
 msgstr ""
 
-#: translationStrings.php:139 app/Hooks/Handlers/AdminMenuHandler.php:590
+#: app/Services/TransStrings.php:161
 msgid "Last week"
 msgstr ""
 
@@ -1440,23 +1307,27 @@ msgstr ""
 msgid "Learn why it's free"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:82
+#: app/Hooks/Handlers/AdminMenuHandler.php:83
 msgid "learn why it's free"
 msgstr ""
 
-#: translationStrings.php:140 app/Hooks/Handlers/AdminMenuHandler.php:591
+#: app/Services/TransStrings.php:162
 msgid "Less"
 msgstr ""
 
-#: translationStrings.php:141 app/Hooks/Handlers/AdminMenuHandler.php:592
+#: app/Hooks/Handlers/AdminMenuHandler.php:369
+msgid "Loading data..."
+msgstr ""
+
+#: app/Services/TransStrings.php:163
 msgid "Log All Emails for Reporting"
 msgstr ""
 
-#: translationStrings.php:142 app/Hooks/Handlers/AdminMenuHandler.php:593
+#: app/Services/TransStrings.php:164
 msgid "Log Emails"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:729
+#: app/Services/TransStrings.php:312
 msgid ""
 "Looking for a WordPress table plugin for your website? Then you’re in the "
 "right place."
@@ -1472,6 +1343,10 @@ msgid ""
 "your account. "
 msgstr ""
 
+#: app/Services/TransStrings.php:165
+msgid "Mailer"
+msgstr ""
+
 #: app/Services/Mailer/Providers/config.php:74
 msgid "Mailgun"
 msgstr ""
@@ -1481,15 +1356,15 @@ msgstr ""
 msgid "Mailgun API Error"
 msgstr ""
 
-#: translationStrings.php:143 app/Hooks/Handlers/AdminMenuHandler.php:594
+#: app/Services/TransStrings.php:166
 msgid "Mailgun API Settings"
 msgstr ""
 
-#: translationStrings.php:144 app/Hooks/Handlers/AdminMenuHandler.php:595
+#: app/Services/TransStrings.php:167
 msgid "Manage Additional Senders"
 msgstr ""
 
-#: translationStrings.php:145 app/Hooks/Handlers/AdminMenuHandler.php:596
+#: app/Services/TransStrings.php:168
 msgid "Marketing"
 msgstr ""
 
@@ -1501,11 +1376,11 @@ msgstr ""
 msgid "Max Sending Rate"
 msgstr ""
 
-#: translationStrings.php:146 app/Hooks/Handlers/AdminMenuHandler.php:597
+#: app/Services/TransStrings.php:169
 msgid "Meet "
 msgstr ""
 
-#: translationStrings.php:147 app/Hooks/Handlers/AdminMenuHandler.php:598
+#: app/Services/TransStrings.php:170
 msgid "Message Stream"
 msgstr ""
 
@@ -1513,11 +1388,15 @@ msgstr ""
 msgid "Middle East (Bahrain)"
 msgstr ""
 
-#: translationStrings.php:148 app/Hooks/Handlers/AdminMenuHandler.php:599
+#: app/Services/TransStrings.php:171
+msgid "Monday"
+msgstr ""
+
+#: app/Services/TransStrings.php:172
 msgid "More"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:756
+#: app/Services/TransStrings.php:310
 msgid "More information on Mailgun.com"
 msgstr ""
 
@@ -1525,93 +1404,97 @@ msgstr ""
 msgid "Netcore Email API, formerly Pepipost"
 msgstr ""
 
-#: translationStrings.php:149 app/Hooks/Handlers/AdminMenuHandler.php:600
+#: app/Services/TransStrings.php:173
 msgid "Next"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:711
+#: app/Services/TransStrings.php:300
 msgid "No Emails will be sent from your WordPress."
 msgstr ""
 
-#: translationStrings.php:150 app/Hooks/Handlers/AdminMenuHandler.php:601
+#: app/Services/TransStrings.php:174
 msgid "None"
 msgstr ""
 
-#: app/Services/Mailer/BaseHandler.php:403
-#: app/Services/Mailer/BaseHandler.php:408
+#: app/Services/Mailer/BaseHandler.php:438
+#: app/Services/Mailer/BaseHandler.php:443
 msgid "Not implemented"
 msgstr ""
 
-#: translationStrings.php:151 app/Hooks/Handlers/AdminMenuHandler.php:602
+#: app/Services/TransStrings.php:175
 msgid "Notification Days"
 msgstr ""
 
-#: translationStrings.php:152 app/Hooks/Handlers/AdminMenuHandler.php:603
+#: app/Services/TransStrings.php:176
 msgid "Notification Email Addresses"
 msgstr ""
 
-#: translationStrings.php:153 app/Hooks/Handlers/AdminMenuHandler.php:604
+#: app/Services/TransStrings.php:177
 msgid "Off"
 msgstr ""
 
-#: translationStrings.php:154 app/Hooks/Handlers/AdminMenuHandler.php:605
+#: app/Services/TransStrings.php:178
 msgid "On"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:741
-msgid "open a github issue"
+#: app/Services/TransStrings.php:179
+msgid "Oops!"
 msgstr ""
 
-#: translationStrings.php:313 app/Hooks/Handlers/AdminMenuHandler.php:768
+#: app/Services/TransStrings.php:328
+msgid "open a GitHub issue"
+msgstr ""
+
+#: app/Services/TransStrings.php:353
 msgid "open an issue on GitHub"
 msgstr ""
 
-#: translationStrings.php:155 app/Hooks/Handlers/AdminMenuHandler.php:606
+#: app/Services/TransStrings.php:180
 msgid "Outlook / Office365 API Settings"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:198
+#: app/Services/Mailer/Providers/config.php:211
 msgid "Outlook or Office 365"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:213
+#: app/Services/Mailer/Providers/config.php:226
 msgid "Outlook/Office365 is not recommended for sending mass marketing emails."
 msgstr ""
 
-#: translationStrings.php:156 app/Hooks/Handlers/AdminMenuHandler.php:607
+#: app/Services/TransStrings.php:181
 msgid "Pepipost API Settings"
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:217
+#: app/Services/Mailer/Providers/config.php:230
 msgid "PHP mail()"
 msgstr ""
 
-#: translationStrings.php:157 app/Hooks/Handlers/AdminMenuHandler.php:608
+#: app/Services/TransStrings.php:182
 msgid "Pin copied to clipboard"
 msgstr ""
 
-#: translationStrings.php:158 app/Hooks/Handlers/AdminMenuHandler.php:609
+#: app/Services/TransStrings.php:183
 msgid "Please "
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:754
+#: app/Services/TransStrings.php:305
 #, php-format
 msgid "Please %s to create API keys on the Google Cloud Platform."
 msgstr ""
 
-#: translationStrings.php:160 app/Hooks/Handlers/AdminMenuHandler.php:611
+#: app/Services/TransStrings.php:185
 msgid "Please add another connection to use fallback feature"
 msgstr ""
 
-#: translationStrings.php:161 app/Hooks/Handlers/AdminMenuHandler.php:612
+#: app/Services/TransStrings.php:186
 msgid "Please authenticate with Google to get "
 msgstr ""
 
-#: translationStrings.php:162 app/Hooks/Handlers/AdminMenuHandler.php:613
+#: app/Services/TransStrings.php:187
 msgid "Please authenticate with Office365 to get "
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:706
+#: app/Services/TransStrings.php:341
 msgid "Please configure your first email service provider connection"
 msgstr ""
 
@@ -1686,6 +1569,10 @@ msgstr ""
 msgid "Please define FLUENTMAIL_SENDINBLUE_API_KEY in wp-config.php file."
 msgstr ""
 
+#: app/Services/Mailer/Providers/Smtp2Go/ValidatorTrait.php:24
+msgid "Please define FLUENTMAIL_SMTP2GO_API_KEY in wp-config.php file."
+msgstr ""
+
 #: app/Services/Mailer/Providers/Smtp/ValidatorTrait.php:33
 msgid "Please define FLUENTMAIL_SMTP_PASSWORD in wp-config.php file."
 msgstr ""
@@ -1698,14 +1585,14 @@ msgstr ""
 msgid "Please define FLUENTMAIL_SPARKPOST_API_KEY in wp-config.php file."
 msgstr ""
 
-#: translationStrings.php:163 app/Hooks/Handlers/AdminMenuHandler.php:614
+#: app/Services/TransStrings.php:188
 msgid "Please enter a valid email address"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:752
+#: app/Services/TransStrings.php:331
 #, php-format
 msgid ""
-"Please find %s on telegram and send following text to activate this "
+"Please find %s on Telegram and send the following text to activate this "
 "connection."
 msgstr ""
 
@@ -1716,7 +1603,7 @@ msgstr ""
 msgid "Please provide a valid email address"
 msgstr ""
 
-#: translationStrings.php:159 app/Hooks/Handlers/AdminMenuHandler.php:610
+#: app/Services/TransStrings.php:184
 msgid "Please Provide an email"
 msgstr ""
 
@@ -1739,26 +1626,26 @@ msgstr ""
 msgid "Please provide site token"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:771
+#: app/Services/TransStrings.php:356
 msgid "Please select your email service provider"
 msgstr ""
 
-#: translationStrings.php:164 app/Hooks/Handlers/AdminMenuHandler.php:615
+#: app/Services/TransStrings.php:189
 msgid "Please send test email to confirm if the connection is working or not."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:741
+#: app/Services/TransStrings.php:328
 #, php-format
 msgid ""
-"Please view the %1$s first. If you still can't find the answer %2$s  and we "
-"will be happy to answer your questions and assist you with any problems."
+"Please view the %1$s first. If you still can't find the answer, %2$s and we "
+"will be happy to assist you with any problems."
 msgstr ""
 
 #: app/Http/Controllers/SettingsController.php:336
 msgid "Plugin has been successfully installed."
 msgstr ""
 
-#: app/Functions/helpers.php:862
+#: app/Functions/helpers.php:864
 msgid "Possible Conflict: "
 msgstr ""
 
@@ -1766,23 +1653,23 @@ msgstr ""
 msgid "Postmark"
 msgstr ""
 
-#: translationStrings.php:165 app/Hooks/Handlers/AdminMenuHandler.php:616
+#: app/Services/TransStrings.php:190
 msgid "Postmark API Settings"
 msgstr ""
 
-#: translationStrings.php:166 app/Hooks/Handlers/AdminMenuHandler.php:617
+#: app/Services/TransStrings.php:191
 msgid "Prev"
 msgstr ""
 
-#: translationStrings.php:167 app/Hooks/Handlers/AdminMenuHandler.php:618
+#: app/Services/TransStrings.php:192
 msgid "Private API Key"
 msgstr ""
 
-#: translationStrings.php:168 app/Hooks/Handlers/AdminMenuHandler.php:619
+#: app/Services/TransStrings.php:193
 msgid "Provider"
 msgstr ""
 
-#: translationStrings.php:314 app/Hooks/Handlers/AdminMenuHandler.php:769
+#: app/Services/TransStrings.php:354
 msgid "provider for the connection."
 msgstr ""
 
@@ -1790,7 +1677,7 @@ msgstr ""
 msgid "PS: if you have a minute please "
 msgstr ""
 
-#: translationStrings.php:169 app/Hooks/Handlers/AdminMenuHandler.php:620
+#: app/Services/TransStrings.php:194
 msgid "Quick Overview"
 msgstr ""
 
@@ -1798,11 +1685,12 @@ msgstr ""
 msgid "Read More here."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:755
+#: app/Services/TransStrings.php:306
 msgid "read the doc and upgrade your API connection"
 msgstr ""
 
-#: translationStrings.php:170 app/Hooks/Handlers/AdminMenuHandler.php:621
+#: app/Services/TransStrings.php:195
+#: app/Services/Mailer/Providers/config.php:29
 #: app/Services/Mailer/Providers/config.php:70
 #: app/Services/Mailer/Providers/config.php:87
 #: app/Services/Mailer/Providers/config.php:101
@@ -1814,48 +1702,47 @@ msgstr ""
 msgid "Read the documentation"
 msgstr ""
 
-#: translationStrings.php:315 app/Hooks/Handlers/AdminMenuHandler.php:770
+#: app/Services/TransStrings.php:355
 msgid "read the documentation here"
 msgstr ""
 
-#: translationStrings.php:171 app/Hooks/Handlers/AdminMenuHandler.php:622
+#: app/Services/TransStrings.php:196
+msgid "Real-Time Email Failure Notifications"
+msgstr ""
+
+#: app/Services/TransStrings.php:197
 msgid "Receiver's Telegram Username: "
 msgstr ""
 
-#: translationStrings.php:172 app/Hooks/Handlers/AdminMenuHandler.php:623
+#: app/Services/TransStrings.php:198
+msgid "Recommended Plugin"
+msgstr ""
+
+#: app/Services/TransStrings.php:199
 msgid "Region "
 msgstr ""
 
-#: translationStrings.php:173 app/Hooks/Handlers/AdminMenuHandler.php:624
+#: app/Services/TransStrings.php:200
 msgid "Remove"
 msgstr ""
 
-#: translationStrings.php:174 app/Hooks/Handlers/AdminMenuHandler.php:625
+#: app/Services/TransStrings.php:201
 msgid "Resend"
 msgstr ""
 
-#: translationStrings.php:175 app/Hooks/Handlers/AdminMenuHandler.php:626
+#: app/Services/TransStrings.php:202
 msgid "Resend Selected Emails"
 msgstr ""
 
-#: translationStrings.php:176 app/Hooks/Handlers/AdminMenuHandler.php:627
+#: app/Services/TransStrings.php:203
 msgid "Resent Count"
 msgstr ""
 
-#: translationStrings.php:177 app/Hooks/Handlers/AdminMenuHandler.php:628
+#: app/Services/TransStrings.php:204
 msgid "Retry"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:713
-#, php-format
-msgid ""
-"Return Path indicates where non - delivery receipts - or bounce messages - "
-"%1$s are to be sent. If unchecked, bounce messages may be lost. With this "
-"enabled, %2$s you'll be emailed using \"From Email\" if any messages bounce "
-"as a result of issues with the recipient's email."
-msgstr ""
-
-#: app/Hooks/Handlers/AdminMenuHandler.php:712
+#: app/Services/TransStrings.php:321
 msgid ""
 "Return Path indicates where non-delivery receipts - or bounce messages - are "
 "to be sent. If unchecked, bounce messages may be lost. With this enabled, "
@@ -1863,39 +1750,44 @@ msgid ""
 "issues with the recipient’s email."
 msgstr ""
 
-#: translationStrings.php:178 app/Hooks/Handlers/AdminMenuHandler.php:629
+#: app/Services/TransStrings.php:322
+#, php-format
+msgid ""
+"Return Path indicates where non-delivery receipts—or bounce messages—%1$s "
+"are to be sent. If unchecked, bounce messages may be lost. With this enabled,"
+" %2$s you'll be emailed using \"From Email\" if any messages bounce due to "
+"issues with the recipient's email."
+msgstr ""
+
+#: app/Services/TransStrings.php:205
 msgid "Run Another Test Email"
 msgstr ""
 
-#: translationStrings.php:184 app/Hooks/Handlers/AdminMenuHandler.php:635
+#: app/Services/TransStrings.php:212
+msgid "Saturday"
+msgstr ""
+
+#: app/Services/TransStrings.php:213
 msgid "Save Connection Settings"
 msgstr ""
 
-#: translationStrings.php:185 app/Hooks/Handlers/AdminMenuHandler.php:636
+#: app/Services/TransStrings.php:214
 msgid "Save Email Logs:"
 msgstr ""
 
-#: translationStrings.php:186 app/Hooks/Handlers/AdminMenuHandler.php:637
+#: app/Services/TransStrings.php:215
 msgid "Save Settings"
 msgstr ""
 
-#: translationStrings.php:316
-msgid "save_connection_error_1"
-msgstr ""
-
-#: translationStrings.php:317
-msgid "save_connection_error_2"
-msgstr ""
-
-#: translationStrings.php:187 app/Hooks/Handlers/AdminMenuHandler.php:638
+#: app/Services/TransStrings.php:216
 msgid "Search Results for"
 msgstr ""
 
-#: translationStrings.php:188 app/Hooks/Handlers/AdminMenuHandler.php:639
+#: app/Services/TransStrings.php:217
 msgid "Search Type and Enter..."
 msgstr ""
 
-#: translationStrings.php:189 app/Hooks/Handlers/AdminMenuHandler.php:640
+#: app/Services/TransStrings.php:218
 msgid "Secret Key"
 msgstr ""
 
@@ -1907,33 +1799,27 @@ msgstr ""
 msgid "Security Failed. Please reload the page"
 msgstr ""
 
-#: translationStrings.php:190 app/Hooks/Handlers/AdminMenuHandler.php:641
+#: app/Services/TransStrings.php:219
 msgid "Select"
 msgstr ""
 
-#: translationStrings.php:194 app/Hooks/Handlers/AdminMenuHandler.php:645
+#: app/Services/TransStrings.php:223
 msgid "Select date and time"
 msgstr ""
 
-#: translationStrings.php:191 app/Hooks/Handlers/AdminMenuHandler.php:642
+#: app/Services/TransStrings.php:220
 msgid "Select Email or Type"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:766
-msgid ""
-"Select how many days, the logs will be saved. If you select 7 days, then "
-"logs older than 7 days will be deleted automatically."
-msgstr ""
-
-#: translationStrings.php:192 app/Hooks/Handlers/AdminMenuHandler.php:643
+#: app/Services/TransStrings.php:221
 msgid "Select Provider"
 msgstr ""
 
-#: translationStrings.php:193 app/Hooks/Handlers/AdminMenuHandler.php:644
+#: app/Services/TransStrings.php:222
 msgid "Select Region"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:708
+#: app/Services/TransStrings.php:337
 msgid ""
 "Select which connection will be used for sending transactional emails from "
 "your WordPress. If you use multiple connection then email will be routed "
@@ -1944,16 +1830,20 @@ msgstr ""
 msgid "Selected Emails have been proceed to send."
 msgstr ""
 
-#: translationStrings.php:195 app/Hooks/Handlers/AdminMenuHandler.php:646
+#: app/Services/TransStrings.php:224
 msgid "Send Test Email"
 msgstr ""
 
-#: translationStrings.php:196 app/Hooks/Handlers/AdminMenuHandler.php:647
+#: app/Services/TransStrings.php:225
 msgid "Send Test Message"
 msgstr ""
 
-#: translationStrings.php:197 app/Hooks/Handlers/AdminMenuHandler.php:648
+#: app/Services/TransStrings.php:227
 msgid "Send this email in HTML or in plain text format."
+msgstr ""
+
+#: app/Services/TransStrings.php:226
+msgid "Send To"
 msgstr ""
 
 #: app/views/admin/ses_connection_info.php:31
@@ -1961,11 +1851,11 @@ msgstr ""
 msgid "Sender Email"
 msgstr ""
 
-#: translationStrings.php:199 app/Hooks/Handlers/AdminMenuHandler.php:650
+#: app/Services/TransStrings.php:229
 msgid "Sender Email "
 msgstr ""
 
-#: translationStrings.php:200 app/Hooks/Handlers/AdminMenuHandler.php:651
+#: app/Services/TransStrings.php:230
 msgid "Sender Email Address"
 msgstr ""
 
@@ -1973,13 +1863,12 @@ msgstr ""
 msgid "Sender email is required."
 msgstr ""
 
-#: translationStrings.php:201 app/Hooks/Handlers/AdminMenuHandler.php:652
-#: app/views/admin/ses_connection_info.php:35
+#: app/Services/TransStrings.php:231 app/views/admin/ses_connection_info.php:35
 #: app/views/admin/general_connection_info.php:12
 msgid "Sender Name"
 msgstr ""
 
-#: translationStrings.php:202 app/Hooks/Handlers/AdminMenuHandler.php:653
+#: app/Services/TransStrings.php:232
 msgid "Sender Settings"
 msgstr ""
 
@@ -1987,7 +1876,7 @@ msgstr ""
 msgid "SendGrid"
 msgstr ""
 
-#: translationStrings.php:198 app/Hooks/Handlers/AdminMenuHandler.php:649
+#: app/Services/TransStrings.php:228
 msgid "SendGrid API Settings"
 msgstr ""
 
@@ -1995,7 +1884,7 @@ msgstr ""
 msgid "Sendinblue"
 msgstr ""
 
-#: translationStrings.php:203 app/Hooks/Handlers/AdminMenuHandler.php:654
+#: app/Services/TransStrings.php:233
 msgid "Sendinblue API Settings"
 msgstr ""
 
@@ -2003,15 +1892,15 @@ msgstr ""
 msgid "SendInBlueError API Error"
 msgstr ""
 
-#: translationStrings.php:205 app/Hooks/Handlers/AdminMenuHandler.php:656
+#: app/Services/TransStrings.php:235
 msgid "Sending by time of day"
 msgstr ""
 
-#: translationStrings.php:204 app/Hooks/Handlers/AdminMenuHandler.php:655
+#: app/Services/TransStrings.php:234
 msgid "Sending Stats"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:429
+#: app/Hooks/Handlers/AdminMenuHandler.php:431
 msgid "Sent"
 msgstr ""
 
@@ -2019,20 +1908,19 @@ msgstr ""
 msgid "Sent in last 24 hours"
 msgstr ""
 
-#: app/Services/Mailer/BaseHandler.php:301
+#: app/Services/Mailer/BaseHandler.php:302
 msgid "Sent using fallback connection "
 msgstr ""
 
-#: translationStrings.php:206 app/Hooks/Handlers/AdminMenuHandler.php:657
+#: app/Services/TransStrings.php:236
 msgid "Server Response"
 msgstr ""
 
-#: translationStrings.php:207 app/Hooks/Handlers/AdminMenuHandler.php:658
+#: app/Services/TransStrings.php:237
 msgid "Set the return-path to match the From Email"
 msgstr ""
 
-#: translationStrings.php:208 app/Hooks/filters.php:18
-#: app/Hooks/Handlers/AdminMenuHandler.php:659
+#: app/Hooks/filters.php:18 app/Services/TransStrings.php:238
 msgid "Settings"
 msgstr ""
 
@@ -2055,21 +1943,14 @@ msgstr ""
 msgid "Showing %1$s of %2$s different subject lines sent in the past %3$s"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:724
+#: app/Services/TransStrings.php:308 app/Services/TransStrings.php:336
 msgid ""
 "Simply copy the following snippet and replace the stars with the "
 "corresponding credential. Then simply paste to wp-config.php file of your "
 "WordPress installation"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:721
-msgid ""
-"Simply copy the following snippet and replace the stars with the "
-"corresponding credential.Then simply paste to wp-config.php file of your "
-"WordPress installation"
-msgstr ""
-
-#: translationStrings.php:209 app/Hooks/Handlers/AdminMenuHandler.php:660
+#: app/Services/TransStrings.php:239
 msgid "Slack Channel Details: "
 msgstr ""
 
@@ -2082,11 +1963,11 @@ msgstr ""
 msgid "Slack notification is not enabled"
 msgstr ""
 
-#: translationStrings.php:210 app/Hooks/Handlers/AdminMenuHandler.php:661
+#: app/Services/TransStrings.php:240
 msgid "Slack Notifications Enabled"
 msgstr ""
 
-#: translationStrings.php:179 app/Hooks/Handlers/AdminMenuHandler.php:630
+#: app/Services/TransStrings.php:206
 msgid "SMTP Host"
 msgstr ""
 
@@ -2094,7 +1975,7 @@ msgstr ""
 msgid "SMTP host is required."
 msgstr ""
 
-#: translationStrings.php:180 app/Hooks/Handlers/AdminMenuHandler.php:631
+#: app/Services/TransStrings.php:207
 msgid "SMTP Password"
 msgstr ""
 
@@ -2102,7 +1983,7 @@ msgstr ""
 msgid "SMTP password is required."
 msgstr ""
 
-#: translationStrings.php:181 app/Hooks/Handlers/AdminMenuHandler.php:632
+#: app/Services/TransStrings.php:208
 msgid "SMTP Port"
 msgstr ""
 
@@ -2114,7 +1995,7 @@ msgstr ""
 msgid "SMTP server"
 msgstr ""
 
-#: translationStrings.php:182 app/Hooks/Handlers/AdminMenuHandler.php:633
+#: app/Services/TransStrings.php:209
 msgid "SMTP Username"
 msgstr ""
 
@@ -2124,6 +2005,14 @@ msgstr ""
 
 #: app/Hooks/filters.php:6
 msgid "SMTP/Mail Settings"
+msgstr ""
+
+#: app/Services/Mailer/Providers/config.php:179
+msgid "SMTP2GO"
+msgstr ""
+
+#: app/Services/TransStrings.php:210
+msgid "SMTP2GO API Settings"
 msgstr ""
 
 #: app/Http/Controllers/LoggerController.php:73
@@ -2139,6 +2028,7 @@ msgstr ""
 #: app/Services/Mailer/Providers/Smtp/Handler.php:23
 #: app/Services/Mailer/Providers/PepiPost/Handler.php:26
 #: app/Services/Mailer/Providers/TransMail/Handler.php:23
+#: app/Services/Mailer/Providers/Smtp2Go/Handler.php:24
 #: app/Services/Mailer/Providers/Mailgun/Handler.php:27
 #: app/Services/Mailer/Providers/Gmail/Handler.php:18
 #: app/Services/Mailer/Providers/DefaultMail/Handler.php:16
@@ -2156,8 +2046,12 @@ msgstr ""
 msgid "Sorry no connection found. Please reload the page and try again"
 msgstr ""
 
-#: translationStrings.php:211 app/Hooks/Handlers/AdminMenuHandler.php:662
+#: app/Services/TransStrings.php:241
 msgid "Sorry! No docs found"
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:473
+msgid "Sorry! The provider email is not valid"
 msgstr ""
 
 #: app/Services/Mailer/Providers/AmazonSes/Handler.php:276
@@ -2176,74 +2070,78 @@ msgstr ""
 msgid "SparkPost"
 msgstr ""
 
-#: app/Services/Mailer/Providers/SparkPost/Handler.php:86
+#: app/Services/Mailer/Providers/SparkPost/Handler.php:79
 msgid "SparkPost API Error"
 msgstr ""
 
-#: translationStrings.php:212 app/Hooks/Handlers/AdminMenuHandler.php:663
+#: app/Services/TransStrings.php:242
 msgid "SparkPost API Settings"
 msgstr ""
 
-#: translationStrings.php:183 app/Hooks/Handlers/AdminMenuHandler.php:634
+#: app/Services/TransStrings.php:211
 msgid "SSL"
 msgstr ""
 
-#: translationStrings.php:213 app/Hooks/Handlers/AdminMenuHandler.php:664
+#: app/Services/TransStrings.php:243
 msgid "Start date"
 msgstr ""
 
-#: translationStrings.php:214 app/Hooks/Handlers/AdminMenuHandler.php:665
+#: app/Services/TransStrings.php:244
 msgid "Status"
 msgstr ""
 
-#: translationStrings.php:215 app/Hooks/Handlers/AdminMenuHandler.php:666
+#: app/Services/TransStrings.php:245
 msgid "Status:"
 msgstr ""
 
-#: translationStrings.php:218 app/Hooks/Handlers/AdminMenuHandler.php:669
+#: app/Services/TransStrings.php:248
 msgid "Store Access Keys in DB"
 msgstr ""
 
-#: translationStrings.php:216 app/Hooks/Handlers/AdminMenuHandler.php:667
+#: app/Services/TransStrings.php:246
 msgid "Store API Keys in Config File"
 msgstr ""
 
-#: translationStrings.php:217 app/Hooks/Handlers/AdminMenuHandler.php:668
+#: app/Services/TransStrings.php:247
 msgid "Store API Keys in DB"
 msgstr ""
 
-#: translationStrings.php:219 app/Hooks/Handlers/AdminMenuHandler.php:670
+#: app/Services/TransStrings.php:249
 msgid "Store Application Keys in DB"
 msgstr ""
 
-#: translationStrings.php:220 app/Hooks/Handlers/AdminMenuHandler.php:671
-#: app/views/admin/digest_email.php:114 app/views/admin/digest_email.php:164
+#: app/Services/TransStrings.php:250 app/views/admin/digest_email.php:114
+#: app/views/admin/digest_email.php:164
 msgid "Subject"
 msgstr ""
 
-#: translationStrings.php:221 app/Hooks/Handlers/AdminMenuHandler.php:672
+#: app/Services/TransStrings.php:251
 msgid "Subscribe To Updates"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:737
+#: app/Services/TransStrings.php:327
 msgid ""
 "Subscribe with your email to know about this plugin updates, releases and "
 "useful tips."
 msgstr ""
 
-#: translationStrings.php:222 app/Hooks/Handlers/AdminMenuHandler.php:673
+#: app/Services/TransStrings.php:252
 msgid "Successful"
 msgstr ""
 
-#: translationStrings.php:223 app/Hooks/Handlers/AdminMenuHandler.php:674
+#: app/Services/TransStrings.php:253
 msgid "Summary Email"
+msgstr ""
+
+#: app/Services/TransStrings.php:254
+msgid "Sunday"
 msgstr ""
 
 #: app/Http/Controllers/TelegramController.php:160
 msgid "Telegram connection has been disconnected successfully"
 msgstr ""
 
-#: translationStrings.php:225 app/Hooks/Handlers/AdminMenuHandler.php:676
+#: app/Services/TransStrings.php:256
 msgid "Telegram Connection Status: "
 msgstr ""
 
@@ -2253,16 +2151,15 @@ msgstr ""
 msgid "Telegram notification is not enabled"
 msgstr ""
 
-#: translationStrings.php:226 app/Hooks/Handlers/AdminMenuHandler.php:677
+#: app/Services/TransStrings.php:257
 msgid "Telegram Notifications Enable"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:747
-#: app/Hooks/Handlers/AdminMenuHandler.php:753
+#: app/Services/TransStrings.php:325 app/Services/TransStrings.php:333
 msgid "terms and conditions"
 msgstr ""
 
-#: translationStrings.php:227 app/Hooks/Handlers/AdminMenuHandler.php:678
+#: app/Services/TransStrings.php:258
 msgid "Test Email Has been successfully sent"
 msgstr ""
 
@@ -2272,7 +2169,7 @@ msgstr ""
 msgid "Test message sent successfully"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:705
+#: app/Services/TransStrings.php:342
 msgid ""
 "Thank you for installing FluentSMTP - The ultimate SMTP & Email Service "
 "Connection Plugin for WordPress"
@@ -2284,33 +2181,33 @@ msgid ""
 "for making sure your emails are delivered."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:730
+#: app/Services/TransStrings.php:313
 msgid ""
 "the best WP table plugin that comes with all the solutions to the problems "
 "you face while creating tables on your posts/pages."
 msgstr ""
 
-#: app/Services/Mailer/Providers/config.php:228
+#: app/Services/Mailer/Providers/config.php:241
 msgid ""
 "The Default option does not use SMTP or any Email Service Providers so it "
 "will not improve email delivery on your site."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:738
+#: app/Services/TransStrings.php:293
 msgid ""
 "The Default(none) option does not use SMTP and will not improve email "
 "delivery on your site."
 msgstr ""
 
-#: translationStrings.php:228 app/Hooks/Handlers/AdminMenuHandler.php:679
+#: app/Services/TransStrings.php:259
 msgid "The email address already exists in the list"
 msgstr ""
 
-#: translationStrings.php:229 app/Hooks/Handlers/AdminMenuHandler.php:680
+#: app/Services/TransStrings.php:260
 msgid "The email address must match the domain: "
 msgstr ""
 
-#: translationStrings.php:230 app/Hooks/Handlers/AdminMenuHandler.php:681
+#: app/Services/TransStrings.php:261
 msgid "The email address which emails are sent from."
 msgstr ""
 
@@ -2322,7 +2219,7 @@ msgstr ""
 msgid "The from email is not verified"
 msgstr ""
 
-#: translationStrings.php:231 app/Hooks/Handlers/AdminMenuHandler.php:682
+#: app/Services/TransStrings.php:262
 msgid "The name which emails are sent from."
 msgstr ""
 
@@ -2338,33 +2235,37 @@ msgstr ""
 msgid "This email was sent from "
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:758
+#: app/Services/TransStrings.php:314
 msgid ""
 "This input will be securely encrypted using WP SALTS as encryption keys "
-"before save."
+"before saving."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:85
+#: app/Hooks/Handlers/AdminMenuHandler.php:86
 msgid ""
 "This notice is from FluentSMTP plugin to prevent plugin\n"
 "                    conflict."
 msgstr ""
 
-#: translationStrings.php:224 app/Hooks/Handlers/AdminMenuHandler.php:675
+#: app/Services/TransStrings.php:263
+msgid "Thursday"
+msgstr ""
+
+#: app/Services/TransStrings.php:255
 msgid "TLS"
 msgstr ""
 
-#: translationStrings.php:232 app/Hooks/Handlers/AdminMenuHandler.php:683
+#: app/Services/TransStrings.php:264
 msgid "To"
 msgstr ""
 
-#: translationStrings.php:233 app/Hooks/Handlers/AdminMenuHandler.php:684
+#: app/Services/TransStrings.php:265
 msgid ""
 "To send emails you will need only a Mail Send access level for this API key."
 msgstr ""
 
-#: translationStrings.php:234 app/Hooks/Handlers/AdminMenuHandler.php:406
-#: app/Hooks/Handlers/AdminMenuHandler.php:685
+#: app/Services/TransStrings.php:266
+#: app/Hooks/Handlers/AdminMenuHandler.php:408
 msgid "Today"
 msgstr ""
 
@@ -2373,31 +2274,35 @@ msgstr ""
 msgid "Token Validity"
 msgstr ""
 
-#: translationStrings.php:235 app/Hooks/Handlers/AdminMenuHandler.php:686
+#: app/Services/TransStrings.php:267
 msgid "Total Email Sent (Logged):"
 msgstr ""
 
-#: translationStrings.php:236 app/Hooks/Handlers/AdminMenuHandler.php:687
+#: app/Services/TransStrings.php:268
 msgid "Track Opens"
 msgstr ""
 
-#: translationStrings.php:237 app/Hooks/Handlers/AdminMenuHandler.php:688
+#: app/Services/TransStrings.php:269
 msgid "Transactional"
 msgstr ""
 
-#: app/Services/Mailer/BaseHandler.php:304
+#: app/Services/Mailer/BaseHandler.php:305
 msgid "Tried to send using fallback but failed. "
 msgstr ""
 
-#: translationStrings.php:238 app/Hooks/Handlers/AdminMenuHandler.php:689
+#: app/Services/TransStrings.php:270
 msgid "Try Again"
 msgstr ""
 
-#: translationStrings.php:239 app/Hooks/Handlers/AdminMenuHandler.php:690
+#: app/Services/TransStrings.php:271
+msgid "Tuesday"
+msgstr ""
+
+#: app/Services/TransStrings.php:272
 msgid "Turn On"
 msgstr ""
 
-#: translationStrings.php:240 app/Hooks/Handlers/AdminMenuHandler.php:691
+#: app/Services/TransStrings.php:273
 msgid "Type & press enter..."
 msgstr ""
 
@@ -2422,7 +2327,7 @@ msgstr ""
 msgid "US West (Oregon)"
 msgstr ""
 
-#: translationStrings.php:241 app/Hooks/Handlers/AdminMenuHandler.php:692
+#: app/Services/TransStrings.php:274
 msgid "Use Auto TLS"
 msgstr ""
 
@@ -2430,17 +2335,17 @@ msgstr ""
 msgid "Valid Sending Emails"
 msgstr ""
 
-#: translationStrings.php:242 app/Hooks/Handlers/AdminMenuHandler.php:693
+#: app/Services/TransStrings.php:275
 msgid "Validating Data. Please wait..."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:445
+#: app/Hooks/Handlers/AdminMenuHandler.php:447
 msgid "View All"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:739
+#: app/Services/TransStrings.php:332
 msgid ""
-"We could not fetch the Telegram notification status.Here is the server "
+"We could not fetch the Telegram notification status. Here is the server "
 "response: "
 msgstr ""
 
@@ -2454,18 +2359,21 @@ msgstr ""
 msgid "Webhook URL is required"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:704
+#: app/Services/TransStrings.php:276
+msgid "Wednesday"
+msgstr ""
+
+#: app/Services/TransStrings.php:343
 msgid "Welcome to FluentSMTP"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:740
-#: app/Hooks/Handlers/AdminMenuHandler.php:767
+#: app/Services/TransStrings.php:304
 msgid ""
 "When checked, the From Name setting above will be used for all emails, "
 "ignoring values set by other plugins."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:278
+#: app/Hooks/Handlers/AdminMenuHandler.php:280
 #, php-format
 msgid ""
 "WordPress version 5.5 or greater is required for FluentSMTP. You are using "
@@ -2473,24 +2381,35 @@ msgid ""
 "Plugin."
 msgstr ""
 
-#: translationStrings.php:243 app/Hooks/Handlers/AdminMenuHandler.php:694
-msgid "Write a review (really appreciate 😊)"
+#: app/Services/TransStrings.php:277
+msgid "Write a review (really appreciated 😊)"
 msgstr ""
 
-#: translationStrings.php:318 app/Hooks/Handlers/AdminMenuHandler.php:773
-#: app/views/admin/email_html.php:53
+#: app/Services/TransStrings.php:358 app/views/admin/email_html.php:53
 msgid "write a review for FluentSMTP"
 msgstr ""
 
-#: translationStrings.php:244 app/Hooks/Handlers/AdminMenuHandler.php:695
+#: app/Hooks/Handlers/AdminMenuHandler.php:236
+msgid "Write a review ★★★★★"
+msgstr ""
+
+#: app/Services/TransStrings.php:278
 msgid "Yes, Disconnect"
+msgstr ""
+
+#: app/Http/Controllers/SettingsController.php:489
+msgid "You are subscribed to plugin update and monthly tips"
 msgstr ""
 
 #: app/Http/Controllers/Controller.php:51
 msgid "You do not have permission to do this action"
 msgstr ""
 
-#: translationStrings.php:245 app/Hooks/Handlers/AdminMenuHandler.php:696
+#: app/Hooks/Handlers/AdminMenuHandler.php:96
+msgid "You do not have permission to see this data"
+msgstr ""
+
+#: app/Services/TransStrings.php:279
 msgid "You may add additional sending emails in this"
 msgstr ""
 
@@ -2500,7 +2419,7 @@ msgid ""
 "in your FluentSMTP settings. Simply turn it off to stop these emails at "
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:81
+#: app/Hooks/Handlers/AdminMenuHandler.php:82
 msgid ""
 "You seem to be looking for an SMTP plugin, but there's no need for another "
 "one — FluentSMTP is already installed on your site. FluentSMTP is a "
@@ -2508,19 +2427,19 @@ msgid ""
 "without any upsell"
 msgstr ""
 
-#: translationStrings.php:246 app/Hooks/Handlers/AdminMenuHandler.php:697
+#: app/Services/TransStrings.php:280
 msgid "Your Discord Channel Name (For Internal Use)"
 msgstr ""
 
-#: translationStrings.php:247 app/Hooks/Handlers/AdminMenuHandler.php:698
+#: app/Services/TransStrings.php:281
 msgid "Your Discord Channel Webhook URL"
 msgstr ""
 
-#: translationStrings.php:248 app/Hooks/Handlers/AdminMenuHandler.php:699
+#: app/Services/TransStrings.php:282
 msgid "Your Email"
 msgstr ""
 
-#: translationStrings.php:249 app/Hooks/Handlers/AdminMenuHandler.php:700
+#: app/Services/TransStrings.php:283
 msgid "Your Email Address"
 msgstr ""
 
@@ -2528,30 +2447,30 @@ msgstr ""
 msgid "Your email sending health is perfect"
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:707
+#: app/Services/TransStrings.php:340
 msgid ""
 "Your emails will be routed automatically based on From email address. No "
 "additional configuration is required."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:731
+#: app/Services/TransStrings.php:329
 #, php-format
 msgid ""
-"Your FluentSMTP plugin is currently integrated with Telegram.Receive timely "
+"Your FluentSMTP plugin is currently integrated with Telegram. Receive timely "
 "notifications from %s on Telegram for any email sending issues from your "
 "website. This ongoing connection ensures you're always informed about your "
 "email delivery status."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:723
+#: app/Services/TransStrings.php:296
 msgid ""
-"Your FluentSMTP plugin is currently integrated with your Discord Channel."
+"Your FluentSMTP plugin is currently integrated with your Discord Channel. "
 "Receive timely notifications on Discord for any email sending issues from "
-"your website.This ongoing connection ensures you're always informed about "
+"your website. This ongoing connection ensures you're always informed about "
 "your email delivery status."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:722
+#: app/Services/TransStrings.php:324
 msgid ""
 "Your FluentSMTP plugin is currently integrated with your Slack Channel. "
 "Receive timely notifications on Slack for any email sending issues from your "
@@ -2559,13 +2478,13 @@ msgid ""
 "email delivery status."
 msgstr ""
 
-#: app/Hooks/Handlers/AdminMenuHandler.php:720
+#: app/Services/TransStrings.php:309
 msgid ""
 "Your Gmail / Google Workspace Authentication has been enabled. No further "
-"action is needed. If you want to re-authenticate, "
+"action is needed. If you want to re-authenticate,"
 msgstr ""
 
-#: translationStrings.php:250 app/Hooks/Handlers/AdminMenuHandler.php:701
+#: app/Services/TransStrings.php:284
 msgid "Your Name"
 msgstr ""
 
@@ -2573,6 +2492,6 @@ msgstr ""
 msgid "Your settings has been saved"
 msgstr ""
 
-#: translationStrings.php:251 app/Hooks/Handlers/AdminMenuHandler.php:702
+#: app/Services/TransStrings.php:285
 msgid "Your SMTP Username"
 msgstr ""

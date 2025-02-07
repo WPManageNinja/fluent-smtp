@@ -3,8 +3,8 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, wordpress mail smtp, mail, mail smtp
 Requires at least: 5.5
 Tested up to: 6.7
-Stable tag: 2.2.83
-Requires PHP: 7.1
+Stable tag: 2.2.90
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,7 @@ Fluent SMTP plugin fixes your email delivery issue by connecting WordPress Mail 
 
 Connect as many email Service Providers as you want, and FluentSMTP will route your transactional and marketing emails automatically. This is one of the unique features that FluentSMTP has to offer.
 
-[youtube https://www.youtube.com/watch?v=Je0OPk1NnjI]
+[youtube https://www.youtube.com/watch?v=qnrTdQMNcuA]
 
 == Why is FluentSMTP free? ==
 The FluentSMTP plugin is 100% free and open source. We will never monetize it. It's a part of our "Five for the Future" participation, an initiative started by the WordPress Foundation.
@@ -39,6 +39,7 @@ Our parent company <a title="WP Manage Ninja" href="https://wpmanageninja.com">W
 * Postmark
 * Zoho ZeptoMail (TransMail)
 * SparkPost
+* SMTP2GO
 * Elastic Mail
 * Zoho via SMTP
 * Any SMTP email provider
@@ -58,6 +59,8 @@ Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin on the m
 
 Most importantly, this plugin is free and will always be free.
 👉 <a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/">Read why it's 100% free (always)</a> 👈
+
+[youtube https://www.youtube.com/watch?v=GwmkX6zImWw]
 
 == How does Fluent SMTP work? ==
 Fluent SMTP improves your WordPress mail by intercepting <code>wp_mail</code> calls, and then connecting with your email service providers to ensure deliverability. It uses a direct email service API to send emails faster and securely. It means emails are sent using the provider's direct API. For your native SMTP connections, it uses the proper host, port, and credentials to send your WP mails.
@@ -117,6 +120,10 @@ Elastic Email is a great solution for sending transactional and marketing emails
 Fluent SMTP provides you options to connect with your Outlook or Office 365 emails and send emails over their API. It's fast and secure. Using oAuth2 authentication system for the connection, You can easily setup the connection and send your emails with Office 365 / Outlook emails.
 
 Read the documentation for <a href="https://fluentsmtp.com/docs/setup-outlook-with-fluentsmtp/">connecting Office 365 Email with WordPress</a>
+
+== 🎉 SMTP2GO Email API Connection ==
+SMTP2GO is a convenient solution for sending transactional and marketing emails with a user-friendly dashboard and many extensive functions such as statistics and real-time information. Fluent SMTP plugin is fully compatible with their official API and you can use it to send your WordPress emails via SMTP2Go
+
 
 == 🎉 Other SMTP ==
 Fluent SMTP plugin works with all major email services that offer SMTP connections such as Gmail, Yahoo, Microsoft Live, Zoho Mail, YandexMail, and any other email sending services.
@@ -287,6 +294,14 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 
 
 == Changelog ==
+
+= 2.2.90 (Date: Feb 07, 2025) =
+- Added SMTP2GO Provider
+- Improved Translations
+- Added name attribute to attachment files
+- Security: Updated Google SDK Library to the latest version & updated JS DomPurify Library
+- Fixed: Email Failed Notification Issue with Slack
+- Styling Improvements
 
 = 2.2.83 (Date: Nov 22, 2024) =
 - Fix unserialize parameter issue
