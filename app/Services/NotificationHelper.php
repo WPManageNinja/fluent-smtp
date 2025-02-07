@@ -188,7 +188,7 @@ class NotificationHelper
     public static function sendSlackMessage($message, $webhookUrl, $blocking = false)
     {
 
-        if(is_array($message)) {
+        if (is_array($message)) {
             $body = wp_json_encode($message);
         } else {
             $body = wp_json_encode(array('text' => $message));
@@ -415,9 +415,7 @@ class NotificationHelper
     {
         if (is_serialized($data)) {
             if (preg_match('/(^|;)O:[0-9]+:/', $data)) {
-                throw new InvalidArgumentException(
-                    "Unsafe serialized data detected!"
-                );
+                return '';
             }
             return unserialize(trim($data), ['allowed_classes' => false]);
         }
