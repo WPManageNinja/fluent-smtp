@@ -820,6 +820,9 @@
             $method = 'aes-256-ctr';
             $ivlen  = openssl_cipher_iv_length($method);
             $iv     = substr($raw_value, 0, $ivlen);
+            if (strlen($iv) < 16) {  
+                $iv = str_pad($iv, 16, "\0");  // Pad with null bytes if it's shorter
+            }  
 
             $raw_value = substr($raw_value, $ivlen);
 
