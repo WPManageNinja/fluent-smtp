@@ -270,9 +270,13 @@ class BaseHandler
                 'errors'  => $response->get_error_messages()
             ];
 
-            $this->processResponse($errorResponse, false);
+            $status = $this->processResponse($errorResponse, false);
 
-            throw new \PHPMailer\PHPMailer\Exception($message, $code); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+            if ( !$status ) {
+                throw new \PHPMailer\PHPMailer\Exception($message, $code); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+            } else {
+                return $status;
+            }
 
         } else {
             return $this->processResponse($response, true);
@@ -318,7 +322,7 @@ class BaseHandler
                 $logId = (new Logger)->add($data);
                 if(!$status) {
                     // We have to fire an action for this failed job
-                    do_action('fluentmail_email_sending_failed', $logId, $this, $data);
+                    $status = apply_filters('fluentmail_email_sending_failed', $status, $logId, $this, $data);
                 }
             }
         }
