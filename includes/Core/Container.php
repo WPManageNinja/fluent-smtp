@@ -905,7 +905,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  Closure  $callback
      * @return void
      */
-    public function resolving($abstract, Closure $callback = null)
+    public function resolving($abstract, ?Closure $callback = null)
     {
         if ($callback === null && $abstract instanceof Closure) {
             $this->resolvingCallback($abstract);
@@ -921,7 +921,7 @@ class Container implements ArrayAccess, ContainerContract
      * @param  Closure $callback
      * @return void
      */
-    public function afterResolving($abstract, Closure $callback = null)
+    public function afterResolving($abstract, ?Closure $callback = null)
     {
         if ($abstract instanceof Closure && $callback === null) {
             $this->afterResolvingCallback($abstract);
@@ -973,18 +973,16 @@ class Container implements ArrayAccess, ContainerContract
     protected function getFunctionHint(Closure $callback)
     {
         $function = new ReflectionFunction($callback);
-        
-        if ($function->getNumberOfParameters() == 0) {
-            return;
+
+        if ($function->getNumberOfParameters() === 0) {
+            return null;
         }
 
         $expected = $function->getParameters()[0];
         
-        if (!$expected->getClass()) {
-            return;
-        }
+        $className = Reflection::getClassName($expected);
 
-        return $expected->getClass()->name;
+        return $className ?: null;
     }
 
     /**
