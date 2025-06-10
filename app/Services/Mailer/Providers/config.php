@@ -61,6 +61,7 @@ return [
                 'ap-southeast-1' => __('Asia Pacific (Singapore)', 'fluent-smtp'),
                 'ap-southeast-2' => __('Asia Pacific (Sydney)', 'fluent-smtp'),
                 'ap-northeast-1' => __('Asia Pacific (Tokyo)', 'fluent-smtp'),
+                'ap-northeast-3' => __('Asia Pacific (Osaka)', 'fluent-smtp'),
                 'sa-east-1'      => __('South America (São Paulo)', 'fluent-smtp'),
                 'me-south-1'     => __('Middle East (Bahrain)', 'fluent-smtp'),
                 'us-gov-west-1'  => __('AWS GovCloud (US)', 'fluent-smtp'),
