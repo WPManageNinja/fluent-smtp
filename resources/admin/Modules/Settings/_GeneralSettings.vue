@@ -86,6 +86,15 @@
                 <p v-if="appVars.is_disabled_defined" style="color: red;">{{ ('Emails are being simulated due to the definition of ') }} <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ (' in your PHP code.') }}</p>
             </el-form-item>
 
+            <el-form-item :label="$t('Auto-Retry Failed Emails')">
+                <el-input
+                    v-model="settings.misc.auto_retry_emails"
+                    type="number"
+                    min="0"
+                />
+                <p>{{ $t('Retry x number of times. Set to 0 to not automatically retry') }}</p>
+            </el-form-item>
+
             <el-form-item :label="$t('Add Multi-Part Plain Text for HTML Emails (beta)')">
                 <el-checkbox
                     v-model="settings.misc.send_as_text"
