@@ -6,6 +6,7 @@
                     <el-radio-button label="">{{ $t('All Statuses') }}</el-radio-button>
                     <el-radio-button label="sent">{{ $t('Successful') }}</el-radio-button>
                     <el-radio-button label="failed">{{ $t('Failed') }}</el-radio-button>
+                    <el-radio-button label="autoresend">{{ $t('To be resent') }}</el-radio-button>
                 </el-radio-group>
             </el-col>
 

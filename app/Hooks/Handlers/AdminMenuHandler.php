@@ -128,6 +128,13 @@ class AdminMenuHandler
             wp_schedule_event(time(), 'daily', $dailyTaskHookName);
         }
 
+        $frequentTaskHookName = 'fluentmail_do_frequent_scheduled_tasks';
+
+        if (!wp_next_scheduled($frequentTaskHookName)) {
+            // TODO: Likely add a filter for this
+            wp_schedule_event(time(), 'hourly', $frequentTaskHookName);
+        }
+
         $this->app->view->render('admin.menu');
     }
 

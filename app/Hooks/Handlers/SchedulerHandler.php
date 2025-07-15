@@ -10,16 +10,27 @@ use FluentMail\Includes\Support\Arr;
 class SchedulerHandler
 {
     protected $dailyActionName = 'fluentmail_do_daily_scheduled_tasks';
+    protected $frequentActionName = 'fluentmail_do_frequent_scheduled_tasks';
 
     public function register()
     {
         add_action($this->dailyActionName, array($this, 'handleScheduledJobs'));
+        add_action($this->frequentActionName, array($this, 'handleFrequentJobs'));
         add_action('fluentmail_email_sending_failed', array($this, 'maybeHandleFallbackConnection'), 10, 3);
 
         add_action('fluentsmtp_renew_gmail_token', array($this, 'renewGmailToken'));
 
         add_action('fluentmail_email_sending_failed_no_fallback', array($this, 'maybeSendNotification'), 10, 3);
 
+        // Hook to allow resending more frequent via cron
+        add_action( 'wp_ajax_fsmtp_resend_cron', array( $this, 'autoResendEmails' ) );
+        add_action( 'wp_ajax_nopriv_fsmtp_resend_cron', array( $this, 'autoResendEmails' ) );
+
+    }
+
+    public function handleFreqentJobs()
+    {
+        $this->autoResendEmails();
     }
 
     public function handleScheduledJobs()
@@ -156,6 +167,45 @@ class SchedulerHandler
 
     }
 
+    public function autoResendEmails()
+    {
+
+        // Get the next email marked as autoresend and retry it
+        $logger = new Logger();
+        $results = $logger->get([
+            'status' => 'autoresend',
+            'per_page' => 1,
+        ]);
+        if(!empty(@$results['data'])) {
+            foreach($results['data'] as $result) {
+                // Attempt retry of email
+                $result['from'] = html_entity_decode($result['from']);
+                $provider = fluentMailGetProvider($result['from']);
+                $provider->setRowId( $result['id'] );
+
+                try {
+
+                    $logger->updateLog([
+                        'status' => 'failed',
+                    ], ['id' => $result['id']]);
+
+                    $email = $logger->resendEmailFromLog($result['id'], 'check_realtime');
+                    
+                    if($email == null || $email['status'] != 'sent'){
+                        do_action('fluentmail_email_sending_failed_no_fallback', $result['id'], $this, $result);
+                    }
+
+                } catch (\Exception $e) {
+                    do_action('fluentmail_email_sending_failed_no_fallback', $result['id'], $this, $result);
+                }
+
+                $provider->setRowId(null);
+
+            }
+        }
+
+    }
+
     private function getDomainName()
     {
         $parts = parse_url(site_url());
@@ -259,6 +309,19 @@ class SchedulerHandler
 
     public function maybeSendNotification($rowId, $handler, $logData = [])
     {
+
+        // Auto-retry
+        $miscSettings = (new Settings())->getMisc();
+        $autoRetryCount = @$miscSettings['auto_retry_emails'] ?: 0; // Default is 0
+        $currentRetryCount = @$logData['retries'] ?: 0;
+        if($rowId && ($autoRetryCount >= $currentRetryCount)) {
+            (new Logger())->updateLog([
+                'status' => 'autoresend'
+            ], ['id' => $rowId]);
+            return false;
+        }
+
+        // Send failure notifications
         $channel = NotificationHelper::getActiveChannelSettings();
 
         if (!$channel) {
