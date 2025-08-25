@@ -7,7 +7,7 @@ use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Core\Application;
 use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\App\Services\Mailer\BaseHandler;
-use FluentMail\App\Services\Mailer\Providers\SendGrid\ValidatorTrait;
+use FluentMail\App\Services\Mailer\Providers\Smtp2Go\ValidatorTrait;
 
 class Handler extends BaseHandler {
     use ValidatorTrait;
