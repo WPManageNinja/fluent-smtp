@@ -21,7 +21,7 @@ class Manager
     
     protected static $wpConfigSettings = [];
 
-    public function __construct(Application $app = null)
+    public function __construct(?Application $app = null)
     {
         $this->app = $app ?: fluentMail();
 
