@@ -267,7 +267,7 @@ class BaseHandler
             $errorResponse = [
                 'code'    => $code,
                 'message' => $message,
-                'errors'  => $response->get_error_messages()
+                'errors'  => $response->get_error_data()
             ];
 
             $status = $this->processResponse($errorResponse, false);
