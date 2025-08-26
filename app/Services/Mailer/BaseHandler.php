@@ -30,7 +30,7 @@ class BaseHandler
 
     protected $existing_row_id = null;
 
-    public function __construct(Application $app = null, Manager $manager = null)
+    public function __construct(?Application $app = null, ?Manager $manager = null)
     {
         $this->app = $app ?: fluentMail();
         $this->manager = $manager ?: fluentMail(Manager::class);
