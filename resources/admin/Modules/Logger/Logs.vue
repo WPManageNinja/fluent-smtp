@@ -76,7 +76,7 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column :label="$t('Actions')" width="190px" align="right">
+                    <el-table-column :label="$t('Actions')" width="200px" align="right">
                         <template slot-scope="scope">
                             <el-button
                                 size="mini"
@@ -201,7 +201,11 @@ export default {
                 search: this.filter_query.search
             };
 
-            this.$router.replace({query: data});
+            this.$router.replace({ query: data }).catch(err => {
+              if (err.name !== 'NavigationDuplicated') {
+                console.error(err);
+              }
+            });
 
             this.$get('logs', data).then(res => {
                 this.logs = this.formatLogs(res.data);
