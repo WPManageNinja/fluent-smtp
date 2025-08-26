@@ -263,17 +263,33 @@ class Handler extends BaseHandler
 
             //Extracting the file name
             $filenameonly = explode(DIRECTORY_SEPARATOR, $attpath[0]);
-
             $fname = end($filenameonly);
 
-            $this->postbody[] = '--' . $this->boundary . "\r\n";
-            $this->postbody[] = '--' . 'Content-Disposition: form-data; name="attachments' . ($i + 1) . '"; filename="' . $fname . '"' . "\r\n\r\n";
+            $mimeType = 'application/octet-stream'; // Default
+            if (function_exists('mime_content_type')) {
+                $detectedMime = mime_content_type($attpath[0]);
+                if ($detectedMime !== false) {
+                    $mimeType = $detectedMime;
+                }
+            } elseif (function_exists('finfo_file')) {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $detectedMime = finfo_file($finfo, $attpath[0]);
+                finfo_close($finfo);
+                if ($detectedMime !== false) {
+                    $mimeType = $detectedMime;
+                }
+            }
 
-            //Loading attachment
-            $handle = fopen($attpath[0], "r");
+            // Add boundary and headers for attachment
+            $this->postbody[] = '--' . $this->boundary . "\r\n";
+            $this->postbody[] = 'Content-Disposition: form-data; name="attachments' . ($i + 1) . '"; filename="' . $fname . '"' . "\r\n";
+            $this->postbody[] = 'Content-Type: ' . $mimeType . "\r\n";
+            $this->postbody[] = "\r\n";
+
+            $handle = fopen($attpath[0], "rb");
             if ($handle) {
                 $fileContent = '';
-                while (($buffer = fgets($handle, 4096)) !== false) {
+                while (($buffer = fread($handle, 8192)) !== false && $buffer !== '') {
                     $fileContent .= $buffer;
                 }
                 fclose($handle);
