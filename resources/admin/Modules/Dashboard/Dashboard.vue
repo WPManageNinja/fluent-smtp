@@ -41,7 +41,7 @@
                                     :end-placeholder="$t('End date')"
                                     value-format="yyyy-MM-dd"
                                 ></el-date-picker>
-                                <el-button size="small" @click="filterReport" type="primary" plain>Apply</el-button>
+                                <el-button style="padding: 8px 15px;" size="small" @click="filterReport" type="primary" plain>Apply</el-button>
                             </div>
                         </div>
                         <div class="fss_content">
