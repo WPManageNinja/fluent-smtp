@@ -47,7 +47,7 @@ class Connection
      * @param null|string    $alias
      * @param null|Container $container
      */
-    public function __construct($wpdb, array $config = array(), $alias = null, Container $container = null)
+    public function __construct($wpdb, array $config = array(), $alias = null, ?Container $container = null)
     {
         $container = $container ? : new Container();
 

@@ -146,7 +146,7 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 	 * @param  mixed      $default
 	 * @return mixed|null
 	 */
-	public function first(Closure $callback = null, $default = null)
+	public function first(?Closure $callback = null, $default = null)
 	{
 		if (is_null($callback))
 		{
