@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, wordpress mail smtp, mail, mail smtp
 Requires at least: 5.5
 Tested up to: 6.7
-Stable tag: 2.2.90
+Stable tag: 2.2.92
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -294,6 +294,19 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 
 
 == Changelog ==
+
+= 2.2.92 (Date: Aug 27, 2025) =
+- Fixed attachment handling issue with Elastic Email.
+- Resolved import statement issue for SMTP2GO.
+- Added PHP 8.4 support for FluentMail\App\Services\Mailer\Manager.
+- Added new Amazon SES region: ap-northeast-3 (Asia Pacific – Osaka).
+- Improved error handling in BaseHandler.
+- Updated fallback email handling to return true on success.
+- General bug fixes and performance improvements.
+- Fix: Logger Resend Email respects Content-Type for HTML emails
+- Styling Improvements
+- Fix: Prevent redundant navigation error in Logs screen when refreshing
+- Fix: Ensure Content-Type header is always logged for accurate email resends
 
 = 2.2.90 (Date: Feb 07, 2025) =
 - Added SMTP2GO Provider

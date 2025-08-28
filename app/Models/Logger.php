@@ -336,6 +336,26 @@ class Logger extends Model
         $email['attachments'] = $this->unserialize($email['attachments']);
         $email['extra']       = $this->unserialize($email['extra']);
 
+        // Convert PHPMailer attachment format to wp_mail format
+        $wpMailAttachments = [];
+        if (!empty($email['attachments']) && is_array($email['attachments'])) {
+            foreach ($email['attachments'] as $attachment) {
+                if (is_array($attachment)) {
+                    // PHPMailer format: [path, filename, name, encoding, type, isString, disposition, cid]
+                    if (isset($attachment[0]) && is_string($attachment[0])) {
+                        $filePath = $attachment[0];
+                        if (file_exists($filePath) && is_readable($filePath)) {
+                            $wpMailAttachments[] = $filePath;
+                        }
+                    }
+                } elseif (is_string($attachment)) {
+                    if (file_exists($attachment) && is_readable($attachment)) {
+                        $wpMailAttachments[] = $attachment;
+                    }
+                }
+            }
+        }
+
         $headers = [];
 
         foreach ($email['headers'] as $key => $value) {
@@ -386,7 +406,7 @@ class Logger extends Model
                 $email['subject'],
                 $email['body'],
                 $headers,
-                $email['attachments']
+                $wpMailAttachments  // Use the converted attachment format
             );
 
             $updateData = [

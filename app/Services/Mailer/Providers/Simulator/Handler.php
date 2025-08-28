@@ -18,6 +18,9 @@ class Handler extends BaseHandler
                 $headers[$customHeader['key']] = $customHeader['value'];
             }
 
+            $headers = $this->phpMailer->getCustomHeaders();
+            $headers['content-type'] = $this->phpMailer->ContentType;
+
             $logData = [
                 'to' => maybe_serialize($this->setRecipientsArray($this->phpMailer->getToAddresses())),
                 'from' => maybe_serialize($this->phpMailer->From),
@@ -26,7 +29,7 @@ class Handler extends BaseHandler
                 'attachments' => maybe_serialize($this->phpMailer->getAttachments()),
                 'status'   => 'sent',
                 'response' => maybe_serialize(['status' => __('Email sending was simulated, No Email was sent originally', 'fluent-smtp')]),
-                'headers'  => maybe_serialize($this->phpMailer->getCustomHeaders()),
+                'headers'  => maybe_serialize($headers),
                 'extra'    => maybe_serialize(['provider' => 'Simulator'])
             ];
 
