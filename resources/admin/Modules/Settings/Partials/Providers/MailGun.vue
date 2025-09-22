@@ -24,7 +24,7 @@
                         {{ $t('Follow this link to get an API Key from Mailgun:') }}
                         <a
                             target="_blank"
-                            href="https://app.mailgun.com/app/account/security/api_keys"
+                            href="https://app.mailgun.com/settings/api_security"
                         >{{ $t('Get a Private API Key.') }}</a>
                     </span>
                 </el-form-item>
@@ -41,7 +41,7 @@
 
                     <span class="small-help-text">
                         {{ $t('Follow this link to get a Domain Name from Mailgun:') }}
-                        <a target="_blank" href="https://app.mailgun.com/app/domains">
+                        <a target="_blank" href="https://app.mailgun.com/mg/sending/domains">
                             {{ $t('Get a Domain Name.') }}
                         </a>
                     </span>
