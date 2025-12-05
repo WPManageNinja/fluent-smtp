@@ -28,13 +28,35 @@ class Handler extends BaseHandler
 
     public function postSend()
     {
-        $mime = chunk_split(base64_encode($this->phpMailer->getSentMIMEMessage()), 76, "\n");
+        // Base64 encode the raw MIME message for SES V2 API
+        $rawMessage = base64_encode($this->phpMailer->getSentMIMEMessage());
 
         $connectionSettings = $this->filterConnectionVars($this->getSetting());
 
         $ses = fluentMailSesConnection($connectionSettings);
 
-        $this->response = $ses->sendRawEmail($mime);
+        // Only use tenant and configuration set if tenant feature is enabled
+        $useTenant = !empty($connectionSettings['use_tenant']) && $connectionSettings['use_tenant'] === 'yes';
+        $tenantName = null;
+        $configurationSetName = null;
+        
+        if ($useTenant) {
+            $tenantName = !empty($connectionSettings['tenant_name']) ? $connectionSettings['tenant_name'] : null;
+            $configurationSetName = !empty($connectionSettings['configuration_set_name']) ? $connectionSettings['configuration_set_name'] : null;
+        }
+
+        try {
+            $this->response = $ses->sendEmail($rawMessage, $tenantName, $configurationSetName);
+            
+            // Transform V2 response to match expected format
+            if (isset($this->response['MessageId'])) {
+                $this->response = [
+                    'MessageId' => $this->response['MessageId']
+                ];
+            }
+        } catch (\Exception $e) {
+            $this->response = new \WP_Error(422, $e->getMessage(), []);
+        }
 
         return $this->handleResponse($this->response);
     }
@@ -160,28 +182,43 @@ class Handler extends BaseHandler
     {
         $config = $this->filterConnectionVars($config);
 
-        $region = 'email.' . $config['region'] . '.amazonaws.com';
-
-        $ses = new SimpleEmailService(
+        $ses = new SimpleEmailServiceV2(
             $config['access_key'],
             $config['secret_key'],
-            $region,
+            $config['region'],
             static::TRIGGER_ERROR
         );
 
-        $validSenders = $ses->listVerifiedEmailAddresses();
-
-        $addresses = [];
-
-        if (is_wp_error($validSenders)) {
+        try {
+            $identities = $ses->listEmailIdentities();
+        } catch (\Exception $e) {
             return [
                 'emails'          => [$config['sender_email']],
                 'verified_domain' => ''
             ];
         }
 
-        if ($validSenders && isset($validSenders['Addresses'])) {
-            $addresses = $validSenders['Addresses'];
+        $addresses = [];
+        $domains = [];
+
+        if (isset($identities['EmailIdentities'])) {
+            foreach ($identities['EmailIdentities'] as $identity) {
+                $identityName = $identity['IdentityName'];
+                $sendingEnabled = isset($identity['SendingEnabled']) ? $identity['SendingEnabled'] : false;
+                
+                // Check if it's a domain (no @ sign) or email address
+                if (strpos($identityName, '@') === false) {
+                    // It's a domain
+                    if ($sendingEnabled) {
+                        $domains[] = $identityName;
+                    }
+                } else {
+                    // It's an email address
+                    if ($sendingEnabled) {
+                        $addresses[] = $identityName;
+                    }
+                }
+            }
         }
 
         $primaryEmail = $config['sender_email'];
@@ -197,7 +234,7 @@ class Handler extends BaseHandler
 
         return [
             'emails'          => apply_filters('fluentsmtp_ses_valid_senders', $addresses, $config),
-            'verified_domain' => in_array($domainName, $validSenders['domains']) ? $domainName : ''
+            'verified_domain' => in_array($domainName, $domains) ? $domainName : ''
         ];
     }
 
@@ -300,16 +337,32 @@ class Handler extends BaseHandler
 
     private function getStats($config)
     {
-        $region = 'email.' . $config['region'] . '.amazonaws.com';
-
-        $ses = new SimpleEmailService(
+        $ses = new SimpleEmailServiceV2(
             $config['access_key'],
             $config['secret_key'],
-            $region,
+            $config['region'],
             static::TRIGGER_ERROR
         );
 
-        return $ses->getSendQuota();
+        try {
+            $account = $ses->getAccount();
+            
+            if (isset($account['error'])) {
+                return new \WP_Error(422, $account['error']);
+            }
+
+            // Transform V2 account info to match expected format
+            $stats = [];
+            if (isset($account['SendQuota'])) {
+                $stats['Max24HourSend'] = isset($account['SendQuota']['Max24HourSend']) ? $account['SendQuota']['Max24HourSend'] : 0;
+                $stats['SentLast24Hours'] = isset($account['SendQuota']['SentLast24Hours']) ? $account['SendQuota']['SentLast24Hours'] : 0;
+                $stats['MaxSendRate'] = isset($account['SendQuota']['MaxSendRate']) ? $account['SendQuota']['MaxSendRate'] : 0;
+            }
+            
+            return $stats;
+        } catch (\Exception $e) {
+            return new \WP_Error(422, $e->getMessage());
+        }
     }
 
     private function filterConnectionVars($connection)

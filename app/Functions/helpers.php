@@ -1,7 +1,7 @@
 <?php
 
     use FluentMail\App\Services\Mailer\Manager;
-    use FluentMail\App\Services\Mailer\Providers\AmazonSes\SimpleEmailService;
+    use FluentMail\App\Services\Mailer\Providers\AmazonSes\SimpleEmailServiceV2;
     use FluentMail\App\Services\Mailer\Providers\Factory;
 
     if (!function_exists('fluentMail')) {
@@ -174,10 +174,10 @@
 
     if (!function_exists('fluentMailSesConnection')) {
         /**
-         * Establishes a connection to the Fluent SMTP service using the Amazon Simple Email Service (SES).
+         * Establishes a connection to the Fluent SMTP service using the Amazon Simple Email Service V2 (SES).
          *
          * @param array $connection The connection details including sender email, access key, secret key, and region.
-         * @return SimpleEmailService The SES driver instance for the specified sender email.
+         * @return SimpleEmailServiceV2 The SES V2 driver instance for the specified sender email.
          */
         function fluentMailSesConnection($connection) {
             static $drivers = [];
@@ -186,12 +186,10 @@
                 return $drivers[$connection['sender_email']];
             }
 
-            $region = 'email.' . $connection['region'] . '.amazonaws.com';
-
-            $ses = new SimpleEmailService(
+            $ses = new SimpleEmailServiceV2(
                 $connection['access_key'],
                 $connection['secret_key'],
-                $region,
+                $connection['region'],
                 false
             );
 

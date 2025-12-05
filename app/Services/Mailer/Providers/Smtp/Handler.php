@@ -112,6 +112,27 @@ class Handler extends BaseHandler
                 $this->phpMailer->ContentType = 'multipart/alternative';
             }
 
+            // Add custom headers from settings
+            $customHeaders = $this->getSetting('custom_headers');
+            if (!empty($customHeaders)) {
+                $headerLines = explode("\n", $customHeaders);
+                foreach ($headerLines as $headerLine) {
+                    $headerLine = trim($headerLine);
+                    if (empty($headerLine)) {
+                        continue;
+                    }
+                    // Parse header in format "Header-Name: value"
+                    $colonPos = strpos($headerLine, ':');
+                    if ($colonPos !== false) {
+                        $headerName = trim(substr($headerLine, 0, $colonPos));
+                        $headerValue = trim(substr($headerLine, $colonPos + 1));
+                        if (!empty($headerName) && !empty($headerValue)) {
+                            $this->phpMailer->addCustomHeader($headerName, $headerValue);
+                        }
+                    }
+                }
+            }
+
             $this->phpMailer->send();
 
             $returnResponse = [
