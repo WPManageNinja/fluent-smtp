@@ -53,6 +53,10 @@ class Handler extends BaseHandler
                 $this->response = [
                     'MessageId' => $this->response['MessageId']
                 ];
+            } else {
+                // MessageId is missing - treat as error
+                $errorMsg = isset($this->response['error']) ? $this->response['error'] : 'Email accepted but no MessageId returned';
+                $this->response = new \WP_Error(422, $errorMsg, []);
             }
         } catch (\Exception $e) {
             $this->response = new \WP_Error(422, $e->getMessage(), []);
@@ -185,8 +189,7 @@ class Handler extends BaseHandler
         $ses = new SimpleEmailServiceV2(
             $config['access_key'],
             $config['secret_key'],
-            $config['region'],
-            static::TRIGGER_ERROR
+            $config['region']
         );
 
         try {
@@ -340,8 +343,7 @@ class Handler extends BaseHandler
         $ses = new SimpleEmailServiceV2(
             $config['access_key'],
             $config['secret_key'],
-            $config['region'],
-            static::TRIGGER_ERROR
+            $config['region']
         );
 
         try {

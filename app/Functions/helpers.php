@@ -189,8 +189,7 @@
             $ses = new SimpleEmailServiceV2(
                 $connection['access_key'],
                 $connection['secret_key'],
-                $connection['region'],
-                false
+                $connection['region']
             );
 
             $drivers[$connection['sender_email']] = $ses;

@@ -126,7 +126,13 @@ class Handler extends BaseHandler
                     if ($colonPos !== false) {
                         $headerName = trim(substr($headerLine, 0, $colonPos));
                         $headerValue = trim(substr($headerLine, $colonPos + 1));
-                        if (!empty($headerName) && !empty($headerValue)) {
+                        
+                        // Prevent header injection by removing newlines and carriage returns
+                        $headerName = str_replace(["\r", "\n", "\0"], '', $headerName);
+                        $headerValue = str_replace(["\r", "\n", "\0"], '', $headerValue);
+                        
+                        // Only allow alphanumeric, hyphen, and underscore in header names
+                        if (!empty($headerName) && !empty($headerValue) && preg_match('/^[A-Za-z0-9\-_]+$/', $headerName)) {
                             $this->phpMailer->addCustomHeader($headerName, $headerValue);
                         }
                     }

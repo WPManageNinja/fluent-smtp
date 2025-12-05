@@ -409,9 +409,21 @@ class SimpleEmailServiceV2
             $verifiedEmails = [];
             if (isset($identities['EmailIdentities'])) {
                 foreach ($identities['EmailIdentities'] as $identity) {
-                    // Only include verified identities
+                    // Only include verified identities that can send emails
                     if (isset($identity['SendingEnabled']) && $identity['SendingEnabled']) {
-                        $verifiedEmails[] = $identity['IdentityName'];
+                        // Use IdentityType field if available to filter only email addresses
+                        // IdentityType can be: EMAIL_ADDRESS, DOMAIN, or MANAGED_DOMAIN
+                        if (isset($identity['IdentityType'])) {
+                            if ($identity['IdentityType'] === 'EMAIL_ADDRESS') {
+                                $verifiedEmails[] = $identity['IdentityName'];
+                            }
+                            // Skip domains - they should be handled separately
+                        } else {
+                            // Fallback: if IdentityType not present, check for @ symbol
+                            if (strpos($identity['IdentityName'], '@') !== false) {
+                                $verifiedEmails[] = $identity['IdentityName'];
+                            }
+                        }
                     }
                 }
             }
