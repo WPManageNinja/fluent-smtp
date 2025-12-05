@@ -366,14 +366,19 @@ class SimpleEmailServiceV2
         if (!empty($responseBody)) {
             $response = json_decode($responseBody, true);
             if (json_last_error() !== JSON_ERROR_NONE) {
-                // Response might be empty for some successful requests
+                // Non-JSON response with success status code - unusual but handle gracefully
                 if ($httpCode >= 200 && $httpCode < 300) {
-                    $response = ['success' => true, 'httpCode' => $httpCode];
+                    // Log warning and return minimal success response
+                    // Caller should check for expected fields like MessageId
+                    $response = ['success' => true, 'httpCode' => $httpCode, 'warning' => 'Non-JSON response body'];
                 } else {
                     $this->lastError = 'Invalid JSON response: ' . $responseBody;
                     return ['error' => $this->lastError];
                 }
             }
+        } elseif ($httpCode >= 200 && $httpCode < 300) {
+            // Empty response body with success code
+            $response = ['success' => true, 'httpCode' => $httpCode, 'warning' => 'Empty response body'];
         }
 
         $this->lastResponse = $response;
