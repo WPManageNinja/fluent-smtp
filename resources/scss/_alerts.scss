@@ -100,10 +100,11 @@
       display: flex;
       align-items: center;
       gap: 15px;
-      margin-bottom: 15px;
 
-      button {
-        margin: 0;
+      &-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
       }
     }
 
