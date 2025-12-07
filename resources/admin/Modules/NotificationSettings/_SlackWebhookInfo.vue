@@ -46,7 +46,7 @@ export default {
     },
     computed: {
         channelTitle() {
-            return (this.channel_config.title || 'Slack') + ' ' + this.$t('Notifications Enabled');
+            return (this.channel_config.title || 'Slack') + ' ' + this.$t('Notifications');
         }
     },
     data() {

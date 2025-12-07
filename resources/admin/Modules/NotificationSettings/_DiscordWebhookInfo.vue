@@ -46,7 +46,7 @@ export default {
     },
     computed: {
         channelTitle() {
-            return (this.channel_config.title || 'Discord') + ' ' + this.$t('Notifications Enabled');
+            return (this.channel_config.title || 'Discord') + ' ' + this.$t('Notifications');
         }
     },
     data() {

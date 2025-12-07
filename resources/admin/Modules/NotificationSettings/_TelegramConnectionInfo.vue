@@ -61,7 +61,7 @@ export default {
     },
     computed: {
         channelTitle() {
-            return (this.channel_config.title || 'Telegram') + ' ' + this.$t('Notifications Enabled');
+            return (this.channel_config.title || 'Telegram') + ' ' + this.$t('Notifications');
         }
     },
     data() {
