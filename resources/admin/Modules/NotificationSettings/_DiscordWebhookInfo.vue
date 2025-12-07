@@ -8,12 +8,12 @@
         <p class="fss_alert_info__details">{{ $t('Discord Channel Details: ') }}{{ notification_settings.discord.channel_name }}</p>
         <div class="fss_alert_info__actions">
             <div class="fss_alert_info__actions__test-button">
-                <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" type="primary">
+                <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" type="primary" size="small">
                     <i class="el-icon-message"></i> {{ $t('Send Test Message') }}
                 </el-button>
             </div>
             <div class="fss_alert_info__actions__disconnect">
-                <el-button v-loading="disconnecting" @click="disconnect()" type="text">
+                <el-button v-loading="disconnecting" @click="disconnect()" type="danger" size="small">
                     <i class="el-icon-delete"></i> {{ $t('Disconnect') }}
                 </el-button>
             </div>

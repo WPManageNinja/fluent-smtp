@@ -142,21 +142,7 @@
 
       &__disconnect {
         .el-button {
-          color: #606266;
-          border-color: #dcdfe6;
-
-          &:hover,
-          &:focus {
-            color: #f56c6c;
-            border-color: #f56c6c;
-            background-color: #fef0f0;
-          }
-
-          &:active {
-            color: #dd6161;
-            border-color: #dd6161;
-            background-color: #fef0f0;
-          }
+          min-width: 120px;
         }
       }
     }
