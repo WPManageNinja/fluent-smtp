@@ -6,7 +6,7 @@
         <div class="fss_alert_settings__header-content">
             <img v-if="logo" class="fss_alert_settings__header-logo" :src="logo" :alt="title"/>
             <div class="fss_alert_info__header">
-                <h3 class="fss_alert_settings__title">{{ title }}</h3>
+                <h3 class="fss_alert_settings__title">{{ displayTitle }}</h3>
                 <el-tag v-if="connected" type="success" class="fss_alert_info__status-badge">
                     <i class="el-icon-success"></i> {{ $t('Connected') }}
                 </el-tag>
@@ -21,7 +21,11 @@ export default {
     props: {
         title: {
             type: String,
-            required: true
+            required: false
+        },
+        channelTitle: {
+            type: String,
+            required: false
         },
         logo: {
             type: String,
@@ -30,6 +34,19 @@ export default {
         connected: {
             type: Boolean,
             default: false
+        }
+    },
+    computed: {
+        displayTitle() {
+            if (this.title) {
+                return this.title;
+            }
+            if (this.channelTitle) {
+                return this.connected 
+                    ? this.channelTitle + ' ' + this.$t('Notifications')
+                    : this.channelTitle + ' ' + this.$t('Settings');
+            }
+            return '';
         }
     },
     methods: {

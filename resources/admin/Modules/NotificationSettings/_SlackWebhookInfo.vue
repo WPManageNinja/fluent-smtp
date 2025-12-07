@@ -1,7 +1,7 @@
 <template>
     <div>
         <channel-header
-            :title="channelTitle"
+            :channel-title="channel_config.title || 'Slack'"
             :logo="channel_config.logo"
             :connected="true"
             @back="$emit('back')"
@@ -42,11 +42,6 @@ export default {
         channel_config: {
             type: Object,
             default: () => ({})
-        }
-    },
-    computed: {
-        channelTitle() {
-            return (this.channel_config.title || 'Slack') + ' ' + this.$t('Notifications');
         }
     },
     data() {

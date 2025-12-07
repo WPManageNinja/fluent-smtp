@@ -4,7 +4,7 @@
         <template v-else>
             <channel-header
                 v-if="status == 'yes'"
-                :title="channelTitle"
+                :channel-title="channel_config.title || 'Telegram'"
                 :logo="channel_config.logo"
                 :connected="true"
                 @back="$emit('back')"
@@ -57,11 +57,6 @@ export default {
         channel_config: {
             type: Object,
             default: () => ({})
-        }
-    },
-    computed: {
-        channelTitle() {
-            return (this.channel_config.title || 'Telegram') + ' ' + this.$t('Notifications');
         }
     },
     data() {

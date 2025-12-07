@@ -2,7 +2,7 @@
     <div v-if="notification_settings.telegram !== undefined">
         <template v-if="selectedChannel">
             <channel-header
-                :title="channelConfig.title + ' ' + $t('Settings')"
+                :channel-title="channelConfig.title"
                 :logo="channelConfig.logo"
                 :connected="false"
                 @back="goBack"
