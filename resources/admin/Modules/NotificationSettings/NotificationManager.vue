@@ -4,7 +4,7 @@
             <channel-header
                 :channel-title="channelConfig.title"
                 :logo="channelConfig.logo"
-                :connected="false"
+                :connected="isChannelConnected"
                 @back="goBack"
             />
             <component
@@ -12,6 +12,7 @@
                 :notification_settings="notification_settings"
                 :channel_key="selectedChannel"
                 :channel_config="channelConfig"
+                @back="goBack"
             />
         </template>
         <alert-list-table
@@ -61,6 +62,36 @@ export default {
                 title: channel.title || this.selectedChannel,
                 logo: channel.logo || ''
             };
+        },
+        isChannelConnected() {
+            if (!this.selectedChannel) {
+                return false;
+            }
+            const channelKey = this.selectedChannel;
+            const settings = this.notification_settings[channelKey];
+
+            if (!settings) {
+                return false;
+            }
+
+            // Check if channel is configured and active
+            if (settings.status !== 'yes') {
+                return false;
+            }
+
+            // Channel-specific configuration checks
+            switch (channelKey) {
+                case 'telegram':
+                    return !!settings.status;
+                case 'slack':
+                    return !!settings.webhook_url;
+                case 'discord':
+                    return !!settings.webhook_url;
+                case 'pushover':
+                    return !!(settings.api_token && settings.user_key);
+                default:
+                    return false;
+            }
         }
     },
     methods: {
