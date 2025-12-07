@@ -1,9 +1,5 @@
 <template>
     <div class="fss_alert_settings">
-        <el-button @click="goBack()" size="mini" type="text" class="fss_alert_settings__back-button">
-            <i class="el-icon-arrow-left"></i> {{ $t('Back to Alerts') }}
-        </el-button>
-        <h3 class="fss_alert_settings__title">{{ channelTitle }} {{ $t('Settings') }}</h3>
         <div v-if="!isConfigured">
             <div v-if="configure_state == 'form'">
                 <p class="fss_alert_settings__intro">
@@ -63,7 +59,6 @@ export default {
         return {
             configure_state: 'form',
             processing: false,
-            channelTitle: 'Slack',
             newForm: {
                 user_email: '',
                 terms: 'no',
@@ -73,9 +68,6 @@ export default {
         }
     },
     methods: {
-        goBack() {
-            this.$emit('back');
-        },
         registerSite() {
             this.processing = true;
             this.$post('settings/slack/register', {
@@ -93,23 +85,9 @@ export default {
                     this.processing = false;
                 });
         },
-        loadChannelConfig() {
-            this.$get('settings/notification-channels')
-                .then((response) => {
-                    const channels = response.data.channels || {};
-                    const channel = channels[this.channel_key];
-                    if (channel && channel.title) {
-                        this.channelTitle = channel.title;
-                    }
-                })
-                .catch(() => {
-                    // Fallback to default if API fails
-                });
-        }
     },
     mounted() {
         this.newForm.user_email = this.appVars.user_email;
-        this.loadChannelConfig();
     }
 }
 </script>

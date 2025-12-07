@@ -1,15 +1,29 @@
 // Alert Settings Styles
 .fluent-mail-app {
   .fss_alert_settings {
-    // Back button
+    // Header section
+    &__header {
+      margin-bottom: 20px;
+    }
+
     &__back-button {
       margin-bottom: 15px;
     }
 
+    &__header-content {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    &__header-logo {
+      max-width: 40px;
+      max-height: 40px;
+    }
+
     // Page title
     &__title {
-      margin-top: 0;
-      margin-bottom: 20px;
+      margin: 0;
     }
 
     // Intro text
@@ -82,12 +96,8 @@
 
   // Connection/Webhook Info Components
   .fss_alert_info {
-    &__logo {
-      max-height: 50px;
-      margin-bottom: 15px;
-    }
-
     &__title {
+      margin-top: 0;
       margin-bottom: 15px;
     }
 
@@ -108,43 +118,6 @@
       justify-content: space-between;
       align-items: center;
       gap: 10px;
-
-      .el-button {
-        min-width: 120px;
-        padding: 10px 20px;
-        font-size: 14px;
-        border-radius: 4px;
-        transition: all 0.3s ease;
-
-        &--text {
-          border: 1px solid #dcdfe6;
-          background: #fff;
-          color: #606266;
-
-          &:hover {
-            color: #409eff;
-            border-color: #c6e2ff;
-            background-color: #ecf5ff;
-          }
-
-          &:active {
-            color: #3a8ee6;
-            border-color: #3a8ee6;
-          }
-        }
-      }
-
-      &__test-button {
-        .el-button {
-          min-width: 120px;
-        }
-      }
-
-      &__disconnect {
-        .el-button {
-          min-width: 120px;
-        }
-      }
     }
 
     &__error-pre {

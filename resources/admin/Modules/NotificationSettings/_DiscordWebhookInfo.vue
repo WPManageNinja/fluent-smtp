@@ -1,7 +1,5 @@
 <template>
     <div class="fss_alert_info">
-        <img class="fss_alert_info__logo" :src="`${appVars.images_url}disc.svg`"/>
-        <h3 class="fss_alert_info__title">{{ $t('Discord Notifications Enabled') }}</h3>
         <p class="fss_alert_info__description">
             {{ $t('__DISCORD_NOTIFICATION_ENABLED') }}
         </p>

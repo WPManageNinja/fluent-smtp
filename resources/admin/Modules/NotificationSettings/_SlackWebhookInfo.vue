@@ -1,7 +1,5 @@
 <template>
     <div class="fss_alert_info">
-        <img class="fss_alert_info__logo" :src="`${appVars.images_url}slack.svg`"/>
-        <h3 class="fss_alert_info__title">{{ $t('Slack Notifications Enabled') }}</h3>
         <p class="fss_alert_info__description">
             {{$t('__SLACK_NOTIFICATION_ENABLED')}}
         </p>

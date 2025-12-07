@@ -1,11 +1,15 @@
 <template>
     <div v-if="notification_settings.telegram !== undefined">
         <template v-if="selectedChannel">
+            <channel-header
+                :title="channelConfig.title"
+                :logo="channelConfig.logo"
+                @back="goBack"
+            />
             <component
                 :is="getChannelComponent(selectedChannel)"
                 :notification_settings="notification_settings"
                 :channel_key="selectedChannel"
-                @back="goBack"
             />
         </template>
         <alert-list-table
@@ -22,6 +26,7 @@ import AlertListTable from './_AlertListTable.vue';
 import TelegramNotification from './_TelegramNotification.vue';
 import SlackNotification from './_SlackNotification.vue';
 import DiscordNotification from './_DiscordNotification.vue';
+import ChannelHeader from './_ChannelHeader.vue';
 
 export default {
     name: 'NotificationManager',
@@ -29,7 +34,8 @@ export default {
         AlertListTable,
         TelegramNotification,
         SlackNotification,
-        DiscordNotification
+        DiscordNotification,
+        ChannelHeader
     },
     props: {
         notification_settings: {
@@ -39,7 +45,20 @@ export default {
     },
     data() {
         return {
-            selectedChannel: null
+            selectedChannel: null,
+            channels: {}
+        }
+    },
+    computed: {
+        channelConfig() {
+            if (!this.selectedChannel) {
+                return { title: '', logo: '' };
+            }
+            const channel = this.channels[this.selectedChannel] || {};
+            return {
+                title: channel.title || this.selectedChannel,
+                logo: channel.logo || ''
+            };
         }
     },
     methods: {
@@ -59,7 +78,19 @@ export default {
         },
         reloadSettings() {
             this.$emit('reload-settings');
+        },
+        loadChannels() {
+            this.$get('settings/notification-channels')
+                .then((response) => {
+                    this.channels = response.data.channels || {};
+                })
+                .catch(() => {
+                    // Fallback if API fails
+                });
         }
+    },
+    mounted() {
+        this.loadChannels();
     }
 }
 </script>
