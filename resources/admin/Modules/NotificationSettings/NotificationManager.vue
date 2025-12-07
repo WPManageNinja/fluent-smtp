@@ -26,6 +26,10 @@ import AlertListTable from './_AlertListTable.vue';
 import TelegramNotification from './_TelegramNotification.vue';
 import SlackNotification from './_SlackNotification.vue';
 import DiscordNotification from './_DiscordNotification.vue';
+<<<<<<< Updated upstream
+=======
+import PushoverNotification from './_PushoverNotification.vue';
+>>>>>>> Stashed changes
 import ChannelHeader from './_ChannelHeader.vue';
 
 export default {
@@ -35,6 +39,10 @@ export default {
         TelegramNotification,
         SlackNotification,
         DiscordNotification,
+<<<<<<< Updated upstream
+=======
+        PushoverNotification,
+>>>>>>> Stashed changes
         ChannelHeader
     },
     props: {
