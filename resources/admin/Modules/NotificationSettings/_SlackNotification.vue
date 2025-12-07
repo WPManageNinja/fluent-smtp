@@ -1,12 +1,16 @@
 <template>
-    <div>
+    <div class="fss_alert_settings">
+        <el-button @click="goBack()" size="mini" type="text" class="fss_alert_settings__back-button">
+            <i class="el-icon-arrow-left"></i> {{ $t('Back to Alerts') }}
+        </el-button>
+        <h3 class="fss_alert_settings__title">{{ channelTitle }} {{ $t('Settings') }}</h3>
         <div v-if="!isConfigured">
             <div v-if="configure_state == 'form'">
-                <p>
+                <p class="fss_alert_settings__intro">
                     {{ $t('__SLACK_INTRO') }} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.
                 </p>
 
-                <el-form class="fss_compact_form" :data="newForm" label-position="top">
+                <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
                     <el-form-item label="Your Email Address">
                         <el-input size="small" v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
                     </el-form-item>
@@ -22,8 +26,8 @@
                             {{ $t('Continue to Slack') }}
                         </el-button>
                     </el-form-item>
-                    <p>{{ $t('FluentSMTP does not store your email notifications data. ')}} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.</p>
                 </el-form>
+                <p class="fss_alert_settings__privacy-note">{{ $t('FluentSMTP does not store your email notifications data. ')}} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.</p>
             </div>
         </div>
         <div v-else>
@@ -44,6 +48,10 @@ export default {
             default: () => {
                 return {}
             }
+        },
+        channel_key: {
+            type: String,
+            default: 'slack'
         }
     },
     computed: {
@@ -55,6 +63,7 @@ export default {
         return {
             configure_state: 'form',
             processing: false,
+            channelTitle: 'Slack',
             newForm: {
                 user_email: '',
                 terms: 'no',
@@ -64,6 +73,9 @@ export default {
         }
     },
     methods: {
+        goBack() {
+            this.$emit('back');
+        },
         registerSite() {
             this.processing = true;
             this.$post('settings/slack/register', {
@@ -80,10 +92,24 @@ export default {
                 .always(() => {
                     this.processing = false;
                 });
+        },
+        loadChannelConfig() {
+            this.$get('settings/notification-channels')
+                .then((response) => {
+                    const channels = response.data.channels || {};
+                    const channel = channels[this.channel_key];
+                    if (channel && channel.title) {
+                        this.channelTitle = channel.title;
+                    }
+                })
+                .catch(() => {
+                    // Fallback to default if API fails
+                });
         }
     },
     mounted() {
         this.newForm.user_email = this.appVars.user_email;
+        this.loadChannelConfig();
     }
 }
 </script>

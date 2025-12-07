@@ -254,4 +254,10 @@ class Settings
 
         return wp_parse_args($settings, $defaults);
     }
+
+    public function getAvailableNotificationChannels()
+    {
+        $manager = new \FluentMail\App\Services\Notification\Manager();
+        return $manager->getAllChannels();
+    }
 }

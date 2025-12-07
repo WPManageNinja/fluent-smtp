@@ -4,6 +4,7 @@ namespace FluentMail\App\Services;
 
 use InvalidArgumentException;
 use FluentMail\App\Models\Settings;
+use FluentMail\App\Services\Notification\Manager as NotificationManager;
 use FluentMail\Includes\Support\Arr;
 
 class NotificationHelper
@@ -277,24 +278,17 @@ class NotificationHelper
             return $channel;
         }
 
-        $settings = (new Settings())->notificationSettings();
-
-        $activeChannel = Arr::get($settings, 'active_channel', '');
+        $notificationManager = new NotificationManager();
+        $activeChannel = $notificationManager->getActiveChannel();
 
         if (!$activeChannel) {
             $channel = false;
             return $channel;
         }
 
-        $channelSettings = Arr::get($settings, $activeChannel, []);
-
-        if (!$channelSettings || empty($channelSettings['status']) || $channelSettings['status'] != 'yes') {
-            $channel = false;
-            return $channel;
-        }
-
-        $channel = $channelSettings;
-        $channel['driver'] = $activeChannel;
+        // Return in the same format as before for backward compatibility
+        $channel = Arr::get($activeChannel, 'settings', []);
+        $channel['driver'] = Arr::get($activeChannel, 'driver');
 
         return $channel;
     }

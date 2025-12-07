@@ -1,16 +1,16 @@
 <template>
-    <div>
-        <img style="max-height: 50px;" :src="`${appVars.images_url}disc.svg`"/>
-        <h3>{{ $t('Discord Notifications Enabled') }}</h3>
-        <p>
+    <div class="fss_alert_info">
+        <img class="fss_alert_info__logo" :src="`${appVars.images_url}disc.svg`"/>
+        <h3 class="fss_alert_info__title">{{ $t('Discord Notifications Enabled') }}</h3>
+        <p class="fss_alert_info__description">
             {{ $t('__DISCORD_NOTIFICATION_ENABLED') }}
         </p>
-        <p>{{ $t('Discord Channel Details: ') }}{{ notification_settings.discord.channel_name }}</p>
-        <p>
+        <p class="fss_alert_info__details">{{ $t('Discord Channel Details: ') }}{{ notification_settings.discord.channel_name }}</p>
+        <p class="fss_alert_info__actions">
             <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" size="mini" type="text">
                 {{ $t('Send Test Message') }}
             </el-button>
-            <el-button v-loading="disconnecting" @click="disconnect()" style="float: right;" size="mini" type="text">
+            <el-button v-loading="disconnecting" @click="disconnect()" class="fss_alert_info__actions__disconnect" size="mini" type="text">
                 {{ $t('Disconnect') }}
             </el-button>
         </p>

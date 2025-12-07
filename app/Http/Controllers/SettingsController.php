@@ -4,6 +4,7 @@ namespace FluentMail\App\Http\Controllers;
 
 use Exception;
 use FluentMail\App\Models\Settings;
+use FluentMail\App\Services\Notification\Manager as NotificationManager;
 use FluentMail\Includes\Request\Request;
 use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Support\ValidationException;
@@ -21,7 +22,6 @@ class SettingsController extends Controller
             return $this->sendSuccess([
                 'settings' => $setting
             ]);
-
         } catch (Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage()
@@ -41,7 +41,6 @@ class SettingsController extends Controller
             $provider->validateBasicInformation($data);
 
             $this->sendSuccess();
-
         } catch (ValidationException $e) {
             $this->sendError($e->errors(), $e->getCode());
         }
@@ -97,7 +96,6 @@ class SettingsController extends Controller
                 'mappings'    => $settings->getMappings(),
                 'misc'        => $settings->getMisc()
             ]);
-
         } catch (ValidationException $e) {
             return $this->sendError($e->errors(), 422);
         } catch (Exception $e) {
@@ -146,7 +144,6 @@ class SettingsController extends Controller
         $this->verify();
 
         try {
-
             $this->app->addAction('wp_mail_failed', [$this, 'onFail']);
 
             $data = $request->except(['action', 'nonce']);
@@ -166,7 +163,6 @@ class SettingsController extends Controller
             return $this->sendSuccess([
                 'message' => __('Email delivered successfully.', 'fluent-smtp')
             ]);
-
         } catch (Exception $e) {
             return $this->sendError([
                 'message' => $e->getMessage()
@@ -258,7 +254,6 @@ class SettingsController extends Controller
         return $this->sendSuccess([
             'message' => __('Email has been added successfully', 'fluent-smtp')
         ]);
-
     }
 
     public function removeSenderEmail(Request $request, Settings $settings, Factory $factory)
@@ -296,7 +291,6 @@ class SettingsController extends Controller
         return $this->sendSuccess([
             'message' => __('Email has been removed successfully', 'fluent-smtp')
         ]);
-
     }
 
     public function installPlugin(Request $request)
@@ -431,7 +425,6 @@ class SettingsController extends Controller
                     }
 
                     $activate = true;
-
                 } catch (\Exception $e) {
                     throw new \Exception(esc_html($e->getMessage()));
                 }
@@ -684,6 +677,102 @@ class SettingsController extends Controller
         ]);
     }
 
+    public function getNotificationChannels()
+    {
+        $this->verify();
+
+        $notificationManager = new NotificationManager();
+        $channels = $notificationManager->getAllChannels();
+        $settings = (new Settings())->notificationSettings();
+        $activeChannel = Arr::get($settings, 'active_channel', '');
+
+        // Add status and active state to each channel
+        $channelsWithStatus = [];
+        foreach ($channels as $key => $channel) {
+            $channelSettings = Arr::get($settings, $key, []);
+            $channelsWithStatus[$key] = array_merge($channel, [
+                'status' => Arr::get($channelSettings, 'status', 'no'),
+                'is_active' => $activeChannel === $key,
+                'settings' => $channelSettings
+            ]);
+        }
+
+        return $this->sendSuccess([
+            'channels' => $channelsWithStatus,
+            'active_channel' => $activeChannel
+        ]);
+    }
+
+    public function toggleNotificationChannel(Request $request)
+    {
+        $this->verify();
+
+        $channelKey = $request->get('channel');
+        $enable = $request->get('enable', false);
+
+        if (!$channelKey) {
+            return $this->sendError([
+                'message' => __('Channel key is required', 'fluent-smtp')
+            ], 422);
+        }
+
+        $notificationManager = new NotificationManager();
+        $channel = $notificationManager->getChannel($channelKey);
+
+        if (!$channel) {
+            return $this->sendError([
+                'message' => __('Invalid channel', 'fluent-smtp')
+            ], 422);
+        }
+
+        $settings = (new Settings())->notificationSettings();
+
+        if ($enable) {
+            // Check if channel is configured before enabling
+            $channelSettings = Arr::get($settings, $channelKey, []);
+            $hasConfiguration = false;
+
+            // Check if channel has required configuration based on channel type
+            if ($channelKey === 'telegram') {
+                $hasConfiguration = !empty($channelSettings['token']);
+            } elseif ($channelKey === 'slack') {
+                $hasConfiguration = !empty($channelSettings['webhook_url']);
+            } elseif ($channelKey === 'discord') {
+                $hasConfiguration = !empty($channelSettings['webhook_url']);
+            }
+
+            if (!$hasConfiguration) {
+                return $this->sendError([
+                    'message' => __('Please configure the channel first before enabling', 'fluent-smtp')
+                ], 422);
+            }
+
+            // Disable all other channels
+            $notificationManager->disableOtherChannels($channelKey, $settings);
+
+            // Enable this channel
+            if (!isset($settings[$channelKey])) {
+                $settings[$channelKey] = [];
+            }
+            $settings[$channelKey]['status'] = 'yes';
+            $settings['active_channel'] = $channelKey;
+        } else {
+            // Disable this channel
+            if (isset($settings[$channelKey])) {
+                $settings[$channelKey]['status'] = 'no';
+            }
+
+            // Clear active channel if this was the active one
+            if ($settings['active_channel'] === $channelKey) {
+                $settings['active_channel'] = '';
+            }
+        }
+
+        update_option('_fluent_smtp_notify_settings', $settings, false);
+
+        return $this->sendSuccess([
+            'message' => $enable ? __('Channel enabled successfully', 'fluent-smtp') : __('Channel disabled successfully', 'fluent-smtp'),
+            'active_channel' => $settings['active_channel']
+        ]);
+    }
 }
-
-

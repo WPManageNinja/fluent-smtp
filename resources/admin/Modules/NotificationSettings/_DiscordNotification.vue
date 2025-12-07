@@ -1,11 +1,15 @@
 <template>
-    <div>
+    <div class="fss_alert_settings">
+        <el-button @click="goBack()" size="mini" type="text" class="fss_alert_settings__back-button">
+            <i class="el-icon-arrow-left"></i> {{ $t('Back to Alerts') }}
+        </el-button>
+        <h3 class="fss_alert_settings__title">{{ channelTitle }} {{ $t('Settings') }}</h3>
         <div v-if="!isConfigured">
             <div>
-                <p>
-                    {{ $t('__DISCORD_INTRO') }}<a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-discord/">{{ $t('Read the documentation') }}</a>.
+                <p class="fss_alert_settings__intro">
+                    {{ $t('__DISCORD_INTRO') }} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-discord/">{{ $t('Read the documentation') }}</a>.
                 </p>
-                <el-form class="fss_compact_form" :data="newForm" label-position="top">
+                <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
                     <el-form-item :label="$t('Your Discord Channel Name (For Internal Use)')">
                         <el-input size="small" v-model="newForm.channel_name"/>
                     </el-form-item>
@@ -42,6 +46,10 @@ export default {
             default: () => {
                 return {}
             }
+        },
+        channel_key: {
+            type: String,
+            default: 'discord'
         }
     },
     computed: {
@@ -53,6 +61,7 @@ export default {
         return {
             configure_state: 'form',
             processing: false,
+            channelTitle: 'Discord',
             newForm: {
                 webhook_url: '',
                 channel_name: ''
@@ -60,6 +69,9 @@ export default {
         }
     },
     methods: {
+        goBack() {
+            this.$emit('back');
+        },
         registerSite() {
             this.processing = true;
             this.$post('settings/discord/register', {
@@ -75,7 +87,23 @@ export default {
                 .always(() => {
                     this.processing = false;
                 });
+        },
+        loadChannelConfig() {
+            this.$get('settings/notification-channels')
+                .then((response) => {
+                    const channels = response.data.channels || {};
+                    const channel = channels[this.channel_key];
+                    if (channel && channel.title) {
+                        this.channelTitle = channel.title;
+                    }
+                })
+                .catch(() => {
+                    // Fallback to default if API fails
+                });
         }
+    },
+    mounted() {
+        this.loadChannelConfig();
     }
 }
 </script>

@@ -38,6 +38,10 @@ class AdminMenuHandler
                     $token = Arr::get($_REQUEST, 'site_token');
 
                     if ($token && $token == Arr::get($settings, 'slack.token')) {
+                        // Disable all other channels
+                        $notificationManager = new \FluentMail\App\Services\Notification\Manager();
+                        $notificationManager->disableOtherChannels('slack', $settings);
+
                         $settings['slack'] = [
                             'status'      => 'yes',
                             'token'       => sanitize_text_field($token),

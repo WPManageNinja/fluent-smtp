@@ -97,6 +97,11 @@ class SlackController extends Controller
             'token'       => ''
         ];
 
+        // Clear active channel if slack was active
+        if ($settings['active_channel'] === 'slack') {
+            $settings['active_channel'] = '';
+        }
+
         update_option('_fluent_smtp_notify_settings', $settings);
 
         return $this->sendSuccess([

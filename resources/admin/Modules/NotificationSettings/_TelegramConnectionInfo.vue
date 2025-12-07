@@ -2,32 +2,32 @@
     <div>
         <el-skeleton :animated="true" v-if="loading" :rows="3"></el-skeleton>
         <template v-else>
-            <div v-if="status == 'yes'">
-                <img style="max-height: 50px;" :src="`${appVars.images_url}tele.svg`"/>
-                <h3>{{ $t('Telegram Notifications Enable') }}d</h3>
-                <p v-html="$t('__TELEGRAM_NOTIFICATION_ENABLED')">
+            <div v-if="status == 'yes'" class="fss_alert_info">
+                <img class="fss_alert_info__logo" :src="`${appVars.images_url}tele.svg`"/>
+                <h3 class="fss_alert_info__title">{{ $t('Telegram Notifications Enable') }}d</h3>
+                <p class="fss_alert_info__description" v-html="$t('__TELEGRAM_NOTIFICATION_ENABLED')">
                 </p>
-                <p>{{ $t('Receiver\'s Telegram Username: ') }}@{{ receiver.username }}</p>
-                <p>
+                <p class="fss_alert_info__details">{{ $t('Receiver\'s Telegram Username: ') }}@{{ receiver.username }}</p>
+                <p class="fss_alert_info__actions">
                     <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" size="mini"
                                type="text">{{ $t('Send Test Message') }}
                     </el-button>
-                    <el-button v-loading="disconnecting" @click="disconnect()" style="float: right;" size="mini"
+                    <el-button v-loading="disconnecting" @click="disconnect()" class="fss_alert_info__actions__disconnect" size="mini"
                                type="text">{{ $t('Disconnect') }}
                     </el-button>
                 </p>
             </div>
-            <div v-else>
-                <img style="max-height: 50px;" :src="`${appVars.images_url}tele.svg`"/>d
-                <h3>{{ $t('Telegram Connection Status: ') }}{{ status }}</h3>
-                <p>{{ $t('__TELE_RESPONSE_ERROR') }}</p>
-                <pre>{{errors}}</pre>
-                <p>
+            <div v-else class="fss_alert_info">
+                <img class="fss_alert_info__logo" :src="`${appVars.images_url}tele.svg`"/>
+                <h3 class="fss_alert_info__title">{{ $t('Telegram Connection Status: ') }}{{ status }}</h3>
+                <p class="fss_alert_info__description">{{ $t('__TELE_RESPONSE_ERROR') }}</p>
+                <pre class="fss_alert_info__error-pre">{{errors}}</pre>
+                <p class="fss_alert_info__actions">
                     <el-button @click="getInfo()" :disabled="sending_test" v-loading="sending_test" size="mini"
                                type="text">
                         {{ $t('Try Again') }}
                     </el-button>
-                    <el-button v-loading="disconnecting" @click="disconnect()" style="float: right;" size="mini"
+                    <el-button v-loading="disconnecting" @click="disconnect()" class="fss_alert_info__actions__disconnect" size="mini"
                                type="text">{{ $t('Disconnect & Reconnect') }}
                     </el-button>
                 </p>

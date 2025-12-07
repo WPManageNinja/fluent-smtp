@@ -4,6 +4,7 @@ namespace FluentMail\App\Http\Controllers;
 
 use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\NotificationHelper;
+use FluentMail\App\Services\Notification\Manager as NotificationManager;
 use FluentMail\Includes\Request\Request;
 use FluentMail\Includes\Support\Arr;
 
@@ -29,6 +30,10 @@ class DiscordController extends Controller
 
 
         $prevSettings = (new Settings())->notificationSettings();
+
+        // Disable all other channels
+        $notificationManager = new NotificationManager();
+        $notificationManager->disableOtherChannels('discord', $prevSettings);
 
         $prevSettings['discord'] = [
             'status'       => 'yes',
@@ -83,7 +88,10 @@ class DiscordController extends Controller
             'channel_name' => ''
         ];
 
-        $settings['active_channel'] = '';
+        // Clear active channel if discord was active
+        if ($settings['active_channel'] === 'discord') {
+            $settings['active_channel'] = '';
+        }
 
         update_option('_fluent_smtp_notify_settings', $settings);
 
@@ -91,5 +99,4 @@ class DiscordController extends Controller
             'message' => __('Discord connection has been disconnected successfully', 'fluent-smtp')
         ]);
     }
-
 }
