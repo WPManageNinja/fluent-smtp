@@ -42,7 +42,7 @@ export default {
                 return this.title;
             }
             if (this.channelTitle) {
-                return this.connected 
+                return this.connected
                     ? this.channelTitle + ' ' + this.$t('Notifications')
                     : this.channelTitle + ' ' + this.$t('Settings');
             }
