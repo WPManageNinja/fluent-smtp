@@ -10,7 +10,7 @@
                 <p class="fss_alert_info__details">{{ $t('Receiver\'s Telegram Username: ') }}@{{ receiver.username }}</p>
                 <div class="fss_alert_info__actions">
                     <div class="fss_alert_info__actions__test-button">
-                        <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" type="text">
+                        <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" type="primary">
                             <i class="el-icon-message"></i> {{ $t('Send Test Message') }}
                         </el-button>
                     </div>
@@ -28,7 +28,7 @@
                 <pre class="fss_alert_info__error-pre">{{errors}}</pre>
                 <div class="fss_alert_info__actions">
                     <div class="fss_alert_info__actions__test-button">
-                        <el-button @click="getInfo()" :disabled="sending_test" v-loading="sending_test" type="text">
+                        <el-button @click="getInfo()" :disabled="sending_test" v-loading="sending_test" type="primary">
                             <i class="el-icon-refresh"></i> {{ $t('Try Again') }}
                         </el-button>
                     </div>
