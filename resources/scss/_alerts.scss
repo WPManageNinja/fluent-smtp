@@ -96,11 +96,6 @@
 
   // Connection/Webhook Info Components
   .fss_alert_info {
-<<<<<<< Updated upstream
-    &__title {
-      margin-top: 0;
-      margin-bottom: 15px;
-=======
     &__header {
       display: flex;
       align-items: center;
@@ -110,7 +105,6 @@
 
     &__title {
       margin: 0;
->>>>>>> Stashed changes
     }
 
     &__description {
