@@ -2,6 +2,13 @@
     <div>
         <el-skeleton :animated="true" v-if="loading" :rows="3"></el-skeleton>
         <template v-else>
+            <channel-header
+                v-if="status == 'yes'"
+                :title="channelTitle"
+                :logo="channel_config.logo"
+                :connected="true"
+                @back="$emit('back')"
+            />
             <div v-if="status == 'yes'" class="fss_alert_info">
                 <p class="fss_alert_info__description" v-html="$t('__TELEGRAM_NOTIFICATION_ENABLED')">
                 </p>
@@ -41,8 +48,22 @@
 </template>
 
 <script type="text/babel">
+import ChannelHeader from './_ChannelHeader.vue';
+
 export default {
     name: 'TelegramConnectionInfo',
+    components: { ChannelHeader },
+    props: {
+        channel_config: {
+            type: Object,
+            default: () => ({})
+        }
+    },
+    computed: {
+        channelTitle() {
+            return (this.channel_config.title || 'Telegram') + ' ' + this.$t('Notifications Enabled');
+        }
+    },
     data() {
         return {
             status: '',

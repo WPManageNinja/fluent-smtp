@@ -38,7 +38,7 @@
             </div>
         </div>
         <div v-else>
-            <connection-info/>
+            <connection-info :channel_config="channel_config" @back="$emit('back')"/>
         </div>
     </div>
 </template>
@@ -58,6 +58,10 @@ export default {
         channel_key: {
             type: String,
             default: 'telegram'
+        },
+        channel_config: {
+            type: Object,
+            default: () => ({})
         }
     },
     data() {

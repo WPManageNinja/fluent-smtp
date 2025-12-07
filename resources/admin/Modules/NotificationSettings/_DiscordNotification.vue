@@ -25,7 +25,7 @@
             </div>
         </div>
         <div v-else>
-            <discord-info :notification_settings="notification_settings"/>
+            <discord-info :notification_settings="notification_settings" :channel_config="channel_config" @back="$emit('back')"/>
         </div>
     </div>
 </template>
@@ -46,6 +46,10 @@ export default {
         channel_key: {
             type: String,
             default: 'discord'
+        },
+        channel_config: {
+            type: Object,
+            default: () => ({})
         }
     },
     computed: {

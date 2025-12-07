@@ -27,7 +27,7 @@
             </div>
         </div>
         <div v-else>
-            <slack-info :notification_settings="notification_settings"/>
+            <slack-info :notification_settings="notification_settings" :channel_config="channel_config" @back="$emit('back')"/>
         </div>
     </div>
 </template>
@@ -48,6 +48,10 @@ export default {
         channel_key: {
             type: String,
             default: 'slack'
+        },
+        channel_config: {
+            type: Object,
+            default: () => ({})
         }
     },
     computed: {

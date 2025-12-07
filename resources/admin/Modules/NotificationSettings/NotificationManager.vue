@@ -2,14 +2,16 @@
     <div v-if="notification_settings.telegram !== undefined">
         <template v-if="selectedChannel">
             <channel-header
-                :title="channelConfig.title"
+                :title="channelConfig.title + ' ' + $t('Settings')"
                 :logo="channelConfig.logo"
+                :connected="false"
                 @back="goBack"
             />
             <component
                 :is="getChannelComponent(selectedChannel)"
                 :notification_settings="notification_settings"
                 :channel_key="selectedChannel"
+                :channel_config="channelConfig"
             />
         </template>
         <alert-list-table
@@ -26,10 +28,6 @@ import AlertListTable from './_AlertListTable.vue';
 import TelegramNotification from './_TelegramNotification.vue';
 import SlackNotification from './_SlackNotification.vue';
 import DiscordNotification from './_DiscordNotification.vue';
-<<<<<<< Updated upstream
-=======
-import PushoverNotification from './_PushoverNotification.vue';
->>>>>>> Stashed changes
 import ChannelHeader from './_ChannelHeader.vue';
 
 export default {
@@ -39,10 +37,6 @@ export default {
         TelegramNotification,
         SlackNotification,
         DiscordNotification,
-<<<<<<< Updated upstream
-=======
-        PushoverNotification,
->>>>>>> Stashed changes
         ChannelHeader
     },
     props: {

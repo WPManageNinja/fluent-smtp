@@ -5,7 +5,12 @@
         </el-button>
         <div class="fss_alert_settings__header-content">
             <img v-if="logo" class="fss_alert_settings__header-logo" :src="logo" :alt="title"/>
-            <h3 class="fss_alert_settings__title">{{ title }} {{ $t('Settings') }}</h3>
+            <div class="fss_alert_info__header">
+                <h3 class="fss_alert_settings__title">{{ title }}</h3>
+                <el-tag v-if="connected" type="success" class="fss_alert_info__status-badge">
+                    <i class="el-icon-success"></i> {{ $t('Connected') }}
+                </el-tag>
+            </div>
         </div>
     </div>
 </template>
@@ -21,6 +26,10 @@ export default {
         logo: {
             type: String,
             default: ''
+        },
+        connected: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {

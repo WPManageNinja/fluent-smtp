@@ -1,6 +1,13 @@
 <template>
-    <div class="fss_alert_info">
-        <p class="fss_alert_info__description">
+    <div>
+        <channel-header
+            :title="channelTitle"
+            :logo="channel_config.logo"
+            :connected="true"
+            @back="$emit('back')"
+        />
+        <div class="fss_alert_info">
+            <p class="fss_alert_info__description">
             {{ $t('__DISCORD_NOTIFICATION_ENABLED') }}
         </p>
         <p class="fss_alert_info__details">{{ $t('Discord Channel Details: ') }}{{ notification_settings.discord.channel_name }}</p>
@@ -20,14 +27,26 @@
 </template>
 
 <script type="text/babel">
+import ChannelHeader from './_ChannelHeader.vue';
+
 export default {
-    name: 'TelegramConnectionInfo',
+    name: 'DiscordWebhookInfo',
+    components: { ChannelHeader },
     props: {
         notification_settings: {
             type: Object,
             default: () => {
                 return {}
             }
+        },
+        channel_config: {
+            type: Object,
+            default: () => ({})
+        }
+    },
+    computed: {
+        channelTitle() {
+            return (this.channel_config.title || 'Discord') + ' ' + this.$t('Notifications Enabled');
         }
     },
     data() {
