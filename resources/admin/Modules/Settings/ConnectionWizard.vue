@@ -110,6 +110,7 @@
     import Error from '@/Pieces/Error';
     import each from 'lodash/each';
     import ConnectionProvider from './Partials/_ConnectionSelector';
+    import FluentMailer from "./Partials/Providers/FluentMailer.vue";
 
     export default {
         name: 'ConnectionWizard',
@@ -128,7 +129,8 @@
             elasticmail,
             smtp2go,
             Error,
-            ConnectionProvider
+            ConnectionProvider,
+            fluent_send_mailer: FluentMailer
         },
         data() {
             return {

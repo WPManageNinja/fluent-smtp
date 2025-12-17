@@ -85,7 +85,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/babel">
     import Confirm from '@/Pieces/Confirm';
     import isEmpty from 'lodash/isEmpty';
     import GeneralSettings from './_GeneralSettings'
