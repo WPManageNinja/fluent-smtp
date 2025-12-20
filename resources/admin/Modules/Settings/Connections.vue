@@ -18,7 +18,7 @@
                         <el-table stripe border :data="connections">
                             <el-table-column :label="$t('Provider')">
                                 <template slot-scope="scope">
-                                    {{ settings.providers[scope.row.provider].title }}
+                                    {{ settings.providers[scope.row.provider]?.title || 'unknown' }}
                                     <span style="color: red;" v-if="scope.row.provider == 'gmail' && !scope.row.version">{{ $t('(Re Authentication Required)') }}</span>
                                 </template>
                             </el-table-column>

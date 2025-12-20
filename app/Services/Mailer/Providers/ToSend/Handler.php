@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentMail\App\Services\Mailer\Providers\FluentSendMailer;
+namespace FluentMail\App\Services\Mailer\Providers\ToSend;
 
 use FluentMail\Includes\Support\Arr;
 use FluentMail\App\Services\Mailer\BaseHandler;
@@ -11,7 +11,7 @@ class Handler extends BaseHandler
 
     protected $emailSentCode = 200;
 
-    protected $baseUrl = 'https://fluentmailer.lab/wp-json/fluent-mailer/v2/';
+    protected $baseUrl = 'https://api.tosend.com/v2/';
 
     public function send()
     {
@@ -125,7 +125,7 @@ class Handler extends BaseHandler
     public function setSettings($settings)
     {
         if ($settings['key_store'] == 'wp_config') {
-            $settings['api_key'] = defined('FLUENTMAIL_MAILER_API_KEY') ? FLUENTMAIL_MAILER_API_KEY : '';
+            $settings['api_key'] = defined('FLUENTMAIL_TOSEND_API_KEY') ? FLUENTMAIL_TOSEND_API_KEY : '';
         }
 
         $this->settings = $settings;
@@ -253,7 +253,7 @@ class Handler extends BaseHandler
     private function filterConnectionVars($connection)
     {
         if ($connection['key_store'] == 'wp_config') {
-            $connection['api_key'] = defined('FLUENTMAIL_MAILER_API_KEY') ? FLUENTMAIL_MAILER_API_KEY : '';
+            $connection['api_key'] = defined('FLUENTMAIL_TOSEND_API_KEY') ? FLUENTMAIL_TOSEND_API_KEY : '';
         }
 
         return $connection;
@@ -272,7 +272,7 @@ class Handler extends BaseHandler
             $stats = [];
         }
 
-        $info = (string)fluentMail('view')->make('admin.fluent_mailer_connection_info', [
+        $info = (string)fluentMail('view')->make('admin.tosend_mailer_connection_info', [
             'connection'    => $connection,
             'valid_senders' => [$connection['sender_email']],
             'stats'         => $stats['account'],

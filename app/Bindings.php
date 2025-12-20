@@ -15,7 +15,7 @@ $singletons = [
     'postmark'     => 'FluentMail\App\Services\Mailer\Providers\Postmark\Handler',
     'elasticmail'  => 'FluentMail\App\Services\Mailer\Providers\ElasticMail\Handler',
     'smtp2go'      => 'FluentMail\App\Services\Mailer\Providers\Smtp2Go\Handler',
-    'fluent_send_mailer' => 'FluentMail\App\Services\Mailer\Providers\FluentSendMailer\Handler',
+    'tosend' => 'FluentMail\App\Services\Mailer\Providers\ToSend\Handler',
 ];
 
 foreach ($singletons as $key => $className) {

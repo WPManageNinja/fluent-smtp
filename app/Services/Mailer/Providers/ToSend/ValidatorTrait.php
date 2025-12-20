@@ -1,6 +1,6 @@
 <?php
 
-namespace FluentMail\App\Services\Mailer\Providers\FluentSendMailer;
+namespace FluentMail\App\Services\Mailer\Providers\ToSend;
 
 use FluentMail\Includes\Support\Arr;
 use FluentMail\App\Services\Mailer\ValidatorTrait as BaseValidatorTrait;
@@ -23,10 +23,10 @@ trait ValidatorTrait
                 $errors['api_key']['required'] = __('Api key is required.', 'fluent-smtp');
             }
         } else if ($keyStoreType == 'wp_config') {
-            if (!defined('FLUENTMAIL_MAILER_API_KEY') || !FLUENTMAIL_MAILER_API_KEY) {
-                $errors['api_key']['required'] = __('Please define FLUENTMAIL_MAILER_API_KEY in wp-config.php file.', 'fluent-smtp');
+            if (!defined('FLUENTMAIL_TOSEND_API_KEY') || !FLUENTMAIL_TOSEND_API_KEY) {
+                $errors['api_key']['required'] = __('Please define FLUENTMAIL_TOSEND_API_KEY in wp-config.php file.', 'fluent-smtp');
             } else {
-                $apiKey = FLUENTMAIL_MAILER_API_KEY;
+                $apiKey = FLUENTMAIL_TOSEND_API_KEY;
             }
         }
 
@@ -61,7 +61,7 @@ trait ValidatorTrait
 
     public function getAccountInfo($apiKey)
     {
-        $request = wp_remote_get($this->baseUrl . 'emails/info?api_key=' . $apiKey, [
+        $request = wp_remote_get($this->baseUrl . 'info?api_key=' . $apiKey, [
             'sslverify' => false
         ]);
 
