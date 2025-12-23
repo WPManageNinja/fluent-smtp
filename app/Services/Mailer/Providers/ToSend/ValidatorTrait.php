@@ -39,12 +39,11 @@ trait ValidatorTrait
                 if (is_wp_error($accountInfo)) {
                     $errors['api_key']['required'] = $accountInfo->get_error_message();
                 } else {
-
-
                     if (empty($accountInfo['verified_domains'])) {
                         $errors['api_key']['required'] = 'No verified domains found in FluentMailer API';
                     } else {
                         $emailDomain = explode('@', $senderEmail)[1];
+                        $verifiedDomains = $accountInfo['verified_domains'];
                         if (!in_array($emailDomain, $accountInfo['verified_domains'])) {
                             $errors['sender_email']['required'] = 'Please provide a sender email that match with your verfied emails. Verfied domains: ' . implode(', ', $verifiedDomains) . '.';
                             $errors['api_key']['required'] = 'Please provide a sender email that match with your verfied emails. Verfied domains: ' . implode(', ', $verifiedDomains) . '.';

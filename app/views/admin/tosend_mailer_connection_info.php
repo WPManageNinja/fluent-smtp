@@ -6,7 +6,7 @@
     <table class="wp-list-table widefat striped">
         <tr>
             <th><?php esc_html_e('Connection Type', 'fluent-smtp') ?></th>
-            <td>FluentMail</td>
+            <td>toSend</td>
         </tr>
         <?php if(isset($stats['monthly_email_limit'])): ?>
         <tr>

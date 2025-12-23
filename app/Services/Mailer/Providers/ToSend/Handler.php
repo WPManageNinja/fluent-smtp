@@ -81,13 +81,15 @@ class Handler extends BaseHandler
             $returnResponse = new \WP_Error($response->get_error_code(), $response->get_error_message(), $response->get_error_messages());
         } else {
             $responseBody = wp_remote_retrieve_body($response);
+
             $responseCode = wp_remote_retrieve_response_code($response);
             $isOKCode = $responseCode == $this->emailSentCode;
             $responseBody = \json_decode($responseBody, true);
+            $messageId = Arr::get($responseBody, 'message_id');
 
-            if ($isOKCode) {
+            if ($isOKCode && $messageId) {
                 $returnResponse = [
-                    'id' => Arr::get($responseBody, 'message_id')
+                    'id' => $messageId
                 ];
             } else {
                 $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'message', 'Unknown Error'), $responseBody);
@@ -109,7 +111,7 @@ class Handler extends BaseHandler
         $fromName = '';
         if (isset($this->phpMailer->FromName)) {
             $fromName = $this->phpMailer->FromName;
-            if ( $this->getSetting('force_from_name') == 'yes' &&
+            if ($this->getSetting('force_from_name') == 'yes' &&
                 $customFrom = $this->getSetting('sender_name')
             ) {
                 $fromName = $customFrom;
