@@ -57,5 +57,7 @@
   "__PASSWORD_ENCRYPT_TIP": "If you change your WordPress SALT Keys, this credential will become invalid. Please update this credential whenever the WP SALTS are modified.",
   "save_connection_error_1": "Please select your email service provider",
   "save_connection_error_2": "Credential Verification Failed. Please check your inputs",
-  "__REAL_NOTIFCATION_DESC": "Get real-time notification on your favorite messaging channel on any email sending failure. Configure any of the following channel to start getting real time notifications."
+  "__REAL_NOTIFCATION_DESC": "Get real-time notification on your favorite messaging channel on any email sending failure. Configure any of the following channel to start getting real time notifications.",
+  "__PUSHOVER_INTRO": "Pushover makes it easy to get real-time notifications on your Android, iPhone, iPad, and Desktop",
+  "__PUSHOVER_NOTIFICATION_ENABLED": "Pushover channel is enabled"
 }

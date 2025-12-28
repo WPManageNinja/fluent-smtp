@@ -9,7 +9,5 @@
   "__TELE_TERMS": "sprintf(__('I agree to the %s of this Telegram integration.', 'fluent-smtp'), '<a target=\"_blank\" rel=\"noopener\" href=\"https://fluentsmtp.com/terms-and-conditions/\">' . __('terms and conditions', 'fluent-smtp') . '</a>')",
   "__GCP_API_INST": "sprintf(__('Please %s to create API keys on the Google Cloud Platform.', 'fluent-smtp'), '<a target=\"_blank\" rel=\"nofollow\" href=\"https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/\">' . __('check the documentation', 'fluent-smtp') . '</a>')",
   "__GCP_INTRO": "sprintf(__('Google API version has been upgraded. Please %s.', 'fluent-smtp'), '<a target=\"_blank\" rel=\"noopener\" href=\"https://fluentsmtp.com/docs/connect-gmail-or-google-workspace-emails-with-fluentsmtp/\">' . __('read the doc and upgrade your API connection', 'fluent-smtp') . '</a>')",
-  "__MAILGUN_REGION": "sprintf(__('If you are operating under EU laws, you may be required to use the EU region. %s.', 'fluent-smtp'), '<a target=\"_blank\" href=\"https://www.mailgun.com/regions\">' . __('More information on Mailgun.com', 'fluent-smtp') . '</a>')",
-  "__PUSHOVER_INTRO": "Pushover makes it easy to get real-time notifications on your Android, iPhone, iPad, and Desktop",
-  "__PUSHOVER_NOTIFICATION_ENABLED": "Pushover channel is enabled"
+  "__MAILGUN_REGION": "sprintf(__('If you are operating under EU laws, you may be required to use the EU region. %s.', 'fluent-smtp'), '<a target=\"_blank\" href=\"https://www.mailgun.com/regions\">' . __('More information on Mailgun.com', 'fluent-smtp') . '</a>')"
 }
