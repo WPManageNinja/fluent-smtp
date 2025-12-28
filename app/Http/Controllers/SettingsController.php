@@ -684,7 +684,7 @@ class SettingsController extends Controller
         $notificationManager = new NotificationManager();
         $channels = $notificationManager->getAllChannels();
         $settings = (new Settings())->notificationSettings();
-        $activeChannel = Arr::get($settings, 'active_channel', '');
+        $activeChannel = Arr::get($settings, 'active_channel', []);
 
         // Add status and active state to each channel
         $channelsWithStatus = [];
@@ -692,7 +692,7 @@ class SettingsController extends Controller
             $channelSettings = Arr::get($settings, $key, []);
             $channelsWithStatus[$key] = array_merge($channel, [
                 'status'    => Arr::get($channelSettings, 'status', 'no'),
-                'is_active' => $activeChannel === $key,
+                'is_active' => in_array($key, $activeChannel),
                 'settings'  => $channelSettings
             ]);
         }

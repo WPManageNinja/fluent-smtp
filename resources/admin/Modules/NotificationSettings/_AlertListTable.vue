@@ -87,8 +87,6 @@ export default {
                         activeChannels = [];
                     }
 
-                    console.log(activeChannels);
-
                     const channels = response.data.channels || {};
                     this.alerts = Object.keys(channels).map(key => {
                         const channel = channels[key];

@@ -49,7 +49,7 @@ class Manager
         }
 
         // Set active channel from database
-        static::$config['active_channel'] = Arr::get($databaseSettings, 'active_channel', '');
+        static::$config['active_channel'] = Arr::get($databaseSettings, 'active_channel', []);
     }
 
     public function getConfig($key = null, $default = null)
