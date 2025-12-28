@@ -4,6 +4,7 @@ namespace FluentMail\App\Http\Controllers;
 
 use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\NotificationHelper;
+use FluentMail\App\Services\Notification\Manager as NotificationManager;
 use FluentMail\Includes\Request\Request;
 use FluentMail\Includes\Support\Arr;
 
@@ -21,24 +22,25 @@ class DiscordController extends Controller
             ], 422);
         }
 
+        // validate the webhook URL
+        $webhookUrl = Arr::get($formData, 'webhook_url');
+        if (!filter_var($webhookUrl, FILTER_VALIDATE_URL)) {
+            return $this->sendError([
+                'message' => __('Please provide a valid Webhook URL', 'fluent-smtp')
+            ], 422);
+        }
+
         if (empty($formData['channel_name'])) {
             return $this->sendError([
                 'message' => __('Channel Name required', 'fluent-smtp')
             ], 422);
         }
 
-
-        $prevSettings = (new Settings())->notificationSettings();
-
-        $prevSettings['discord'] = [
+        NotificationHelper::updateChannelSettings('discord', [
             'status'       => 'yes',
-            'channel_name' => Arr::get($formData, 'channel_name'),
-            'webhook_url'  => Arr::get($formData, 'webhook_url'),
-        ];
-
-        $prevSettings['active_channel'] = 'discord';
-
-        update_option('_fluent_smtp_notify_settings', $prevSettings);
+            'channel_name' => sanitize_text_field(Arr::get($formData, 'channel_name')),
+            'webhook_url'  => sanitize_url(Arr::get($formData, 'webhook_url')),
+        ]);
 
         return $this->sendSuccess([
             'message' => __('Your settings has been saved', 'fluent-smtp'),
@@ -75,21 +77,14 @@ class DiscordController extends Controller
 
     public function disconnect()
     {
-        $settings = (new Settings())->notificationSettings();
-
-        $settings['discord'] = [
+        NotificationHelper::updateChannelSettings('discord', [
             'status'       => 'no',
             'webhook_url'  => '',
             'channel_name' => ''
-        ];
-
-        $settings['active_channel'] = '';
-
-        update_option('_fluent_smtp_notify_settings', $settings);
+        ]);
 
         return $this->sendSuccess([
             'message' => __('Discord connection has been disconnected successfully', 'fluent-smtp')
         ]);
     }
-
 }

@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <div class="fss_alert_settings">
         <div v-if="!isConfigured">
             <div>
-                <p>
-                    {{ $t('__DISCORD_INTRO') }}<a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-discord/">{{ $t('Read the documentation') }}</a>.
+                <p class="fss_alert_settings__intro">
+                    {{ $t('__DISCORD_INTRO') }} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-discord/">{{ $t('Read the documentation') }}</a>.
                 </p>
-                <el-form class="fss_compact_form" :data="newForm" label-position="top">
+                <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
                     <el-form-item :label="$t('Your Discord Channel Name (For Internal Use)')">
                         <el-input size="small" v-model="newForm.channel_name"/>
                     </el-form-item>
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div v-else>
-            <discord-info :notification_settings="notification_settings"/>
+            <discord-info :notification_settings="notification_settings" :channel_config="channel_config" @back="$emit('back')"/>
         </div>
     </div>
 </template>
@@ -42,6 +42,14 @@ export default {
             default: () => {
                 return {}
             }
+        },
+        channel_key: {
+            type: String,
+            default: 'discord'
+        },
+        channel_config: {
+            type: Object,
+            default: () => ({})
         }
     },
     computed: {

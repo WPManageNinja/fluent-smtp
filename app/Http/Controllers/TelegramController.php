@@ -4,6 +4,7 @@ namespace FluentMail\App\Http\Controllers;
 
 use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\NotificationHelper;
+use FluentMail\App\Services\Notification\Manager as NotificationManager;
 use FluentMail\Includes\Request\Request;
 use FluentMail\Includes\Support\Arr;
 
@@ -70,17 +71,10 @@ class TelegramController extends Controller
             ], 422);
         }
 
-        // Let's update the notification status
-        $previousSettings = (new Settings())->notificationSettings();
-
-        $previousSettings['telegram'] = [
+        NotificationHelper::updateChannelSettings('telegram', [
             'status' => 'yes',
             'token'  => $siteToken
-        ];
-
-        $previousSettings['active_channel'] = 'telegram';
-
-        update_option('_fluent_smtp_notify_settings', $previousSettings, false);
+        ]);
 
         return $this->sendSuccess([
             'success' => true,
@@ -148,13 +142,17 @@ class TelegramController extends Controller
     {
         $settings = (new Settings())->notificationSettings();
 
-        if (Arr::get($settings, 'telegram.status') != 'yes') {
-            return $this->sendError([
-                'message' => __('Telegram notification is not enabled', 'fluent-smtp')
-            ], 422);
+        $token = Arr::get($settings, 'telegram.token');
+
+        // Only call disconnect API if we have a token
+        if ($token) {
+            NotificationHelper::disconnectTelegram($token);
         }
 
-        NotificationHelper::disconnectTelegram(Arr::get($settings, 'telegram.token'));
+        NotificationHelper::updateChannelSettings('telegram', [
+            'status' => 'no',
+            'token'  => ''
+        ]);
 
         return $this->sendSuccess([
             'message' => __('Telegram connection has been disconnected successfully', 'fluent-smtp')

@@ -1,41 +1,44 @@
 <template>
-    <div v-if="notification_settings.telegram">
-        <template v-if="selectedDriver == 'telegram'">
-            <telegram-notification :notification_settings="notification_settings"/>
+    <div v-if="notification_settings.telegram !== undefined">
+        <template v-if="selectedChannel">
+            <channel-header
+                :channel-title="channelConfig.title"
+                :logo="channelConfig.logo"
+                :connected="isChannelConnected"
+                @back="goBack"
+            />
+            <component
+                :is="getChannelComponent(selectedChannel)"
+                :notification_settings="notification_settings"
+                :channel_key="selectedChannel"
+                :channel_config="channelConfig"
+                @back="goBack"
+            />
         </template>
-        <template v-else-if="selectedDriver == 'slack'">
-            <slack-notification :notification_settings="notification_settings"/>
-        </template>
-        <template v-else-if="selectedDriver == 'discord'">
-            <discord-notification :notification_settings="notification_settings"/>
-        </template>
-        <div style="text-align: center;" v-else>
-            <h3>{{ $t('Real-Time Email Failure Notifications') }}</h3>
-            <p>{{ $t('__REAL_NOTIFCATION_DESC') }}</p>
-
-            <div class="fss_notification_channels">
-                <div v-for="(channel, channelKey) in channels" :key="channelKey" class="fss_notification_channel">
-                    <div @click="configureChannel(channelKey)" class="fss_notification_item">
-                        <img :src="`${appVars.images_url}${channel.logo_name}`"/>
-                        <span>{{ channel.name }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <alert-list-table
+            v-else
+            :notification_settings="notification_settings"
+            @edit-channel="editChannel"
+            @channel-toggled="reloadSettings"
+        />
     </div>
 </template>
 
 <script type="text/babel">
+import AlertListTable from './_AlertListTable.vue';
 import TelegramNotification from './_TelegramNotification.vue';
 import SlackNotification from './_SlackNotification.vue';
 import DiscordNotification from './_DiscordNotification.vue';
+import ChannelHeader from './_ChannelHeader.vue';
 
 export default {
     name: 'NotificationManager',
     components: {
+        AlertListTable,
         TelegramNotification,
         SlackNotification,
-        DiscordNotification
+        DiscordNotification,
+        ChannelHeader
     },
     props: {
         notification_settings: {
@@ -43,48 +46,84 @@ export default {
             required: true
         }
     },
-    computed: {
-        selectedDriver() {
-            if(this.selectedChannel) {
-                return this.selectedChannel;
-            }
-            if (this.notification_settings.telegram && this.notification_settings.telegram.status == 'yes') {
-                return 'telegram';
-            }
-            if (this.notification_settings.slack && this.notification_settings.slack.status == 'yes') {
-                return 'slack';
-            }
-
-            if (this.notification_settings.discord && this.notification_settings.discord.status == 'yes') {
-                return 'discord';
-            }
-
-            return 'unknown';
-        }
-    },
     data() {
         return {
-            channels: {
-                telegram: {
-                    name: "Telegram",
-                    logo_name: "tele.svg"
-                },
-                slack: {
-                    name: "Slack",
-                    logo_name: "slack.svg"
-                },
-                discord: {
-                    name: "Discord",
-                    logo_name: "disc.svg"
-                }
-            },
-            selectedChannel: null
+            selectedChannel: null,
+            channels: {}
+        }
+    },
+    computed: {
+        channelConfig() {
+            if (!this.selectedChannel) {
+                return { title: '', logo: '' };
+            }
+            const channel = this.channels[this.selectedChannel] || {};
+            return {
+                title: channel.title || this.selectedChannel,
+                logo: channel.logo || ''
+            };
+        },
+        isChannelConnected() {
+            if (!this.selectedChannel) {
+                return false;
+            }
+            const channelKey = this.selectedChannel;
+            const settings = this.notification_settings[channelKey];
+
+            if (!settings) {
+                return false;
+            }
+
+            // Check if channel is configured and active
+            if (settings.status !== 'yes') {
+                return false;
+            }
+
+            // Channel-specific configuration checks
+            switch (channelKey) {
+                case 'telegram':
+                    return !!settings.status;
+                case 'slack':
+                    return !!settings.webhook_url;
+                case 'discord':
+                    return !!settings.webhook_url;
+                case 'pushover':
+                    return !!(settings.api_token && settings.user_key);
+                default:
+                    return false;
+            }
         }
     },
     methods: {
-        configureChannel(channel) {
-            this.selectedChannel = channel;
+        editChannel(channelKey) {
+            this.selectedChannel = channelKey;
+        },
+        goBack() {
+            this.selectedChannel = null;
+        },
+        getChannelComponent(channelKey) {
+            const componentMap = {
+                'telegram': 'telegram-notification',
+                'slack': 'slack-notification',
+                'discord': 'discord-notification'
+            };
+            return componentMap[channelKey] || null;
+        },
+        reloadSettings() {
+            this.$emit('reload-settings');
+        },
+        loadChannels() {
+            this.$get('settings/notification-channels')
+                .then((response) => {
+                    this.channels = response.data.channels || {};
+                })
+                .catch(() => {
+                    // Fallback if API fails
+                });
         }
+    },
+    mounted() {
+        this.loadChannels();
     }
 }
 </script>

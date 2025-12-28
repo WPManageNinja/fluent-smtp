@@ -13,7 +13,7 @@
                 <div class="fss_about">
                     <div class="fss_header">{{ $t('Email Sending Error Notifications') }}</div>
                     <div class="fss_content">
-                        <notification-manager :notification_settings="notification_settings"/>
+                        <notification-manager :notification_settings="notification_settings" @reload-settings="getSettings"/>
                     </div>
                 </div>
             </el-col>
