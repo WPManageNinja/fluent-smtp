@@ -7,6 +7,7 @@
             mozallowfullscreen
             webkitallowfullscreen
             style="width:100%;height: 400px;"
+            @load="setBody(content)"
         ></iframe>
         <el-button size="small" type="primary" icon="el-icon-full-screen" ref="fullscreen" @click="fullScreen">
             {{$t('Enter Full Screen')}}
@@ -32,8 +33,14 @@ export default {
 
             this.$nextTick(() => {
                 const ifr = this.$refs.ifr;
+                if (!ifr) {
+                    return;
+                }
+
                 const doc = ifr.contentDocument || ifr.contentWindow.document;
-                doc.body.innerHTML = body;
+                if (doc && doc.body) {
+                    doc.body.innerHTML = body;
+                }
             });
         },
         fullScreen() {
