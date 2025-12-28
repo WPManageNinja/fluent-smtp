@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'SzepeViktor\\PHPStan\\WordPress\\' => array($vendorDir . '/szepeviktor/phpstan-wordpress/src'),
     'FluentMail\\Includes\\' => array($baseDir . '/includes'),
     'FluentMail\\App\\' => array($baseDir . '/app'),
 );

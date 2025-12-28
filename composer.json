@@ -20,5 +20,9 @@
     },
     "config": {
         "optimize-autoloader": true
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "szepeviktor/phpstan-wordpress": "^2.0"
     }
 }

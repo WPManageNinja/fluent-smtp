@@ -318,7 +318,7 @@ class SettingsController extends Controller
             ]
         ];
 
-        if (!isset($UrlMaps[$pluginSlug]) || (defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS)) {
+        if (!isset($UrlMaps[$pluginSlug]) || !wp_is_file_mod_allowed('install_plugins')) {
             $this->sendError([
                 'message' => __('Sorry, You can not install this plugin', 'fluent-smtp')
             ]);

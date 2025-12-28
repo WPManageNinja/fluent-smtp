@@ -1,0 +1,16 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+    level: 0
+    paths:
+        - app/
+        - includes/
+    excludePaths:
+        - includes/libs/
+        - app/Services/DB/
+    scanDirectories:
+        - includes/
+        - database/
+        - app/Services/DB/
+    treatPhpDocTypesAsCertain: false

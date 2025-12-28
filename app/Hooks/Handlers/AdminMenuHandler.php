@@ -183,7 +183,7 @@ class AdminMenuHandler
 
         $user = get_user_by('ID', get_current_user_id());
 
-        $disable_recommendation = defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS;
+        $disable_recommendation = wp_is_file_mod_allowed('install_plugins');
 
         $settings = $this->getMailerSettings();
 

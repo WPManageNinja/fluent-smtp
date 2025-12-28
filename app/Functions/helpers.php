@@ -474,7 +474,6 @@ if (!function_exists('fluentMailSend')) {
              * This filter is documented in wp-includes/pluggable.php
              *
              * @param WP_Error $error A WP_Error object containing the error message.
-             * @param array $mail_error_data An array of additional error data.
              * @return void
              */
             do_action('wp_mail_failed', new WP_Error('wp_mail_failed', $e->getMessage(), $mail_error_data));
