@@ -14,11 +14,11 @@ trait SendTestEmailTrait
 
         if ($data['isHtml'] == 'true') {
             $headers[] = 'Content-Type: text/html; charset=UTF-8';
-            $body = (string) fluentMail('view')->make('admin.email_html');
+            $body = (string)fluentMail('view')->make('admin.email_html');
             $subject .= ' - HTML Version';
         } else {
             $headers[] = 'Content-Type: text/plain; charset=UTF-8';
-            $body = (string) fluentMail('view')->make('admin.email_text');
+            $body = (string)fluentMail('view')->make('admin.email_text');
             $subject .= ' - Text Version';
         }
 
@@ -26,7 +26,7 @@ trait SendTestEmailTrait
             $headers[] = 'From: ' . $data['from'];
         }
 
-        if(!defined('FLUENTMAIL_TEST_EMAIL')) {
+        if (!defined('FLUENTMAIL_TEST_EMAIL')) {
             define('FLUENTMAIL_TEST_EMAIL', true);
         }
 
