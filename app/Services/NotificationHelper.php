@@ -4,6 +4,7 @@ namespace FluentMail\App\Services;
 
 use InvalidArgumentException;
 use FluentMail\App\Models\Settings;
+use FluentMail\App\Services\Notification\Manager as NotificationManager;
 use FluentMail\Includes\Support\Arr;
 
 class NotificationHelper
@@ -46,15 +47,10 @@ class NotificationHelper
     {
         self::sendTeleRequest('disconnect', [], 'POST', $token);
 
-        $settings = (new Settings())->notificationSettings();
-
-        $settings['telegram'] = [
+        self::updateChannelSettings('telegram', [
             'status' => 'no',
             'token'  => ''
-        ];
-        $settings['active_channel'] = '';
-
-        update_option('_fluent_smtp_notify_settings', $settings, false);
+        ]);
 
         return true;
     }
@@ -269,36 +265,6 @@ class NotificationHelper
         return json_decode($body, true);
     }
 
-    public static function getActiveChannelSettings()
-    {
-        static $channel = null;
-
-        if ($channel !== null) {
-            return $channel;
-        }
-
-        $settings = (new Settings())->notificationSettings();
-
-        $activeChannel = Arr::get($settings, 'active_channel', '');
-
-        if (!$activeChannel) {
-            $channel = false;
-            return $channel;
-        }
-
-        $channelSettings = Arr::get($settings, $activeChannel, []);
-
-        if (!$channelSettings || empty($channelSettings['status']) || $channelSettings['status'] != 'yes') {
-            $channel = false;
-            return $channel;
-        }
-
-        $channel = $channelSettings;
-        $channel['driver'] = $activeChannel;
-
-        return $channel;
-    }
-
     public static function formatSlackMessageBlock($handler, $logData = [])
     {
         $sendingTo = self::unserialize(Arr::get($logData, 'to'));
@@ -421,5 +387,33 @@ class NotificationHelper
         }
 
         return $data;
+    }
+
+    public static function updateChannelSettings($channelName, $channelSettings)
+    {
+        $settings = (new Settings())->notificationSettings();
+
+        $settings[$channelName] = $channelSettings;
+
+        $isActive = Arr::get($channelSettings, 'status') === 'yes' ? true : false;
+
+        $activeChannels = $settings['active_channel'];
+
+        if ($isActive) {
+            if (!in_array($channelName, $activeChannels)) {
+                $activeChannels[] = $channelName;
+            }
+        } else {
+            if (($key = array_search($channelName, $activeChannels)) !== false) {
+                unset($activeChannels[$key]);
+            }
+        }
+
+        $activeChannels = array_values($activeChannels);
+        $settings['active_channel'] = $activeChannels;
+
+        update_option('_fluent_smtp_notify_settings', $settings, false);
+
+        return true;
     }
 }

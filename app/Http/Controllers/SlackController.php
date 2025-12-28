@@ -27,7 +27,7 @@ class SlackController extends Controller
 
         $payload = [
             'admin_email' => $userEmail,
-            'smtp_url'    => admin_url('options-general.php?_slacK_nonce='.$nonce.'&page=fluent-mail#/'),
+            'smtp_url'    => admin_url('options-general.php?_slacK_nonce=' . $nonce . '&page=fluent-mail#/'),
             'site_url'    => site_url(),
             'site_title'  => get_bloginfo('name'),
             'site_lang'   => get_bloginfo('language'),
@@ -43,16 +43,11 @@ class SlackController extends Controller
             ], 422);
         }
 
-        $prevSettings = (new Settings())->notificationSettings();
-
-
-        $prevSettings['slack'] = [
+        NotificationHelper::updateChannelSettings('slack', [
             'status'       => 'pending',
             'token'        => Arr::get($activationData, 'site_token'),
             'redirect_url' => ''
-        ];
-
-        update_option('_fluent_smtp_notify_settings', $prevSettings);
+        ]);
 
         return $this->sendSuccess([
             'message'      => __('Awesome! You are redirecting to slack', 'fluent-smtp'),
@@ -89,15 +84,11 @@ class SlackController extends Controller
 
     public function disconnect()
     {
-        $settings = (new Settings())->notificationSettings();
-
-        $settings['slack'] = [
+        NotificationHelper::updateChannelSettings('slack', [
             'status'      => 'no',
             'webhook_url' => '',
             'token'       => ''
-        ];
-
-        update_option('_fluent_smtp_notify_settings', $settings);
+        ]);
 
         return $this->sendSuccess([
             'message' => __('Slack connection has been disconnected successfully', 'fluent-smtp')

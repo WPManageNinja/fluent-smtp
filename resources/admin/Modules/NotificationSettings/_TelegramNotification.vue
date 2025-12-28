@@ -1,11 +1,13 @@
 <template>
-    <div>
+    <div class="fss_alert_settings">
         <div v-if="!notification_settings.telegram || notification_settings.telegram.status != 'yes'">
             <div v-if="configure_state == 'form'">
-                <p v-html="$t('__TELE_INTRO')"></p>
-                <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-telegram/">{{ $t('Read the documentation') }}</a>.
+                <p class="fss_alert_settings__intro--compact" v-html="$t('__TELE_INTRO')"></p>
+                <p class="fss_alert_settings__intro">
+                    <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-telegram/">{{ $t('Read the documentation') }}</a>.
+                </p>
 
-                <el-form class="fss_compact_form" :data="newForm" label-position="top">
+                <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
                     <el-form-item :label="$t('Your Email Address')">
                         <el-input size="small" v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
                     </el-form-item>
@@ -21,23 +23,22 @@
                             {{ $t('Continue') }}
                         </el-button>
                     </el-form-item>
-                    <p>{{ $t('FluentSMTP does not store your email notifications data.') }}</p>
                 </el-form>
+                <p class="fss_alert_settings__privacy-note">{{ $t('FluentSMTP does not store your email notifications data.') }}</p>
             </div>
             <div v-else-if="configure_state == 'pin'">
-                <h3>{{ $t('Last step!') }}</h3>
-                <p v-html="$t('__TELE_LAST_STEP')"></p>
-                <h3>{{ $t('Activation Pin') }}</h3>
-                <p style="font-size: 20px;font-weight: bold;padding: 10px; margin: 15px 0; background: rgb(248 250 252);border-radius: 5px;border: 2px dashed #e8d100;">
+                <h3 class="fss_alert_settings__section-title">{{ $t('Last step!') }}</h3>
+                <p class="fss_alert_settings__intro" v-html="$t('__TELE_LAST_STEP')"></p>
+                <h3 class="fss_alert_settings__section-title">{{ $t('Activation Pin') }}</h3>
+                <p class="fss_alert_settings__pin-container">
                     {{ $t('activate ') }} {{ newForm.site_pin }}
-                    <span @click="copyPin()"
-                          style="float: right; user-select: none; font-size: 14px;border: 1px solid #f0f0f1;padding: 2px 10px;line-height: 14px;background: white;border-radius: 5px;cursor: pointer;">{{ $t('copy') }}</span>
+                    <span @click="copyPin()" class="fss_alert_settings__pin-container__copy-button">{{ $t('copy') }}</span>
                 </p>
                 <el-button :disabled="processing" v-loading="processing" @click="confirmConnection()" size="medium" type="success">{{ $t('I have sent the code') }}</el-button>
             </div>
         </div>
         <div v-else>
-            <connection-info/>
+            <connection-info :channel_config="channel_config" @back="$emit('back')"/>
         </div>
     </div>
 </template>
@@ -53,6 +54,14 @@ export default {
             default: () => {
                 return {}
             }
+        },
+        channel_key: {
+            type: String,
+            default: 'telegram'
+        },
+        channel_config: {
+            type: Object,
+            default: () => ({})
         }
     },
     data() {
@@ -62,7 +71,7 @@ export default {
             newForm: {
                 user_email: '',
                 terms: 'no',
-                site_pin: 'wp.lab-327372',
+                site_pin: '',
                 site_token: ''
             },
         }
@@ -111,7 +120,7 @@ export default {
             document.execCommand('copy');
             document.body.removeChild(el);
             this.$notify.success(this.$t('Pin copied to clipboard'));
-        }
+        },
     },
     mounted() {
         this.newForm.user_email = this.appVars.user_email;
