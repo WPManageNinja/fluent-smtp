@@ -246,7 +246,6 @@ class Handler extends BaseHandler
 
     public function getConnectionInfo($connection)
     {
-
         $connection = $this->filterConnectionVars($connection);
         $stats = $this->getAccountInfo($connection['api_key']);
         $error = '';
@@ -256,20 +255,139 @@ class Handler extends BaseHandler
             $stats = [];
         }
 
+
+        if (empty($stats['account'])) {
+            $info = (string)fluentMail('view')->make('admin.tosend_mailer_connection_info', [
+                'connection'    => $connection,
+                'valid_senders' => [$connection['sender_email']],
+                'stats'         => $stats['account'] ?? [],
+                'error'         => $error
+            ]);
+
+            return [
+                'info' => $info
+            ];
+        }
+
+        $validSenders = $this->getSendersFromMappings($connection);
+
+        $connection['valid_senders'] = $validSenders['all_senders'];
+
         $info = (string)fluentMail('view')->make('admin.tosend_mailer_connection_info', [
-            'connection'    => $connection,
-            'valid_senders' => [$connection['sender_email']],
-            'stats'         => $stats['account'],
-            'error'         => $error
+            'connection' => $connection,
+            'stats'      => $stats['account'] ?? [],
+            'error'      => $error
         ]);
 
+        $hasMultiDomain = $stats['verified_domains'] ? count($validSenders['verified_senders']) > 1 : false;
+
         return [
-            'info' => $info,
-//            'verificationSettings' => [
-//                'connection_name'  => 'FluentMailer',
-//                'verified_senders' => [$connection['sender_email']],
-//                'verified_domain'  => implode(', ', $stats['verified_domains']),
-//            ]
+            'info'                 => $info,
+            'verificationSettings' => [
+                'connection_name'       => 'ToSend',
+                'all_senders'           => $validSenders['all_senders'],
+                'verified_senders'      => $validSenders['verified_senders'],
+                'verified_domain'       => $validSenders['verified_domain'],
+                'supports_multi_domain' => $hasMultiDomain,
+                'api_info'   => $stats,
+                'email_help_message'    => $hasMultiDomain ? __('Make sure to verify your sender emails or domain in toSend dashboard and available in the provided API Key.', 'fluent-smtp') : ''
+            ]
+        ];
+    }
+
+    public function addNewSenderEmail($connection, $email)
+    {
+
+        $connection = $this->filterConnectionVars($connection);
+        $stats = $this->getAccountInfo($connection['api_key']);
+        if (is_wp_error($stats)) {
+            return new \WP_Error(422, __('Unable to verify the connection details. Please check the API Key.', 'fluent-smtp'));
+        }
+        $verifiedDomains = Arr::get($stats, 'verified_domains', []);
+        $emailDomain = explode('@', $email);
+        $emailDomain = $emailDomain[1];
+
+        if (!in_array($emailDomain, $verifiedDomains)) {
+            return new \WP_Error(422, __('Invalid email address! Please use an email with verified domain.', 'fluent-smtp'));
+        }
+
+        $settings = fluentMailGetSettings();
+        $mappings = Arr::get($settings, 'mappings', []);
+
+        if (isset($mappings[$email])) {
+            return new \WP_Error(422, __('Email address already exists with another connection. Please choose a different email.', 'fluent-smtp'));
+        }
+
+        $settings = get_option('fluentmail-settings');
+
+        $settings['mappings'][$email] = md5($connection['sender_email']);
+
+        update_option('fluentmail-settings', $settings);
+
+        return true;
+    }
+
+    public function removeSenderEmail($connection, $email)
+    {
+        $connection = $this->filterConnectionVars($connection);
+
+        $settings = fluentMailGetSettings();
+        $mappings = Arr::get($settings, 'mappings', []);
+
+        if (!isset($mappings[$email])) {
+            return new \WP_Error(422, __('Email does not exists. Please try again.', 'fluent-smtp'));
+        }
+
+        if ($email == $connection['sender_email']) {
+            return new \WP_Error(422, __('You can not remove the primary sender email of this connection.', 'fluent-smtp'));
+        }
+
+        // check if the it's the same email or not
+        if ($mappings[$email] != md5($connection['sender_email'])) {
+            return new \WP_Error(422, __('Email does not exists. Please try again.', 'fluent-smtp'));
+        }
+
+        $settings = get_option('fluentmail-settings');
+
+        unset($settings['mappings'][$email]);
+
+        update_option('fluentmail-settings', $settings);
+
+        return true;
+    }
+
+    private function getSendersFromMappings($connection)
+    {
+        $validSenders = [
+            'emails' => [$connection['sender_email']]
+        ];
+        $verifiedDomain = explode('@', $connection['sender_email'])[1] ?? '';
+
+        if ($verifiedDomain) {
+            $settings = fluentMailGetSettings();
+            $mappings = Arr::get($settings, 'mappings', []);
+
+            $mapKey = md5($connection['sender_email']);
+            $mapSenders = array_filter($mappings, function ($key) use ($mapKey) {
+                return $key == $mapKey;
+            });
+
+            $mapSenders[$connection['sender_email']] = true;
+
+            foreach ($validSenders['emails'] as $email) {
+                $mapSenders[$email] = $email;
+            }
+
+            $mapSenders = array_keys($mapSenders);
+
+        } else {
+            $mapSenders = $validSenders['emails'];
+        }
+
+        return [
+            'all_senders'      => $mapSenders,
+            'verified_senders' => $validSenders['emails'],
+            'verified_domain'  => $verifiedDomain
         ];
     }
 

@@ -159,7 +159,6 @@ class Handler extends BaseHandler
     public function getValidSendingIdentities($config)
     {
         $config = $this->filterConnectionVars($config);
-
         $region = 'email.' . $config['region'] . '.amazonaws.com';
 
         $ses = new SimpleEmailService(
@@ -170,7 +169,6 @@ class Handler extends BaseHandler
         );
 
         $validSenders = $ses->listVerifiedEmailAddresses();
-
         $addresses = [];
 
         if (is_wp_error($validSenders)) {

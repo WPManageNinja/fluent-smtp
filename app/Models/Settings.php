@@ -72,7 +72,6 @@ class Settings
 
         $settings['connections'] = $connections;
 
-
         if ($settings['mappings'] && $settings['connections']) {
             $validMappings = array_keys(Arr::get($settings, 'connections', []));
 

@@ -14,6 +14,7 @@
                     <InputPassword
                         id="access_key"
                         v-model="connection.access_key"
+                        :disable_help="connection.disable_encryption === 'yes'"
                     />
 
                     <error :error="errors.get('access_key')" />
@@ -28,9 +29,23 @@
                     <InputPassword
                         id="ses-key"
                         v-model="connection.secret_key"
+                        :disable_help="connection.disable_encryption === 'yes'"
                     />
 
                     <error :error="errors.get('secret_key')" />
+                </el-form-item>
+            </el-col>
+
+            <el-col :span="24">
+                <el-form-item>
+                    <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                        {{ $t('Disable Encryption for Secret Key (Not Recommended)') }}
+                    </el-checkbox>
+                    <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
+                        {{
+                            $t('By disabling encryption, your Secret Key will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                        }}
+                    </p>
                 </el-form-item>
             </el-col>
         </el-row>

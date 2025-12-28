@@ -46,5 +46,17 @@
             <th><?php esc_html_e('Force Sender Name', 'fluent-smtp') ?></th>
             <td><?php echo esc_html(ucfirst($connection['force_from_name'])); ?></td>
         </tr>
+        <?php if(!empty($connection['valid_senders'])): ?>
+        <tr>
+            <th><?php esc_html_e('Valid Sending Emails', 'fluent-smtp') ?></th>
+            <td>
+                <ul>
+                    <?php foreach($connection['valid_senders'] as $validSender): ?>
+                        <li><?php echo esc_html($validSender); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </td>
+        </tr>
+        <?php endif; ?>
     </table>
 </div>
