@@ -48,6 +48,13 @@ $app->post('settings/discord/register', 'DiscordController@registerSite');
 $app->post('settings/discord/send-test', 'DiscordController@sendTestMessage');
 $app->post('settings/discord/disconnect', 'DiscordController@disconnect');
 
+/*
+ * Pushover Routes
+ */
+$app->post('settings/pushover/register', 'PushoverController@registerSite');
+$app->post('settings/pushover/send-test', 'PushoverController@sendTestMessage');
+$app->post('settings/pushover/disconnect', 'PushoverController@disconnect');
+
 
 
 $app->get('/logs', 'LoggerController@get');

@@ -296,6 +296,17 @@ class SchedulerHandler
                 NotificationHelper::sendDiscordMessage(NotificationHelper::formatDiscordMessageBlock($handler, $logData), Arr::get($channelSettings, 'webhook_url'), false);
                 continue;
             }
+
+            if ($driver == 'pushover') {
+                NotificationHelper::sendPushoverMessage(
+                    NotificationHelper::formatPushoverMessage($handler, $logData),
+                    Arr::get($channelSettings, 'api_token'),
+                    Arr::get($channelSettings, 'user_key'),
+                    false,
+                    1 // High priority for failed emails
+                );
+                continue;
+            }
         }
 
         return true;

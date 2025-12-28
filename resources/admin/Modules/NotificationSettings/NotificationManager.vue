@@ -29,6 +29,7 @@ import AlertListTable from './_AlertListTable.vue';
 import TelegramNotification from './_TelegramNotification.vue';
 import SlackNotification from './_SlackNotification.vue';
 import DiscordNotification from './_DiscordNotification.vue';
+import PushoverNotification from './_PushoverNotification.vue';
 import ChannelHeader from './_ChannelHeader.vue';
 
 export default {
@@ -38,6 +39,7 @@ export default {
         TelegramNotification,
         SlackNotification,
         DiscordNotification,
+        PushoverNotification,
         ChannelHeader
     },
     props: {
@@ -105,7 +107,8 @@ export default {
             const componentMap = {
                 'telegram': 'telegram-notification',
                 'slack': 'slack-notification',
-                'discord': 'discord-notification'
+                'discord': 'discord-notification',
+                'pushover': 'pushover-notification'
             };
             return componentMap[channelKey] || null;
         },

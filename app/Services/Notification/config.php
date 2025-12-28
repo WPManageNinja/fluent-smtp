@@ -46,5 +46,19 @@ return [
                 'disconnect' => 'settings/discord/disconnect',
             ],
         ],
+        'pushover' => [
+            'key'         => 'pushover',
+            'title'       => __('Pushover', 'fluent-smtp'),
+            'logo'        => fluentMailAssetUrl('images/pushover.svg'),
+            'logo_name'   => 'pushover.svg',
+            'controller'  => 'FluentMail\App\Http\Controllers\PushoverController',
+            'component'   => '_PushoverNotification',
+            'info_component' => '_PushoverWebhookInfo',
+            'routes'      => [
+                'register'  => 'settings/pushover/register',
+                'test'      => 'settings/pushover/send-test',
+                'disconnect' => 'settings/pushover/disconnect',
+            ],
+        ],
     ],
 ];
