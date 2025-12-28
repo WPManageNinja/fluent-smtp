@@ -1,7 +1,6 @@
 <template>
     <div>
         <p>{{ $t('__REAL_NOTIFCATION_DESC') }}</p>
-
         <el-table :data="alerts" class="fss_alert_list_table__table" v-loading="loading">
             <el-table-column :label="$t('Channel')" min-width="200">
                 <template slot-scope="scope">
@@ -16,8 +15,10 @@
                 <template slot-scope="scope">
                     <el-switch
                         v-model="scope.row.is_active"
+                        active-value="yes"
+                        inactive-value="no"
+                        @change="toggleChannel()"
                         :disabled="toggling || !scope.row.is_configured"
-                        @change="toggleChannel(scope.row.key, scope.row.is_active)"
                         :aria-label="scope.row.is_active ? $t('Enabled') : $t('Disabled') + ' - ' + scope.row.title">
                     </el-switch>
                 </template>
@@ -43,6 +44,15 @@
                 </template>
             </el-table-column>
         </el-table>
+
+        <div style="margin-top: 20px;" v-if="activatedChannelsCount > 1">
+            <el-alert
+                type="info"
+                :closable="false"
+                :title="$t('We recommend activating only one notification channel at a time.')"
+                show-icon>
+            </el-alert>
+        </div>
     </div>
 </template>
 
@@ -62,11 +72,23 @@ export default {
             toggling: false
         }
     },
+    computed: {
+        activatedChannelsCount() {
+            return this.alerts.filter(alert => alert.is_active === 'yes').length;
+        }
+    },
     methods: {
         loadChannels() {
             this.loading = true;
             this.$get('settings/notification-channels')
                 .then((response) => {
+                    let activeChannels = this.notification_settings.active_channel || [];
+                    if (typeof activeChannels !== 'object') {
+                        activeChannels = [];
+                    }
+
+                    console.log(activeChannels);
+
                     const channels = response.data.channels || {};
                     this.alerts = Object.keys(channels).map(key => {
                         const channel = channels[key];
@@ -75,11 +97,13 @@ export default {
                         // Each channel may have different required fields, so we check if status is yes and settings exist
                         const isConfigured = settings.status === 'yes' && Object.keys(settings).length > 1;
 
+                        console.log(activeChannels.indexOf(key), key, isConfigured);
+
                         return {
                             key: key,
                             title: channel.title,
                             logo: channel.logo,
-                            is_active: channel.is_active || false,
+                            is_active: (isConfigured && (activeChannels.indexOf(key) != -1)) ? 'yes' : 'no',
                             status: channel.status || 'no',
                             is_configured: isConfigured
                         };
@@ -93,25 +117,17 @@ export default {
                     this.loading = false;
                 });
         },
-        toggleChannel(channelKey, enable) {
-            // Prevent enabling if not configured
-            if (enable) {
-                const alert = this.alerts.find(a => a.key === channelKey);
-                if (!alert || !alert.is_configured) {
-                    this.$notify.warning(this.$t('Please configure the channel first before enabling'));
-                    // Revert the toggle
-                    const alertToRevert = this.alerts.find(a => a.key === channelKey);
-                    if (alertToRevert) {
-                        alertToRevert.is_active = false;
-                    }
-                    return;
+        toggleChannel() {
+            const enabledChannelKeys = [];
+            this.alerts.forEach(alert => {
+                if (alert.is_active === 'yes' && alert.status === 'yes') {
+                    enabledChannelKeys.push(alert.key);
                 }
-            }
+            });
 
             this.toggling = true;
             this.$post('settings/notification-channels/toggle', {
-                channel: channelKey,
-                enable: enable
+                channel_keys: enabledChannelKeys
             })
                 .then((response) => {
                     this.$notify.success(response.data.message);

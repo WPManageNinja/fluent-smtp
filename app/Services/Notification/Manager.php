@@ -72,41 +72,40 @@ class Manager
         return Arr::get(static::$config['channels'], $key, null);
     }
 
-    public function getActiveChannel()
+    public function getActiveChannels()
     {
-        $activeChannelKey = Arr::get(static::$config, 'active_channel', '');
-
-        if (!$activeChannelKey) {
-            return null;
+        static $activeChannels;
+        if (isset($activeChannels)) {
+            return $activeChannels;
         }
 
-        $channel = $this->getChannel($activeChannelKey);
-
-        if (!$channel) {
-            return null;
+        $activeChannelKeys = Arr::get(static::$config, 'active_channel', []);
+        if (!$activeChannelKeys || !is_array($activeChannelKeys)) {
+            return [];
         }
 
-        $channelSettings = Arr::get(static::$settings, $activeChannelKey, []);
+        $activeChannels = [];
 
-        if (empty($channelSettings['status']) || $channelSettings['status'] != 'yes') {
-            return null;
+        foreach ($activeChannelKeys as $activeChannelKey) {
+            $channel = $this->getChannel($activeChannelKey);
+
+            if (!$channel) {
+                continue;
+            }
+
+            $channelSettings = Arr::get(static::$settings, $activeChannelKey, []);
+
+            if (empty($channelSettings['status']) || $channelSettings['status'] != 'yes') {
+                continue;
+            }
+
+            $channel['driver'] = $activeChannelKey;
+            $channel['settings'] = $channelSettings;
+
+            $activeChannels[] = $channel;
         }
 
-        $channel['driver'] = $activeChannelKey;
-        $channel['settings'] = $channelSettings;
-
-        return $channel;
-    }
-
-    public function getActiveChannelSettings()
-    {
-        return $this->getActiveChannel();
-    }
-
-    public function isChannelActive($key)
-    {
-        $activeChannel = Arr::get(static::$config, 'active_channel', '');
-        return $activeChannel === $key;
+        return $activeChannels;
     }
 
     public function getChannelStatus($key)
@@ -120,14 +119,4 @@ class Manager
         return array_keys(static::$config['channels'] ?? []);
     }
 
-    public function disableOtherChannels($activeChannelKey, &$settings)
-    {
-        $allChannelKeys = $this->getAllChannelKeys();
-
-        foreach ($allChannelKeys as $channelKey) {
-            if ($channelKey !== $activeChannelKey && isset($settings[$channelKey]) && is_array($settings[$channelKey])) {
-                $settings[$channelKey]['status'] = 'no';
-            }
-        }
-    }
 }

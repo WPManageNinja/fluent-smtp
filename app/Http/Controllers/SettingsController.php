@@ -691,14 +691,14 @@ class SettingsController extends Controller
         foreach ($channels as $key => $channel) {
             $channelSettings = Arr::get($settings, $key, []);
             $channelsWithStatus[$key] = array_merge($channel, [
-                'status' => Arr::get($channelSettings, 'status', 'no'),
+                'status'    => Arr::get($channelSettings, 'status', 'no'),
                 'is_active' => $activeChannel === $key,
-                'settings' => $channelSettings
+                'settings'  => $channelSettings
             ]);
         }
 
         return $this->sendSuccess([
-            'channels' => $channelsWithStatus,
+            'channels'       => $channelsWithStatus,
             'active_channel' => $activeChannel
         ]);
     }
@@ -707,72 +707,22 @@ class SettingsController extends Controller
     {
         $this->verify();
 
-        $channelKey = $request->get('channel');
-        $enable = $request->get('enable', false);
-
-        if (!$channelKey) {
-            return $this->sendError([
-                'message' => __('Channel key is required', 'fluent-smtp')
-            ], 422);
-        }
-
-        $notificationManager = new NotificationManager();
-        $channel = $notificationManager->getChannel($channelKey);
-
-        if (!$channel) {
-            return $this->sendError([
-                'message' => __('Invalid channel', 'fluent-smtp')
-            ], 422);
-        }
+        $channelKeys = $request->get('channel_keys', []);
+        $channelKeys = array_map('sanitize_text_field', $channelKeys);
+        $allChanelKeys = (new NotificationManager())->getAllChannelKeys();
+        $channelKeys = array_filter($channelKeys, function ($key) use ($allChanelKeys) {
+            return in_array($key, $allChanelKeys);
+        });
 
         $settings = (new Settings())->notificationSettings();
 
-        if ($enable) {
-            // Check if channel is configured before enabling
-            $channelSettings = Arr::get($settings, $channelKey, []);
-            $hasConfiguration = false;
-
-            // Check if channel has required configuration based on channel type
-            if ($channelKey === 'telegram') {
-                $hasConfiguration = !empty($channelSettings['token']);
-            } elseif ($channelKey === 'slack') {
-                $hasConfiguration = !empty($channelSettings['webhook_url']);
-            } elseif ($channelKey === 'discord') {
-                $hasConfiguration = !empty($channelSettings['webhook_url']);
-            }
-
-            if (!$hasConfiguration) {
-                return $this->sendError([
-                    'message' => __('Please configure the channel first before enabling', 'fluent-smtp')
-                ], 422);
-            }
-
-            // Disable all other channels
-            $notificationManager->disableOtherChannels($channelKey, $settings);
-
-            // Enable this channel
-            if (!isset($settings[$channelKey])) {
-                $settings[$channelKey] = [];
-            }
-            $settings[$channelKey]['status'] = 'yes';
-            $settings['active_channel'] = $channelKey;
-        } else {
-            // Disable this channel
-            if (isset($settings[$channelKey])) {
-                $settings[$channelKey]['status'] = 'no';
-            }
-
-            // Clear active channel if this was the active one
-            if ($settings['active_channel'] === $channelKey) {
-                $settings['active_channel'] = '';
-            }
-        }
+        $settings['active_channel'] = $channelKeys;
 
         update_option('_fluent_smtp_notify_settings', $settings, false);
 
         return $this->sendSuccess([
-            'message' => $enable ? __('Channel enabled successfully', 'fluent-smtp') : __('Channel disabled successfully', 'fluent-smtp'),
-            'active_channel' => $settings['active_channel']
+            'message'         => __('Notification channel updated successfully', 'fluent-smtp'),
+            'active_channels' => $channelKeys
         ]);
     }
 }

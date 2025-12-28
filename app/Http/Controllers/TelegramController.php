@@ -71,21 +71,10 @@ class TelegramController extends Controller
             ], 422);
         }
 
-        // Let's update the notification status
-        $previousSettings = (new Settings())->notificationSettings();
-
-        // Disable all other channels
-        $notificationManager = new NotificationManager();
-        $notificationManager->disableOtherChannels('telegram', $previousSettings);
-
-        $previousSettings['telegram'] = [
+        NotificationHelper::updateChannelSettings('telegram', [
             'status' => 'yes',
             'token'  => $siteToken
-        ];
-
-        $previousSettings['active_channel'] = 'telegram';
-
-        update_option('_fluent_smtp_notify_settings', $previousSettings, false);
+        ]);
 
         return $this->sendSuccess([
             'success' => true,
@@ -160,18 +149,10 @@ class TelegramController extends Controller
             NotificationHelper::disconnectTelegram($token);
         }
 
-        // Clear telegram settings
-        $settings['telegram'] = [
+        NotificationHelper::updateChannelSettings('telegram', [
             'status' => 'no',
             'token'  => ''
-        ];
-
-        // Clear active channel if telegram was active
-        if ($settings['active_channel'] === 'telegram') {
-            $settings['active_channel'] = '';
-        }
-
-        update_option('_fluent_smtp_notify_settings', $settings, false);
+        ]);
 
         return $this->sendSuccess([
             'message' => __('Telegram connection has been disconnected successfully', 'fluent-smtp')

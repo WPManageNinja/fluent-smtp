@@ -258,13 +258,6 @@ class SchedulerHandler
 
     public function maybeSendNotification($rowId, $handler, $logData = [])
     {
-        $notificationManager = new NotificationManager();
-        $channel = $notificationManager->getActiveChannelSettings();
-
-        if (!$channel) {
-            return false;
-        }
-
         $lastNotificationSent = get_option('_fsmtp_last_notification_sent');
         if ($lastNotificationSent && (time() - $lastNotificationSent) < 60) {
             return false;
@@ -272,28 +265,40 @@ class SchedulerHandler
 
         update_option('_fsmtp_last_notification_sent', time());
 
-        $driver = $channel['driver'];
-        $channelSettings = Arr::get($channel, 'settings', []);
+        $notificationManager = new NotificationManager();
+        $channels = $notificationManager->getActiveChannels();
 
-        if ($driver == 'telegram') {
-            $data = [
-                'token_id'      => Arr::get($channelSettings, 'token'),
-                'provider'      => $handler->getSetting('provider'),
-                'error_message' => $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')))
-            ];
-
-            return NotificationHelper::sendFailedNotificationTele($data);
+        if (!$channels) {
+            return false;
         }
 
-        if ($driver == 'slack') {
-            return NotificationHelper::sendSlackMessage(NotificationHelper::formatSlackMessageBlock($handler, $logData), Arr::get($channelSettings, 'webhook_url'), false);
+        foreach ($channels as $channel) {
+            $driver = $channel['driver'];
+            $channelSettings = Arr::get($channel, 'settings', []);
+
+            if ($driver == 'telegram') {
+                $data = [
+                    'token_id'      => Arr::get($channelSettings, 'token'),
+                    'provider'      => $handler->getSetting('provider'),
+                    'error_message' => $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')))
+                ];
+
+                NotificationHelper::sendFailedNotificationTele($data);
+                continue;
+            }
+
+            if ($driver == 'slack') {
+                NotificationHelper::sendSlackMessage(NotificationHelper::formatSlackMessageBlock($handler, $logData), Arr::get($channelSettings, 'webhook_url'), false);
+                continue;
+            }
+
+            if ($driver == 'discord') {
+                NotificationHelper::sendDiscordMessage(NotificationHelper::formatDiscordMessageBlock($handler, $logData), Arr::get($channelSettings, 'webhook_url'), false);
+                continue;
+            }
         }
 
-        if ($driver == 'discord') {
-            return NotificationHelper::sendDiscordMessage(NotificationHelper::formatDiscordMessageBlock($handler, $logData), Arr::get($channelSettings, 'webhook_url'), false);
-        }
-
-        return false;
+        return true;
     }
 
     private function saveNewGmailTokens($existingData, $tokens)

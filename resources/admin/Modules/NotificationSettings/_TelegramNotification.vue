@@ -71,7 +71,7 @@ export default {
             newForm: {
                 user_email: '',
                 terms: 'no',
-                site_pin: 'wp.lab-327372',
+                site_pin: '',
                 site_token: ''
             },
         }
