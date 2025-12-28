@@ -29,7 +29,7 @@ class SimpleEmailServiceRequest
 	* @param string $verb HTTP verb
 	* @return void
 	*/
-	public function __construct(SimpleEmailService $ses = null, $verb = 'GET') {
+	public function __construct($ses = null, $verb = 'GET') {
 		$this->ses = $ses;
 		$this->verb = $verb;
 		$this->response = (object) array('body' => '', 'code' => 0, 'error' => false);

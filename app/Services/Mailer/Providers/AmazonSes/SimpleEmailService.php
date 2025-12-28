@@ -652,10 +652,10 @@ class SimpleEmailService
     /**
      * Set SES Request
      *
-     * @param SimpleEmailServiceRequest $ses_request description
+     * @param SimpleEmailServiceRequest|null $ses_request description
      * @return SimpleEmailService $this
      */
-    public function setRequestHandler(SimpleEmailServiceRequest $ses_request = null)
+    public function setRequestHandler($ses_request = null)
     {
         if (!is_null($ses_request)) {
             $ses_request->setSES($this);

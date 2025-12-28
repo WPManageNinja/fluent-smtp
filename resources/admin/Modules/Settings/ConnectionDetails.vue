@@ -4,20 +4,28 @@
         <div v-html="connection_content"></div>
 
         <template v-if="verificationSettings && verificationSettings.verified_domain">
-            <el-button @click="showEmailManageModal = true" type="primary">{{ $t('Add Additional Senders') }}</el-button>
+            <el-button style="margin-top: 10px;" @click="showEmailManageModal = true" type="primary">{{
+                    $t('Add Additional Senders')
+                }}
+            </el-button>
             <el-dialog :visible.sync="showEmailManageModal" :title="$t('Manage Additional Senders')" width="50%">
                 <p style="font-size: 16px;">{{ $t('You may add additional sending emails in this') }}
                     {{ verificationSettings.connection_name }} {{ $t(' connection.') }}</p>
-
                 <el-input type="text"
                           :placeholder="$t('Enter new email address ex: new_sender@') + verificationSettings.verified_domain"
                           v-model="newSender">
-                    <el-button :disabled="addingNew" v-loading="addingNew" @click="addNewSender()" slot="append" type="primary" icon="el-icon-plus">
-                        {{ $t('Add') }}</el-button>
+                    <el-button :disabled="addingNew" v-loading="addingNew" @click="addNewSender()" slot="append"
+                               type="primary" icon="el-icon-plus">
+                        {{ $t('Add') }}
+                    </el-button>
                 </el-input>
 
-                <p>{{ $t('The email address must match the domain: ') }}<code>{{ verificationSettings.verified_domain }}</code></p>
-
+                <p v-if="verificationSettings.email_help_message" v-html="verificationSettings.email_help_message"></p>
+                <p v-else>
+                    {{
+                        $t('The email address must match the domain: ')
+                    }}
+                    <code>{{ verificationSettings.verified_domain }}</code></p>
                 <hr/>
 
                 <h3>{{ $t('Current verified senders:') }}</h3>
@@ -26,8 +34,9 @@
                     <tr v-for="sender in verificationSettings.all_senders" :key="sender">
                         <th>
                             {{ sender }}
-                            <el-button plain v-if="verificationSettings.verified_senders.indexOf(sender) === -1" type="danger" size="mini" @click="removeSender(sender)">
-                                {{ $t('Remove') }}</el-button>
+                            <el-button plain v-if="verificationSettings.verified_senders.indexOf(sender) === -1 || verificationSettings.supports_multi_domain" type="danger" size="mini" @click="removeSender(sender)">
+                                {{ $t('Remove') }}
+                            </el-button>
                         </th>
                     </tr>
                     </tbody>
@@ -88,7 +97,7 @@ export default {
             }
 
             // check if the email domain matches the verified domain
-            if (this.newSender.split('@')[1] !== this.verificationSettings.verified_domain) {
+            if (!this.verificationSettings.supports_multi_domain && this.newSender.split('@')[1] !== this.verificationSettings.verified_domain) {
                 this.$notify.error({
                     title: 'Error',
                     message: this.$t('The email address must match the domain: ') + this.verificationSettings.verified_domain

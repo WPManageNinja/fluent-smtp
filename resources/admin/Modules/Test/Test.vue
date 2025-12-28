@@ -8,7 +8,7 @@
                 <el-form ref="form" :model="form" label-position="left" label-width="120px">
 
                     <el-form-item for="email" :label="$t('From')">
-                        <el-select :placeholder="$t('Select Email or Type')" :allow-create="true" :filterable="true" v-model="form.from">
+                        <el-select autocomplete="new_password" :placeholder="$t('Select Email or Type')" v-model="form.from">
                             <el-option
                                 v-for="(emailHash, email) in sender_emails"
                                 :key="email" :label="email"
