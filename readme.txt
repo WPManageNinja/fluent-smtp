@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, amazon ses, wordpress mail smtp, mail, mail smtp
 Requires at least: 5.5
 Tested up to: 6.7
-Stable tag: 2.2.92
+Stable tag: 2.2.95
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -294,6 +294,14 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 
 
 == Changelog ==
+
+= 2.2.95 (Date: Dec 28, 2025) =
+- Added Multiple Notification Channels for Email Failure Notification
+- Added Pushover Notification Support
+- Added toSend Email Sending Provider
+- Added Option to disable API Keys Encryption
+- Fixed PHP 8.4 Compatibility Issues
+-
 
 = 2.2.92 (Date: Aug 27, 2025) =
 - Fixed attachment handling issue with Elastic Email.
