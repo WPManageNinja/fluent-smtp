@@ -229,7 +229,7 @@ return [
         'tosend'      => [
             'key'      => 'tosend',
             'title'    => 'ToSend',
-            'image'    => fluentMailAssetUrl('images/provider-tosend.png'),
+            'image'    => fluentMailAssetUrl('images/provider-tosend.svg'),
             'provider' => 'tosend',
             'options'  => [
                 'sender_name'      => '',

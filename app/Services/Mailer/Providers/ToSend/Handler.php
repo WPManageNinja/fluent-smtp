@@ -41,7 +41,7 @@ class Handler extends BaseHandler
         }
 
         if ($cc = $this->getCarbonCopy()) {
-            $body['Cc'] = $cc;
+            $body['cc'] = $cc;
         }
 
         $contentType = $this->getHeader('content-type');
@@ -155,30 +155,12 @@ class Handler extends BaseHandler
 
     protected function getTo()
     {
-        $tos = $this->getRecipients($this->getParam('to'));
-
-        return $tos[0];
+        return $this->getRecipients($this->getParam('to'));
     }
 
     protected function getCarbonCopy()
     {
-        $ccEmails = $this->getRecipients($this->getParam('headers.cc'));
-
-        $to = $this->getParam('to');
-
-        if (count($to) > 1) {
-            // get the all other emails except the first one
-            $toEmails = array_map(function ($recipient) {
-                return [
-                    'name'  => Arr::get($recipient, 'name', ''),
-                    'email' => Arr::get($recipient, 'email')
-                ];
-            }, array_slice($to, 1));
-            // merge cc and to emails
-            return array_merge($ccEmails, $toEmails);
-        }
-
-        return $ccEmails;
+        return $this->getRecipients($this->getParam('headers.cc'));
     }
 
     protected function getBlindCarbonCopy()
