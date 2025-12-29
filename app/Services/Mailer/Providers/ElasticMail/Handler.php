@@ -139,29 +139,6 @@ class Handler extends BaseHandler
         ];
     }
 
-    protected function getRecipients()
-    {
-        $recipients = [
-            'to'  => $this->getTo(),
-            'cc'  => $this->getCarbonCopy(),
-            'bcc' => $this->getBlindCarbonCopy(),
-        ];
-
-        $recipients = array_filter($recipients);
-
-        foreach ($recipients as $key => $recipient) {
-            $array = array_map(function ($recipient) {
-                return isset($recipient['name'])
-                    ? $recipient['name'] . ' <' . $recipient['email'] . '>'
-                    : $recipient['email'];
-            }, $recipient);
-
-            $this->attributes['formatted'][$key] = implode(', ', $array);
-        }
-
-        return [$recipients];
-    }
-
     protected function getCcFormatted()
     {
         $ccs = $this->getCarbonCopy();

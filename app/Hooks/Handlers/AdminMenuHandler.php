@@ -5,6 +5,7 @@ namespace FluentMail\App\Hooks\Handlers;
 use FluentMail\App\Models\Logger;
 use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\Converter;
+use FluentMail\App\Services\NotificationHelper;
 use FluentMail\Includes\Core\Application;
 use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\Includes\Support\Arr;
@@ -38,14 +39,12 @@ class AdminMenuHandler
                     $token = Arr::get($_REQUEST, 'site_token');
 
                     if ($token && $token == Arr::get($settings, 'slack.token')) {
-                        $settings['slack'] = [
+                        NotificationHelper::updateChannelSettings('slack', [
                             'status'      => 'yes',
                             'token'       => sanitize_text_field($token),
                             'slack_team'  => sanitize_text_field(Arr::get($_REQUEST, 'slack_team')),
                             'webhook_url' => sanitize_url(Arr::get($_REQUEST, 'slack_webhook'))
-                        ];
-                        $settings['active_channel'] = 'slack';
-                        update_option('_fluent_smtp_notify_settings', $settings);
+                        ]);
                     }
 
                     wp_redirect(admin_url('options-general.php?page=fluent-mail#/notification-settings'));
@@ -184,7 +183,7 @@ class AdminMenuHandler
 
         $user = get_user_by('ID', get_current_user_id());
 
-        $disable_recommendation = defined('DISALLOW_FILE_MODS') && DISALLOW_FILE_MODS;
+        $disable_recommendation = wp_is_file_mod_allowed('install_plugins');
 
         $settings = $this->getMailerSettings();
 

@@ -35,7 +35,7 @@ class ActionsRegistrar
      */
     public static function init(Application $app)
     {
-        $instance = new static($app);
+        $instance = new self($app);
         $instance->registerHooks();
         return $instance;
     }

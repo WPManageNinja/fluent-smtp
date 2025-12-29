@@ -16,20 +16,20 @@
                     <InputPassword
                         id="key"
                         v-model="connection.api_key"
+                        :disable_help="connection.disable_encryption === 'yes'"
                     />
-                    
+
                     <error :error="errors.get('api_key')" />
 
                     <span class="small-help-text">
                         {{ $t('Follow this link to get an API Key from Mailgun:') }}
                         <a
                             target="_blank"
-                            href="https://app.mailgun.com/app/account/security/api_keys"
+                            href="https://app.mailgun.com/settings/api_security"
                         >{{ $t('Get a Private API Key.') }}</a>
                     </span>
                 </el-form-item>
             </el-col>
-
             <el-col :md="12" :sm="24">
                 <el-form-item for="domain">
                     <label for="domain">
@@ -41,10 +41,23 @@
 
                     <span class="small-help-text">
                         {{ $t('Follow this link to get a Domain Name from Mailgun:') }}
-                        <a target="_blank" href="https://app.mailgun.com/app/domains">
+                        <a target="_blank" href="https://app.mailgun.com/mg/sending/domains">
                             {{ $t('Get a Domain Name.') }}
                         </a>
                     </span>
+                </el-form-item>
+            </el-col>
+
+            <el-col :span="24">
+                <el-form-item>
+                    <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                        {{ $t('Disable Encryption for API Key (Not Recommended)') }}
+                    </el-checkbox>
+                    <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
+                        {{
+                            $t('By disabling encryption, your API key will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                        }}
+                    </p>
                 </el-form-item>
             </el-col>
         </el-row>

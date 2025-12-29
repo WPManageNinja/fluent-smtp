@@ -9,7 +9,7 @@
             @input="$emit('input', $event)"
         >
         </el-input>
-        <p class="small-help-text" style="font-size: 80%; margin: 3px 0 0 0">
+        <p v-if="!disable_help" class="small-help-text" style="font-size: 80%; margin: 3px 0 0 0">
             {{$t('__PASSWORD_ENCRYPT_HELP')}}
             <el-popover
                 width="400"
@@ -24,7 +24,7 @@
 <script>
     export default {
         name: 'InputPassword',
-        props: ['value', 'id', 'placeholder', 'disabled'],
+        props: ['value', 'id', 'placeholder', 'disabled', 'disable_help'],
         data() {
             return {
                 type: 'password',

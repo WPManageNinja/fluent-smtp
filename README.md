@@ -58,6 +58,9 @@ All the email connection drivers can be found in `app/Services/Mailer/Providers`
 
 ![GitHub Contributors Image](https://contrib.rocks/image?repo=WPManageNinja/fluent-smtp)
 
+#### Getting Started
+- Clone this repository.
+- Run `composer install` to install PHP dependencies.
 
 #### Build JavaScript source
 

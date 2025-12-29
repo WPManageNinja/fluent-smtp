@@ -20,6 +20,8 @@ $app->post('settings/remove_sender_email', 'SettingsController@removeSenderEmail
 
 $app->get('settings/notification-settings', 'SettingsController@getNotificationSettings');
 $app->post('settings/notification-settings', 'SettingsController@saveNotificationSettings');
+$app->get('settings/notification-channels', 'SettingsController@getNotificationChannels');
+$app->post('settings/notification-channels/toggle', 'SettingsController@toggleNotificationChannel');
 $app->post('settings/gmail_auth_url', 'SettingsController@getGmailAuthUrl');
 $app->post('settings/outlook_auth_url', 'SettingsController@getOutlookAuthUrl');
 
@@ -45,6 +47,13 @@ $app->post('settings/slack/disconnect', 'SlackController@disconnect');
 $app->post('settings/discord/register', 'DiscordController@registerSite');
 $app->post('settings/discord/send-test', 'DiscordController@sendTestMessage');
 $app->post('settings/discord/disconnect', 'DiscordController@disconnect');
+
+/*
+ * Pushover Routes
+ */
+$app->post('settings/pushover/register', 'PushoverController@registerSite');
+$app->post('settings/pushover/send-test', 'PushoverController@sendTestMessage');
+$app->post('settings/pushover/disconnect', 'PushoverController@disconnect');
 
 
 

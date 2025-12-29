@@ -5,6 +5,7 @@ namespace FluentMail\App\Hooks\Handlers;
 use FluentMail\App\Models\Logger;
 use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\NotificationHelper;
+use FluentMail\App\Services\Notification\Manager as NotificationManager;
 use FluentMail\Includes\Support\Arr;
 
 class SchedulerHandler
@@ -19,7 +20,6 @@ class SchedulerHandler
         add_action('fluentsmtp_renew_gmail_token', array($this, 'renewGmailToken'));
 
         add_action('fluentmail_email_sending_failed_no_fallback', array($this, 'maybeSendNotification'), 10, 3);
-
     }
 
     public function handleScheduledJobs()
@@ -153,7 +153,6 @@ class SchedulerHandler
         update_option('_fluentmail_last_email_digest', gmdate('Y-m-d H:i:s'));
 
         return wp_mail($sendToArray, $emailSubject, $emailBody, $headers);
-
     }
 
     private function getDomainName()
@@ -259,12 +258,6 @@ class SchedulerHandler
 
     public function maybeSendNotification($rowId, $handler, $logData = [])
     {
-        $channel = NotificationHelper::getActiveChannelSettings();
-
-        if (!$channel) {
-            return false;
-        }
-
         $lastNotificationSent = get_option('_fsmtp_last_notification_sent');
         if ($lastNotificationSent && (time() - $lastNotificationSent) < 60) {
             return false;
@@ -272,26 +265,51 @@ class SchedulerHandler
 
         update_option('_fsmtp_last_notification_sent', time());
 
-        $driver = $channel['driver'];
-        if ($driver == 'telegram') {
-            $data = [
-                'token_id'      => $channel['token'],
-                'provider'      => $handler->getSetting('provider'),
-                'error_message' => $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')))
-            ];
+        $notificationManager = new NotificationManager();
+        $channels = $notificationManager->getActiveChannels();
 
-            return NotificationHelper::sendFailedNotificationTele($data);
+        if (!$channels) {
+            return false;
         }
 
-        if ($driver == 'slack') {
-            return NotificationHelper::sendSlackMessage(NotificationHelper::formatSlackMessageBlock($handler, $logData), $channel['webhook_url'], false);
+        foreach ($channels as $channel) {
+            $driver = $channel['driver'];
+            $channelSettings = Arr::get($channel, 'settings', []);
+
+            if ($driver == 'telegram') {
+                $data = [
+                    'token_id'      => Arr::get($channelSettings, 'token'),
+                    'provider'      => $handler->getSetting('provider'),
+                    'error_message' => $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')))
+                ];
+
+                NotificationHelper::sendFailedNotificationTele($data);
+                continue;
+            }
+
+            if ($driver == 'slack') {
+                NotificationHelper::sendSlackMessage(NotificationHelper::formatSlackMessageBlock($handler, $logData), Arr::get($channelSettings, 'webhook_url'), false);
+                continue;
+            }
+
+            if ($driver == 'discord') {
+                NotificationHelper::sendDiscordMessage(NotificationHelper::formatDiscordMessageBlock($handler, $logData), Arr::get($channelSettings, 'webhook_url'), false);
+                continue;
+            }
+
+            if ($driver == 'pushover') {
+                NotificationHelper::sendPushoverMessage(
+                    NotificationHelper::formatPushoverMessage($handler, $logData),
+                    Arr::get($channelSettings, 'api_token'),
+                    Arr::get($channelSettings, 'user_key'),
+                    false,
+                    1 // High priority for failed emails
+                );
+                continue;
+            }
         }
 
-        if ($driver == 'discord') {
-            return NotificationHelper::sendDiscordMessage(NotificationHelper::formatDiscordMessageBlock($handler, $logData), $channel['webhook_url'], false);
-        }
-
-        return false;
+        return true;
     }
 
     private function saveNewGmailTokens($existingData, $tokens)

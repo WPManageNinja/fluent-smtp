@@ -7,6 +7,8 @@ class Model
     protected $db  = null;
     protected $app = null;
 
+    protected $table = null;
+
     public function __construct()
     {
         $this->app = fluentMail();

@@ -18,7 +18,16 @@
                         <el-table stripe border :data="connections">
                             <el-table-column :label="$t('Provider')">
                                 <template slot-scope="scope">
-                                    {{ settings.providers[scope.row.provider].title }}
+
+                                    <span v-if="settings.providers[scope.row.provider]">
+                                        <img
+                                            :title="settings.providers[scope.row.provider]?.title"
+                                            :src="settings.providers[scope.row.provider]?.image"
+                                            :alt="settings.providers[scope.row.provider]?.title"
+                                            style="max-height: 24px; vertical-align: middle; margin-right: 8px;"
+                                        />
+                                    </span>
+                                    <span v-else>Unknown</span>
                                     <span style="color: red;" v-if="scope.row.provider == 'gmail' && !scope.row.version">{{ $t('(Re Authentication Required)') }}</span>
                                 </template>
                             </el-table-column>
@@ -85,7 +94,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/babel">
     import Confirm from '@/Pieces/Confirm';
     import isEmpty from 'lodash/isEmpty';
     import GeneralSettings from './_GeneralSettings'

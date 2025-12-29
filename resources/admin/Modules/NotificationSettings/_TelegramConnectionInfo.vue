@@ -2,50 +2,56 @@
     <div>
         <el-skeleton :animated="true" v-if="loading" :rows="3"></el-skeleton>
         <template v-else>
-            <div v-if="status == 'yes'">
-                <img style="max-height: 50px;" :src="`${appVars.images_url}tele.svg`"/>
-                <h3>{{ $t('Telegram Notifications Enable') }}d</h3>
-                <p v-html="$t('__TELEGRAM_NOTIFICATION_ENABLED')">
+            <div v-if="status == 'yes'" class="fss_alert_info">
+                <p class="fss_alert_info__description" v-html="$t('__TELEGRAM_NOTIFICATION_ENABLED')">
                 </p>
-                <p>{{ $t('Receiver\'s Telegram Username: ') }}@{{ receiver.username }}</p>
-                <p>
-                    <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" size="mini"
-                               type="text">{{ $t('Send Test Message') }}
-                    </el-button>
-                    <el-button v-loading="disconnecting" @click="disconnect()" style="float: right;" size="mini"
-                               type="text">{{ $t('Disconnect') }}
-                    </el-button>
-                </p>
+                <p class="fss_alert_info__details">{{ $t('Receiver\'s Telegram Username: ') }}@{{ receiver.username }}</p>
+                <channel-actions
+                    :channel_key="'telegram'"
+                    :channel_title="channel_config.title || 'Telegram'"
+                />
             </div>
-            <div v-else>
-                <img style="max-height: 50px;" :src="`${appVars.images_url}tele.svg`"/>d
-                <h3>{{ $t('Telegram Connection Status: ') }}{{ status }}</h3>
-                <p>{{ $t('__TELE_RESPONSE_ERROR') }}</p>
-                <pre>{{errors}}</pre>
-                <p>
-                    <el-button @click="getInfo()" :disabled="sending_test" v-loading="sending_test" size="mini"
-                               type="text">
-                        {{ $t('Try Again') }}
-                    </el-button>
-                    <el-button v-loading="disconnecting" @click="disconnect()" style="float: right;" size="mini"
-                               type="text">{{ $t('Disconnect & Reconnect') }}
-                    </el-button>
-                </p>
+            <div v-else class="fss_alert_info">
+                <h3 class="fss_alert_info__title">{{ $t('Telegram Connection Status: ') }}{{ status }}</h3>
+                <p class="fss_alert_info__description">{{ $t('__TELE_RESPONSE_ERROR') }}</p>
+                <pre class="fss_alert_info__error-pre">{{errors}}</pre>
+                <div class="fss_alert_info__actions">
+                    <div class="fss_alert_info__actions__test-button">
+                        <el-button @click="getInfo()" :disabled="loading" v-loading="loading" type="primary" size="small">
+                            <i class="el-icon-refresh"></i> {{ $t('Try Again') }}
+                        </el-button>
+                    </div>
+                    <div class="fss_alert_info__actions__disconnect">
+                        <channel-actions
+                            :channel_key="'telegram'"
+                            :channel_title="channel_config.title || 'Telegram'"
+                            :disconnect_label="$t('Disconnect & Reconnect')"
+                            :show-test-button="false"
+                        />
+                    </div>
+                </div>
             </div>
         </template>
     </div>
 </template>
 
 <script type="text/babel">
+import ChannelActions from './_ChannelActions.vue';
+
 export default {
     name: 'TelegramConnectionInfo',
+    components: { ChannelActions },
+    props: {
+        channel_config: {
+            type: Object,
+            default: () => ({})
+        }
+    },
     data() {
         return {
             status: '',
             receiver: null,
             loading: false,
-            disconnecting: false,
-            sending_test: false,
             errors: null
         }
     },
@@ -67,40 +73,6 @@ export default {
                 })
                 .always(() => {
                     this.loading = false;
-                });
-        },
-        disconnect() {
-            this.$confirm(this.$t('Are you sure you want to disconnect Telegram notifications?'), 'Warning', {
-                confirmButtonText: this.$t('Yes, Disconnect'),
-                cancelButtonText: this.$t('Cancel'),
-                type: 'warning'
-            })
-                .then(() => {
-                    this.disconnecting = true;
-                    this.$post('settings/telegram/disconnect')
-                        .then((response) => {
-                            this.$notify.success(response.data.message);
-                            window.location.reload();
-                        })
-                        .catch((errors) => {
-                            this.$notify.error(errors.responseJSON.data.message);
-                        })
-                        .always(() => {
-                            this.disconnecting = false;
-                        });
-                });
-        },
-        sendTest() {
-            this.sending_test = true;
-            this.$post('settings/telegram/send-test')
-                .then((response) => {
-                    this.$notify.success(response.data.message);
-                })
-                .catch((errors) => {
-                    this.$notify.error(errors.responseJSON.data.message);
-                })
-                .always(() => {
-                    this.sending_test = false;
                 });
         }
     },

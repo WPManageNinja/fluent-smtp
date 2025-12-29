@@ -1,0 +1,138 @@
+// Alert Settings Styles
+.fluent-mail-app {
+  .fss_alert_settings {
+    // Header section
+    &__header {
+      margin-bottom: 20px;
+    }
+
+    &__back-button {
+      margin-bottom: 15px;
+    }
+
+    &__header-content {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    &__header-logo {
+      max-width: 40px;
+      max-height: 40px;
+    }
+
+    // Page title
+    &__title {
+      margin: 0;
+    }
+
+    // Intro text
+    &__intro {
+      margin-bottom: 20px;
+
+      &--compact {
+        margin-bottom: 15px;
+      }
+    }
+
+    // Form container
+    &__form {
+      margin-bottom: 15px;
+    }
+
+    // Privacy/disclaimer text
+    &__privacy-note {
+      margin-top: 15px;
+      color: #909399;
+      font-size: 13px;
+    }
+
+    // Section headings
+    &__section-title {
+      margin-bottom: 15px;
+    }
+
+    // Telegram pin step
+    &__pin-container {
+      font-size: 20px;
+      font-weight: bold;
+      padding: 10px;
+      margin: 15px 0;
+      background: rgb(248 250 252);
+      border-radius: 5px;
+      border: 2px dashed #e8d100;
+
+      &__copy-button {
+        float: right;
+        user-select: none;
+        font-size: 14px;
+        border: 1px solid #f0f0f1;
+        padding: 2px 10px;
+        line-height: 14px;
+        background: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  // Alert List Table
+  .fss_alert_list_table {
+    &__table {
+      width: 100%;
+    }
+
+    &__channel-cell {
+      display: flex;
+      align-items: center;
+    }
+
+    &__logo {
+      max-width: 30px;
+      max-height: 30px;
+      margin-right: 10px;
+    }
+  }
+
+  // Connection/Webhook Info Components
+  .fss_alert_info {
+    &__header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+
+      &-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+    }
+
+    &__title {
+      margin: 0;
+    }
+
+    &__description {
+      margin-bottom: 15px;
+    }
+
+    &__details {
+      margin-bottom: 20px;
+    }
+
+    &__actions {
+      margin-top: 25px;
+      margin-bottom: 0;
+      padding-top: 20px;
+      border-top: 1px solid #ebeef5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    &__error-pre {
+      margin-bottom: 20px;
+    }
+  }
+}

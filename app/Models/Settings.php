@@ -72,7 +72,6 @@ class Settings
 
         $settings['connections'] = $connections;
 
-
         if ($settings['mappings'] && $settings['connections']) {
             $validMappings = array_keys(Arr::get($settings, 'connections', []));
 
@@ -233,7 +232,7 @@ class Settings
             'enabled'        => 'no',
             'notify_email'   => '{site_admin}',
             'notify_days'    => ['Mon'],
-            'active_channel' => '',
+            'active_channel' => [],
             'telegram'       => [
                 'status' => 'no',
                 'token'  => ''
@@ -252,6 +251,18 @@ class Settings
 
         $settings = get_option('_fluent_smtp_notify_settings', []);
 
-        return wp_parse_args($settings, $defaults);
+        $settings = wp_parse_args($settings, $defaults);
+
+        if (!is_array($settings['active_channel'])) {
+            $settings['active_channel'] = array_filter([$settings['active_channel']]);
+        }
+
+        return $settings;
+    }
+
+    public function getAvailableNotificationChannels()
+    {
+        $manager = new \FluentMail\App\Services\Notification\Manager();
+        return $manager->getAllChannels();
     }
 }

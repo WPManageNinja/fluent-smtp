@@ -1,0 +1,28 @@
+{
+    "name": "wpmanageninja/fluent-smtp",
+    "description": "FluentSMTP - The Ultimate SMTP Plugin for WordPress",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "WPManageNinja",
+            "email": "contact_support@wpmanageninja.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "FluentMail\\App\\": "app/",
+            "FluentMail\\Includes\\": "includes/"
+        },
+        "exclude-from-classmap": [
+            "includes/libs/google-api-client/"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "szepeviktor/phpstan-wordpress": "^2.0"
+    }
+}

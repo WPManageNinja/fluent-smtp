@@ -4,6 +4,7 @@ namespace FluentMail\App\Services;
 
 use InvalidArgumentException;
 use FluentMail\App\Models\Settings;
+use FluentMail\App\Services\Notification\Manager as NotificationManager;
 use FluentMail\Includes\Support\Arr;
 
 class NotificationHelper
@@ -42,19 +43,22 @@ class NotificationHelper
         return self::sendTeleRequest('send-test', [], 'POST', $token);
     }
 
+    public static function sendTestPushoverMessage($apiToken, $userKey)
+    {
+        $message = __('This is a test message for ', 'fluent-smtp') . site_url() . '. ' .
+            __('If you get this message, then your site is connected successfully.', 'fluent-smtp');
+
+        return self::sendPushoverMessage($message, $apiToken, $userKey, true, 1);
+    }
+
     public static function disconnectTelegram($token)
     {
         self::sendTeleRequest('disconnect', [], 'POST', $token);
 
-        $settings = (new Settings())->notificationSettings();
-
-        $settings['telegram'] = [
+        self::updateChannelSettings('telegram', [
             'status' => 'no',
             'token'  => ''
-        ];
-        $settings['active_channel'] = '';
-
-        update_option('_fluent_smtp_notify_settings', $settings, false);
+        ]);
 
         return true;
     }
@@ -269,34 +273,54 @@ class NotificationHelper
         return json_decode($body, true);
     }
 
-    public static function getActiveChannelSettings()
+    public static function sendPushoverMessage($message, $apiToken, $userKey, $blocking = false, $priority = 1)
     {
-        static $channel = null;
+        $title = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), get_bloginfo('name'));
 
-        if ($channel !== null) {
-            return $channel;
+        $args = array(
+            'body'        => array(
+                'token'   => $apiToken,
+                'user'    => $userKey,
+                'message' => $message,
+                'title'   => $title,
+                'priority' => $priority,
+                'html'    => 1, // Enable HTML formatting
+            ),
+            'timeout'     => 60,
+            'redirection' => 5,
+            'blocking'    => true,
+            'httpversion' => '1.0',
+            'sslverify'   => true,
+        );
+
+        if (!$blocking) {
+            $args['blocking'] = false;
+            $args['timeout'] = 0.01;
         }
 
-        $settings = (new Settings())->notificationSettings();
+        $response = wp_remote_post('https://api.pushover.net/1/messages.json', $args);
 
-        $activeChannel = Arr::get($settings, 'active_channel', '');
-
-        if (!$activeChannel) {
-            $channel = false;
-            return $channel;
+        if (!$blocking) {
+            return true;
         }
 
-        $channelSettings = Arr::get($settings, $activeChannel, []);
-
-        if (!$channelSettings || empty($channelSettings['status']) || $channelSettings['status'] != 'yes') {
-            $channel = false;
-            return $channel;
+        if (is_wp_error($response)) {
+            return $response;
         }
 
-        $channel = $channelSettings;
-        $channel['driver'] = $activeChannel;
+        $responseCode = wp_remote_retrieve_response_code($response);
+        $body = wp_remote_retrieve_body($response);
+        $responseData = json_decode($body, true);
 
-        return $channel;
+        if ($responseCode !== 200 || empty($responseData['status']) || $responseData['status'] != 1) {
+            $errorMessage = __('Pushover API error', 'fluent-smtp');
+            if (!empty($responseData['errors'])) {
+                $errorMessage = is_array($responseData['errors']) ? implode(', ', $responseData['errors']) : $responseData['errors'];
+            }
+            return new \WP_Error('pushover_api_error', $errorMessage, $responseData);
+        }
+
+        return $responseData;
     }
 
     public static function formatSlackMessageBlock($handler, $logData = [])
@@ -388,6 +412,37 @@ class NotificationHelper
         return $content;
     }
 
+    public static function formatPushoverMessage($handler, $logData = [])
+    {
+        $sendingTo = self::unserialize(Arr::get($logData, 'to'));
+
+        if (is_array($sendingTo)) {
+            $sendingTo = Arr::get($sendingTo, '0.email', '');
+        }
+
+        if (is_array($sendingTo) || !$sendingTo) {
+            $sendingTo = Arr::get($logData, 'to');
+        }
+
+        $provider = strtoupper($handler->getSetting('provider'));
+        $subject = Arr::get($logData, 'subject');
+
+        $message = '<b>' . __('Website URL:', 'fluent-smtp') . '</b> ' . esc_html(site_url()) . "<br>";
+        $message .= '<b>' . __('Sending Driver:', 'fluent-smtp') . '</b> ' . esc_html($provider) . "<br>";
+        $message .= '<b>' . __('To Email Address:', 'fluent-smtp') . '</b> ' . esc_html($sendingTo) . "<br>";
+        $message .= '<b>' . __('Email Subject:', 'fluent-smtp') . '</b> ' . esc_html($subject) . "<br>";
+        $message .= '<b>' . __('Error Message:', 'fluent-smtp') . '</b><br>';
+        $message .= '<code>' . esc_html(self::getErrorMessageFromResponse(
+            self::unserialize(Arr::get($logData, 'response'))
+        )) . '</code><br>';
+        $logsUrl = admin_url(
+            'options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search='
+        );
+        $message .= '<a href="' . esc_url($logsUrl) . '">' . __('View Failed Email(s)', 'fluent-smtp') . '</a>';
+
+        return $message;
+    }
+
     public static function getErrorMessageFromResponse($response)
     {
         if (!$response || !is_array($response)) {
@@ -421,5 +476,33 @@ class NotificationHelper
         }
 
         return $data;
+    }
+
+    public static function updateChannelSettings($channelName, $channelSettings)
+    {
+        $settings = (new Settings())->notificationSettings();
+
+        $settings[$channelName] = $channelSettings;
+
+        $isActive = Arr::get($channelSettings, 'status') === 'yes' ? true : false;
+
+        $activeChannels = $settings['active_channel'];
+
+        if ($isActive) {
+            if (!in_array($channelName, $activeChannels)) {
+                $activeChannels[] = $channelName;
+            }
+        } else {
+            if (($key = array_search($channelName, $activeChannels)) !== false) {
+                unset($activeChannels[$key]);
+            }
+        }
+
+        $activeChannels = array_values($activeChannels);
+        $settings['active_channel'] = $activeChannels;
+
+        update_option('_fluent_smtp_notify_settings', $settings, false);
+
+        return true;
     }
 }
