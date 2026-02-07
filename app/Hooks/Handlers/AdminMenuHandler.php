@@ -77,13 +77,12 @@ class AdminMenuHandler
             <div
                 style="background-color: #fff;border: 1px solid #dcdcde;box-sizing: border-box;padding: 20px;margin: 15px 0;"
                 class="fluent_smtp_box">
-                <h3 style="margin: 0;"><?php __('For SMTP, you already have FluentSMTP Installed', 'fluent-smtp'); ?></h3>
-                <p><?php __('You seem to be looking for an SMTP plugin, but there\'s no need for another one — FluentSMTP is already installed on your site. FluentSMTP is a comprehensive, free, and open-source plugin with full features available without any upsell', 'fluent-smtp'); ?>
-                    (<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/"><?php __('learn why it\'s free', 'fluent-smtp'); ?></a>)<?php __('. It\'s compatible with various SMTP services, including Amazon SES, SendGrid, MailGun, ElasticEmail, SendInBlue, Google, Microsoft, and others, providing you with a wide range of options for your email needs.', 'fluent-smtp'); ?>
+                <h3 style="margin: 0;"><?php esc_html_e('For SMTP, you already have FluentSMTP Installed', 'fluent-smtp'); ?></h3>
+                <p><?php esc_html_e('You seem to be looking for an SMTP plugin, but there\'s no need for another one — FluentSMTP is already installed on your site. FluentSMTP is a comprehensive, free, and open-source plugin with full features available without any upsell', 'fluent-smtp'); ?>
+                    (<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/"><?php esc_html_e('learn why it\'s free', 'fluent-smtp'); ?></a>)<?php esc_html_e('. It\'s compatible with various SMTP services, including Amazon SES, SendGrid, MailGun, ElasticEmail, SendInBlue, Google, Microsoft, and others, providing you with a wide range of options for your email needs.', 'fluent-smtp'); ?>
                 </p><a href="<?php echo esc_url(admin_url('options-general.php?page=fluent-mail#/')); ?>"
-                       class="wp-core-ui button button-primary"><?php __('Go To FluentSMTP Settings', 'fluent-smtp'); ?></a>
-                <p style="font-size: 80%; margin: 15px 0 0;"><?php __('This notice is from FluentSMTP plugin to prevent plugin
-                    conflict.', 'fluent-smtp') ?></p>
+                       class="wp-core-ui button button-primary"><?php esc_html_e('Go To FluentSMTP Settings', 'fluent-smtp'); ?></a>
+                <p style="font-size: 80%; margin: 15px 0 0;"><?php esc_html_e('This notice is from FluentSMTP plugin to prevent plugin conflict.', 'fluent-smtp'); ?></p>
             </div>
             <?php
         }, 1);
@@ -434,9 +433,9 @@ class AdminMenuHandler
             <tbody>
             <?php foreach ($stats as $stat): ?>
                 <tr>
-                    <td><?php echo $stat['title']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
-                    <td><?php echo $stat['sent']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
-                    <td class="<?php echo ($stat['failed']) ? 'fstmp_failed' : ''; ?>"><?php echo $stat['failed']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
+                    <td><?php echo esc_html($stat['title']); ?></td>
+                    <td><?php echo absint($stat['sent']); ?></td>
+                    <td class="<?php echo absint($stat['failed']) ? 'fstmp_failed' : ''; ?>"><?php echo absint($stat['failed']); ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>

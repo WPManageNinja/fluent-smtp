@@ -31,40 +31,51 @@ class DashboardController extends Controller
     {
         $this->verify();
 
+        // Validate and sanitize input with absint() and constrain to reasonable range
         $lastDay = 0;
         if (isset($_REQUEST['last_day'])) {
-            $lastDay = (int)$_REQUEST['last_day'];
+            $lastDay = absint($_REQUEST['last_day']);
+            // Constrain to reasonable range: 0-365 days
+            $lastDay = min(max($lastDay, 0), 365);
         }
 
         global $wpdb;
+        $tableName = $wpdb->prefix . 'fsmpt_email_logs';
+
         if ($lastDay > 6) {
-            $results = $wpdb->get_results("SELECT
-  DAYNAME(created_at) AS day_of_week,
-  HOUR(created_at) AS hour_of_day,
-  COUNT(*) AS count
-FROM
-  {$wpdb->prefix}fsmpt_email_logs
-WHERE
-  created_at >= NOW() - INTERVAL {$lastDay} DAY
-GROUP BY
-  DAYNAME(created_at),
-  HOUR(created_at)
-ORDER BY
-  FIELD(DAYNAME(created_at), 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
-  HOUR(created_at)");
+            // Use wpdb->prepare() with proper placeholder for the interval value
+            $results = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT
+                        DAYNAME(created_at) AS day_of_week,
+                        HOUR(created_at) AS hour_of_day,
+                        COUNT(*) AS count
+                    FROM {$tableName}
+                    WHERE created_at >= NOW() - INTERVAL %d DAY
+                    GROUP BY
+                        DAYNAME(created_at),
+                        HOUR(created_at)
+                    ORDER BY
+                        FIELD(DAYNAME(created_at), 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
+                        HOUR(created_at)",
+                    $lastDay
+                )
+            );
         } else {
-            $results = $wpdb->get_results("SELECT
-  DAYNAME(created_at) AS day_of_week,
-  HOUR(created_at) AS hour_of_day,
-  COUNT(*) AS count
-FROM
-  {$wpdb->prefix}fsmpt_email_logs
-GROUP BY
-  DAYNAME(created_at),
-  HOUR(created_at)
-ORDER BY
-  FIELD(DAYNAME(created_at), 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
-  HOUR(created_at)");
+            // Query for all time data when lastDay <= 6
+            $results = $wpdb->get_results(
+                "SELECT
+                    DAYNAME(created_at) AS day_of_week,
+                    HOUR(created_at) AS hour_of_day,
+                    COUNT(*) AS count
+                FROM {$tableName}
+                GROUP BY
+                    DAYNAME(created_at),
+                    HOUR(created_at)
+                ORDER BY
+                    FIELD(DAYNAME(created_at), 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
+                    HOUR(created_at)"
+            );
         }
 
         // Assuming $results is the array of records fetched from the database.

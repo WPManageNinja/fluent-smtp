@@ -891,7 +891,7 @@ function fluentMailFuncCouldNotBeLoadedRecheckPluginsLoad()
                 disable it for <strong>FluentSMTP</strong> to work!</p>
             <p style="color: red;">
                 <?php esc_html_e('Possible Conflict: ', 'fluent-smtp'); ?>
-                <?php echo $hints; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+                <?php echo esc_html($hints); ?>
             </p>
         </div>
         <?php
