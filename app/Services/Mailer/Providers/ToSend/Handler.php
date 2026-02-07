@@ -142,15 +142,13 @@ class Handler extends BaseHandler
                 return null;
             }
 
-            $name = Arr::get($replyTo, 'name', '');
-
-            if ($name) {
-                return $name . ' <' . $replyTo['email'] . '>';
-            }
-
-            return $replyTo['email'];
+            return [
+                'name'  => Arr::get($replyTo, 'name', ''),
+                'email' => $replyTo['email']
+            ];
         }
-        return '';
+
+        return null;
     }
 
     protected function getTo()
