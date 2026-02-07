@@ -63,6 +63,8 @@ class DashboardController extends Controller
             );
         } else {
             // Query for all time data when lastDay <= 6
+            // Table name is safe - constructed from WordPress prefix and plugin constant
+            // No user input in this query, so prepare() is not needed
             $results = $wpdb->get_results(
                 "SELECT
                     DAYNAME(created_at) AS day_of_week,

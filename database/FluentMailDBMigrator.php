@@ -14,7 +14,10 @@ class FluentMailDBMigrator
                 $site_ids = get_sites(['fields' => 'ids', 'network_id' => get_current_network_id(), 'number' => 0]);
             } else {
                 $site_ids = $wpdb->get_col(
-                    "SELECT blog_id FROM $wpdb->blogs WHERE site_id = $wpdb->siteid;"
+                    $wpdb->prepare(
+                        "SELECT blog_id FROM $wpdb->blogs WHERE site_id = %d",
+                        $wpdb->siteid
+                    )
                 );
             }
 

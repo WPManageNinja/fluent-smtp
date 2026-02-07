@@ -32,12 +32,17 @@ class Reporting
 
         // Build dynamic SELECT clause based on groupBy parameter
         // to ensure the selected columns match the GROUP BY clause
-        $selectClause = 'COUNT(id) AS count, DATE(created_at) AS date';
-
+        // Use MIN(DATE()) for ONLY_FULL_GROUP_BY compliance
         if ($groupBy === 'week') {
-            $selectClause .= ', WEEK(created_at) AS week';
+            // Use YEARWEEK to prevent merging weeks across different years
+            // Mode 1 ensures weeks start on Monday (ISO 8601 standard)
+            $selectClause = 'COUNT(id) AS count, MIN(DATE(created_at)) AS date, YEARWEEK(created_at, 1) AS week';
         } elseif ($groupBy === 'month') {
-            $selectClause .= ', MONTH(created_at) AS month';
+            // Use YYYY-MM format to prevent merging months across different years
+            $selectClause = "COUNT(id) AS count, MIN(DATE(created_at)) AS date, DATE_FORMAT(created_at, '%Y-%m') AS month";
+        } else {
+            // Default: group by date (daily stats)
+            $selectClause = 'COUNT(id) AS count, DATE(created_at) AS date';
         }
 
         // Only parameterize data values (dates), NOT table/column names

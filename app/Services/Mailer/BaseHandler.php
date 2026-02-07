@@ -489,18 +489,52 @@ class BaseHandler
             '/dev/',
             '/root/',
             ABSPATH . 'wp-config.php',
+            dirname(ABSPATH) . '/wp-config.php',  // WordPress often stores wp-config.php one level up
             ABSPATH . '.htaccess',
         ];
 
         // Allow developers to customize blocked paths via filter
         $blockedPaths = apply_filters('fluentsmtp_attachment_blocked_paths', $blockedPaths);
 
+        // Validate filter return to prevent fatal errors
+        if (!is_array($blockedPaths)) {
+            $blockedPaths = [];
+        } else {
+            // Ensure all entries are strings
+            $blockedPaths = array_values(array_filter($blockedPaths, 'is_string'));
+        }
+
         foreach ($blockedPaths as $blockedPath) {
             $blockedRealPath = realpath($blockedPath);
-            if ($blockedRealPath && strpos($realPath, $blockedRealPath) === 0) {
+
+            if (!$blockedRealPath) {
+                continue;
+            }
+
+            // Normalize the blocked path (remove trailing separators)
+            $normalizedBlocked = rtrim($blockedRealPath, DIRECTORY_SEPARATOR);
+
+            if ($normalizedBlocked === '') {
+                continue;
+            }
+
+            // Check for exact match (both files and directories)
+            if ($realPath === $normalizedBlocked) {
                 throw new Exception(
                     __('Access to this file location is restricted for security reasons', 'fluent-smtp')
                 );
+            }
+
+            // If blocked path is a directory, block any files within it
+            // Use DIRECTORY_SEPARATOR to ensure proper path boundary checking
+            if (is_dir($normalizedBlocked)) {
+                $blockedDirPrefix = $normalizedBlocked . DIRECTORY_SEPARATOR;
+
+                if (strpos($realPath, $blockedDirPrefix) === 0) {
+                    throw new Exception(
+                        __('Access to this file location is restricted for security reasons', 'fluent-smtp')
+                    );
+                }
             }
         }
 
