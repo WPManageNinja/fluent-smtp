@@ -30,11 +30,21 @@ class Reporting
         // Table name is safe - constructed from constants and WordPress prefix
         $tableName = $wpdb->prefix . FLUENT_MAIL_DB_PREFIX . 'email_logs';
 
+        // Build dynamic SELECT clause based on groupBy parameter
+        // to ensure the selected columns match the GROUP BY clause
+        $selectClause = 'COUNT(id) AS count, DATE(created_at) AS date';
+
+        if ($groupBy === 'week') {
+            $selectClause .= ', WEEK(created_at) AS week';
+        } elseif ($groupBy === 'month') {
+            $selectClause .= ', MONTH(created_at) AS month';
+        }
+
         // Only parameterize data values (dates), NOT table/column names
         // Column names are validated above against whitelist
         $items = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT COUNT(id) AS count, DATE(created_at) AS date
+                "SELECT {$selectClause}
                  FROM `{$tableName}`
                  WHERE `created_at` BETWEEN %s AND %s
                  GROUP BY `{$groupBy}`

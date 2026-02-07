@@ -451,7 +451,7 @@ class BaseHandler
      * Securely read file contents with path traversal protection
      *
      * @param string $filePath The file path to read
-     * @return string|false File contents on success, false on failure
+     * @return string File contents on success
      * @throws Exception If path validation fails or file cannot be read
      */
     protected function secureFileRead($filePath)
@@ -478,6 +478,30 @@ class BaseHandler
             throw new Exception(
                 sprintf(__('File is not readable: %s', 'fluent-smtp'), esc_html($realPath))
             );
+        }
+
+        // Security check: Block access to sensitive system directories
+        // This prevents reading sensitive files while allowing plugin/theme attachments
+        $blockedPaths = [
+            '/etc/',
+            '/proc/',
+            '/sys/',
+            '/dev/',
+            '/root/',
+            ABSPATH . 'wp-config.php',
+            ABSPATH . '.htaccess',
+        ];
+
+        // Allow developers to customize blocked paths via filter
+        $blockedPaths = apply_filters('fluentsmtp_attachment_blocked_paths', $blockedPaths);
+
+        foreach ($blockedPaths as $blockedPath) {
+            $blockedRealPath = realpath($blockedPath);
+            if ($blockedRealPath && strpos($realPath, $blockedRealPath) === 0) {
+                throw new Exception(
+                    __('Access to this file location is restricted for security reasons', 'fluent-smtp')
+                );
+            }
         }
 
         // Read and return file contents
