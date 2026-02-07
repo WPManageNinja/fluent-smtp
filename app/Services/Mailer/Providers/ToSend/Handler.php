@@ -70,9 +70,9 @@ class Handler extends BaseHandler
         }
 
         $args = array(
-            'headers'   => $this->getRequestHeaders(),
-            'body'      => json_encode($body),
-            'sslverify' => false
+            'headers' => $this->getRequestHeaders(),
+            'body'    => json_encode($body),
+            'timeout' => 10
         );
 
         $response = wp_remote_post($this->baseUrl . 'emails', $args);
@@ -287,7 +287,7 @@ class Handler extends BaseHandler
                 'verified_senders'      => $validSenders['verified_senders'],
                 'verified_domain'       => $validSenders['verified_domain'],
                 'supports_multi_domain' => $hasMultiDomain,
-                'api_info'   => $stats,
+                'api_info'              => $stats,
                 'email_help_message'    => $hasMultiDomain ? __('Make sure to verify your sender emails or domain in toSend dashboard and available in the provided API Key.', 'fluent-smtp') : ''
             ]
         ];
