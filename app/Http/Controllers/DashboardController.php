@@ -63,7 +63,7 @@ class DashboardController extends Controller
             );
         } else {
             // Query for all time data when lastDay <= 6
-            // Table name is safe - constructed from WordPress prefix and plugin constant
+            // Table name is safe - constructed from WordPress prefix and hard-coded table suffix
             // No user input in this query, so prepare() is not needed
             $results = $wpdb->get_results(
                 "SELECT

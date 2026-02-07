@@ -17,7 +17,8 @@ class EmailLogs
 
         $table = $wpdb->prefix . FLUENT_MAIL_DB_PREFIX.'email_logs';
 
-        if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table)) != $table) {
+        // Escape table name for LIKE to prevent _ and % from being treated as wildcards
+        if ($wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $wpdb->esc_like($table))) != $table) {
             $sql = "CREATE TABLE $table (
                 `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `site_id` INT UNSIGNED NULL,

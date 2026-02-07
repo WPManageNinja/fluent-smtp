@@ -32,14 +32,17 @@ class Reporting
 
         // Build dynamic SELECT clause based on groupBy parameter
         // to ensure the selected columns match the GROUP BY clause
-        // Use MIN(DATE()) for ONLY_FULL_GROUP_BY compliance
+        // Use deterministic bucket dates that align with DatePeriod for ONLY_FULL_GROUP_BY compliance
         if ($groupBy === 'week') {
             // Use YEARWEEK to prevent merging weeks across different years
             // Mode 1 ensures weeks start on Monday (ISO 8601 standard)
-            $selectClause = 'COUNT(id) AS count, MIN(DATE(created_at)) AS date, YEARWEEK(created_at, 1) AS week';
+            // Use Monday of each week as deterministic bucket date for alignment with DatePeriod
+            $selectClause = 'COUNT(id) AS count, DATE(DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) DAY)) AS date, YEARWEEK(created_at, 1) AS week';
         } elseif ($groupBy === 'month') {
             // Use YYYY-MM format to prevent merging months across different years
-            $selectClause = "COUNT(id) AS count, MIN(DATE(created_at)) AS date, DATE_FORMAT(created_at, '%Y-%m') AS month";
+            // Use first day of month as deterministic bucket date for alignment with DatePeriod
+            // Note: %% escapes % for wpdb->prepare() - will become single % in final SQL
+            $selectClause = "COUNT(id) AS count, DATE_FORMAT(created_at, '%%Y-%%m-01') AS date, DATE_FORMAT(created_at, '%%Y-%%m') AS month";
         } else {
             // Default: group by date (daily stats)
             $selectClause = 'COUNT(id) AS count, DATE(created_at) AS date';
