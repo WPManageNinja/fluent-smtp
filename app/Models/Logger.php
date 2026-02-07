@@ -446,18 +446,9 @@ class Logger extends Model
 
     public function getStats()
     {
-        $succeeded = $this->db->get_var(
-            $this->db->prepare(
-                "SELECT COUNT(id) FROM {$this->table} WHERE status = %s",
-                'sent'
-            )
-        );
-        $failed = $this->db->get_var(
-            $this->db->prepare(
-                "SELECT COUNT(id) FROM {$this->table} WHERE status = %s",
-                'failed'
-            )
-        );
+        // Status values are hardcoded, no need for prepare()
+        $succeeded = $this->db->get_var("SELECT COUNT(id) FROM {$this->table} WHERE status = 'sent'");
+        $failed = $this->db->get_var("SELECT COUNT(id) FROM {$this->table} WHERE status = 'failed'");
 
         return [
             'sent'   => $succeeded,
@@ -525,11 +516,8 @@ class Logger extends Model
 
     public function getSubjectStat($status, $statDate, $endDate, $limit = 5)
     {
-        // Sanitize limit to ensure it's a positive integer
-        $limit = absint($limit);
-        if ($limit <= 0) {
-            $limit = 5;
-        }
+        // Sanitize and validate limit as positive integer
+        $limit = max(1, absint($limit)) ?: 5;
 
         $query = $this->db->prepare(
             "SELECT subject,

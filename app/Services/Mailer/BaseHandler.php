@@ -506,35 +506,10 @@ class BaseHandler
 
         foreach ($blockedPaths as $blockedPath) {
             $blockedRealPath = realpath($blockedPath);
-
-            if (!$blockedRealPath) {
-                continue;
-            }
-
-            // Normalize the blocked path (remove trailing separators)
-            $normalizedBlocked = rtrim($blockedRealPath, DIRECTORY_SEPARATOR);
-
-            if ($normalizedBlocked === '') {
-                continue;
-            }
-
-            // Check for exact match (both files and directories)
-            if ($realPath === $normalizedBlocked) {
+            if ($blockedRealPath && strpos($realPath, $blockedRealPath) === 0) {
                 throw new Exception(
                     __('Access to this file location is restricted for security reasons', 'fluent-smtp')
                 );
-            }
-
-            // If blocked path is a directory, block any files within it
-            // Use DIRECTORY_SEPARATOR to ensure proper path boundary checking
-            if (is_dir($normalizedBlocked)) {
-                $blockedDirPrefix = $normalizedBlocked . DIRECTORY_SEPARATOR;
-
-                if (strpos($realPath, $blockedDirPrefix) === 0) {
-                    throw new Exception(
-                        __('Access to this file location is restricted for security reasons', 'fluent-smtp')
-                    );
-                }
             }
         }
 
