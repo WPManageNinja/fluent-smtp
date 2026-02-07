@@ -29,7 +29,7 @@
         <?php endif; ?>
         <tr>
             <th><?php esc_html_e('Sender Email', 'fluent-smtp') ?></th>
-            <td><?php echo $connection['sender_email']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
+            <td><?php echo esc_html($connection['sender_email']); ?></td>
         </tr>
         <tr>
             <th><?php esc_html_e('Sender Name', 'fluent-smtp') ?></th>

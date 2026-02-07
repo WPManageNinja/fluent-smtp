@@ -166,16 +166,23 @@ class Handler extends BaseHandler
 
         foreach ($this->getParam('attachments') as $attachment) {
             $file = false;
+            $fileName = null;
+            $filetype = null;
+            $contentId = null;
 
             try {
-                if (is_file($attachment[0]) && is_readable($attachment[0])) {
-                    $fileName = basename($attachment[0]);
-                    $contentId = wp_hash($attachment[0]);
-                    $file = file_get_contents($attachment[0]);
-                    $mimeType = mime_content_type($attachment[0]);
-                    $filetype = str_replace(';', '', trim($mimeType));
-                }
+                // Use secure file reading with path traversal protection
+                $file = $this->secureFileRead($attachment[0]);
+                $fileName = basename($attachment[0]);
+                $contentId = wp_hash($attachment[0]);
+
+                // Get MIME type from the validated real path
+                $realPath = realpath($attachment[0]);
+                $mimeType = mime_content_type($realPath);
+                $filetype = str_replace(';', '', trim($mimeType));
             } catch (\Exception $e) {
+                // Log error and skip this attachment
+                error_log('FluentSMTP: Failed to read attachment - ' . $e->getMessage());
                 $file = false;
             }
 

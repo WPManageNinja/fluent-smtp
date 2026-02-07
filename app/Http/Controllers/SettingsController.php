@@ -296,7 +296,34 @@ class SettingsController extends Controller
     public function installPlugin(Request $request)
     {
         $this->verify();
-        $pluginSlug = $request->get('plugin_slug');
+
+        // Sanitize plugin slug input
+        $pluginSlug = sanitize_key($request->get('plugin_slug'));
+
+        // Define whitelist of allowed plugins
+        $allowedPlugins = ['fluentform', 'fluent-crm', 'ninja-tables'];
+
+        // Validate plugin slug against whitelist with strict comparison
+        if (!in_array($pluginSlug, $allowedPlugins, true)) {
+            return $this->sendError([
+                'message' => __('Invalid plugin specified. Only approved plugins can be installed.', 'fluent-smtp')
+            ]);
+        }
+
+        // Verify user has permission to install plugins
+        if (!current_user_can('install_plugins')) {
+            return $this->sendError([
+                'message' => __('Sorry, you do not have permission to install plugins.', 'fluent-smtp')
+            ]);
+        }
+
+        // Verify file modifications are allowed
+        if (!wp_is_file_mod_allowed('install_plugins')) {
+            return $this->sendError([
+                'message' => __('Plugin installation is disabled on this site.', 'fluent-smtp')
+            ]);
+        }
+
         $plugin = [
             'name'      => $pluginSlug,
             'repo-slug' => $pluginSlug,
@@ -318,20 +345,14 @@ class SettingsController extends Controller
             ]
         ];
 
-        if (!isset($UrlMaps[$pluginSlug]) || !wp_is_file_mod_allowed('install_plugins')) {
-            $this->sendError([
-                'message' => __('Sorry, You can not install this plugin', 'fluent-smtp')
-            ]);
-        }
-
         try {
             $this->backgroundInstaller($plugin);
-            $this->send([
+            return $this->send([
                 'message' => __('Plugin has been successfully installed.', 'fluent-smtp'),
                 'info'    => $UrlMaps[$pluginSlug]
             ]);
         } catch (\Exception $exception) {
-            $this->sendError([
+            return $this->sendError([
                 'message' => $exception->getMessage()
             ]);
         }
@@ -453,23 +474,23 @@ class SettingsController extends Controller
     public function subscribe()
     {
         $this->verify();
-        $email = sanitize_text_field($_REQUEST['email']); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-        $displayName = '';
+        // Properly sanitize email input with sanitize_email() instead of sanitize_text_field()
+        $email = isset($_REQUEST['email']) ? sanitize_email($_REQUEST['email']) : '';
 
-        if (isset($_REQUEST['display_name'])) {
-            $displayName = sanitize_text_field($_REQUEST['display_name']);
-        }
+        // Sanitize display name
+        $displayName = isset($_REQUEST['display_name']) ? sanitize_text_field($_REQUEST['display_name']) : '';
 
+        // Validate email format
         if (!is_email($email)) {
             return $this->sendError([
-                'message' => __('Sorry! The provider email is not valid', 'fluent-smtp')
+                'message' => __('Sorry! The provided email is not valid', 'fluent-smtp')
             ], 422);
         }
 
+        // Properly validate share_essentials with isset() check and strict comparison
         $shareEssentials = 'no';
-
-        if ($_REQUEST['share_essentials'] == 'yes') {
+        if (isset($_REQUEST['share_essentials']) && $_REQUEST['share_essentials'] === 'yes') {
             update_option('_fluentsmtp_sub_update', 'shared', 'no');
             $shareEssentials = 'yes';
         } else {

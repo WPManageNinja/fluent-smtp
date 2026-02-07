@@ -447,4 +447,49 @@ class BaseHandler
         return new \WP_Error('not_implemented', __('Not implemented', 'fluent-smtp'));
     }
 
+    /**
+     * Securely read file contents with path traversal protection
+     *
+     * @param string $filePath The file path to read
+     * @return string|false File contents on success, false on failure
+     * @throws Exception If path validation fails or file cannot be read
+     */
+    protected function secureFileRead($filePath)
+    {
+        // Resolve the real path to prevent path traversal attacks
+        $realPath = realpath($filePath);
+
+        // Validate that realpath returned a valid path
+        if ($realPath === false) {
+            throw new Exception(
+                sprintf(__('Invalid file path: %s', 'fluent-smtp'), esc_html($filePath))
+            );
+        }
+
+        // Verify it's actually a file (not a directory)
+        if (!is_file($realPath)) {
+            throw new Exception(
+                sprintf(__('Path is not a file: %s', 'fluent-smtp'), esc_html($realPath))
+            );
+        }
+
+        // Verify the file is readable
+        if (!is_readable($realPath)) {
+            throw new Exception(
+                sprintf(__('File is not readable: %s', 'fluent-smtp'), esc_html($realPath))
+            );
+        }
+
+        // Read and return file contents
+        $contents = file_get_contents($realPath);
+
+        if ($contents === false) {
+            throw new Exception(
+                sprintf(__('Failed to read file: %s', 'fluent-smtp'), esc_html($realPath))
+            );
+        }
+
+        return $contents;
+    }
+
 }

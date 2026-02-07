@@ -17,18 +17,32 @@ class Reporting
 
         list($groupBy, $orderBy) = $this->getGroupAndOrder($frequency);
 
+        // Validate column names against whitelist to prevent SQL injection
+        $allowedColumns = ['date', 'week', 'month'];
+        if (!in_array($groupBy, $allowedColumns, true) || !in_array($orderBy, $allowedColumns, true)) {
+            // Fallback to safe default if validation fails
+            $groupBy = 'date';
+            $orderBy = 'date';
+        }
+
         global $wpdb;
 
-        $tableName = $wpdb->prefix.FLUENT_MAIL_DB_PREFIX.'email_logs';
+        // Table name is safe - constructed from constants and WordPress prefix
+        $tableName = $wpdb->prefix . FLUENT_MAIL_DB_PREFIX . 'email_logs';
 
-        $items = $wpdb->get_results($wpdb->prepare(
-            'SELECT COUNT(id) AS count, DATE(created_at) AS date FROM `%1$s` WHERE `created_at` BETWEEN \'%2$s\' AND \'%3$s\' GROUP BY `%4$s` ORDER BY `%5$s` ASC',
-            $tableName,
-            $from->format('Y-m-d'),
-            $to->format('Y-m-d'),
-            $groupBy,
-            $orderBy
-        ));
+        // Only parameterize data values (dates), NOT table/column names
+        // Column names are validated above against whitelist
+        $items = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT COUNT(id) AS count, DATE(created_at) AS date
+                 FROM `{$tableName}`
+                 WHERE `created_at` BETWEEN %s AND %s
+                 GROUP BY `{$groupBy}`
+                 ORDER BY `{$orderBy}` ASC",
+                $from->format('Y-m-d'),
+                $to->format('Y-m-d')
+            )
+        );
 
         return $this->getResult($period, $items);
     }
