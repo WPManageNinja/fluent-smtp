@@ -240,6 +240,8 @@ class Logger extends Model
     public function delete(array $id)
     {
         if ($id && $id[0] == 'all') {
+            // TRUNCATE doesn't support parameterization
+            // Table name is safe - constructed from constants in __construct()
             return $this->db->query("TRUNCATE TABLE {$this->table}");
         }
 
@@ -444,8 +446,9 @@ class Logger extends Model
 
     public function getStats()
     {
-        $succeeded = $this->db->get_var("select COUNT(id) from {$this->table} where status='sent'");
-        $failed = $this->db->get_var("select COUNT(id) from {$this->table} where status='failed'");
+        // Status values are hardcoded, no need for prepare()
+        $succeeded = $this->db->get_var("SELECT COUNT(id) FROM {$this->table} WHERE status = 'sent'");
+        $failed = $this->db->get_var("SELECT COUNT(id) FROM {$this->table} WHERE status = 'failed'");
 
         return [
             'sent'   => $succeeded,
@@ -513,6 +516,9 @@ class Logger extends Model
 
     public function getSubjectStat($status, $statDate, $endDate, $limit = 5)
     {
+        // Sanitize and validate limit as positive integer
+        $limit = max(1, absint($limit)) ?: 5;
+
         $query = $this->db->prepare(
             "SELECT subject,
 			COUNT(DISTINCT id) AS emails_sent
@@ -522,10 +528,11 @@ class Logger extends Model
 			AND status = %s
 			GROUP BY subject
 			ORDER BY emails_sent DESC
-			LIMIT {$limit}",
+			LIMIT %d",
             $statDate,
             $endDate,
-            $status
+            $status,
+            $limit
         );
 
         return $this->db->get_results($query, ARRAY_A);

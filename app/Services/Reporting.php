@@ -30,11 +30,29 @@ class Reporting
         // Table name is safe - constructed from constants and WordPress prefix
         $tableName = $wpdb->prefix . FLUENT_MAIL_DB_PREFIX . 'email_logs';
 
+        // Build dynamic SELECT clause based on groupBy parameter
+        // to ensure the selected columns match the GROUP BY clause
+        // Use deterministic bucket dates that align with DatePeriod for ONLY_FULL_GROUP_BY compliance
+        if ($groupBy === 'week') {
+            // Use YEARWEEK to prevent merging weeks across different years
+            // Mode 1 ensures weeks start on Monday (ISO 8601 standard)
+            // Use Monday of each week as deterministic bucket date for alignment with DatePeriod
+            $selectClause = 'COUNT(id) AS count, DATE(DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) DAY)) AS date, YEARWEEK(created_at, 1) AS week';
+        } elseif ($groupBy === 'month') {
+            // Use YYYY-MM format to prevent merging months across different years
+            // Use first day of month as deterministic bucket date for alignment with DatePeriod
+            // Note: %% escapes % for wpdb->prepare() - will become single % in final SQL
+            $selectClause = "COUNT(id) AS count, DATE_FORMAT(created_at, '%%Y-%%m-01') AS date, DATE_FORMAT(created_at, '%%Y-%%m') AS month";
+        } else {
+            // Default: group by date (daily stats)
+            $selectClause = 'COUNT(id) AS count, DATE(created_at) AS date';
+        }
+
         // Only parameterize data values (dates), NOT table/column names
         // Column names are validated above against whitelist
         $items = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT COUNT(id) AS count, DATE(created_at) AS date
+                "SELECT {$selectClause}
                  FROM `{$tableName}`
                  WHERE `created_at` BETWEEN %s AND %s
                  GROUP BY `{$groupBy}`
