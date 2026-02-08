@@ -187,20 +187,20 @@ export default {
                 connection_key: this.connection_key
             })
                 .then(response => {
-                    this.$notify.success(response.data.message);
-                    this.$set(this.settings, 'connections', response.data.connections);
-                    this.$set(this.settings, 'mappings', response.data.mappings);
-                    this.$set(this.settings, 'misc', response.data.misc);
+                    this.$notify.success(response.message);
+                    this.$set(this.settings, 'connections', response.connections);
+                    this.$set(this.settings, 'mappings', response.mappings);
+                    this.$set(this.settings, 'misc', response.misc);
                     this.$router.push({
                         name: 'connections'
                     });
                 })
-                .fail((error) => {
+                .catch((error) => {
                     this.errors.record(error.responseJSON.data);
                     this.api_error = error.responseJSON.data.api_error;
                     this.has_error = true;
                 })
-                .always(() => {
+                .finally(() => {
                     this.saving = false;
                 });
         }

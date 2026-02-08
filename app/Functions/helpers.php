@@ -919,3 +919,4 @@ function fluentMailSendMultiPartText()
     $settings = fluentMailGetSettings();
     return isset($settings['misc']['send_as_text']) && $settings['misc']['send_as_text'] == 'yes';
 }
+

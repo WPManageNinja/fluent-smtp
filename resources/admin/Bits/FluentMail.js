@@ -2,6 +2,8 @@ import Vue from 'vue';
 import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
 
+import Rest from '../Bits/Rest.js';
+
 import {
     Tag,
     Row,
@@ -175,18 +177,12 @@ export default class FluentMail {
         return window.jQuery[method](window.ajaxurl, options);
     }
 
-    $get(url, options = {}) {
-        options.action = this.appVars.slug + '-get-' + url;
-        options.nonce = this.appVars.nonce;
-        return window.FluentMail.request('get', options);
+    $get(url, data = {}) {
+        return Rest.get(url, data);
     }
 
-    $post(url, options = {}) {
-        options.action = this.appVars.slug + '-post-' + url;
-
-        options.nonce = this.appVars.nonce;
-
-        return window.FluentMail.request('post', options);
+    $post(url, data = {}) {
+        return Rest.post(url, data);
     }
 
     dateFormat(date, format) {

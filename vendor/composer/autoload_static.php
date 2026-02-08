@@ -117,6 +117,7 @@ class ComposerStaticInit9b719a7d374be78de74c2068943692fe
         'FluentMail\\App\\Services\\NotificationHelper' => __DIR__ . '/../..' . '/app/Services/NotificationHelper.php',
         'FluentMail\\App\\Services\\Notification\\Manager' => __DIR__ . '/../..' . '/app/Services/Notification/Manager.php',
         'FluentMail\\App\\Services\\Reporting' => __DIR__ . '/../..' . '/app/Services/Reporting.php',
+        'FluentMail\\App\\Services\\Router' => __DIR__ . '/../..' . '/app/Services/Router.php',
         'FluentMail\\App\\Services\\TransStrings' => __DIR__ . '/../..' . '/app/Services/TransStrings.php',
         'FluentMail\\Includes\\Activator' => __DIR__ . '/../..' . '/includes/Activator.php',
         'FluentMail\\Includes\\Core\\Application' => __DIR__ . '/../..' . '/includes/Core/Application.php',

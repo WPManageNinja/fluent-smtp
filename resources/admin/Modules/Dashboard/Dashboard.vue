@@ -41,7 +41,9 @@
                                     :end-placeholder="$t('End date')"
                                     value-format="yyyy-MM-dd"
                                 ></el-date-picker>
-                                <el-button style="padding: 8px 15px;" size="small" @click="filterReport" type="primary" plain>Apply</el-button>
+                                <el-button style="padding: 8px 15px;" size="small" @click="filterReport" type="primary"
+                                           plain>Apply
+                                </el-button>
                             </div>
                         </div>
                         <div class="fss_content">
@@ -184,14 +186,17 @@ export default {
     methods: {
         fetch() {
             this.loading = true;
-            this.$get('/').then(res => {
-                this.stats = res.stats;
-                this.settings_stat = res.settings_stat;
-            }).fail(error => {
-                console.log(error);
-            }).always(() => {
-                this.loading = false;
-            });
+            this.$get('dashboard')
+                .then(res => {
+                    this.stats = res.stats;
+                    this.settings_stat = res.settings_stat;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         filterReport() {
             this.showing_chart = false;

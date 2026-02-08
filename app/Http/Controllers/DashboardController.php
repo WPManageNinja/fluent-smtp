@@ -8,15 +8,16 @@ use FluentMail\App\Services\Reporting;
 use FluentMail\Includes\Request\Request;
 use FluentMail\Includes\Support\Arr;
 
-class DashboardController extends Controller
+class DashboardController
 {
-    public function index(Logger $logger, Manager $manager)
+    public function index(\WP_REST_Request $request)
     {
-        $this->verify();
+        $manager = new Manager();
+        $logger = new Logger();
 
         $connections = $manager->getSettings('connections', []);
 
-        return $this->send([
+        return [
             'stats'         => $logger->getStats(),
             'settings_stat' => [
                 'connection_counts' => count($connections),
@@ -24,19 +25,18 @@ class DashboardController extends Controller
                 'auto_delete_days'  => $manager->getSettings('misc.log_saved_interval_days'),
                 'log_enabled'       => $manager->getSettings('misc.log_emails')
             ]
-        ]);
+        ];
     }
 
-    public function getDayTimeStats()
+    public function getDayTimeStats(\WP_REST_Request $request)
     {
-        $this->verify();
-
         // Validate and sanitize input with absint() and constrain to reasonable range
-        $lastDay = 0;
-        if (isset($_REQUEST['last_day'])) {
-            $lastDay = absint($_REQUEST['last_day']);
-            // Constrain to reasonable range: 0-365 days
+        $lastDay = absint($request->get_param('last_day'));
+
+        if ($lastDay) {
             $lastDay = min(max($lastDay, 0), 365);
+        } else {
+            $lastDay = 0; // Default to 0 if not provided
         }
 
         global $wpdb;
@@ -99,22 +99,25 @@ class DashboardController extends Controller
             $dataItems[$day][$hour] = (int)$row->count;
         }
 
-        return $this->send([
+        return [
             'stats' => $dataItems
-        ]);
+        ];
 
     }
 
-    public function getSendingStats(Request $request, Reporting $reporting)
+    public function getSendingStats(\WP_REST_Request $request)
     {
-        $this->verify();
+        $dateRange = $request->get_param('date_range');
+        if (!is_array($dateRange) || count($dateRange) !== 2) {
+           $dateRange = [null, null];
+        }
 
-        list($from, $to) = $request->get('date_range');
+        $reporting = new Reporting();
+        list($from, $to) = $dateRange;
 
-        return $this->send([
+        return [
             'stats' => $reporting->getSendingStats($from, $to)
-        ]);
-
+        ];
     }
 
     public function getDocs()

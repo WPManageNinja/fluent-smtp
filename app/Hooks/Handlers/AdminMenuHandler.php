@@ -213,7 +213,14 @@ class AdminMenuHandler
             'plugin_url'             => 'https://fluentsmtp.com/?utm_source=wp&utm_medium=install&utm_campaign=dashboard',
             'trans'                  => $this->getTrans(),
             'recommended'            => $recommendedSettings,
-            'is_disabled_defined'    => defined('FLUENTMAIL_SIMULATE_EMAILS') && FLUENTMAIL_SIMULATE_EMAILS
+            'is_disabled_defined'    => defined('FLUENTMAIL_SIMULATE_EMAILS') && FLUENTMAIL_SIMULATE_EMAILS,
+            'rest'                   => [
+                'base_url'  => esc_url_raw(rest_url()),
+                'url'       => rest_url('fluent-smtp'),
+                'nonce'     => wp_create_nonce('wp_rest'),
+                'namespace' => 'v2',
+                'version'   => '2'
+            ],
         ]);
 
         do_action('fluent_mail_loading_app');
@@ -230,8 +237,8 @@ class AdminMenuHandler
             return sprintf(
                 __('%1$s is a free plugin & it will be always free %2$s. %3$s', 'fluent-smtp'),
                 '<b>FluentSMTP</b>',
-                '<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/" target="_blank" rel="noopener noreferrer">'. esc_html__('(Learn why it\'s free)', 'fluent-smtp') .'</a>',
-                '<a href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5" target="_blank" rel="noopener noreferrer">'. esc_html__('Write a review ★★★★★', 'fluent-smtp') .'</a>'
+                '<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/" target="_blank" rel="noopener noreferrer">' . esc_html__('(Learn why it\'s free)', 'fluent-smtp') . '</a>',
+                '<a href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5" target="_blank" rel="noopener noreferrer">' . esc_html__('Write a review ★★★★★', 'fluent-smtp') . '</a>'
             );
         });
     }

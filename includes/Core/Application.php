@@ -69,6 +69,14 @@ final class Application extends Container
             </div>
             <?php
         });
+
+
+        add_action('plugins_loaded', function () {
+            add_action('rest_api_init', function () {
+                require_once FLUENTMAIL_PLUGIN_PATH . 'app/Http/api.php';
+            });
+        });
+
     }
 
     private function setApplicationInstance()

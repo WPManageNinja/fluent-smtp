@@ -346,7 +346,7 @@ export default {
         },
         saveMisc() {
             this.loading = true;
-            this.$post('misc-settings', {
+            this.$post('settings/misc', {
                 settings: this.form
             })
                 .then(response => {

@@ -85,6 +85,7 @@ return array(
     'FluentMail\\App\\Services\\NotificationHelper' => $baseDir . '/app/Services/NotificationHelper.php',
     'FluentMail\\App\\Services\\Notification\\Manager' => $baseDir . '/app/Services/Notification/Manager.php',
     'FluentMail\\App\\Services\\Reporting' => $baseDir . '/app/Services/Reporting.php',
+    'FluentMail\\App\\Services\\Router' => $baseDir . '/app/Services/Router.php',
     'FluentMail\\App\\Services\\TransStrings' => $baseDir . '/app/Services/TransStrings.php',
     'FluentMail\\Includes\\Activator' => $baseDir . '/includes/Activator.php',
     'FluentMail\\Includes\\Core\\Application' => $baseDir . '/includes/Core/Application.php',

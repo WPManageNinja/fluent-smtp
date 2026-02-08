@@ -1,14 +1,14 @@
 <?php
 
-$app->get('/', 'DashboardController@index');
-$app->get('/day-time-stats', 'DashboardController@getDayTimeStats');
-$app->get('sending_stats', 'DashboardController@getSendingStats');
+//$app->get('/', 'DashboardController@index');
+//$app->get('/day-time-stats', 'DashboardController@getDayTimeStats');
+//$app->get('sending_stats', 'DashboardController@getSendingStats');
 
-$app->get('/settings', 'SettingsController@index');
-$app->post('/settings/validate', 'SettingsController@validate');
+$app->get('/settings', 'SettingsController@index'); // done
+$app->post('/settings/validate', 'SettingsController@validate'); // done
 $app->post('/settings', 'SettingsController@store');
-$app->post('/misc-settings', 'SettingsController@storeMiscSettings');
-$app->post('/settings/delete', 'SettingsController@delete');
+$app->post('/misc-settings', 'SettingsController@storeMiscSettings'); //done
+$app->post('/settings/delete', 'SettingsController@delete'); // done
 $app->post('/settings/misc', 'SettingsController@storeGlobals');
 $app->post('/settings/test', 'SettingsController@sendTestEmil');
 $app->post('/settings/subscribe', 'SettingsController@subscribe');

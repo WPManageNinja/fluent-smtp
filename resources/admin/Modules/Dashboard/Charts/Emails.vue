@@ -33,10 +33,10 @@
                         this.stats = res.stats;
                         this.setupChartItems();
                     })
-                    .fail(error => {
+                    .catch(error => {
                         console.log(error);
                     })
-                    .always(() => {
+                    .finally(() => {
                         this.fetching = false;
                     });
             },

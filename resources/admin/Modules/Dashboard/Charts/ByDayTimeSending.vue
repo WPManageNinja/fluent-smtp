@@ -113,10 +113,10 @@ export default {
                 .then(res => {
                     this.dataItems = res.stats;
                 })
-                .fail(error => {
+                .catch(error => {
                     console.log(error);
                 })
-                .always(() => {
+                .finally(() => {
                     this.appReady = true;
                 });
         }

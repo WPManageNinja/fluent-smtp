@@ -5,13 +5,13 @@
                 <div class="fss_content_box">
                     <div class="fss_header">
                         <span style="float:left;">
-                            {{$t('Active Email Connections')}}
+                            {{ $t('Active Email Connections') }}
                         </span>
                         <span
                             style="float:right;color:#46A0FC;cursor:pointer;"
                             @click="addConnection"
                         >
-                            <i class="el-icon-plus"></i> {{$t('Add Another Connection')}}
+                            <i class="el-icon-plus"></i> {{ $t('Add Another Connection') }}
                         </span>
                     </div>
                     <div class="fss_content">
@@ -28,12 +28,16 @@
                                         />
                                     </span>
                                     <span v-else>Unknown</span>
-                                    <span style="color: red;" v-if="scope.row.provider == 'gmail' && !scope.row.version">{{ $t('(Re Authentication Required)') }}</span>
+                                    <span style="color: red;"
+                                          v-if="scope.row.provider == 'gmail' && !scope.row.version">{{
+                                            $t('(Re Authentication Required)')
+                                        }}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="sender_email" :label="$t('From Email')">
                                 <template slot-scope="scope">
-                                    <span style="cursor: pointer;" @click="showConnection(scope.row)">{{ scope.row.sender_email }}</span>
+                                    <span style="cursor: pointer;"
+                                          @click="showConnection(scope.row)">{{ scope.row.sender_email }}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column width="120" :label="$t('Actions')" align="center">
@@ -69,24 +73,25 @@
                 <div v-if="showing_connection" class="fss_content_box">
                     <div class="fss_header">
                         <span style="float:left;">
-                            {{$t('Connection Details')}}
+                            {{ $t('Connection Details') }}
                         </span>
                         <span style="float:right;color:#46A0FC;cursor:pointer;" @click="showing_connection = ''">
-                            {{$t('Close')}}
+                            {{ $t('Close') }}
                         </span>
                     </div>
                     <div class="fss_content">
-                        <connection-details :connection_id="showing_connection" />
+                        <connection-details :connection_id="showing_connection"/>
                     </div>
                 </div>
             </el-col>
             <el-col :md="10" :sm="24">
-                <div :class="{ fss_box_active: active_settings == 'general' }" style="margin-bottom: 0px;" class="fss_content_box fss_box_action">
+                <div :class="{ fss_box_active: active_settings == 'general' }" style="margin-bottom: 0px;"
+                     class="fss_content_box fss_box_action">
                     <div @click="active_settings = 'general'" class="fss_header">
-                        {{$t('General Settings')}}
+                        {{ $t('General Settings') }}
                     </div>
                     <div v-if="active_settings == 'general'" class="fss_content">
-                        <general-settings />
+                        <general-settings/>
                     </div>
                 </div>
             </el-col>
@@ -95,87 +100,106 @@
 </template>
 
 <script type="text/babel">
-    import Confirm from '@/Pieces/Confirm';
-    import isEmpty from 'lodash/isEmpty';
-    import GeneralSettings from './_GeneralSettings'
+import Confirm from '@/Pieces/Confirm';
+import isEmpty from 'lodash/isEmpty';
+import GeneralSettings from './_GeneralSettings'
 
-    import ConnectionDetails from './ConnectionDetails'
+import ConnectionDetails from './ConnectionDetails'
 
-    export default {
-        name: 'Connections',
-        components: {
-            Confirm,
-            GeneralSettings,
-            ConnectionDetails
+export default {
+    name: 'Connections',
+    components: {
+        Confirm,
+        GeneralSettings,
+        ConnectionDetails
+    },
+    data() {
+        return {
+            showing_connection: '',
+            active_settings: 'general',
+            loading: false,
+            deleting: false
+        };
+    },
+    methods: {
+        fetch() {
+            this.loading = true;
+            this.$get('settings')
+                .then((response) => {
+                    this.settings.mappings = response.settings.mappings;
+                    this.settings.connections = response.settings.connections;
+                    if (isEmpty(this.settings.connections)) {
+                        this.$router.push({
+                            name: 'dashboard',
+                            query: {
+                                is_redirect: 'yes'
+                            }
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
-        data() {
-            return {
-                showing_connection: '',
-                active_settings: 'general'
-            };
+        addConnection() {
+            this.$router.push({name: 'connection'});
         },
-        methods: {
-            async fetch() {
-                const settings = await this.$get('settings');
-                this.settings.mappings = settings.data.settings.mappings;
-                this.settings.connections = settings.data.settings.connections;
+        editConnection(connection) {
+            this.$router.push({
+                name: 'connection',
+                query: {connection_key: connection.unique_key}
+            });
+        },
+        deleteConnection(connection) {
 
-                if (isEmpty(this.settings.connections)) {
-                    this.$router.push({
-                        name: 'dashboard',
-                        query: {
-                            is_redirect: 'yes'
-                        }
+            this.deleting = true;
+
+            this.$post('settings/delete', {
+                key: connection.unique_key
+            })
+                .then((response) => {
+                    this.settings.connections = response.connections;
+                    this.settings.misc.default_connection = response.misc.default_connection;
+                    this.$notify.success({
+                        title: 'Great!',
+                        message: this.$t('Connection deleted Successfully.'),
+                        offset: 19
                     });
-                }
-            },
-            addConnection() {
-                this.$router.push({ name: 'connection' });
-            },
-            editConnection(connection) {
-                this.$router.push({
-                    name: 'connection',
-                    query: { connection_key: connection.unique_key }
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                .finally(() => {
+                    this.deleting = false;
                 });
-            },
-            async deleteConnection(connection) {
-                const result = await this.$post('settings/delete', {
-                    key: connection.unique_key
-                });
-
-                this.settings.connections = result.data.connections;
-                this.settings.misc.default_connection = result.data.misc.default_connection;
-
-                this.$notify.success({
-                    title: 'Great!',
-                    message: this.$t('Connection deleted Successfully.'),
-                    offset: 19
-                });
-            },
-            showConnection(connection) {
-                this.showing_connection = '';
-                this.$nextTick(() => {
-                    this.showing_connection = connection.unique_key;
-                });
-            }
         },
-        computed: {
-            connections() {
-                const data = [];
-
-                jQuery.each(this.settings.connections, (key, connection) => {
-                    data.push({
-                        unique_key: key,
-                        title: connection.title,
-                        ...connection.provider_settings
-                    });
-                });
-
-                return data;
-            }
-        },
-        created() {
-            this.fetch();
+        showConnection(connection) {
+            this.showing_connection = '';
+            this.$nextTick(() => {
+                this.showing_connection = connection.unique_key;
+            });
         }
-    };
+    },
+    computed: {
+        connections() {
+            const data = [];
+
+            jQuery.each(this.settings.connections, (key, connection) => {
+                data.push({
+                    unique_key: key,
+                    title: connection.title,
+                    ...connection.provider_settings
+                });
+            });
+
+            return data;
+        }
+    },
+    created() {
+        this.fetch();
+    }
+};
 </script>

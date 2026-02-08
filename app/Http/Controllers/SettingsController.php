@@ -10,28 +10,28 @@ use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Support\ValidationException;
 use FluentMail\App\Services\Mailer\Providers\Factory;
 
-class SettingsController extends Controller
+class SettingsController
 {
-    public function index(Settings $settings)
+    public function index(\WP_REST_Request $request)
     {
-        $this->verify();
+        $settings = new Settings();
 
         try {
             $setting = $settings->get();
-
-            return $this->sendSuccess([
+            return [
                 'settings' => $setting
-            ]);
+            ];
         } catch (Exception $e) {
-            return $this->sendError([
-                'message' => $e->getMessage()
-            ], $e->getCode());
+            return new \WP_Error($e->getCode(), $e->getMessage(), ['status' => 500]);
         }
     }
 
-    public function validate(Request $request, Settings $settings, Factory $factory)
+    public function validate(\WP_REST_Request $request)
     {
-        $this->verify();
+        $data = $request->get_body();
+
+        print_r($data);
+        die();
 
         try {
             $data = $request->except(['action', 'nonce']);
@@ -46,18 +46,36 @@ class SettingsController extends Controller
         }
     }
 
-    public function store(Request $request, Settings $settings, Factory $factory)
+    public function store(\WP_REST_Request $request)
     {
-        $this->verify();
+        $data = $request->get_body_params();
+        $connection = Arr::get($data, 'connection', []);
 
+        // sanitize the connection data
         $passWordKeys = ['password', 'access_key', 'secret_key', 'api_key', 'client_id', 'client_secret', 'auth_token', 'access_token', 'refresh_token'];
+        foreach ($connection as $index => $value) {
+            if ($index === 'sender_email') {
+                $connection['sender_email'] = sanitize_email($connection['sender_email']);
+            }
+
+            if (in_array($index, $passWordKeys)) {
+                if ($value) {
+                    $connection[$index] = trim($value);
+                }
+                continue;
+            }
+
+            if (is_string($value) && $value) {
+                $connection[$index] = sanitize_text_field($value);
+            }
+        }
+        $data['connection'] = $connection;
+        $providerKey = Arr::get($connection, 'provider');
+
 
         try {
-            $data = $request->except(['action', 'nonce']);
 
-            $data = wp_unslash($data);
-
-            $provider = $factory->make($data['connection']['provider']);
+            $provider = fluentMail()->make($providerKey);
 
             $connection = $data['connection'];
 
@@ -88,14 +106,16 @@ class SettingsController extends Controller
 
             $data = apply_filters('fluentmail_saving_connection_data', $data, $data['connection']['provider']);
 
-            $settings->store($data);
 
-            return $this->sendSuccess([
+            $settings = new Settings();
+
+            $settings->store($data);
+            return [
                 'message'     => __('Settings saved successfully.', 'fluent-smtp'),
                 'connections' => $settings->getConnections(),
                 'mappings'    => $settings->getMappings(),
                 'misc'        => $settings->getMisc()
-            ]);
+            ];
         } catch (ValidationException $e) {
             return $this->sendError($e->errors(), 422);
         } catch (Exception $e) {
@@ -105,24 +125,21 @@ class SettingsController extends Controller
         }
     }
 
-    public function storeMiscSettings(Request $request, Settings $settings)
+    public function storeMiscSettings(\WP_REST_Request $request)
     {
-        $this->verify();
-
-        $misc = $request->get('settings');
+        $misc = $request->get_param('settings');
+        $settings = new Settings();
         $settings->updateMiscSettings($misc);
-        $this->sendSuccess([
-            'message' => __('General Settings has been updated', 'fluent-smtp')
-        ]);
+
+        return [
+            'message' => __('Miscellaneous Settings has been updated', 'fluent-smtp')
+        ];
     }
 
-    public function delete(Request $request, Settings $settings)
+    public function delete(\WP_REST_Request $request)
     {
-        $this->verify();
-
-        $settings = $settings->delete($request->get('key'));
-
-        return $this->sendSuccess($settings);
+        $key = $request->get_param('key');
+        return (new Settings())->delete($key);
     }
 
     public function storeGlobals(Request $request, Settings $settings)
