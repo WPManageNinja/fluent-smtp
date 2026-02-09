@@ -28,10 +28,6 @@ class SettingsController
 
     public function validate(\WP_REST_Request $request)
     {
-        $data = $request->get_body();
-
-        print_r($data);
-        die();
 
         try {
             $data = $request->except(['action', 'nonce']);
@@ -71,7 +67,6 @@ class SettingsController
         }
         $data['connection'] = $connection;
         $providerKey = Arr::get($connection, 'provider');
-
 
         try {
 
@@ -117,11 +112,9 @@ class SettingsController
                 'misc'        => $settings->getMisc()
             ];
         } catch (ValidationException $e) {
-            return $this->sendError($e->errors(), 422);
+            return new \WP_Error(422, 'Validation Error', ['errors' => $e->errors()]);
         } catch (Exception $e) {
-            return $this->sendError([
-                'message' => $e->getMessage()
-            ], 422);
+            return new \WP_Error(422, $e->getMessage(), ['errors' => $e->errors()]);
         }
     }
 
