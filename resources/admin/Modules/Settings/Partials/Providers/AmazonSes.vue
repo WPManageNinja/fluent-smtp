@@ -85,6 +85,59 @@ define( 'FLUENTMAIL_AWS_SECRET_ACCESS_KEY', '********************' );</textarea>
                 style="margin-top: 10px;"
             >{{ errors.errors.api_error }}</span>
         </el-form-item>
+
+        <!-- Tenant Support Section -->
+        <el-form-item>
+            <label>
+                <el-checkbox 
+                    v-model="useTenant" 
+                    true-label="yes" 
+                    false-label="no"
+                >
+                    {{ $t('Use SES Tenant for Sender Isolation') }}
+                </el-checkbox>
+            </label>
+            <p class="small-help-text">
+                {{ $t('Enable to use AWS SES Tenant feature for isolating sender reputation. Requires a Configuration Set and Tenant to be configured in AWS SES.') }}
+            </p>
+        </el-form-item>
+
+        <el-row v-if="useTenant === 'yes'" :gutter="20">
+            <el-col :md="12" :sm="24">
+                <el-form-item for="configuration_set_name">
+                    <label for="configuration_set_name">
+                        {{ $t('Configuration Set Name') }}
+                        <span class="required-star">*</span>
+                    </label>
+                    <el-input
+                        id="configuration_set_name"
+                        v-model="connection.configuration_set_name"
+                        :placeholder="$t('Enter Configuration Set Name')"
+                    />
+                    <error :error="errors.get('configuration_set_name')" />
+                    <p class="small-help-text">
+                        {{ $t('The AWS SES Configuration Set that has the tenant assigned.') }}
+                    </p>
+                </el-form-item>
+            </el-col>
+            <el-col :md="12" :sm="24">
+                <el-form-item for="tenant_name">
+                    <label for="tenant_name">
+                        {{ $t('Tenant Name') }}
+                        <span class="required-star">*</span>
+                    </label>
+                    <el-input
+                        id="tenant_name"
+                        v-model="connection.tenant_name"
+                        :placeholder="$t('Enter Tenant Name')"
+                    />
+                    <error :error="errors.get('tenant_name')" />
+                    <p class="small-help-text">
+                        {{ $t('The AWS SES Tenant name for sender isolation.') }}
+                    </p>
+                </el-form-item>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
@@ -98,6 +151,21 @@ define( 'FLUENTMAIL_AWS_SECRET_ACCESS_KEY', '********************' );</textarea>
         components: {
             InputPassword,
             Error
+        },
+        computed: {
+            useTenant: {
+                get() {
+                    return this.connection.use_tenant || 'no';
+                },
+                set(value) {
+                    this.$set(this.connection, 'use_tenant', value);
+                    // Clear tenant fields when disabling tenant feature
+                    if (value === 'no') {
+                        this.$set(this.connection, 'tenant_name', '');
+                        this.$set(this.connection, 'configuration_set_name', '');
+                    }
+                }
+            }
         },
         watch: {
             'connection.key_store'(value) {
