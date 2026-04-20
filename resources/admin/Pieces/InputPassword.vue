@@ -6,6 +6,11 @@
             :value="value"
             :placeholder="placeholder"
             :disabled="disabled"
+            autocomplete="off"
+            data-bwignore
+            data-lpignore="true"
+            data-1p-ignore
+            data-form-type="other"
             @input="$emit('input', $event)"
         >
         </el-input>

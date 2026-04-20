@@ -28,6 +28,21 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/set-up-fluent-smtp-with-any-host-or-mailer/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure any SMTP with FluentSMTP.', 'fluent-smtp')
         ],
+        'tosend'      => [
+            'key'      => 'tosend',
+            'title'    => 'ToSend',
+            'image'    => fluentMailAssetUrl('images/provider-tosend.svg'),
+            'provider' => 'tosend',
+            'options'  => [
+                'sender_name'      => '',
+                'sender_email'     => '',
+                'force_from_name'  => 'no',
+                'force_from_email' => 'yes',
+                'api_key'          => '',
+                'key_store'        => 'db'
+            ],
+            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-tosend-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure ToSend with FluentSMTP.', 'fluent-smtp')
+        ],
         'ses'         => [
             'key'      => 'ses',
             'title'    => __('Amazon SES', 'fluent-smtp'),
@@ -226,20 +241,20 @@ return [
             ],
             'note'     => __('Outlook/Office365 is not recommended for sending mass marketing emails.', 'fluent-smtp')
         ],
-        'tosend'      => [
-            'key'      => 'tosend',
-            'title'    => 'ToSend',
-            'image'    => fluentMailAssetUrl('images/provider-tosend.svg'),
-            'provider' => 'tosend',
+        'cloudflare'  => [
+            'key'      => 'cloudflare',
+            'title'    => __('Cloudflare Email', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-cloudflare.svg'),
+            'provider' => 'Cloudflare',
             'options'  => [
-                'sender_name'      => '',
-                'sender_email'     => '',
-                'force_from_name'  => 'no',
-                'force_from_email' => 'yes',
-                'api_key'          => '',
-                'key_store'        => 'db'
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'api_key'         => '',
+                'account_id'      => '',
+                'key_store'       => 'db'
             ],
-            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-tosend-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure ToSend with FluentSMTP.', 'fluent-smtp')
+            'note'     => __('Cloudflare Email Sending requires a verified domain in your Cloudflare account and an API token with Email Sending permissions.', 'fluent-smtp')
         ],
         'default'     => [
             'key'      => 'default',

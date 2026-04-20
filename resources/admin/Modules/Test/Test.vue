@@ -5,10 +5,10 @@
         </div>
         <div class="fss_content">
             <div class="test_form" v-if="!email_success">
-                <el-form ref="form" :model="form" label-position="left" label-width="120px">
+                <el-form ref="form" :model="form" label-position="left" label-width="120px" autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore data-form-type="other">
 
                     <el-form-item for="email" :label="$t('From')">
-                        <el-select autocomplete="new_password" :placeholder="$t('Select Email or Type')" v-model="form.from">
+                        <el-select autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore :placeholder="$t('Select Email or Type')" v-model="form.from">
                             <el-option
                                 v-for="(emailHash, email) in sender_emails"
                                 :key="email" :label="email"
@@ -22,7 +22,7 @@
                     </el-form-item>
 
                     <el-form-item for="from" :label="$t('Send To')">
-                        <el-input id="from" v-model="form.email" />
+                        <el-input id="from" v-model="form.email" autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore name="fluentsmtp_test_to" />
 
                         <span class="small-help-text" style="display:block;margin-top:-10px">
                             {{ $t('__TEST_EMAIL_INST') }}

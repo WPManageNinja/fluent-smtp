@@ -687,6 +687,7 @@ if (!function_exists('fluentMailGetSettings')) {
                 'gmail'       => 'client_secret',
                 'outlook'     => 'client_secret',
                 'tosend'      => 'api_key',
+                'cloudflare'  => 'api_key',
             ];
             if (!empty($settings['connections']) && is_array($settings['connections'])) {
                 foreach ($settings['connections'] as $key => $connection) {
@@ -753,6 +754,7 @@ if (!function_exists('fluentMailSetSettings')) {
                 'gmail'       => 'client_secret',
                 'outlook'     => 'client_secret',
                 'tosend'      => 'api_key',
+                'cloudflare'  => 'api_key',
             ];
             if (!empty($settings['connections']) && is_array($settings['connections'])) {
                 foreach ($settings['connections'] as $key => $connection) {

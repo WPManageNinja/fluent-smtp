@@ -1,27 +1,31 @@
 <template>
     <div>
-        <h3 class="fs_config_title">{{ $t('ToSend API Settings') }}</h3>
+        <h3 class="fs_config_title">{{ $t('Cloudflare Email API Settings') }}</h3>
 
         <el-alert type="info" :closable="false" style="margin-bottom: 15px;">
             <div style="line-height: 1.6;">
-                <strong>{{ $t('How to connect ToSend:') }}</strong>
+                <strong>{{ $t('How to create the API token:') }}</strong>
                 <ol style="margin: 6px 0 0 18px; padding: 0;">
                     <li>
-                        {{ $t('Sign in to') }}
-                        <a target="_blank" rel="noopener" href="https://dash.tosend.com/">{{ $t('your ToSend dashboard') }}</a>
-                        {{ $t('and add your sending domain.') }}
-                    </li>
-                    <li>{{ $t('Publish the SPF, DKIM, and DMARC DNS records ToSend shows for that domain and wait for verification.') }}</li>
-                    <li>
                         {{ $t('Open') }}
-                        <a target="_blank" rel="noopener" href="https://dash.tosend.com/app/api-keys">{{ $t('API Keys') }}</a>
-                        {{ $t('and create a new key, then copy its value.') }}
+                        <a target="_blank" rel="noopener" :href="tokenDashUrl">
+                            {{ $t('Cloudflare Account API Tokens') }}
+                        </a>
+                        {{ $t('and click') }} <em>{{ $t('Create Token') }}</em>.
+                        <span v-if="!connection.account_id" style="color:#888;">
+                            ({{ $t("you'll be prompted to pick the account") }})
+                        </span>
                     </li>
-                    <li>{{ $t('Paste the key below, enter a From Email on the verified domain, and save.') }}</li>
+                    <li>{{ $t('Set Permission policies to') }} <strong>Custom</strong>.</li>
+                    <li>
+                        {{ $t('Add a policy with scope') }} <strong>Entire Account</strong>,
+                        {{ $t('then pick') }} <strong>Email &amp; Messaging → Email Sending</strong>
+                        {{ $t('and check both') }} <strong>Read</strong> {{ $t('and') }} <strong>Edit</strong>.
+                    </li>
+                    <li>{{ $t('Save and copy the token, then paste it below along with your Account ID.') }}</li>
                 </ol>
                 <p style="margin: 8px 0 0;">
-                    {{ $t('Full guide:') }}
-                    <a target="_blank" rel="noopener" href="https://tosend.com/docs/guide/wordpress/">tosend.com/docs/guide/wordpress</a>
+                    {{ $t('The sender domain must also be added to this Cloudflare account with Email Sending enabled (SPF/DKIM/DMARC records published).') }}
                 </p>
             </div>
         </el-alert>
@@ -33,12 +37,12 @@
 
         <template v-if="connection.key_store == 'db'">
             <el-form-item>
-                <label for="fluentmailer-key">
-                    {{ $t('API Key') }}
+                <label for="cloudflare-key">
+                    {{ $t('API Token') }}
                 </label>
+
                 <InputPassword
-                    id="fluentmailer-key"
-                    placeholder="tosend_xxxxxxx"
+                    id="cloudflare-key"
                     v-model="connection.api_key"
                     :disable_help="connection.disable_encryption === 'yes'"
                 />
@@ -60,11 +64,21 @@
             <el-form-item>
                 <label>{{ $t('__WP_CONFIG_INSTRUCTION') }}</label>
                 <div class="code_snippet">
-                    <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_TOSEND_API_KEY', '********************' );</textarea>
+                    <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_CLOUDFLARE_API_KEY', '********************' );
+define( 'FLUENTMAIL_CLOUDFLARE_ACCOUNT_ID', 'your-cloudflare-account-id' );</textarea>
                 </div>
                 <error :error="errors.get('api_key')"/>
             </el-form-item>
         </div>
+
+        <el-form-item :label="$t('Cloudflare Account ID')">
+            <el-input
+                type="text"
+                :placeholder="$t('Your Cloudflare Account ID')"
+                v-model="connection.account_id"
+            ></el-input>
+            <error :error="errors.get('account_id')"/>
+        </el-form-item>
 
     </div>
 </template>
@@ -74,7 +88,7 @@ import InputPassword from '@/Pieces/InputPassword';
 import Error from '@/Pieces/Error';
 
 export default {
-    name: 'ToSend',
+    name: 'Cloudflare',
     props: ['connection', 'errors'],
     components: {
         InputPassword,
@@ -86,9 +100,13 @@ export default {
         }
     },
     data() {
-        return {
-            // ...
-        };
+        return {};
+    },
+    computed: {
+        tokenDashUrl() {
+            const account = this.connection.account_id || ':account';
+            return 'https://dash.cloudflare.com/?to=/' + account + '/api-tokens';
+        }
     }
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div class="fss_connection_wizard">
-        <el-form :data="connection" label-position="top">
+        <el-form :data="connection" label-position="top" autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore data-form-type="other">
             <el-form-item :label="$t('Connection Provider')">
                 <connection-provider :providers="providers" :connection="connection"/>
             </el-form-item>
@@ -115,6 +115,7 @@ import Error from '@/Pieces/Error';
 import each from 'lodash/each';
 import ConnectionProvider from './Partials/_ConnectionSelector';
 import Tosend from "./Partials/Providers/Tosend.vue";
+import cloudflare from './Partials/Providers/Cloudflare';
 
 export default {
     name: 'ConnectionWizard',
@@ -134,7 +135,8 @@ export default {
         smtp2go,
         Error,
         ConnectionProvider,
-        Tosend
+        Tosend,
+        cloudflare
     },
     data() {
         return {
