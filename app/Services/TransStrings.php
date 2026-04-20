@@ -282,7 +282,7 @@ class TransStrings
             'Thursday' => __('Thursday', 'fluent-smtp'),
             'To' => __('To', 'fluent-smtp'),
             'To send emails you will need only a Mail Send access level for this API key.' => __('To send emails you will need only a Mail Send access level for this API key.', 'fluent-smtp'),
-            'ToSend API Settings' => __('ToSend API Settings', 'fluent-smtp'),
+            'toSend Api Settings' => __('toSend Api Settings', 'fluent-smtp'),
             'Today' => __('Today', 'fluent-smtp'),
             'Total Email Sent (Logged):' => __('Total Email Sent (Logged):', 'fluent-smtp'),
             'Track Opens' => __('Track Opens', 'fluent-smtp'),

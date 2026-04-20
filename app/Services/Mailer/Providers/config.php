@@ -30,18 +30,19 @@ return [
         ],
         'tosend'      => [
             'key'      => 'tosend',
-            'title'    => 'ToSend',
+            'title'    => 'toSend',
             'image'    => fluentMailAssetUrl('images/provider-tosend.svg'),
             'provider' => 'tosend',
             'options'  => [
-                'sender_name'      => '',
-                'sender_email'     => '',
-                'force_from_name'  => 'no',
-                'force_from_email' => 'yes',
-                'api_key'          => '',
-                'key_store'        => 'db'
+                'sender_name'       => '',
+                'sender_email'      => '',
+                'force_from_name'   => 'no',
+                'force_from_email'  => 'yes',
+                'api_key'           => '',
+                'key_store'         => 'db',
+                'additional_senders' => []
             ],
-            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-tosend-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure ToSend with FluentSMTP.', 'fluent-smtp')
+            'note'     => '<a href="https://fluentsmtp.com/docs/set-up-tosend-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure toSend with FluentSMTP.', 'fluent-smtp')
         ],
         'ses'         => [
             'key'      => 'ses',

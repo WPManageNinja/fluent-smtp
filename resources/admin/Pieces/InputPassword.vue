@@ -6,7 +6,8 @@
             :value="value"
             :placeholder="placeholder"
             :disabled="disabled"
-            autocomplete="off"
+            :name="fieldName"
+            autocomplete="new-password"
             data-bwignore
             data-lpignore="true"
             data-1p-ignore
@@ -38,6 +39,11 @@
                 },
                 src: window.FluentMail.appVars.image_url + '/eye-cross.png'
             };
+        },
+        computed: {
+            fieldName() {
+                return 'fluentsmtp_' + (this.id || Math.random().toString(36).slice(2)) + '_secret';
+            }
         },
         methods: {
             toggle() {

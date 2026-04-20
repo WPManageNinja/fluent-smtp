@@ -15,6 +15,12 @@
                                     type="email"
                                     :placeholder="$t('From Email')"
                                     v-model="connection.sender_email"
+                                    autocomplete="off"
+                                    data-bwignore
+                                    data-lpignore="true"
+                                    data-1p-ignore
+                                    data-form-type="other"
+                                    name="fluentsmtp_sender_email"
                                 ></el-input>
                                 <p style="color: red;" v-if="is_conflicted">{{ $t('__ANOTHER_CONNECTION_NOTICE') }}</p>
                             </el-form-item>
@@ -79,6 +85,7 @@
                         :is="connection.provider"
                         :connection="connection"
                         :provider="providers[connection.provider]"
+                        :is_new="is_new"
                     />
                 </div>
                 <p v-if="providers[connection.provider].note" style="padding: 5px 0px; font-size: 16px; color: #ff5722;"

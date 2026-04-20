@@ -21,9 +21,12 @@ Connect as many email service providers as you want, and FluentSMTP will route y
 
 [youtube https://www.youtube.com/watch?v=qnrTdQMNcuA]
 
-== Why is FluentSMTP free? ==
-The FluentSMTP plugin is 100% free and open source. We will never monetize it. It's a part of our "Five for the Future" participation, an initiative started by the WordPress Foundation.
-Our parent company <a title="WP Manage Ninja" href="https://wpmanageninja.com">WPManageNinja LLC</a> builds products for WordPress businesses and has a very stable business model. We want to give back to the community, and FluentSMTP is part of that.
+== 💚 100% Free Forever — No Pro Version, No Upsells, No Paywalls 💚 ==
+**FluentSMTP is 100% free and open source — and it always will be.** There is no "pro" version, no premium add-ons, no locked features, no email capture wall, no nagging upgrade prompts, no feature limits, and no paid tier. Every integration listed above — Amazon SES, Gmail, Outlook, SendGrid, Mailgun, Cloudflare, toSend, Postmark, Brevo, SparkPost, and the rest — is fully available at no cost.
+
+You will never have to pay a cent to use any feature of FluentSMTP. We have pledged this as part of our "Five for the Future" participation, an initiative started by the WordPress Foundation.
+
+Our parent company <a title="WP Manage Ninja" href="https://wpmanageninja.com">WPManageNinja LLC</a> builds commercial products for WordPress businesses and runs a stable, profitable business on those — which means FluentSMTP is our way of giving back to the WordPress community, not a funnel. 👉 <a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/">Read why it's 100% free (always)</a> 👈
 
 == 🎉 Available Email Service Connections ==
 * Amazon SES
@@ -37,7 +40,6 @@ Our parent company <a title="WP Manage Ninja" href="https://wpmanageninja.com">W
 * Brevo (Sendinblue)
 * Netcore (Pepipost)
 * Postmark
-* Zoho ZeptoMail (TransMail)
 * SparkPost
 * SMTP2GO
 * Elastic Email
@@ -112,6 +114,11 @@ SparkPost is a great email sending service with lots of analytics features.
 With Fluent SMTP, You can set up your SparkPost email service connection with your WordPress in less than a minute.
 
 Read about <a href="https://fluentsmtp.com/docs/configure-sparkpost-in-fluent-smtp-to-send-emails/">SparkPost connection documentation here</a>
+
+== 🎉 Postmark API Connection ==
+Postmark is a highly reliable transactional email service, known for fast delivery and top-tier inbox placement. FluentSMTP connects to Postmark's Server API directly — paste your Server Token, pick a Message Stream, and your WordPress transactional emails ship through Postmark with full support for attachments, CC/BCC, Reply-To, and custom headers.
+
+Read about <a href="https://fluentsmtp.com/docs/configure-postmark-in-fluent-smtp-to-send-emails/">Postmark connection documentation here</a>
 
 == 🎉 Elastic Email API Connection ==
 Elastic Email is a great solution for sending transactional and marketing emails with a user-friendly dashboard and many extensive functions such as statistics and real-time information. Fluent SMTP plugin is fully compatible with their official API and you can use it to send your WordPress emails via Elastic Email

@@ -334,7 +334,7 @@ class Handler extends BaseHandler
         return [
             'info'                 => $info,
             'verificationSettings' => [
-                'connection_name'       => 'ToSend',
+                'connection_name'       => 'toSend',
                 'all_senders'           => $validSenders['all_senders'],
                 'verified_senders'      => $validSenders['verified_senders'],
                 'verified_domain'       => $validSenders['verified_domain'],
@@ -343,6 +343,20 @@ class Handler extends BaseHandler
                 'email_help_message'    => $hasMultiDomain ? __('Make sure to verify your sender emails or domain in toSend dashboard and available in the provided API Key.', 'fluent-smtp') : ''
             ]
         ];
+    }
+
+    public function getValidSenders($connection)
+    {
+        $senders = [$connection['sender_email']];
+
+        $additional = array_filter((array) Arr::get($connection, 'additional_senders', []));
+        foreach ($additional as $extra) {
+            if (is_email($extra)) {
+                $senders[] = $extra;
+            }
+        }
+
+        return array_values(array_unique(array_filter($senders)));
     }
 
     public function addNewSenderEmail($connection, $email)
