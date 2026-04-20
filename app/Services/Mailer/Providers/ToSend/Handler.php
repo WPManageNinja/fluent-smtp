@@ -76,7 +76,7 @@ class Handler extends BaseHandler
         if (is_wp_error($response)) {
             $returnResponse = new \WP_Error($response->get_error_code(), $response->get_error_message(), $response->get_error_messages());
         } else {
-            $responseCode = (int) $response['code'];
+            $responseCode = (int)$response['code'];
             $isOKCode = $responseCode == $this->emailSentCode;
             $responseBody = \json_decode($response['body'], true);
             $messageId = Arr::get($responseBody, 'message_id');
@@ -136,14 +136,12 @@ class Handler extends BaseHandler
                 return null;
             }
 
-            $name = Arr::get($replyTo, 'name', '');
-
-            if ($name) {
-                return $name . ' <' . $replyTo['email'] . '>';
-            }
-
-            return $replyTo['email'];
+            return array_filter([
+                'name'  => Arr::get($replyTo, 'name', ''),
+                'email' => $replyTo['email']
+            ]);
         }
+
         return '';
     }
 
@@ -341,7 +339,7 @@ class Handler extends BaseHandler
                 'verified_senders'      => $validSenders['verified_senders'],
                 'verified_domain'       => $validSenders['verified_domain'],
                 'supports_multi_domain' => $hasMultiDomain,
-                'api_info'   => $stats,
+                'api_info'              => $stats,
                 'email_help_message'    => $hasMultiDomain ? __('Make sure to verify your sender emails or domain in toSend dashboard and available in the provided API Key.', 'fluent-smtp') : ''
             ]
         ];
