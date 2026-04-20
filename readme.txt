@@ -1,6 +1,6 @@
-=== FluentSMTP - WP SMTP Plugin with Amazon SES, SendGrid, MailGun, Postmark, Google and Any SMTP Provider ===
+=== FluentSMTP – WP SMTP Plugin with Amazon SES, SendGrid, Mailgun, Postmark, Cloudflare, toSend, Gmail and Any SMTP ===
 Contributors: techjewel, wpmanageninja, heera, adreastrian
-Tags: smtp, amazon ses, wordpress mail smtp, mail, mail smtp
+Tags: smtp, wordpress mail smtp, amazon ses, sendgrid, mailgun
 Requires at least: 5.5
 Tested up to: 6.7
 Stable tag: 2.2.95
@@ -8,18 +8,16 @@ Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The Ultimate Forever Free Mail SMTP Plugin for WordPress. Connect with any SMTP, SendGrid, Mailgun, Amazon SES, Brevo, Postmark, Sparkpost, Google...
+Free WP Mail SMTP plugin — fix WordPress email deliverability with Gmail, Amazon SES, SendGrid, Mailgun, Cloudflare, toSend, Postmark, Brevo &amp; any SMTP.
 
 == Description ==
 
-###  WordPress Mail SMTP Plugin For Any Email Services
-Are you having problems with your WordPress emails not sending? Or do you want to set what email address they are sent from? This plugin will solve all your email deliverability problems. FluentSMTP is the ultimate WP Mail Plugin that connects with your Email Service Provider natively and makes sure your emails are delivered 💯.
+###  WordPress Mail SMTP Plugin For Any Email Service Provider
+Are your WordPress emails not sending, landing in spam, or failing silently? FluentSMTP is the ultimate **WP Mail SMTP plugin** that fixes email deliverability by routing `wp_mail()` through your chosen email service — **Gmail, Amazon SES, SendGrid, Mailgun, Cloudflare Email, toSend, Postmark, Brevo (Sendinblue), SparkPost, Outlook / Office 365, Zoho**, or any SMTP host.
 
-Our goal is to send your WordPress emails fast, secure, and have them reach the inbox.
+FluentSMTP connects natively to each provider's API (not just SMTP), so your transactional and marketing emails ship **fast, secure, and reach the inbox**. Reconfigure your sender, enable logging, add real-time failure alerts, and route different senders to different providers — all from a single clean UI.
 
-Fluent SMTP plugin fixes your email delivery issue by connecting WordPress Mail with your email service providers. These integrations are native, so it will send the emails superfast.
-
-Connect as many email Service Providers as you want, and FluentSMTP will route your transactional and marketing emails automatically. This is one of the unique features that FluentSMTP has to offer.
+Connect as many email service providers as you want, and FluentSMTP will route your transactional and marketing emails automatically based on the From Address. This is one of the unique features that FluentSMTP has to offer.
 
 [youtube https://www.youtube.com/watch?v=qnrTdQMNcuA]
 
@@ -31,16 +29,18 @@ Our parent company <a title="WP Manage Ninja" href="https://wpmanageninja.com">W
 * Amazon SES
 * Gmail OAuth
 * Google Workspace OAuth
-* Outlook OAuth
+* Outlook / Office 365 OAuth
 * SendGrid
 * Mailgun
+* Cloudflare Email (new)
+* toSend (new)
 * Brevo (Sendinblue)
-* Pepipost
+* Netcore (Pepipost)
 * Postmark
 * Zoho ZeptoMail (TransMail)
 * SparkPost
 * SMTP2GO
-* Elastic Mail
+* Elastic Email
 * Zoho via SMTP
 * Any SMTP email provider
 * More native integrations coming soon
@@ -123,6 +123,13 @@ Read the documentation for <a href="https://fluentsmtp.com/docs/setup-outlook-wi
 
 == 🎉 SMTP2GO Email API Connection ==
 SMTP2GO is a convenient solution for sending transactional and marketing emails with a user-friendly dashboard and many extensive functions such as statistics and real-time information. Fluent SMTP plugin is fully compatible with their official API and you can use it to send your WordPress emails via SMTP2Go
+
+== 🎉 Cloudflare Email API Connection ==
+Send WordPress emails through **Cloudflare Email Sending** using their native REST API. If your domain is already on Cloudflare, you can send transactional email directly from Cloudflare's edge network — fast, reliable, and with built-in SPF/DKIM/DMARC. FluentSMTP handles the full request shape, including attachments, CC/BCC, Reply-To, and custom headers. The plugin also live-verifies your API token on save and on the connection info screen, so misconfigurations surface immediately.
+
+== 🎉 toSend Email Sending Provider ==
+**toSend** is a modern transactional email service with a simple API, per-domain analytics, and fast delivery. FluentSMTP ships a native toSend integration — paste your API key, set a verified From address, and you're sending in under a minute. Failed sends are logged with full payloads so you can resend or debug without leaving WordPress.
+Read about <a href="https://tosend.com/docs/guide/wordpress/">toSend WordPress setup guide here</a>
 
 
 == 🎉 Other SMTP ==
@@ -273,6 +280,14 @@ Yes, when you create your connection you can choose how you want to store your c
 
 Yes, FluentSMTP let you connect your Pepipost email sending service via secure API Key.
 
+= Can I send WordPress mails with Cloudflare Email? =
+
+Yes. FluentSMTP ships a native Cloudflare Email Sending integration. Add your Cloudflare Account ID and an API token with Email Sending permissions, and the plugin will send through Cloudflare's REST API (including attachments, CC/BCC, Reply-To, and custom headers). The sending domain must be on Cloudflare with Email Sending enabled (SPF/DKIM/DMARC published).
+
+= Can I send WordPress mails with toSend? =
+
+Yes. FluentSMTP has a native toSend integration. Create an API key in the toSend dashboard, add your verified sending domain, paste the key into FluentSMTP, and your WordPress emails will be delivered through toSend.
+
 = I am a developer, Where I can contribute to this project? =
 
 Thank you so much. We really appreciate it. Please check <a href="https://github.com/WPManageNinja/fluent-smtp">our github repository</a> for more details.
@@ -294,6 +309,12 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 
 
 == Changelog ==
+
+= 2.2.96 (Pending) =
+- Added Cloudflare Email Sending native API provider
+- Added live API token verification for Cloudflare on save and on the connection info screen
+- Password-manager auto-fill popups disabled on connection and test-email forms
+- Inline setup guides added to Cloudflare and toSend settings screens
 
 = 2.2.95 (Date: Dec 28, 2025) =
 - Added Multiple Notification Channels for Email Failure Notification
