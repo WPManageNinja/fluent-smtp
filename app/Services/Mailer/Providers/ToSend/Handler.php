@@ -13,6 +13,8 @@ class Handler extends BaseHandler
 
     protected $baseUrl = 'https://api.tosend.com/v2/';
 
+    private static $curlHandle = null;
+
     public function send()
     {
         if ($this->preSend() && $this->phpMailer->preSend()) {
@@ -69,22 +71,14 @@ class Handler extends BaseHandler
             }
         }
 
-        $args = array(
-            'headers' => $this->getRequestHeaders(),
-            'body'    => json_encode($body),
-            'timeout' => 10
-        );
-
-        $response = wp_remote_post($this->baseUrl . 'emails', $args);
+        $response = $this->sendViaCurl($this->baseUrl . 'emails', json_encode($body));
 
         if (is_wp_error($response)) {
             $returnResponse = new \WP_Error($response->get_error_code(), $response->get_error_message(), $response->get_error_messages());
         } else {
-            $responseBody = wp_remote_retrieve_body($response);
-
-            $responseCode = wp_remote_retrieve_response_code($response);
+            $responseCode = (int) $response['code'];
             $isOKCode = $responseCode == $this->emailSentCode;
-            $responseBody = \json_decode($responseBody, true);
+            $responseBody = \json_decode($response['body'], true);
             $messageId = Arr::get($responseBody, 'message_id');
 
             if ($isOKCode && $messageId) {
@@ -142,13 +136,15 @@ class Handler extends BaseHandler
                 return null;
             }
 
-            return [
-                'name'  => Arr::get($replyTo, 'name', ''),
-                'email' => $replyTo['email']
-            ];
-        }
+            $name = Arr::get($replyTo, 'name', '');
 
-        return null;
+            if ($name) {
+                return $name . ' <' . $replyTo['email'] . '>';
+            }
+
+            return $replyTo['email'];
+        }
+        return '';
     }
 
     protected function getTo()
@@ -194,21 +190,15 @@ class Handler extends BaseHandler
 
         foreach ($this->getParam('attachments') as $attachment) {
             $file = false;
-            $fileName = null;
-            $filetype = null;
 
             try {
-                // Use secure file reading with path traversal protection
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = basename($attachment[0]);
-
-                // Get MIME type from the validated real path
-                $realPath = realpath($attachment[0]);
-                $mimeType = mime_content_type($realPath);
-                $filetype = str_replace(';', '', trim($mimeType));
+                if (is_file($attachment[0]) && is_readable($attachment[0])) {
+                    $fileName = basename($attachment[0]);
+                    $file = file_get_contents($attachment[0]);
+                    $mimeType = mime_content_type($attachment[0]);
+                    $filetype = str_replace(';', '', trim($mimeType));
+                }
             } catch (\Exception $e) {
-                // Log error and skip this attachment
-                error_log('FluentSMTP ToSend: Failed to read attachment - ' . $e->getMessage());
                 $file = false;
             }
 
@@ -235,6 +225,64 @@ class Handler extends BaseHandler
         return [
             'Accept'       => 'application/json',
             'Content-Type' => 'application/json'
+        ];
+    }
+
+    private function sendViaCurl($url, $jsonBody)
+    {
+        if (!function_exists('curl_init')) {
+            $response = wp_remote_post($url, [
+                'headers'   => $this->getRequestHeaders(),
+                'body'      => $jsonBody,
+                'sslverify' => false,
+                'timeout'   => 30,
+            ]);
+
+            if (is_wp_error($response)) {
+                return $response;
+            }
+
+            return [
+                'code' => wp_remote_retrieve_response_code($response),
+                'body' => wp_remote_retrieve_body($response),
+            ];
+        }
+
+        if (self::$curlHandle === null) {
+            self::$curlHandle = curl_init();
+            curl_setopt(self::$curlHandle, CURLOPT_POST, true);
+            curl_setopt(self::$curlHandle, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt(self::$curlHandle, CURLOPT_FOLLOWLOCATION, false);
+            curl_setopt(self::$curlHandle, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt(self::$curlHandle, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt(self::$curlHandle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+            curl_setopt(self::$curlHandle, CURLOPT_CONNECTTIMEOUT, 10);
+            curl_setopt(self::$curlHandle, CURLOPT_TIMEOUT, 30);
+            curl_setopt(self::$curlHandle, CURLOPT_HTTPHEADER, [
+                'Accept: application/json',
+                'Content-Type: application/json',
+                'Connection: keep-alive',
+            ]);
+        }
+
+        curl_setopt(self::$curlHandle, CURLOPT_URL, $url);
+        curl_setopt(self::$curlHandle, CURLOPT_POSTFIELDS, $jsonBody);
+
+        $body = curl_exec(self::$curlHandle);
+
+        if ($body === false) {
+            $errno = curl_errno(self::$curlHandle);
+            $error = curl_error(self::$curlHandle);
+
+            curl_close(self::$curlHandle);
+            self::$curlHandle = null;
+
+            return new \WP_Error('curl_' . $errno, $error ?: 'cURL request failed', [$error]);
+        }
+
+        return [
+            'code' => curl_getinfo(self::$curlHandle, CURLINFO_RESPONSE_CODE),
+            'body' => $body,
         ];
     }
 
@@ -293,7 +341,7 @@ class Handler extends BaseHandler
                 'verified_senders'      => $validSenders['verified_senders'],
                 'verified_domain'       => $validSenders['verified_domain'],
                 'supports_multi_domain' => $hasMultiDomain,
-                'api_info'              => $stats,
+                'api_info'   => $stats,
                 'email_help_message'    => $hasMultiDomain ? __('Make sure to verify your sender emails or domain in toSend dashboard and available in the provided API Key.', 'fluent-smtp') : ''
             ]
         ];
