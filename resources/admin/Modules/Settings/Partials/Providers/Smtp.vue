@@ -148,6 +148,27 @@ define( 'FLUENTMAIL_SMTP_PASSWORD', '********************' );</textarea>
                 </el-form-item>
             </div>
         </template>
+
+        <!-- Custom Headers Section -->
+        <el-row :gutter="20" style="margin-top: 20px;">
+            <el-col :span="24">
+                <el-form-item>
+                    <label for="custom_headers">
+                        {{ $t('Custom Headers') }}
+                    </label>
+                    <el-input
+                        type="textarea"
+                        id="custom_headers"
+                        v-model="connection.custom_headers"
+                        :placeholder="$t('X-Header-Name: value\nX-SES-TENANT: your-tenant-name')"
+                        :rows="3"
+                    />
+                    <p class="small-help-text">
+                        {{ $t('Add custom SMTP headers, one per line. Format: Header-Name: value. Useful for AWS SES tenant isolation via X-SES-TENANT header when using SMTP interface.') }}
+                    </p>
+                </el-form-item>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
