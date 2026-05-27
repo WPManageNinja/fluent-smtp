@@ -32,8 +32,7 @@
                         <el-radio
                             label="self"
                             style="display:block;margin:6px 0;"
-                        >
-                            {{ $t('My account email') }}
+                        >{{ $t('My account email') }}
                             <span v-if="appVars.user_email" style="color:#909399;">
                                 ({{ appVars.user_email }})
                             </span>
