@@ -29,7 +29,7 @@ class AdminMenuHandler
 
             if (isset($_REQUEST['sub_action']) && $_REQUEST['sub_action'] == 'slack_success') {
                 add_action('admin_init', function () {
-                    $nonce = Arr::get($_REQUEST, '_slacK_nonce');
+                    $nonce = Arr::get($_REQUEST, '_slack_nonce');
                     if (!wp_verify_nonce($nonce, 'fluent_smtp_slack_register_site')) {
                         wp_redirect(admin_url('options-general.php?page=fluent-mail&slack_security_failed=1#/notification-settings'));
                         die();

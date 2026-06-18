@@ -107,7 +107,7 @@ class Container
         }
 
 
-        $instance = $this->instanciate($object, $parameters);
+        $instance = $this->instantiate($object, $parameters);
 
         // If the key is registered as a singleton, we can save the instance as singleton
         // for later use
@@ -127,7 +127,7 @@ class Container
      * @throws \Exception
      * @return mixed
      */
-    protected function instanciate($key, $parameters = null)
+    protected function instantiate($key, $parameters = null)
     {
 
         if ($key instanceof \Closure) {

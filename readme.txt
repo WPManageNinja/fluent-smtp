@@ -400,7 +400,7 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 
 = 2.2.4 (Date: Feb 04, 2023) =
 * Email preview is now sanitized
-* you can now define `FLUENTMAIL_SIMULATE_EMAILS` to simulate emails programtically
+* you can now define `FLUENTMAIL_SIMULATE_EMAILS` to simulate emails programmatically
 * Fixed outlook API connection issues
 * Fixed inline documentation links
 * UX improvements

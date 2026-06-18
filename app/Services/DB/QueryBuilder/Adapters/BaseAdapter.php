@@ -44,7 +44,7 @@ abstract class BaseAdapter
         $selects = $this->arrayStr($statements['selects'], ', ');
 
 
-        // Wheres
+        // Where clauses
         list($whereCriteria, $whereBindings) = $this->buildCriteriaWithType($statements, 'wheres', 'WHERE');
         // Group bys
         $groupBys = '';
@@ -213,7 +213,7 @@ abstract class BaseAdapter
     }
 
     /**
-     * Build fields assignment part of SET ... or ON DUBLICATE KEY UPDATE ... statements
+     * Build fields assignment part of SET ... or ON DUPLICATE KEY UPDATE ... statements
      *
      * @param array $data
      *
@@ -260,7 +260,7 @@ abstract class BaseAdapter
         // Update statement
         list($updateStatement, $bindings) = $this->getUpdateStatement($data);
 
-        // Wheres
+        // Where clauses
         list($whereCriteria, $whereBindings) = $this->buildCriteriaWithType($statements, 'wheres', 'WHERE');
 
         // Limit
@@ -297,7 +297,7 @@ abstract class BaseAdapter
 
         $table = end($statements['tables']);
 
-        // Wheres
+        // Where clauses
         list($whereCriteria, $whereBindings) = $this->buildCriteriaWithType($statements, 'wheres', 'WHERE');
 
         // Limit
@@ -428,7 +428,7 @@ abstract class BaseAdapter
                     $criteria .= $statement['joiner'] . ' ' . $key . ' ';
                     $bindings = array_merge($bindings, $statement['key']->getBindings());
                 } else {
-                    // For wheres
+                    // For where clauses
 
                     $valuePlaceholder = '?';
                     $bindings[] = $value;

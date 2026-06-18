@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p>{{ $t('__REAL_NOTIFCATION_DESC') }}</p>
+        <p>{{ $t('__REAL_NOTIFICATION_DESC') }}</p>
         <el-table :data="alerts" class="fss_alert_list_table__table" v-loading="loading">
             <el-table-column :label="$t('Channel')" min-width="200">
                 <template slot-scope="scope">

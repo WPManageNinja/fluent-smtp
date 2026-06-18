@@ -7,7 +7,7 @@
                     <p>{{ $t('__wizard_sub') }}</p>
                 </div>
 
-                <div v-if="recommended && !skip_recommended" class="fsmtp_recommened">
+                <div v-if="recommended && !skip_recommended" class="fsmtp_recommended">
                     <h2>{{ recommended.title }}</h2>
                     <p>{{ recommended.subtitle }}</p>
                     <el-button @click="setRecommendation()" type="primary">{{ recommended.button_text }}</el-button>
@@ -111,7 +111,7 @@
 import isEmpty from 'lodash/isEmpty';
 import ConnectionWizard from '../Settings/ConnectionWizard';
 import EmailsChart from './Charts/Emails';
-import EmailSubscriber from '../../Pieces/_Subscrbe';
+import EmailSubscriber from '../../Pieces/_Subscribe';
 import SubscribeDismiss from '../../Pieces/_SubscribeDismiss';
 import ByDayTimeSending from "./Charts/ByDayTimeSending.vue";
 
