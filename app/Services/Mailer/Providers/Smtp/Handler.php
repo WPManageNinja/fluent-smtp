@@ -129,7 +129,7 @@ class Handler extends BaseHandler
 
     public function setSettings($settings)
     {
-        if (Arr::get($settings, 'key_store') == 'wp_config') {
+        if (Arr::get($settings, 'key_store') == 'wp_config' && is_null(Arr::get($settings, 'connection_id'))) {
             $settings['username'] = defined('FLUENTMAIL_SMTP_USERNAME') ? FLUENTMAIL_SMTP_USERNAME : '';
             $settings['password'] = defined('FLUENTMAIL_SMTP_PASSWORD') ? FLUENTMAIL_SMTP_PASSWORD : '';
         }

@@ -22,6 +22,84 @@ class Settings
         return $this->get();
     }
 
+    public function getNextConnectionId()
+    {
+        $settings = $this->getSettings();
+        $connections = $this->getConnections($settings);
+        $maxId = -1;
+        foreach ($connections as $connection) {
+            $connId = Arr::get($connection, 'provider_settings.connection_id');
+            if (!is_null($connId)) {
+                $maxId = max($maxId, (int)$connId);
+            }
+        }
+        return $maxId + 1;
+    }
+
+    public function getConnectionByIntId($id)
+    {
+        $settings = $this->getSettings();
+        $connections = $this->getConnections($settings);
+        foreach ($connections as $key => $connection) {
+            $connId = Arr::get($connection, 'provider_settings.connection_id');
+            if (!is_null($connId) && (int)$connId === (int)$id) {
+                return [$key, $connection];
+            }
+        }
+        return [null, null];
+    }
+
+    public function assignConnectionIds()
+    {
+        $settings = $this->getSettings();
+        if (empty($settings['connections'])) {
+            return;
+        }
+
+        $modified = false;
+
+        $maxId = -1;
+        foreach ($settings['connections'] as $connection) {
+            $connId = Arr::get($connection, 'provider_settings.connection_id');
+            if (!is_null($connId)) {
+                $maxId = max($maxId, (int)$connId);
+            }
+        }
+
+        $nextId = $maxId + 1;
+
+        foreach ($settings['connections'] as $key => $connection) {
+            $connId = Arr::get($connection, 'provider_settings.connection_id');
+            if (is_null($connId)) {
+                $settings['connections'][$key]['provider_settings']['connection_id'] = $nextId;
+                $nextId++;
+                $modified = true;
+            }
+        }
+
+        $defaultMd5 = Arr::get($settings, 'misc.default_connection');
+        if ($defaultMd5 && isset($settings['connections'][$defaultMd5])) {
+            $intId = Arr::get($settings['connections'][$defaultMd5], 'provider_settings.connection_id');
+            if (!is_null($intId)) {
+                $settings['misc']['default_connection'] = (int)$intId;
+                $modified = true;
+            }
+        }
+
+        $fallbackMd5 = Arr::get($settings, 'misc.fallback_connection');
+        if ($fallbackMd5 && isset($settings['connections'][$fallbackMd5])) {
+            $intId = Arr::get($settings['connections'][$fallbackMd5], 'provider_settings.connection_id');
+            if (!is_null($intId)) {
+                $settings['misc']['fallback_connection'] = (int)$intId;
+                $modified = true;
+            }
+        }
+
+        if ($modified) {
+            fluentMailSetSettings($settings);
+        }
+    }
+
     public function store($inputs)
     {
         $settings = $this->getSettings();
@@ -31,12 +109,20 @@ class Settings
 
         $key = $inputs['connection_key'];
 
+        $existingConnectionId = null;
         if (isset($connections[$key])) {
+            $existingConnectionId = Arr::get($connections[$key], 'provider_settings.connection_id');
             $mappings = array_filter($mappings, function ($mappingKey) use ($key) {
                 return $mappingKey != $key;
             });
             unset($connections[$key]);
         }
+
+        if (is_null($existingConnectionId)) {
+            $existingConnectionId = $this->getNextConnectionId();
+        }
+
+        $inputs['connection']['connection_id'] = $existingConnectionId;
 
         $primaryEmails = [];
         foreach ($connections as $connection) {
@@ -91,8 +177,20 @@ class Settings
             ];
         }
 
-        if (empty($misc['default_connection']) || $misc['default_connection'] == $key) {
-            $misc['default_connection'] = $uniqueKey;
+        $defaultConnectionId = Arr::get($misc, 'default_connection');
+        $isDefaultMatched = false;
+        if (empty($defaultConnectionId)) {
+            $isDefaultMatched = true;
+        } else {
+            if (!is_null($existingConnectionId) && (string)$defaultConnectionId === (string)$existingConnectionId) {
+                $isDefaultMatched = true;
+            } elseif ((string)$defaultConnectionId === (string)$key) {
+                $isDefaultMatched = true;
+            }
+        }
+
+        if ($isDefaultMatched) {
+            $misc['default_connection'] = $existingConnectionId;
             $settings['misc'] = $misc;
         }
 
@@ -115,9 +213,11 @@ class Settings
     {
         $settings = $this->getSettings();
 
-
         $mappings = $settings['mappings'];
         $connections = $settings['connections'];
+
+        $deletedConnection = isset($connections[$key]) ? $connections[$key] : null;
+        $deletedIntId = $deletedConnection ? Arr::get($deletedConnection, 'provider_settings.connection_id') : null;
 
         unset($connections[$key]);
 
@@ -130,13 +230,37 @@ class Settings
         $settings['mappings'] = $mappings;
         $settings['connections'] = $connections;
 
-        if (Arr::get($settings, 'misc.default_connection') == $key) {
-            $default = Arr::get($settings, 'mappings', []);
-            $default = reset($default);
-            Arr::set($settings, 'misc.default_connection', $default ?: '');
+        $defaultConnectionId = Arr::get($settings, 'misc.default_connection');
+        $isDefaultMatched = false;
+        if (!is_null($defaultConnectionId) && $defaultConnectionId !== '') {
+            if (!is_null($deletedIntId) && (string)$defaultConnectionId === (string)$deletedIntId) {
+                $isDefaultMatched = true;
+            } elseif ((string)$defaultConnectionId === (string)$key) {
+                $isDefaultMatched = true;
+            }
         }
 
-        if (Arr::get($settings, 'misc.fallback_connection') == $key) {
+        if ($isDefaultMatched) {
+            if (count($connections)) {
+                $firstConn = reset($connections);
+                $newDefaultId = Arr::get($firstConn, 'provider_settings.connection_id');
+                Arr::set($settings, 'misc.default_connection', !is_null($newDefaultId) ? (int)$newDefaultId : '');
+            } else {
+                Arr::set($settings, 'misc.default_connection', '');
+            }
+        }
+
+        $fallbackConnectionId = Arr::get($settings, 'misc.fallback_connection');
+        $isFallbackMatched = false;
+        if (!is_null($fallbackConnectionId) && $fallbackConnectionId !== '') {
+            if (!is_null($deletedIntId) && (string)$fallbackConnectionId === (string)$deletedIntId) {
+                $isFallbackMatched = true;
+            } elseif ((string)$fallbackConnectionId === (string)$key) {
+                $isFallbackMatched = true;
+            }
+        }
+
+        if ($isFallbackMatched) {
             Arr::set($settings, 'misc.fallback_connection', '');
         }
 

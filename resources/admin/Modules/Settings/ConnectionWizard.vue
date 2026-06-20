@@ -21,6 +21,7 @@
                                     data-1p-ignore
                                     data-form-type="other"
                                     name="fluentsmtp_sender_email"
+                                    :disabled="connection.key_store === 'wp_config'"
                                 ></el-input>
                                 <p style="color: red;" v-if="is_conflicted">{{ $t('__ANOTHER_CONNECTION_NOTICE') }}</p>
                             </el-form-item>
@@ -60,6 +61,7 @@
                                     type="text"
                                     :placeholder="$t('From Name')"
                                     v-model="connection.sender_name"
+                                    :disabled="connection.key_store === 'wp_config'"
                                 ></el-input>
                                 <error :error="errors.get('sender_name')"/>
                             </el-form-item>
@@ -86,6 +88,7 @@
                         :connection="connection"
                         :provider="providers[connection.provider]"
                         :is_new="is_new"
+                        :connections="connections"
                     />
                 </div>
                 <p v-if="providers[connection.provider].note" style="padding: 5px 0px; font-size: 16px; color: #ff5722;"

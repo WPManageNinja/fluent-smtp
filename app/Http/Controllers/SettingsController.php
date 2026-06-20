@@ -19,6 +19,10 @@ class SettingsController extends Controller
         try {
             $setting = $settings->get();
 
+            if (isset($setting['connections'])) {
+                $setting['connections'] = $this->maskConnections($setting['connections']);
+            }
+
             return $this->sendSuccess([
                 'settings' => $setting
             ]);
@@ -92,7 +96,7 @@ class SettingsController extends Controller
 
             return $this->sendSuccess([
                 'message'     => __('Settings saved successfully.', 'fluent-smtp'),
-                'connections' => $settings->getConnections(),
+                'connections' => $this->maskConnections($settings->getConnections()),
                 'mappings'    => $settings->getMappings(),
                 'misc'        => $settings->getMisc()
             ]);
@@ -120,9 +124,38 @@ class SettingsController extends Controller
     {
         $this->verify();
 
-        $settings = $settings->delete($request->get('key'));
+        $connectionId = $request->get('connection_id');
+        if (!is_null($connectionId) && $connectionId !== '') {
+            [$key, $connection] = $settings->getConnectionByIntId((int)$connectionId);
+            if ($key) {
+                $settingsData = $settings->delete($key);
+                if (isset($settingsData['connections'])) {
+                    $settingsData['connections'] = $this->maskConnections($settingsData['connections']);
+                }
+                return $this->sendSuccess($settingsData);
+            }
+        }
 
-        return $this->sendSuccess($settings);
+        $settingsData = $settings->delete($request->get('key'));
+        if (isset($settingsData['connections'])) {
+            $settingsData['connections'] = $this->maskConnections($settingsData['connections']);
+        }
+
+        return $this->sendSuccess($settingsData);
+    }
+
+    protected function maskConnections($connections)
+    {
+        if (is_array($connections)) {
+            foreach ($connections as $key => $connection) {
+                if (Arr::get($connection, 'provider_settings.key_store') === 'wp_config') {
+                    if (isset($connection['provider_settings']['password'])) {
+                        $connections[$key]['provider_settings']['password'] = '********************';
+                    }
+                }
+            }
+        }
+        return $connections;
     }
 
     public function storeGlobals(Request $request, Settings $settings)

@@ -52,6 +52,7 @@ class ActionsRegistrar
         $this->registerSiteInitialization();
         $this->registerCustomActions();
         $this->registerRestRoutes();
+        $this->registerMigration();
     }
 
     /**
@@ -112,6 +113,21 @@ class ActionsRegistrar
                 'callback'            => [$this, 'handleOutlookCallback'],
                 'permission_callback' => [$this, 'verifyOutlookCallbackState'],
             ]);
+        });
+    }
+
+    /**
+     * Register connection ID migration hook on admin_init.
+     *
+     * @return void
+     */
+    protected function registerMigration()
+    {
+        $this->app->addAction('admin_init', function () {
+            if (!get_option('_fluentsmtp_conn_id_migrated')) {
+                (new \FluentMail\App\Models\Settings())->assignConnectionIds();
+                update_option('_fluentsmtp_conn_id_migrated', '1', false);
+            }
         });
     }
 

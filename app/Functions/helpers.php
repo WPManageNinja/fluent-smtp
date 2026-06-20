@@ -87,13 +87,25 @@ if (!function_exists('fluentMailDefaultConnection')) {
             return [];
         }
 
-        if (
-            isset($settings['misc']['default_connection']) &&
-            isset($settings['connections'][$settings['misc']['default_connection']])
-        ) {
-            $default = $settings['misc']['default_connection'];
-            $defaultConnection = $settings['connections'][$default]['provider_settings'];
-        } else if (count($settings['connections'])) {
+        $defaultIntId = \FluentMail\Includes\Support\Arr::get($settings, 'misc.default_connection');
+
+        if (!is_null($defaultIntId) && $defaultIntId !== '') {
+            // Find connection by integer ID
+            foreach ($settings['connections'] as $connection) {
+                $connId = \FluentMail\Includes\Support\Arr::get($connection, 'provider_settings.connection_id');
+                if (!is_null($connId) && (int)$connId === (int)$defaultIntId) {
+                    $defaultConnection = $connection['provider_settings'];
+                    return $defaultConnection;
+                }
+            }
+            // Fallback to legacy MD5 lookup if not found as an integer ID
+            if (isset($settings['connections'][$defaultIntId])) {
+                $defaultConnection = $settings['connections'][$defaultIntId]['provider_settings'];
+                return $defaultConnection;
+            }
+        }
+
+        if (count($settings['connections'])) {
             $connection = reset($settings['connections']);
             $defaultConnection = $connection['provider_settings'];
         } else {
@@ -711,6 +723,67 @@ if (!function_exists('fluentMailGetSettings')) {
             }
         }
 
+        if (!empty($settings['connections']) && is_array($settings['connections'])) {
+            foreach ($settings['connections'] as $key => $connection) {
+                $ps = $connection['provider_settings'];
+
+                if (\FluentMail\Includes\Support\Arr::get($ps, 'key_store') !== 'wp_config') {
+                    continue;
+                }
+
+                $serial = \FluentMail\Includes\Support\Arr::get($ps, 'connection_id');
+                if (is_null($serial)) {
+                    // Legacy single-constant fallback
+                    $username = defined('FLUENTMAIL_SMTP_USERNAME') ? FLUENTMAIL_SMTP_USERNAME : '';
+                    $password = defined('FLUENTMAIL_SMTP_PASSWORD') ? FLUENTMAIL_SMTP_PASSWORD : '';
+
+                    if ($username) {
+                        $settings['connections'][$key]['provider_settings']['username'] = $username;
+                    }
+                    if ($password) {
+                        $settings['connections'][$key]['provider_settings']['password'] = $password;
+                    }
+                    continue;
+                }
+
+                $suffix = '_' . $serial;
+
+                // Resolve all SMTP settings from constants (if defined) or fall back to default/empty values.
+                $host = defined('FLUENTMAIL_SMTP_HOST' . $suffix) ? constant('FLUENTMAIL_SMTP_HOST' . $suffix) : '';
+                $port = defined('FLUENTMAIL_SMTP_PORT' . $suffix) ? (int)constant('FLUENTMAIL_SMTP_PORT' . $suffix) : 587;
+                $enc  = defined('FLUENTMAIL_SMTP_ENCRYPTION' . $suffix) ? constant('FLUENTMAIL_SMTP_ENCRYPTION' . $suffix) : 'tls';
+                $auth = defined('FLUENTMAIL_SMTP_AUTH' . $suffix) ? constant('FLUENTMAIL_SMTP_AUTH' . $suffix) : 'yes';
+                $username = defined('FLUENTMAIL_SMTP_USERNAME' . $suffix) ? constant('FLUENTMAIL_SMTP_USERNAME' . $suffix) : '';
+                $password = defined('FLUENTMAIL_SMTP_PASSWORD' . $suffix) ? constant('FLUENTMAIL_SMTP_PASSWORD' . $suffix) : '';
+                $senderName = defined('FLUENTMAIL_SMTP_SENDER_NAME' . $suffix) ? constant('FLUENTMAIL_SMTP_SENDER_NAME' . $suffix) : get_bloginfo('name');
+
+                // Sender email: auto-derive from username if it is a valid email, else read explicit constant.
+                $senderEmail = '';
+                if (is_email($username)) {
+                    $senderEmail = $username;
+                } else {
+                    $senderEmail = defined('FLUENTMAIL_SMTP_SENDER_EMAIL' . $suffix) ? constant('FLUENTMAIL_SMTP_SENDER_EMAIL' . $suffix) : '';
+                }
+
+                // Merge resolved values into the connection settings
+                $settings['connections'][$key]['provider_settings'] = array_merge($ps, [
+                    'host'         => $host,
+                    'port'         => $port,
+                    'encryption'   => $enc,
+                    'auth'         => $auth,
+                    'username'     => $username,
+                    'password'     => $password,
+                    'sender_email' => $senderEmail,
+                    'sender_name'  => $senderName,
+                ]);
+
+                // Ensure mappings reflect the resolved sender_email
+                if ($senderEmail) {
+                    $settings['mappings'][$senderEmail] = $key;
+                }
+            }
+        }
+
         $cachedSettings = $settings;
 
         return $settings;
@@ -727,6 +800,20 @@ if (!function_exists('fluentMailSetSettings')) {
      */
     function fluentMailSetSettings($settings)
     {
+        if (!empty($settings['connections']) && is_array($settings['connections'])) {
+            foreach ($settings['connections'] as $key => $connection) {
+                $ps = \FluentMail\Includes\Support\Arr::get($connection, 'provider_settings');
+                if ($ps && \FluentMail\Includes\Support\Arr::get($ps, 'key_store') === 'wp_config') {
+                    $serial = \FluentMail\Includes\Support\Arr::get($ps, 'connection_id');
+                    if (!is_null($serial)) {
+                        $fieldsToStrip = ['host', 'port', 'encryption', 'auth', 'username', 'password', 'sender_email', 'sender_name'];
+                        foreach ($fieldsToStrip as $field) {
+                            unset($settings['connections'][$key]['provider_settings'][$field]);
+                        }
+                    }
+                }
+            }
+        }
 
         /**
          * Get the value of the 'use_encrypt' setting.

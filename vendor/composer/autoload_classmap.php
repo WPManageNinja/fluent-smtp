@@ -53,6 +53,8 @@ return array(
     'FluentMail\\App\\Services\\Mailer\\Providers\\AmazonSes\\SimpleEmailServiceRequest' => $baseDir . '/app/Services/Mailer/Providers/AmazonSes/SimpleEmailServiceRequest.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\AmazonSes\\Validator' => $baseDir . '/app/Services/Mailer/Providers/AmazonSes/Validator.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\AmazonSes\\ValidatorTrait' => $baseDir . '/app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php',
+    'FluentMail\\App\\Services\\Mailer\\Providers\\Cloudflare\\Handler' => $baseDir . '/app/Services/Mailer/Providers/Cloudflare/Handler.php',
+    'FluentMail\\App\\Services\\Mailer\\Providers\\Cloudflare\\ValidatorTrait' => $baseDir . '/app/Services/Mailer/Providers/Cloudflare/ValidatorTrait.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\DefaultMail\\Handler' => $baseDir . '/app/Services/Mailer/Providers/DefaultMail/Handler.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\ElasticMail\\Handler' => $baseDir . '/app/Services/Mailer/Providers/ElasticMail/Handler.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\ElasticMail\\ValidatorTrait' => $baseDir . '/app/Services/Mailer/Providers/ElasticMail/ValidatorTrait.php',

@@ -47,8 +47,8 @@
                 <el-select v-model="settings.misc.default_connection">
                     <el-option
                         v-for="(connection, connectionId) in settings.connections"
-                        :key="connectionId"
-                        :value="connectionId"
+                        :key="connection.provider_settings.connection_id !== undefined && connection.provider_settings.connection_id !== null ? connection.provider_settings.connection_id : connectionId"
+                        :value="connection.provider_settings.connection_id !== undefined && connection.provider_settings.connection_id !== null ? connection.provider_settings.connection_id : connectionId"
                         :label="connection.title +' - '+ connection.provider_settings.sender_email"
                     ></el-option>
                 </el-select>
@@ -67,9 +67,9 @@
                 <el-select clearable v-if="connectionsCount > 1" v-model="settings.misc.fallback_connection">
                     <el-option
                         v-for="(connection, connectionId) in settings.connections"
-                        :key="connectionId"
-                        :disabled="settings.misc.default_connection == connectionId"
-                        :value="connectionId"
+                        :key="connection.provider_settings.connection_id !== undefined && connection.provider_settings.connection_id !== null ? connection.provider_settings.connection_id : connectionId"
+                        :disabled="settings.misc.default_connection == (connection.provider_settings.connection_id !== undefined && connection.provider_settings.connection_id !== null ? connection.provider_settings.connection_id : connectionId)"
+                        :value="connection.provider_settings.connection_id !== undefined && connection.provider_settings.connection_id !== null ? connection.provider_settings.connection_id : connectionId"
                         :label="connection.title +' - '+ connection.provider_settings.sender_email"
                     ></el-option>
                 </el-select>
