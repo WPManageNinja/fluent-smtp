@@ -12,3 +12,4 @@ vendor
 fluent-smtp/*
 research
 .claude
+*.code-workspace

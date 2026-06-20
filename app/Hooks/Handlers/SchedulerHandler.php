@@ -172,12 +172,20 @@ class SchedulerHandler
 
         $fallbackConnectionId = \FluentMail\Includes\Support\Arr::get($settings, 'misc.fallback_connection');
 
-        if (!$fallbackConnectionId) {
+        if (is_null($fallbackConnectionId) || $fallbackConnectionId === '') {
             do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
             return false;
         }
 
-        $fallbackConnection = \FluentMail\Includes\Support\Arr::get($settings, 'connections.' . $fallbackConnectionId);
+        // Try lookup by integer ID
+        $fallbackConnection = null;
+        $settingsModel = new \FluentMail\App\Models\Settings();
+        [$fallbackKey, $fallbackConnection] = $settingsModel->getConnectionByIntId($fallbackConnectionId);
+
+        // Fallback to legacy MD5 key lookup if not found
+        if (!$fallbackConnection) {
+            $fallbackConnection = \FluentMail\Includes\Support\Arr::get($settings, 'connections.' . $fallbackConnectionId);
+        }
 
         if (!$fallbackConnection) {
             do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);

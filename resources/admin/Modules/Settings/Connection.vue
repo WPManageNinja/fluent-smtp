@@ -36,7 +36,19 @@
         },
         created() {
             const key = this.$route.query.connection_key;
-            if (key && key !== '0') {
+            const id = this.$route.query.connection_id;
+
+            if (id !== undefined && id !== null && id !== '') {
+                this.title = this.$t('Edit Connection');
+                jQuery.each(this.settings.connections, (connKey, connection) => {
+                    const connId = connection.provider_settings.connection_id;
+                    if (connId !== undefined && connId !== null && String(connId) === String(id)) {
+                        this.provider = connection.provider_settings;
+                        this.provider_key = connKey;
+                        return false;
+                    }
+                });
+            } else if (key && key !== '0') {
                 this.title = this.$t('Edit Connection');
                 this.provider = this.settings.connections[key].provider_settings;
                 this.provider_key = key;

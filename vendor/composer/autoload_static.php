@@ -85,6 +85,8 @@ class ComposerStaticInit9b719a7d374be78de74c2068943692fe
         'FluentMail\\App\\Services\\Mailer\\Providers\\AmazonSes\\SimpleEmailServiceRequest' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/AmazonSes/SimpleEmailServiceRequest.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\AmazonSes\\Validator' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/AmazonSes/Validator.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\AmazonSes\\ValidatorTrait' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php',
+        'FluentMail\\App\\Services\\Mailer\\Providers\\Cloudflare\\Handler' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/Cloudflare/Handler.php',
+        'FluentMail\\App\\Services\\Mailer\\Providers\\Cloudflare\\ValidatorTrait' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/Cloudflare/ValidatorTrait.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\DefaultMail\\Handler' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/DefaultMail/Handler.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\ElasticMail\\Handler' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/ElasticMail/Handler.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\ElasticMail\\ValidatorTrait' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/ElasticMail/ValidatorTrait.php',

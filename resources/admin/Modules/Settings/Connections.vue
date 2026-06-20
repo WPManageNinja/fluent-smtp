@@ -34,6 +34,7 @@
                             <el-table-column prop="sender_email" :label="$t('From Email')">
                                 <template slot-scope="scope">
                                     <span style="cursor: pointer;" @click="showConnection(scope.row)">{{ scope.row.sender_email }}</span>
+                                    <el-tag size="mini" type="warning" style="margin-left: 8px" v-slot v-if="scope.row.key_store === 'wp_config'">wp-config</el-tag>
                                 </template>
                             </el-table-column>
                             <el-table-column width="120" :label="$t('Actions')" align="center">
@@ -133,15 +134,26 @@
                 this.$router.push({ name: 'connection' });
             },
             editConnection(connection) {
-                this.$router.push({
-                    name: 'connection',
-                    query: { connection_key: connection.unique_key }
-                });
+                if (connection.connection_id !== undefined && connection.connection_id !== null) {
+                    this.$router.push({
+                        name: 'connection',
+                        query: { connection_id: connection.connection_id }
+                    });
+                } else {
+                    this.$router.push({
+                        name: 'connection',
+                        query: { connection_key: connection.unique_key }
+                    });
+                }
             },
             async deleteConnection(connection) {
-                const result = await this.$post('settings/delete', {
-                    key: connection.unique_key
-                });
+                const postData = {};
+                if (connection.connection_id !== undefined && connection.connection_id !== null) {
+                    postData.connection_id = connection.connection_id;
+                } else {
+                    postData.key = connection.unique_key;
+                }
+                const result = await this.$post('settings/delete', postData);
 
                 this.settings.connections = result.data.connections;
                 this.settings.misc.default_connection = result.data.misc.default_connection;
