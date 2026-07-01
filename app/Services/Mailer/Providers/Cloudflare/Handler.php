@@ -288,7 +288,7 @@ class Handler extends BaseHandler
 
             try {
                 $file = $this->secureFileRead($attachment[0]);
-                $fileName = basename($attachment[0]);
+                $fileName = $attachment[2] ?? basename($attachment[0]);
             } catch (\Exception $e) {
                 error_log('FluentSMTP Cloudflare: Failed to read attachment - ' . $e->getMessage());
                 $file = false;

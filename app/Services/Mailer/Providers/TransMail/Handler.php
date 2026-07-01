@@ -186,7 +186,7 @@ class Handler extends BaseHandler
             try {
                 // Use secure file reading with path traversal protection
                 $file = $this->secureFileRead($attachment[0]);
-                $fileName = basename($attachment[0]);
+                $fileName = $attachment[2] ?? basename($attachment[0]);
             } catch (\Exception $e) {
                 // Log error and skip this attachment
                 error_log('FluentSMTP TransMail: Failed to read attachment - ' . $e->getMessage());

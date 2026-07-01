@@ -173,7 +173,7 @@ class Handler extends BaseHandler
             try {
                 // Use secure file reading with path traversal protection
                 $file = $this->secureFileRead($attachment[0]);
-                $fileName = basename($attachment[0]);
+                $fileName = $attachment[2] ?? basename($attachment[0]);
 
                 // Get MIME type from the validated real path
                 $realPath = realpath($attachment[0]);
