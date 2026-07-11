@@ -72,7 +72,7 @@
                 ];
             },
             setMenus() {
-                this.items = this.applyFilters('fluentmail_top_menus', this.defaultRoutes());
+                this.items = this.applyFilters('fluent_mail_top_menus', this.defaultRoutes());
                 this.setActive();
             },
             setActive() {
