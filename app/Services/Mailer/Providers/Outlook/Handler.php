@@ -53,6 +53,10 @@ class Handler extends BaseHandler
 
         $accessToken = $this->getAccessToken($data);
 
+        if (is_wp_error($accessToken)) {
+            return new \WP_Error(422, __('Failed to refresh the Outlook access token: ', 'fluent-smtp') . $accessToken->get_error_message(), []);
+        }
+
         $api = (new API($data['client_id'], $data['client_secret']));
 
         $result = $api->sendMime($mime, $accessToken);
@@ -165,8 +169,8 @@ class Handler extends BaseHandler
                 'refresh_token' => $config['refresh_token']
             ]);
 
-            if(is_wp_error($tokens)) {
-                return false;
+            if (is_wp_error($tokens)) {
+                return $tokens;
             }
 
             $this->saveNewTokens($config, $tokens);

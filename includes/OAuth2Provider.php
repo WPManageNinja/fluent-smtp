@@ -186,20 +186,31 @@ class OAuth2Provider
         }
 
         $responseBody = wp_remote_retrieve_body($response);
+        $responseCode = wp_remote_retrieve_response_code($response);
 
-        if (false === is_array($response)) {
+        $tokens = \json_decode($responseBody, true);
+
+        if (!is_array($tokens)) {
             throw new \Exception(
                 'Invalid response received from Authorization Server. Expected JSON.'
             );
         }
 
-        if(empty(['access_token'])) {
+        if (!empty($tokens['error'])) {
+            $errorMessage = $tokens['error'];
+            if (!empty($tokens['error_description'])) {
+                $errorMessage .= ': ' . $tokens['error_description'];
+            }
+            throw new \Exception(wp_kses_post($errorMessage)); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+        }
+
+        if ($responseCode >= 300 || empty($tokens['access_token'])) {
             throw new \Exception(
-                'Invalid response received from Authorization Server.'
+                'Authorization Server returned HTTP ' . intval($responseCode) . ' without an access token.'
             );
         }
 
-        return \json_decode($responseBody, true);
+        return $tokens;
     }
 
 

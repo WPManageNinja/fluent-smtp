@@ -50,6 +50,10 @@ class API
      */
     public function sendMime($mime, $accessToken)
     {
+        if (empty($accessToken) || is_wp_error($accessToken) || !is_string($accessToken)) {
+            return new \WP_Error(401, __('Outlook API Error: No valid access token available. Please re-authenticate the connection.', 'fluent-smtp'));
+        }
+
         $response = wp_remote_request('https://graph.microsoft.com/v1.0/me/sendMail', [
             'method'  => 'POST',
             'headers' => [
@@ -66,15 +70,16 @@ class API
         $responseCode = wp_remote_retrieve_response_code($response);
 
         if ($responseCode >= 300) {
-            $error = Arr::get($response, 'response.message');
+            $responseBody = json_decode(wp_remote_retrieve_body($response), true);
+
+            $error = Arr::get($responseBody, 'error.message');
 
             if (!$error) {
-                $responseBody = json_decode(wp_remote_retrieve_body($response), true);
+                $error = Arr::get($response, 'response.message');
+            }
 
-                $error = Arr::get($responseBody, 'error.message');
-                if (!$error) {
-                    $error = __('Something with wrong with Outlook API. Please check your API Settings', 'fluent-smtp');
-                }
+            if (!$error) {
+                $error = __('Something went wrong with the Outlook API. Please check your API Settings', 'fluent-smtp');
             }
 
             return new \WP_Error($responseCode, $error);
