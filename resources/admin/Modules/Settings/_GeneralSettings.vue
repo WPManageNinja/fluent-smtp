@@ -94,6 +94,14 @@
                 >{{$t('__Email_TEXT_PART_Label')}}</el-checkbox>
             </el-form-item>
 
+            <el-form-item :label="$t('Auto-Retry Failed Emails')">
+                <el-checkbox
+                    v-model="settings.misc.auto_retry_failed_emails"
+                    true-label="yes"
+                    false-label="no"
+                >{{$t('__auto_retry_label')}}</el-checkbox>
+            </el-form-item>
+
             <el-button
                 v-loading="saving"
                 @click="saveMiscSettings()"

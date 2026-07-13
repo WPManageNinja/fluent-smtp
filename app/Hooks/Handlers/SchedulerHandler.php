@@ -26,6 +26,11 @@ class SchedulerHandler
     {
         $this->deleteOldEmails();
         $this->sendDailyDigest();
+
+        // Runs last so the sweep's own retry attempts (which define
+        // FLUENTMAIL_LOG_OFF for the rest of this request) don't suppress
+        // logging of the digest email sent above.
+        (new AutoRetryHandler())->sweepStrandedRetries();
     }
 
     private function deleteOldEmails()
@@ -258,6 +263,12 @@ class SchedulerHandler
 
     public function maybeSendNotification($rowId, $handler, $logData = [])
     {
+        if (AutoRetryHandler::willRetry($rowId)) {
+            // An auto-retry attempt is pending; notify only if the final
+            // attempt also fails (AutoRetryHandler re-fires this action then).
+            return false;
+        }
+
         $lastNotificationSent = get_option('_fsmtp_last_notification_sent');
         if ($lastNotificationSent && (time() - $lastNotificationSent) < 60) {
             return false;

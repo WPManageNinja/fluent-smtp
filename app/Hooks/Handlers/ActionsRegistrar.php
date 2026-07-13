@@ -5,6 +5,7 @@ namespace FluentMail\App\Hooks\Handlers;
 use FluentMail\Includes\Core\Application;
 use FluentMail\App\Hooks\Handlers\AdminMenuHandler;
 use FluentMail\App\Hooks\Handlers\SchedulerHandler;
+use FluentMail\App\Hooks\Handlers\AutoRetryHandler;
 use FluentMail\App\Hooks\Handlers\InitializeSiteHandler;
 use WP_REST_Request;
 
@@ -75,6 +76,7 @@ class ActionsRegistrar
     protected function registerScheduler()
     {
         (new SchedulerHandler)->register();
+        (new AutoRetryHandler)->register();
     }
 
     /**
