@@ -47,13 +47,13 @@ class Handler extends BaseHandler
             }
 
             if (isset($this->phpMailer->FromName)) {
-                $fromName = $this->phpMailer->FromName;
+                $fromName = html_entity_decode($this->phpMailer->FromName, ENT_QUOTES, 'UTF-8');
 
                 if (
                     $this->getSetting('force_from_name') == 'yes' &&
                     $customFrom = $this->getSetting('sender_name')
                 ) {
-                    $fromName = $customFrom;
+                    $fromName = html_entity_decode($customFrom, ENT_QUOTES, 'UTF-8');
                 }
 
                 $this->phpMailer->setFrom($fromEmail, $fromName);

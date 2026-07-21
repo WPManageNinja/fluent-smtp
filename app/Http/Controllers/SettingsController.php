@@ -75,6 +75,9 @@ class SettingsController extends Controller
 
                 if (is_string($value) && $value) {
                     $connection[$index] = sanitize_text_field($value);
+                    if ($index === 'sender_name') {
+                        $connection[$index] = html_entity_decode($connection[$index], ENT_QUOTES, 'UTF-8');
+                    }
                 }
             }
 

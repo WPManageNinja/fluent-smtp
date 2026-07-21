@@ -60,7 +60,7 @@ class BaseHandler
         $this->attributes = [];
         
         if ($this->isForced('from_name')) {
-            $this->phpMailer->FromName = $this->getSetting('sender_name');
+            $this->phpMailer->FromName = html_entity_decode($this->getSetting('sender_name'), ENT_QUOTES, 'UTF-8');
         }
 
         if ($this->getSetting('return_path') == 'yes') {
@@ -135,7 +135,7 @@ class BaseHandler
 
     protected function setFrom()
     {
-        $name = $this->getSetting('sender_name');
+        $name = html_entity_decode($this->getSetting('sender_name'), ENT_QUOTES, 'UTF-8');
         $email = $this->getSetting('sender_email');
         $overrideName = $this->getSetting('force_from_name');
 
@@ -145,8 +145,8 @@ class BaseHandler
             $from = $name . ' <' . $email . '>';
         } elseif ($this->phpMailer->FromName) {
             $this->attributes['sender_email'] = $email;
-            $this->attributes['sender_name'] = $this->phpMailer->FromName;
-            $from = $this->phpMailer->FromName . ' <' . $email . '>';
+            $this->attributes['sender_name'] = html_entity_decode($this->phpMailer->FromName, ENT_QUOTES, 'UTF-8');
+            $from = $this->attributes['sender_name'] . ' <' . $email . '>';
         } else {
             $from = $this->attributes['sender_email'] = $email;
         }
@@ -240,7 +240,7 @@ class BaseHandler
         $subject = '';
 
         if (isset($this->attributes['subject'])) {
-            $subject = $this->attributes['subject'];
+            $subject = html_entity_decode($this->attributes['subject'], ENT_QUOTES, 'UTF-8');
         }
 
         return $subject;
@@ -289,7 +289,7 @@ class BaseHandler
             $data = [
                 'to' => $this->serialize($this->attributes['to']),
                 'from' => $this->attributes['from'],
-                'subject' => sanitize_text_field($this->attributes['subject']),
+                'subject' => html_entity_decode(sanitize_text_field($this->attributes['subject']), ENT_QUOTES, 'UTF-8'),
                 'body' => $this->attributes['message'],
                 'attachments' => $this->serialize($this->attributes['attachments']),
                 'status'   => $status ? 'sent' : 'failed',
