@@ -139,6 +139,130 @@ class SettingsController extends Controller
         ]);
     }
 
+    public function exportConnections(Settings $settings)
+    {
+        $this->verify();
+
+        try {
+            $settingsData = $settings->get();
+            $connections = Arr::get($settingsData, 'connections', []);
+            $mappings = Arr::get($settingsData, 'mappings', []);
+
+            $exportData = [
+                'version'      => '1.0',
+                'exported_at'  => current_time('c'),
+                'source_url'   => site_url(),
+                'plugin_version' => FLUENTMAIL_PLUGIN_VERSION,
+                'connections'  => $connections,
+                'mappings'     => $mappings,
+            ];
+
+            return $this->sendSuccess([
+                'export_data' => $exportData,
+                'message'     => __('Connections exported successfully.', 'fluent-smtp')
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError([
+                'message' => $e->getMessage()
+            ], $e->getCode());
+        }
+    }
+
+    public function importConnections(Request $request, Settings $settings)
+    {
+        $this->verify();
+
+        try {
+            $data = $request->except(['action', 'nonce']);
+            $importData = json_decode(wp_unslash($data['import_data']), true);
+
+            if (!$importData || !isset($importData['connections']) || empty($importData['connections'])) {
+                return $this->sendError([
+                    'message' => __('Invalid import data. No connections found in the file.', 'fluent-smtp')
+                ], 422);
+            }
+
+            $connections = $importData['connections'];
+            $importMappings = isset($importData['mappings']) ? $importData['mappings'] : [];
+
+            // Validate provider keys exist in current plugin config
+            $currentSettings = $settings->get();
+            $availableProviders = Arr::get($currentSettings, 'providers', []);
+
+            $validatedConnections = [];
+            $skippedCount = 0;
+            $addedCount = 0;
+
+            foreach ($connections as $key => $connection) {
+                $providerKey = Arr::get($connection, 'provider_settings.provider');
+
+                if (!$providerKey || !isset($availableProviders[$providerKey])) {
+                    $skippedCount++;
+                    continue;
+                }
+
+                $validatedConnections[$key] = $connection;
+            }
+
+            $addedCount = count($validatedConnections);
+
+            if ($addedCount === 0) {
+                return $this->sendError([
+                    'message' => __('None of the connections could be imported. The provider(s) may not be available in this installation.', 'fluent-smtp')
+                ], 422);
+            }
+
+            $mode = Arr::get($data, 'mode', 'merge');
+
+            if ($mode === 'replace') {
+                $currentSettings['connections'] = $validatedConnections;
+                $currentSettings['mappings'] = $importMappings;
+            } else {
+                // Merge: add/overwrite individual connections
+                foreach ($validatedConnections as $key => $connection) {
+                    $currentSettings['connections'][$key] = $connection;
+                }
+                // Also merge mappings
+                foreach ($importMappings as $email => $connectionKey) {
+                    $currentSettings['mappings'][$email] = $connectionKey;
+                }
+
+                // Clean up orphaned mappings
+                if ($currentSettings['mappings'] && $currentSettings['connections']) {
+                    $validMappings = array_keys(Arr::get($currentSettings, 'connections', []));
+                    $currentSettings['mappings'] = array_filter($currentSettings['mappings'], function ($key) use ($validMappings) {
+                        return in_array($key, $validMappings);
+                    });
+                }
+            }
+
+            fluentMailSetSettings($currentSettings);
+
+            $summary = sprintf(
+                __('%d connection(s) imported successfully.', 'fluent-smtp'),
+                $addedCount
+            );
+
+            if ($skippedCount > 0) {
+                $summary .= ' ' . sprintf(
+                    __('%d connection(s) skipped (provider not available).', 'fluent-smtp'),
+                    $skippedCount
+                );
+            }
+
+            return $this->sendSuccess([
+                'message'     => $summary,
+                'connections' => $settings->getConnections(),
+                'mappings'    => $settings->getMappings(),
+                'misc'        => $settings->getMisc()
+            ]);
+        } catch (Exception $e) {
+            return $this->sendError([
+                'message' => $e->getMessage()
+            ], $e->getCode());
+        }
+    }
+
     public function sendTestEmil(Request $request, Settings $settings)
     {
         $this->verify();

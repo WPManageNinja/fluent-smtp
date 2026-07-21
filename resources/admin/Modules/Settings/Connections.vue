@@ -7,11 +7,25 @@
                         <span style="float:left;">
                             {{$t('Active Email Connections')}}
                         </span>
-                        <span
-                            style="float:right;color:#46A0FC;cursor:pointer;"
-                            @click="addConnection"
-                        >
-                            <i class="el-icon-plus"></i> {{$t('Add Another Connection')}}
+                        <span style="float:right;">
+                            <span
+                                style="color:#67C23A;cursor:pointer;margin-right:16px;"
+                                @click="exportConnections"
+                            >
+                                <i class="el-icon-download"></i> {{$t('Export')}}
+                            </span>
+                            <span
+                                style="color:#46A0FC;cursor:pointer;margin-right:16px;"
+                                @click="showImportDialog = true"
+                            >
+                                <i class="el-icon-upload2"></i> {{$t('Import')}}
+                            </span>
+                            <span
+                                style="color:#46A0FC;cursor:pointer;"
+                                @click="addConnection"
+                            >
+                                <i class="el-icon-plus"></i> {{$t('Add Another Connection')}}
+                            </span>
                         </span>
                     </div>
                     <div class="fss_content">
@@ -91,6 +105,61 @@
                 </div>
             </el-col>
         </el-row>
+
+        <el-dialog
+            :title="$t('Import Connections')"
+            :visible.sync="showImportDialog"
+            width="500px"
+            :close-on-click-modal="false"
+        >
+            <div style="padding: 10px 0;">
+                <p style="margin-bottom: 15px; color: #666;">
+                    {{ $t('Select a JSON file exported from another FluentSMTP installation. The connections will be imported and merged with your existing ones.') }}
+                </p>
+                <el-upload
+                    ref="importUpload"
+                    :auto-upload="false"
+                    :on-change="onImportFileChange"
+                    :on-remove="onImportFileRemove"
+                    accept=".json"
+                    :limit="1"
+                    action="#"
+                >
+                    <el-button size="small" type="primary">
+                        <i class="el-icon-document"></i> {{ $t('Select JSON File') }}
+                    </el-button>
+                    <div slot="tip" class="el-upload__tip" style="color: #999;">
+                        {{ $t('Only .json files are accepted') }}
+                    </div>
+                </el-upload>
+
+                <div v-if="importPreview" style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 4px;">
+                    <p style="font-weight: 600; margin-bottom: 10px;">
+                        <i class="el-icon-info" style="color: #409EFF;"></i>
+                        {{ $t('Connections to import:') }}
+                    </p>
+                    <div v-for="(conn, key) in importPreview" :key="key" style="padding: 6px 0; border-bottom: 1px solid #eee; font-size: 13px;">
+                        <strong>{{ conn.title }}</strong>
+                        <span style="color: #999;"> — {{ conn.provider_settings?.sender_email || 'N/A' }}</span>
+                    </div>
+                    <el-radio-group v-model="importMode" style="margin-top: 15px;">
+                        <el-radio label="merge">{{ $t('Merge with existing connections') }}</el-radio>
+                        <el-radio label="replace">{{ $t('Replace all existing connections') }}</el-radio>
+                    </el-radio-group>
+                </div>
+            </div>
+            <span slot="footer">
+                <el-button @click="closeImportDialog">{{ $t('Cancel') }}</el-button>
+                <el-button
+                    type="primary"
+                    :disabled="!importFileContent"
+                    :loading="importing"
+                    @click="importConnections"
+                >
+                    {{ $t('Import') }}
+                </el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -111,7 +180,12 @@
         data() {
             return {
                 showing_connection: '',
-                active_settings: 'general'
+                active_settings: 'general',
+                showImportDialog: false,
+                importFileContent: null,
+                importPreview: null,
+                importing: false,
+                importMode: 'merge'
             };
         },
         methods: {
@@ -157,6 +231,112 @@
                 this.$nextTick(() => {
                     this.showing_connection = connection.unique_key;
                 });
+            },
+            async exportConnections() {
+                try {
+                    const response = await this.$get('settings/export-connections');
+                    const exportData = response.data.export_data;
+                    const json = JSON.stringify(exportData, null, 2);
+                    const blob = new Blob([json], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'fluent-smtp-connections-' + exportData.source_url.replace(/[^a-z0-9]/gi, '-') + '.json';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+
+                    this.$notify.success({
+                        title: this.$t('Exported'),
+                        message: this.$t('Connections exported successfully.'),
+                        offset: 19
+                    });
+                } catch (error) {
+                    this.$notify.error({
+                        title: this.$t('Export Failed'),
+                        message: error.message || this.$t('An error occurred while exporting connections.'),
+                        offset: 19
+                    });
+                }
+            },
+            onImportFileChange(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        if (!data.connections || Object.keys(data.connections).length === 0) {
+                            this.$notify.error({
+                                title: this.$t('Invalid File'),
+                                message: this.$t('The selected file does not contain any connections.'),
+                                offset: 19
+                            });
+                            this.importFileContent = null;
+                            this.importPreview = null;
+                            return;
+                        }
+                        this.importFileContent = e.target.result;
+                        this.importPreview = data.connections;
+                    } catch (err) {
+                        this.$notify.error({
+                            title: this.$t('Invalid File'),
+                            message: this.$t('The selected file is not a valid JSON file.'),
+                            offset: 19
+                        });
+                        this.importFileContent = null;
+                        this.importPreview = null;
+                    }
+                };
+                reader.readAsText(file.raw);
+            },
+            onImportFileRemove() {
+                this.importFileContent = null;
+                this.importPreview = null;
+            },
+            closeImportDialog() {
+                this.showImportDialog = false;
+                this.importFileContent = null;
+                this.importPreview = null;
+                this.importing = false;
+                this.importMode = 'merge';
+                if (this.$refs.importUpload) {
+                    this.$refs.importUpload.clearFiles();
+                }
+            },
+            async importConnections() {
+                if (!this.importFileContent) return;
+
+                this.importing = true;
+
+                try {
+                    const response = await this.$post('settings/import-connections', {
+                        import_data: this.importFileContent,
+                        mode: this.importMode
+                    });
+
+                    this.settings.connections = response.data.connections;
+                    this.settings.mappings = response.data.mappings;
+                    this.settings.misc = response.data.misc;
+
+                    this.$notify.success({
+                        title: this.$t('Imported'),
+                        message: response.data.message,
+                        offset: 19,
+                        duration: 5000
+                    });
+
+                    this.closeImportDialog();
+                } catch (error) {
+                    const message = error.response?.data?.message || error.message || this.$t('An error occurred while importing connections.');
+                    this.$notify.error({
+                        title: this.$t('Import Failed'),
+                        message: message,
+                        offset: 19,
+                        duration: 5000
+                    });
+                } finally {
+                    this.importing = false;
+                }
             }
         },
         computed: {

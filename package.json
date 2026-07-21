@@ -38,5 +38,9 @@
         "vue": "^2.6.14",
         "vue-chartjs": "^3.5.1",
         "vue-router": "^3.5.2"
+    },
+    "allowScripts": {
+        "@parcel/watcher@2.6.0": true,
+        "core-js@2.6.12": true
     }
 }
