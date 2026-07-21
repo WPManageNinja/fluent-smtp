@@ -173,21 +173,22 @@ class SettingsController extends Controller
         $this->verify();
 
         try {
-            $data = $request->except(['action', 'nonce']);
-            $importData = json_decode(wp_unslash($data['import_data']), true);
+            $input = json_decode(file_get_contents('php://input'), true);
 
-            if (!$importData || !isset($importData['connections']) || empty($importData['connections'])) {
+            if (!$input || !isset($input['import_data']) || empty($input['import_data'])) {
                 return $this->sendError([
-                    'message' => __('Invalid import data. No connections found in the file.', 'fluent-smtp')
+                    'message' => __('Invalid import data. No connections found in the request.', 'fluent-smtp')
                 ], 422);
             }
+
+            $importData = json_decode(wp_unslash($input['import_data']), true);
 
             $connections = $importData['connections'];
             $importMappings = isset($importData['mappings']) ? $importData['mappings'] : [];
 
             // Validate provider keys exist in current plugin config
             $currentSettings = $settings->get();
-            $availableProviders = Arr::get($currentSettings, 'providers', []);
+            $availableProviders = fluentMail('manager')->getConfig('providers');
 
             $validatedConnections = [];
             $skippedCount = 0;
@@ -212,7 +213,7 @@ class SettingsController extends Controller
                 ], 422);
             }
 
-            $mode = Arr::get($data, 'mode', 'merge');
+            $mode = Arr::get($input, 'mode', 'merge');
 
             if ($mode === 'replace') {
                 $currentSettings['connections'] = $validatedConnections;

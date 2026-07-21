@@ -116,22 +116,14 @@
                 <p style="margin-bottom: 15px; color: #666;">
                     {{ $t('Select a JSON file exported from another FluentSMTP installation. The connections will be imported and merged with your existing ones.') }}
                 </p>
-                <el-upload
-                    ref="importUpload"
-                    :auto-upload="false"
-                    :on-change="onImportFileChange"
-                    :on-remove="onImportFileRemove"
-                    accept=".json"
-                    :limit="1"
-                    action="#"
-                >
-                    <el-button size="small" type="primary">
+                <div>
+                    <el-button size="small" type="primary" @click="selectImportFile">
                         <i class="el-icon-document"></i> {{ $t('Select JSON File') }}
                     </el-button>
-                    <div slot="tip" class="el-upload__tip" style="color: #999;">
+                    <div style="color: #999; font-size: 12px; line-height: 1; margin-top: 10px;">
                         {{ $t('Only .json files are accepted') }}
                     </div>
-                </el-upload>
+                </div>
 
                 <div v-if="importPreview" style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 4px;">
                     <p style="font-weight: 600; margin-bottom: 10px;">
@@ -165,7 +157,6 @@
 
 <script type="text/babel">
     import Confirm from '@/Pieces/Confirm';
-    import isEmpty from 'lodash/isEmpty';
     import GeneralSettings from './_GeneralSettings'
 
     import ConnectionDetails from './ConnectionDetails'
@@ -193,15 +184,6 @@
                 const settings = await this.$get('settings');
                 this.settings.mappings = settings.data.settings.mappings;
                 this.settings.connections = settings.data.settings.connections;
-
-                if (isEmpty(this.settings.connections)) {
-                    this.$router.push({
-                        name: 'dashboard',
-                        query: {
-                            is_redirect: 'yes'
-                        }
-                    });
-                }
             },
             addConnection() {
                 this.$router.push({ name: 'connection' });
@@ -260,7 +242,17 @@
                     });
                 }
             },
-            onImportFileChange(file) {
+            selectImportFile() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                input.addEventListener('change', this.onImportFileChange);
+                input.click();
+            },
+            onImportFileChange(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     try {
@@ -287,7 +279,7 @@
                         this.importPreview = null;
                     }
                 };
-                reader.readAsText(file.raw);
+                reader.readAsText(file);
             },
             onImportFileRemove() {
                 this.importFileContent = null;
@@ -299,9 +291,6 @@
                 this.importPreview = null;
                 this.importing = false;
                 this.importMode = 'merge';
-                if (this.$refs.importUpload) {
-                    this.$refs.importUpload.clearFiles();
-                }
             },
             async importConnections() {
                 if (!this.importFileContent) return;
@@ -309,9 +298,15 @@
                 this.importing = true;
 
                 try {
-                    const response = await this.$post('settings/import-connections', {
-                        import_data: this.importFileContent,
-                        mode: this.importMode
+                    const response = await jQuery.ajax({
+                        url: window.ajaxurl + '?action=' + window.FluentMail.appVars.slug + '-post-settings/import-connections&nonce=' + window.FluentMail.appVars.nonce,
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            import_data: this.importFileContent,
+                            mode: this.importMode
+                        }),
+                        processData: false
                     });
 
                     this.settings.connections = response.data.connections;
@@ -327,7 +322,7 @@
 
                     this.closeImportDialog();
                 } catch (error) {
-                    const message = error.response?.data?.message || error.message || this.$t('An error occurred while importing connections.');
+                    const message = error.responseJSON?.data?.message || error.statusText || this.$t('An error occurred while importing connections.');
                     this.$notify.error({
                         title: this.$t('Import Failed'),
                         message: message,
