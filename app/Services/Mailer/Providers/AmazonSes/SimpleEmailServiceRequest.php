@@ -178,11 +178,13 @@ class SimpleEmailServiceRequest
 
 
 		// Execute, grab errors. Connection-phase failures (DNS 6, connect 7,
-		// TLS handshake 35) mean the request never reached AWS, so ONE retry
-		// is always duplicate-safe — this typically recovers a kept-alive
-		// connection that went stale between bulk batches. Errors after the
-		// connection phase are never retried: the request may already have
-		// been processed and a retry could deliver the email twice.
+		// TLS handshake 35) happen while establishing a FRESH connection, so
+		// the request never reached AWS and ONE retry is always duplicate-safe.
+		// (Stale kept-alive sockets are not this case: curl detects a dead
+		// reused connection and reconnects on its own before sending. If a
+		// reused socket dies mid-transfer instead — errno 52/55/56 — the
+		// request bytes may already have reached AWS, so those are never
+		// retried: a retry could deliver the email twice.)
 		for ($attempt = 0; $attempt < 2; $attempt++) {
 			if ($attempt) {
 				// Discard anything the failed attempt streamed into the body.
