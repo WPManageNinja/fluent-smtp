@@ -40,6 +40,14 @@ class BulkSendSessionHandler
      */
     protected static $connectionFingerprint = null;
 
+    /**
+     * Whether the current send is riding a socket left open by a previous
+     * send. The SMTP handler's dead-socket retry only re-sends when the
+     * failure came from a reused connection — a fresh-connect failure is a
+     * real error (relay down, bad credentials) a retry would not fix.
+     */
+    protected static $socketReused = false;
+
     public function register()
     {
         add_action('fluent_crm/email_sender_session_started', [$this, 'startSession']);
@@ -117,6 +125,23 @@ class BulkSendSessionHandler
         }
 
         self::$connectionFingerprint = $fingerprint;
+
+        global $phpmailer;
+
+        self::$socketReused = $phpmailer
+            && method_exists($phpmailer, 'getSMTPInstance')
+            && $phpmailer->getSMTPInstance()->connected();
+    }
+
+    /**
+     * Whether the send being declared reuses an already-open kept-alive
+     * socket (vs establishing a fresh connection).
+     *
+     * @return bool
+     */
+    public static function wasSocketReused()
+    {
+        return self::$socketReused;
     }
 
     /**
@@ -132,6 +157,7 @@ class BulkSendSessionHandler
         // Whatever socket existed no longer does; the next send establishes
         // (and re-fingerprints) its own connection.
         self::$connectionFingerprint = null;
+        self::$socketReused = false;
 
         global $phpmailer;
 

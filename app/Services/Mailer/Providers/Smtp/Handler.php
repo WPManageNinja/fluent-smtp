@@ -4,6 +4,7 @@ namespace FluentMail\App\Services\Mailer\Providers\Smtp;
 
 use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Core\Application;
+use FluentMail\App\Hooks\Handlers\BulkSendSessionHandler;
 use FluentMail\App\Services\Mailer\BaseHandler;
 use FluentMail\App\Services\Mailer\Providers\Smtp\ValidatorTrait;
 
@@ -32,25 +33,14 @@ class Handler extends BaseHandler
             // closes the kept-alive socket when this send's connection identity
             // differs from the one the socket was opened for — PHPMailer alone
             // would silently reuse the old relay's authenticated connection.
-            \FluentMail\App\Hooks\Handlers\BulkSendSessionHandler::ensureConnectionFor([
-                'host'       => $this->getSetting('host'),
-                'port'       => $this->getSetting('port'),
-                'username'   => $this->getSetting('username'),
-                'auth'       => $this->getSetting('auth'),
-                'encryption' => $this->getSetting('encryption'),
-                'auto_tls'   => $this->getSetting('auto_tls'),
-                // Hashed so the raw credential never sits in the fingerprint.
-                // A rotated password must count as a different connection, or
-                // the old authenticated session would keep being reused.
-                'auth_key'   => md5((string)$this->getSetting('password')),
-            ]);
+            BulkSendSessionHandler::ensureConnectionFor($this->getConnectionIdentity());
 
             // Keep-alive is enabled only here — for identity-declared SMTP
             // sends during a bulk session — never via a global phpmailer_init
             // hook, so no other integration's mail can ride an unguarded
             // kept-alive socket. Runs after ensureConnectionFor() so the first
             // send on a switched connection gets keep-alive again immediately.
-            $this->phpMailer->SMTPKeepAlive = \FluentMail\App\Hooks\Handlers\BulkSendSessionHandler::isActive();
+            $this->phpMailer->SMTPKeepAlive = BulkSendSessionHandler::isActive();
 
             $this->phpMailer->isSMTP();
             $this->phpMailer->Host = $this->getSetting('host');
@@ -151,19 +141,68 @@ class Handler extends BaseHandler
             ];
 
         } catch (\Exception $e) {
-            // During a bulk session the relay may have dropped the kept-alive
-            // socket while idle; close it so the NEXT email reconnects fresh
-            // instead of failing on the same dead connection.
-            if (\FluentMail\App\Hooks\Handlers\BulkSendSessionHandler::isActive()) {
-                \FluentMail\App\Hooks\Handlers\BulkSendSessionHandler::closeConnection();
-            }
-
             $returnResponse = new \WP_Error(422, $e->getMessage(), []);
+
+            // During a bulk session the relay may drop the kept-alive socket
+            // under us (idle timeout, per-connection message cap, LB reset);
+            // close it so the next attempt reconnects fresh instead of
+            // failing on the same dead connection.
+            if (BulkSendSessionHandler::isActive()) {
+                $socketWasReused = BulkSendSessionHandler::wasSocketReused();
+
+                BulkSendSessionHandler::closeConnection();
+
+                // Retry THIS email once when a reused socket died under us —
+                // but never after the DATA stage: "data not accepted" is the
+                // one failure where the relay may already have accepted the
+                // message (terminator sent, confirmation lost), so a retry
+                // could deliver it twice. Every other failure provably
+                // happened before acceptance, making one retry on a fresh
+                // connection duplicate-safe. Fresh-connect failures (relay
+                // down, bad credentials) are never retried.
+                if ($socketWasReused && stripos($e->getMessage(), 'data not accepted') === false) {
+                    try {
+                        $this->phpMailer->send();
+
+                        // Healthy fresh connection — re-declare its identity
+                        // so following emails keep full keep-alive reuse.
+                        BulkSendSessionHandler::ensureConnectionFor($this->getConnectionIdentity());
+
+                        $returnResponse = [
+                            'response' => 'OK'
+                        ];
+                    } catch (\Exception $retryException) {
+                        BulkSendSessionHandler::closeConnection();
+                        $returnResponse = new \WP_Error(422, $retryException->getMessage(), []);
+                    }
+                }
+            }
         }
 
         $this->response = $returnResponse;
 
         return $this->handleResponse($this->response);
+    }
+
+    /**
+     * Connection-identifying settings for the keep-alive session guard.
+     *
+     * @return array
+     */
+    private function getConnectionIdentity()
+    {
+        return [
+            'host'       => $this->getSetting('host'),
+            'port'       => $this->getSetting('port'),
+            'username'   => $this->getSetting('username'),
+            'auth'       => $this->getSetting('auth'),
+            'encryption' => $this->getSetting('encryption'),
+            'auto_tls'   => $this->getSetting('auto_tls'),
+            // Hashed so the raw credential never sits in the fingerprint.
+            // A rotated password must count as a different connection, or
+            // the old authenticated session would keep being reused.
+            'auth_key'   => md5((string)$this->getSetting('password')),
+        ];
     }
 
     public function setSettings($settings)
