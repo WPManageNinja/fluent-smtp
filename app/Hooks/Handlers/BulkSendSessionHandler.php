@@ -28,6 +28,15 @@ class BulkSendSessionHandler
 
     protected static $hooked = false;
 
+    /**
+     * Identity of the SMTP connection the kept-alive socket belongs to.
+     * FluentSMTP routes per From address, so one bulk session can interleave
+     * emails bound for DIFFERENT relays/credentials — and PHPMailer's
+     * smtpConnect() reuses an open socket without re-checking Host or auth.
+     * Reusing across identities would send mail through the wrong relay.
+     */
+    protected static $connectionFingerprint = null;
+
     public function register()
     {
         add_action('fluent_crm/email_sender_session_started', [$this, 'startSession']);
@@ -79,6 +88,35 @@ class BulkSendSessionHandler
     }
 
     /**
+     * Guard the kept-alive socket against connection switches mid-session.
+     *
+     * The SMTP provider calls this with its resolved connection settings
+     * before each send. Same identity as the open socket -> keep reusing it.
+     * Different identity (another relay or credentials, routed by From
+     * address) -> close first, so PHPMailer reconnects with the new settings
+     * instead of pushing mail through the previous relay's session. A streak
+     * of same-connection emails keeps the full keep-alive benefit; alternating
+     * connections degrade gracefully to connect-per-send.
+     *
+     * @param array $config Connection-identifying settings (host, port,
+     *                      username, encryption, auth, auto_tls).
+     */
+    public static function ensureConnectionFor($config)
+    {
+        if (!self::$active) {
+            return;
+        }
+
+        $fingerprint = md5(wp_json_encode($config));
+
+        if (self::$connectionFingerprint !== null && self::$connectionFingerprint !== $fingerprint) {
+            self::closeConnection();
+        }
+
+        self::$connectionFingerprint = $fingerprint;
+    }
+
+    /**
      * Close the kept-alive SMTP connection, if one is open.
      *
      * Also called by the SMTP provider handler when a send fails mid-session:
@@ -88,6 +126,10 @@ class BulkSendSessionHandler
      */
     public static function closeConnection()
     {
+        // Whatever socket existed no longer does; the next send establishes
+        // (and re-fingerprints) its own connection.
+        self::$connectionFingerprint = null;
+
         global $phpmailer;
 
         if ($phpmailer && method_exists($phpmailer, 'smtpClose')) {

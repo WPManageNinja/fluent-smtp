@@ -26,6 +26,20 @@ class Handler extends BaseHandler
     protected function postSend()
     {
         try {
+            // FluentSMTP routes per From address, so a bulk session can switch
+            // between different relays/credentials mid-run. The session handler
+            // closes the kept-alive socket when this send's connection identity
+            // differs from the one the socket was opened for — PHPMailer alone
+            // would silently reuse the old relay's authenticated connection.
+            \FluentMail\App\Hooks\Handlers\BulkSendSessionHandler::ensureConnectionFor([
+                'host'       => $this->getSetting('host'),
+                'port'       => $this->getSetting('port'),
+                'username'   => $this->getSetting('username'),
+                'auth'       => $this->getSetting('auth'),
+                'encryption' => $this->getSetting('encryption'),
+                'auto_tls'   => $this->getSetting('auto_tls'),
+            ]);
+
             $this->phpMailer->isSMTP();
             $this->phpMailer->Host = $this->getSetting('host');
             $this->phpMailer->Port = $this->getSetting('port');
