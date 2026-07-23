@@ -29,6 +29,11 @@ class BulkSendSessionHandler
 {
     protected static $active = false;
 
+    /**
+     * Unix timestamp of the most recent session start, for self-expiry.
+     */
+    protected static $activeSince = 0;
+
     protected static $hooked = false;
 
     /**
@@ -64,6 +69,7 @@ class BulkSendSessionHandler
         }
 
         self::$active = true;
+        self::$activeSince = time();
 
         if (self::$hooked) {
             return;
@@ -75,6 +81,8 @@ class BulkSendSessionHandler
 
     public function endSession()
     {
+        // Deliberately checks the raw flag (not isActive()): a session_ended
+        // arriving after the 5-minute self-expiry must still close the socket.
         if (!self::$active) {
             return;
         }
@@ -87,11 +95,17 @@ class BulkSendSessionHandler
     /**
      * Whether a FluentCRM bulk sending session is currently active.
      *
+     * Sessions self-expire after 5 minutes: real sessions last ~50s and every
+     * new lock-winning sender run re-fires session_started (refreshing the
+     * stamp), so only an orphaned session — an unpaired start in a long-lived
+     * process that never received its session_ended — can reach the limit.
+     * Expiry degrades gracefully to connect-per-send.
+     *
      * @return bool
      */
     public static function isActive()
     {
-        return self::$active;
+        return self::$active && (time() - self::$activeSince) < 300;
     }
 
     /**
@@ -111,7 +125,7 @@ class BulkSendSessionHandler
      */
     public static function ensureConnectionFor($config)
     {
-        if (!self::$active) {
+        if (!self::isActive()) {
             return;
         }
 
