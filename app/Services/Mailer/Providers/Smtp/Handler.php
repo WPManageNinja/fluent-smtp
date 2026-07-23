@@ -45,6 +45,13 @@ class Handler extends BaseHandler
                 'auth_key'   => md5((string)$this->getSetting('password')),
             ]);
 
+            // Keep-alive is enabled only here — for identity-declared SMTP
+            // sends during a bulk session — never via a global phpmailer_init
+            // hook, so no other integration's mail can ride an unguarded
+            // kept-alive socket. Runs after ensureConnectionFor() so the first
+            // send on a switched connection gets keep-alive again immediately.
+            $this->phpMailer->SMTPKeepAlive = \FluentMail\App\Hooks\Handlers\BulkSendSessionHandler::isActive();
+
             $this->phpMailer->isSMTP();
             $this->phpMailer->Host = $this->getSetting('host');
             $this->phpMailer->Port = $this->getSetting('port');

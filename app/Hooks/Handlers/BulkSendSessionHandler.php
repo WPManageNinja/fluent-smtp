@@ -17,10 +17,13 @@ namespace FluentMail\App\Hooks\Handlers;
  * cURL handles (see fluentMailSesConnection() and the ToSend handler).
  *
  * The session actions may fire repeatedly or unpaired (FluentCRM documents
- * them as such), so every method here is idempotent. A shutdown close is
- * registered as a crash net; an orphaned socket dies with the PHP process
- * anyway, and one-off emails sent outside a session keep the normal
- * connect-per-send behavior.
+ * them as such), so every method here is idempotent. Keep-alive itself is
+ * enabled per send by the SMTP provider handler — the only path that
+ * declares a connection identity via ensureConnectionFor() — so mail sent
+ * by other phpmailer_init integrations never rides an unguarded kept-alive
+ * socket. A shutdown close is registered as a crash net; an orphaned socket
+ * dies with the PHP process anyway, and one-off emails sent outside a
+ * session keep the normal connect-per-send behavior.
  */
 class BulkSendSessionHandler
 {
@@ -45,6 +48,13 @@ class BulkSendSessionHandler
 
     public function startSession()
     {
+        // Kill switch: some relays cap messages-per-connection, so sites must
+        // be able to disable connection reuse at runtime. Everything else in
+        // this class is inert while no session is marked active.
+        if (!apply_filters('fluentmail_smtp_bulk_keep_alive', true)) {
+            return;
+        }
+
         self::$active = true;
 
         if (self::$hooked) {
@@ -52,18 +62,7 @@ class BulkSendSessionHandler
         }
         self::$hooked = true;
 
-        // Both WP core's wp_mail() and fluent-smtp's override fire
-        // phpmailer_init on every send, so this flips keep-alive on the shared
-        // PHPMailer instance only while a bulk session is active.
-        add_action('phpmailer_init', [$this, 'enableKeepAlive']);
         register_shutdown_function([$this, 'endSession']);
-    }
-
-    public function enableKeepAlive($phpMailer)
-    {
-        if (self::$active) {
-            $phpMailer->SMTPKeepAlive = true;
-        }
     }
 
     public function endSession()
@@ -110,7 +109,10 @@ class BulkSendSessionHandler
 
         $fingerprint = md5(wp_json_encode($config));
 
-        if (self::$connectionFingerprint !== null && self::$connectionFingerprint !== $fingerprint) {
+        // Close on ANY change — including from the unknown (null) state, so a
+        // socket some other integration left open is never adopted as ours.
+        // Closing an already-closed socket is a cheap no-op.
+        if (self::$connectionFingerprint !== $fingerprint) {
             self::closeConnection();
         }
 
