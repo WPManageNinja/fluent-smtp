@@ -99,7 +99,8 @@ class BulkSendSessionHandler
      * connections degrade gracefully to connect-per-send.
      *
      * @param array $config Connection-identifying settings (host, port,
-     *                      username, encryption, auth, auto_tls).
+     *                      username, encryption, auth, auto_tls, and a hash
+     *                      of the credential so rotations force a reconnect).
      */
     public static function ensureConnectionFor($config)
     {

@@ -14,9 +14,10 @@ class Handler extends BaseHandler
     public function send()
     {
         if ($this->preSend()) {
-            if ($this->getSetting('auto_tls') == 'no') {
-                $this->phpMailer->SMTPAutoTLS = false;
-            }
+            // The global PHPMailer persists across sends, so every
+            // connection-identity property must be assigned unconditionally —
+            // a previous connection's value would otherwise carry over.
+            $this->phpMailer->SMTPAutoTLS = $this->getSetting('auto_tls') != 'no';
             return $this->postSend();
         }
 
@@ -38,6 +39,10 @@ class Handler extends BaseHandler
                 'auth'       => $this->getSetting('auth'),
                 'encryption' => $this->getSetting('encryption'),
                 'auto_tls'   => $this->getSetting('auto_tls'),
+                // Hashed so the raw credential never sits in the fingerprint.
+                // A rotated password must count as a different connection, or
+                // the old authenticated session would keep being reused.
+                'auth_key'   => md5((string)$this->getSetting('password')),
             ]);
 
             $this->phpMailer->isSMTP();
@@ -48,11 +53,17 @@ class Handler extends BaseHandler
                 $this->phpMailer->SMTPAuth = true;
                 $this->phpMailer->Username = $this->getSetting('username');
                 $this->phpMailer->Password = $this->getSetting('password');
+            } else {
+                // Reset on the persistent instance: without this, PHPMailer
+                // would AUTH against this relay with the previous
+                // connection's credentials.
+                $this->phpMailer->SMTPAuth = false;
+                $this->phpMailer->Username = '';
+                $this->phpMailer->Password = '';
             }
 
-            if (($encryption = $this->getSetting('encryption')) != 'none') {
-                $this->phpMailer->SMTPSecure = $encryption;
-            }
+            $encryption = $this->getSetting('encryption');
+            $this->phpMailer->SMTPSecure = $encryption != 'none' ? $encryption : '';
 
             $fromEmail = $this->phpMailer->From;
 

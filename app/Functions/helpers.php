@@ -405,6 +405,10 @@ if (!function_exists('fluentMailSend')) {
         $phpmailer->clearReplyTos();
         $phpmailer->Body = '';
         $phpmailer->AltBody = '';
+        // The instance now persists across sends, so the envelope sender must
+        // reset like a fresh instance would. This runs before phpmailer_init,
+        // so listeners (and the return_path handlers) still set it per send.
+        $phpmailer->Sender = '';
 
         /*
      * If we don't have an email from the input headers, default to wordpress@$sitename

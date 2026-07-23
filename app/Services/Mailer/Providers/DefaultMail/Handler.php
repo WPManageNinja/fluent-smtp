@@ -19,6 +19,10 @@ class Handler extends BaseHandler
     protected function postSend()
     {
         try {
+            // The persistent PHPMailer may still carry Mailer='smtp' (and that
+            // relay's host/credentials) from a previous SMTP-connection send;
+            // this transport must explicitly select PHP mail() every time.
+            $this->phpMailer->isMail();
             $this->phpMailer->send();
             return $this->handleSuccess();
         } catch(Exception $e) {
