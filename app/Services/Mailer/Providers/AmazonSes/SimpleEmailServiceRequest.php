@@ -132,6 +132,12 @@ class SimpleEmailServiceRequest
 		curl_setopt($curl, CURLOPT_WRITEFUNCTION, array(&$this, '__responseWriteCallback'));
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 
+		// Bounded timeouts: this handle previously had NONE, so a single hung
+		// request could stall the whole sending pipeline indefinitely (WP-CLI
+		// runs have no execution limit). Overridable via self::$curlOptions.
+		curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+		curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+
 		foreach(self::$curlOptions as $option => $value) {
 			curl_setopt($curl, $option, $value);
 		}
@@ -171,15 +177,32 @@ class SimpleEmailServiceRequest
 		curl_setopt($curl_handler, CURLOPT_URL, $url);
 
 
-		// Execute, grab errors
-		if (curl_exec($curl_handler)) {
-			$this->response->code = curl_getinfo($curl_handler, CURLINFO_HTTP_CODE);
-		} else {
+		// Execute, grab errors. Connection-phase failures (DNS 6, connect 7,
+		// TLS handshake 35) mean the request never reached AWS, so ONE retry
+		// is always duplicate-safe — this typically recovers a kept-alive
+		// connection that went stale between bulk batches. Errors after the
+		// connection phase are never retried: the request may already have
+		// been processed and a retry could deliver the email twice.
+		for ($attempt = 0; $attempt < 2; $attempt++) {
+			if ($attempt) {
+				// Discard anything the failed attempt streamed into the body.
+				$this->response = (object) array('body' => '', 'code' => 0, 'error' => false);
+			}
+
+			if (curl_exec($curl_handler)) {
+				$this->response->code = curl_getinfo($curl_handler, CURLINFO_HTTP_CODE);
+				break;
+			}
+
 			$this->response->error = array(
 				'curl' => true,
 				'code' => curl_errno($curl_handler),
 				'message' => curl_error($curl_handler),
 			);
+
+			if (!in_array(curl_errno($curl_handler), array(6, 7, 35), true)) {
+				break;
+			}
 		}
 
 		// cleanup for reusing the current instance for multiple requests
@@ -237,6 +260,12 @@ class SimpleEmailServiceRequest
             $headers[] = 'Host: ' . $this->ses->getHost();
             $headers[] = 'X-Amzn-Authorization: ' . $auth;
         }
+
+        // Suppress cURL's automatic "Expect: 100-continue": every
+        // SendRawEmail body exceeds cURL's 1KB threshold, and the
+        // wait-for-continue handshake costs one extra round trip to the SES
+        // region PER EMAIL. AWS processes the request identically without it.
+        $headers[] = 'Expect:';
 
         return $headers;
     }
