@@ -119,6 +119,13 @@ class Handler extends BaseHandler
             ];
 
         } catch (\Exception $e) {
+            // During a bulk session the relay may have dropped the kept-alive
+            // socket while idle; close it so the NEXT email reconnects fresh
+            // instead of failing on the same dead connection.
+            if (\FluentMail\App\Hooks\Handlers\BulkSendSessionHandler::isActive()) {
+                \FluentMail\App\Hooks\Handlers\BulkSendSessionHandler::closeConnection();
+            }
+
             $returnResponse = new \WP_Error(422, $e->getMessage(), []);
         }
 

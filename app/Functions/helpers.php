@@ -616,9 +616,16 @@ if (!function_exists('fluentMailSend')) {
 
         // Send!
         try {
-            // Trap the fluentSMTPMail mailer here
-            $phpmailer = new FluentMail\App\Services\Mailer\FluentPHPMailer($phpmailer);
-            $send = $phpmailer->send();
+            // Trap the fluentSMTPMail mailer here. Deliberately a LOCAL
+            // variable: assigning the wrapper to the global $phpmailer made
+            // the next wp_mail() call fail its instanceof PHPMailer check and
+            // rebuild a fresh instance for every email — destroying the
+            // instance (and closing any kept-alive SMTP connection) between
+            // sends. Keeping the raw PHPMailer in the global matches WP core
+            // behavior and lets a FluentCRM bulk sending session reuse one
+            // SMTP connection across a whole run (BulkSendSessionHandler).
+            $fluentMailer = new FluentMail\App\Services\Mailer\FluentPHPMailer($phpmailer);
+            $send = $fluentMailer->send();
 
             /**
              * Fires after a successful email is sent using the wp_mail() function.

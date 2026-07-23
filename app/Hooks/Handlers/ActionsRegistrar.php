@@ -52,6 +52,9 @@ class ActionsRegistrar
         $this->registerSiteInitialization();
         $this->registerCustomActions();
         $this->registerRestRoutes();
+
+        // SMTP connection reuse across FluentCRM bulk sending sessions.
+        (new BulkSendSessionHandler())->register();
     }
 
     /**
