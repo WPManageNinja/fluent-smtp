@@ -240,6 +240,20 @@ export default {
         },
         sanitize(html) {
             return window.DOMPurify.sanitize(html);
+        },
+        formatAddresses(addresses) {
+            if (typeof addresses === 'string') {
+                return addresses;
+            }
+            if (!Array.isArray(addresses)) {
+                return '';
+            }
+            return addresses.map((val) => {
+                if (val && val.name) {
+                    return this.escapeHtml(`${val.name} <${val.email}>`);
+                }
+                return this.escapeHtml(val && val.email ? val.email : '');
+            }).join(', ');
         }
     },
     computed: {
@@ -248,6 +262,13 @@ export default {
                 let log;
                 if (this.logViewerProps.log) {
                     log = {...this.logViewerProps.log};
+                    // `to` arrives as a pre-escaped string from the list view,
+                    // but as a raw [{name, email}] array on Prev/Next navigation.
+                    // Escape the array form here (single choke point for v-html)
+                    // since the display name is attacker-controllable via the To header.
+                    if (Array.isArray(log.to)) {
+                        log.to = this.formatAddresses(log.to);
+                    }
                     if (!log.headers) {
                         log.headers = {};
                     }

@@ -351,10 +351,18 @@ class BaseHandler
 
     protected function serialize(array $data)
     {
+        return serialize($this->recursiveSanitize($data));
+    }
+
+    protected function recursiveSanitize(array $data)
+    {
         foreach ($data as $key => $item) {
 
             if (is_array($item)) {
-                $this->serialize($item);
+                // Reassign the sanitized array back; without this, nested values
+                // (e.g. recipient display names in `to`) bypass sanitization.
+                $data[$key] = $this->recursiveSanitize($item);
+                continue;
             }
 
             if (is_object($item) || is_resource($item)) {
@@ -380,7 +388,7 @@ class BaseHandler
             }
         }
 
-        return serialize($data);
+        return $data;
     }
 
     protected function updatedLog($id, $data)
