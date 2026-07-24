@@ -152,15 +152,11 @@ class Handler extends BaseHandler
 
                 BulkSendSessionHandler::closeConnection();
 
-                // Retry THIS email once when a reused socket died under us —
-                // but never after the DATA stage: "data not accepted" is the
-                // one failure where the relay may already have accepted the
-                // message (terminator sent, confirmation lost), so a retry
-                // could deliver it twice. Every other failure provably
-                // happened before acceptance, making one retry on a fresh
-                // connection duplicate-safe. Fresh-connect failures (relay
-                // down, bad credentials) are never retried.
-                if ($socketWasReused && stripos($e->getMessage(), 'data not accepted') === false) {
+                // Retry THIS email once when a reused socket died under us,
+                // but only when isRetrySafe() can PROVE the relay never
+                // accepted the message. Fresh-connect failures (relay down,
+                // bad credentials) are never retried either.
+                if ($socketWasReused && $this->isRetrySafe($e)) {
                     try {
                         $this->phpMailer->send();
 
@@ -182,6 +178,44 @@ class Handler extends BaseHandler
         $this->response = $returnResponse;
 
         return $this->handleResponse($this->response);
+    }
+
+    /**
+     * Whether a failed send can be retried with zero duplicate-delivery risk.
+     *
+     * Only single-recipient messages (one RCPT TO across to/cc/bcc) qualify:
+     * with one recipient PHPMailer never reaches the DATA stage after a
+     * recipient failure, so the only failure that can follow acceptance is
+     * "data not accepted" (DATA terminator sent, 250 confirmation lost) —
+     * excluded here via PHPMailer's own, possibly translated, error string.
+     * Multi-recipient mail is never retried: on a partial RCPT failure
+     * PHPMailer still delivers to the accepted recipients BEFORE throwing
+     * "recipients failed", so a retry would deliver to those twice.
+     *
+     * @param \Exception $e The failure thrown by PHPMailer::send().
+     * @return bool
+     */
+    private function isRetrySafe(\Exception $e)
+    {
+        $recipientCount = count($this->phpMailer->getToAddresses())
+            + count($this->phpMailer->getCcAddresses())
+            + count($this->phpMailer->getBccAddresses());
+
+        if ($recipientCount !== 1) {
+            return false;
+        }
+
+        // PHPMailer throws its TRANSLATED strings, so match the live
+        // translation table instead of hardcoding the English text.
+        $dataNotAccepted = 'data not accepted';
+        if (method_exists($this->phpMailer, 'getTranslations')) {
+            $translations = $this->phpMailer->getTranslations();
+            if (!empty($translations['data_not_accepted'])) {
+                $dataNotAccepted = $translations['data_not_accepted'];
+            }
+        }
+
+        return stripos($e->getMessage(), $dataNotAccepted) === false;
     }
 
     /**
