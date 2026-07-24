@@ -10,7 +10,10 @@ namespace FluentMail\App\Hooks\Handlers;
  * For the SMTP provider, the per-email connect + EHLO + STARTTLS + AUTH + QUIT
  * handshake is typically 100-300ms — often more than the MAIL/RCPT/DATA
  * exchange itself — so holding the connection open for the session is a 2-5x
- * throughput win on SMTP relays.
+ * throughput win on SMTP relays. Sockets are still recycled after
+ * MAX_CONNECTION_AGE seconds: the handshake savings only need tens of sends
+ * per connection, and short-lived sockets stay clear of relay idle timeouts,
+ * message-per-connection caps, and any state an old connection could carry.
  *
  * The HTTP API providers need nothing here: their connections are already
  * reused via statically cached service/request objects holding persistent
@@ -27,6 +30,11 @@ namespace FluentMail\App\Hooks\Handlers;
  */
 class BulkSendSessionHandler
 {
+    /**
+     * Hard cap on how long one kept-alive socket may be reused, in seconds.
+     */
+    const MAX_CONNECTION_AGE = 15;
+
     protected static $active = false;
 
     /**
@@ -44,6 +52,12 @@ class BulkSendSessionHandler
      * Reusing across identities would send mail through the wrong relay.
      */
     protected static $connectionFingerprint = null;
+
+    /**
+     * Unix timestamp of when the current kept-alive connection was opened,
+     * for the MAX_CONNECTION_AGE recycle.
+     */
+    protected static $connectionOpenedAt = 0;
 
     /**
      * Whether the current send is riding a socket left open by a previous
@@ -99,7 +113,9 @@ class BulkSendSessionHandler
      * new lock-winning sender run re-fires session_started (refreshing the
      * stamp), so only an orphaned session — an unpaired start in a long-lived
      * process that never received its session_ended — can reach the limit.
-     * Expiry degrades gracefully to connect-per-send.
+     * Expiry degrades gracefully to connect-per-send, and the next declared
+     * send's hygiene pass in ensureConnectionFor() closes whatever socket
+     * the expired session left open.
      *
      * @return bool
      */
@@ -125,26 +141,44 @@ class BulkSendSessionHandler
      */
     public static function ensureConnectionFor($config)
     {
+        global $phpmailer;
+
+        $connected = $phpmailer
+            && method_exists($phpmailer, 'getSMTPInstance')
+            && $phpmailer->getSMTPInstance()->connected();
+
+        // Hygiene runs BEFORE the active check on purpose: PHPMailer's
+        // smtpConnect() silently reuses any connected socket without
+        // re-checking Host or credentials, so a socket left open by an
+        // ended/expired session — or one past its age cap — must be closed
+        // here, before this send gets a chance to adopt it.
+        if ($connected && (!self::isActive() || (time() - self::$connectionOpenedAt) >= self::MAX_CONNECTION_AGE)) {
+            self::closeConnection();
+            $connected = false;
+        }
+
         if (!self::isActive()) {
             return;
         }
 
         $fingerprint = md5(wp_json_encode($config));
 
-        // Close on ANY change — including from the unknown (null) state, so a
-        // socket some other integration left open is never adopted as ours.
-        // Closing an already-closed socket is a cheap no-op.
+        // Close on ANY identity change — including from the unknown (null)
+        // state, so a socket some other integration left open is never
+        // adopted as ours. Closing an already-closed socket is a cheap no-op.
         if (self::$connectionFingerprint !== $fingerprint) {
             self::closeConnection();
+            $connected = false;
         }
 
         self::$connectionFingerprint = $fingerprint;
+        self::$socketReused = $connected;
 
-        global $phpmailer;
-
-        self::$socketReused = $phpmailer
-            && method_exists($phpmailer, 'getSMTPInstance')
-            && $phpmailer->getSMTPInstance()->connected();
+        if (!$connected) {
+            // This send opens a fresh connection right after this call;
+            // stamp its birth so the age cap above can recycle it.
+            self::$connectionOpenedAt = time();
+        }
     }
 
     /**
@@ -171,6 +205,7 @@ class BulkSendSessionHandler
         // Whatever socket existed no longer does; the next send establishes
         // (and re-fingerprints) its own connection.
         self::$connectionFingerprint = null;
+        self::$connectionOpenedAt = 0;
         self::$socketReused = false;
 
         global $phpmailer;
