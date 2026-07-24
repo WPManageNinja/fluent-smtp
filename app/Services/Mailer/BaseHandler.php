@@ -383,34 +383,6 @@ class BaseHandler
         return serialize($data);
     }
 
-    protected function fireWPMailFailedAction($data)
-    {
-        $code = is_numeric($data['code']) ? $data['code'] : 400;
-        $code = strlen($code) < 3 ? 400 : $code;
-
-        $mail_error_data['phpmailer_exception_code'] = $code;
-        $mail_error_data['errors'] = $data['errors'];
-
-        // WP-core parity: core's wp_mail() attaches the recipient list to the
-        // wp_mail_failed error data. Listeners (e.g. FluentCRM's failed-send
-        // marker) use it to verify a failure belongs to their in-flight email.
-        $to = [];
-        foreach ((array)$this->getParam('to') as $recipient) {
-            if (is_array($recipient) && !empty($recipient['email'])) {
-                $to[] = $recipient['email'];
-            } elseif (is_string($recipient) && $recipient !== '') {
-                $to[] = $recipient;
-            }
-        }
-        $mail_error_data['to'] = $to;
-
-        $error = new \WP_Error(
-            $code, $data['message'], $mail_error_data
-        );
-
-        $this->app->doAction('wp_mail_failed', $error);
-    }
-
     protected function updatedLog($id, $data)
     {
         try {
