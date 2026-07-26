@@ -44,6 +44,22 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/set-up-tosend-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure toSend with FluentSMTP.', 'fluent-smtp')
         ],
+        'emailit'     => [
+		    'key'      => 'emailit',
+		    'title'    => __('Emailit', 'fluent-smtp'),
+		    'image'    => fluentMailAssetUrl('images/provider-emailit.svg'),
+		    'provider' => 'emailit',
+		    'options'  => [
+		        'sender_name'        => '',
+		        'sender_email'       => '',
+		        'force_from_name'    => 'no',
+		        'force_from_email'   => 'yes',
+		        'api_key'            => '',
+		        'key_store'          => 'db',
+		        'disable_encryption' => 'no'
+		    ],
+		    'note'     => '<a href="https://emailit.com/docs/quickstart/api/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure Emailit with FluentSMTP.', 'fluent-smtp')
+		],
         'ses'         => [
             'key'      => 'ses',
             'title'    => __('Amazon SES', 'fluent-smtp'),

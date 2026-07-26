@@ -122,6 +122,7 @@ import Error from '@/Pieces/Error';
 import each from 'lodash/each';
 import ConnectionProvider from './Partials/_ConnectionSelector';
 import Tosend from "./Partials/Providers/Tosend.vue";
+import Emailit from './Partials/Providers/Emailit';
 import cloudflare from './Partials/Providers/Cloudflare';
 
 export default {
@@ -140,6 +141,7 @@ export default {
         postmark,
         elasticmail,
         smtp2go,
+        emailit: Emailit,
         Error,
         ConnectionProvider,
         Tosend,
