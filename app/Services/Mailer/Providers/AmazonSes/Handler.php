@@ -7,6 +7,462 @@ use FluentMail\App\Services\Mailer\BaseHandler;
 use FluentMail\Includes\Support\Arr;
 
 class Handler extends BaseHandler
+<?php
+
+namespace FluentMail\App\Services\Mailer\Providers\AmazonSes;
+
+use FluentMail\App\Models\Settings;
+use FluentMail\App\Services\Mailer\BaseHandler;
+use FluentMail\Includes\Support\Arr;
+
+class Handler extends BaseHandler
+{
+    use ValidatorTrait;
+
+    protected $client = null;
+
+    const RAW_REQUEST = true;
+
+    const TRIGGER_ERROR = false;
+
+    public function send()
+    {
+        if ($this->preSend() && $this->phpMailer->preSend()) {
+            $this->client = new SimpleEmailServiceMessage;
+            return $this->postSend();
+        }
+
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
+    }
+
+    public function postSend()
+    {
+        $rawMessage = $this->normalizeListHeaders(
+            $this->phpMailer->getSentMIMEMessage()
+        );
+
+        $mime = chunk_split(base64_encode($rawMessage), 76, "\n");
+
+        $connectionSettings = $this->filterConnectionVars($this->getSetting());
+
+        $ses = fluentMailSesConnection($connectionSettings);
+
+        $this->response = $ses->sendRawEmail($mime);
+
+        return $this->handleResponse($this->response);
+    }
+
+    /**
+     * Repair List-Unsubscribe / List-Unsubscribe-Post headers in the raw MIME.
+     *
+     * PHPMailer RFC-2047-encodes long custom header values so they can be
+     * folded. Encoded-words are not valid inside structured headers such as
+     * List-Unsubscribe, and Gmail ignores the header entirely when it arrives
+     * encoded — silently breaking RFC 8058 one-click unsubscribe, which Gmail
+     * and Yahoo require from bulk senders.
+     *
+     * Because this provider hands the fully built raw message to Amazon SES,
+     * we can repair the headers here: unfold each target header, decode any
+     * encoded-words, and re-emit the header as a plain single line (re-folded
+     * at a URI boundary only if it would exceed the RFC 5322 line limit).
+     *
+     * @param string $rawMessage The message from PHPMailer::getSentMIMEMessage()
+     * @return string
+     */
+    protected function normalizeListHeaders($rawMessage)
+    {
+        // Nothing to do if no target header shows signs of encoded-words.
+        if (stripos($rawMessage, 'List-Unsubscribe') === false) {
+            return $rawMessage;
+        }
+
+        // Work on the top-level header block only.
+        $separator = "\r\n\r\n";
+        $breakPos = strpos($rawMessage, $separator);
+
+        if ($breakPos === false) {
+            $separator = "\n\n";
+            $breakPos = strpos($rawMessage, $separator);
+        }
+
+        if ($breakPos === false) {
+            return $rawMessage;
+        }
+
+        $headerBlock = substr($rawMessage, 0, $breakPos);
+        $rest = substr($rawMessage, $breakPos);
+
+        $lineEnding = (strpos($headerBlock, "\r\n") !== false) ? "\r\n" : "\n";
+
+        $fixedHeaderBlock = preg_replace_callback(
+            '/^(List-Unsubscribe(?:-Post)?)[ \t]*:[ \t]*([^\r\n]*(?:\r?\n[ \t][^\r\n]*)*)/mi',
+            function ($matches) use ($lineEnding) {
+                $name = $matches[1];
+
+                // Unfold continuation lines.
+                $value = preg_replace('/\r?\n[ \t]+/', ' ', $matches[2]);
+
+                // Decode RFC 2047 encoded-words if present.
+                if (strpos($value, '=?') !== false) {
+                    $decoded = false;
+
+                    if (function_exists('iconv_mime_decode')) {
+                        $decoded = @iconv_mime_decode(
+                            $value,
+                            ICONV_MIME_DECODE_CONTINUE_ON_ERROR,
+                            'UTF-8'
+                        );
+                    }
+
+                    if (($decoded === false || $decoded === null) && function_exists('mb_decode_mimeheader')) {
+                        $decoded = mb_decode_mimeheader($value);
+                    }
+
+                    if ($decoded !== false && $decoded !== null && $decoded !== '') {
+                        $value = $decoded;
+                    }
+                }
+
+                $value = preg_replace('/[ \t]+/', ' ', trim($value));
+
+                $headerLine = $name . ': ' . $value;
+
+                // RFC 5322 hard limit is 998 chars per line. If exceeded,
+                // re-fold at the comma between URIs (a legal fold point).
+                if (strlen($headerLine) > 990) {
+                    $headerLine = $name . ': ' . str_replace(
+                        '>, <',
+                        '>,' . $lineEnding . ' <',
+                        $value
+                    );
+                }
+
+                return $headerLine;
+            },
+            $headerBlock
+        );
+
+        if ($fixedHeaderBlock === null) {
+            return $rawMessage; // regex failure — send untouched
+        }
+
+        return $fixedHeaderBlock . $rest;
+    }
+
+    protected function getFrom()
+    {
+        return $this->getParam('from');
+    }
+
+    public function getVerifiedEmails()
+    {
+        return (new Settings)->getVerifiedEmails();
+    }
+
+    protected function getReplyTo()
+    {
+        $replyTo = $this->getRecipients(
+            $this->getParam('headers.reply-to')
+        );
+
+        if (is_array($replyTo)) {
+            $replyTo = reset($replyTo);
+        }
+
+        return $replyTo;
+    }
+
+    protected function getTo()
+    {
+        return $this->getRecipients($this->getParam('to'));
+    }
+
+    protected function getCarbonCopy()
+    {
+        return $this->getRecipients($this->getParam('headers.cc'));
+    }
+
+    protected function getBlindCarbonCopy()
+    {
+        return $this->getRecipients($this->getParam('headers.bcc'));
+    }
+
+    protected function getRecipients($recipients)
+    {
+        $array = array_map(function ($recipient) {
+            return isset($recipient['name'])
+                ? $recipient['name'] . ' <' . $recipient['email'] . '>'
+                : $recipient['email'];
+        }, $recipients);
+
+        return implode(', ', $array);
+    }
+
+    protected function getBody()
+    {
+        return [
+            $this->phpMailer->AltBody,
+            $this->phpMailer->Body
+        ];
+    }
+
+    protected function getAttachments()
+    {
+        $attachments = [];
+
+        foreach ($this->getParam('attachments') as $attachment) {
+            $file = false;
+            $fileName = null;
+            $filetype = null;
+
+            try {
+                // Use secure file reading with path traversal protection
+                $file = $this->secureFileRead($attachment[0]);
+                $fileName = basename($attachment[0]);
+
+                // Get MIME type from the validated real path
+                $realPath = realpath($attachment[0]);
+                $mimeType = mime_content_type($realPath);
+                $filetype = str_replace(';', '', trim($mimeType));
+            } catch (\Exception $e) {
+                // Log error and skip this attachment
+                error_log('FluentSMTP AmazonSes: Failed to read attachment - ' . $e->getMessage());
+                $file = false;
+            }
+
+            if ($file === false) {
+                continue;
+            }
+
+            $attachments[] = [
+                'type'    => $filetype,
+                'name'    => $fileName,
+                'content' => $file
+            ];
+        }
+
+        return $attachments;
+    }
+
+    protected function getCustomEmailHeaders()
+    {
+        $customHeaders = [
+            'X-Mailer' => 'Amazon-SES'
+        ];
+
+        $headers = [];
+        foreach ($customHeaders as $key => $header) {
+            $headers[] = $key . ':' . $header;
+        }
+
+        return $headers;
+    }
+
+    public function getValidSenders($config)
+    {
+        $config = $this->filterConnectionVars($config);
+
+        $senders = $this->getSendersFromMappingsAndApi($config);
+
+        return $senders['all_senders'];
+    }
+
+    public function getValidSendingIdentities($config)
+    {
+        $config = $this->filterConnectionVars($config);
+        $region = SimpleEmailService::regionToHost($config['region']);
+
+        $ses = new SimpleEmailService(
+            $config['access_key'],
+            $config['secret_key'],
+            $region,
+            static::TRIGGER_ERROR
+        );
+
+        $validSenders = $ses->listVerifiedEmailAddresses();
+        $addresses = [];
+
+        if (is_wp_error($validSenders)) {
+            return [
+                'emails'          => [$config['sender_email']],
+                'verified_domain' => ''
+            ];
+        }
+
+        if ($validSenders && isset($validSenders['Addresses'])) {
+            $addresses = $validSenders['Addresses'];
+        }
+
+        $primaryEmail = $config['sender_email'];
+        $domainArray = explode('@', $primaryEmail);
+        $domainName = $domainArray[1];
+
+        if (apply_filters('fluent_mail_ses_primary_domain_only', true)) {
+            $addresses = array_filter($addresses, function ($email) use ($domainName) {
+                return !!strpos($email, $domainName);
+            });
+            $addresses = array_values($addresses);
+        }
+
+        return [
+            'emails'          => apply_filters('fluentsmtp_ses_valid_senders', $addresses, $config),
+            'verified_domain' => in_array($domainName, $validSenders['domains']) ? $domainName : ''
+        ];
+    }
+
+    public function getConnectionInfo($connection)
+    {
+        $connection = $this->filterConnectionVars($connection);
+
+        $stats = $this->getStats($connection);
+        $error = '';
+        if (is_wp_error($stats)) {
+            $error = $stats->get_error_message();
+            $stats = [];
+        }
+
+        $validSenders = $this->getSendersFromMappingsAndApi($connection);
+
+        $info = (string)fluentMail('view')->make('admin.ses_connection_info', [
+            'connection'    => $connection,
+            'valid_senders' => $validSenders['all_senders'],
+            'stats'         => $stats,
+            'error'         => $error
+        ]);
+
+        return [
+            'info'                 => $info,
+            'verificationSettings' => [
+                'connection_name'  => 'Amazon SES',
+                'all_senders'      => $validSenders['all_senders'],
+                'verified_senders' => $validSenders['verified_senders'],
+                'verified_domain'  => $validSenders['verified_domain']
+            ]
+        ];
+    }
+
+    public function addNewSenderEmail($connection, $email)
+    {
+        $connection = $this->filterConnectionVars($connection);
+        $validSenders = $this->getValidSendingIdentities($connection);
+
+        $emailDomain = explode('@', $email);
+        $emailDomain = $emailDomain[1];
+
+        if ($emailDomain != $validSenders['verified_domain']) {
+            return new \WP_Error(422, __('Invalid email address! Please use a verified domain.', 'fluent-smtp'));
+        }
+
+        $settings = fluentMailGetSettings();
+        $mappings = Arr::get($settings, 'mappings', []);
+
+        if (isset($mappings[$email])) {
+            return new \WP_Error(422, __('Email address already exists with another connection. Please choose a different email.', 'fluent-smtp'));
+        }
+
+        $settings = get_option('fluentmail-settings');
+
+        $settings['mappings'][$email] = md5($connection['sender_email']);
+
+        update_option('fluentmail-settings', $settings);
+
+        return true;
+    }
+
+    public function removeSenderEmail($connection, $email)
+    {
+        $connection = $this->filterConnectionVars($connection);
+        $validSenders = $this->getValidSendingIdentities($connection);
+
+        $emailDomain = explode('@', $email);
+        $emailDomain = $emailDomain[1];
+
+        if ($emailDomain != $validSenders['verified_domain']) {
+            return new \WP_Error(422, __('Invalid email address! Please use a verified domain.', 'fluent-smtp'));
+        }
+
+        if (in_array($email, $validSenders['emails'])) {
+            return new \WP_Error(422, __('Sorry! you can not remove this email from this connection', 'fluent-smtp'));
+        }
+
+        $settings = fluentMailGetSettings();
+        $mappings = Arr::get($settings, 'mappings', []);
+
+        if (!isset($mappings[$email])) {
+            return new \WP_Error(422, __('Email does not exists. Please try again.', 'fluent-smtp'));
+        }
+
+        // check if the it's the same email or not
+        if ($mappings[$email] != md5($connection['sender_email'])) {
+            return new \WP_Error(422, __('Email does not exists. Please try again.', 'fluent-smtp'));
+        }
+
+        $settings = get_option('fluentmail-settings');
+
+        unset($settings['mappings'][$email]);
+
+        update_option('fluentmail-settings', $settings);
+
+        return true;
+    }
+
+
+    private function getStats($config)
+    {
+        $region = SimpleEmailService::regionToHost($config['region']);
+
+        $ses = new SimpleEmailService(
+            $config['access_key'],
+            $config['secret_key'],
+            $region,
+            static::TRIGGER_ERROR
+        );
+
+        return $ses->getSendQuota();
+    }
+
+    private function filterConnectionVars($connection)
+    {
+        if ($connection['key_store'] == 'wp_config') {
+            $connection['access_key'] = defined('FLUENTMAIL_AWS_ACCESS_KEY_ID') ? FLUENTMAIL_AWS_ACCESS_KEY_ID : '';
+            $connection['secret_key'] = defined('FLUENTMAIL_AWS_SECRET_ACCESS_KEY') ? FLUENTMAIL_AWS_SECRET_ACCESS_KEY : '';
+        }
+
+        return $connection;
+    }
+
+    private function getSendersFromMappingsAndApi($connection)
+    {
+        $validSenders = $this->getValidSendingIdentities($connection);
+        $verifiedDomain = Arr::get($validSenders, 'verified_domain', '');
+        if ($verifiedDomain) {
+            $settings = fluentMailGetSettings();
+            $mappings = Arr::get($settings, 'mappings', []);
+
+            $mapKey = md5($connection['sender_email']);
+            $mapSenders = array_filter($mappings, function ($key) use ($mapKey) {
+                return $key == $mapKey;
+            });
+
+            $mapSenders[$connection['sender_email']] = true;
+
+            foreach ($validSenders['emails'] as $email) {
+                $mapSenders[$email] = $email;
+            }
+
+            $mapSenders = array_keys($mapSenders);
+
+        } else {
+            $mapSenders = $validSenders['emails'];
+        }
+
+        return [
+            'all_senders'      => $mapSenders,
+            'verified_senders' => $validSenders['emails'],
+            'verified_domain'  => $verifiedDomain
+        ];
+    }
+}
 {
     use ValidatorTrait;
 
