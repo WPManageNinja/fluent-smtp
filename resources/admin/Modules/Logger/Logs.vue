@@ -91,7 +91,7 @@
                                 size="mini"
                                 type="success"
                                 icon="el-icon-refresh-right"
-                                @click="handleRetry(scope.row, 'resend')"
+                                @click="handleResendClick(scope.row)"
                                 v-if="scope.row.status == 'sent'"
                             >
                                 {{ $t('Resend') }}
@@ -137,6 +137,14 @@
             <el-skeleton :animated="true" v-else class="fss_content" :rows="15"></el-skeleton>
 
             <LogViewer :logViewerProps="logViewerProps"/>
+
+            <ResendDialog
+                v-model="resendDialog.visible"
+                :log="resendDialog.log"
+                :resending="resendDialog.resending"
+                @confirm="handleResendConfirm"
+                @closed="handleResendDialogClosed"
+            />
         </div>
     </div>
 </template>
@@ -147,6 +155,7 @@ import Pagination from '@/Pieces/Pagination';
 import LogFilter from './LogFilter';
 import LogViewer from './LogViewer';
 import LogBulkAction from './BulkAction';
+import ResendDialog from './ResendDialog';
 import isEmpty from 'lodash/isEmpty'
 
 export default {
@@ -156,7 +165,8 @@ export default {
         Pagination,
         LogFilter,
         LogViewer,
-        LogBulkAction
+        LogBulkAction,
+        ResendDialog
     },
     data() {
         return {
@@ -168,6 +178,11 @@ export default {
             logViewerProps: {
                 log: null,
                 dialogVisible: false
+            },
+            resendDialog: {
+                visible: false,
+                log: null,
+                resending: false
             },
             pagination: {
                 total: 0,
@@ -277,12 +292,19 @@ export default {
                 return this.handleResendBulk(this.selectedLogs);
             }
         },
-        handleRetry(row, type) {
+        handleRetry(row, type, recipients = null) {
             this.loading = true;
-            this.$post('logs/retry', {
+
+            const payload = {
                 id: row.id,
                 type: type
-            }).then(res => {
+            };
+
+            if (recipients && recipients.length) {
+                payload.recipients = recipients;
+            }
+
+            return this.$post('logs/retry', payload).then(res => {
                 if (!res.data.email) {
                     this.$notify.error({
                         offset: 19,
@@ -300,15 +322,40 @@ export default {
                     title: 'Great!',
                     message: res.data.message
                 });
+                return true;
             }).fail(error => {
                 this.$notify.error({
                     offset: 19,
                     title: 'Oops!!',
                     message: error.responseJSON.data.message
                 });
+                return false;
             }).always(() => {
                 this.loading = false;
             });
+        },
+        handleResendClick(row) {
+            this.resendDialog.log = row;
+            this.resendDialog.resending = false;
+            this.resendDialog.visible = true;
+        },
+        handleResendConfirm(payload) {
+            const row = this.resendDialog.log;
+            if (!row) {
+                return;
+            }
+
+            const recipients = payload.target === 'original' ? null : payload.recipients;
+
+            this.resendDialog.resending = true;
+            this.handleRetry(row, 'resend', recipients).always(() => {
+                this.resendDialog.resending = false;
+                this.resendDialog.visible = false;
+            });
+        },
+        handleResendDialogClosed() {
+            this.resendDialog.log = null;
+            this.resendDialog.resending = false;
         },
         handleView(row) {
             this.logViewerProps.log = row;
