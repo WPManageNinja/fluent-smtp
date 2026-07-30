@@ -17,6 +17,49 @@ if (!function_exists('fluentMail')) {
     }
 }
 
+if (!function_exists('fluentMailManageCapability')) {
+    /**
+     * The capability required to view and change FluentSMTP's settings.
+     *
+     * Every administrative surface in the plugin is guarded by this: the AJAX
+     * controllers, the settings page, the dashboard widget and the admin notices.
+     * It is a single value on purpose, so a site cannot end up with a settings
+     * screen that opens and an API that refuses, or the reverse.
+     *
+     * The default is unchanged, so nothing differs on an ordinary installation.
+     * The filter exists for hosts and multi-tenant products where the people who
+     * administer email are deliberately not WordPress administrators — granting
+     * them `manage_options` to reach this screen would hand over the whole site.
+     *
+     * Note for anyone filtering this: `manage_options` does not imply a custom
+     * capability, so a site administrator loses access unless the replacement is
+     * also granted to them.
+     *
+     * @since 2.2.96
+     *
+     * @param string $capability Capability name. Default `manage_options`.
+     * @return string
+     */
+    function fluentMailManageCapability()
+    {
+        return apply_filters('fluent_mail/manage_capability', 'manage_options');
+    }
+}
+
+if (!function_exists('fluentMailCurrentUserCanManage')) {
+    /**
+     * Whether the current user may administer FluentSMTP.
+     *
+     * @since 2.2.96
+     *
+     * @return bool
+     */
+    function fluentMailCurrentUserCanManage()
+    {
+        return current_user_can(fluentMailManageCapability());
+    }
+}
+
 if (!function_exists('fluentMailMix')) {
     /**
      * Generate the mixed URL for the given asset path.
@@ -891,7 +934,7 @@ function fluentMailDb()
 function fluentMailFuncCouldNotBeLoadedRecheckPluginsLoad()
 {
     add_action('admin_notices', function () {
-        if (!current_user_can('manage_options')) {
+        if (!fluentMailCurrentUserCanManage()) {
             return;
         }
         $details = new ReflectionFunction('wp_mail');

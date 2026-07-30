@@ -89,7 +89,7 @@ class AdminMenuHandler
 
         add_action('wp_ajax_fluent_smtp_get_dashboard_html', function () {
             // This widget should be displayed for certain high-level users only.
-            if (!current_user_can('manage_options') || apply_filters('fluent_mail_disable_dashboard_widget', false)) {
+            if (!fluentMailCurrentUserCanManage() || apply_filters('fluent_mail_disable_dashboard_widget', false)) {
                 wp_send_json([
                     'html' => __('You do not have permission to see this data', 'fluent-smtp')
                 ]);
@@ -110,7 +110,7 @@ class AdminMenuHandler
             'options-general.php',
             $title,
             $title,
-            'manage_options',
+            fluentMailManageCapability(),
             'fluent-mail',
             [$this, 'renderApp'],
             16
@@ -262,7 +262,7 @@ class AdminMenuHandler
 
     public function maybeAdminNotice()
     {
-        if (!current_user_can('manage_options')) {
+        if (!fluentMailCurrentUserCanManage()) {
             return;
         }
 
@@ -297,7 +297,7 @@ class AdminMenuHandler
 
     public function addSimulationBar($adminBar)
     {
-        if (!current_user_can('manage_options')) {
+        if (!fluentMailCurrentUserCanManage()) {
             return;
         }
 
@@ -336,7 +336,7 @@ class AdminMenuHandler
     public function initAdminWidget()
     {
         // This widget should be displayed for certain high-level users only.
-        if (!current_user_can('manage_options') || apply_filters('fluent_mail_disable_dashboard_widget', false)) {
+        if (!fluentMailCurrentUserCanManage() || apply_filters('fluent_mail_disable_dashboard_widget', false)) {
             return;
         }
 
