@@ -135,6 +135,8 @@ class TransStrings
             'Failed to load notification channels' => __('Failed to load notification channels', 'fluent-smtp'),
             'Failed to toggle channel' => __('Failed to toggle channel', 'fluent-smtp'),
             'Fallback Connection' => __('Fallback Connection', 'fluent-smtp'),
+            'Auto-Retry Failed Emails' => __('Auto-Retry Failed Emails', 'fluent-smtp'),
+            '__auto_retry_label' => __('Automatically retry failed emails (up to 3 attempts with increasing delays)', 'fluent-smtp'),
             'Fastest Contact Form Builder Plugin for WordPress' => __('Fastest Contact Form Builder Plugin for WordPress', 'fluent-smtp'),
             'Filter' => __('Filter', 'fluent-smtp'),
             'FluentCRM Email Logging' => __('FluentCRM Email Logging', 'fluent-smtp'),

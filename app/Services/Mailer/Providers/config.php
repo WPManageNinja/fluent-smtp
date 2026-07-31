@@ -275,10 +275,11 @@ return [
         ],
     ],
     'misc'        => [
-        'log_emails'              => 'yes',
-        'log_saved_interval_days' => '14',
-        'disable_fluentcrm_logs'  => 'no',
-        'default_connection'      => '',
-        'fallback_connection'     => ''
+        'log_emails'               => 'yes',
+        'log_saved_interval_days'  => '14',
+        'disable_fluentcrm_logs'   => 'no',
+        'default_connection'       => '',
+        'fallback_connection'      => '',
+        'auto_retry_failed_emails' => 'no'
     ]
 ];
