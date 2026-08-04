@@ -81,6 +81,46 @@ return function () {
         }
     });
 
+    FsmtpTest::case('failed replacement index creation preserves the legacy status index', function () {
+        global $wpdb;
+        $table = FsmtpFactory::emailLogTable(true, false);
+        $addAttempts = 0;
+        $dropAttempts = 0;
+        $ddlFailure = function ($query) use ($table, &$addAttempts, &$dropAttempts) {
+            if (stripos($query, 'ALTER TABLE') === false || strpos($query, $table) === false) {
+                return $query;
+            }
+
+            if (stripos($query, 'ADD INDEX `created_at_status`') !== false) {
+                $addAttempts++;
+                return "ALTER TABLE `{$table}` ADD INDEX `created_at_status` (`fsmtp_missing_column`)";
+            }
+
+            if (stripos($query, 'DROP INDEX `status`') !== false) {
+                $dropAttempts++;
+            }
+            return $query;
+        };
+
+        $wasSuppressing = $wpdb->suppress_errors();
+        add_filter('query', $ddlFailure, PHP_INT_MAX);
+        try {
+            $method = new ReflectionMethod(EmailLogs::class, 'maybeUpgradeIndexes');
+            $method->setAccessible(true);
+            $method->invoke(null, $table);
+            $indexes = FsmtpFactory::indexes($table);
+
+            FsmtpTest::assertSame(1, $addAttempts, 'replacement index creation attempt count');
+            FsmtpTest::assertSame(0, $dropAttempts, 'legacy index drop attempt count after replacement failure');
+            FsmtpTest::assertSame(['status'], isset($indexes['status']) ? $indexes['status'] : null, 'legacy status index after replacement failure');
+            FsmtpTest::assert(!isset($indexes['created_at_status']), 'failed replacement index unexpectedly exists');
+        } finally {
+            remove_filter('query', $ddlFailure, PHP_INT_MAX);
+            $wpdb->suppress_errors($wasSuppressing);
+            FsmtpFactory::dropTable($table);
+        }
+    });
+
     FsmtpTest::case('log pruning deletes only rows older than the cutoff in bounded batches', function () {
         global $wpdb;
         $table = FsmtpFactory::emailLogTable(false, true);
