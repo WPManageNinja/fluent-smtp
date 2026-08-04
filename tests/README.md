@@ -15,6 +15,11 @@ The harness forces FluentSMTP's Simulator provider, blocks outbound HTTP, and
 fails if the real `fsmpt_email_logs` row count changes during a run. Read
 `tests/AGENT.md` before adding cases.
 
+The integration tier also launches fresh child processes for the real
+`wp fluent-smtp test`, `health`, `stats`, and `prune-logs` commands. The child
+bootstrap independently proves Simulator resolution and fuses logging, HTTP,
+cron scheduling, and health-report option writes.
+
 The admin application uses admin-AJAX. Its 42-route manifest (11 GET and 31
 POST) lives at `tests/smoke/routes.manifest.php`; only the Outlook callback is a
 REST route.

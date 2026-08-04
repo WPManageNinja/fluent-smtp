@@ -459,6 +459,80 @@ class FsmtpTest
         return $counts;
     }
 
+    /**
+     * Run the plugin's real WP-CLI command in a fresh process. The child loads
+     * cli-bootstrap.php before command dispatch, so mail simulation, HTTP and
+     * option-write fuses are enforced inside the process that owns the command.
+     *
+     * @return array{code:int,stdout:string,stderr:string,output:string}
+     */
+    public static function wpCli(array $arguments, array $environment = [])
+    {
+        $candidates = [
+            isset($_SERVER['argv'][0]) ? $_SERVER['argv'][0] : '',
+            getenv('_') ?: '',
+        ];
+        $binary = '';
+
+        foreach ($candidates as $candidate) {
+            if ($candidate && is_file($candidate) && is_executable($candidate)) {
+                $binary = $candidate;
+                break;
+            }
+        }
+
+        if (!$binary) {
+            $located = [];
+            $locateCode = 1;
+            exec('command -v wp 2>/dev/null', $located, $locateCode);
+            if ($locateCode === 0 && !empty($located[0])) {
+                $binary = trim($located[0]);
+            }
+        }
+
+        if (!$binary) {
+            throw new RuntimeException('Could not locate the wp executable for CLI integration tests.');
+        }
+
+        $command = array_merge([
+            $binary,
+            '--path=' . untrailingslashit(ABSPATH),
+            '--require=' . dirname(__DIR__) . '/bin/cli-bootstrap.php',
+            '--no-color',
+        ], $arguments);
+        $descriptors = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ];
+        $baseEnvironment = getenv();
+        $process = proc_open(
+            $command,
+            $descriptors,
+            $pipes,
+            null,
+            array_merge(is_array($baseEnvironment) ? $baseEnvironment : [], $environment)
+        );
+
+        if (!is_resource($process)) {
+            throw new RuntimeException('Could not start the WP-CLI child process.');
+        }
+
+        fclose($pipes[0]);
+        $stdout = (string)stream_get_contents($pipes[1]);
+        fclose($pipes[1]);
+        $stderr = (string)stream_get_contents($pipes[2]);
+        fclose($pipes[2]);
+        $code = proc_close($process);
+
+        return [
+            'code'   => (int)$code,
+            'stdout' => $stdout,
+            'stderr' => $stderr,
+            'output' => trim($stdout . "\n" . $stderr),
+        ];
+    }
+
     public static function uniq($prefix = 'fsmtptest')
     {
         return $prefix . '-' . strtolower(wp_generate_password(8, false, false));
