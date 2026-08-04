@@ -5,6 +5,7 @@ use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\Mailer\Providers\Factory;
 use FluentMail\App\Services\Mailer\Providers\Gmail\Handler as GmailHandler;
+use FluentMail\App\Services\Mailer\Providers\Outlook\Handler as OutlookHandler;
 
 /** Outbound Google client seam: no Guzzle request can leave the process. */
 class FsmtpSuiteGoogleClient
@@ -212,6 +213,50 @@ return function () {
 
         FsmtpTest::assertSame(ConnectionHealth::STATUS_HEALTHY, $result['status'], 'Outlook healthy status');
         FsmtpTest::assertSame('', $result['message'], 'Outlook healthy message');
+    });
+
+    FsmtpTest::case('Outlook refreshes only an expired cached token when force is false', function () use (
+        $outlookSettings,
+        $withWriteFuses
+    ) {
+        FsmtpTest::interceptHttp(function ($url) {
+            if (strpos($url, 'login.microsoftonline.com/common/oauth2/v2.0/token') !== false) {
+                return [
+                    'headers' => [],
+                    'body' => wp_json_encode([
+                        'access_token' => 'suite-refreshed-access',
+                        'expires_in' => 3600,
+                    ]),
+                    'response' => ['code' => 200, 'message' => 'OK'],
+                    'cookies' => [],
+                    'filename' => null,
+                ];
+            }
+            return null;
+        });
+
+        $method = new ReflectionMethod(OutlookHandler::class, 'getAccessToken');
+        $method->setAccessible(true);
+        $handler = new OutlookHandler();
+        $future = array_merge(
+            $outlookSettings('outlook-future-' . FsmtpTest::uniq() . '@example.test'),
+            ['access_token' => 'suite-cached-access', 'expire_stamp' => time() + 600]
+        );
+
+        $cachedToken = $method->invoke($handler, $future, false);
+        FsmtpTest::assertSame('suite-cached-access', $cachedToken, 'future Outlook access token');
+        FsmtpTest::assertSame(0, count(FsmtpTest::httpRequests()), 'future Outlook token request count');
+
+        $expired = array_merge($future, [
+            'sender_email' => 'outlook-expired-' . FsmtpTest::uniq() . '@example.test',
+            'expire_stamp' => time() - 1,
+        ]);
+        $refreshedToken = $withWriteFuses(function () use ($method, $handler, $expired) {
+            return $method->invoke($handler, $expired, false);
+        });
+
+        FsmtpTest::assertSame('suite-refreshed-access', $refreshedToken, 'expired Outlook access token');
+        FsmtpTest::assertSame(1, count(FsmtpTest::httpRequests()), 'expired Outlook token request count');
     });
 
     FsmtpTest::case('Gmail handler surfaces a rejected grant description', function () use ($gmailSettings) {
