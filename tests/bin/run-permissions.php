@@ -14,16 +14,7 @@ FsmtpTest::boot();
 FsmtpTest::interceptHttp();
 
 $manifest = require dirname(__DIR__) . '/smoke/mutating.manifest.php';
-$knownFailures = [
-    'settings/telegram/send-test' => 'TelegramController.php:116 sendTestMessage() does not call verify()',
-    'settings/telegram/disconnect' => 'TelegramController.php:141 disconnect() does not call verify()',
-    'settings/slack/send-test' => 'SlackController.php:58 sendTestMessage() does not call verify()',
-    'settings/slack/disconnect' => 'SlackController.php:85 disconnect() does not call verify()',
-    'settings/discord/send-test' => 'DiscordController.php:50 sendTestMessage() does not call verify()',
-    'settings/discord/disconnect' => 'DiscordController.php:78 disconnect() does not call verify()',
-    'settings/pushover/send-test' => 'PushoverController.php:41 sendTestMessage() does not call verify()',
-    'settings/pushover/disconnect' => 'PushoverController.php:69 disconnect() does not call verify()',
-];
+$knownFailures = [];
 
 $protectedOptions = [
     'fluentmail-settings',

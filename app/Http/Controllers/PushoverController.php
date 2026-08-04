@@ -40,6 +40,8 @@ class PushoverController extends Controller
 
     public function sendTestMessage(Request $request)
     {
+        $this->verify();
+
         $settings = (new Settings())->notificationSettings();
 
         if (Arr::get($settings, 'pushover.status') != 'yes') {
@@ -68,6 +70,8 @@ class PushoverController extends Controller
 
     public function disconnect()
     {
+        $this->verify();
+
         NotificationHelper::updateChannelSettings('pushover', [
             'status'    => 'no',
             'api_token' => '',
