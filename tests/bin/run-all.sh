@@ -54,6 +54,11 @@ run_static() {
     record "lint: route-coverage" $?
   fi
 
+  if [ -f "$PLUGIN_DIR/tests/lint/browser-route-coverage.php" ]; then
+    php "$PLUGIN_DIR/tests/lint/browser-route-coverage.php"
+    record "lint: browser-route-coverage" $?
+  fi
+
   php "$PLUGIN_DIR/tests/lint/raw-sql-prefix.php" "$PLUGIN_DIR/tests/lint/fixtures" >/dev/null 2>&1
   if [ $? -eq 1 ]; then
     echo "lint self-test: raw-sql-prefix still fires on fixtures"
