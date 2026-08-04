@@ -80,6 +80,20 @@ run_wp_suite() {
   echo
 }
 
+run_js() {
+  echo "${BOLD}S4 — admin request layer${OFF}"; hr
+  if ! command -v pnpm >/dev/null 2>&1; then
+    echo "${RED}pnpm not found on PATH.${OFF}"
+    record "S4 — admin request layer" 1
+    echo
+    return
+  fi
+
+  ( cd "$PLUGIN_DIR" && pnpm test:js )
+  record "S4 — admin request layer" $?
+  echo
+}
+
 if ! command -v wp >/dev/null 2>&1; then
   echo "${RED}wp-cli not found on PATH.${OFF}"; exit 2
 fi
@@ -103,8 +117,10 @@ case "$SUITE" in
   integration)
     run_wp_suite "S2/S3 — integration" "tests/bin/run-integration.php"
     ;;
+  js) run_js ;;
   all)
     run_static
+    run_js
     run_wp_suite "S1 — admin-AJAX smoke" "tests/bin/run-smoke.php"
     if [ -f "$PLUGIN_DIR/tests/smoke/mutating.manifest.php" ]; then
       run_wp_suite "S1 — permission smoke" "tests/bin/run-permissions.php"
@@ -118,7 +134,7 @@ case "$SUITE" in
     fi
     ;;
   *)
-    echo "Unknown suite: $SUITE (use: static|smoke|permissions|integration|all)"
+    echo "Unknown suite: $SUITE (use: static|smoke|permissions|integration|js|all)"
     exit 2
     ;;
 esac

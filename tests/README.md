@@ -9,6 +9,7 @@ bash tests/bin/run-all.sh static
 bash tests/bin/run-all.sh smoke
 bash tests/bin/run-all.sh permissions
 bash tests/bin/run-all.sh integration
+bash tests/bin/run-all.sh js
 bash tests/bin/run-environment-axes.sh
 bash tests/bin/run-coverage.sh
 ```
