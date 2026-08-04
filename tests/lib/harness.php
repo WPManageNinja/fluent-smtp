@@ -61,6 +61,12 @@ class FsmtpTest
     /** @var bool */
     private static $routesLoaded = false;
 
+    /** @var string */
+    private static $coverageFile = '';
+
+    /** @var bool */
+    private static $coverageStarted = false;
+
     /** @return array<string,mixed> */
     public static function config()
     {
@@ -77,6 +83,7 @@ class FsmtpTest
      */
     public static function boot()
     {
+        self::startCoverage();
         self::$startedAt = microtime(true);
 
         $hint = self::config()['plugin_dir_hint'];
@@ -133,6 +140,8 @@ class FsmtpTest
      */
     public static function finish($suiteName)
     {
+        self::writeCoverage();
+
         $after = self::protectedTableCounts();
         if (self::$protectedCounts !== $after) {
             self::$currentCase = 'protected production data';
@@ -177,6 +186,59 @@ class FsmtpTest
 
         WP_CLI::log(str_repeat('=', 72));
         WP_CLI::halt(0);
+    }
+
+    /** Start optional PCOV collection before the first suite assertion. */
+    private static function startCoverage()
+    {
+        self::$coverageFile = (string) getenv('FSMTP_COVERAGE_FILE');
+        if (self::$coverageFile === '') {
+            return;
+        }
+
+        if (!function_exists('pcov\\start') || ini_get('pcov.enabled') !== '1') {
+            WP_CLI::error('FSMTP_COVERAGE_FILE requires PHP with pcov.enabled=1.');
+        }
+
+        if (!defined('FSMTP_COVERAGE_STARTED_EARLY')) {
+            \pcov\clear();
+            \pcov\start();
+        }
+        self::$coverageStarted = true;
+    }
+
+    /** Persist only this plugin's production line map for the coverage merger. */
+    private static function writeCoverage()
+    {
+        if (!self::$coverageStarted) {
+            return;
+        }
+
+        \pcov\stop();
+        $collected = \pcov\collect();
+        $root = realpath(dirname(__DIR__, 2));
+        $filtered = [];
+
+        foreach ((array) $collected as $file => $lines) {
+            $realFile = realpath($file);
+            if (!$root || !$realFile || strpos($realFile, $root . DIRECTORY_SEPARATOR) !== 0) {
+                continue;
+            }
+
+            $relative = str_replace(DIRECTORY_SEPARATOR, '/', substr($realFile, strlen($root) + 1));
+            if (!preg_match('#^(app|includes|database)/#', $relative)) {
+                continue;
+            }
+            $filtered[$relative] = $lines;
+        }
+
+        ksort($filtered);
+        $encoded = json_encode($filtered, JSON_UNESCAPED_SLASHES);
+        if ($encoded === false || file_put_contents(self::$coverageFile, $encoded) === false) {
+            self::fail('Could not write PCOV data to the requested coverage file.');
+        }
+
+        self::$coverageStarted = false;
     }
 
     public static function case($name, callable $callback)

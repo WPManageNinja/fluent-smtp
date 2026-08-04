@@ -9,6 +9,7 @@ bash tests/bin/run-all.sh static
 bash tests/bin/run-all.sh smoke
 bash tests/bin/run-all.sh permissions
 bash tests/bin/run-all.sh integration
+bash tests/bin/run-coverage.sh
 ```
 
 The harness forces FluentSMTP's Simulator provider, blocks outbound HTTP, and
@@ -27,6 +28,10 @@ REST route.
 Runtime prefix portability was verified on 2026-08-04 by running the full suite
 against an isolated WordPress install with the `wptest_` table prefix. Set
 `FSMTP_WP_ROOT` to exercise the suite against a different local install.
+
+The optional coverage gate uses PCOV to merge smoke, permission, and integration
+line maps. It fails until every production PHP file over 100 lines with zero
+hits has a current decision in `tests/coverage/zero-coverage-triage.php`.
 
 ## Phase 6 — shared-table isolation
 
