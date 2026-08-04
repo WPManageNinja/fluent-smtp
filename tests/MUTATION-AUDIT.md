@@ -1,88 +1,106 @@
-# Phase 19 mutation audit
+# Phase 19 mutation audit — HEAD rerun
 
 Date: 2026-08-04
 
-Baseline: `tests/suite-round-3` after phase 20 (`a25b8530`)
+Baseline: `fix/strict-sql-reports` after the three survivor follow-ups
+(`17e36e90`)
 
 Command for every mutant: `bash tests/bin/run-all.sh`
-Full-suite shape: smoke 33, permissions 62, integration 48, zero skips
 
-Each mutation was applied to one production behavior at a time, exercised
-against the complete suite, and then reversed before the next mutation. The CLI
-pruning path was protected by a subprocess-only SQL fuse before removing the
-retention predicate; isolated fixture tables still received the actual mutant
-query. No production log row was changed.
+Full-suite shape: smoke 33, permissions 62, integration 58, zero skips.
+Every mutation was applied alone, exercised against the complete suite, and
+restored before the next mutation. The worktree was clean after every batch.
+The CLI pruning path remained protected by its subprocess-only production-log
+SQL fuse; pruning mutants executed only against isolated fixture tables.
 
 ## Result
 
-- Mutants: 7
-- Killed: 4
-- Survived: 3
-- Kill rate: 57.1%
+- Mutants: 20
+- Clause-deletion mutants: 18
+- Comparison-reversal mutants: 2
+- Killed: 16
+- Survived: 4
+- Kill rate: 80.0%
 
-The percentage is context, not a target. The survivor list below is the phase
-deliverable; no equivalent mutants were added to inflate the result.
+The percentage is context, not a target. Every survivor below completed the
+full 33/62/58 suite with zero failures and zero skips; the survivor list is the
+deliverable.
 
 ## Survivor list
 
-### S1 — report date-range predicate deletion
+### S1 — bounded heatmap `GROUP BY` deletion
 
-- Production: `app/Services/Reporting.php:57`
-- Mutation: replaced `created_at BETWEEN <from> AND <to>` with a constant true
-  predicate while retaining both prepared parameters.
-- Full-suite result: survived; 33/33 smoke, 62/62 permissions, 48/48
+- Production: `app/Http/Controllers/DashboardController.php:57-59`
+- Mutation: removed the bounded query's `GROUP BY DAYNAME(created_at),
+  HOUR(created_at)` clause.
+- Full-suite result: survived; 33/33 smoke, 62/62 permissions, 58/58
   integration, zero skips, protected log count unchanged.
-- Gap: report tests assert values for requested in-range buckets, but no fixture
-  outside the requested range is asserted absent from the returned chart.
-- Highest-value follow-up: add an isolated report fixture immediately before
-  and after the requested range and assert that neither contributes a bucket or
-  count.
+- Gap: bounded heatmap coverage exercises route health and lookback clamping,
+  but does not run two or more in-range weekday/hour groups from an isolated
+  table. The strict aggregate fixture uses only the all-time branch.
+- Highest-value follow-up: add an isolated strict-SQL bounded heatmap fixture
+  with rows in distinct weekday/hour groups and assert each returned cell.
 
-### S2 — Outlook expiry comparison reversal
+### S2 — bounded heatmap `ORDER BY` deletion
 
-- Production: `app/Services/Mailer/Providers/Outlook/Handler.php:215`
-- Mutation: reversed the refresh threshold comparison from `< time()` to
-  `> time()`.
-- Full-suite result: survived; 33/33 smoke, 62/62 permissions, 48/48
+- Production: `app/Http/Controllers/DashboardController.php:60-62`
+- Mutation: removed the bounded query's weekday/hour ordering.
+- Full-suite result: survived; 33/33 smoke, 62/62 permissions, 58/58
   integration, zero skips, protected log count unchanged.
-- Gap: current Outlook renewal coverage reaches the token request through paths
-  that force a refresh; it does not distinguish a still-valid cached token from
-  an expired token when `force` is false.
-- Highest-value follow-up: invoke `getAccessToken()` through reflection with
-  future and expired stamps, assert zero versus one intercepted token request,
-  and keep settings and scheduling fused.
+- Gap: the controller copies rows into a prebuilt weekday/hour matrix, so row
+  order is not observable in the response and no current behavior requires the
+  SQL ordering.
+- Highest-value follow-up: decide whether database row order is an intended
+  internal contract. If not, the clause is redundant production code rather
+  than a missing behavioral assertion.
 
-### S3 — replacement-index confirmation deletion
+### S3 — all-time heatmap `ORDER BY` deletion
 
-- Production: `database/migrations/EmailLogs.php:78`
-- Mutation: removed the `created_at_status` existence check before dropping the
-  legacy `status` index.
-- Full-suite result: survived; 33/33 smoke, 62/62 permissions, 48/48
+- Production: `app/Http/Controllers/DashboardController.php:79-81`
+- Mutation: removed the all-time query's weekday/hour ordering.
+- Full-suite result: survived; 33/33 smoke, 62/62 permissions, 58/58
   integration, zero skips, protected log count unchanged.
-- Gap: migration tests cover successful convergence and idempotence, but do not
-  force the replacement `ADD INDEX` to fail and prove the legacy status index
-  remains in place.
-- Highest-value follow-up: use a real incompatible pre-existing index state or
-  a fail-closed DDL query fixture, then assert that the legacy index is not
-  dropped after replacement creation fails.
+- Gap: as in S2, the response matrix has deterministic key order regardless of
+  the database row order.
+- Highest-value follow-up: resolve the same production-contract question as S2
+  before adding any SQL-shape assertion.
+
+### S4 — subject-count status predicate deletion
+
+- Production: `app/Models/Logger.php:535`
+- Mutation: replaced the status discriminator with a constant-true prepared
+  predicate while retaining all parameters.
+- Full-suite result: survived; 33/33 smoke, 62/62 permissions, 58/58
+  integration, zero skips, protected log count unchanged.
+- Gap: the strict aggregate fixture asks for sent subjects during January, but
+  its only failed subject is in March, so the date range masks deletion of the
+  status predicate.
+- Highest-value follow-up: place distinct sent and failed subjects inside the
+  same requested range and assert status-specific distinct-subject counts.
 
 ## Killed mutants
 
 | ID | Production mutation | Full-suite killer evidence |
 |---|---|---|
-| K1 | Removed the `created_at` predicate and its argument from `Logger::deleteLogsOlderThan()` (`app/Models/Logger.php:480`) | Integration failed on deleted count 5→8, retained rows 3→0, batch queries 3→5, the no-match row being deleted, and the site-local fixture deleting 2 instead of 1. |
-| K2 | Removed the `status` discriminator from both `Logger::getTotalCountStat()` branches (`app/Models/Logger.php:509,520`) | Dashboard Today counters changed from `[1,1]` to `[2,2]`; the open-ended failed count changed from 1 to 2. |
-| K3 | Reversed Gmail's expiry comparison (`app/Services/Mailer/Providers/Gmail/Handler.php:274`) | The rejected-grant case received a client instead of `WP_Error` and failed before the expected provider detail could be read. |
-| K4 | Removed the `created_at_status` existence guard before `ADD INDEX` (`database/migrations/EmailLogs.php:70`) | The idempotence case observed 2 `ALTER TABLE` statements instead of 0. |
+| M01 | Removed the report date-range predicate (`app/Services/Reporting.php:57`). | The new boundary case exposed both outside buckets and a total count of 3 instead of 1. |
+| M02 | Reversed Outlook's expiry comparison (`app/Services/Mailer/Providers/Outlook/Handler.php:215`). | The future-token case made one request instead of zero and returned a refreshed token; the expired case returned the stale cached token. |
+| M03 | Removed replacement-index confirmation before the legacy drop (`database/migrations/EmailLogs.php:78`). | The failed-ADD fixture observed one forbidden drop and the legacy `status` index disappeared. |
+| M04 | Removed the pruning retention predicate (`app/Models/Logger.php:480`). | Six assertions failed across bounded pruning, no-match pruning, and the site-local cutoff; newer rows were deleted. |
+| M05 | Removed the status discriminator from both total-count branches (`app/Models/Logger.php:509,520`). | Dashboard Today counters and the strict open-ended failed count included the wrong status. |
+| M06 | Reversed Gmail's expiry comparison (`app/Services/Mailer/Providers/Gmail/Handler.php:274`). | The rejected-grant handler case returned a client instead of the expected provider error. |
+| M07 | Removed the replacement-index existence guard before `ADD INDEX` (`database/migrations/EmailLogs.php:70`). | The idempotence case observed two `ALTER TABLE` statements instead of zero. |
+| M08 | Removed the report `GROUP BY` clause (`app/Services/Reporting.php:58`). | Twelve integration assertions failed across daily, weekly, monthly, strict-SQL, timezone, and whitelist behavior. |
+| M09 | Removed the report `ORDER BY` clause (`app/Services/Reporting.php:59`). | The whitelist-fallback case rejected the missing safe daily ordering. |
+| M10 | Removed the daily report date projection (`app/Services/Reporting.php:48`). | All three daily smoke variations reported an unknown `date` grouping column and seven integration assertions failed. |
+| M11 | Removed the daily report count projection (`app/Services/Reporting.php:48`). | Three smoke variations and four integration behaviors raised missing-count diagnostics; five value assertions also failed. |
+| M12 | Removed the bounded heatmap range predicate (`app/Http/Controllers/DashboardController.php:56`). | The lookback validation case no longer observed the clamped `INTERVAL 365 DAY` predicate. |
+| M15 | Removed the all-time heatmap `GROUP BY` clause (`app/Http/Controllers/DashboardController.php:76-78`). | Four timezone and strict-SQL assertions failed, including an `ONLY_FULL_GROUP_BY` database error. |
+| M17 | Removed the heatmap's upper 365-day clamp (`app/Http/Controllers/DashboardController.php:41`). | Both lookback-clamp assertions failed. |
+| M18 | Removed the pruning `LIMIT` clause (`app/Models/Logger.php:480`). | Five batch-count and fixed-batch SQL assertions failed. |
+| M19 | Removed pruning loop continuation (`app/Models/Logger.php:493`). | Seven assertions showed only the first batch was deleted and rows remained. |
 
-## Safety-fuse proof-of-catch
+## Closed survivors from the previous audit
 
-The new CLI pruning case runs `prune-logs --days=1 --yes`, asserts the child
-process reports that the production-log `DELETE` was fused, expects zero
-deletions, and compares protected row counts. Changing only the child fixture's
-fuse marker made the owning integration case fail with:
-
-> child process did not prove the production-log write fuse
-
-The marker was restored and the filtered CLI tier returned 4/4 green before
-the mutation audit began.
+The previous 48-case audit's three survivors are M01-M03 above. Each is now
+killed by its stated follow-up, and each follow-up has an isolated
+proof-of-catch commit on this branch.
