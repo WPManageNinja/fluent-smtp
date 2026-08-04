@@ -42,7 +42,7 @@ class Reporting
             // Use YYYY-MM format to prevent merging months across different years
             // Use first day of month as deterministic bucket date for alignment with DatePeriod
             // Note: %% escapes % for wpdb->prepare() - will become single % in final SQL
-            $selectClause = "COUNT(id) AS count, DATE_FORMAT(created_at, '%%Y-%%m-01') AS date, DATE_FORMAT(created_at, '%%Y-%%m') AS month";
+            $selectClause = "COUNT(id) AS count, MIN(DATE_FORMAT(created_at, '%%Y-%%m-01')) AS date, DATE_FORMAT(created_at, '%%Y-%%m') AS month";
         } else {
             // Default: group by date (daily stats)
             $selectClause = 'COUNT(id) AS count, DATE(created_at) AS date';
