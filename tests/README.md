@@ -24,14 +24,14 @@ The admin application uses admin-AJAX. Its 42-route manifest (11 GET and 31
 POST) lives at `tests/smoke/routes.manifest.php`; only the Outlook callback is a
 REST route.
 
-Current environment limitation: this install has the default `wp_` WordPress
-table prefix, so runtime non-default-prefix coverage must be performed on a
-separate suitable install.
+Runtime prefix portability was verified on 2026-08-04 by running the full suite
+against an isolated WordPress install with the `wptest_` table prefix. Set
+`FSMTP_WP_ROOT` to exercise the suite against a different local install.
 
 ## Phase 6 — shared-table isolation
 
 Not applicable. FluentSMTP owns one plugin table,
 `{$wpdb->prefix}fsmpt_email_logs`, and its rows have no site, tenant, account,
 or other shared-table discriminator. Prefix safety is covered by the static SQL
-gate and by resolving the table through `$wpdb->prefix`; the remaining runtime
-non-default-prefix check is the environment limitation above.
+gate, by resolving the table through `$wpdb->prefix`, and by the isolated
+`wptest_` runtime suite described above.
