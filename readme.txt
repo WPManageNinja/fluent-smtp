@@ -319,9 +319,7 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 
 = 2.3.0 (Date: Aug 03, 2026) =
 - Added Cloudflare Email Sending Provider
-- Added live API token verification for Cloudflare connections
 - Added Amazon SES EU Sovereign Cloud region (Germany, Brandenburg)
-- Added Additional Sender Emails for toSend connections
 - Added SMTP connection reuse for FluentCRM bulk sending sessions
 - Added fluent_mail/manage_capability filter to change the required admin capability
 - Added inline setup guides for Cloudflare and toSend
@@ -330,21 +328,9 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 - Improved Amazon SES and toSend sending speed with fewer round trips and persistent connections
 - Disabled password manager auto-fill popups on connection and test email forms
 - Attachment read errors are now logged only when WP_DEBUG is enabled
-- Security: Fixed nested array sanitization in email logs
-- Security: Escaped recipient display names in the Email Log Viewer
-- Security: Added path traversal protection for email attachments
-- Security: Hardened plugin installer with capability check and allowlist
-- Security: Added prepared statements for reporting and dashboard queries
-- Fix: Sending hung with no error on hosts without the PHP PDO extension
-- Fix: Test Email button now reports fatal errors instead of spinning forever
-- Fix: A failure while writing the email log no longer aborts an email that was already sent
-- Fix: Default PHP mail() connection inheriting SMTP settings from a previous send
-- Fix: Email encoding downgrading to 7-bit and carrying over to later emails in the same request
-- Fix: Content-Type with a charset or boundary parameter falling back to plain text on API providers
+- Fixed nested array sanitization in email logs
 - Fix: Weekly and monthly reports merging data across different years
-- Fix: Plugin install button not showing on the Support screen
 - Fix: toSend Reply-To formatting and sender validation messages
-- Tested up to WordPress 7.0
 
 = 2.2.95 (Date: Dec 28, 2025) =
 - Added Multiple Notification Channels for Email Failure Notification
