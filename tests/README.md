@@ -22,3 +22,11 @@ REST route.
 Current environment limitation: this install has the default `wp_` WordPress
 table prefix, so runtime non-default-prefix coverage must be performed on a
 separate suitable install.
+
+## Phase 6 — shared-table isolation
+
+Not applicable. FluentSMTP owns one plugin table,
+`{$wpdb->prefix}fsmpt_email_logs`, and its rows have no site, tenant, account,
+or other shared-table discriminator. Prefix safety is covered by the static SQL
+gate and by resolving the table through `$wpdb->prefix`; the remaining runtime
+non-default-prefix check is the environment limitation above.
