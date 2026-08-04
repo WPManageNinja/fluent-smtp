@@ -37,7 +37,7 @@ class Reporting
             // Use YEARWEEK to prevent merging weeks across different years
             // Mode 1 ensures weeks start on Monday (ISO 8601 standard)
             // Use Monday of each week as deterministic bucket date for alignment with DatePeriod
-            $selectClause = 'COUNT(id) AS count, DATE(DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) DAY)) AS date, YEARWEEK(created_at, 1) AS week';
+            $selectClause = 'COUNT(id) AS count, MIN(DATE(DATE_SUB(created_at, INTERVAL WEEKDAY(created_at) DAY))) AS date, YEARWEEK(created_at, 1) AS week';
         } elseif ($groupBy === 'month') {
             // Use YYYY-MM format to prevent merging months across different years
             // Use first day of month as deterministic bucket date for alignment with DatePeriod
