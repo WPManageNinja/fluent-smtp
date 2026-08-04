@@ -140,7 +140,7 @@ class Handler extends BaseHandler {
                 $filetype = str_replace(';', '', trim($mimeType));
             } catch (\Exception $e) {
                 // Log error and skip this attachment
-                error_log('FluentSMTP Smtp2Go: Failed to read attachment - ' . $e->getMessage());
+                $this->logAttachmentFailure('Smtp2Go', $e);
                 $file = false;
             }
 

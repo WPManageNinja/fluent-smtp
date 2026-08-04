@@ -116,7 +116,7 @@ class Handler extends BaseHandler
                 $filetype = str_replace(';', '', trim($mimeType));
             } catch (\Exception $e) {
                 // Log error and skip this attachment
-                error_log('FluentSMTP AmazonSes: Failed to read attachment - ' . $e->getMessage());
+                $this->logAttachmentFailure('AmazonSes', $e);
                 $file = false;
             }
 

@@ -3,7 +3,7 @@
 Plugin Name:  FluentSMTP
 Plugin URI:   https://fluentsmtp.com
 Description:  The Ultimate SMTP Connection Plugin for WordPress.
-Version:      2.2.95
+Version:      2.3.0
 Author:       FluentSMTP & WPManageNinja Team
 Author URI:   https://fluentsmtp.com
 License:      GPL2
@@ -45,8 +45,8 @@ function fluentSmtpInit() {
 fluentSmtpInit();
 
 if (!function_exists('wp_mail')):
-    function wp_mail($to, $subject, $message, $headers = '', $attachments = array()) {
-        return fluentMailSend($to, $subject, $message, $headers, $attachments);
+    function wp_mail($to, $subject, $message, $headers = '', $attachments = array(), $embeds = array()) {
+        return fluentMailSend($to, $subject, $message, $headers, $attachments, $embeds);
     }
  else :
     if (!(defined('DOING_AJAX') && DOING_AJAX)):

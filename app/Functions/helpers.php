@@ -35,7 +35,7 @@ if (!function_exists('fluentMailManageCapability')) {
      * capability, so a site administrator loses access unless the replacement is
      * also granted to them.
      *
-     * @since 2.2.96
+     * @since 2.3.0
      *
      * @param string $capability Capability name. Default `manage_options`.
      * @return string
@@ -50,7 +50,7 @@ if (!function_exists('fluentMailCurrentUserCanManage')) {
     /**
      * Whether the current user may administer FluentSMTP.
      *
-     * @since 2.2.96
+     * @since 2.3.0
      *
      * @return bool
      */
@@ -256,11 +256,30 @@ if (!function_exists('fluentMailSend')) {
     /**
      * Sends an email using the wp_mail() function with additional filters and pre-send checks.
      *
+     * Mirrors WordPress core's wp_mail(), which this replaces, so that hooks and
+     * arguments behave identically for anything that calls wp_mail().
+     *
+     * When using the `$embeds` parameter to embed images for use in HTML emails,
+     * reference the embedded file in your HTML with a `cid:` URL whose value
+     * matches the file's Content-ID. By default, the Content-ID (`cid`) used for
+     * each embedded file is the key in the embeds array, unless modified via the
+     * {@see 'wp_mail_embed_args'} filter. For example:
+     *
+     * `<img src="cid:0" alt="Logo">`
+     * `<img src="cid:my-image" alt="Image">`
+     *
+     * Note: embedded images are applied to the PHPMailer instance, so they work on
+     * SMTP connections. Providers that send over their own HTTP API build their
+     * payload separately and currently ignore embeds.
+     *
+     * @since 6.9.0 The `$embeds` parameter was added, matching WP core.
+     *
      * @param string|array $to Array or comma-separated list of email addresses to send the message to.
      * @param string $subject The subject of the email.
      * @param string $message The message content of the email.
      * @param string|array $headers Additional headers for the email.
-     * @param array $attachments Paths to files to attach to the email.
+     * @param string|array $attachments Paths to files to attach to the email.
+     * @param string|array $embeds Optional. Paths to files to embed.
      *
      * @return bool|null Returns true if the email was successfully sent, false if sending was preempted, or null if there was an error.
      *
@@ -268,19 +287,20 @@ if (!function_exists('fluentMailSend')) {
      * @filter wp_mail
      * @filter pre_wp_mail
      */
-    function fluentMailSend($to, $subject, $message, $headers = '', $attachments = array())
+    function fluentMailSend($to, $subject, $message, $headers = '', $attachments = array(), $embeds = array())
     {
         // Compact the input, apply the filters, and extract them back out.
         /**
          * Filters the wp_mail() arguments.
          *
          * @param array $args A compacted array of wp_mail() arguments, including the "to" email,
-         *                    subject, message, headers, and attachments values.
+         *                    subject, message, headers, attachments and embeds values.
          * @since 2.2.0
+         * @since 6.9.0 The `$embeds` element was added to the `$args` array.
          *
          */
         $atts = apply_filters(
-            'wp_mail', compact('to', 'subject', 'message', 'headers', 'attachments')
+            'wp_mail', compact('to', 'subject', 'message', 'headers', 'attachments', 'embeds')
         );
 
         /**
@@ -299,6 +319,7 @@ if (!function_exists('fluentMailSend')) {
          * @type string $message Message contents.
          * @type string|string[] $headers Additional headers.
          * @type string|string[] $attachments Paths to files to attach.
+         * @type string|string[] $embeds Paths to files to embed.
          * }
          * @since 5.7.0
          *
@@ -337,6 +358,14 @@ if (!function_exists('fluentMailSend')) {
             $attachments = explode("\n", str_replace("\r\n", "\n", $attachments));
         }
 
+        if (isset($atts['embeds'])) {
+            $embeds = $atts['embeds'];
+        }
+
+        if (!is_array($embeds)) {
+            $embeds = explode("\n", str_replace("\r\n", "\n", $embeds));
+        }
+
         global $phpmailer;
 
         // (Re)create it, if it's gone missing.
@@ -344,7 +373,18 @@ if (!function_exists('fluentMailSend')) {
             require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
             require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
             require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
-            $phpmailer = new PHPMailer\PHPMailer\PHPMailer(true);
+
+            // WP 6.8+ ships WP_PHPMailer, which routes PHPMailer's error strings
+            // through WordPress translations. Guarded on the file, not a version
+            // number, because this plugin still supports WP 5.5 where it is absent.
+            $wpPhpMailerFile = ABSPATH . WPINC . '/class-wp-phpmailer.php';
+
+            if (file_exists($wpPhpMailerFile)) {
+                require_once $wpPhpMailerFile;
+                $phpmailer = new WP_PHPMailer(true);
+            } else {
+                $phpmailer = new PHPMailer\PHPMailer\PHPMailer(true);
+            }
 
             $phpmailer::$validator = static function ($email) {
                 return (bool)is_email($email);
@@ -416,6 +456,12 @@ if (!function_exists('fluentMailSend')) {
                                 } elseif (false !== stripos($charset_content, 'boundary=')) {
                                     $boundary = trim(str_replace(array('BOUNDARY=', 'boundary=', '"'), '', $charset_content));
                                     $charset = '';
+                                    // Normalize the subtype and re-attach the boundary, so a
+                                    // header like "Content-Type: multipart/MIXED; boundary=x"
+                                    // yields a well-formed lowercase type. Matches WP 6.9.
+                                    if (preg_match('~^multipart/(\S+)~', $content_type, $matches)) {
+                                        $content_type = 'multipart/' . strtolower($matches[1]) . '; boundary="' . $boundary . '"';
+                                    }
                                 }
 
                                 // Avoid setting an empty $content_type.
@@ -452,6 +498,20 @@ if (!function_exists('fluentMailSend')) {
         // reset like a fresh instance would. This runs before phpmailer_init,
         // so listeners (and the return_path handlers) still set it per send.
         $phpmailer->Sender = '';
+
+        /*
+         * Reset encoding to 8-bit, as it may have been automatically downgraded
+         * to 7-bit by PHPMailer (based on the body contents) in a previous call
+         * to wp_mail().
+         *
+         * Matches WP core. This matters more here than it does in core: the
+         * PHPMailer instance is now deliberately kept alive across sends for
+         * SMTP connection reuse, so without this reset one plain-ASCII email
+         * would downgrade the encoding for every later email in the request.
+         *
+         * See https://core.trac.wordpress.org/ticket/33972
+         */
+        $phpmailer->Encoding = PHPMailer\PHPMailer\PHPMailer::ENCODING_8BIT;
 
         /*
      * If we don't have an email from the input headers, default to wordpress@$sitename
@@ -620,9 +680,13 @@ if (!function_exists('fluentMailSend')) {
                 }
             }
 
-            if (false !== stripos($content_type, 'multipart') && !empty($boundary)) {
-                $phpmailer->addCustomHeader(sprintf('Content-Type: %s; boundary="%s"', $content_type, $boundary));
-            }
+            /*
+             * The boundary is no longer re-attached here. As of WP 6.9 the boundary is
+             * folded into $content_type while parsing the Content-Type header above, and
+             * that value is assigned to $phpmailer->ContentType. Emitting it again as a
+             * custom header would produce a duplicate Content-Type carrying the boundary
+             * twice.
+             */
         }
 
 
@@ -632,6 +696,51 @@ if (!function_exists('fluentMailSend')) {
 
                 try {
                     $phpmailer->addAttachment($attachment, $filename);
+                } catch (PHPMailer\PHPMailer\Exception $e) {
+                    continue;
+                }
+            }
+        }
+
+        if (!empty($embeds)) {
+            foreach ($embeds as $key => $embed_path) {
+                /**
+                 * Filters the arguments for PHPMailer's addEmbeddedImage() method.
+                 *
+                 * @since 6.9.0
+                 *
+                 * @param array $args {
+                 *     An array of arguments for PHPMailer's addEmbeddedImage() method.
+                 *
+                 * @type string $path The path to the file.
+                 * @type string $cid The Content-ID of the image. Default: The key in the embeds array.
+                 * @type string $name The filename of the image.
+                 * @type string $encoding The encoding of the image. Default: 'base64'.
+                 * @type string $type The MIME type of the image. Default: empty string, which lets PHPMailer auto-detect.
+                 * @type string $disposition The disposition of the image. Default: 'inline'.
+                 * }
+                 */
+                $embed_args = apply_filters(
+                    'wp_mail_embed_args',
+                    array(
+                        'path'        => $embed_path,
+                        'cid'         => (string)$key,
+                        'name'        => basename($embed_path),
+                        'encoding'    => 'base64',
+                        'type'        => '',
+                        'disposition' => 'inline',
+                    )
+                );
+
+                try {
+                    $phpmailer->addEmbeddedImage(
+                        $embed_args['path'],
+                        $embed_args['cid'],
+                        $embed_args['name'],
+                        $embed_args['encoding'],
+                        $embed_args['type'],
+                        $embed_args['disposition']
+                    );
                 } catch (PHPMailer\PHPMailer\Exception $e) {
                     continue;
                 }
@@ -659,7 +768,7 @@ if (!function_exists('fluentMailSend')) {
             }
         }
 
-        $mail_data = compact('to', 'subject', 'message', 'headers', 'attachments');
+        $mail_data = compact('to', 'subject', 'message', 'headers', 'attachments', 'embeds');
 
         // Send!
         try {

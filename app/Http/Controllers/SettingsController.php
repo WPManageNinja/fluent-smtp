@@ -158,16 +158,57 @@ class SettingsController extends Controller
                 define('FLUENTMAIL_EMAIL_TESTING', true);
             }
 
+            $startedAt = microtime(true);
+
             $settings->sendTestEmail($data, $settings->get());
 
+            /*
+             * The handover to the provider is synchronous, so this covers the whole
+             * round trip: connection/handshake, the API call or SMTP conversation and
+             * the provider's response. It is not the time until the mail lands in the
+             * inbox - that part is out of our hands.
+             */
+            $timeTaken = microtime(true) - $startedAt;
+
             return $this->sendSuccess([
-                'message' => __('Email delivered successfully.', 'fluent-smtp')
+                'message'          => __('Email delivered successfully.', 'fluent-smtp'),
+                'time_taken'       => round($timeTaken, 3),
+                'time_taken_human' => $this->formatDuration($timeTaken)
             ]);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
+            /*
+             * Throwable, not Exception. A missing PHP extension, a type error or
+             * any other engine-level failure raised while sending is an \Error,
+             * which catch(Exception) lets through — the AJAX request then died
+             * with no JSON body and the UI span forever with no message shown.
+             *
+             * getCode() is meaningless on an \Error (almost always 0) and an HTTP
+             * status of 0 is not valid, so only a sane positive code is honoured.
+             */
+            $code = (int)$e->getCode();
+            if ($code < 400 || $code > 599) {
+                $code = 422;
+            }
+
             return $this->sendError([
                 'message' => $e->getMessage()
-            ], $e->getCode());
+            ], $code);
         }
+    }
+
+    protected function formatDuration($seconds)
+    {
+        if ($seconds < 1) {
+            return sprintf(
+                __('Delivered in %s milliseconds', 'fluent-smtp'),
+                number_format_i18n($seconds * 1000)
+            );
+        }
+
+        return sprintf(
+            __('Delivered in %s seconds', 'fluent-smtp'),
+            number_format_i18n($seconds, 2)
+        );
     }
 
     public function onFail($response)

@@ -182,7 +182,9 @@ class AdminMenuHandler
 
         $user = get_user_by('ID', get_current_user_id());
 
-        $disable_recommendation = wp_is_file_mod_allowed('install_plugins');
+        // wp_is_file_mod_allowed() answers "are mods ALLOWED"; this flag is the
+        // inverse — it hides the one-click install button — so it must be negated.
+        $disable_installation = !wp_is_file_mod_allowed('install_plugins');
 
         $settings = $this->getMailerSettings();
 
@@ -209,7 +211,7 @@ class AdminMenuHandler
             'require_optin'          => $this->isRequireOptin(),
             'has_ninja_tables'       => defined('NINJA_TABLES_VERSION'),
             'disable_recommendation' => apply_filters('fluentmail_disable_recommendation', false),
-            'disable_installation'   => $disable_recommendation,
+            'disable_installation'   => $disable_installation,
             'plugin_url'             => 'https://fluentsmtp.com/?utm_source=wp&utm_medium=install&utm_campaign=dashboard',
             'trans'                  => $this->getTrans(),
             'recommended'            => $recommendedSettings,

@@ -49,7 +49,10 @@ zip -r $ZIP_NAME . \
     -x ".gitignore" \
     -x ".gitattributes" \
     -x "composer.lock" \
-    -x "README.md"
+    -x "README.md" \
+    -x "CLAUDE.md" \
+    -x ".claude/*" \
+    -x "research/*"
 
 echo "✅ Build Created: $ZIP_NAME"
 

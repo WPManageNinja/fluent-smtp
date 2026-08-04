@@ -94,13 +94,15 @@ export default {
         InputPassword,
         Error
     },
-    'connection.key_store'(value) {
-        if (value === 'wp_config') {
-            this.connection.api_key = '';
-        }
-    },
     data() {
         return {};
+    },
+    watch: {
+        'connection.key_store'(value) {
+            if (value === 'wp_config') {
+                this.connection.api_key = '';
+            }
+        }
     },
     computed: {
         tokenDashUrl() {

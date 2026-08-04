@@ -106,7 +106,15 @@ class BaseHandler
             $this->phpMailer->getReplyToAddresses()
         ));
         
-        $contentType = $this->phpMailer->ContentType;
+        /*
+         * Expose the bare MIME type only. PHPMailer's ContentType can carry
+         * parameters — a charset, or the multipart boundary that WP 6.9+ folds
+         * into the Content-Type value instead of emitting a separate header.
+         * Every provider and the logger compare this against bare types such as
+         * 'text/html' and 'multipart/alternative', so a parameterized value would
+         * silently fall through to the plain-text branch.
+         */
+        $contentType = trim(strtok((string)$this->phpMailer->ContentType, ';'));
         
         $customHeaders = $this->setFormattedCustomHeaders();
 
@@ -286,44 +294,73 @@ class BaseHandler
     public function processResponse($response, $status)
     {
         if ($this->shouldBeLogged($status)) {
-            $data = [
-                'to' => $this->serialize($this->attributes['to']),
-                'from' => $this->attributes['from'],
-                'subject' => sanitize_text_field($this->attributes['subject']),
-                'body' => $this->attributes['message'],
-                'attachments' => $this->serialize($this->attributes['attachments']),
-                'status'   => $status ? 'sent' : 'failed',
-                'response' => $this->serialize($response),
-                'headers'  => $this->serialize($this->getParam('headers')),
-                'extra'    => $this->serialize($this->getExtraParams())
-            ];
-
-            if($this->existing_row_id) {
-                $row = (new Logger())->find($this->existing_row_id);
-                if($row) {
-                    $row['response'] = (array) $row['response'];
-                    if($status) {
-                        $row['response']['fallback'] = __('Sent using fallback connection ', 'fluent-smtp') . $this->attributes['from'];
-                        $row['response']['fallback_response'] = $response;
-                    } else {
-                        $row['response']['fallback'] = __('Tried to send using fallback but failed. ', 'fluent-smtp') . $this->attributes['from'];
-                        $row['response']['fallback_response'] = $response;
-                    }
-
-                    $data['response'] = $this->serialize( $row['response']);
-                    $data['retries'] = $row['retries'] + 1;
-                    (new Logger())->updateLog($data, ['id' => $row['id']]);
-
-                    if(!$status) {
-                        do_action('fluentmail_email_sending_failed_no_fallback', $row['id'], $this, $data);
-                    }
+            try {
+                return $this->writeLog($response, $status);
+            } catch (\Throwable $e) {
+                /*
+                 * Logging runs after the provider has already accepted (or
+                 * rejected) the message, so a failure here must never change the
+                 * outcome of a send that already happened. Throwable rather than
+                 * Exception: the database layer can raise engine-level \Errors —
+                 * a missing PHP extension, for instance — which would otherwise
+                 * escape and kill the request after the email had gone out,
+                 * leaving the caller with no response at all.
+                 */
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    error_log('FluentSMTP: Failed to write email log - ' . $e->getMessage());
                 }
-            } else {
-                $logId = (new Logger)->add($data);
+            }
+        }
+
+        return $status;
+    }
+
+    /**
+     * Persist the email log row for a completed send.
+     *
+     * @param mixed $response Provider response or error payload.
+     * @param bool $status Whether the send succeeded.
+     * @return bool
+     */
+    protected function writeLog($response, $status)
+    {
+        $data = [
+            'to' => $this->serialize($this->attributes['to']),
+            'from' => $this->attributes['from'],
+            'subject' => sanitize_text_field($this->attributes['subject']),
+            'body' => $this->attributes['message'],
+            'attachments' => $this->serialize($this->attributes['attachments']),
+            'status'   => $status ? 'sent' : 'failed',
+            'response' => $this->serialize($response),
+            'headers'  => $this->serialize($this->getParam('headers')),
+            'extra'    => $this->serialize($this->getExtraParams())
+        ];
+
+        if($this->existing_row_id) {
+            $row = (new Logger())->find($this->existing_row_id);
+            if($row) {
+                $row['response'] = (array) $row['response'];
+                if($status) {
+                    $row['response']['fallback'] = __('Sent using fallback connection ', 'fluent-smtp') . $this->attributes['from'];
+                    $row['response']['fallback_response'] = $response;
+                } else {
+                    $row['response']['fallback'] = __('Tried to send using fallback but failed. ', 'fluent-smtp') . $this->attributes['from'];
+                    $row['response']['fallback_response'] = $response;
+                }
+
+                $data['response'] = $this->serialize( $row['response']);
+                $data['retries'] = $row['retries'] + 1;
+                (new Logger())->updateLog($data, ['id' => $row['id']]);
+
                 if(!$status) {
-                    // We have to fire an action for this failed job
-                    $status = apply_filters('fluentmail_email_sending_failed', $status, $logId, $this, $data);
+                    do_action('fluentmail_email_sending_failed_no_fallback', $row['id'], $this, $data);
                 }
+            }
+        } else {
+            $logId = (new Logger)->add($data);
+            if(!$status) {
+                // We have to fire an action for this failed job
+                $status = apply_filters('fluentmail_email_sending_failed', $status, $logId, $this, $data);
             }
         }
 
@@ -438,6 +475,32 @@ class BaseHandler
     public function removeSenderEmail($connection, $email)
     {
         return new \WP_Error('not_implemented', __('Not implemented', 'fluent-smtp'));
+    }
+
+    /**
+     * Record an attachment that could not be read, then let the send continue.
+     *
+     * Gated on WP_DEBUG on purpose. A recurring email carrying a stale
+     * attachment path fails this way on EVERY send, so an ungated error_log()
+     * grows the PHP error log for as long as the schedule runs — on a
+     * production site that is noise the admin never asked for and cannot turn
+     * off. Sites debugging a missing attachment already have WP_DEBUG on.
+     *
+     * @param string     $provider Provider label used in the log line.
+     * @param \Exception $e        The failure from secureFileRead().
+     * @return void
+     */
+    protected function logAttachmentFailure($provider, $e)
+    {
+        if (!defined('WP_DEBUG') || !WP_DEBUG) {
+            return;
+        }
+
+        error_log(sprintf(
+            'FluentSMTP %s: Failed to read attachment - %s',
+            $provider,
+            $e->getMessage()
+        ));
     }
 
     /**
