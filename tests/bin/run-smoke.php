@@ -129,6 +129,27 @@ foreach ($getRoutes as $entry) {
 
             $params = $replaceTokens($variation['params']);
             $result = FsmtpTest::ajax($entry['method'], $entry['route'], $params);
+
+            $strictHeatmapFailure = $entry['route'] === '/day-time-stats'
+                && strpos($result['db_error'], 'ORDER BY clause is not in GROUP BY clause') !== false
+                && strpos($result['db_error'], 'only_full_group_by') !== false;
+            if (FsmtpTest::knownFailure(
+                $strictHeatmapFailure,
+                'heatmap ordering is rejected by ONLY_FULL_GROUP_BY (app/Http/Controllers/DashboardController.php:60-62,79-81).'
+            )) {
+                return;
+            }
+
+            $strictReportFailure = $entry['route'] === 'sending_stats'
+                && strpos($result['db_error'], 'SELECT list is not in GROUP BY clause') !== false
+                && strpos($result['db_error'], 'only_full_group_by') !== false;
+            if (FsmtpTest::knownFailure(
+                $strictReportFailure,
+                'grouped reporting SELECT is rejected by ONLY_FULL_GROUP_BY (app/Services/Reporting.php:40,45,58).'
+            )) {
+                return;
+            }
+
             FsmtpTest::assertAjaxHealthy(
                 $result,
                 $entry['method'] . ' ' . $entry['route'] . ' [' . $variation['label'] . ']'

@@ -9,6 +9,7 @@ bash tests/bin/run-all.sh static
 bash tests/bin/run-all.sh smoke
 bash tests/bin/run-all.sh permissions
 bash tests/bin/run-all.sh integration
+bash tests/bin/run-environment-axes.sh
 bash tests/bin/run-coverage.sh
 ```
 
@@ -28,6 +29,12 @@ REST route.
 Runtime prefix portability was verified on 2026-08-04 by running the full suite
 against an isolated WordPress install with the `wptest_` table prefix. Set
 `FSMTP_WP_ROOT` to exercise the suite against a different local install.
+
+The phase-20 environment runner executes the complete suite at numeric timezone
+offsets `+6` and `-8`, then once more with `ONLY_FULL_GROUP_BY` and
+`STRICT_TRANS_TABLES`. These are process-local option filters and SQL session
+modes; neither WordPress install's saved timezone or database configuration is
+changed.
 
 The optional coverage gate uses PCOV to merge smoke, permission, and integration
 line maps. It fails until every production PHP file over 100 lines with zero

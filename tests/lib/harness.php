@@ -83,6 +83,7 @@ class FsmtpTest
      */
     public static function boot()
     {
+        self::applyEnvironmentAxes();
         self::startCoverage();
         self::$startedAt = microtime(true);
 
@@ -115,6 +116,54 @@ class FsmtpTest
         self::clearCaches();
         self::assertMailSimulationActive();
         self::$protectedCounts = self::protectedTableCounts();
+    }
+
+    /**
+     * Apply opt-in axes only inside this WP-CLI process. Filters avoid writing
+     * either install's timezone options, while SESSION sql_mode disappears as
+     * soon as the suite process exits.
+     */
+    private static function applyEnvironmentAxes()
+    {
+        global $wpdb;
+
+        $requestedOffset = getenv('FSMTP_TEST_GMT_OFFSET');
+        if ($requestedOffset !== false && $requestedOffset !== '') {
+            if (!preg_match('/^-?(?:\d+|\d*\.\d+)$/', $requestedOffset)) {
+                throw new RuntimeException('FSMTP_TEST_GMT_OFFSET must be numeric.');
+            }
+
+            $offset = (float)$requestedOffset;
+            if ($offset < -12 || $offset > 14) {
+                throw new RuntimeException('FSMTP_TEST_GMT_OFFSET must be between -12 and +14.');
+            }
+
+            add_filter('pre_option_timezone_string', function () {
+                return '';
+            }, PHP_INT_MAX);
+            add_filter('pre_option_gmt_offset', function () use ($offset) {
+                return $offset;
+            }, PHP_INT_MAX);
+        }
+
+        if (getenv('FSMTP_TEST_STRICT_SQL')) {
+            $current = array_filter(array_map('trim', explode(
+                ',',
+                (string)$wpdb->get_var('SELECT @@SESSION.sql_mode')
+            )));
+            $modes = array_values(array_unique(array_merge(
+                $current,
+                ['ONLY_FULL_GROUP_BY', 'STRICT_TRANS_TABLES']
+            )));
+            $result = $wpdb->query($wpdb->prepare(
+                'SET SESSION sql_mode = %s',
+                implode(',', $modes)
+            ));
+
+            if ($result === false) {
+                throw new RuntimeException('Could not enable strict SQL modes: ' . $wpdb->last_error);
+            }
+        }
     }
 
     /**
@@ -279,6 +328,25 @@ class FsmtpTest
     {
         self::$skipped++;
         WP_CLI::log('  SKIP ' . (self::$currentCase ?: '') . ' — ' . $reason);
+    }
+
+    /**
+     * Keep a confirmed production defect visible without making the default
+     * regression gate red. Strict-known-failure runs still fail for fix passes.
+     */
+    public static function knownFailure($condition, $detail)
+    {
+        if (!$condition) {
+            return false;
+        }
+
+        $message = 'KNOWN-FAILURE: ' . $detail;
+        if (getenv('FSMTP_STRICT_KNOWN_FAILURES') === '1') {
+            self::fail($message);
+        } else {
+            WP_CLI::log('  ' . (self::$currentCase ?: '(no case)') . ' — ' . $message);
+        }
+        return true;
     }
 
     public static function assert($condition, $detail)

@@ -90,6 +90,22 @@ class FsmtpFactory
         return $logger;
     }
 
+    /**
+     * Redirect production log-table SQL to an isolated real table. This keeps
+     * hard-coded reporting/controller paths database-backed without allowing a
+     * behavioral test to read, insert, update, or delete a production log row.
+     */
+    public static function productionLogTableRedirect($table)
+    {
+        global $wpdb;
+        self::assertIdentifier($table);
+        $productionTable = $wpdb->prefix . FLUENT_MAIL_DB_PREFIX . 'email_logs';
+
+        return function ($query) use ($productionTable, $table) {
+            return str_replace($productionTable, $table, $query);
+        };
+    }
+
     /** @return array<string,array<int,string>> index name => ordered columns */
     public static function indexes($table)
     {
