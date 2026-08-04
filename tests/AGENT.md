@@ -15,6 +15,7 @@ bash tests/bin/run-all.sh static
 bash tests/bin/run-all.sh smoke
 bash tests/bin/run-all.sh permissions
 bash tests/bin/run-all.sh integration
+FSMTP_STRICT_KNOWN_FAILURES=1 bash tests/bin/run-all.sh permissions
 
 wp eval-file tests/bin/run-smoke.php
 wp eval-file tests/bin/run-smoke.php -- filter=logs
@@ -87,6 +88,8 @@ admin-AJAX manifest and should be tested separately if its behavior changes.
 - Assert behavior and returned values, not exact SQL or log text.
 - Clean up in `finally`. Cleanup must be exact and idempotent.
 - Promote FluentSMTP notices, warnings, and deprecations to failures.
+- Never print raw settings or provider request data; failure output must redact
+  credentials and URL query strings.
 - Clear only FluentSMTP-owned caches before each suite.
 
 The shared harness exposes:

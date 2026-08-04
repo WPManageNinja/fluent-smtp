@@ -342,7 +342,7 @@ class FsmtpTest
             return;
         }
         if (!is_array($result['data'])) {
-            self::fail($label . "\n  invalid JSON response: " . trim($result['raw']));
+            self::fail($label . "\n  invalid JSON response (body length " . strlen($result['raw']) . ')');
             return;
         }
         if (isset($result['data']['success']) && $result['data']['success'] === false) {
@@ -355,6 +355,12 @@ class FsmtpTest
     {
         $bootstrap = self::config()['app_bootstrap'];
         return $bootstrap()->getAjaxAction($route, strtolower($method), $isAdmin);
+    }
+
+    /** Extract the human-facing message from a WordPress AJAX envelope. */
+    public static function ajaxMessage(array $result)
+    {
+        return is_array($result['data']) ? self::responseMessage($result['data']) : trim($result['raw']);
     }
 
     /**
@@ -379,9 +385,10 @@ class FsmtpTest
                 }
             }
 
+            $safeUrl = strtok((string) $url, '?');
             return new WP_Error(
                 'fsmtp_test_http_blocked',
-                'Outbound HTTP blocked by the FluentSMTP test harness: ' . $url
+                'Outbound HTTP blocked by the FluentSMTP test harness: ' . $safeUrl
             );
         };
 
