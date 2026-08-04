@@ -98,21 +98,22 @@ return function () {
         FsmtpTest::assert(strpos($result['stdout'], '"metric":"failed"') !== false, 'stats failed metric');
     });
 
-    FsmtpTest::case('wp fluent-smtp prune-logs safely handles no matches', function () use (
+    FsmtpTest::case('wp fluent-smtp prune-logs fuses production log deletes in the child process', function () use (
         $baseSettings,
         $environmentFor
     ) {
-        // MySQL TIMESTAMP values cannot predate 1970. A roughly 821-year
-        // retention window therefore guarantees that this real-table command
-        // cannot match any valid FluentSMTP row on the current date.
         $before = FsmtpTest::protectedTableCounts();
         $result = FsmtpTest::wpCli(
-            ['fluent-smtp', 'prune-logs', '--days=300000', '--yes'],
+            ['fluent-smtp', 'prune-logs', '--days=1', '--yes'],
             $environmentFor($baseSettings)
         );
 
         FsmtpTest::assertSame(0, $result['code'], 'prune command exit code');
-        FsmtpTest::assert(strpos($result['output'], 'Deleted 0 log entries.') !== false, 'prune no-match output');
+        FsmtpTest::assert(
+            strpos($result['output'], 'FluentSMTP CLI safety: production log DELETE fused.') !== false,
+            'child process did not prove the production-log write fuse'
+        );
+        FsmtpTest::assert(strpos($result['output'], 'Deleted 0 log entries.') !== false, 'fused prune output');
         FsmtpTest::assertSame($before, FsmtpTest::protectedTableCounts(), 'prune command log count');
     });
 };

@@ -37,6 +37,27 @@ WP_CLI::add_hook('after_wp_load', function () use ($suiteSettings) {
         return false;
     }, PHP_INT_MAX, 3);
     add_filter('fluentmail_will_log_email', '__return_false', PHP_INT_MAX);
+    add_filter('query', function ($query) {
+        global $wpdb;
+
+        $table = $wpdb->prefix . FLUENT_MAIL_DB_PREFIX . 'email_logs';
+        $deletePattern = '/^\s*DELETE\s+FROM\s+`?'
+            . preg_quote($table, '/') . '`?(?:\s|$)/i';
+        if (!preg_match($deletePattern, $query)) {
+            return $query;
+        }
+
+        // Child CLI coverage is allowed to reach the real pruning command, but
+        // no test subprocess is allowed to change a production log row. Insert
+        // the impossible predicate before LIMIT for both healthy and mutated SQL.
+        $limitOffset = stripos($query, ' LIMIT ');
+        $head = $limitOffset === false ? $query : substr($query, 0, $limitOffset);
+        $tail = $limitOffset === false ? '' : substr($query, $limitOffset);
+        $predicate = stripos($head, ' WHERE ') === false ? ' WHERE 1 = 0' : ' AND 1 = 0';
+
+        WP_CLI::log('FluentSMTP CLI safety: production log DELETE fused.');
+        return $head . $predicate . $tail;
+    }, PHP_INT_MAX);
     add_filter('pre_http_request', function ($preempt, $args, $url) {
         return new WP_Error(
             'fsmtp_cli_test_http_blocked',
