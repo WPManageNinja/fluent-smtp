@@ -26,20 +26,29 @@ class Factory
 
     public function get($email)
     {
-        if (!($conn = $this->settings->getConnection($email))) {
-            $conn = $this->getDefaultProvider();
-        }
-        
-        if ($conn) {
+        if ($conn = $this->settings->getConnection($email)) {
             $settings = array_merge($conn['provider_settings'], [
-                'title' => $conn['title']
+                'title' => isset($conn['title']) ? $conn['title'] : ''
             ]);
-            
+
             return $this->make(
                 $conn['provider_settings']['provider']
             )->setSettings($settings);
         }
-        
+
+        /*
+         * The two shapes differ. A stored connection is the wrapper
+         * {title, provider_settings}, but fluentMailDefaultConnection()
+         * returns the provider_settings payload itself. Unwrapping the
+         * default a second time - as this used to - reads a key that is not
+         * there and hands null to array_merge(), which is fatal. So the
+         * default is used as-is.
+         */
+        $default = $this->getDefaultProvider();
+
+        if ($default && !empty($default['provider'])) {
+            return $this->make($default['provider'])->setSettings($default);
+        }
 
         throw new InvalidArgumentException(
             esc_html__('There is no matching provider found by email: ', 'fluent-smtp') . $email // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped

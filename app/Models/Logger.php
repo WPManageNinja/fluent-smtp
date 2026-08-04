@@ -461,8 +461,37 @@ class Logger extends Model
         try {
 
             $date = gmdate('Y-m-d H:i:s', current_time('timestamp') - $days * DAY_IN_SECONDS);
-            $query = $this->db->prepare("DELETE FROM {$this->table} WHERE `created_at` < %s", $date);
-            return $this->db->query($query);
+
+            /*
+             * Deleted in batches rather than in one statement. A site that has
+             * been logging for months can have this cron pass hit hundreds of
+             * thousands of rows, and a single unbounded DELETE holds locks for
+             * the whole scan - long enough to time out and leave the backlog
+             * permanently uncleared, since the next run faces the same pile.
+             * Batches let each statement commit and release.
+             */
+            $batchSize = (int)apply_filters('fluentmail_log_delete_batch_size', 2000);
+            $batchSize = max(1, $batchSize);
+
+            $deleted = 0;
+
+            do {
+                $query = $this->db->prepare(
+                    "DELETE FROM {$this->table} WHERE `created_at` < %s LIMIT %d",
+                    $date,
+                    $batchSize
+                );
+
+                $result = $this->db->query($query);
+
+                if (!$result) {
+                    break;
+                }
+
+                $deleted += $result;
+            } while ($result >= $batchSize);
+
+            return $deleted;
 
         } catch (Exception $e) {
             if (wp_get_environment_type() != 'production') {
