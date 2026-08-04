@@ -185,6 +185,25 @@ return function () {
         }
     });
 
+    FsmtpTest::case('report chart excludes rows immediately outside the requested range', function () use ($redirectFixture) {
+        $table = FsmtpFactory::emailLogTable(false, true);
+        FsmtpFactory::insertLog($table, ['created_at' => '2025-01-05 23:59:59']);
+        FsmtpFactory::insertLog($table, ['created_at' => '2025-01-07 12:00:00']);
+        FsmtpFactory::insertLog($table, ['created_at' => '2025-01-11 00:00:01']);
+
+        try {
+            $stats = $redirectFixture($table, function () {
+                return (new Reporting())->getSendingStats('2025-01-06', '2025-01-10');
+            });
+
+            FsmtpTest::assert(!isset($stats['2025-01-05']), 'row immediately before the report range contributed a bucket');
+            FsmtpTest::assert(!isset($stats['2025-01-11']), 'row immediately after the report range contributed a bucket');
+            FsmtpTest::assertSame(1, array_sum($stats), 'out-of-range rows contributed to the report count');
+        } finally {
+            FsmtpFactory::dropTable($table);
+        }
+    });
+
     FsmtpTest::case('day-time heatmap buckets rows by site-local weekday and hour', function () use (
         $assertTimezoneAxis,
         $redirectFixture
