@@ -320,6 +320,7 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 = 2.3.0 (Date: Aug 03, 2026) =
 - Added a recipient picker when resending from Email Logs — send to the original recipients, your own account, or any address (props @faisalahammad)
 - Added a resend history on each email log, showing where every resend went, when, and who sent it
+- Added send time to each email log, so a slow connection is visible per email rather than only on a test send
 - Added Cloudflare Email Sending Provider
 - Added Amazon SES EU Sovereign Cloud region (Germany, Brandenburg)
 - Added SMTP connection reuse for FluentCRM bulk sending sessions

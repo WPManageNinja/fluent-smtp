@@ -30,6 +30,10 @@ class BaseHandler
 
     protected $existing_row_id = null;
 
+    protected $sendStartedAt = null;
+
+    protected $sendDurationMs = null;
+
     public function __construct(?Application $app = null, ?Manager $manager = null)
     {
         $this->app = $app ?: fluentMail();
@@ -57,6 +61,16 @@ class BaseHandler
 
     protected function preSend()
     {
+        /*
+         * Every provider calls this first, so it is the one point that marks
+         * the start of a send for all of them. What lands in the log is the
+         * span from here to the provider's answer: assembling the MIME message
+         * and then the round trip itself - connection, the API call or SMTP
+         * conversation, and the response. It is not the time until the mail
+         * reaches an inbox; that part is out of our hands.
+         */
+        $this->sendStartedAt = microtime(true);
+
         $this->attributes = [];
         
         if ($this->isForced('from_name')) {
@@ -394,11 +408,23 @@ class BaseHandler
     {
         $this->attributes['extra']['provider'] = $this->getSetting('provider');
 
+        if ($this->sendDurationMs !== null) {
+            $this->attributes['extra']['send_time_ms'] = $this->sendDurationMs;
+        }
+
         return $this->attributes['extra'];
     }
 
     public function handleResponse($response)
     {
+        // Stopped here rather than in writeLog() so the figure is the provider
+        // round trip, not the round trip plus however long the database took.
+        // Failed sends are timed too — a send that takes ten seconds to fail is
+        // worth seeing.
+        if ($this->sendStartedAt) {
+            $this->sendDurationMs = round((microtime(true) - $this->sendStartedAt) * 1000, 1);
+        }
+
         if ( is_wp_error($response) ) {
             $code = $response->get_error_code();
 

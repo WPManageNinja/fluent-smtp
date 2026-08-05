@@ -422,6 +422,8 @@ class Logger extends Model
                 define('FLUENTMAIL_LOG_OFF', true);
             }
 
+            $startedAt = microtime(true);
+
             $result = wp_mail(
                 $to,
                 $email['subject'],
@@ -429,6 +431,8 @@ class Logger extends Model
                 $headers,
                 $wpMailAttachments  // Use the converted attachment format
             );
+
+            $durationMs = round((microtime(true) - $startedAt) * 1000, 1);
 
             $updateData = [
                 'status'     => 'sent',
@@ -442,7 +446,7 @@ class Logger extends Model
             if ($type == 'resend') {
                 $updateData['resent_count'] = intval($email['resent_count']) + 1;
                 $updateData['extra'] = maybe_serialize(
-                    $this->appendResendRecord($email['extra'], $to, (bool)$result)
+                    $this->appendResendRecord($email['extra'], $to, (bool)$result, $durationMs)
                 );
             } else {
                 $updateData['retries'] = intval($email['retries']) + 1;
@@ -474,9 +478,10 @@ class Logger extends Model
      * @param mixed $extra The unserialized `extra` column.
      * @param array $to    Recipients this resend was addressed to.
      * @param bool  $sent  Whether the send itself reported success.
+     * @param float $ms    How long the send took, in milliseconds.
      * @return array
      */
-    protected function appendResendRecord($extra, $to, $sent)
+    protected function appendResendRecord($extra, $to, $sent, $ms = null)
     {
         $extra = is_array($extra) ? $extra : [];
 
@@ -495,7 +500,8 @@ class Logger extends Model
             // leave the trail unreadable once the account is deleted, which is
             // exactly when it matters.
             'by'   => ($user && $user->exists()) ? $user->display_name : '',
-            'sent' => $sent
+            'sent' => $sent,
+            'ms'   => $ms
         ];
 
         // Keep the tail. A row that gets resent all day should not grow its

@@ -269,6 +269,7 @@ class TransStrings
             'Select date and time' => __('Select date and time', 'fluent-smtp'),
             'Send Test Email' => __('Send Test Email', 'fluent-smtp'),
             'Send Test Message' => __('Send Test Message', 'fluent-smtp'),
+            'Send Time' => __('Send Time', 'fluent-smtp'),
             'Send To' => __('Send To', 'fluent-smtp'),
             'Send this email in HTML or in plain text format.' => __('Send this email in HTML or in plain text format.', 'fluent-smtp'),
             'Send this email to:' => __('Send this email to:', 'fluent-smtp'),

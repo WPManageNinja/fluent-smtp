@@ -56,6 +56,12 @@
                             <span v-html="formatAddresses(log.to)"></span>
                         </div>
                     </li>
+                    <li v-if="sendTime">
+                        <div class="item_header">{{ $t('Send Time') }}:</div>
+                        <div class="item_content">
+                            <span>{{ sendTime }}</span>
+                        </div>
+                    </li>
                     <li v-if="log.resent_count > 0">
                         <div class="item_header">{{ $t('Resent Count') }}:</div>
                         <div class="item_content">
@@ -69,6 +75,7 @@
                                 <span>{{ record.to }}</span>
                                 <span style="color:#909399;"> — {{ record.at }}</span>
                                 <span v-if="record.by" style="color:#909399;"> ({{ record.by }})</span>
+                                <span v-if="record.ms" style="color:#909399;"> · {{ record.ms }}</span>
                                 <span v-if="!record.sent" style="color:#f56c6c;"> — {{ $t('failed') }}</span>
                             </div>
                         </div>
@@ -303,6 +310,22 @@ export default {
         sanitize(html) {
             return window.DOMPurify.sanitize(html);
         },
+        // Milliseconds up to a second, then seconds — 1173 ms reads worse than
+        // 1.17s, and 40 ms reads worse than 0.04s. Returns '' when the log
+        // predates this being recorded, which hides the row entirely.
+        formatSendTime(ms) {
+            const value = Number(ms);
+
+            if (!isFinite(value) || value <= 0) {
+                return '';
+            }
+
+            if (value < 1000) {
+                return `${Math.round(value)} ms`;
+            }
+
+            return `${(value / 1000).toFixed(2)} s`;
+        },
         // The single escaping choke point for the v-html that renders `to`.
         // The display name is attacker-controllable via the To header, so
         // nothing may reach that binding unescaped. Escaping happens here, at
@@ -359,8 +382,12 @@ export default {
                 at: record.at || '',
                 by: record.by || '',
                 sent: record.sent !== false,
+                ms: this.formatSendTime(record.ms),
                 to: Array.isArray(record.to) ? record.to.join(', ') : String(record.to || '')
             })).reverse();
+        },
+        sendTime() {
+            return this.formatSendTime(this.log && this.log.extra ? this.log.extra.send_time_ms : null);
         }
     }
 };
