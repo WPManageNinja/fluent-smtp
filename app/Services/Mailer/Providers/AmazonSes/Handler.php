@@ -28,7 +28,11 @@ class Handler extends BaseHandler
 
     public function postSend()
     {
-        $mime = chunk_split(base64_encode($this->phpMailer->getSentMIMEMessage()), 76, "\n");
+        $rawMessage = $this->normalizeListHeaders(
+            $this->phpMailer->getSentMIMEMessage()
+        );
+
+        $mime = chunk_split(base64_encode($rawMessage), 76, "\n");
 
         $connectionSettings = $this->filterConnectionVars($this->getSetting());
 
@@ -37,6 +41,103 @@ class Handler extends BaseHandler
         $this->response = $ses->sendRawEmail($mime);
 
         return $this->handleResponse($this->response);
+    }
+
+    /**
+     * Repair List-Unsubscribe / List-Unsubscribe-Post headers in the raw MIME.
+     *
+     * PHPMailer RFC-2047-encodes long custom header values so they can be
+     * folded. Encoded-words are not valid inside structured headers such as
+     * List-Unsubscribe, and Gmail ignores the header entirely when it arrives
+     * encoded — silently breaking RFC 8058 one-click unsubscribe, which Gmail
+     * and Yahoo require from bulk senders.
+     *
+     * Because this provider hands the fully built raw message to Amazon SES,
+     * we can repair the headers here: unfold each target header, decode any
+     * encoded-words, and re-emit the header as a plain single line (re-folded
+     * at a URI boundary only if it would exceed the RFC 5322 line limit).
+     *
+     * @param string $rawMessage The message from PHPMailer::getSentMIMEMessage()
+     * @return string
+     */
+    protected function normalizeListHeaders($rawMessage)
+    {
+        // Nothing to do if no target header shows signs of encoded-words.
+        if (stripos($rawMessage, 'List-Unsubscribe') === false) {
+            return $rawMessage;
+        }
+
+        // Work on the top-level header block only.
+        $separator = "\r\n\r\n";
+        $breakPos = strpos($rawMessage, $separator);
+
+        if ($breakPos === false) {
+            $separator = "\n\n";
+            $breakPos = strpos($rawMessage, $separator);
+        }
+
+        if ($breakPos === false) {
+            return $rawMessage;
+        }
+
+        $headerBlock = substr($rawMessage, 0, $breakPos);
+        $rest = substr($rawMessage, $breakPos);
+
+        $lineEnding = (strpos($headerBlock, "\r\n") !== false) ? "\r\n" : "\n";
+
+        $fixedHeaderBlock = preg_replace_callback(
+            '/^(List-Unsubscribe(?:-Post)?)[ \t]*:[ \t]*([^\r\n]*(?:\r?\n[ \t][^\r\n]*)*)/mi',
+            function ($matches) use ($lineEnding) {
+                $name = $matches[1];
+
+                // Unfold continuation lines.
+                $value = preg_replace('/\r?\n[ \t]+/', ' ', $matches[2]);
+
+                // Decode RFC 2047 encoded-words if present.
+                if (strpos($value, '=?') !== false) {
+                    $decoded = false;
+
+                    if (function_exists('iconv_mime_decode')) {
+                        $decoded = @iconv_mime_decode(
+                            $value,
+                            ICONV_MIME_DECODE_CONTINUE_ON_ERROR,
+                            'UTF-8'
+                        );
+                    }
+
+                    if (($decoded === false || $decoded === null) && function_exists('mb_decode_mimeheader')) {
+                        $decoded = mb_decode_mimeheader($value);
+                    }
+
+                    if ($decoded !== false && $decoded !== null && $decoded !== '') {
+                        $value = $decoded;
+                    }
+                }
+
+                $value = preg_replace('/[ \t]+/', ' ', trim($value));
+
+                $headerLine = $name . ': ' . $value;
+
+                // RFC 5322 hard limit is 998 chars per line. If exceeded,
+                // re-fold at the comma between URIs (a legal fold point).
+                if (strlen($headerLine) > 990) {
+                    $headerLine = $name . ': ' . str_replace(
+                        '>, <',
+                        '>,' . $lineEnding . ' <',
+                        $value
+                    );
+                }
+
+                return $headerLine;
+            },
+            $headerBlock
+        );
+
+        if ($fixedHeaderBlock === null) {
+            return $rawMessage; // regex failure — send untouched
+        }
+
+        return $fixedHeaderBlock . $rest;
     }
 
     protected function getFrom()
