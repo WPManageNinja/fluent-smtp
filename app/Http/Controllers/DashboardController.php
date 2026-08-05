@@ -56,9 +56,6 @@ class DashboardController extends Controller
                     WHERE created_at >= NOW() - INTERVAL %d DAY
                     GROUP BY
                         DAYNAME(created_at),
-                        HOUR(created_at)
-                    ORDER BY
-                        MIN(WEEKDAY(created_at)),
                         HOUR(created_at)",
                     $lastDay
                 )
@@ -75,9 +72,6 @@ class DashboardController extends Controller
                 FROM {$tableName}
                 GROUP BY
                     DAYNAME(created_at),
-                    HOUR(created_at)
-                ORDER BY
-                    MIN(WEEKDAY(created_at)),
                     HOUR(created_at)"
             );
         }

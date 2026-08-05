@@ -53,6 +53,8 @@ deliverable.
 - Highest-value follow-up: decide whether database row order is an intended
   internal contract. If not, the clause is redundant production code rather
   than a missing behavioral assertion.
+- **Resolved.** Row order is not a contract. The clause was removed rather than
+  asserted, because there was no behaviour to assert - see the note below.
 
 ### S3 — all-time heatmap `ORDER BY` deletion
 
@@ -64,6 +66,29 @@ deliverable.
   the database row order.
 - Highest-value follow-up: resolve the same production-contract question as S2
   before adding any SQL-shape assertion.
+- **Resolved.** Same decision as S2.
+
+### Resolution of S2 and S3
+
+Both survivors were redundant production code, not missing assertions.
+
+`getDayTimeStats()` seeds a fixed 7x24 matrix (`Mon`..`Sun`, `0:00`..`23:00`)
+with zeros and then assigns each returned row by key. Assigning to an existing
+PHP array key does not move it, so the response key order comes entirely from
+the seeded matrix and the database row order cannot reach the caller.
+
+Verified before removal against an isolated table holding five populated
+weekday/hour cells: the ordered and unordered queries produced byte-identical
+payloads, including key order.
+
+Both `ORDER BY` clauses were therefore deleted. This also removes the
+`MIN(WEEKDAY(created_at))` aggregate that had been added purely to keep the
+ordering `ONLY_FULL_GROUP_BY`-safe; the remaining `SELECT` projects exactly the
+grouped expressions, so the query is still strict-SQL compliant.
+
+Adding a test here would have asserted an internal SQL shape that no behaviour
+depends on, which is the kind of incidental-detail assertion this audit exists
+to avoid.
 
 ### S4 — subject-count status predicate deletion
 
