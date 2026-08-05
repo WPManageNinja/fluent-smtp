@@ -18,9 +18,15 @@ SQL fuse; pruning mutants executed only against isolated fixture tables.
 - Mutants: 20
 - Clause-deletion mutants: 18
 - Comparison-reversal mutants: 2
-- Killed: 16
-- Survived: 4
-- Kill rate: 80.0%
+- Killed: 16 at the time of the run, 18 after the follow-ups below
+- Survived: 4 at the time of the run, 0 outstanding
+- Kill rate: 80.0% at the time of the run, 100% of the mutants in this set
+
+All four survivors have since been resolved: S1 and S4 by the guards described
+below, S2 and S3 by deleting redundant production code rather than asserting
+it. A 100% figure for a 20-mutant set is not a claim about the suite overall -
+it means this particular set is exhausted, and the next audit should widen the
+set rather than re-run it.
 
 The percentage is context, not a target. Every survivor below completed the
 full 33/62/58 suite with zero failures and zero skips; the survivor list is the
@@ -40,6 +46,12 @@ deliverable.
   table. The strict aggregate fixture uses only the all-time branch.
 - Highest-value follow-up: add an isolated strict-SQL bounded heatmap fixture
   with rows in distinct weekday/hour groups and assert each returned cell.
+- **Killed.** `tests/integration/aggregate-grouping.php` requests
+  `last_day = 30` against an isolated table holding two rows in one
+  weekday/hour group, one in another, and one outside the lookback. Re-applying
+  the mutation fails two assertions: `bounded heatmap grouped bucket` expected
+  2, actual 0; `bounded heatmap second bucket` expected 1, actual 3 - every row
+  collapsing into a single cell.
 
 ### S2 — bounded heatmap `ORDER BY` deletion
 
@@ -53,6 +65,8 @@ deliverable.
 - Highest-value follow-up: decide whether database row order is an intended
   internal contract. If not, the clause is redundant production code rather
   than a missing behavioral assertion.
+- **Resolved.** Row order is not a contract. The clause was removed rather than
+  asserted, because there was no behaviour to assert - see the note below.
 
 ### S3 — all-time heatmap `ORDER BY` deletion
 
@@ -64,6 +78,29 @@ deliverable.
   the database row order.
 - Highest-value follow-up: resolve the same production-contract question as S2
   before adding any SQL-shape assertion.
+- **Resolved.** Same decision as S2.
+
+### Resolution of S2 and S3
+
+Both survivors were redundant production code, not missing assertions.
+
+`getDayTimeStats()` seeds a fixed 7x24 matrix (`Mon`..`Sun`, `0:00`..`23:00`)
+with zeros and then assigns each returned row by key. Assigning to an existing
+PHP array key does not move it, so the response key order comes entirely from
+the seeded matrix and the database row order cannot reach the caller.
+
+Verified before removal against an isolated table holding five populated
+weekday/hour cells: the ordered and unordered queries produced byte-identical
+payloads, including key order.
+
+Both `ORDER BY` clauses were therefore deleted. This also removes the
+`MIN(WEEKDAY(created_at))` aggregate that had been added purely to keep the
+ordering `ONLY_FULL_GROUP_BY`-safe; the remaining `SELECT` projects exactly the
+grouped expressions, so the query is still strict-SQL compliant.
+
+Adding a test here would have asserted an internal SQL shape that no behaviour
+depends on, which is the kind of incidental-detail assertion this audit exists
+to avoid.
 
 ### S4 — subject-count status predicate deletion
 
@@ -77,6 +114,12 @@ deliverable.
   status predicate.
 - Highest-value follow-up: place distinct sent and failed subjects inside the
   same requested range and assert status-specific distinct-subject counts.
+- **Killed.** `tests/integration/aggregate-grouping.php` puts a distinct sent
+  subject and a distinct failed subject inside the same January range, plus a
+  repeat subject (proving DISTINCT) and an out-of-range one. Re-applying the
+  mutation fails both assertions: sent and failed distinct-subject counts each
+  expected 1, actual 2. This aggregate feeds the daily digest email, where a
+  dropped predicate would report identical sent and failed subject counts.
 
 ## Killed mutants
 
