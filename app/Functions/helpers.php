@@ -433,7 +433,7 @@ if (!function_exists('fluentMailSend')) {
                             if (false !== $bracket_pos) {
                                 // Text before the bracketed email is the "From" name.
                                 if ($bracket_pos > 0) {
-                                    $from_name = substr($content, 0, $bracket_pos - 1);
+                                    $from_name = substr($content, 0, $bracket_pos);
                                     $from_name = str_replace('"', '', $from_name);
                                     $from_name = trim($from_name);
                                 }

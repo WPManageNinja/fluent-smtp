@@ -317,7 +317,7 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 
 == Changelog ==
 
-= 2.3.0 (Date: Aug 03, 2026) =
+= 2.3.0 (Date: Aug 05, 2026) =
 - Added a recipient picker when resending from Email Logs — send to the original recipients, your own account, or any address (props @faisalahammad)
 - Added a resend history on each email log, showing where every resend went, when, and who sent it
 - Added send time to each email log, so a slow connection is visible per email rather than only on a test send
@@ -336,6 +336,7 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 - Fix: toSend Reply-To formatting and sender validation messages
 - Fix: Outlook send failures reporting a generic "Unauthorized" instead of the reason Microsoft gave (props @reikjarloekl)
 - Fix: Ampersands in the site title showing as &amp; in the From Name, subject and email logs (props @ikamal7)
+- Fix: A From name written without a space before the angle bracket lost its last character
 - Fix: RFC 8058 one-click unsubscribe on Amazon SES, Gmail and Outlook — List-Unsubscribe headers were sent RFC-2047 encoded, so mailbox providers ignored them (props @rogerjudd)
 
 = 2.2.95 (Date: Dec 28, 2025) =
