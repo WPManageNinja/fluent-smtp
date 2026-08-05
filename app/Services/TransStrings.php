@@ -87,6 +87,7 @@ class TransStrings
             'Connection Name ' => __('Connection Name ', 'fluent-smtp'),
             'Connection Provider' => __('Connection Provider', 'fluent-smtp'),
             'Connection deleted Successfully.' => __('Connection deleted Successfully.', 'fluent-smtp'),
+            'Connection needs attention' => __('Connection needs attention', 'fluent-smtp'),
             'Continue' => __('Continue', 'fluent-smtp'),
             'Continue to Slack' => __('Continue to Slack', 'fluent-smtp'),
             'Contributors' => __('Contributors', 'fluent-smtp'),
