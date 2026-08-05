@@ -163,9 +163,15 @@ class Logger extends Model
             $result[$key]['id']      = (int)$result[$key]['id'];
             $result[$key]['retries'] = (int)$result[$key]['retries'];
             $result[$key]['from']    = htmlspecialchars($result[$key]['from']);
-            $result[$key]['subject'] = wp_kses_post(
-                wp_unslash($result[$key]['subject'])
-            );
+            /*
+             * No wp_kses_post() here. Both consumers render the subject as text
+             * — {{ }} in Logs.vue and LogViewer.vue, which escapes on its own —
+             * so kses adds no safety, and its entity normalization rewrites a
+             * subject reading "Tom & Jerry" to "Tom &amp; Jerry", which the
+             * page then shows verbatim. Anything that puts a subject into
+             * HTML has to escape it at that point, as digest_email.php does.
+             */
+            $result[$key]['subject'] = wp_unslash($result[$key]['subject']);
         }
 
         return $result;

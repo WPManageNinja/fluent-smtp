@@ -258,7 +258,7 @@ class SchedulerHandler
             $message = sprintf(
             /* translators: 1: site name, 2: provider name, 3: sender email, 4: error message */
                 __('FluentSMTP on %1$s cannot use the %2$s connection for %3$s any more: %4$s', 'fluent-smtp'),
-                get_bloginfo('name'),
+                fluentMailSiteTitle(),
                 $provider,
                 Arr::get($connection, 'sender_email'),
                 $errorMessage

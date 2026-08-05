@@ -75,6 +75,15 @@ class SettingsController extends Controller
 
                 if (is_string($value) && $value) {
                     $connection[$index] = sanitize_text_field($value);
+
+                    // Store the name the admin typed. A sender name copied from
+                    // the site title arrives HTML-escaped, and it is plain text
+                    // everywhere it is used. fluentMailGetSettings() decodes on
+                    // read as well, so installs that already hold an escaped
+                    // name are fixed whether or not they ever save again.
+                    if ($index === 'sender_name') {
+                        $connection[$index] = wp_specialchars_decode($connection[$index], ENT_QUOTES);
+                    }
                 }
             }
 

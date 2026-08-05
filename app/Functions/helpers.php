@@ -874,6 +874,25 @@ if (!function_exists('fluentMailGetSettings')) {
             }
         }
 
+        /*
+         * Sender names reach us HTML-escaped when they were taken from the site
+         * title, which WordPress stores that way. Left alone, a site called
+         * "Tom & Jerry" sends every email from "Tom &amp; Jerry". Decoding here
+         * rather than only on save fixes installs that already hold an escaped
+         * name, without asking anyone to re-save a connection, and covers every
+         * reader — this function is the one path settings travel through.
+         */
+        if (!empty($settings['connections']) && is_array($settings['connections'])) {
+            foreach ($settings['connections'] as $key => $connection) {
+                if (!empty($connection['provider_settings']['sender_name'])) {
+                    $settings['connections'][$key]['provider_settings']['sender_name'] = wp_specialchars_decode(
+                        $connection['provider_settings']['sender_name'],
+                        ENT_QUOTES
+                    );
+                }
+            }
+        }
+
         $cachedSettings = $settings;
 
         return $settings;
@@ -1060,6 +1079,29 @@ if (!function_exists('fluentMailDebugLog')) {
         }
 
         error_log('FluentSMTP: ' . $message);
+    }
+}
+
+if (!function_exists('fluentMailSiteTitle')) {
+    /**
+     * The site title as the admin typed it, safe to drop into plain text.
+     *
+     * WordPress stores blogname HTML-escaped — sanitize_option() runs
+     * esc_html() over it — so a site called "Tom & Jerry" comes back from
+     * get_bloginfo('name') as "Tom &amp; Jerry". That is correct for HTML
+     * output and wrong everywhere else: an email subject, a Slack message or
+     * a push notification is plain text, and the entity shows up literally.
+     *
+     * Core has the same problem and solves it the same way — see the
+     * wp_specialchars_decode() calls around get_option('blogname') in
+     * pluggable.php. Use this anywhere the title is not being written into
+     * HTML; keep esc_html(fluentMailSiteTitle()) where it is.
+     *
+     * @return string
+     */
+    function fluentMailSiteTitle()
+    {
+        return wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES);
     }
 }
 

@@ -39,7 +39,7 @@
                             </p>
 
                             <p style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; margin: 20px 0 15px 0; Margin: 20px 0 15px 0;">
-                                <?php esc_html_e('This email was sent from ', 'fluent-smtp') ?><b><?php echo esc_html(get_bloginfo('name')); ?> at <?php echo esc_html(current_time('mysql')); ?></b>
+                                <?php esc_html_e('This email was sent from ', 'fluent-smtp') ?><b><?php echo esc_html(fluentMailSiteTitle()); ?> at <?php echo esc_html(current_time('mysql')); ?></b>
                             </p>
                         </div>
                     </td>

@@ -331,6 +331,7 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 - Fixed nested array sanitization in email logs
 - Fix: Weekly and monthly reports merging data across different years
 - Fix: toSend Reply-To formatting and sender validation messages
+- Fix: Ampersands in the site title showing as &amp; in the From Name, subject and email logs (props @ikamal7)
 - Fix: RFC 8058 one-click unsubscribe on Amazon SES, Gmail and Outlook — List-Unsubscribe headers were sent RFC-2047 encoded, so mailbox providers ignored them (props @rogerjudd)
 
 = 2.2.95 (Date: Dec 28, 2025) =

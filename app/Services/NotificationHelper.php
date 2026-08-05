@@ -275,7 +275,7 @@ class NotificationHelper
 
     public static function sendPushoverMessage($message, $apiToken, $userKey, $blocking = false, $priority = 1)
     {
-        $title = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), get_bloginfo('name'));
+        $title = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), fluentMailSiteTitle());
 
         $args = array(
             'body'        => array(
@@ -335,7 +335,7 @@ class NotificationHelper
             $sendingTo = Arr::get($logData, 'to');
         }
 
-        $heading = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), get_bloginfo('name'));
+        $heading = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), fluentMailSiteTitle());
 
         return [
             'text'   => $heading,
@@ -399,7 +399,7 @@ class NotificationHelper
             $sendingTo = Arr::get($logData, 'to');
         }
 
-        $heading = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), get_bloginfo('name'));
+        $heading = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), fluentMailSiteTitle());
 
         $content = '## ' . $heading . "\n";
         $content .= __('**Website URL:** ', 'fluent-smtp') . site_url() . "\n";

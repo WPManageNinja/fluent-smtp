@@ -63,6 +63,19 @@ class BaseHandler
             $this->phpMailer->FromName = $this->getSetting('sender_name');
         }
 
+        /*
+         * A display name is plain text — an entity in it has no meaning and
+         * simply shows up as "Tom &amp; Jerry" in the recipient's inbox. Names
+         * arrive escaped whenever they came from the site title, which
+         * WordPress stores that way, whether that was our own sender_name
+         * setting or a theme filtering wp_mail_from_name with the raw option.
+         * Normalize once here, where the handler takes ownership of the
+         * message and before any provider or the log reads the name.
+         */
+        if ($this->phpMailer->FromName) {
+            $this->phpMailer->FromName = wp_specialchars_decode($this->phpMailer->FromName, ENT_QUOTES);
+        }
+
         if ($this->getSetting('return_path') == 'yes') {
             $this->phpMailer->Sender = $this->phpMailer->From;
         }
