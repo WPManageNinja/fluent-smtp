@@ -66,15 +66,24 @@ class API
         $responseCode = wp_remote_retrieve_response_code($response);
 
         if ($responseCode >= 300) {
-            $error = Arr::get($response, 'response.message');
+            /*
+             * Graph's own message first. The other candidate is the HTTP
+             * reason phrase, which is set on essentially every failure and so
+             * always won the old ordering - that is where the useless
+             * "Unauthorized" in the logs came from, while the body sitting
+             * right next to it said the access token had expired and the
+             * account needed reconnecting.
+             */
+            $responseBody = json_decode(wp_remote_retrieve_body($response), true);
+
+            $error = Arr::get($responseBody, 'error.message');
 
             if (!$error) {
-                $responseBody = json_decode(wp_remote_retrieve_body($response), true);
+                $error = Arr::get($response, 'response.message');
+            }
 
-                $error = Arr::get($responseBody, 'error.message');
-                if (!$error) {
-                    $error = __('Something with wrong with Outlook API. Please check your API Settings', 'fluent-smtp');
-                }
+            if (!$error) {
+                $error = __('Something went wrong with the Outlook API. Please check your API Settings', 'fluent-smtp');
             }
 
             return new \WP_Error($responseCode, $error);
