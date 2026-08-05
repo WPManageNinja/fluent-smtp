@@ -58,7 +58,7 @@ class DashboardController extends Controller
                         DAYNAME(created_at),
                         HOUR(created_at)
                     ORDER BY
-                        FIELD(DAYNAME(created_at), 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
+                        MIN(WEEKDAY(created_at)),
                         HOUR(created_at)",
                     $lastDay
                 )
@@ -77,7 +77,7 @@ class DashboardController extends Controller
                     DAYNAME(created_at),
                     HOUR(created_at)
                 ORDER BY
-                    FIELD(DAYNAME(created_at), 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
+                    MIN(WEEKDAY(created_at)),
                     HOUR(created_at)"
             );
         }
