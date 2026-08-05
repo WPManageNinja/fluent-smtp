@@ -17,7 +17,7 @@
                 </el-form-item>
                 <el-form-item :label="$t('Notification Days')">
                     <el-checkbox-group v-model="notification_settings.notify_days">
-                        <el-checkbox v-for="(day, dayLabel) in sending_days" :key="day" :value="day" :label="$t(dayLabel)"></el-checkbox>
+                        <el-checkbox v-for="(dayLabel, day) in sending_days" :key="day" :label="day">{{ dayLabel }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
             </template>

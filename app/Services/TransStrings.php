@@ -326,6 +326,7 @@ class TransStrings
             'Use Auto TLS' => __('Use Auto TLS', 'fluent-smtp'),
             'User Key' => __('User Key', 'fluent-smtp'),
             'Validating Data. Please wait...' => __('Validating Data. Please wait...', 'fluent-smtp'),
+            'View all contributors on GitHub' => __('View all contributors on GitHub', 'fluent-smtp'),
             'Warning' => __('Warning', 'fluent-smtp'),
             'We recommend activating only one notification channel at a time.' => __('We recommend activating only one notification channel at a time.', 'fluent-smtp'),
             'Wednesday' => __('Wednesday', 'fluent-smtp'),

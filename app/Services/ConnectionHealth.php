@@ -59,13 +59,51 @@ class ConnectionHealth
     }
 
     /**
+     * The stored report is always read through the current connection list.
+     *
+     * A connection deleted between two daily runs leaves its last result
+     * behind in the option, and warning about a connection the admin has
+     * already removed is worse than saying nothing at all - there is no
+     * action left to take, and the warning cannot be dismissed. Reconciling
+     * on read means the dashboard is correct the moment a connection goes
+     * away, rather than at the next scheduled run.
+     *
      * @return array
      */
     public function getReport()
     {
         $report = get_option(self::OPTION_KEY);
 
-        return is_array($report) ? $report : [];
+        if (!is_array($report)) {
+            return [];
+        }
+
+        $connections = Arr::get(fluentMailGetSettings(), 'connections', []);
+
+        return array_intersect_key($report, $connections);
+    }
+
+    /**
+     * Drop a single connection's stored result.
+     *
+     * Called when a connection is deleted so the option does not accumulate
+     * results for connections that no longer exist. getReport() already hides
+     * them; this stops them being carried around forever.
+     *
+     * @param string $key connection unique key
+     * @return void
+     */
+    public function forget($key)
+    {
+        $report = get_option(self::OPTION_KEY);
+
+        if (!is_array($report) || !array_key_exists($key, $report)) {
+            return;
+        }
+
+        unset($report[$key]);
+
+        update_option(self::OPTION_KEY, $report, false);
     }
 
     /**

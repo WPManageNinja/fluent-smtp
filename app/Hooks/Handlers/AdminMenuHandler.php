@@ -79,7 +79,7 @@ class AdminMenuHandler
                 class="fluent_smtp_box">
                 <h3 style="margin: 0;"><?php esc_html_e('For SMTP, you already have FluentSMTP Installed', 'fluent-smtp'); ?></h3>
                 <p><?php esc_html_e('You seem to be looking for an SMTP plugin, but there\'s no need for another one — FluentSMTP is already installed on your site. FluentSMTP is a comprehensive, free, and open-source plugin with full features available without any upsell', 'fluent-smtp'); ?>
-                    (<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/"><?php esc_html_e('learn why it\'s free', 'fluent-smtp'); ?></a>)<?php esc_html_e('. It\'s compatible with various SMTP services, including Amazon SES, SendGrid, MailGun, ElasticEmail, SendInBlue, Google, Microsoft, and others, providing you with a wide range of options for your email needs.', 'fluent-smtp'); ?>
+                    (<a href="https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/"><?php esc_html_e('learn why it\'s free', 'fluent-smtp'); ?></a>)<?php esc_html_e('. It\'s compatible with various SMTP services, including Amazon SES, SendGrid, MailGun, ElasticEmail, SendInBlue, Google, Microsoft, and others, providing you with a wide range of options for your email needs.', 'fluent-smtp'); ?>
                 </p><a href="<?php echo esc_url(admin_url('options-general.php?page=fluent-mail#/')); ?>"
                        class="wp-core-ui button button-primary"><?php esc_html_e('Go To FluentSMTP Settings', 'fluent-smtp'); ?></a>
                 <p style="font-size: 80%; margin: 15px 0 0;"><?php esc_html_e('This notice is from FluentSMTP plugin to prevent plugin conflict.', 'fluent-smtp'); ?></p>
@@ -232,7 +232,7 @@ class AdminMenuHandler
             return sprintf(
                 __('%1$s is a free plugin & it will be always free %2$s. %3$s', 'fluent-smtp'),
                 '<b>FluentSMTP</b>',
-                '<a href="https://fluentsmtp.com/why-we-built-fluentsmtp-plugin/" target="_blank" rel="noopener noreferrer">'. esc_html__('(Learn why it\'s free)', 'fluent-smtp') .'</a>',
+                '<a href="https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/" target="_blank" rel="noopener noreferrer">'. esc_html__('(Learn why it\'s free)', 'fluent-smtp') .'</a>',
                 '<a href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5" target="_blank" rel="noopener noreferrer">'. esc_html__('Write a review ★★★★★', 'fluent-smtp') .'</a>'
             );
         });
