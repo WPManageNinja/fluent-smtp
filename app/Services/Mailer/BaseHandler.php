@@ -429,9 +429,7 @@ class BaseHandler
                  * escape and kill the request after the email had gone out,
                  * leaving the caller with no response at all.
                  */
-                if (defined('WP_DEBUG') && WP_DEBUG) {
-                    error_log('FluentSMTP: Failed to write email log - ' . $e->getMessage());
-                }
+                fluentMailDebugLog('Failed to write email log - ' . $e->getMessage());
             }
         }
 
@@ -557,7 +555,7 @@ class BaseHandler
             $data['updated_at'] = current_time('mysql');
             (new Logger)->updateLog($data, ['id' => $id]);
         } catch (Exception $e) {
-            error_log($e->getMessage());
+            fluentMailDebugLog('Failed to update email log - ' . $e->getMessage());
         }
     }
 
@@ -603,24 +601,14 @@ class BaseHandler
     /**
      * Record an attachment that could not be read, then let the send continue.
      *
-     * Gated on WP_DEBUG on purpose. A recurring email carrying a stale
-     * attachment path fails this way on EVERY send, so an ungated error_log()
-     * grows the PHP error log for as long as the schedule runs — on a
-     * production site that is noise the admin never asked for and cannot turn
-     * off. Sites debugging a missing attachment already have WP_DEBUG on.
-     *
      * @param string     $provider Provider label used in the log line.
      * @param \Exception $e        The failure from secureFileRead().
      * @return void
      */
     protected function logAttachmentFailure($provider, $e)
     {
-        if (!defined('WP_DEBUG') || !WP_DEBUG) {
-            return;
-        }
-
-        error_log(sprintf(
-            'FluentSMTP %s: Failed to read attachment - %s',
+        fluentMailDebugLog(sprintf(
+            '%s: Failed to read attachment - %s',
             $provider,
             $e->getMessage()
         ));

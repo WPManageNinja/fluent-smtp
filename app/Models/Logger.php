@@ -494,9 +494,7 @@ class Logger extends Model
             return $deleted;
 
         } catch (Exception $e) {
-            if (wp_get_environment_type() != 'production') {
-                error_log('Message: ' . $e->getMessage());
-            }
+            fluentMailDebugLog('Failed to delete old email logs - ' . $e->getMessage());
         }
     }
 

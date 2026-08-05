@@ -1039,6 +1039,29 @@ function fluentMailDb()
     return FluentSmtpDb();
 }
 
+if (!function_exists('fluentMailDebugLog')) {
+    /**
+     * Write a diagnostic line to the PHP error log, but only while debugging.
+     *
+     * Every one of these sites reports a swallowed failure — a log row that
+     * could not be written, an attachment that could not be read. They recur:
+     * whatever broke once breaks again on every send, so an ungated
+     * error_log() grows the PHP error log for as long as the site keeps
+     * sending. That is noise a production admin never asked for and cannot
+     * turn off, while anyone actually chasing the failure has WP_DEBUG on.
+     *
+     * @param string $message Message to record, prefixed with the plugin name.
+     * @return void
+     */
+    function fluentMailDebugLog($message)
+    {
+        if (!defined('WP_DEBUG') || !WP_DEBUG) {
+            return;
+        }
+
+        error_log('FluentSMTP: ' . $message);
+    }
+}
 
 function fluentMailFuncCouldNotBeLoadedRecheckPluginsLoad()
 {

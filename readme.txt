@@ -327,7 +327,7 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 - Updated the wp_mail() replacement to match WordPress 7.0 core, including doc blocks and hooks
 - Improved Amazon SES and toSend sending speed with fewer round trips and persistent connections
 - Disabled password manager auto-fill popups on connection and test email forms
-- Attachment read errors are now logged only when WP_DEBUG is enabled
+- Diagnostic errors (attachment reads, email log writes) are now logged only when WP_DEBUG is enabled
 - Fixed nested array sanitization in email logs
 - Fix: Weekly and monthly reports merging data across different years
 - Fix: toSend Reply-To formatting and sender validation messages
