@@ -49,7 +49,9 @@ class Handler extends BaseHandler
             require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/build/vendor/autoload.php';
         }
 
-        $message = $this->phpMailer->getSentMIMEMessage();
+        $message = $this->normalizeListHeaders(
+            $this->phpMailer->getSentMIMEMessage()
+        );
 
         $data = $this->getSetting();
 

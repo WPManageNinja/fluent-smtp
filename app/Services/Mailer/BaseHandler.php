@@ -214,6 +214,129 @@ class BaseHandler
         return $headers;
     }
 
+    /**
+     * Repair List-Unsubscribe / List-Unsubscribe-Post headers in a raw MIME message.
+     *
+     * PHPMailer RFC-2047-encodes a custom header whose value is longer than it
+     * can fit on one line. Our wp_mail() replacement leaves PHPMailer in mail()
+     * mode, so that limit is MAIL_MAX_LINE_LENGTH (63) minus the encoded-word
+     * overhead — only 47 characters. Every realistic unsubscribe URL is longer
+     * than that and therefore ships encoded.
+     *
+     * Encoded-words are not valid inside structured headers such as
+     * List-Unsubscribe, so Gmail ignores the header entirely when it arrives
+     * encoded, silently breaking RFC 8058 one-click unsubscribe that Gmail and
+     * Yahoo require from bulk senders.
+     *
+     * Providers that hand the fully built message to the API can repair the
+     * headers here: unfold each target header, decode any encoded-words, and
+     * re-emit it as a plain single line (re-folded at a URI boundary only if it
+     * would otherwise exceed the RFC 5322 line limit).
+     *
+     * Any header we cannot rewrite safely is left exactly as PHPMailer built
+     * it — a missing unsubscribe button is a far better outcome than a message
+     * the provider rejects.
+     *
+     * @param string $rawMessage The message from PHPMailer::getSentMIMEMessage()
+     * @return string
+     */
+    protected function normalizeListHeaders($rawMessage)
+    {
+        if (stripos($rawMessage, 'List-Unsubscribe') === false) {
+            return $rawMessage;
+        }
+
+        // Work on the top-level header block only.
+        $breakPos = strpos($rawMessage, "\r\n\r\n");
+
+        if ($breakPos === false) {
+            $breakPos = strpos($rawMessage, "\n\n");
+        }
+
+        if ($breakPos === false) {
+            return $rawMessage;
+        }
+
+        $headerBlock = substr($rawMessage, 0, $breakPos);
+        $rest = substr($rawMessage, $breakPos);
+
+        $lineEnding = (strpos($headerBlock, "\r\n") !== false) ? "\r\n" : "\n";
+
+        $fixedHeaderBlock = preg_replace_callback(
+            '/^(List-Unsubscribe(?:-Post)?)[ \t]*:[ \t]*([^\r\n]*(?:\r?\n[ \t][^\r\n]*)*)/mi',
+            function ($matches) use ($lineEnding) {
+                $name = $matches[1];
+
+                // Unfold continuation lines.
+                $value = preg_replace('/\r?\n[ \t]+/', ' ', $matches[2]);
+
+                // Decode RFC 2047 encoded-words if present.
+                if (strpos($value, '=?') !== false) {
+                    $decoded = false;
+
+                    if (function_exists('iconv_mime_decode')) {
+                        $decoded = @iconv_mime_decode(
+                            $value,
+                            ICONV_MIME_DECODE_CONTINUE_ON_ERROR,
+                            'UTF-8'
+                        );
+                    }
+
+                    if (($decoded === false || $decoded === null) && function_exists('mb_decode_mimeheader')) {
+                        $decoded = mb_decode_mimeheader($value);
+                    }
+
+                    if ($decoded !== false && $decoded !== null && $decoded !== '') {
+                        $value = $decoded;
+                    }
+                }
+
+                $value = preg_replace('/[ \t]+/', ' ', trim($value));
+
+                // Decoding is what makes an encoded-word unnecessary in the
+                // first place, so it must produce a header that is legal
+                // unencoded: printable US-ASCII, no control characters and no
+                // line breaks. A percent-escaped URL always is. Anything else
+                // (an IDN host, a unicode query value, a decode that went
+                // wrong) has to stay encoded or we would emit raw 8-bit bytes
+                // into the header block and risk the provider rejecting the
+                // whole message.
+                if (preg_match('/[^\x20-\x7E]/', $value)) {
+                    return $matches[0];
+                }
+
+                $headerLine = $name . ': ' . $value;
+
+                // RFC 5322 caps a line at 998 characters. Fold at the comma
+                // between URIs, which is a legal fold point.
+                if (strlen($headerLine) > 990) {
+                    $headerLine = $name . ': ' . preg_replace(
+                        '/>,\s*</',
+                        '>,' . $lineEnding . ' <',
+                        $value
+                    );
+                }
+
+                // A single URI longer than the limit has no fold point, so the
+                // rewrite would produce an over-long line. Keep the original.
+                foreach (explode($lineEnding, $headerLine) as $line) {
+                    if (strlen($line) > 998) {
+                        return $matches[0];
+                    }
+                }
+
+                return $headerLine;
+            },
+            $headerBlock
+        );
+
+        if ($fixedHeaderBlock === null) {
+            return $rawMessage; // regex failure — send untouched
+        }
+
+        return $fixedHeaderBlock . $rest;
+    }
+
     public function getSetting($key = null, $default = null)
     {
         try {
