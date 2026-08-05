@@ -562,16 +562,6 @@ class BaseHandler
         return $data;
     }
 
-    protected function updatedLog($id, $data)
-    {
-        try {
-            $data['updated_at'] = current_time('mysql');
-            (new Logger)->updateLog($data, ['id' => $id]);
-        } catch (Exception $e) {
-            fluentMailDebugLog('Failed to update email log - ' . $e->getMessage());
-        }
-    }
-
     public function getValidSenders($connection)
     {
         return [$connection['sender_email']];
