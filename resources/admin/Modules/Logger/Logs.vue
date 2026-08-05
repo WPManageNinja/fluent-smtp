@@ -312,6 +312,7 @@ export default {
                 row.retries = res.data.email.retries;
                 row.resent_count = res.data.email.resent_count;
                 row.updated_at = res.data.email.updated_at;
+                this.$set(row, 'extra', res.data.email.extra);
                 this.$notify.success({
                     offset: 19,
                     title: 'Great!',

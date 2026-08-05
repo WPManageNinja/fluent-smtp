@@ -441,6 +441,9 @@ class Logger extends Model
 
             if ($type == 'resend') {
                 $updateData['resent_count'] = intval($email['resent_count']) + 1;
+                $updateData['extra'] = maybe_serialize(
+                    $this->appendResendRecord($email['extra'], $to, (bool)$result)
+                );
             } else {
                 $updateData['retries'] = intval($email['retries']) + 1;
             }
@@ -456,6 +459,56 @@ class Logger extends Model
         } catch (\PHPMailer\PHPMailer\Exception $e) {
             throw $e;
         }
+    }
+
+    /**
+     * Record where a resend actually went.
+     *
+     * A resend can now be redirected to an address other than the original
+     * recipient, and resent_count alone only says that it happened, not where
+     * it landed - so a log row could show three resends with nothing to say
+     * that two of them went to somebody else entirely. The trail lives in the
+     * existing `extra` column, which needs no schema change, and the row's own
+     * `to` stays untouched as the record of the original send.
+     *
+     * @param mixed $extra The unserialized `extra` column.
+     * @param array $to    Recipients this resend was addressed to.
+     * @param bool  $sent  Whether the send itself reported success.
+     * @return array
+     */
+    protected function appendResendRecord($extra, $to, $sent)
+    {
+        $extra = is_array($extra) ? $extra : [];
+
+        $resends = [];
+
+        if (!empty($extra['resends']) && is_array($extra['resends'])) {
+            $resends = $extra['resends'];
+        }
+
+        $user = wp_get_current_user();
+
+        $resends[] = [
+            'at'   => current_time('mysql'),
+            'to'   => array_values(array_map('strval', (array)$to)),
+            // The display name as it stood at the time. Storing an ID would
+            // leave the trail unreadable once the account is deleted, which is
+            // exactly when it matters.
+            'by'   => ($user && $user->exists()) ? $user->display_name : '',
+            'sent' => $sent
+        ];
+
+        // Keep the tail. A row that gets resent all day should not grow its
+        // extra column without bound.
+        $limit = apply_filters('fluentsmtp_resend_history_limit', 20);
+
+        if (count($resends) > $limit) {
+            $resends = array_slice($resends, -$limit);
+        }
+
+        $extra['resends'] = array_values($resends);
+
+        return $extra;
     }
 
     public function updateLog($data, $where)

@@ -62,6 +62,17 @@
                             <span v-html="log.resent_count"></span>
                         </div>
                     </li>
+                    <li v-if="resendHistory.length">
+                        <div class="item_header">{{ $t('Resend History') }}:</div>
+                        <div class="item_content">
+                            <div v-for="(record, index) in resendHistory" :key="index" style="margin-bottom:2px;">
+                                <span>{{ record.to }}</span>
+                                <span style="color:#909399;"> — {{ record.at }}</span>
+                                <span v-if="record.by" style="color:#909399;"> ({{ record.by }})</span>
+                                <span v-if="!record.sent" style="color:#f56c6c;"> — {{ $t('failed') }}</span>
+                            </div>
+                        </div>
+                    </li>
                     <li>
                         <div class="item_header">{{ $t('Subject') }}:</div>
                         <div class="item_content">
@@ -249,6 +260,8 @@ export default {
                 this.logViewerProps.log.status = res.data.email.status;
                 this.logViewerProps.log.updated_at = res.data.email.updated_at;
                 this.logViewerProps.log.resent_count = res.data.email.resent_count;
+                // Carries the resend trail, so the history renders without a reload.
+                this.$set(this.logViewerProps.log, 'extra', res.data.email.extra);
                 this.$notify.success({
                     offset: 19,
                     title: 'Great!',
@@ -332,6 +345,22 @@ export default {
             set(log) {
                 this.logViewerProps.log = log;
             }
+        },
+        // Newest first. Rendered as text, never v-html: the original
+        // recipients carry a display name that whoever sent the email chose.
+        resendHistory() {
+            const records = this.log && this.log.extra ? this.log.extra.resends : null;
+
+            if (!Array.isArray(records)) {
+                return [];
+            }
+
+            return records.map(record => ({
+                at: record.at || '',
+                by: record.by || '',
+                sent: record.sent !== false,
+                to: Array.isArray(record.to) ? record.to.join(', ') : String(record.to || '')
+            })).reverse();
         }
     }
 };
