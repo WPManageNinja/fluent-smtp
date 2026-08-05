@@ -8,6 +8,12 @@ Baseline: `fix/strict-sql-reports` after the three survivor follow-ups
 Command for every mutant: `bash tests/bin/run-all.sh`
 
 Full-suite shape: smoke 33, permissions 62, integration 58, zero skips.
+
+> The counts throughout this document describe the suite as it stood on the
+> audit date and are left unchanged, because a mutation result only means
+> anything alongside the suite that produced it. As of the 2.3.0 release the
+> suite runs 33/62/60. Widen the mutant set and re-run rather than editing
+> these figures.
 Every mutation was applied alone, exercised against the complete suite, and
 restored before the next mutation. The worktree was clean after every batch.
 The CLI pruning path remained protected by its subprocess-only production-log

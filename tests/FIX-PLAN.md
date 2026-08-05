@@ -2,6 +2,10 @@
 
 > Findings from test-writing runs. There are currently no open
 > `KNOWN-FAILURE` items; resolved entries remain below as regression history.
+>
+> Everything below shipped in 2.3.0. Entries are kept rather than deleted so
+> that a future strict-SQL regression is recognised as a repeat rather than
+> investigated from scratch. Add new findings at the top.
 
 ## RESOLVED — weekly reporting failed with `ONLY_FULL_GROUP_BY`
 

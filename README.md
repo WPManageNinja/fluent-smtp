@@ -19,15 +19,17 @@ Connect as many email Service Providers as you want, and FluentSMTP will route y
 - Amazon SES
 - Gmail OAuth
 - Google Workspace OAuth
-- Outlook OAuth
+- Outlook / Office 365 OAuth
 - SendGrid
 - Mailgun
+- Cloudflare Email
+- toSend
 - Brevo (Sendinblue)
-- Pepipost
+- Netcore (Pepipost)
 - Postmark
-- Zoho ZeptoMail (TransMail)
 - SparkPost
-- Elastic Mail
+- SMTP2GO
+- Elastic Email
 - Zoho via SMTP
 - Any SMTP email provider
 - More native integrations coming soon
@@ -40,12 +42,15 @@ Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin on the m
 * Connect with Any Email Service Providers
 * Fallback Email Connection
 * Email Logging
-* Resend Emails
+* Resend Emails to any recipient, with full resend history
 * Detailed Reporting
+* Daily Connection Health Monitoring
+* Real-time failure notifications via Telegram, Slack, Discord and Pushover
+* WP-CLI support
 * Super fast UI powered by VueJS
 
 Most importantly, this plugin is free and will always be free.
-👉 <a href="https://fluentsmtp.com/why-we-build-fluentsmtp-plugin/">Read Why it's 100% free (always)</a> 👈
+👉 <a href="https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/">Read Why it's 100% free (always)</a> 👈
 
 #### Contribute
 FluentSMTP is built with VueJS and ElementUI (frontend). It's backend communication is based on standard WordPress AJAX endpoints.
@@ -61,14 +66,48 @@ All the email connection drivers can be found in `app/Services/Mailer/Providers`
 #### Getting Started
 - Clone this repository.
 - Run `composer install` to install PHP dependencies.
+- Run `npm install` to install the frontend dependencies.
 
 #### Build JavaScript source
 
-- Clone this project.
-- Open the project in the terminal.
-- Run `npm install`.
-- Run `npx mix watch` for development.
-- Run `npx mix --production` to build the project.
+- Run `npm run start` (or `npx mix watch`) for development.
+- Run `npm run prod` (or `npx mix --production`) to build for production.
 
 All VueJS code can be found in `resources/admin`.
+
+Translation strings used by the Vue app are extracted with `npm run i18n`,
+which regenerates `app/Services/TransStrings.php`. Only literal strings passed
+to `$t('...')` are extracted, so a `$t(someVariable)` call will render
+untranslated and the extractor will warn about it.
+
+#### Running the tests
+
+The suite runs locally through WP-CLI against a real development WordPress
+install. There is no Docker, PHPUnit, `wp-env`, or CI service to set up.
+
+```bash
+bash tests/bin/run-all.sh              # everything
+bash tests/bin/run-all.sh static       # lint and route-coverage gates
+bash tests/bin/run-all.sh smoke        # admin-AJAX smoke
+bash tests/bin/run-all.sh permissions  # every POST route as anonymous + subscriber
+bash tests/bin/run-all.sh integration  # database, connection and domain behaviour
+bash tests/bin/run-all.sh js           # Vitest over the admin request layer
+```
+
+The harness fails closed: it forces the Simulator provider, blocks outbound
+HTTP, and aborts the run if the real `fsmpt_email_logs` row count changes.
+Running the tests cannot send an email or touch your log.
+
+Read `tests/AGENT.md` before adding a case, and `tests/README.md` for the
+optional coverage gate, the environment-axes runner, and prefix portability.
+
+#### Building a release
+
+```bash
+./build.sh
+```
+
+This builds the frontend, installs Composer dependencies without dev packages,
+produces `fluent-smtp.zip`, restores your dev dependencies, and then verifies
+that no development files ended up in the archive.
 
