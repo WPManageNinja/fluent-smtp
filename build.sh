@@ -42,6 +42,7 @@ zip -r $ZIP_NAME . \
     -x "webpack.config.js" \
     -x "translation.node.js" \
     -x "webpack.mix.js" \
+    -x "vitest.config.mjs" \
     -x "package.json" \
     -x "package-lock.json" \
     -x "pnpm-lock.yaml" \

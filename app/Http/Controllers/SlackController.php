@@ -57,6 +57,8 @@ class SlackController extends Controller
 
     public function sendTestMessage(Request $request)
     {
+        $this->verify();
+
         // Let's update the notification status
         $settings = (new Settings())->notificationSettings();
 
@@ -84,6 +86,8 @@ class SlackController extends Controller
 
     public function disconnect()
     {
+        $this->verify();
+
         NotificationHelper::updateChannelSettings('slack', [
             'status'      => 'no',
             'webhook_url' => '',
