@@ -60,7 +60,7 @@
 
                     <el-table-column :label="$t('To')">
                         <template slot-scope="scope">
-                            <span v-html="scope.row.to"></span>
+                            <span v-html="formatAddresses(scope.row.to)"></span>
                         </template>
                     </el-table-column>
 
@@ -223,7 +223,7 @@ export default {
             });
 
             this.$get('logs', data).then(res => {
-                this.logs = this.formatLogs(res.data);
+                this.logs = res.data;
                 this.pagination.total = res.total;
                 const page = Number(this.$route.query.page);
                 this.pagination.current_page = page || this.pagination.current_page;
@@ -233,17 +233,12 @@ export default {
                 this.loading = false;
             });
         },
-        formatLogs(logs) {
-            jQuery.each(logs, (i, log) => {
-                logs[i] = this.formatLog(log);
-            });
-
-            return logs;
-        },
-        formatLog(log) {
-            log.to = this.formatAddresses(log.to);
-            return log;
-        },
+        // Formats the recipient list for display. Called from the template
+        // rather than stored back onto the row: the row's `to` has to stay the
+        // raw [{name, email}] array so that everything downstream — the log
+        // viewer, the resend dialog — can decide for itself how to render it.
+        // Escaping the row in place used to leave the dialog showing
+        // "John &lt;john@example.com&gt;", since it renders text, not HTML.
         formatAddresses(addresses) {
             if (!addresses) {
                 return '';
@@ -254,7 +249,7 @@ export default {
             }
 
             if(typeof addresses == 'string') {
-                return addresses;
+                return this.escapeHtml(addresses);
             }
 
             const result = [];

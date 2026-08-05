@@ -53,7 +53,7 @@
                     <li>
                         <div class="item_header">{{ $t('To') }}:</div>
                         <div class="item_content">
-                            <span v-html="log.to"></span>
+                            <span v-html="formatAddresses(log.to)"></span>
                         </div>
                     </li>
                     <li v-if="log.resent_count > 0">
@@ -290,9 +290,15 @@ export default {
         sanitize(html) {
             return window.DOMPurify.sanitize(html);
         },
+        // The single escaping choke point for the v-html that renders `to`.
+        // The display name is attacker-controllable via the To header, so
+        // nothing may reach that binding unescaped. Escaping happens here, at
+        // the point of render, rather than on the row itself — the row keeps
+        // the raw [{name, email}] array so the resend dialog can render the
+        // same data as plain text without it arriving pre-escaped.
         formatAddresses(addresses) {
             if (typeof addresses === 'string') {
-                return addresses;
+                return this.escapeHtml(addresses);
             }
             if (!Array.isArray(addresses)) {
                 return '';
@@ -311,13 +317,6 @@ export default {
                 let log;
                 if (this.logViewerProps.log) {
                     log = {...this.logViewerProps.log};
-                    // `to` arrives as a pre-escaped string from the list view,
-                    // but as a raw [{name, email}] array on Prev/Next navigation.
-                    // Escape the array form here (single choke point for v-html)
-                    // since the display name is attacker-controllable via the To header.
-                    if (Array.isArray(log.to)) {
-                        log.to = this.formatAddresses(log.to);
-                    }
                     if (!log.headers) {
                         log.headers = {};
                     }

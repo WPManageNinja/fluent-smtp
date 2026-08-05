@@ -117,8 +117,36 @@ class LoggerController extends Controller
             $rawRecipients = preg_split('/[\s,;]+/', $rawRecipients);
         }
 
+        /*
+         * Refuse rather than fall through. Returning an empty list here would
+         * mean a malformed request quietly resends to the ORIGINAL recipient
+         * instead of the one that was asked for - the worst possible answer,
+         * since the caller is told the send succeeded and never learns it went
+         * somewhere else.
+         */
         if (!is_array($rawRecipients)) {
-            return [];
+            throw new \Exception(
+                esc_html__('Could not read the recipient list.', 'fluent-smtp'),
+                422
+            );
+        }
+
+        /*
+         * A resend is a manual, one-at-a-time action. A list this long is a
+         * mistake or a pasted address book, and either way it is better caught
+         * than delivered.
+         */
+        $maxRecipients = apply_filters('fluentsmtp_max_resend_recipients', 25);
+
+        if (count($rawRecipients) > $maxRecipients) {
+            throw new \Exception(
+                sprintf(
+                    /* translators: %d: maximum number of recipients allowed */
+                    esc_html__('Please enter no more than %d email addresses.', 'fluent-smtp'),
+                    (int) $maxRecipients
+                ),
+                422
+            );
         }
 
         $recipients = [];

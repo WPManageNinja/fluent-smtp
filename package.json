@@ -6,7 +6,8 @@
     "scripts": {
         "start": "mix watch",
         "prod": "mix --production",
-        "test:js": "vitest run --config vitest.config.mjs"
+        "test:js": "vitest run --config vitest.config.mjs",
+        "i18n": "node translation.node.js"
     },
     "repository": {
         "type": "git",
