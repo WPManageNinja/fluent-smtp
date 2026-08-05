@@ -34,7 +34,7 @@
                                     size="mini"
                                     type="success"
                                     icon="el-icon-refresh-right"
-                                    @click="handleRetry(log, 'resend')"
+                                    @click="handleResendClick"
                                     v-if="log.status == 'sent'"
                                 >
                                     {{ $t('Resend') }}
@@ -150,23 +150,37 @@
                 </el-row>
             </div>
         </el-dialog>
+
+        <ResendDialog
+            v-model="resendDialog.visible"
+            :log="resendDialog.log"
+            :resending="resendDialog.resending"
+            @confirm="handleResendConfirm"
+            @closed="handleResendDialogClosed"
+        />
     </div>
 </template>
 
 <script>
 import EmailbodyContainer from './EmailbodyContainer';
+import ResendDialog from './ResendDialog';
 
 export default {
     name: 'LogViewer',
     props: ['logViewerProps'],
-    components: {EmailbodyContainer},
+    components: {EmailbodyContainer, ResendDialog},
     data() {
         return {
             activeName: 'email_body',
             loading: false,
             next: false,
             prev: false,
-            retrying: false
+            retrying: false,
+            resendDialog: {
+                visible: false,
+                log: null,
+                resending: false
+            }
         };
     },
     methods: {
@@ -218,16 +232,28 @@ export default {
             name = name[0].replace(/\\/g, '/');
             return name.split('/').pop();
         },
-        handleRetry(log, type) {
+        handleRetry(log, type, recipients = null) {
             this.retrying = true;
-            this.$post('logs/retry', {
+
+            const payload = {
                 id: log.id,
                 type: type
-            }).then(res => {
+            };
+
+            if (recipients && recipients.length) {
+                payload.recipients = recipients;
+            }
+
+            return this.$post('logs/retry', payload).then(res => {
                 this.logViewerProps.retries = res.data.email.retries;
                 this.logViewerProps.log.status = res.data.email.status;
                 this.logViewerProps.log.updated_at = res.data.email.updated_at;
                 this.logViewerProps.log.resent_count = res.data.email.resent_count;
+                this.$notify.success({
+                    offset: 19,
+                    title: 'Great!',
+                    message: res.data.message
+                });
             }).fail(error => {
                 this.$notify.error({
                     offset: 19,
@@ -237,6 +263,29 @@ export default {
             }).always(() => {
                 this.retrying = false;
             });
+        },
+        handleResendClick() {
+            this.resendDialog.log = this.log;
+            this.resendDialog.resending = false;
+            this.resendDialog.visible = true;
+        },
+        handleResendConfirm(payload) {
+            const log = this.resendDialog.log;
+            if (!log) {
+                return;
+            }
+
+            const recipients = payload.target === 'original' ? null : payload.recipients;
+
+            this.resendDialog.resending = true;
+            this.handleRetry(log, 'resend', recipients).always(() => {
+                this.resendDialog.resending = false;
+                this.resendDialog.visible = false;
+            });
+        },
+        handleResendDialogClosed() {
+            this.resendDialog.log = null;
+            this.resendDialog.resending = false;
         },
         sanitize(html) {
             return window.DOMPurify.sanitize(html);

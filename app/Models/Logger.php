@@ -335,7 +335,7 @@ class Logger extends Model
         return (array)$row;
     }
 
-    public function resendEmailFromLog($id, $type = 'retry')
+    public function resendEmailFromLog($id, $type = 'retry', $recipients = [])
     {
         $email = $this->find($id);
 
@@ -364,9 +364,18 @@ class Logger extends Model
             }
         }
 
+        // When custom recipients are provided, drop cc/bcc headers so the email
+        // is only delivered to the requested address(es).
+        $hasCustomRecipients = !empty($recipients) && is_array($recipients);
+        $skipHeaderKeys = $hasCustomRecipients ? ['cc', 'bcc'] : [];
+
         $headers = [];
 
         foreach ($email['headers'] as $key => $value) {
+
+            if (in_array(strtolower((string) $key), $skipHeaderKeys, true)) {
+                continue;
+            }
 
             if($key == 'content-type' && $value == 'multipart/alternative') {
                 $value = 'text/html';
@@ -395,12 +404,16 @@ class Logger extends Model
             'From: ' . $email['from']
         ]);
 
-        $to = [];
-        foreach ($email['to'] as $recipient) {
-            if (isset($recipient['name'])) {
-                $to[] = $recipient['name'] . ' <' . $recipient['email'] . '>';
-            } else {
-                $to[] = $recipient['email'];
+        if ($hasCustomRecipients) {
+            $to = array_values($recipients);
+        } else {
+            $to = [];
+            foreach ($email['to'] as $recipient) {
+                if (isset($recipient['name'])) {
+                    $to[] = $recipient['name'] . ' <' . $recipient['email'] . '>';
+                } else {
+                    $to[] = $recipient['email'];
+                }
             }
         }
 
