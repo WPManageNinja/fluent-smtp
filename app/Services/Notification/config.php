@@ -60,5 +60,19 @@ return [
                 'disconnect' => 'settings/pushover/disconnect',
             ],
         ],
+        'gotify' => [
+            'key'         => 'gotify',
+            'title'       => __('Gotify', 'fluent-smtp'),
+            'logo'        => fluentMailAssetUrl('images/gotify.svg'),
+            'logo_name'   => 'gotify.svg',
+            'controller'  => 'FluentMail\App\Http\Controllers\GotifyController',
+            'component'   => '_GotifyNotification',
+            'info_component' => '_GotifyConnectionInfo',
+            'routes'      => [
+                'register'  => 'settings/gotify/register',
+                'test'      => 'settings/gotify/send-test',
+                'disconnect' => 'settings/gotify/disconnect',
+            ],
+        ],
     ],
 ];

@@ -444,6 +444,8 @@ class TransStrings
             '__GIT_CONTRIBUTE' => sprintf(__('If you are a developer and would like to contribute to the project, please %s', 'fluent-smtp'), '<a target="_blank" rel="nofollow" href="https://github.com/WPManageNinja/fluent-smtp/">' . __('contribute on GitHub', 'fluent-smtp') . '</a>'),
             '__GMAIL_CODE_INSTRUCTION' => __('Copy the snippet below, replace the stars with your own credentials, and paste it into your site\'s wp-config.php file.', 'fluent-smtp'),
             '__GMAIL_SUCCESS' => __('Gmail / Google Workspace is connected and nothing else is needed here. To authenticate again,', 'fluent-smtp'),
+            '__GOTIFY_INTRO' => __('Gotify is a self-hosted server for sending and receiving push notifications. Enter the URL of your Gotify server and an application token to start getting real time notifications.', 'fluent-smtp'),
+            '__GOTIFY_NOTIFICATION_ENABLED' => __('Gotify channel is enabled', 'fluent-smtp'),
             '__MAILGUN_REGION' => sprintf(__('If you are operating under EU laws, you may be required to use the EU region. %s.', 'fluent-smtp'), '<a target="_blank" href="https://www.mailgun.com/regions">' . __('More information on Mailgun.com', 'fluent-smtp') . '</a>'),
             '__MAILGUN_URL_TIP' => __('Which Mailgun endpoint to send through.', 'fluent-smtp'),
             '__SMTP2GO_REGION_TIP' => __('Sends through the SMTP2GO API servers in this region. Pick the one closest to your web server; your API key works with every region.', 'fluent-smtp'),
