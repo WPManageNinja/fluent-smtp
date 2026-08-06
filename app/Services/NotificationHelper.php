@@ -51,6 +51,14 @@ class NotificationHelper
         return self::sendPushoverMessage($message, $apiToken, $userKey, true, 1);
     }
 
+    public static function sendTestGotifyMessage($serverUrl, $appToken)
+    {
+        $message = __('This is a test message for ', 'fluent-smtp') . site_url() . '. ' .
+            __('If you get this message, then your site is connected successfully.', 'fluent-smtp');
+
+        return self::sendGotifyMessage($message, $serverUrl, $appToken, true, 5);
+    }
+
     public static function disconnectTelegram($token)
     {
         self::sendTeleRequest('disconnect', [], 'POST', $token);
@@ -323,6 +331,98 @@ class NotificationHelper
         return $responseData;
     }
 
+    /**
+     * Gotify instances are self-hosted, so the base URL comes from the user. Accept what
+     * they are likely to paste (with or without a trailing slash or the /message endpoint)
+     * and hand back a bare origin we can append /message to.
+     */
+    public static function sanitizeGotifyServerUrl($serverUrl)
+    {
+        $serverUrl = trim((string) $serverUrl);
+
+        if (!$serverUrl) {
+            return '';
+        }
+
+        $serverUrl = preg_replace('#/message/?$#i', '', $serverUrl);
+        $serverUrl = untrailingslashit($serverUrl);
+
+        $scheme = strtolower((string) wp_parse_url($serverUrl, PHP_URL_SCHEME));
+
+        if (!in_array($scheme, ['http', 'https'], true) || !wp_parse_url($serverUrl, PHP_URL_HOST)) {
+            return '';
+        }
+
+        return esc_url_raw($serverUrl, ['http', 'https']);
+    }
+
+    public static function sendGotifyMessage($message, $serverUrl, $appToken, $blocking = false, $priority = 8)
+    {
+        $serverUrl = self::sanitizeGotifyServerUrl($serverUrl);
+
+        if (!$serverUrl || !$appToken) {
+            return new \WP_Error(
+                'gotify_invalid_settings',
+                __('Gotify server URL and application token are required', 'fluent-smtp')
+            );
+        }
+
+        $title = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), fluentMailSiteTitle());
+
+        $args = array(
+            'headers'     => array(
+                'X-Gotify-Key' => $appToken,
+                'Content-Type' => 'application/json',
+            ),
+            'body'        => wp_json_encode(array(
+                'title'    => $title,
+                'message'  => $message,
+                'priority' => $priority,
+                'extras'   => array(
+                    'client::display' => array(
+                        'contentType' => 'text/markdown'
+                    )
+                )
+            )),
+            'timeout'     => 60,
+            'redirection' => 5,
+            'blocking'    => true,
+            'httpversion' => '1.0',
+            'sslverify'   => true,
+        );
+
+        if (!$blocking) {
+            $args['blocking'] = false;
+            $args['timeout'] = 0.01;
+        }
+
+        $response = wp_remote_post($serverUrl . '/message', $args);
+
+        if (!$blocking) {
+            return true;
+        }
+
+        if (is_wp_error($response)) {
+            return $response;
+        }
+
+        $responseCode = wp_remote_retrieve_response_code($response);
+        $body = wp_remote_retrieve_body($response);
+        $responseData = json_decode($body, true);
+
+        if ($responseCode < 200 || $responseCode >= 300) {
+            $errorMessage = Arr::get($responseData, 'errorDescription');
+
+            if (!$errorMessage) {
+                $errorMessage = Arr::get($responseData, 'error', __('Gotify API error', 'fluent-smtp'));
+            }
+
+            return new \WP_Error('gotify_api_error', $errorMessage, $responseData);
+        }
+
+        return $responseData;
+    }
+
     public static function formatSlackMessageBlock($handler, $logData = [])
     {
         $sendingTo = self::unserialize(Arr::get($logData, 'to'));
@@ -439,6 +539,41 @@ class NotificationHelper
             'options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search='
         );
         $message .= '<a href="' . esc_url($logsUrl) . '">' . __('View Failed Email(s)', 'fluent-smtp') . '</a>';
+
+        return $message;
+    }
+
+    /**
+     * Gotify renders plain text by default and markdown when the message asks for it,
+     * so this is the markdown counterpart of formatPushoverMessage().
+     */
+    public static function formatGotifyMessage($handler, $logData = [])
+    {
+        $sendingTo = self::unserialize(Arr::get($logData, 'to'));
+
+        if (is_array($sendingTo)) {
+            $sendingTo = Arr::get($sendingTo, '0.email', '');
+        }
+
+        if (is_array($sendingTo) || !$sendingTo) {
+            $sendingTo = Arr::get($logData, 'to');
+        }
+
+        $provider = strtoupper($handler->getSetting('provider'));
+        $subject = Arr::get($logData, 'subject');
+
+        $message = '**' . __('Website URL:', 'fluent-smtp') . '** ' . site_url() . "\n\n";
+        $message .= '**' . __('Sending Driver:', 'fluent-smtp') . '** ' . $provider . "\n\n";
+        $message .= '**' . __('To Email Address:', 'fluent-smtp') . '** ' . $sendingTo . "\n\n";
+        $message .= '**' . __('Email Subject:', 'fluent-smtp') . '** ' . $subject . "\n\n";
+        $message .= '**' . __('Error Message:', 'fluent-smtp') . "**\n\n";
+        $message .= '```' . "\n" . self::getErrorMessageFromResponse(
+            self::unserialize(Arr::get($logData, 'response'))
+        ) . "\n" . '```' . "\n\n";
+        $logsUrl = admin_url(
+            'options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search='
+        );
+        $message .= '[' . __('View Failed Email(s)', 'fluent-smtp') . '](' . esc_url_raw($logsUrl) . ')';
 
         return $message;
     }

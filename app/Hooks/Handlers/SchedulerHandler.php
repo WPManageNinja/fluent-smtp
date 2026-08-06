@@ -297,6 +297,17 @@ class SchedulerHandler
                     );
                     continue;
                 }
+
+                if ($driver == 'gotify') {
+                    NotificationHelper::sendGotifyMessage(
+                        $message,
+                        Arr::get($channelSettings, 'server_url'),
+                        Arr::get($channelSettings, 'app_token'),
+                        false,
+                        8
+                    );
+                    continue;
+                }
             }
         }
     }
@@ -429,6 +440,17 @@ class SchedulerHandler
                     Arr::get($channelSettings, 'user_key'),
                     false,
                     1 // High priority for failed emails
+                );
+                continue;
+            }
+
+            if ($driver == 'gotify') {
+                NotificationHelper::sendGotifyMessage(
+                    NotificationHelper::formatGotifyMessage($handler, $logData),
+                    Arr::get($channelSettings, 'server_url'),
+                    Arr::get($channelSettings, 'app_token'),
+                    false,
+                    8 // High priority for failed emails
                 );
                 continue;
             }
