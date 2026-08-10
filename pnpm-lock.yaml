@@ -63,6 +63,12 @@ importers:
       vue-template-compiler:
         specifier: ^2.6.14
         version: 2.7.16
+      webpack:
+        specifier: 5.89.0
+        version: 5.89.0(webpack-cli@4.10.0)
+      webpack-cli:
+        specifier: 4.10.0
+        version: 4.10.0(webpack@5.89.0)
 
 packages:
 
