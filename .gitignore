@@ -12,3 +12,6 @@ vendor
 fluent-smtp/*
 research
 .claude
+internal_docs
+fluent-smtp.zip
+.gstack/

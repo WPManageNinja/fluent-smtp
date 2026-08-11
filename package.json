@@ -4,8 +4,10 @@
     "description": "---",
     "main": ".eslintrc.js",
     "scripts": {
-        "start": "webpack --mode=development --node-env=development --progress --watch",
-        "prod": "webpack --mode=production --node-env=production --progress"
+        "start": "mix watch",
+        "prod": "mix --production",
+        "test:js": "vitest run --config vitest.config.mjs",
+        "i18n": "node translation.node.js"
     },
     "repository": {
         "type": "git",
@@ -26,6 +28,7 @@
         "resolve-url-loader": "^4.0.0",
         "sass": "^1.36.0",
         "sass-loader": "^12.1.0",
+        "vitest": "^4.1.10",
         "vue-loader": "^15.9.7",
         "vue-template-compiler": "^2.6.14"
     },

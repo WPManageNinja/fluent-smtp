@@ -60,7 +60,7 @@
 
                     <el-table-column :label="$t('To')">
                         <template slot-scope="scope">
-                            <span v-html="scope.row.to"></span>
+                            <span v-html="formatAddresses(scope.row.to)"></span>
                         </template>
                     </el-table-column>
 
@@ -91,7 +91,7 @@
                                 size="mini"
                                 type="success"
                                 icon="el-icon-refresh-right"
-                                @click="handleRetry(scope.row, 'resend')"
+                                @click="handleResendClick(scope.row)"
                                 v-if="scope.row.status == 'sent'"
                             >
                                 {{ $t('Resend') }}
@@ -137,6 +137,14 @@
             <el-skeleton :animated="true" v-else class="fss_content" :rows="15"></el-skeleton>
 
             <LogViewer :logViewerProps="logViewerProps"/>
+
+            <ResendDialog
+                v-model="resendDialog.visible"
+                :log="resendDialog.log"
+                :resending="resendDialog.resending"
+                @confirm="handleResendConfirm"
+                @closed="handleResendDialogClosed"
+            />
         </div>
     </div>
 </template>
@@ -147,6 +155,7 @@ import Pagination from '@/Pieces/Pagination';
 import LogFilter from './LogFilter';
 import LogViewer from './LogViewer';
 import LogBulkAction from './BulkAction';
+import ResendDialog from './ResendDialog';
 import isEmpty from 'lodash/isEmpty'
 
 export default {
@@ -156,7 +165,8 @@ export default {
         Pagination,
         LogFilter,
         LogViewer,
-        LogBulkAction
+        LogBulkAction,
+        ResendDialog
     },
     data() {
         return {
@@ -168,6 +178,11 @@ export default {
             logViewerProps: {
                 log: null,
                 dialogVisible: false
+            },
+            resendDialog: {
+                visible: false,
+                log: null,
+                resending: false
             },
             pagination: {
                 total: 0,
@@ -208,7 +223,7 @@ export default {
             });
 
             this.$get('logs', data).then(res => {
-                this.logs = this.formatLogs(res.data);
+                this.logs = res.data;
                 this.pagination.total = res.total;
                 const page = Number(this.$route.query.page);
                 this.pagination.current_page = page || this.pagination.current_page;
@@ -218,17 +233,12 @@ export default {
                 this.loading = false;
             });
         },
-        formatLogs(logs) {
-            jQuery.each(logs, (i, log) => {
-                logs[i] = this.formatLog(log);
-            });
-
-            return logs;
-        },
-        formatLog(log) {
-            log.to = this.formatAddresses(log.to);
-            return log;
-        },
+        // Formats the recipient list for display. Called from the template
+        // rather than stored back onto the row: the row's `to` has to stay the
+        // raw [{name, email}] array so that everything downstream — the log
+        // viewer, the resend dialog — can decide for itself how to render it.
+        // Escaping the row in place used to leave the dialog showing
+        // "John &lt;john@example.com&gt;", since it renders text, not HTML.
         formatAddresses(addresses) {
             if (!addresses) {
                 return '';
@@ -239,7 +249,7 @@ export default {
             }
 
             if(typeof addresses == 'string') {
-                return addresses;
+                return this.escapeHtml(addresses);
             }
 
             const result = [];
@@ -277,12 +287,19 @@ export default {
                 return this.handleResendBulk(this.selectedLogs);
             }
         },
-        handleRetry(row, type) {
+        handleRetry(row, type, recipients = null) {
             this.loading = true;
-            this.$post('logs/retry', {
+
+            const payload = {
                 id: row.id,
                 type: type
-            }).then(res => {
+            };
+
+            if (recipients && recipients.length) {
+                payload.recipients = recipients;
+            }
+
+            return this.$post('logs/retry', payload).then(res => {
                 if (!res.data.email) {
                     this.$notify.error({
                         offset: 19,
@@ -295,20 +312,46 @@ export default {
                 row.retries = res.data.email.retries;
                 row.resent_count = res.data.email.resent_count;
                 row.updated_at = res.data.email.updated_at;
+                this.$set(row, 'extra', res.data.email.extra);
                 this.$notify.success({
                     offset: 19,
                     title: 'Great!',
                     message: res.data.message
                 });
+                return true;
             }).fail(error => {
                 this.$notify.error({
                     offset: 19,
                     title: 'Oops!!',
                     message: error.responseJSON.data.message
                 });
+                return false;
             }).always(() => {
                 this.loading = false;
             });
+        },
+        handleResendClick(row) {
+            this.resendDialog.log = row;
+            this.resendDialog.resending = false;
+            this.resendDialog.visible = true;
+        },
+        handleResendConfirm(payload) {
+            const row = this.resendDialog.log;
+            if (!row) {
+                return;
+            }
+
+            const recipients = payload.target === 'original' ? null : payload.recipients;
+
+            this.resendDialog.resending = true;
+            this.handleRetry(row, 'resend', recipients).always(() => {
+                this.resendDialog.resending = false;
+                this.resendDialog.visible = false;
+            });
+        },
+        handleResendDialogClosed() {
+            this.resendDialog.log = null;
+            this.resendDialog.resending = false;
         },
         handleView(row) {
             this.logViewerProps.log = row;

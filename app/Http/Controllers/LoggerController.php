@@ -63,10 +63,29 @@ class LoggerController extends Controller
                 ], $response->get_error_code());
             });
 
-            if ($email = $logger->resendEmailFromLog($request->get('id'), $request->get('type'))) {
+            $recipients = $this->sanitizeRecipients($request->get('recipients'));
+
+            $resentEmail = $logger->resendEmailFromLog(
+                $request->get('id'),
+                $request->get('type'),
+                $recipients
+            );
+
+            if ($resentEmail) {
+                $message = __('Email sent successfully.', 'fluent-smtp');
+
+                if (!empty($recipients)) {
+                    $message = sprintf(
+                        /* translators: %s: comma separated list of email addresses */
+                        __('Email sent successfully to %s.', 'fluent-smtp'),
+                        implode(', ', $recipients)
+                    );
+                }
+
                 return $this->sendSuccess([
-                    'email' => $email,
-                    'message' => __('Email sent successfully.', 'fluent-smtp')
+                    'email'      => $resentEmail,
+                    'recipients' => $recipients,
+                    'message'    => $message
                 ]);
             }
 
@@ -77,6 +96,83 @@ class LoggerController extends Controller
                 'message' => $e->getMessage()
             ], $e->getCode());
         }
+    }
+
+    /**
+     * Sanitize and validate a list of recipient email addresses coming
+     * from the resend dialog. Returns an array of valid email addresses
+     * or an empty array when none are provided / valid.
+     *
+     * @param  mixed $rawRecipients
+     * @return array<int, string>
+     * @throws \Exception When an invalid email address is supplied.
+     */
+    protected function sanitizeRecipients($rawRecipients)
+    {
+        if (empty($rawRecipients)) {
+            return [];
+        }
+
+        if (is_string($rawRecipients)) {
+            $rawRecipients = preg_split('/[\s,;]+/', $rawRecipients);
+        }
+
+        /*
+         * Refuse rather than fall through. Returning an empty list here would
+         * mean a malformed request quietly resends to the ORIGINAL recipient
+         * instead of the one that was asked for - the worst possible answer,
+         * since the caller is told the send succeeded and never learns it went
+         * somewhere else.
+         */
+        if (!is_array($rawRecipients)) {
+            throw new \Exception(
+                esc_html__('Could not read the recipient list.', 'fluent-smtp'),
+                422
+            );
+        }
+
+        /*
+         * A resend is a manual, one-at-a-time action. A list this long is a
+         * mistake or a pasted address book, and either way it is better caught
+         * than delivered.
+         */
+        $maxRecipients = apply_filters('fluentsmtp_max_resend_recipients', 25);
+
+        if (count($rawRecipients) > $maxRecipients) {
+            throw new \Exception(
+                sprintf(
+                    /* translators: %d: maximum number of recipients allowed */
+                    esc_html__('Please enter no more than %d email addresses.', 'fluent-smtp'),
+                    (int) $maxRecipients
+                ),
+                422
+            );
+        }
+
+        $recipients = [];
+
+        foreach ($rawRecipients as $recipient) {
+            $recipient = sanitize_email(trim((string) $recipient));
+
+            if ($recipient === '') {
+                continue;
+            }
+
+            if (!is_email($recipient)) {
+                throw new \Exception(
+                    sprintf(
+                        /* translators: %s: email address */
+                        esc_html__('Invalid email address: %s', 'fluent-smtp'),
+                        esc_html($recipient)
+                    ),
+                    422
+                );
+            }
+
+            $recipients[] = $recipient;
+        }
+
+        return array_values(array_unique($recipients));
     }
 
     public function retryBulk(Request $request, Logger $logger)

@@ -49,7 +49,9 @@ class Handler extends BaseHandler
             require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/build/vendor/autoload.php';
         }
 
-        $message = $this->phpMailer->getSentMIMEMessage();
+        $message = $this->normalizeListHeaders(
+            $this->phpMailer->getSentMIMEMessage()
+        );
 
         $data = $this->getSetting();
 
@@ -304,10 +306,26 @@ class Handler extends BaseHandler
             require_once FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/build/vendor/autoload.php';
         }
 
-        $client = $this->getApiClient($connection);
+        $tokenError = '';
 
-        if (is_wp_error($client)) {
-            return '<p style="color: red; text-align: center; font-size: 18px;">ERROR: ' . $connection->get_error_message() . '</p>';
+        try {
+            $client = $this->getApiClient($connection);
+
+            /*
+             * This read `$connection->get_error_message()` - a method call on
+             * the array parameter, which is a fatal Error rather than a
+             * catchable Exception. It fired exactly when someone opened this
+             * panel to find out why their Gmail connection had stopped
+             * working, so the one screen that could explain the failure was
+             * the one screen guaranteed to die on it.
+             */
+            if (is_wp_error($client)) {
+                $tokenError = $client->get_error_message();
+            }
+        } catch (\Exception $e) {
+            // The Google client throws on a rejected grant rather than
+            // returning an error, and nothing upstream catches it here.
+            $tokenError = $e->getMessage();
         }
 
         $info = fluentMailgetConnection($connection['sender_email']);
@@ -316,10 +334,12 @@ class Handler extends BaseHandler
 
         $extraRow = [
             'title'   => __('Token Validity', 'fluent-smtp'),
-            'content' => 'Valid (' . (int)(($connection['expire_stamp'] - time()) / 60) . 'minutes)'
+            'content' => 'Valid (' . (int)((Arr::get($connection, 'expire_stamp') - time()) / 60) . 'minutes)'
         ];
 
-        if (($connection['expire_stamp']) < time()) {
+        if ($tokenError) {
+            $extraRow['content'] = $tokenError;
+        } elseif (Arr::get($connection, 'expire_stamp') < time()) {
             $extraRow['content'] = __('Invalid. Please re-authenticate', 'fluent-smtp');
         }
 

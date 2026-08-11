@@ -12,6 +12,20 @@ class QueryBuilderHandler
     protected $container;
 
     /**
+     * Fetch-mode values mirroring PDO::FETCH_OBJ and PDO::FETCH_CLASS.
+     *
+     * Declared locally instead of referencing the PDO class. This query builder
+     * runs every statement through $wpdb and never touches PDO, but a property
+     * default of `\PDO::FETCH_OBJ` is resolved when the class is instantiated —
+     * so on a host without ext-pdo (WordPress itself only needs mysqli) merely
+     * constructing the builder raised "Class PDO not found". That is an \Error,
+     * not an \Exception, so it slipped past callers' catch(Exception) blocks and
+     * killed the request with no message: sending appeared to hang.
+     */
+    const FETCH_OBJ = 5;
+    const FETCH_CLASS = 8;
+
+    /**
      * @var \FluentMail\App\Services\DB\src\Connection
      */
     protected $connection;
@@ -46,7 +60,7 @@ class QueryBuilderHandler
      *
      * @var array
      */
-    protected $fetchParameters = array(\PDO::FETCH_OBJ);
+    protected $fetchParameters = array(self::FETCH_OBJ);
     /**
      * @var string
      */
@@ -109,7 +123,7 @@ class QueryBuilderHandler
     {
         var_dump('need to implement this'); die();
 
-        return $this->setFetchMode(\PDO::FETCH_CLASS, $className, $constructorArgs);
+        return $this->setFetchMode(self::FETCH_CLASS, $className, $constructorArgs);
     }
 
     /**

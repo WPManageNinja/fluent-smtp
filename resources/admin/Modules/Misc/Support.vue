@@ -38,19 +38,34 @@
 
                         <el-skeleton :rows="4" :animated="true" v-if="contributorsLoading" />
 
-                        <a target="_blank" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
-
-                            <ul v-if="contributors.length > 0" v-loading="contributorsLoading" style="list-style: none; display: flex; flex-direction: row; flex-wrap: wrap; ">
-                                <li v-for="contributor in contributors" :key="contributor.id" class="" >
-                                    <p :title="contributor.login">
-                                        <img :src="contributor.avatar_url" :alt="contributor.login" style="width: 60px; height: 60px; border-radius: 50%;"/>
-                                    </p>
-                                </li>
-                            </ul>
-                            <div v-else-if="!contributorsLoading && !contributors.length" style="text-align: center;">
+                        <ul v-if="contributors.length > 0" v-loading="contributorsLoading" class="fss_contributors">
+                            <li v-for="contributor in contributors" :key="contributor.id">
+                                <a
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    :href="contributor.html_url"
+                                    :title="contributor.login"
+                                >
+                                    <img
+                                        :src="contributor.avatar_url"
+                                        :alt="contributor.login"
+                                        loading="lazy"
+                                    />
+                                    <span>{{ contributor.login }}</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div v-else-if="!contributorsLoading && !contributors.length" style="text-align: center;">
+                            <a target="_blank" rel="noopener noreferrer" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
                                 <img title="Contributors" :src="appVars.images_url + 'contributors.png'"/>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
+
+                        <p v-if="contributors.length > 0" class="fss_contributors_all">
+                            <a target="_blank" rel="noopener noreferrer" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
+                                {{ $t('View all contributors on GitHub') }}
+                            </a>
+                        </p>
 
                     </div>
                 </div>
@@ -201,16 +216,79 @@ export default {
         async fetchContributors() {
             this.contributorsLoading = true;
             try {
-                await fetch('https://api.github.com/repos/WPManageNinja/fluent-smtp/contributors')
+                /*
+                 * per_page is explicit because the API returns 30 by default,
+                 * which silently truncated the list as the project grew.
+                 * A rate-limited or errored response is an object rather than
+                 * an array, so the shape is checked before it is used - that
+                 * case falls through to the static contributors image.
+                 */
+                await fetch('https://api.github.com/repos/WPManageNinja/fluent-smtp/contributors?per_page=100')
                     .then(response => response.json())
                     .then(data => {
-                        this.contributors = data.slice(0, 20);
+                        this.contributors = Array.isArray(data) ? data : [];
                         this.contributorsLoading = false;
                     })
             } catch (e) {
+                this.contributors = [];
                 this.contributorsLoading = false;
             }
         }
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.fss_contributors {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 10px;
+    margin: 16px 0 0;
+    padding: 0;
+
+    li {
+        margin: 0;
+        /* wide enough that most GitHub logins sit on one line */
+        width: 88px;
+    }
+
+    a {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        color: #5a5a5a;
+
+        &:hover {
+            color: #1a7efb;
+
+            img {
+                border-color: #1a7efb;
+            }
+        }
+    }
+
+    img {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        display: block;
+        margin: 0 auto 6px;
+        border: 2px solid transparent;
+        transition: border-color .15s ease-in-out;
+    }
+
+    span {
+        display: block;
+        font-size: 11px;
+        line-height: 1.3;
+        /* logins are a single unbroken token and several are long */
+        overflow-wrap: anywhere;
+    }
+}
+
+.fss_contributors_all {
+    margin-top: 14px;
+    font-size: 13px;
+}
+</style>

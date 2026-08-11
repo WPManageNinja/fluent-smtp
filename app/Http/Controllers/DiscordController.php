@@ -49,6 +49,8 @@ class DiscordController extends Controller
 
     public function sendTestMessage(Request $request)
     {
+        $this->verify();
+
         // Let's update the notification status
         $settings = (new Settings())->notificationSettings();
 
@@ -77,6 +79,8 @@ class DiscordController extends Controller
 
     public function disconnect()
     {
+        $this->verify();
+
         NotificationHelper::updateChannelSettings('discord', [
             'status'       => 'no',
             'webhook_url'  => '',

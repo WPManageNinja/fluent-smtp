@@ -4,6 +4,7 @@ namespace FluentMail\App\Hooks\Handlers;
 
 use FluentMail\App\Models\Logger;
 use FluentMail\App\Models\Settings;
+use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\NotificationHelper;
 use FluentMail\App\Services\Notification\Manager as NotificationManager;
 use FluentMail\Includes\Support\Arr;
@@ -18,14 +19,29 @@ class SchedulerHandler
         add_filter('fluentmail_email_sending_failed', array($this, 'maybeHandleFallbackConnection'), 10, 4);
 
         add_action('fluentsmtp_renew_gmail_token', array($this, 'renewGmailToken'));
+        add_action('fluentsmtp_renew_outlook_token', array($this, 'renewOutlookToken'));
 
         add_action('fluentmail_email_sending_failed_no_fallback', array($this, 'maybeSendNotification'), 10, 3);
+
+        add_action('fluentmail_connection_health_failed', array($this, 'notifyUnhealthyConnections'));
     }
 
     public function handleScheduledJobs()
     {
         $this->deleteOldEmails();
         $this->sendDailyDigest();
+        $this->checkConnectionHealth();
+    }
+
+    /**
+     * Doubles as the safety net for token renewal. The single events that keep
+     * the OAuth tokens fresh are only ever armed by a successful renewal, so a
+     * single failed one used to end the chain silently - this daily pass picks
+     * it back up.
+     */
+    private function checkConnectionHealth()
+    {
+        (new ConnectionHealth())->checkAll();
     }
 
     private function deleteOldEmails()
@@ -215,6 +231,106 @@ class SchedulerHandler
         }
     }
 
+    /**
+     * Announce connections that have just started failing their health check,
+     * over whichever channels the site has already set up.
+     *
+     * @param array $failing
+     * @return void
+     */
+    public function notifyUnhealthyConnections($failing)
+    {
+        if (!$failing) {
+            return;
+        }
+
+        $notificationManager = new NotificationManager();
+        $channels = $notificationManager->getActiveChannels();
+
+        if (!$channels) {
+            return;
+        }
+
+        foreach ($failing as $connection) {
+            $provider = Arr::get($connection, 'provider');
+            $errorMessage = Arr::get($connection, 'message');
+
+            $message = sprintf(
+            /* translators: 1: site name, 2: provider name, 3: sender email, 4: error message */
+                __('FluentSMTP on %1$s cannot use the %2$s connection for %3$s any more: %4$s', 'fluent-smtp'),
+                fluentMailSiteTitle(),
+                $provider,
+                Arr::get($connection, 'sender_email'),
+                $errorMessage
+            );
+
+            foreach ($channels as $channel) {
+                $driver = $channel['driver'];
+                $channelSettings = Arr::get($channel, 'settings', []);
+
+                if ($driver == 'telegram') {
+                    NotificationHelper::sendFailedNotificationTele([
+                        'token_id'      => Arr::get($channelSettings, 'token'),
+                        'provider'      => $provider,
+                        'error_message' => $errorMessage
+                    ]);
+                    continue;
+                }
+
+                if ($driver == 'slack') {
+                    NotificationHelper::sendSlackMessage($message, Arr::get($channelSettings, 'webhook_url'), false);
+                    continue;
+                }
+
+                if ($driver == 'discord') {
+                    NotificationHelper::sendDiscordMessage($message, Arr::get($channelSettings, 'webhook_url'), false);
+                    continue;
+                }
+
+                if ($driver == 'pushover') {
+                    NotificationHelper::sendPushoverMessage(
+                        $message,
+                        Arr::get($channelSettings, 'api_token'),
+                        Arr::get($channelSettings, 'user_key'),
+                        false,
+                        1
+                    );
+                    continue;
+                }
+            }
+        }
+    }
+
+    public function renewOutlookToken()
+    {
+        $settings = fluentMailGetSettings();
+
+        if (!$settings) {
+            return;
+        }
+
+        $connections = Arr::get($settings, 'connections', []);
+
+        foreach ($connections as $connection) {
+            $providerSettings = Arr::get($connection, 'provider_settings', []);
+
+            if (Arr::get($providerSettings, 'provider') != 'outlook') {
+                continue;
+            }
+
+            if (empty($providerSettings['refresh_token'])) {
+                continue;
+            }
+
+            if ((Arr::get($providerSettings, 'expire_stamp') - 480) >= time()) {
+                continue;
+            }
+
+            $handler = new \FluentMail\App\Services\Mailer\Providers\Outlook\Handler();
+            $handler->renewToken($providerSettings);
+        }
+    }
+
     public function callGmailApiForNewToken($settings)
     {
         if (Arr::get($settings, 'key_store') == 'wp_config') {
@@ -246,7 +362,16 @@ class SchedulerHandler
             $result = $this->saveNewGmailTokens($settings, $newTokens);
 
             if (!$result) {
-                return new \WP_Error('api_error', __('Failed to renew the token', 'fluent-smtp'));
+                // Google says why in error_description - usually that the
+                // grant was revoked or expired, which only re-authenticating
+                // fixes. Reporting "failed" alone leaves nothing to act on.
+                $errorDescription = Arr::get($newTokens, 'error_description');
+
+                if (!$errorDescription) {
+                    $errorDescription = __('Failed to renew the token with the Gmail API', 'fluent-smtp');
+                }
+
+                return new \WP_Error('api_error', $errorDescription);
             }
 
             return true;

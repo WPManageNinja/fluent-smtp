@@ -34,7 +34,7 @@
                                     size="mini"
                                     type="success"
                                     icon="el-icon-refresh-right"
-                                    @click="handleRetry(log, 'resend')"
+                                    @click="handleResendClick"
                                     v-if="log.status == 'sent'"
                                 >
                                     {{ $t('Resend') }}
@@ -53,13 +53,31 @@
                     <li>
                         <div class="item_header">{{ $t('To') }}:</div>
                         <div class="item_content">
-                            <span v-html="log.to"></span>
+                            <span v-html="formatAddresses(log.to)"></span>
+                        </div>
+                    </li>
+                    <li v-if="sendTime">
+                        <div class="item_header">{{ $t('Send Time') }}:</div>
+                        <div class="item_content">
+                            <span>{{ sendTime }}</span>
                         </div>
                     </li>
                     <li v-if="log.resent_count > 0">
                         <div class="item_header">{{ $t('Resent Count') }}:</div>
                         <div class="item_content">
                             <span v-html="log.resent_count"></span>
+                        </div>
+                    </li>
+                    <li v-if="resendHistory.length">
+                        <div class="item_header">{{ $t('Resend History') }}:</div>
+                        <div class="item_content">
+                            <div v-for="(record, index) in resendHistory" :key="index" style="margin-bottom:2px;">
+                                <span>{{ record.to }}</span>
+                                <span style="color:#909399;"> — {{ record.at }}</span>
+                                <span v-if="record.by" style="color:#909399;"> ({{ record.by }})</span>
+                                <span v-if="record.ms" style="color:#909399;"> · {{ record.ms }}</span>
+                                <span v-if="!record.sent" style="color:#f56c6c;"> — {{ $t('failed') }}</span>
+                            </div>
                         </div>
                     </li>
                     <li>
@@ -150,23 +168,37 @@
                 </el-row>
             </div>
         </el-dialog>
+
+        <ResendDialog
+            v-model="resendDialog.visible"
+            :log="resendDialog.log"
+            :resending="resendDialog.resending"
+            @confirm="handleResendConfirm"
+            @closed="handleResendDialogClosed"
+        />
     </div>
 </template>
 
 <script>
 import EmailbodyContainer from './EmailbodyContainer';
+import ResendDialog from './ResendDialog';
 
 export default {
     name: 'LogViewer',
     props: ['logViewerProps'],
-    components: {EmailbodyContainer},
+    components: {EmailbodyContainer, ResendDialog},
     data() {
         return {
             activeName: 'email_body',
             loading: false,
             next: false,
             prev: false,
-            retrying: false
+            retrying: false,
+            resendDialog: {
+                visible: false,
+                log: null,
+                resending: false
+            }
         };
     },
     methods: {
@@ -218,16 +250,30 @@ export default {
             name = name[0].replace(/\\/g, '/');
             return name.split('/').pop();
         },
-        handleRetry(log, type) {
+        handleRetry(log, type, recipients = null) {
             this.retrying = true;
-            this.$post('logs/retry', {
+
+            const payload = {
                 id: log.id,
                 type: type
-            }).then(res => {
+            };
+
+            if (recipients && recipients.length) {
+                payload.recipients = recipients;
+            }
+
+            return this.$post('logs/retry', payload).then(res => {
                 this.logViewerProps.retries = res.data.email.retries;
                 this.logViewerProps.log.status = res.data.email.status;
                 this.logViewerProps.log.updated_at = res.data.email.updated_at;
                 this.logViewerProps.log.resent_count = res.data.email.resent_count;
+                // Carries the resend trail, so the history renders without a reload.
+                this.$set(this.logViewerProps.log, 'extra', res.data.email.extra);
+                this.$notify.success({
+                    offset: 19,
+                    title: 'Great!',
+                    message: res.data.message
+                });
             }).fail(error => {
                 this.$notify.error({
                     offset: 19,
@@ -238,8 +284,67 @@ export default {
                 this.retrying = false;
             });
         },
+        handleResendClick() {
+            this.resendDialog.log = this.log;
+            this.resendDialog.resending = false;
+            this.resendDialog.visible = true;
+        },
+        handleResendConfirm(payload) {
+            const log = this.resendDialog.log;
+            if (!log) {
+                return;
+            }
+
+            const recipients = payload.target === 'original' ? null : payload.recipients;
+
+            this.resendDialog.resending = true;
+            this.handleRetry(log, 'resend', recipients).always(() => {
+                this.resendDialog.resending = false;
+                this.resendDialog.visible = false;
+            });
+        },
+        handleResendDialogClosed() {
+            this.resendDialog.log = null;
+            this.resendDialog.resending = false;
+        },
         sanitize(html) {
             return window.DOMPurify.sanitize(html);
+        },
+        // Milliseconds up to a second, then seconds — 1173 ms reads worse than
+        // 1.17s, and 40 ms reads worse than 0.04s. Returns '' when the log
+        // predates this being recorded, which hides the row entirely.
+        formatSendTime(ms) {
+            const value = Number(ms);
+
+            if (!isFinite(value) || value <= 0) {
+                return '';
+            }
+
+            if (value < 1000) {
+                return `${Math.round(value)} ms`;
+            }
+
+            return `${(value / 1000).toFixed(2)} s`;
+        },
+        // The single escaping choke point for the v-html that renders `to`.
+        // The display name is attacker-controllable via the To header, so
+        // nothing may reach that binding unescaped. Escaping happens here, at
+        // the point of render, rather than on the row itself — the row keeps
+        // the raw [{name, email}] array so the resend dialog can render the
+        // same data as plain text without it arriving pre-escaped.
+        formatAddresses(addresses) {
+            if (typeof addresses === 'string') {
+                return this.escapeHtml(addresses);
+            }
+            if (!Array.isArray(addresses)) {
+                return '';
+            }
+            return addresses.map((val) => {
+                if (val && val.name) {
+                    return this.escapeHtml(`${val.name} <${val.email}>`);
+                }
+                return this.escapeHtml(val && val.email ? val.email : '');
+            }).join(', ');
         }
     },
     computed: {
@@ -263,6 +368,26 @@ export default {
             set(log) {
                 this.logViewerProps.log = log;
             }
+        },
+        // Newest first. Rendered as text, never v-html: the original
+        // recipients carry a display name that whoever sent the email chose.
+        resendHistory() {
+            const records = this.log && this.log.extra ? this.log.extra.resends : null;
+
+            if (!Array.isArray(records)) {
+                return [];
+            }
+
+            return records.map(record => ({
+                at: record.at || '',
+                by: record.by || '',
+                sent: record.sent !== false,
+                ms: this.formatSendTime(record.ms),
+                to: Array.isArray(record.to) ? record.to.join(', ') : String(record.to || '')
+            })).reverse();
+        },
+        sendTime() {
+            return this.formatSendTime(this.log && this.log.extra ? this.log.extra.send_time_ms : null);
         }
     }
 };

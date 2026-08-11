@@ -45,7 +45,7 @@ final class Application extends Container
         });
 
         add_action('admin_notices', function () {
-            if (!current_user_can('manage_options')) {
+            if (!fluentMailCurrentUserCanManage()) {
                 return;
             }
 

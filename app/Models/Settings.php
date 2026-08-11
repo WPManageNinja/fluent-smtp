@@ -3,6 +3,7 @@
 namespace FluentMail\App\Models;
 
 use FluentMail\Includes\Support\Arr;
+use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\App\Models\Traits\SendTestEmailTrait;
 
@@ -142,6 +143,8 @@ class Settings
 
         fluentMailSetSettings($settings);
 
+        (new ConnectionHealth())->forget($key);
+
         return $settings;
     }
 
@@ -218,12 +221,33 @@ class Settings
         $this->saveGlobalSettings($settings);
     }
 
+    /**
+     * Update an existing connection in place.
+     *
+     * Every caller is a token-refresh path persisting a renewed OAuth token,
+     * so an absent key means the connection was deleted - either while the
+     * refresh was in flight, or before a scheduled renewal fired. Writing it
+     * back used to recreate it, which resurrected a connection the admin had
+     * removed and left it to be checked, reported on, and routed to. Nothing
+     * here is allowed to create a connection.
+     *
+     * @param string $fromEmail
+     * @param array $connection
+     * @return bool whether the connection existed and was updated
+     */
     public function updateConnection($fromEmail, $connection)
     {
         $key = $this->generateUniqueKey($fromEmail);
         $settings = $this->getSettings();
+
+        if (!isset($settings['connections'][$key])) {
+            return false;
+        }
+
         $settings['connections'][$key]['provider_settings'] = $connection;
         $this->saveGlobalSettings($settings);
+
+        return true;
     }
 
     public function notificationSettings()

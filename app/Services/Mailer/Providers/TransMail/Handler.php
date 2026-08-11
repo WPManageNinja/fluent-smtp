@@ -189,7 +189,7 @@ class Handler extends BaseHandler
                 $fileName = $attachment[2] ?? basename($attachment[0]);
             } catch (\Exception $e) {
                 // Log error and skip this attachment
-                error_log('FluentSMTP TransMail: Failed to read attachment - ' . $e->getMessage());
+                $this->logAttachmentFailure('TransMail', $e);
                 $file = false;
             }
 

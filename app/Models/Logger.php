@@ -163,9 +163,15 @@ class Logger extends Model
             $result[$key]['id']      = (int)$result[$key]['id'];
             $result[$key]['retries'] = (int)$result[$key]['retries'];
             $result[$key]['from']    = htmlspecialchars($result[$key]['from']);
-            $result[$key]['subject'] = wp_kses_post(
-                wp_unslash($result[$key]['subject'])
-            );
+            /*
+             * No wp_kses_post() here. Both consumers render the subject as text
+             * — {{ }} in Logs.vue and LogViewer.vue, which escapes on its own —
+             * so kses adds no safety, and its entity normalization rewrites a
+             * subject reading "Tom & Jerry" to "Tom &amp; Jerry", which the
+             * page then shows verbatim. Anything that puts a subject into
+             * HTML has to escape it at that point, as digest_email.php does.
+             */
+            $result[$key]['subject'] = wp_unslash($result[$key]['subject']);
         }
 
         return $result;
@@ -329,7 +335,7 @@ class Logger extends Model
         return (array)$row;
     }
 
-    public function resendEmailFromLog($id, $type = 'retry')
+    public function resendEmailFromLog($id, $type = 'retry', $recipients = [])
     {
         $email = $this->find($id);
 
@@ -358,9 +364,18 @@ class Logger extends Model
             }
         }
 
+        // When custom recipients are provided, drop cc/bcc headers so the email
+        // is only delivered to the requested address(es).
+        $hasCustomRecipients = !empty($recipients) && is_array($recipients);
+        $skipHeaderKeys = $hasCustomRecipients ? ['cc', 'bcc'] : [];
+
         $headers = [];
 
         foreach ($email['headers'] as $key => $value) {
+
+            if (in_array(strtolower((string) $key), $skipHeaderKeys, true)) {
+                continue;
+            }
 
             if($key == 'content-type' && $value == 'multipart/alternative') {
                 $value = 'text/html';
@@ -389,12 +404,16 @@ class Logger extends Model
             'From: ' . $email['from']
         ]);
 
-        $to = [];
-        foreach ($email['to'] as $recipient) {
-            if (isset($recipient['name'])) {
-                $to[] = $recipient['name'] . ' <' . $recipient['email'] . '>';
-            } else {
-                $to[] = $recipient['email'];
+        if ($hasCustomRecipients) {
+            $to = array_values($recipients);
+        } else {
+            $to = [];
+            foreach ($email['to'] as $recipient) {
+                if (isset($recipient['name'])) {
+                    $to[] = $recipient['name'] . ' <' . $recipient['email'] . '>';
+                } else {
+                    $to[] = $recipient['email'];
+                }
             }
         }
 
@@ -403,6 +422,8 @@ class Logger extends Model
                 define('FLUENTMAIL_LOG_OFF', true);
             }
 
+            $startedAt = microtime(true);
+
             $result = wp_mail(
                 $to,
                 $email['subject'],
@@ -410,6 +431,8 @@ class Logger extends Model
                 $headers,
                 $wpMailAttachments  // Use the converted attachment format
             );
+
+            $durationMs = round((microtime(true) - $startedAt) * 1000, 1);
 
             $updateData = [
                 'status'     => 'sent',
@@ -422,6 +445,9 @@ class Logger extends Model
 
             if ($type == 'resend') {
                 $updateData['resent_count'] = intval($email['resent_count']) + 1;
+                $updateData['extra'] = maybe_serialize(
+                    $this->appendResendRecord($email['extra'], $to, (bool)$result, $durationMs)
+                );
             } else {
                 $updateData['retries'] = intval($email['retries']) + 1;
             }
@@ -437,6 +463,58 @@ class Logger extends Model
         } catch (\PHPMailer\PHPMailer\Exception $e) {
             throw $e;
         }
+    }
+
+    /**
+     * Record where a resend actually went.
+     *
+     * A resend can now be redirected to an address other than the original
+     * recipient, and resent_count alone only says that it happened, not where
+     * it landed - so a log row could show three resends with nothing to say
+     * that two of them went to somebody else entirely. The trail lives in the
+     * existing `extra` column, which needs no schema change, and the row's own
+     * `to` stays untouched as the record of the original send.
+     *
+     * @param mixed $extra The unserialized `extra` column.
+     * @param array $to    Recipients this resend was addressed to.
+     * @param bool  $sent  Whether the send itself reported success.
+     * @param float $ms    How long the send took, in milliseconds.
+     * @return array
+     */
+    protected function appendResendRecord($extra, $to, $sent, $ms = null)
+    {
+        $extra = is_array($extra) ? $extra : [];
+
+        $resends = [];
+
+        if (!empty($extra['resends']) && is_array($extra['resends'])) {
+            $resends = $extra['resends'];
+        }
+
+        $user = wp_get_current_user();
+
+        $resends[] = [
+            'at'   => current_time('mysql'),
+            'to'   => array_values(array_map('strval', (array)$to)),
+            // The display name as it stood at the time. Storing an ID would
+            // leave the trail unreadable once the account is deleted, which is
+            // exactly when it matters.
+            'by'   => ($user && $user->exists()) ? $user->display_name : '',
+            'sent' => $sent,
+            'ms'   => $ms
+        ];
+
+        // Keep the tail. A row that gets resent all day should not grow its
+        // extra column without bound.
+        $limit = apply_filters('fluentsmtp_resend_history_limit', 20);
+
+        if (count($resends) > $limit) {
+            $resends = array_slice($resends, -$limit);
+        }
+
+        $extra['resends'] = array_values($resends);
+
+        return $extra;
     }
 
     public function updateLog($data, $where)
@@ -461,13 +539,40 @@ class Logger extends Model
         try {
 
             $date = gmdate('Y-m-d H:i:s', current_time('timestamp') - $days * DAY_IN_SECONDS);
-            $query = $this->db->prepare("DELETE FROM {$this->table} WHERE `created_at` < %s", $date);
-            return $this->db->query($query);
+
+            /*
+             * Deleted in batches rather than in one statement. A site that has
+             * been logging for months can have this cron pass hit hundreds of
+             * thousands of rows, and a single unbounded DELETE holds locks for
+             * the whole scan - long enough to time out and leave the backlog
+             * permanently uncleared, since the next run faces the same pile.
+             * Batches let each statement commit and release.
+             */
+            $batchSize = (int)apply_filters('fluentmail_log_delete_batch_size', 2000);
+            $batchSize = max(1, $batchSize);
+
+            $deleted = 0;
+
+            do {
+                $query = $this->db->prepare(
+                    "DELETE FROM {$this->table} WHERE `created_at` < %s LIMIT %d",
+                    $date,
+                    $batchSize
+                );
+
+                $result = $this->db->query($query);
+
+                if (!$result) {
+                    break;
+                }
+
+                $deleted += $result;
+            } while ($result >= $batchSize);
+
+            return $deleted;
 
         } catch (Exception $e) {
-            if (wp_get_environment_type() != 'production') {
-                error_log('Message: ' . $e->getMessage());
-            }
+            fluentMailDebugLog('Failed to delete old email logs - ' . $e->getMessage());
         }
     }
 

@@ -52,6 +52,25 @@ class ActionsRegistrar
         $this->registerSiteInitialization();
         $this->registerCustomActions();
         $this->registerRestRoutes();
+
+        // SMTP connection reuse across FluentCRM bulk sending sessions.
+        (new BulkSendSessionHandler())->register();
+
+        $this->registerCliCommands();
+    }
+
+    /**
+     * Register the `wp fluent-smtp` commands.
+     *
+     * @return void
+     */
+    protected function registerCliCommands()
+    {
+        if (!defined('WP_CLI') || !WP_CLI || !class_exists('\WP_CLI')) {
+            return;
+        }
+
+        \WP_CLI::add_command('fluent-smtp', '\FluentMail\App\Services\CliHandler');
     }
 
     /**

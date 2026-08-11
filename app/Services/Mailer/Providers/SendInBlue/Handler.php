@@ -181,7 +181,7 @@ class Handler extends BaseHandler
                 }
             } catch (\Exception $e) {
                 // Log error and skip this attachment
-                error_log('FluentSMTP SendInBlue: Failed to read attachment - ' . $e->getMessage());
+                $this->logAttachmentFailure('SendInBlue', $e);
                 continue;
             }
         }

@@ -28,7 +28,7 @@ class TelegramController extends Controller
             'admin_email' => $userEmail,
             'smtp_url'    => admin_url('options-general.php?page=fluent-mail#/'),
             'site_url'    => site_url(),
-            'site_title'  => get_bloginfo('name'),
+            'site_title'  => fluentMailSiteTitle(),
             'site_lang'   => get_bloginfo('language'),
         ];
 
@@ -115,6 +115,8 @@ class TelegramController extends Controller
 
     public function sendTestMessage(Request $request)
     {
+        $this->verify();
+
         // Let's update the notification status
         $settings = (new Settings())->notificationSettings();
 
@@ -140,6 +142,8 @@ class TelegramController extends Controller
 
     public function disconnect()
     {
+        $this->verify();
+
         $settings = (new Settings())->notificationSettings();
 
         $token = Arr::get($settings, 'telegram.token');

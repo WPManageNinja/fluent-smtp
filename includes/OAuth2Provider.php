@@ -185,21 +185,43 @@ class OAuth2Provider
             );
         }
 
-        $responseBody = wp_remote_retrieve_body($response);
+        $responseBody = json_decode(wp_remote_retrieve_body($response), true);
 
-        if (false === is_array($response)) {
+        if (!is_array($responseBody)) {
             throw new \Exception(
                 'Invalid response received from Authorization Server. Expected JSON.'
             );
         }
 
-        if(empty(['access_token'])) {
+        /*
+         * The identity server answers a rejected grant with HTTP 400 and a JSON
+         * body describing why - most often invalid_grant, meaning the refresh
+         * token was revoked or expired through inactivity and the account has
+         * to be reconnected. That description is the only thing that tells a
+         * site owner what to actually do, so it is surfaced verbatim instead of
+         * being flattened into a generic failure.
+         */
+        if (!empty($responseBody['error'])) {
+            $description = '';
+
+            if (!empty($responseBody['error_description'])) {
+                $description = $responseBody['error_description'];
+            } elseif (is_string($responseBody['error'])) {
+                $description = $responseBody['error'];
+            }
+
             throw new \Exception(
-                'Invalid response received from Authorization Server.'
+                wp_kses_post('Authorization Server rejected the request: ' . $description)
             );
         }
 
-        return \json_decode($responseBody, true);
+        if (empty($responseBody['access_token'])) {
+            throw new \Exception(
+                'Invalid response received from Authorization Server. No access token was returned.'
+            );
+        }
+
+        return $responseBody;
     }
 
 
