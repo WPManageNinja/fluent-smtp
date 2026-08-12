@@ -632,8 +632,12 @@ if (!function_exists('fluentMailSend')) {
             }
         }
 
-        // Set to use PHP's mail().
+        // Set to use PHP's mail(). This runs before phpmailer_init, so a host
+        // or plugin listening there still has the final word on the transport,
+        // and nothing an earlier send left on the persistent instance carries
+        // into this one.
         $phpmailer->isMail();
+        FluentMail\App\Services\Mailer\BaseHandler::forgetSmtpTransportClaim();
 
         // Set Content-Type and charset.
 

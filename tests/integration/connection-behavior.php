@@ -51,6 +51,74 @@ class FsmtpSuiteFactoryWithDefault extends Factory
     }
 }
 
+/**
+ * Stands in for the shared PHPMailer while the PHP mail() handler decides
+ * whether to touch the transport. Sending is the one thing it must not do for
+ * real, so send() only records that it was reached.
+ */
+class FsmtpSuiteTransportProbe
+{
+    public $Mailer = 'smtp';
+
+    public $isMailCalls = 0;
+
+    public $sendCalls = 0;
+
+    public function isMail()
+    {
+        $this->Mailer = 'mail';
+        ++$this->isMailCalls;
+    }
+
+    public function send()
+    {
+        ++$this->sendCalls;
+        return true;
+    }
+}
+
+/**
+ * Stands in for the global PHPMailer while the bulk-session handler decides
+ * whether a send may inherit a kept-alive socket. Records the close instead of
+ * owning a real connection.
+ */
+class FsmtpSuiteSocketProbe
+{
+    public $Mailer = 'smtp';
+
+    public $SMTPKeepAlive = true;
+
+    public $closeCalls = 0;
+
+    public function smtpClose()
+    {
+        ++$this->closeCalls;
+    }
+}
+
+/**
+ * Runs the real postSend() transport branch with the logging tail stubbed out,
+ * so the assertions are about transport selection and nothing else.
+ */
+class FsmtpSuiteDefaultMailProbeHandler extends \FluentMail\App\Services\Mailer\Providers\DefaultMail\Handler
+{
+    public function runPostSend($phpMailer)
+    {
+        $this->phpMailer = $phpMailer;
+        return $this->postSend();
+    }
+
+    protected function handleSuccess()
+    {
+        return 'sent';
+    }
+
+    protected function handleFailure($exception)
+    {
+        return 'failed';
+    }
+}
+
 return function () {
     $outlookSettings = function ($sender) {
         return [
@@ -311,4 +379,150 @@ return function () {
         FsmtpTest::assertSame(ConnectionHealth::STATUS_HEALTHY, $result['status'], 'Gmail healthy status');
         FsmtpTest::assertSame('', $result['message'], 'Gmail healthy message');
     });
+
+    /*
+     * Transport selection for the PHP mail() connection. 2.3.0 reset the
+     * transport on every send from this handler, which silently overrode the
+     * relay that plenty of hosts declare from phpmailer_init and broke sending
+     * on those sites. The reset is still needed for one case - a fallback that
+     * lands here after the SMTP provider already pointed the shared PHPMailer
+     * at a relay - so both directions are pinned here.
+     */
+    $transportClaim = function () {
+        $property = new ReflectionProperty(
+            \FluentMail\App\Services\Mailer\BaseHandler::class,
+            'smtpTransportClaimed'
+        );
+        $property->setAccessible(true);
+        return (bool) $property->getValue();
+    };
+
+    FsmtpTest::case('PHP mail() connection keeps a transport declared from phpmailer_init', function () {
+        \FluentMail\App\Services\Mailer\BaseHandler::forgetSmtpTransportClaim();
+
+        $probe = new FsmtpSuiteTransportProbe();
+        $result = (new FsmtpSuiteDefaultMailProbeHandler())->runPostSend($probe);
+
+        FsmtpTest::assertSame('sent', $result, 'probe send did not complete');
+        FsmtpTest::assertSame('smtp', $probe->Mailer, 'declared transport was overridden');
+        FsmtpTest::assertSame(0, $probe->isMailCalls, 'isMail() ran without a claim to undo');
+        FsmtpTest::assertSame(1, $probe->sendCalls, 'send() was not reached exactly once');
+    });
+
+    FsmtpTest::case('fallback to PHP mail() undoes the transport the SMTP provider claimed', function () use (
+        $transportClaim
+    ) {
+        \FluentMail\App\Services\Mailer\BaseHandler::forgetSmtpTransportClaim();
+        \FluentMail\App\Services\Mailer\BaseHandler::markSmtpTransportClaimed();
+
+        $probe = new FsmtpSuiteTransportProbe();
+        $result = (new FsmtpSuiteDefaultMailProbeHandler())->runPostSend($probe);
+
+        FsmtpTest::assertSame('sent', $result, 'fallback probe send did not complete');
+        FsmtpTest::assertSame('mail', $probe->Mailer, 'claimed SMTP transport was not reset');
+        FsmtpTest::assertSame(1, $probe->isMailCalls, 'isMail() did not run for a claimed transport');
+        FsmtpTest::assert(!$transportClaim(), 'the claim survived the reset that consumed it');
+    });
+
+    FsmtpTest::case('a consumed claim does not reset the transport of the next send', function () {
+        \FluentMail\App\Services\Mailer\BaseHandler::forgetSmtpTransportClaim();
+        \FluentMail\App\Services\Mailer\BaseHandler::markSmtpTransportClaimed();
+
+        (new FsmtpSuiteDefaultMailProbeHandler())->runPostSend(new FsmtpSuiteTransportProbe());
+
+        $second = new FsmtpSuiteTransportProbe();
+        (new FsmtpSuiteDefaultMailProbeHandler())->runPostSend($second);
+
+        FsmtpTest::assertSame('smtp', $second->Mailer, 'a spent claim reset a later send');
+        FsmtpTest::assertSame(0, $second->isMailCalls, 'isMail() ran on a spent claim');
+    });
+
+    FsmtpTest::case('wp_mail() clears the transport claim before phpmailer_init fires', function () use (
+        $transportClaim
+    ) {
+        FsmtpTest::assertMailSimulationActive();
+        \FluentMail\App\Services\Mailer\BaseHandler::markSmtpTransportClaimed();
+
+        $observed = null;
+        $listener = function ($phpmailer) use (&$observed, $transportClaim) {
+            $observed = $transportClaim();
+        };
+        $logFuse = function () {
+            return false;
+        };
+
+        add_action('phpmailer_init', $listener);
+        add_filter('fluentmail_will_log_email', $logFuse, PHP_INT_MAX);
+
+        try {
+            wp_mail(
+                'transport-claim-' . FsmtpTest::uniq() . '@example.test',
+                'Suite transport claim',
+                'body',
+                ['Content-Type: text/plain; charset=UTF-8']
+            );
+        } finally {
+            remove_action('phpmailer_init', $listener);
+            remove_filter('fluentmail_will_log_email', $logFuse, PHP_INT_MAX);
+            \FluentMail\App\Services\Mailer\BaseHandler::forgetSmtpTransportClaim();
+        }
+
+        FsmtpTest::assert($observed !== null, 'phpmailer_init did not fire during wp_mail()');
+        FsmtpTest::assert(
+            $observed === false,
+            'a stale claim was still set when phpmailer_init listeners ran'
+        );
+    });
+
+    /*
+     * PHPMailer's smtpConnect() adopts any connected socket without re-checking
+     * Host or credentials, so a kept-alive bulk-session connection has to be
+     * detached from every send this plugin's SMTP handler is not routing -
+     * otherwise that mail leaves through this site's relay instead of the one
+     * it was addressed to.
+     */
+    $withSocketProbe = function (callable $callback) {
+        $probe = new FsmtpSuiteSocketProbe();
+        $real = isset($GLOBALS['phpmailer']) ? $GLOBALS['phpmailer'] : null;
+        $GLOBALS['phpmailer'] = $probe;
+
+        try {
+            $callback($probe);
+        } finally {
+            if ($real === null) {
+                unset($GLOBALS['phpmailer']);
+            } else {
+                $GLOBALS['phpmailer'] = $real;
+            }
+            \FluentMail\App\Hooks\Handlers\BulkSendSessionHandler::closeConnection();
+        }
+    };
+
+    FsmtpTest::case('a foreign SMTP send does not inherit the kept-alive socket', function () use (
+        $withSocketProbe
+    ) {
+        $withSocketProbe(function ($probe) {
+            $probe->Mailer = 'smtp';
+            $probe->SMTPKeepAlive = true;
+
+            \FluentMail\App\Hooks\Handlers\BulkSendSessionHandler::releaseForeignSend();
+
+            FsmtpTest::assertSame(1, $probe->closeCalls, 'the kept-alive socket was left attached');
+            FsmtpTest::assertSame(false, $probe->SMTPKeepAlive, 'keep-alive stayed on for a foreign send');
+        });
+    });
+
+    FsmtpTest::case('releasing is a no-op when the send is not going over SMTP', function () use (
+        $withSocketProbe
+    ) {
+        $withSocketProbe(function ($probe) {
+            $probe->Mailer = 'mail';
+            $probe->SMTPKeepAlive = true;
+
+            \FluentMail\App\Hooks\Handlers\BulkSendSessionHandler::releaseForeignSend();
+
+            FsmtpTest::assertSame(0, $probe->closeCalls, 'a PHP mail() send closed an SMTP socket');
+        });
+    });
+
 };

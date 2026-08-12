@@ -34,6 +34,44 @@ class BaseHandler
 
     protected $sendDurationMs = null;
 
+    /**
+     * Set once this plugin's SMTP provider has pointed the shared PHPMailer
+     * instance at a relay, and cleared again at the start of the next send.
+     *
+     * The instance persists across sends now, so a PHP mail() send that follows
+     * an SMTP one — a fallback, most of all — would otherwise inherit
+     * Mailer='smtp' along with that relay's host and credentials. Only that
+     * carry-over may be undone: a phpmailer_init listener selecting a transport
+     * for the send in progress has to be honored, so the reset is not a blanket
+     * one. @see Providers\DefaultMail\Handler::postSend()
+     *
+     * @var bool
+     */
+    protected static $smtpTransportClaimed = false;
+
+    /**
+     * Record that the SMTP provider has taken over the shared PHPMailer.
+     *
+     * @return void
+     */
+    public static function markSmtpTransportClaimed()
+    {
+        self::$smtpTransportClaimed = true;
+    }
+
+    /**
+     * Forget any earlier claim, because the transport has just been reset.
+     *
+     * Called from the wp_mail() replacement alongside the isMail() reset, which
+     * runs before phpmailer_init, so listeners get the final word again.
+     *
+     * @return void
+     */
+    public static function forgetSmtpTransportClaim()
+    {
+        self::$smtpTransportClaimed = false;
+    }
+
     public function __construct(?Application $app = null, ?Manager $manager = null)
     {
         $this->app = $app ?: fluentMail();

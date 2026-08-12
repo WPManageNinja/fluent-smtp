@@ -43,6 +43,12 @@ class Handler extends BaseHandler
             $this->phpMailer->SMTPKeepAlive = BulkSendSessionHandler::isActive();
 
             $this->phpMailer->isSMTP();
+
+            // The shared instance keeps this transport, and this relay's host
+            // and credentials, until something resets it. Flag it so a fallback
+            // to PHP mail() knows to switch back.
+            self::markSmtpTransportClaimed();
+
             $this->phpMailer->Host = $this->getSetting('host');
             $this->phpMailer->Port = $this->getSetting('port');
 

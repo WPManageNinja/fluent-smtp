@@ -193,6 +193,33 @@ class BulkSendSessionHandler
     }
 
     /**
+     * Detach any kept-alive socket before a send this plugin is not routing.
+     *
+     * PHPMailer's smtpConnect() adopts a socket that is already connected
+     * without re-checking Host or credentials, so a send that reaches the SMTP
+     * transport some other way — a host or plugin declaring its own relay from
+     * phpmailer_init, or an address no connection maps — would otherwise be
+     * delivered through the relay a bulk session left open, authenticated as
+     * this site's SMTP user. Only the SMTP provider handler, which declares
+     * what the socket belongs to through ensureConnectionFor(), may inherit it.
+     *
+     * @return void
+     */
+    public static function releaseForeignSend()
+    {
+        global $phpmailer;
+
+        if (!$phpmailer || $phpmailer->Mailer !== 'smtp') {
+            return;
+        }
+
+        // Closes the socket if one is open and clears SMTPKeepAlive either
+        // way, so this send cannot leave its own connection open under a flag
+        // that a later send of ours would read as its socket.
+        self::closeConnection();
+    }
+
+    /**
      * Close the kept-alive SMTP connection, if one is open.
      *
      * Also called by the SMTP provider handler when a send fails mid-session:

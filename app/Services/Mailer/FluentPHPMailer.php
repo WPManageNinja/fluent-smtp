@@ -2,6 +2,7 @@
 
 namespace FluentMail\App\Services\Mailer;
 
+use FluentMail\App\Hooks\Handlers\BulkSendSessionHandler;
 use FluentMail\App\Models\Logger;
 use FluentMail\App\Services\Mailer\Providers\Factory;
 use FluentMail\App\Services\Mailer\Providers\DefaultMail\Handler as PHPMailer;
@@ -27,6 +28,12 @@ class FluentPHPMailer
             }
             return $driver->setPhpMailer($this->phpMailer)->send();
         }
+
+        // No connection routes this address, so PHPMailer sends it however the
+        // request left it configured. That is not a send this plugin is
+        // routing, so it must not go out over a relay socket a bulk session
+        // left open.
+        BulkSendSessionHandler::releaseForeignSend();
 
         return $this->phpMailer->send();
     }
