@@ -657,6 +657,21 @@ class SettingsController extends Controller
 
         $clientId = Arr::get($connection, 'client_id');
         $clientSecret = Arr::get($connection, 'client_secret');
+        $tenantId = Arr::get($connection, 'tenant_id');
+
+        /*
+         * The tenant is part of the authority the browser is about to be sent
+         * to, so it is checked here as well as on save — this endpoint is
+         * reached before the connection has been stored, and refusing a bad
+         * value is better than quietly signing in against the wrong directory.
+         */
+        if (!\FluentMail\App\Services\Mailer\Providers\Outlook\API::isValidTenant($tenantId)) {
+            return $this->sendError([
+                'tenant_id' => [
+                    'invalid' => __('Directory (tenant) ID must be the tenant GUID, a verified domain such as contoso.onmicrosoft.com, or one of common, organizations, consumers.', 'fluent-smtp')
+                ]
+            ]);
+        }
 
         delete_option('_fluentsmtp_intended_outlook_info');
 
@@ -682,7 +697,8 @@ class SettingsController extends Controller
         } else {
             update_option('_fluentsmtp_intended_outlook_info', [
                 'client_id'     => $clientId,
-                'client_secret' => $clientSecret
+                'client_secret' => $clientSecret,
+                'tenant_id'     => $tenantId
             ]);
         }
 
@@ -703,7 +719,7 @@ class SettingsController extends Controller
         }
 
         return $this->sendSuccess([
-            'auth_url' => (new \FluentMail\App\Services\Mailer\Providers\Outlook\API($clientId, $clientSecret))->getAuthUrl()
+            'auth_url' => (new \FluentMail\App\Services\Mailer\Providers\Outlook\API($clientId, $clientSecret, $tenantId))->getAuthUrl()
         ]);
     }
 

@@ -5,6 +5,7 @@ use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\Mailer\Providers\Factory;
 use FluentMail\App\Services\Mailer\Providers\Gmail\Handler as GmailHandler;
+use FluentMail\App\Services\Mailer\Providers\Outlook\API as OutlookApi;
 use FluentMail\App\Services\Mailer\Providers\Outlook\Handler as OutlookHandler;
 
 /** Outbound Google client seam: no Guzzle request can leave the process. */
@@ -525,4 +526,144 @@ return function () {
         });
     });
 
+    /*
+     * Single-tenant Microsoft 365. The tenant is interpolated into the
+     * authority that receives the client secret, so the shapes it accepts are
+     * pinned here alongside the behaviour.
+     */
+    $outlookAuthority = function ($tenant) {
+        $captured = null;
+        $capture = function ($preempt, $args, $url) use (&$captured) {
+            if ($preempt !== false) {
+                return $preempt;
+            }
+            $captured = $url;
+            return [
+                'headers'  => [],
+                'body'     => '{"access_token":"a","refresh_token":"r","expires_in":3599}',
+                'response' => ['code' => 200, 'message' => 'OK'],
+                'cookies'  => [],
+                'filename' => null,
+            ];
+        };
+
+        add_filter('pre_http_request', $capture, 10, 3);
+
+        try {
+            $api = new OutlookApi('suite-client', 'suite-secret', $tenant);
+            $api->sendTokenRequest('refresh_token', ['refresh_token' => 'suite-refresh']);
+            $authorize = $api->getAuthUrl();
+        } finally {
+            remove_filter('pre_http_request', $capture, 10);
+        }
+
+        return [
+            'token'     => $captured,
+            'authorize' => $authorize,
+        ];
+    };
+
+    FsmtpTest::case('an Outlook connection with no tenant still uses the common authority', function () use (
+        $outlookAuthority
+    ) {
+        $urls = $outlookAuthority('');
+
+        FsmtpTest::assertSame(
+            'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+            $urls['token'],
+            'an upgraded connection changed authority'
+        );
+        FsmtpTest::assert(
+            strpos($urls['authorize'], 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize') === 0,
+            'the authorize URL changed for an upgraded connection'
+        );
+    });
+
+    FsmtpTest::case('a configured tenant scopes both the authorize and token authority', function () use (
+        $outlookAuthority
+    ) {
+        foreach (['aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee', 'organizations', 'contoso.onmicrosoft.com'] as $tenant) {
+            $urls = $outlookAuthority($tenant);
+
+            FsmtpTest::assertSame(
+                'https://login.microsoftonline.com/' . $tenant . '/oauth2/v2.0/token',
+                $urls['token'],
+                'token authority for ' . $tenant
+            );
+            FsmtpTest::assert(
+                strpos($urls['authorize'], 'https://login.microsoftonline.com/' . $tenant . '/oauth2/v2.0/authorize') === 0,
+                'authorize authority for ' . $tenant
+            );
+        }
+    });
+
+    FsmtpTest::case('a tenant that could redirect the credential exchange is refused', function () use (
+        $outlookAuthority
+    ) {
+        $hostile = [
+            'evil.test/x/oauth2/v2.0/token?a=',
+            'https://evil.test',
+            '../../evil',
+            'someone@evil.test',
+            'tenant id with spaces',
+            "guid\nHost: evil.test",
+        ];
+
+        foreach ($hostile as $tenant) {
+            FsmtpTest::assert(
+                !OutlookApi::isValidTenant($tenant),
+                'validation accepted a hostile tenant: ' . $tenant
+            );
+
+            // Second gate: even stored, it must never steer the request.
+            $urls = $outlookAuthority($tenant);
+            FsmtpTest::assertSame(
+                'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+                $urls['token'],
+                'a hostile tenant reached the token URL: ' . $tenant
+            );
+            FsmtpTest::assertSame(
+                'login.microsoftonline.com',
+                wp_parse_url($urls['authorize'], PHP_URL_HOST),
+                'a hostile tenant moved the authorize host: ' . $tenant
+            );
+        }
+    });
+
+    FsmtpTest::case('saving an Outlook connection rejects an invalid tenant', function () {
+        $connection = [
+            'key_store'     => 'db',
+            'provider'      => 'outlook',
+            'sender_email'  => 'outlook-tenant-' . FsmtpTest::uniq() . '@example.test',
+            'client_id'     => 'suite-client',
+            'client_secret' => 'suite-secret',
+            'tenant_id'     => 'https://evil.test',
+            'access_token'  => 'suite-access',
+        ];
+
+        $errors = null;
+
+        try {
+            (new OutlookHandler())->validateProviderInformation($connection);
+        } catch (\FluentMail\Includes\Support\ValidationException $e) {
+            $errors = $e->errors();
+        }
+
+        FsmtpTest::assert(is_array($errors), 'an invalid tenant saved without complaint');
+        FsmtpTest::assert(isset($errors['tenant_id']), 'the rejection was not reported against tenant_id');
+    });
+
+    FsmtpTest::case('a non-Outlook stored connection never triggers a tenant re-auth prompt', function () {
+        $method = new ReflectionMethod(OutlookHandler::class, 'tenantChanged');
+        $method->setAccessible(true);
+
+        // The suite's own connection is the Simulator, so a stored connection
+        // of another provider must not be read as a tenant that moved.
+        $changed = $method->invoke(new OutlookHandler(), [
+            'sender_email' => 'fsmtp-suite-safety@example.test',
+            'tenant_id'    => 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
+        ]);
+
+        FsmtpTest::assertSame(false, $changed, 'a non-Outlook connection was treated as a tenant change');
+    });
 };

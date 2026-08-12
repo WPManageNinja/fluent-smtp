@@ -86,7 +86,7 @@ class Handler extends BaseHandler
 
         $accessToken = $this->getAccessToken($data);
 
-        $api = (new API($data['client_id'], $data['client_secret']));
+        $api = (new API($data['client_id'], $data['client_secret'], Arr::get($data, 'tenant_id')));
 
         $result = $api->sendMime($mime, $accessToken);
 
@@ -109,6 +109,10 @@ class Handler extends BaseHandler
 
         $clientId = Arr::get($connection, 'client_id');
         $clientSecret = Arr::get($connection, 'client_secret');
+
+        if (!API::isValidTenant(Arr::get($connection, 'tenant_id'))) {
+            $errors['tenant_id']['invalid'] = __('Directory (tenant) ID must be the tenant GUID, a verified domain such as contoso.onmicrosoft.com, or one of common, organizations, consumers.', 'fluent-smtp');
+        }
 
         if ($keyStoreType == 'db') {
             if (!$clientId) {
@@ -139,8 +143,21 @@ class Handler extends BaseHandler
         $accessToken = Arr::get($connection, 'access_token');
         $authToken = Arr::get($connection, 'auth_token');
 
+        /*
+         * Tokens are issued by one authority and mean nothing at another, so a
+         * tenant change invalidates whatever is already stored. Say so instead
+         * of saving a connection whose credentials can now only fail at send
+         * time, with a 401 that reads as an unrelated problem. Re-authenticating
+         * posts the form as it stands, so the new tenant is used for the sign-in
+         * without needing this save to land first.
+         */
+        if (!$authToken && $accessToken && $this->tenantChanged($connection)) {
+            $errors['tenant_id']['reauth'] = __('The Directory (tenant) ID changed, so the existing Microsoft authentication no longer applies. Please authenticate with Office365 again before saving.', 'fluent-smtp');
+            $this->throwValidationException($errors);
+        }
+
         if (!$accessToken && $authToken) {
-            $tokens = (new API($clientId, $clientSecret))->generateToken($authToken);
+            $tokens = (new API($clientId, $clientSecret, Arr::get($connection, 'tenant_id')))->generateToken($authToken);
             if (is_wp_error($tokens)) {
                 $errors['auth_token']['required'] = $tokens->get_error_message();
             } else {
@@ -169,6 +186,35 @@ class Handler extends BaseHandler
         if ($errors) {
             $this->throwValidationException($errors);
         }
+    }
+
+    /**
+     * Whether the submitted connection points at a different Microsoft
+     * authority than the one its stored tokens were issued by.
+     *
+     * Compares resolved values, so switching between an empty field and an
+     * explicit `common` — which address the same authority — is not treated as
+     * a change that costs the admin a sign-in.
+     *
+     * @param array $connection Submitted provider_settings.
+     * @return bool
+     */
+    private function tenantChanged($connection)
+    {
+        $senderEmail = Arr::get($connection, 'sender_email');
+
+        if (!$senderEmail) {
+            return false;
+        }
+
+        $stored = (new Settings())->getConnection($senderEmail);
+
+        if (Arr::get($stored, 'provider_settings.provider') !== 'outlook') {
+            return false;
+        }
+
+        return API::resolveTenant(Arr::get($stored, 'provider_settings.tenant_id'))
+            !== API::resolveTenant(Arr::get($connection, 'tenant_id'));
     }
 
     private function saveNewTokens($existingData, $tokens)
@@ -217,7 +263,7 @@ class Handler extends BaseHandler
 
         // check if expired or will be expired in 300 seconds
         if ($force || ($expireStamp - 300) < time()) {
-            $fluentAPi = (new API($config['client_id'], $config['client_secret']));
+            $fluentAPi = (new API($config['client_id'], $config['client_secret'], Arr::get($config, 'tenant_id')));
 
             $tokens = $fluentAPi->sendTokenRequest('refresh_token', [
                 'refresh_token' => Arr::get($config, 'refresh_token')

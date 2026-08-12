@@ -67,6 +67,25 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
         </div>
 
         <el-form-item>
+            <label for="tenant_id">
+                {{ $t('Directory (tenant) ID') }}
+                <span style="font-weight: normal;">({{ $t('Optional') }})</span>
+            </label>
+            <el-input
+                id="tenant_id"
+                v-model="connection.tenant_id"
+                placeholder="common"
+            />
+            <error :error="errors.get('tenant_id')" />
+            <p>
+                {{ $t('Leave empty unless your Entra app registration is single-tenant. Paste the Directory (tenant) ID from the app overview page, or a verified domain such as contoso.onmicrosoft.com. Use organizations to allow any work or school account but no personal Microsoft accounts.') }}
+            </p>
+            <p v-if="connection.access_token" style="color: #E6A23C; margin-top: 0;">
+                {{ $t('Changing this requires authenticating with Office365 again.') }}
+            </p>
+        </el-form-item>
+
+        <el-form-item>
             <label>{{ $t('App Callback URL(Use this URL to your APP)') }}</label>
             <el-input :readonly="true" v-model="provider.callback_url" />
         </el-form-item>

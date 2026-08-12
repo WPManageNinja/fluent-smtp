@@ -237,6 +237,7 @@ return [
                 'key_store'       => 'db',
                 'client_id'       => '',
                 'client_secret'   => '',
+                'tenant_id'       => '',
                 'auth_token'      => '',
                 'access_token'    => '',
                 'refresh_token'   => ''
