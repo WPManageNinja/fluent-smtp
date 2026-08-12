@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, wordpress mail smtp, amazon ses, sendgrid, mailgun
 Requires at least: 5.5
 Tested up to: 7.0
-Stable tag: 2.3.0
+Stable tag: 2.3.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -337,6 +337,11 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 
 
 == Changelog ==
+
+= 2.3.1 (Date: Aug 13, 2026) =
+- Added an optional Directory (tenant) ID for Outlook / Office 365, for single-tenant Entra app registrations that cannot accept personal Microsoft accounts
+- Fixed "Could not instantiate mail function." on the PHP mail() connection when a host or plugin selects its own transport from the <code>phpmailer_init</code> hook
+- Fixed mail routed outside FluentSMTP being sent through the site's own SMTP relay when a bulk sending session held a connection open
 
 = 2.3.0 (Date: Aug 05, 2026) =
 - Added Cloudflare Email Sending Provider
