@@ -44,6 +44,24 @@ return [
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/set-up-tosend-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure toSend with FluentSMTP.', 'fluent-smtp')
         ],
+        'mailchannels' => [
+            'key'      => 'mailchannels',
+            'title'    => __('MailChannels', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-mailchannels.svg'),
+            'provider' => 'MailChannels',
+            'options'  => [
+                'sender_name'       => '',
+                'sender_email'      => '',
+                'force_from_name'   => 'no',
+                'force_from_email'  => 'yes',
+                'return_path'       => 'yes',
+                'api_key'           => '',
+                'key_store'         => 'db',
+                'send_mode'         => 'direct',
+                'disable_encryption' => 'no',
+            ],
+            'note'     => __('MailChannels sends through the HTTPS Email API. API acceptance is not final delivery.', 'fluent-smtp'),
+        ],
         'ses'         => [
             'key'      => 'ses',
             'title'    => __('Amazon SES', 'fluent-smtp'),
