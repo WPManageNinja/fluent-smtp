@@ -11,6 +11,8 @@ $app->post('/misc-settings', 'SettingsController@storeMiscSettings');
 $app->post('/settings/delete', 'SettingsController@delete');
 $app->post('/settings/misc', 'SettingsController@storeGlobals');
 $app->post('/settings/test', 'SettingsController@sendTestEmil');
+$app->get('settings/export-connections', 'SettingsController@exportConnections');
+$app->post('settings/import-connections', 'SettingsController@importConnections');
 $app->post('/settings/subscribe', 'SettingsController@subscribe');
 $app->post('/settings/subscribe-dismiss', 'SettingsController@subscribeDismiss');
 $app->get('settings/connection_info', 'SettingsController@getConnectionInfo');
