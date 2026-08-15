@@ -59,5 +59,7 @@
   "save_connection_error_2": "Credential Verification Failed. Please check your inputs",
   "__REAL_NOTIFICATION_DESC": "Get real-time notification on your favorite messaging channel on any email sending failure. Configure any of the following channel to start getting real time notifications.",
   "__PUSHOVER_INTRO": "Pushover makes it easy to get real-time notifications on your Android, iPhone, iPad, and Desktop",
-  "__PUSHOVER_NOTIFICATION_ENABLED": "Pushover channel is enabled"
+  "__PUSHOVER_NOTIFICATION_ENABLED": "Pushover channel is enabled",
+  "__GOTIFY_INTRO": "Gotify is a self-hosted server for sending and receiving push notifications. Enter the URL of your Gotify server and an application token to start getting real time notifications.",
+  "__GOTIFY_NOTIFICATION_ENABLED": "Gotify channel is enabled"
 }
