@@ -61,13 +61,23 @@ class Handler extends BaseHandler
             $body['attachments'] = $this->getAttachments();
         }
 
-        // Add any custom headers
+        /*
+         * toSend documents `headers` as an object map of name to value, so the
+         * names are assigned as keys rather than appended. Appending produced a
+         * JSON array of single-key objects, which the API accepted with a 200
+         * and a message_id while dropping every header — taking
+         * List-Unsubscribe with it on bulk sends. A map cannot express a
+         * repeated header name, so the last occurrence wins; this matches the
+         * Cloudflare handler, which builds the same shape.
+         */
         $customHeaders = $this->phpMailer->getCustomHeaders();
         if (!empty($customHeaders)) {
+            $headers = [];
             foreach ($customHeaders as $header) {
-                $body['headers'][] = [
-                    $header[0] => $header[1]
-                ];
+                $headers[$header[0]] = $header[1];
+            }
+            if (!empty($headers)) {
+                $body['headers'] = $headers;
             }
         }
 
@@ -226,13 +236,13 @@ class Handler extends BaseHandler
         ];
     }
 
-    private function sendViaCurl($url, $jsonBody)
+    protected function sendViaCurl($url, $jsonBody)
     {
         if (!function_exists('curl_init')) {
             $response = wp_remote_post($url, [
                 'headers'   => $this->getRequestHeaders(),
                 'body'      => $jsonBody,
-                'sslverify' => false,
+                'sslverify' => true,
                 'timeout'   => 30,
             ]);
 
@@ -251,8 +261,22 @@ class Handler extends BaseHandler
             curl_setopt(self::$curlHandle, CURLOPT_POST, true);
             curl_setopt(self::$curlHandle, CURLOPT_RETURNTRANSFER, true);
             curl_setopt(self::$curlHandle, CURLOPT_FOLLOWLOCATION, false);
-            curl_setopt(self::$curlHandle, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt(self::$curlHandle, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt(self::$curlHandle, CURLOPT_SSL_VERIFYPEER, true);
+            curl_setopt(self::$curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
+
+            /*
+             * This transport bypasses WP_Http, so it does not pick up the CA
+             * bundle WordPress ships. Point cURL at that bundle when it is
+             * readable — a stale system trust store is the usual reason peer
+             * verification gets turned off, and the message body and API key
+             * travel over this connection. Falls back to the system store
+             * rather than to no verification at all.
+             */
+            $caBundle = ABSPATH . WPINC . '/certificates/ca-bundle.crt';
+            if (is_readable($caBundle)) {
+                curl_setopt(self::$curlHandle, CURLOPT_CAINFO, $caBundle);
+            }
+
             curl_setopt(self::$curlHandle, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
             curl_setopt(self::$curlHandle, CURLOPT_CONNECTTIMEOUT, 10);
             curl_setopt(self::$curlHandle, CURLOPT_TIMEOUT, 30);

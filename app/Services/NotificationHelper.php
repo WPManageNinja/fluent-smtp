@@ -108,7 +108,7 @@ class NotificationHelper
             'blocking'  => false,
             'body'      => $data,
             'cookies'   => false,
-            'sslverify' => false,
+            'sslverify' => true,
         ));
 
         return true;
@@ -125,12 +125,12 @@ class NotificationHelper
         if ($method == 'POST') {
             $response = wp_remote_post($url, [
                 'body'      => $data,
-                'sslverify' => false,
+                'sslverify' => true,
                 'timeout'   => 50
             ]);
         } else {
             $response = wp_remote_get($url, [
-                'sslverify' => false,
+                'sslverify' => true,
                 'timeout'   => 50
             ]);
         }
@@ -162,12 +162,12 @@ class NotificationHelper
         if ($method == 'POST') {
             $response = wp_remote_post($url, [
                 'body'      => $data,
-                'sslverify' => false,
+                'sslverify' => true,
                 'timeout'   => 50
             ]);
         } else {
             $response = wp_remote_get($url, [
-                'sslverify' => false,
+                'sslverify' => true,
                 'timeout'   => 50
             ]);
         }
@@ -208,7 +208,7 @@ class NotificationHelper
             'redirection' => 5,
             'blocking'    => true,
             'httpversion' => '1.0',
-            'sslverify'   => false,
+            'sslverify'   => true,
             'data_format' => 'body',
         );
 
@@ -250,7 +250,7 @@ class NotificationHelper
             'redirection' => 5,
             'blocking'    => true,
             'httpversion' => '1.0',
-            'sslverify'   => false,
+            'sslverify'   => true,
             'data_format' => 'body',
         );
 

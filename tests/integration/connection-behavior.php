@@ -1,12 +1,25 @@
 <?php
 
 use FluentMail\App\Hooks\Handlers\SchedulerHandler;
+use FluentMail\App\Hooks\Handlers\ActionsRegistrar;
+use FluentMail\App\Hooks\Handlers\AdminMenuHandler;
 use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\Mailer\Providers\Factory;
 use FluentMail\App\Services\Mailer\Providers\Gmail\Handler as GmailHandler;
 use FluentMail\App\Services\Mailer\Providers\Outlook\API as OutlookApi;
 use FluentMail\App\Services\Mailer\Providers\Outlook\Handler as OutlookHandler;
+use FluentMail\App\Services\Mailer\Providers\ToSend\Handler as ToSendHandler;
+use FluentMail\App\Services\NotificationHelper;
+
+/** Minimal screen stub so is_admin() reports true without defining WP_ADMIN. */
+class FsmtpSuiteAdminScreen
+{
+    public function in_admin()
+    {
+        return true;
+    }
+}
 
 /** Outbound Google client seam: no Guzzle request can leave the process. */
 class FsmtpSuiteGoogleClient
@@ -120,7 +133,397 @@ class FsmtpSuiteDefaultMailProbeHandler extends \FluentMail\App\Services\Mailer\
     }
 }
 
+/**
+ * Runs the real toSend postSend() body builder with the cURL transport and the
+ * logging tail replaced, so no request leaves the process and the assertions
+ * are about the serialized request body alone.
+ */
+class FsmtpSuiteToSendProbe extends \FluentMail\App\Services\Mailer\Providers\ToSend\Handler
+{
+    public $capturedBody = null;
+
+    public function runPostSend($phpMailer, $settings)
+    {
+        $this->phpMailer = $phpMailer;
+        $this->settings = $settings;
+        $this->attributes = $this->setAttributes();
+
+        return $this->postSend();
+    }
+
+    protected function sendViaCurl($url, $jsonBody)
+    {
+        $this->capturedBody = $jsonBody;
+
+        return [
+            'code' => 200,
+            'body' => json_encode(['message_id' => 'suite-message-id']),
+        ];
+    }
+
+    public function handleResponse($response)
+    {
+        return $response;
+    }
+}
+
 return function () {
+    /** Build one toSend request body from a PHPMailer carrying custom headers. */
+    $toSendBodyWithHeaders = function (array $headers) {
+        FsmtpTest::requirePhpMailer();
+
+        $phpMailer = new \PHPMailer\PHPMailer\PHPMailer(true);
+        $phpMailer->CharSet = 'UTF-8';
+        $phpMailer->setFrom('sender@example.test', 'Suite Sender');
+        $phpMailer->addAddress('recipient@example.test');
+        $phpMailer->Subject = 'Suite toSend message';
+        $phpMailer->Body = 'Suite toSend body';
+        foreach ($headers as $header) {
+            $phpMailer->addCustomHeader($header[0], $header[1]);
+        }
+
+        $probe = new FsmtpSuiteToSendProbe();
+        $probe->runPostSend($phpMailer, [
+            'provider'     => 'tosend',
+            'sender_email' => 'sender@example.test',
+            'sender_name'  => 'Suite Sender',
+            'key_store'    => 'db',
+            'api_key'      => 'suite-api-key',
+        ]);
+
+        FsmtpTest::assert(!is_null($probe->capturedBody), 'toSend probe captured no request body');
+
+        return json_decode($probe->capturedBody, true);
+    };
+
+    FsmtpTest::case('toSend serializes custom headers as an object map', function () use ($toSendBodyWithHeaders) {
+        $body = $toSendBodyWithHeaders([
+            ['List-Unsubscribe', '<https://example.test/unsubscribe>'],
+            ['List-Unsubscribe-Post', 'List-Unsubscribe=One-Click'],
+        ]);
+
+        FsmtpTest::assert(isset($body['headers']), 'toSend request body carried no headers field');
+
+        // A JSON object decodes to a string-keyed array; the previous
+        // append-shape decoded to a list of single-key arrays instead.
+        FsmtpTest::assertSame(
+            ['List-Unsubscribe', 'List-Unsubscribe-Post'],
+            array_keys($body['headers']),
+            'toSend custom header names'
+        );
+        FsmtpTest::assertSame(
+            '<https://example.test/unsubscribe>',
+            isset($body['headers']['List-Unsubscribe']) ? $body['headers']['List-Unsubscribe'] : null,
+            'toSend List-Unsubscribe value'
+        );
+        FsmtpTest::assertSame(
+            'List-Unsubscribe=One-Click',
+            isset($body['headers']['List-Unsubscribe-Post']) ? $body['headers']['List-Unsubscribe-Post'] : null,
+            'toSend List-Unsubscribe-Post value'
+        );
+    });
+
+    /**
+     * Drive the Slack registration-return handler for one user and report
+     * whether it reached the settings write.
+     *
+     * The handler ends in wp_safe_redirect()+die(), which would take the whole
+     * runner with it, so both exits throw instead: the write fuse when the
+     * settings write is reached, and a redirect fuse for the paths that finish
+     * without writing. Either way control returns before die(). The settings
+     * read is filtered too, so no real notification settings are touched in
+     * either direction.
+     */
+    $runSlackReturn = function ($userId, $pendingToken, $submittedToken) {
+        $optionName = '_fluent_smtp_notify_settings';
+        $writeAttempted = false;
+
+        $stored = [
+            'enabled'        => 'no',
+            'active_channel' => [],
+            'slack'          => ['status' => 'pending', 'token' => $pendingToken, 'webhook_url' => ''],
+        ];
+        $readFuse = function () use ($stored) {
+            return $stored;
+        };
+        $writeFuse = function () use (&$writeAttempted) {
+            $writeAttempted = true;
+            throw new RuntimeException('fsmtp-suite-slack-write');
+        };
+        // Priority 1 so this runs before WP-CLI's own wp_redirect handler,
+        // which would otherwise exit the runner.
+        $redirectFuse = function ($location) {
+            throw new RuntimeException('fsmtp-suite-slack-redirect');
+        };
+
+        add_filter('pre_option_' . $optionName, $readFuse, PHP_INT_MAX);
+        add_filter('pre_update_option_' . $optionName, $writeFuse, PHP_INT_MAX, 2);
+        add_filter('wp_redirect', $redirectFuse, 1);
+
+        // is_admin() consults current_screen first; a stub keeps WP_ADMIN alone.
+        $screen = isset($GLOBALS['current_screen']) ? $GLOBALS['current_screen'] : null;
+        $GLOBALS['current_screen'] = new FsmtpSuiteAdminScreen();
+
+        $previousUser = get_current_user_id();
+        $oldGet = $_GET;
+        $oldRequest = $_REQUEST;
+
+        try {
+            wp_set_current_user($userId);
+
+            $_GET['page'] = 'fluent-mail';
+            $_REQUEST = [
+                'page'          => 'fluent-mail',
+                'sub_action'    => 'slack_success',
+                // Created as this user: WP nonces are bound to the user id, so
+                // it must verify for whoever the handler runs as.
+                '_slacK_nonce'  => wp_create_nonce('fluent_smtp_slack_register_site'),
+                'site_token'    => $submittedToken,
+                'slack_team'    => 'suite-team',
+                'slack_webhook' => 'https://hooks.slack.test/services/suite',
+            ];
+
+            // Register and invoke only this handler's own admin_init callback,
+            // so no unrelated admin_init work runs inside the suite.
+            $before = isset($GLOBALS['wp_filter']['admin_init'])
+                ? $GLOBALS['wp_filter']['admin_init']->callbacks
+                : [];
+
+            (new AdminMenuHandler(fluentMail()))->addFluentMailMenu();
+
+            $after = $GLOBALS['wp_filter']['admin_init']->callbacks;
+            foreach ($after as $priority => $callbacks) {
+                foreach ($callbacks as $id => $registered) {
+                    if (isset($before[$priority][$id])) {
+                        continue;
+                    }
+                    remove_action('admin_init', $registered['function'], $priority);
+                    if ($registered['function'] instanceof Closure) {
+                        try {
+                            call_user_func($registered['function']);
+                        } catch (RuntimeException $e) {
+                            $expected = ['fsmtp-suite-slack-write', 'fsmtp-suite-slack-redirect'];
+                            if (!in_array($e->getMessage(), $expected, true)) {
+                                throw $e;
+                            }
+                        }
+                    }
+                }
+            }
+        } finally {
+            $_GET = $oldGet;
+            $_REQUEST = $oldRequest;
+            wp_set_current_user($previousUser);
+            if ($screen === null) {
+                unset($GLOBALS['current_screen']);
+            } else {
+                $GLOBALS['current_screen'] = $screen;
+            }
+            remove_filter('pre_option_' . $optionName, $readFuse, PHP_INT_MAX);
+            remove_filter('pre_update_option_' . $optionName, $writeFuse, PHP_INT_MAX);
+            remove_filter('wp_redirect', $redirectFuse, 1);
+        }
+
+        return $writeAttempted;
+    };
+
+    FsmtpTest::case('Slack registration return refuses a user without the manage capability', function () use ($runSlackReturn) {
+        $token = FsmtpTest::uniq('slack-token');
+        $username = FsmtpTest::uniq('fsmtp-slack');
+        $subscriberId = wp_insert_user([
+            'user_login' => $username,
+            'user_pass'  => wp_generate_password(24, true, true),
+            'user_email' => $username . '@example.test',
+            'role'       => 'subscriber',
+        ]);
+        FsmtpTest::assert(!is_wp_error($subscriberId), 'could not create the suite subscriber');
+
+        try {
+            // Valid nonce and a matching token: the capability is the only
+            // thing standing between this user and a rewritten Slack channel.
+            $writeAttempted = $runSlackReturn($subscriberId, $token, $token);
+
+            FsmtpTest::assertSame(
+                false,
+                $writeAttempted,
+                'notification settings write attempted by a subscriber'
+            );
+        } finally {
+            if (!function_exists('wp_delete_user')) {
+                require_once ABSPATH . 'wp-admin/includes/user.php';
+            }
+            if (!is_wp_error($subscriberId) && get_user_by('ID', $subscriberId)) {
+                wp_delete_user($subscriberId);
+            }
+        }
+    });
+
+    FsmtpTest::case('Slack registration return still completes for a manager', function () use ($runSlackReturn) {
+        $token = FsmtpTest::uniq('slack-token');
+
+        // Guards the fix itself: the capability check must not lock out the
+        // administrator the flow is built for.
+        $writeAttempted = $runSlackReturn(get_current_user_id(), $token, $token);
+
+        FsmtpTest::assertSame(
+            true,
+            $writeAttempted,
+            'notification settings write reached for a manager'
+        );
+    });
+
+    FsmtpTest::case('Slack registration return rejects a token that is only loosely equal', function () use ($runSlackReturn) {
+        // Two different numeric strings that PHP's == still treats as equal.
+        $writeAttempted = $runSlackReturn(get_current_user_id(), '1000', '1e3');
+
+        FsmtpTest::assertSame(
+            false,
+            $writeAttempted,
+            'notification settings write attempted for a non-identical token'
+        );
+    });
+
+    FsmtpTest::case('requesting an Outlook authorization URL stores no plaintext secret', function () {
+        global $wpdb;
+
+        $secret = FsmtpTest::uniq('outlook-secret');
+
+        // Building the URL persists a fresh OAuth state; fuse that write so the
+        // test cannot disturb a real pending authorization on this install.
+        $stateFuse = function ($newValue, $oldValue) {
+            return $oldValue;
+        };
+        add_filter('pre_update_option__fluentmail_last_generated_state', $stateFuse, PHP_INT_MAX, 2);
+
+        try {
+            $result = FsmtpTest::ajax('POST', '/settings/outlook_auth_url', [
+                'connection' => [
+                    'client_id'     => 'suite-client-id',
+                    'client_secret' => $secret,
+                    'tenant_id'     => 'common',
+                    'key_store'     => 'db',
+                    'sender_email'  => 'sender@example.test',
+                ],
+            ]);
+
+            FsmtpTest::assertAjaxHealthy($result, 'outlook authorization url');
+
+            // Compared as presence, not value: a failure here must not print
+            // the credential it is complaining about.
+            $legacy = get_option('_fluentsmtp_intended_outlook_info');
+            FsmtpTest::assertSame(
+                'absent',
+                $legacy === false ? 'absent' : 'present',
+                'legacy Outlook option after an authorization request'
+            );
+
+            // Counted, never printed: the secret must not reach any option row.
+            $leaked = (int) $wpdb->get_var($wpdb->prepare(
+                "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_value LIKE %s",
+                '%' . $wpdb->esc_like($secret) . '%'
+            ));
+            FsmtpTest::assertSame(0, $leaked, 'option rows containing the client secret');
+        } finally {
+            remove_filter('pre_update_option__fluentmail_last_generated_state', $stateFuse, PHP_INT_MAX);
+        }
+    });
+
+    FsmtpTest::case('app load removes a legacy plaintext Outlook option', function () {
+        $reflection = new ReflectionMethod(ActionsRegistrar::class, 'registerHooks');
+        $lines = file($reflection->getFileName());
+        $source = implode('', array_slice(
+            $lines,
+            $reflection->getStartLine() - 1,
+            $reflection->getEndLine() - $reflection->getStartLine() + 1
+        ));
+
+        // A plugin update does not reliably run the activation hook, so app load
+        // is the route that reaches an install which never reopens the screen.
+        FsmtpTest::assert(
+            strpos(preg_replace('/\s+/', '', $source), 'purgeLegacyOutlookSecret()') !== false,
+            'FluentSMTP app load no longer runs the legacy Outlook purge'
+        );
+
+        $existing = get_option('_fluentsmtp_intended_outlook_info');
+        add_option(
+            '_fluentsmtp_intended_outlook_info',
+            ['client_secret' => FsmtpTest::uniq('legacy-secret')],
+            '',
+            'no'
+        );
+
+        try {
+            $purge = new ReflectionMethod(ActionsRegistrar::class, 'purgeLegacyOutlookSecret');
+            $purge->setAccessible(true);
+            $purge->invoke(new ActionsRegistrar(fluentMail()));
+
+            $remaining = get_option('_fluentsmtp_intended_outlook_info');
+            FsmtpTest::assertSame(
+                'absent',
+                $remaining === false ? 'absent' : 'present',
+                'legacy Outlook option after the app-load purge'
+            );
+        } finally {
+            delete_option('_fluentsmtp_intended_outlook_info');
+            if ($existing !== false) {
+                update_option('_fluentsmtp_intended_outlook_info', $existing);
+            }
+        }
+    });
+
+    FsmtpTest::case('outbound notification and provider requests verify TLS', function () {
+        // These requests carry webhook secrets, Telegram/Slack registration
+        // tokens, and a toSend API key. The lint gate gets the literal source
+        // forms; this asserts what the transport is actually handed.
+        FsmtpTest::interceptHttp(function () {
+            // Satisfies both the notification success check and the toSend
+            // account-info domain loop, so no path warns on the canned body.
+            return [
+                'headers'  => [],
+                'body'     => json_encode(['success' => true, 'domains' => []]),
+                'response' => ['code' => 200, 'message' => 'OK'],
+                'cookies'  => [],
+            ];
+        });
+
+        try {
+            NotificationHelper::sendSlackMessage('suite message', 'https://hooks.slack.test/services/suite', true);
+            NotificationHelper::sendDiscordMessage('suite message', 'https://discord.test/api/webhooks/suite', true);
+            NotificationHelper::sendFailedNotificationTele(['site' => 'suite']);
+            NotificationHelper::issueTelegramPinCode(['site' => 'suite']);
+            (new ToSendHandler())->getAccountInfo('suite-api-key');
+
+            $requests = FsmtpTest::httpRequests();
+            FsmtpTest::assertSame(5, count($requests), 'captured outbound request count');
+
+            foreach ($requests as $request) {
+                // Query strings carry the tokens; label with the path only.
+                FsmtpTest::assertSame(
+                    true,
+                    isset($request['args']['sslverify']) ? $request['args']['sslverify'] : null,
+                    'TLS verification for ' . strtok($request['url'], '?')
+                );
+            }
+        } finally {
+            FsmtpTest::releaseHttpInterceptor();
+        }
+    });
+
+    FsmtpTest::case('toSend collapses a repeated custom header to its last value', function () use ($toSendBodyWithHeaders) {
+        // A header map cannot express a repeated name. Last-wins is the
+        // documented trade-off and matches the Cloudflare handler.
+        $body = $toSendBodyWithHeaders([
+            ['X-Suite-Repeated', 'first'],
+            ['X-Suite-Repeated', 'second'],
+        ]);
+
+        FsmtpTest::assertSame(
+            'second',
+            isset($body['headers']['X-Suite-Repeated']) ? $body['headers']['X-Suite-Repeated'] : null,
+            'toSend repeated custom header value'
+        );
+    });
+
     $outlookSettings = function ($sender) {
         return [
             'provider'      => 'outlook',
