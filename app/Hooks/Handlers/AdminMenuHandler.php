@@ -44,7 +44,7 @@ class AdminMenuHandler
                         return;
                     }
 
-                    $nonce = Arr::get($_REQUEST, '_slacK_nonce');
+                    $nonce = Arr::get($_REQUEST, '_slack_nonce');
                     if (!wp_verify_nonce($nonce, 'fluent_smtp_slack_register_site')) {
                         wp_safe_redirect(admin_url('options-general.php?page=fluent-mail&slack_security_failed=1#/notification-settings'));
                         die();

@@ -381,7 +381,7 @@ class TransStrings
             '__POSTMARK_OPEN' => __('If you enable this then open tracking header will be added to the email for Postmark.', 'fluent-smtp'),
             '__PUSHOVER_INTRO' => __('Pushover makes it easy to get real-time notifications on your Android, iPhone, iPad, and Desktop', 'fluent-smtp'),
             '__PUSHOVER_NOTIFICATION_ENABLED' => __('Pushover channel is enabled', 'fluent-smtp'),
-            '__REAL_NOTIFCATION_DESC' => __('Get real-time notification on your favorite messaging channel on any email sending failure. Configure any of the following channel to start getting real time notifications.', 'fluent-smtp'),
+            '__REAL_NOTIFICATION_DESC' => __('Get real-time notification on your favorite messaging channel on any email sending failure. Configure any of the following channel to start getting real time notifications.', 'fluent-smtp'),
             '__RETURN_PATH_ALERT' => __('Return Path indicates where non-delivery receipts - or bounce messages - are to be sent. If unchecked, bounce messages may be lost. With this enabled, you\'ll be emailed using "From Email" if any messages bounce as a result of issues with the recipient’s email.', 'fluent-smtp'),
             '__RETURN_PATH_TOOLTIP' => sprintf(__('Return Path indicates where non-delivery receipts—or bounce messages—%1$s are to be sent. If unchecked, bounce messages may be lost. With this enabled, %2$s you\'ll be emailed using "From Email" if any messages bounce due to issues with the recipient\'s email.', 'fluent-smtp'), '<br />', '<br />'),
             '__SLACK_INTRO' => __('Get real-time notification on your Slack Channel on any email sending failure. Configure notification with Slack Bot to start getting real time notifications.', 'fluent-smtp'),

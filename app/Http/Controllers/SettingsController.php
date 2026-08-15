@@ -148,7 +148,7 @@ class SettingsController extends Controller
         ]);
     }
 
-    public function sendTestEmil(Request $request, Settings $settings)
+    public function sendTestEmail(Request $request, Settings $settings)
     {
         $this->verify();
 
@@ -788,9 +788,9 @@ class SettingsController extends Controller
 
         $channelKeys = $request->get('channel_keys', []);
         $channelKeys = array_map('sanitize_text_field', $channelKeys);
-        $allChanelKeys = (new NotificationManager())->getAllChannelKeys();
-        $channelKeys = array_filter($channelKeys, function ($key) use ($allChanelKeys) {
-            return in_array($key, $allChanelKeys);
+        $allChannelKeys = (new NotificationManager())->getAllChannelKeys();
+        $channelKeys = array_filter($channelKeys, function ($key) use ($allChannelKeys) {
+            return in_array($key, $allChannelKeys);
         });
 
         $settings = (new Settings())->notificationSettings();

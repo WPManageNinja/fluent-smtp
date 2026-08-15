@@ -10,7 +10,7 @@ $app->post('/settings', 'SettingsController@store');
 $app->post('/misc-settings', 'SettingsController@storeMiscSettings');
 $app->post('/settings/delete', 'SettingsController@delete');
 $app->post('/settings/misc', 'SettingsController@storeGlobals');
-$app->post('/settings/test', 'SettingsController@sendTestEmil');
+$app->post('/settings/test', 'SettingsController@sendTestEmail');
 $app->post('/settings/subscribe', 'SettingsController@subscribe');
 $app->post('/settings/subscribe-dismiss', 'SettingsController@subscribeDismiss');
 $app->get('settings/connection_info', 'SettingsController@getConnectionInfo');

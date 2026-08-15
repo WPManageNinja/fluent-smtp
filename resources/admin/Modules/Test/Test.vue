@@ -86,7 +86,7 @@
 
 <script type="text/babel">
     import isEmpty from 'lodash/isEmpty'
-    import EmailSubscriber from '../../Pieces/_Subscrbe';
+    import EmailSubscriber from '../../Pieces/_Subscribe';
 
     export default {
         name: 'EmailTest',

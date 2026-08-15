@@ -27,7 +27,7 @@ class SlackController extends Controller
 
         $payload = [
             'admin_email' => $userEmail,
-            'smtp_url'    => admin_url('options-general.php?_slacK_nonce=' . $nonce . '&page=fluent-mail#/'),
+            'smtp_url'    => admin_url('options-general.php?_slack_nonce=' . $nonce . '&page=fluent-mail#/'),
             'site_url'    => site_url(),
             'site_title'  => fluentMailSiteTitle(),
             'site_lang'   => get_bloginfo('language'),

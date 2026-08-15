@@ -103,7 +103,7 @@ class SimpleEmailService
     protected $__trigger_errors;
 
     /**
-     * Controls the reuse of CURL hander for sending a bulk of messages
+     * Controls the reuse of CURL handler for sending a bulk of messages
      * @deprecated
      */
     protected $__bulk_sending_mode = false;
