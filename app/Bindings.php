@@ -16,6 +16,7 @@ $singletons = [
     'elasticmail'  => 'FluentMail\App\Services\Mailer\Providers\ElasticMail\Handler',
     'smtp2go'      => 'FluentMail\App\Services\Mailer\Providers\Smtp2Go\Handler',
     'tosend' => 'FluentMail\App\Services\Mailer\Providers\ToSend\Handler',
+    'mailchannels' => 'FluentMail\App\Services\Mailer\Providers\MailChannels\Handler',
     'cloudflare'   => 'FluentMail\App\Services\Mailer\Providers\Cloudflare\Handler',
 ];
 
