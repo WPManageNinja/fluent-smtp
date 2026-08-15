@@ -10,6 +10,7 @@ parameters:
         - includes/libs/google-api-client/build/vendor/autoload.php
     scanFiles:
         - app/Services/DB/wpfluent.php
+        - vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
     excludePaths:
         - includes/libs/
         - app/Services/DB/
@@ -18,3 +19,6 @@ parameters:
         - database/
         - app/Services/DB/
     treatPhpDocTypesAsCertain: false
+    phpVersion:
+        min: 70400
+        max: 80400
