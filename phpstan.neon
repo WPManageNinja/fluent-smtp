@@ -6,6 +6,10 @@ parameters:
     paths:
         - app/
         - includes/
+    bootstrapFiles:
+        - includes/libs/google-api-client/build/vendor/autoload.php
+    scanFiles:
+        - app/Services/DB/wpfluent.php
     excludePaths:
         - includes/libs/
         - app/Services/DB/

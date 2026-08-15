@@ -201,7 +201,7 @@ class Collection implements ArrayAccess, ArrayableInterface, Countable, Iterator
 			return $this->items[$key];
 		}
 
-		return value($default);
+		return Arr::value($default);
 	}
 
 	/**
