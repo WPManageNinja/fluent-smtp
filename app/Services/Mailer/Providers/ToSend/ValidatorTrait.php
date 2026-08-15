@@ -85,7 +85,7 @@ trait ValidatorTrait
     public function getAccountInfo($apiKey)
     {
         $request = wp_remote_get($this->baseUrl . 'info?api_key=' . $apiKey, [
-            'sslverify' => false
+            'sslverify' => true
         ]);
 
         if (is_wp_error($request)) {

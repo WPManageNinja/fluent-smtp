@@ -673,8 +673,6 @@ class SettingsController extends Controller
             ]);
         }
 
-        delete_option('_fluentsmtp_intended_outlook_info');
-
         if (Arr::get($connection, 'key_store') == 'wp_config') {
             if (defined('FLUENTMAIL_OUTLOOK_CLIENT_ID')) {
                 $clientId = FLUENTMAIL_OUTLOOK_CLIENT_ID;
@@ -694,12 +692,6 @@ class SettingsController extends Controller
                     ]
                 ]);
             }
-        } else {
-            update_option('_fluentsmtp_intended_outlook_info', [
-                'client_id'     => $clientId,
-                'client_secret' => $clientSecret,
-                'tenant_id'     => $tenantId
-            ]);
         }
 
         if (!$clientId) {

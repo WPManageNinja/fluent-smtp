@@ -57,6 +57,29 @@ class ActionsRegistrar
         (new BulkSendSessionHandler())->register();
 
         $this->registerCliCommands();
+
+        $this->purgeLegacyOutlookSecret();
+    }
+
+    /**
+     * Remove the retired `_fluentsmtp_intended_outlook_info` option, which held
+     * an Outlook client id, secret, and tenant in plain text while the browser
+     * was away at Microsoft. Nothing ever read it back, so the write is gone —
+     * this clears what existing installs are still holding.
+     *
+     * Done on app load rather than on activation or a scheduled pass: a plugin
+     * update does not reliably run the activation hook, and a stale secret
+     * should not sit in the database for up to a day waiting on cron. The
+     * lookup is served from the options cache, so the common case where the
+     * option is already gone costs no query.
+     *
+     * @return void
+     */
+    protected function purgeLegacyOutlookSecret()
+    {
+        if (get_option('_fluentsmtp_intended_outlook_info') !== false) {
+            delete_option('_fluentsmtp_intended_outlook_info');
+        }
     }
 
     /**

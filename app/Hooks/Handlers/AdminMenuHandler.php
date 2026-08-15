@@ -29,16 +29,39 @@ class AdminMenuHandler
 
             if (isset($_REQUEST['sub_action']) && $_REQUEST['sub_action'] == 'slack_success') {
                 add_action('admin_init', function () {
+                    /*
+                     * This writes a notification connection, which is the same
+                     * authority as saving one from the settings screen, so it
+                     * asks the same question every other management path asks.
+                     * The nonce below is bound to whoever started the
+                     * registration and so is already hard to present as another
+                     * user — but a nonce proves the request was intended, not
+                     * that the person making it is allowed to. Returning rather
+                     * than redirecting leaves the response to the admin page,
+                     * which refuses users who cannot manage anyway.
+                     */
+                    if (!fluentMailCurrentUserCanManage()) {
+                        return;
+                    }
+
                     $nonce = Arr::get($_REQUEST, '_slacK_nonce');
                     if (!wp_verify_nonce($nonce, 'fluent_smtp_slack_register_site')) {
-                        wp_redirect(admin_url('options-general.php?page=fluent-mail&slack_security_failed=1#/notification-settings'));
+                        wp_safe_redirect(admin_url('options-general.php?page=fluent-mail&slack_security_failed=1#/notification-settings'));
                         die();
                     }
 
                     $settings = (new Settings())->notificationSettings();
-                    $token = Arr::get($_REQUEST, 'site_token');
+                    $token = (string) Arr::get($_REQUEST, 'site_token');
+                    $pendingToken = (string) Arr::get($settings, 'slack.token');
 
-                    if ($token && $token == Arr::get($settings, 'slack.token')) {
+                    /*
+                     * hash_equals, not ==. The two operands are strings from a
+                     * remote service and the database, and PHP still compares
+                     * two numeric strings numerically, so '1e3' and '1000' are
+                     * loosely equal. Both are cast above because hash_equals
+                     * rejects a null from a connection that was never started.
+                     */
+                    if ($token !== '' && $pendingToken !== '' && hash_equals($pendingToken, $token)) {
                         NotificationHelper::updateChannelSettings('slack', [
                             'status'      => 'yes',
                             'token'       => sanitize_text_field($token),
@@ -47,7 +70,7 @@ class AdminMenuHandler
                         ]);
                     }
 
-                    wp_redirect(admin_url('options-general.php?page=fluent-mail#/notification-settings'));
+                    wp_safe_redirect(admin_url('options-general.php?page=fluent-mail#/notification-settings'));
                     die();
                 });
             }
@@ -174,7 +197,19 @@ class AdminMenuHandler
 
         wp_enqueue_script('fluentmail-chartjs', fluentMailMix('libs/chartjs/Chart.min.js'), [], FLUENTMAIL_PLUGIN_VERSION);
         wp_enqueue_script('fluentmail-vue-chartjs', fluentMailMix('libs/chartjs/vue-chartjs.min.js'), [], FLUENTMAIL_PLUGIN_VERSION);
-        wp_enqueue_script('dompurify', fluentMailMix('libs/purify/purify.min.js'), [], '2.4.3');
+        /*
+         * DOMPurify 3.4.13, vendored at resources/libs/purify/ from the npm
+         * package of the same version. It sanitizes logged email bodies before
+         * they are framed, so keep it current — check the advisories when
+         * bumping, and update the version in this comment with the files.
+         *
+         * The cache buster is the plugin version, not the library version. A
+         * hard-coded library version was stale by two majors, which meant an
+         * updated file would have kept serving from browser cache under the old
+         * URL. The plugin version changes on every release that can carry a new
+         * bundled library, so it cannot drift.
+         */
+        wp_enqueue_script('dompurify', fluentMailMix('libs/purify/purify.min.js'), [], FLUENTMAIL_PLUGIN_VERSION);
 
         wp_enqueue_style(
             'fluent_mail_admin_app', fluentMailMix('admin/css/fluent-mail-admin.css'), [], FLUENTMAIL_PLUGIN_VERSION

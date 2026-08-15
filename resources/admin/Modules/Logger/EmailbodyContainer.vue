@@ -1,8 +1,21 @@
 <template>
     <div>
+        <!--
+            The body is arbitrary HTML from whoever called wp_mail(), which on
+            most sites includes a public contact form. DOMPurify runs over it
+            first, but this frame is the containment: without allow-scripts,
+            script elements and event handlers that survive a sanitizer bypass
+            still never execute, and forms and top-level navigation are refused.
+
+            allow-same-origin is required because setBody() writes through
+            contentDocument. Never add allow-scripts alongside it — the two
+            together let framed content clear its own sandbox, which would put
+            script execution back inside the wp-admin origin.
+        -->
         <iframe
             ref="ifr"
             frameborder="0"
+            sandbox="allow-same-origin"
             allowFullScreen
             mozallowfullscreen
             webkitallowfullscreen
