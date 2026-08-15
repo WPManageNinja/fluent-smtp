@@ -201,7 +201,7 @@ class Handler extends BaseHandler
 
             try {
                 if (is_file($attachment[0]) && is_readable($attachment[0])) {
-                    $fileName = basename($attachment[0]);
+                    $fileName = $this->getAttachmentName($attachment);
                     $file = file_get_contents($attachment[0]);
                     $mimeType = mime_content_type($attachment[0]);
                     $filetype = str_replace(';', '', trim($mimeType));

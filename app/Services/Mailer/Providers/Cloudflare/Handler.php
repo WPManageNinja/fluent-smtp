@@ -288,7 +288,7 @@ class Handler extends BaseHandler
 
             try {
                 $file = $this->secureFileRead($attachment[0]);
-                $fileName = basename($attachment[0]);
+                $fileName = $this->getAttachmentName($attachment);
             } catch (\Exception $e) {
                 $this->logAttachmentFailure('Cloudflare', $e);
                 $file = false;

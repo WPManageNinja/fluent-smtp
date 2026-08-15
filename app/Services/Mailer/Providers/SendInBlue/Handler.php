@@ -175,7 +175,7 @@ class Handler extends BaseHandler
 
                 if (in_array($ext, $this->allowedAttachmentExts, true)) {
                     $files[] = [
-                        'name'    => basename($attachment[0]),
+                        'name'    => $this->getAttachmentName($attachment),
                         'content' => base64_encode($file)
                     ];
                 }

@@ -239,8 +239,7 @@ class Handler extends BaseHandler
             }
 
             //Extracting the file name
-            $filenameonly = explode(DIRECTORY_SEPARATOR, $attpath[0]);
-            $fname = end($filenameonly);
+            $fname = $this->getAttachmentName($attpath);
 
             $mimeType = 'application/octet-stream'; // Default
             if (function_exists('mime_content_type')) {
