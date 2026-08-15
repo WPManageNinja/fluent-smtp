@@ -123,7 +123,7 @@ class Handler extends BaseHandler
 
             if ($attachments = $this->getParam('attachments')) {
                 foreach ($attachments as $attachment) {
-                    $this->phpMailer->addAttachment($attachment[0], $attachment[7]);
+                    $this->phpMailer->addAttachment($attachment[0], $this->getAttachmentName($attachment));
                 }
             }
 

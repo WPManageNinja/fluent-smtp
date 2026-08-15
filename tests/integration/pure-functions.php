@@ -2,6 +2,7 @@
 
 use FluentMail\App\Http\Controllers\SettingsController;
 use FluentMail\App\Services\ConnectionHealth;
+use FluentMail\App\Services\Mailer\Providers\Simulator\Handler as SimulatorHandler;
 use FluentMail\App\Services\Reporting;
 use FluentMail\Includes\Support\ValidationException;
 
@@ -87,6 +88,52 @@ return function () {
             $message,
             $invoke(new ConnectionHealth(), 'flattenMessage', [new Exception($message)]),
             'ordinary health exception message'
+        );
+    });
+
+    FsmtpTest::case('attachment names prefer the caller supplied name and stay a bare file name', function () use ($invoke, $withoutConstructor) {
+        // getAttachmentName() lives on BaseHandler; every provider reads it, so
+        // any concrete handler proves the shared behavior.
+        $handler = $withoutConstructor(SimulatorHandler::class);
+
+        $nameFor = function ($path, $name) use ($invoke, $handler) {
+            // The shape PHPMailer::getAttachments() returns.
+            return $invoke($handler, 'getAttachmentName', [[
+                0 => $path,
+                1 => basename($path),
+                2 => $name,
+                3 => 'base64',
+                4 => 'application/pdf',
+                5 => false,
+                6 => 'attachment',
+                7 => $name
+            ]]);
+        };
+
+        FsmtpTest::assertSame(
+            'January Invoice.pdf',
+            $nameFor('/var/uploads/9f2c1ab7e4.pdf', 'January Invoice.pdf'),
+            'custom wp_mail() attachment name'
+        );
+        FsmtpTest::assertSame(
+            '9f2c1ab7e4.pdf',
+            $nameFor('/var/uploads/9f2c1ab7e4.pdf', ''),
+            'fallback to the stored file name'
+        );
+        FsmtpTest::assertSame(
+            'passwd',
+            $nameFor('/var/uploads/9f2c1ab7e4.pdf', '../../../etc/passwd'),
+            'directory part stripped from the supplied name'
+        );
+        FsmtpTest::assertSame(
+            'invoice.pdf',
+            $nameFor('/var/uploads/9f2c1ab7e4.pdf', "in\r\nvoice.pdf"),
+            'header break stripped from the supplied name'
+        );
+        FsmtpTest::assertSame(
+            'invoice.pdf',
+            $nameFor('/var/uploads/9f2c1ab7e4.pdf', 'in"voice.pdf'),
+            'quote stripped from the supplied name'
         );
     });
 

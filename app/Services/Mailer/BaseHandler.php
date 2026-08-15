@@ -682,6 +682,44 @@ class BaseHandler
     }
 
     /**
+     * Resolve the file name an attachment should be delivered under.
+     *
+     * PHPMailer keeps the caller supplied name at index 2 — wp_mail() puts the
+     * attachments array key there — and the file's own base name at index 1, so
+     * a site that stores uploads under randomised names can still send a
+     * readable one. The name is caller controlled, so it is reduced to a bare
+     * file name before it reaches a Content-Disposition header or a provider
+     * payload.
+     *
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @return string Empty only when the row carries neither a name nor a path.
+     */
+    protected function getAttachmentName($attachment)
+    {
+        $candidates = [
+            isset($attachment[2]) ? $attachment[2] : '',
+            isset($attachment[0]) ? $attachment[0] : ''
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (!is_string($candidate) || $candidate === '') {
+                continue;
+            }
+
+            // wp_basename() drops any directory part for both separators;
+            // the rest cannot be allowed to break out of a quoted header.
+            $name = str_replace(["\r", "\n", "\0", '"'], '', wp_basename($candidate));
+            $name = trim($name);
+
+            if ($name !== '') {
+                return $name;
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Securely read file contents with path traversal protection
      *
      * @param string $filePath The file path to read
