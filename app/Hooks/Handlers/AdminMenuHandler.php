@@ -44,7 +44,14 @@ class AdminMenuHandler
                         return;
                     }
 
-                    $nonce = Arr::get($_REQUEST, '_slack_nonce');
+                    /*
+                     * The return URL is handed to the remote registration
+                     * service and comes back to us minutes later, so a site that
+                     * updates mid-flow returns carrying the old misspelled key.
+                     * Reading both keeps that window working; the misspelled one
+                     * can go once no in-flight registration can still hold it.
+                     */
+                    $nonce = Arr::get($_REQUEST, '_slack_nonce', Arr::get($_REQUEST, '_slacK_nonce'));
                     if (!wp_verify_nonce($nonce, 'fluent_smtp_slack_register_site')) {
                         wp_safe_redirect(admin_url('options-general.php?page=fluent-mail&slack_security_failed=1#/notification-settings'));
                         die();

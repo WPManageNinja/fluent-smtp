@@ -234,7 +234,7 @@ return function () {
      * read is filtered too, so no real notification settings are touched in
      * either direction.
      */
-    $runSlackReturn = function ($userId, $pendingToken, $submittedToken) {
+    $runSlackReturn = function ($userId, $pendingToken, $submittedToken, $nonceKey = '_slack_nonce') {
         $optionName = '_fluent_smtp_notify_settings';
         $writeAttempted = false;
 
@@ -277,7 +277,7 @@ return function () {
                 'sub_action'    => 'slack_success',
                 // Created as this user: WP nonces are bound to the user id, so
                 // it must verify for whoever the handler runs as.
-                '_slacK_nonce'  => wp_create_nonce('fluent_smtp_slack_register_site'),
+                $nonceKey       => wp_create_nonce('fluent_smtp_slack_register_site'),
                 'site_token'    => $submittedToken,
                 'slack_team'    => 'suite-team',
                 'slack_webhook' => 'https://hooks.slack.test/services/suite',
@@ -369,6 +369,20 @@ return function () {
             true,
             $writeAttempted,
             'notification settings write reached for a manager'
+        );
+    });
+
+    FsmtpTest::case('Slack registration return accepts the legacy misspelled nonce key', function () use ($runSlackReturn) {
+        $token = FsmtpTest::uniq('slack-token');
+
+        // A registration started before the key was spelled correctly returns
+        // carrying the old name, and that return must still land.
+        $writeAttempted = $runSlackReturn(get_current_user_id(), $token, $token, '_slacK_nonce');
+
+        FsmtpTest::assertSame(
+            true,
+            $writeAttempted,
+            'notification settings write reached for a legacy return URL'
         );
     });
 

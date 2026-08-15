@@ -65,10 +65,10 @@ return [
         'key' => 'fsmtp-suite-missing-connection',
     ]),
     $post('/settings/misc', 'SettingsController@storeGlobals', 'app/Http/routes.php:11', []),
-    $post('/settings/test', 'SettingsController@sendTestEmil', 'resources/admin/Modules/Test/Test.vue:115', [
+    $post('/settings/test', 'SettingsController@sendTestEmail', 'resources/admin/Modules/Test/Test.vue:115', [
         'email' => 'fsmtp-suite@example.test', 'from' => '', 'isHtml' => 'true',
     ]),
-    $post('/settings/subscribe', 'SettingsController@subscribe', 'resources/admin/Pieces/_Subscrbe.vue:56', [
+    $post('/settings/subscribe', 'SettingsController@subscribe', 'resources/admin/Pieces/_Subscribe.vue:56', [
         'email' => 'fsmtp-suite@example.test', 'display_name' => 'FluentSMTP Suite', 'share_essentials' => 'no',
     ]),
     $post('/settings/subscribe-dismiss', 'SettingsController@subscribeDismiss', 'resources/admin/Pieces/_SubscribeDismiss.vue:10'),
