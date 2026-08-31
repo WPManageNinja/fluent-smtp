@@ -11,7 +11,7 @@
                         <el-input size="small" v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
                     </el-form-item>
                     <el-form-item>
-                        <el-checkbox v-model="newForm.terms" true-label="yes" false-label="no">
+                        <el-checkbox v-model="newForm.terms" true-value="yes" false-value="no">
                             <div v-html="$t('__SLACK_TERMS')"></div>
                         </el-checkbox>
                     </el-form-item>

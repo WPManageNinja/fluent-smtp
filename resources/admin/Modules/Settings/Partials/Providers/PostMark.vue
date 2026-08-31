@@ -1,9 +1,9 @@
 <template>
     <div>
         <h3 class="fs_config_title">{{ $t('Postmark API Settings') }}</h3>
-        <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button label="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
-            <el-radio-button label="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
+        <el-radio-group size="small" v-model="connection.key_store">
+            <el-radio-button value="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
         </el-radio-group>
 
         <template v-if="connection.key_store == 'db'">
@@ -20,7 +20,7 @@
                 <error :error="errors.get('api_key')"/>
             </el-form-item>
             <el-form-item>
-                <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                     {{ $t('Disable Encryption for API Key (Not Recommended)') }}
                 </el-checkbox>
                 <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
@@ -50,16 +50,18 @@
             <el-col :md="12" :sm="24">
                 <el-form-item :label="$t('Track Opens')">
                     <el-checkbox
-                        true-label="yes"
-                        false-label="no"
+                        true-value="yes"
+                        false-value="no"
                         v-model="connection.track_opens"
                     >
                         {{ $t('Enable email opens tracking on postmark(For HTML Emails only).') }}
                         <el-tooltip effect="dark" placement="top-start">
-                            <div slot="content">
-                                {{ $t('__POSTMARK_OPEN') }}
-                            </div>
-                            <i class="el-icon-info"></i>
+                            <template #content>
+                                <div>
+                                    {{ $t('__POSTMARK_OPEN') }}
+                                </div>
+                            </template>
+                            <el-icon><FsmIconInfo /></el-icon>
                         </el-tooltip>
                     </el-checkbox>
                 </el-form-item>
@@ -70,16 +72,18 @@
             <el-col :md="12" :sm="24">
                 <el-form-item label="Track Links">
                     <el-checkbox
-                        true-label="yes"
-                        false-label="no"
+                        true-value="yes"
+                        false-value="no"
                         v-model="connection.track_links"
                     >
                         {{ $t('Enable link tracking on postmark (For HTML Emails only).') }}
                         <el-tooltip effect="dark" placement="top-start">
-                            <div slot="content">
-                                {{ $t('__POSTMARK_CLICK') }}
-                            </div>
-                            <i class="el-icon-info"></i>
+                            <template #content>
+                                <div>
+                                    {{ $t('__POSTMARK_CLICK') }}
+                                </div>
+                            </template>
+                            <el-icon><FsmIconInfo /></el-icon>
                         </el-tooltip>
                     </el-checkbox>
                 </el-form-item>

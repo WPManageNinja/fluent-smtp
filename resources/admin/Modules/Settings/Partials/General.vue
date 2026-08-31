@@ -8,10 +8,12 @@
                     </label>
                     
                     <el-tooltip effect="dark" placement="top-start">
-                        <div slot="content">
-                            {{ $t('The email address which emails are sent from.') }}
-                        </div>
-                        <i class="el-icon-info"></i>
+                        <template #content>
+                            <div>
+                                {{ $t('The email address which emails are sent from.') }}
+                            </div>
+                        </template>
+                        <el-icon><FsmIconInfo /></el-icon>
                     </el-tooltip>
 
                     <el-input
@@ -19,7 +21,7 @@
                         v-model="schema.provider.options.sender_email"
                         :placeholder="$t('Sender Email Address')"
                     >
-                        <template slot="append"><slot></slot></template>
+                        <template #append><slot></slot></template>
                     </el-input>
                 </el-form-item>
             </el-col>
@@ -29,10 +31,12 @@
                     <label for="sender_name">{{ $t('Sender Name') }}</label>
 
                     <el-tooltip effect="dark" placement="top-start">
-                        <div slot="content">
-                            {{ $t('The name which emails are sent from.') }}
-                        </div>
-                        <i class="el-icon-info"></i>
+                        <template #content>
+                            <div>
+                                {{ $t('The name which emails are sent from.') }}
+                            </div>
+                        </template>
+                        <el-icon><FsmIconInfo /></el-icon>
                     </el-tooltip>
 
                     <el-input
@@ -48,15 +52,17 @@
             <el-col :md="12" :sm="24">
                 <el-checkbox
                     v-model="schema.provider.options.force_from_name"
-                    true-label="yes"
-                    false-label="no"
+                    true-value="yes"
+                    false-value="no"
                 >{{ $t('Force Sender Name') }}</el-checkbox>
 
                 <el-tooltip effect="dark" placement="top-start">
-                    <div slot="content">
-                        {{ $t('__FORCE_SENDER_NAME_TIP') }}
-                    </div>
-                    <i class="el-icon-info"></i>
+                    <template #content>
+                        <div>
+                            {{ $t('__FORCE_SENDER_NAME_TIP') }}
+                        </div>
+                    </template>
+                    <el-icon><FsmIconInfo /></el-icon>
                 </el-tooltip>
             </el-col>
         </el-row>

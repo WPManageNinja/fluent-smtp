@@ -1,7 +1,7 @@
 <template>
     <el-dialog
         :title="$t('Resend Email')"
-        :visible.sync="visible"
+        v-model="visible"
         @closed="handleClosed"
         :close-on-click-modal="false"
         append-to-body
@@ -21,16 +21,16 @@
                 ref="form"
                 label-position="top"
                 :model="form"
-                @submit.native.prevent
+                @submit.prevent
             >
                 <el-form-item :label="$t('Send this email to:')">
                     <el-radio-group v-model="form.target" style="display:block;">
                         <el-radio
-                            label="original"
+                            value="original"
                             style="display:block;margin:6px 0;"
                         >{{ $t('Original recipient(s)') }}</el-radio>
                         <el-radio
-                            label="self"
+                            value="self"
                             style="display:block;margin:6px 0;"
                         >{{ $t('My account email') }}
                             <span v-if="appVars.user_email" style="color:#909399;">
@@ -38,7 +38,7 @@
                             </span>
                         </el-radio>
                         <el-radio
-                            label="custom"
+                            value="custom"
                             style="display:block;margin:6px 0;"
                         >{{ $t('A different email address') }}</el-radio>
                     </el-radio-group>
@@ -50,7 +50,7 @@
                         type="text"
                         v-model="form.customEmail"
                         :placeholder="$t('e.g. you@example.com')"
-                        @keyup.enter.native="handleConfirm"
+                        @keyup.enter="handleConfirm"
                         autocomplete="off"
                         data-bwignore
                         data-lpignore="true"
@@ -63,20 +63,22 @@
             </el-form>
         </div>
 
-        <span slot="footer" class="dialog-footer">
-            <el-button size="small" @click="visible = false" :disabled="resending">
-                {{ $t('Cancel') }}
-            </el-button>
-            <el-button
-                type="success"
-                size="small"
-                icon="el-icon-refresh-right"
-                :loading="resending"
-                @click="handleConfirm"
-            >
-                {{ $t('Resend') }}
-            </el-button>
-        </span>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button size="small" @click="visible = false" :disabled="resending">
+                    {{ $t('Cancel') }}
+                </el-button>
+                <el-button
+                    type="success"
+                    size="small"
+                    icon="FsmIconRefreshRight"
+                    :loading="resending"
+                    @click="handleConfirm"
+                >
+                    {{ $t('Resend') }}
+                </el-button>
+            </span>
+        </template>
     </el-dialog>
 </template>
 

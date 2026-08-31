@@ -5,25 +5,29 @@
             <el-form-item :label="$t('Log Emails')">
                 <el-checkbox
                     v-model="settings.misc.log_emails"
-                    true-label="yes"
-                    false-label="no"
+                    true-value="yes"
+                    false-value="no"
                 >{{$t('Log All Emails for Reporting')}}</el-checkbox>
             </el-form-item>
 
             <el-form-item v-if="settings.misc.log_emails == 'yes' && !!appVars.has_fluentcrm" :label="$t('FluentCRM Email Logging')">
-                <el-checkbox v-model="settings.misc.disable_fluentcrm_logs" true-label="yes" false-label="no">{{$t('Disable Logging for FluentCRM Emails')}}</el-checkbox>
+                <el-checkbox v-model="settings.misc.disable_fluentcrm_logs" true-value="yes" false-value="no">{{$t('Disable Logging for FluentCRM Emails')}}</el-checkbox>
             </el-form-item>
             
             <el-form-item v-if="settings.misc.log_emails == 'yes'">
-                <label slot="label">
-                    {{$t('Delete Logs')}}
-                    <el-popover
-                        width="400"
-                        trigger="hover">
-                        <p>{{$t('delete_logs_info')}}</p>
-                        <i slot="reference" class="el-icon el-icon-info"></i>
-                    </el-popover>
-                </label>
+                <template #label>
+                    <label>
+                        {{$t('Delete Logs')}}
+                        <el-popover
+                            width="400"
+                            trigger="hover">
+                            <p>{{$t('delete_logs_info')}}</p>
+                            <template #reference>
+                                <el-icon><FsmIconInfo /></el-icon>
+                            </template>
+                        </el-popover>
+                    </label>
+                </template>
                 <el-select v-model="settings.misc.log_saved_interval_days">
                     <el-option
                         v-for="(logLabel, logValue) in logging_days"
@@ -35,15 +39,19 @@
             </el-form-item>
 
             <el-form-item>
-                <label slot="label">
-                    {{$t('Default Connection')}}
-                    <el-popover
-                        width="400"
-                        trigger="hover">
-                        <p>{{$t('__default_connection_popover')}}</p>
-                        <i slot="reference" class="el-icon el-icon-info"></i>
-                    </el-popover>
-                </label>
+                <template #label>
+                    <label>
+                        {{$t('Default Connection')}}
+                        <el-popover
+                            width="400"
+                            trigger="hover">
+                            <p>{{$t('__default_connection_popover')}}</p>
+                            <template #reference>
+                                <el-icon><FsmIconInfo /></el-icon>
+                            </template>
+                        </el-popover>
+                    </label>
+                </template>
                 <el-select v-model="settings.misc.default_connection">
                     <el-option
                         v-for="(connection, connectionId) in settings.connections"
@@ -55,15 +63,19 @@
             </el-form-item>
 
             <el-form-item>
-                <label slot="label">
-                    {{ $t('Fallback Connection') }}
-                    <el-popover
-                        width="400"
-                        trigger="hover">
-                        <p>{{$t('__fallback_connection_popover')}}</p>
-                        <i slot="reference" class="el-icon el-icon-info"></i>
-                    </el-popover>
-                </label>
+                <template #label>
+                    <label>
+                        {{ $t('Fallback Connection') }}
+                        <el-popover
+                            width="400"
+                            trigger="hover">
+                            <p>{{$t('__fallback_connection_popover')}}</p>
+                            <template #reference>
+                                <el-icon><FsmIconInfo /></el-icon>
+                            </template>
+                        </el-popover>
+                    </label>
+                </template>
                 <el-select clearable v-if="connectionsCount > 1" v-model="settings.misc.fallback_connection">
                     <el-option
                         v-for="(connection, connectionId) in settings.connections"
@@ -79,8 +91,8 @@
             <el-form-item :label="$t('Email Simulation')">
                 <el-checkbox
                     v-model="settings.misc.simulate_emails"
-                    true-label="yes"
-                    false-label="no"
+                    true-value="yes"
+                    false-value="no"
                 >{{$t('__Email_Simulation_Label')}}</el-checkbox>
                 <p style="color: red;" v-if="settings.misc.simulate_emails == 'yes'">{{$t('__Email_Simulation_Yes')}}</p>
                 <p v-if="appVars.is_disabled_defined" style="color: red;">{{ ('Emails are being simulated due to the definition of ') }} <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ (' in your PHP code.') }}</p>
@@ -89,8 +101,8 @@
             <el-form-item :label="$t('Add Multi-Part Plain Text for HTML Emails (beta)')">
                 <el-checkbox
                     v-model="settings.misc.send_as_text"
-                    true-label="yes"
-                    false-label="no"
+                    true-value="yes"
+                    false-value="no"
                 >{{$t('__Email_TEXT_PART_Label')}}</el-checkbox>
             </el-form-item>
 

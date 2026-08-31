@@ -2,9 +2,9 @@
     <div>
         <h3>{{ $t('Outlook / Office365 API Settings') }}</h3>
         <p>{{ $t('Please ') }}<a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/setup-outlook-with-fluentsmtp/">{{ $t('check the documentation first to create API keys at Microsoft') }}</a></p>
-        <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button value="db" label="db">{{ $t('Store Application Keys in DB') }}</el-radio-button>
-            <el-radio-button value="wp_config" label="wp_config">{{ $t('Application Keys in Config File') }}</el-radio-button>
+        <el-radio-group size="small" v-model="connection.key_store">
+            <el-radio-button value="db">{{ $t('Store Application Keys in DB') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Application Keys in Config File') }}</el-radio-button>
         </el-radio-group>
 
         <el-row :gutter="20" v-if="connection.key_store == 'db'">
@@ -41,7 +41,7 @@
 
             <el-col :md="24">
                 <el-form-item>
-                    <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                    <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                         {{ $t('Disable Encryption for Application Client Secret (Not Recommended)') }}
                     </el-checkbox>
                     <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
@@ -164,7 +164,7 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
         },
         mounted() {
             if (!this.connection.key_store) {
-                this.$set(this.connection, 'key_store', 'db');
+                this.connection.key_store = 'db';
             }
         }
     };

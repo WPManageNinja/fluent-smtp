@@ -1,5 +1,8 @@
 import { defineConfig } from 'vite';
-import vue2 from '@vitejs/plugin-vue2';
+import vue from '@vitejs/plugin-vue';
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -70,7 +73,19 @@ export default defineConfig(({ mode }) => {
         base: '',
         mode: 'production',
         plugins: [
-            vue2(),
+            vue(),
+            /*
+             * Element Plus components are pulled in on demand, along with their
+             * stylesheets, by the resolver. That is what let resources/scss/vendor.scss
+             * - 182 lines of hand-maintained CSS imports that had to be edited every
+             * time a component was added - be deleted outright.
+             *
+             * Components used imperatively rather than as tags (ElNotification,
+             * ElLoading, ElMessageBox) are invisible to the resolver, so their CSS is
+             * imported by hand at the top of fluent-mail-admin.scss.
+             */
+            AutoImport({ resolvers: [ElementPlusResolver()] }),
+            Components({ resolvers: [ElementPlusResolver()], directives: false }),
             ...(build.copy ? [viteStaticCopy({ targets: build.copy })] : []),
             ...(build.cssFileName ? [renameExtractedCss(build.cssFileName)] : [])
         ],
@@ -78,10 +93,8 @@ export default defineConfig(({ mode }) => {
             preprocessorOptions: {
                 scss: {
                     api: 'modern-compiler',
-                    // resources/scss/vendor.scss is a wall of @import statements
-                    // for Element UI's stylesheets. Silencing the deprecation
-                    // keeps the build output readable; Phase 3 deletes the file.
-                    silenceDeprecations: ['import', 'legacy-js-api']
+                    // Element Plus's own stylesheets still use @import.
+                    silenceDeprecations: ['import', 'legacy-js-api', 'global-builtin']
                 }
             }
         },
@@ -89,24 +102,20 @@ export default defineConfig(({ mode }) => {
             alias: {
                 '@': path.resolve(root, 'resources/admin'),
                 /*
-                 * Pin Vue to one file, and specifically to the ESM build.
+                 * The app is split across two bundles that must share one Vue.
                  *
-                 * Without this the bundle ends up with two Vues: our own
-                 * `import Vue from 'vue'` takes the package's `module` entry
-                 * (dist/vue.runtime.esm.js), while Element UI's CommonJS
-                 * `require('vue')` takes `main` (dist/vue.runtime.common.js).
-                 * Two Vues means two independent reactivity systems, and the
-                 * failure is quiet: el-table's column store is a Vue instance
-                 * built from Element's copy, so the app's copy never collects a
-                 * dependency on it. The table renders its rows and every <td>
-                 * is missing, with no console error to say why.
-                 *
-                 * `dedupe` is not enough here - both specifiers already resolve
-                 * inside the same installed package, just to different files.
+                 * Under Vue 2 this was a hard bug: Element UI's CommonJS
+                 * `require('vue')` resolved to the package's `main` while our
+                 * `import` resolved to its `module`, giving two reactivity
+                 * systems and an el-table whose every row rendered with no cells
+                 * in it, silently. Vue 3 and Element Plus are both ESM-first so
+                 * the same trap is unlikely, but a second copy of Vue would fail
+                 * just as quietly - boot.js and the app bundle would each have
+                 * their own - so it stays pinned.
                  */
-                vue: path.resolve(root, 'node_modules/vue/dist/vue.runtime.esm.js')
+                vue: path.resolve(root, 'node_modules/vue/dist/vue.runtime.esm-bundler.js')
             },
-            dedupe: ['vue', 'vue-router'],
+            dedupe: ['vue', 'vue-router', 'element-plus'],
             extensions: ['.js', '.mjs', '.vue', '.json']
         },
         build: {

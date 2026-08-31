@@ -47,7 +47,7 @@
                         <el-button
                             type="primary"
                             size="small"
-                            icon="el-icon-s-promotion"
+                            icon="FsmIconSPromotion"
                             :loading="loading"
                             @click="sendEmail"
                             :disabled="!maybeEnabled"
@@ -64,16 +64,16 @@
                 <el-alert v-if="debug_info" type="error" :title="debug_info.message" show-icon />
             </div>
             <div v-else class="success_wrapper">
-                <h1><i class="el-icon el-icon-success"></i></h1>
+                <h1><el-icon><FsmIconSuccess /></el-icon></h1>
                 <h3>{{ $t('Test Email Has been successfully sent') }}</h3>
                 <p v-if="time_taken_human" class="small-help-text">
-                    <i class="el-icon el-icon-timer"></i> {{ time_taken_human }}
+                    <el-icon><FsmIconTimer /></el-icon> {{ time_taken_human }}
                 </p>
                 <hr />
                 <div v-if="appVars.require_optin == 'yes'" style="margin-top: 10px;">
                     <email-subscriber />
                 </div>
-                <el-button v-else @click="email_success = false" v-else>{{ $t('Run Another Test Email') }}</el-button>
+                <el-button v-else @click="email_success = false">{{ $t('Run Another Test Email') }}</el-button>
 
                 <div v-if="appVars.require_optin != 'yes'" style="margin-top: 50px;">
                     {{ $t('If you have a minute, consider ') }} <a target="_blank" href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5">{{ $t('write a review for FluentSMTP') }}</a>

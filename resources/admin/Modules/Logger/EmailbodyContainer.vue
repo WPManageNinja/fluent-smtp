@@ -22,7 +22,7 @@
             style="width:100%;height: 400px;"
             @load="setBody(content)"
         ></iframe>
-        <el-button size="small" type="primary" icon="el-icon-full-screen" ref="fullscreen" @click="fullScreen">
+        <el-button size="small" type="primary" icon="FsmIconFullScreen" ref="fullscreen" @click="fullScreen">
             {{$t('Enter Full Screen')}}
         </el-button>
 

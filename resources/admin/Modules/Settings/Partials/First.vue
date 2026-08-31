@@ -8,10 +8,12 @@
                     </label>
 
                     <el-tooltip effect="dark" placement="top-start">
-                        <div slot="content">
-                            {{ $t('A name for the connection.') }}
-                        </div>
-                        <i class="el-icon-info"></i>
+                        <template #content>
+                            <div>
+                                {{ $t('A name for the connection.') }}
+                            </div>
+                        </template>
+                        <el-icon><FsmIconInfo /></el-icon>
                     </el-tooltip>
 
                     <el-input id="connection_name" v-model="schema.connection_name" />
@@ -23,10 +25,12 @@
                     <label for="provider_name">{{ $t('Select Provider') }}</label>
 
                     <el-tooltip effect="dark" placement="top-start">
-                        <div slot="content">
-                            {{ $t('provider for the connection.') }}
-                        </div>
-                        <i class="el-icon-info"></i>
+                        <template #content>
+                            <div>
+                                {{ $t('provider for the connection.') }}
+                            </div>
+                        </template>
+                        <el-icon><FsmIconInfo /></el-icon>
                     </el-tooltip>
 
                     <el-select id="provider_name" v-model="schema.provider_name" :placeholder="$t('Select')">

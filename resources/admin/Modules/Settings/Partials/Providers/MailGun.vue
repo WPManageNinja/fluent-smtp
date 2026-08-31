@@ -1,9 +1,9 @@
 <template>
     <div>
         <h3 class="fs_config_title">{{ $t('Mailgun API Settings') }}</h3>
-        <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button label="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
-            <el-radio-button label="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
+        <el-radio-group size="small" v-model="connection.key_store">
+            <el-radio-button value="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
         </el-radio-group>
 
         <el-row v-if="connection.key_store == 'db'" :gutter="20">
@@ -50,7 +50,7 @@
 
             <el-col :span="24">
                 <el-form-item>
-                    <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                    <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                         {{ $t('Disable Encryption for API Key (Not Recommended)') }}
                     </el-checkbox>
                     <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
@@ -79,8 +79,8 @@ define( 'FLUENTMAIL_MAILGUN_DOMAIN', '********************' );</textarea>
                 {{ $t('Select Region') }}&nbsp;&nbsp;&nbsp;&nbsp;
             </label>
 
-            <el-radio v-model="connection.region" label="us">US</el-radio>
-            <el-radio v-model="connection.region" label="eu">EU</el-radio>
+            <el-radio v-model="connection.region" value="us">US</el-radio>
+            <el-radio v-model="connection.region" value="eu">EU</el-radio>
             
             <el-alert :closable="false">
                 <span>

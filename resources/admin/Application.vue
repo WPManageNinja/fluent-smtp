@@ -7,15 +7,18 @@
                 class="fluent-mail-navigation"
                 :default-active="active"
             >
-                <el-menu-item index="dashboard" :route="{ name: 'dashboard' }" v-html="logo" />
+                <el-menu-item index="dashboard" :route="{ name: 'dashboard' }">
+                    <span v-html="logo"></span>
+                </el-menu-item>
 
                 <el-menu-item
                     :key="item.route"
                     :index="item.route"
-                    v-html="item.title"
                     v-for="item in items"
                     :route="{ name: item.route }"
-                />
+                >
+                    <span v-html="item.title"></span>
+                </el-menu-item>
             </el-menu>
         </div>
 

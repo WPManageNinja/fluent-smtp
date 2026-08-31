@@ -5,7 +5,7 @@
             :title="$t('Email Log')"
             @closed="closed"
             v-loading="retrying"
-            :visible.sync="logViewerProps.dialogVisible"
+            v-model="logViewerProps.dialogVisible"
         >
             <div v-loading="loading">
                 <ul class="fss_log_items">
@@ -22,18 +22,18 @@
                                 >{{ log.status }}</span>
 
                                 <el-button
-                                    size="mini"
+                                    size="small"
                                     type="success"
-                                    icon="el-icon-refresh"
+                                    icon="FsmIconRefresh"
                                     @click="handleRetry(log, 'retry')"
                                     :plain="true"
                                     v-if="log.status == 'failed'"
                                 >{{ $t('Retry') }}</el-button>
 
                                 <el-button
-                                    size="mini"
+                                    size="small"
                                     type="success"
-                                    icon="el-icon-refresh-right"
+                                    icon="FsmIconRefreshRight"
                                     @click="handleResendClick"
                                     v-if="log.status == 'sent'"
                                 >
@@ -102,7 +102,7 @@
 
                 <el-collapse v-model="activeName" style="margin-top:10px;">
                     <el-collapse-item name="email_body">
-                        <template slot="title">
+                        <template #title>
                             <strong style="color:#606266">{{ $t('Email Body') }} (sanitized)</strong>
                         </template>
                         <hr class="log-border">
@@ -117,7 +117,7 @@
                     </el-row>
                     <hr/>
                     <el-collapse-item name="tech_info">
-                        <template slot="title">
+                        <template #title>
                             <strong style="color:#606266">{{ $t('Email Headers') }}</strong>
                         </template>
                         <div>
@@ -128,7 +128,7 @@
 
 
                     <el-collapse-item name="attachments">
-                        <template slot="title">
+                        <template #title>
                             <strong style="color:#606266">
                                 {{ $t('Attachments') }} ({{ getAttachments(log).length }})
                             </strong>
@@ -152,7 +152,7 @@
                             :disabled="!prev"
                             @click="navigate('prev')"
                         >
-                            <i class="el-icon-arrow-left"></i> {{ $t('Prev') }}
+                            <el-icon><FsmIconArrowLeft /></el-icon> {{ $t('Prev') }}
                         </el-button>
                     </el-col>
                     <el-col :span="12">
@@ -162,7 +162,7 @@
                             :disabled="!next"
                             @click="navigate('next')"
                         >
-                            {{ $t('Next') }} <i class="el-icon-arrow-right"></i>
+                            {{ $t('Next') }} <el-icon><FsmIconArrowRight /></el-icon>
                         </el-button>
                     </el-col>
                 </el-row>
@@ -268,7 +268,7 @@ export default {
                 this.logViewerProps.log.updated_at = res.data.email.updated_at;
                 this.logViewerProps.log.resent_count = res.data.email.resent_count;
                 // Carries the resend trail, so the history renders without a reload.
-                this.$set(this.logViewerProps.log, 'extra', res.data.email.extra);
+                this.logViewerProps.log.extra = res.data.email.extra;
                 this.$notify.success({
                     offset: 19,
                     title: 'Great!',

@@ -26,30 +26,34 @@
                             </el-form-item>
                             <div v-if="connection.force_from_email != undefined">
                                 <el-checkbox
-                                    true-label="yes"
-                                    false-label="no"
+                                    true-value="yes"
+                                    false-value="no"
                                     v-model="connection.force_from_email"
                                 >
                                     {{ $t('Force From Email (Recommended Settings: Enable)') }}
                                     <el-tooltip effect="dark" placement="top-start">
-                                        <div slot="content">
-                                            {{ $t('__from_email_tooltip') }}
-                                        </div>
-                                        <i class="el-icon-info"></i>
+                                        <template #content>
+                                            <div>
+                                                {{ $t('__from_email_tooltip') }}
+                                            </div>
+                                        </template>
+                                        <el-icon><FsmIconInfo /></el-icon>
                                     </el-tooltip>
                                 </el-checkbox>
                             </div>
                             <div v-if="connection.return_path != undefined">
                                 <el-checkbox
-                                    true-label="yes"
-                                    false-label="no"
+                                    true-value="yes"
+                                    false-value="no"
                                     v-model="connection.return_path"
                                 >
                                     {{ $t('Set the return-path to match the From Email') }}
                                     <el-tooltip effect="dark" placement="top-start">
-                                        <div slot="content" v-html="$t('__RETURN_PATH_TOOLTIP')">
-                                        </div>
-                                        <i class="el-icon-info"></i>
+                                        <template #content>
+                                            <div v-html="$t('__RETURN_PATH_TOOLTIP')">
+                                            </div>
+                                        </template>
+                                        <el-icon><FsmIconInfo /></el-icon>
                                     </el-tooltip>
                                 </el-checkbox>
                             </div>
@@ -65,15 +69,17 @@
                             </el-form-item>
                             <el-checkbox
                                 v-model="connection.force_from_name"
-                                true-label="yes"
-                                false-label="no"
+                                true-value="yes"
+                                false-value="no"
                             >
                                 {{ $t('Force Sender Name') }}
                                 <el-tooltip effect="dark" placement="top-start">
-                                    <div slot="content">
-                                        {{ $t('force_sender_tooltip') }}
-                                    </div>
-                                    <i class="el-icon-info"></i>
+                                    <template #content>
+                                        <div>
+                                            {{ $t('force_sender_tooltip') }}
+                                        </div>
+                                    </template>
+                                    <el-icon><FsmIconInfo /></el-icon>
                                 </el-tooltip>
                             </el-checkbox>
                         </el-col>
@@ -182,7 +188,7 @@ export default {
             options.provider = value;
 
             each(options, (value, key) => {
-                this.$set(this.connection, key, value);
+                this.connection[key] = value;
             });
         }
     },
@@ -197,9 +203,9 @@ export default {
             })
                 .then(response => {
                     this.$notify.success(response.data.message);
-                    this.$set(this.settings, 'connections', response.data.connections);
-                    this.$set(this.settings, 'mappings', response.data.mappings);
-                    this.$set(this.settings, 'misc', response.data.misc);
+                    this.settings.connections = response.data.connections;
+                    this.settings.mappings = response.data.mappings;
+                    this.settings.misc = response.data.misc;
                     this.$router.push({
                         name: 'connections'
                     });

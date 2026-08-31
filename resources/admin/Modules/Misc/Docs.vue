@@ -11,7 +11,9 @@
                 v-model="search"
                 :placeholder="$t('Search Type and Enter...')"
             >
-                <el-button slot="append" icon="el-icon-search"></el-button>
+                <template #append>
+                    <el-button icon="FsmIconSearch"></el-button>
+                </template>
             </el-input>
             <div v-if="search" class="search_result">
                 <div class="fc_doc_items">

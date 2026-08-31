@@ -3,7 +3,7 @@
         <p>{{ $t('__REAL_NOTIFICATION_DESC') }}</p>
         <el-table :data="alerts" class="fss_alert_list_table__table" v-loading="loading">
             <el-table-column :label="$t('Channel')" min-width="200">
-                <template slot-scope="scope">
+                <template #default="scope">
                     <div class="fss_alert_list_table__channel-cell">
                         <img :src="scope.row.logo" class="fss_alert_list_table__logo" :alt="scope.row.title"/>
                         <span>{{ scope.row.title }}</span>
@@ -12,7 +12,7 @@
             </el-table-column>
 
             <el-table-column :label="$t('Status')" width="100" align="center">
-                <template slot-scope="scope">
+                <template #default="scope">
                     <el-switch
                         v-model="scope.row.is_active"
                         active-value="yes"
@@ -25,19 +25,19 @@
             </el-table-column>
 
             <el-table-column :label="$t('Actions')" width="150" align="right">
-                <template slot-scope="scope">
+                <template #default="scope">
                     <el-button
-                        size="mini"
+                        size="small"
                         :type="scope.row.is_configured ? 'primary' : 'success'"
-                        :icon="scope.row.is_configured ? 'el-icon-edit' : 'el-icon-plus'"
+                        :icon="scope.row.is_configured ? 'FsmIconEdit' : 'FsmIconPlus'"
                         @click="editChannel(scope.row.key)"
                         :aria-label="(scope.row.is_configured ? $t('Edit') : $t('Configure')) + ' ' + scope.row.title">
                     </el-button>
                     <el-button
                         v-if="scope.row.is_configured"
-                        size="mini"
+                        size="small"
                         type="danger"
-                        icon="el-icon-delete"
+                        icon="FsmIconDelete"
                         @click="deactivateChannel(scope.row.key)"
                         :aria-label="$t('Deactivate') + ' ' + scope.row.title">
                     </el-button>

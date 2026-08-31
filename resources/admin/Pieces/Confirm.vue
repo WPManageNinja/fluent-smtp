@@ -9,23 +9,23 @@
 
         <div class="action-buttons">
             <el-button
-                size="mini"
-                type="text"
+                size="small"
+                link
                 @click="cancel()">
                 {{$t('cancel')}}
             </el-button>
 
             <el-button
                 type="primary"
-                size="mini"
+                size="small"
                 @click="confirm()">
                 {{ $t('confirm') }}
             </el-button>
         </div>
 
-        <template slot="reference">
+        <template #reference>
             <slot name="reference">
-                <i class="el-icon-delete"/>
+                <el-icon><FsmIconDelete /></el-icon>
             </slot>
         </template>
     </el-popover>

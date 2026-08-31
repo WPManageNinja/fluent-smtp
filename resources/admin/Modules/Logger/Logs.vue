@@ -5,7 +5,7 @@
                 <div class="fss_content">
                     <el-alert :closable="false" show-icon center>
                         {{ $t('__EMAIL_LOGGING_OFF') }}
-                        <el-button type="text" @click="turnOnEmailLogging">{{ $t('Turn On') }}</el-button>
+                        <el-button link @click="turnOnEmailLogging">{{ $t('Turn On') }}</el-button>
                         .
                     </el-alert>
                 </div>
@@ -17,7 +17,7 @@
                     v-if="selectedLogs.length"
                 />
                 <div style="float:left;margin-top:6px;">{{ $t('Email Logs') }}</div>
-                <div style="float:right;margin-left: 6px;"><el-button @click="fetch" type="success" size="small" ><i class="el-icon-refresh"></i></el-button></div>
+                <div style="float:right;margin-left: 6px;"><el-button @click="fetch" type="success" size="small" ><el-icon><FsmIconRefresh /></el-icon></el-button></div>
 
                 <LogFilter
                     :filter_query="filter_query"
@@ -31,10 +31,12 @@
                         size="small"
                         v-model="filter_query.search"
                         @clear="filter_query.search=''"
-                        @keyup.enter.native="fetch"
+                        @keyup.enter="fetch"
                         :placeholder="$t('Type & press enter...')"
                     >
-                        <el-button slot="append" icon="el-icon-search" @click="fetch"/>
+                        <template #append>
+                            <el-button icon="FsmIconSearch" @click="fetch"/>
+                        </template>
                     </el-input>
                 </div>
 
@@ -51,7 +53,7 @@
                 >
                     <el-table-column type="selection" width="55"/>
                     <el-table-column :label="$t('Subject')">
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
                             <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
                                   style="color: #ff0000;">{{ $t(' - Simulated') }}</span>
@@ -59,38 +61,42 @@
                     </el-table-column>
 
                     <el-table-column :label="$t('To')">
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             <span v-html="formatAddresses(scope.row.to)"></span>
                         </template>
                     </el-table-column>
 
                     <el-table-column :label="$t('Status')" width="120" align="center">
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             {{ scope.row.status }}
                         </template>
                     </el-table-column>
 
                     <el-table-column prop="created_at" :label="$t('Date-Time')" width="200px">
-                        <template slot-scope="scope">
+                        <template #default="scope">
                             {{ $dateFormat(scope.row.created_at, 'DD MMM YYYY LT') }}
                         </template>
                     </el-table-column>
 
-                    <el-table-column :label="$t('Actions')" width="200px" align="right">
-                        <template slot-scope="scope">
+                    <!-- 220px, not the old 200px: an Element Plus button is a few pixels
+                         wider than the Element UI `mini` it replaced, and three of them
+                         plus their margins came to 179px inside a 176px content box,
+                         which wrapped the row onto two lines. -->
+                    <el-table-column :label="$t('Actions')" width="220px" align="right">
+                        <template #default="scope">
                             <el-button
-                                size="mini"
+                                size="small"
                                 type="success"
-                                icon="el-icon-refresh"
+                                icon="FsmIconRefresh"
                                 @click="handleRetry(scope.row, 'retry')"
                                 :plain="true"
                                 v-if="scope.row.status == 'failed'"
                             >{{ $t('Retry') }}
                             </el-button>
                             <el-button
-                                size="mini"
+                                size="small"
                                 type="success"
-                                icon="el-icon-refresh-right"
+                                icon="FsmIconRefreshRight"
                                 @click="handleResendClick(scope.row)"
                                 v-if="scope.row.status == 'sent'"
                             >
@@ -99,19 +105,20 @@
                             </el-button>
 
                             <el-button
-                                size="mini"
+                                size="small"
                                 type="primary"
-                                icon="el-icon-view"
+                                icon="FsmIconView"
                                 @click="handleView(scope.row)"
                             />
 
                             <confirm @yes="handleDelete(scope.row.id)">
-                                <el-button
-                                    size="mini"
-                                    type="danger"
-                                    icon="el-icon-delete"
-                                    slot="reference"
-                                />
+                                <template #reference>
+                                    <el-button
+                                        size="small"
+                                        type="danger"
+                                        icon="FsmIconDelete"
+                                    />
+                                </template>
                             </confirm>
                         </template>
                     </el-table-column>
@@ -122,7 +129,9 @@
                         <div v-if="logs.length" style="margin-top:20px;">
                             <confirm placement="right" :message="$t('Are you sure, you want to delete all the logs?')"
                                      @yes="handleDelete(['all'])">
-                                <el-button slot="reference" size="mini" type="info">{{ $t('Delete All Logs') }}</el-button>
+                                <template #reference>
+                                    <el-button size="small" type="info">{{ $t('Delete All Logs') }}</el-button>
+                                </template>
                             </confirm>
                         </div>
                         <span v-else>&nbsp;</span>
@@ -136,7 +145,7 @@
             </div>
             <el-skeleton :animated="true" v-else class="fss_content" :rows="15"></el-skeleton>
 
-            <LogViewer :logViewerProps="logViewerProps"/>
+            <LogViewer ref="logViewer" :logViewerProps="logViewerProps"/>
 
             <ResendDialog
                 v-model="resendDialog.visible"
@@ -312,7 +321,7 @@ export default {
                 row.retries = res.data.email.retries;
                 row.resent_count = res.data.email.resent_count;
                 row.updated_at = res.data.email.updated_at;
-                this.$set(row, 'extra', res.data.email.extra);
+                row.extra = res.data.email.extra;
                 this.$notify.success({
                     offset: 19,
                     title: 'Great!',
@@ -362,11 +371,9 @@ export default {
                 this.logViewerProps.filterBy = this.filterBy;
                 this.logViewerProps.filterByValue = this.filterByValue;
 
-                const logViewer = this.$children.find(
-                    c => c.$options._componentTag === 'LogViewer'
-                );
-
-                logViewer && logViewer.navigate();
+                // Vue 3 removed $children, which is what this used to walk to
+                // find the viewer by its component tag. A ref names it directly.
+                this.$refs.logViewer && this.$refs.logViewer.navigate();
             });
         },
         handleDelete(id) {

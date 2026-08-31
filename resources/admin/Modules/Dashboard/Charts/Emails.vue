@@ -1,6 +1,8 @@
 <template>
     <div v-loading="fetching" class="fss_body fss_chart_box">
-        <growth-chart :maxCumulativeValue="maxCumulativeValue" :chart-data="chartData"/>
+        <div class="fss_chart_canvas">
+            <growth-chart v-if="chartData" :chart-data="chartData"/>
+        </div>
     </div>
 </template>
 
@@ -18,8 +20,9 @@
             return {
                 fetching: false,
                 stats: {},
-                chartData: {},
-                maxCumulativeValue: 0
+                // null until the first report lands: Chart.js needs a data
+                // object with datasets in it, not an empty one.
+                chartData: null
             }
         },
         computed: {},
@@ -48,10 +51,7 @@
                     backgroundColor: 'rgba(81, 52, 178, 0.5)',
                     borderColor: '#b175eb',
                     data: [],
-                    fill: false,
-                    gridLines: {
-                        display: false
-                    }
+                    fill: false
                 };
 
                 const cumulativeItems = {
@@ -60,7 +60,10 @@
                     borderColor: '#37a2eb',
                     data: [],
                     yAxisID: 'byCumulative',
-                    type: 'line'
+                    type: 'line',
+                    // Chart.js 2 filled a line dataset by default and 4 does
+                    // not, so the wash under this line has to be asked for.
+                    fill: true
                 };
 
                 let currentTotal = 0;
@@ -70,7 +73,6 @@
                     currentTotal += parseInt(count);
                     cumulativeItems.data.push(currentTotal);
                 });
-                this.maxCumulativeValue = currentTotal + 10;
                 this.chartData = {
                     labels: labels,
                     datasets: [ItemValues, cumulativeItems]
@@ -82,3 +84,16 @@
         }
     };
 </script>
+
+<style lang="scss">
+    /*
+     * Chart.js sizes its canvas to the parent when maintainAspectRatio is off,
+     * so the parent has to have a height. vue-chartjs 2 carried a default
+     * height prop of 400 on the canvas itself; vue-chartjs 5 does not, and
+     * without this the chart collapses to nothing.
+     */
+    .fss_chart_canvas {
+        position: relative;
+        height: 400px;
+    }
+</style>

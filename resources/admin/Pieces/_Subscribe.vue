@@ -14,10 +14,10 @@
                     </el-form-item>
                 </el-form>
 
-                <el-checkbox true-label="yes" false-label="no" v-model="share_details">
+                <el-checkbox true-value="yes" false-value="no" v-model="share_details">
                     {{ $t('(Optional) Share Non - Sensitive Data. It will help us to improve the integrations') }}
                     <el-tooltip class="item" effect="dark" :content="$t('Access Data: Active SMTP Connection Provider, installed plugin names, php & mysql version')" placement="top-end">
-                        <i class="el-icon el-icon-info"></i>
+                        <el-icon><FsmIconInfo /></el-icon>
                     </el-tooltip>
                 </el-checkbox>
                 <el-button style="margin-top: 10px;" v-loading="saving" :disabled="saving" @click="subscribeToEmail()" type="success" size="small">

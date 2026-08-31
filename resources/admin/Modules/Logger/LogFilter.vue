@@ -3,18 +3,19 @@
         <el-row :gutter="10" style="margin-right:-20px;">
             <el-col :span="10">
                 <el-radio-group @change="applyFilter()" v-model="filter_query.status" size="small">
-                    <el-radio-button label="">{{ $t('All Statuses') }}</el-radio-button>
-                    <el-radio-button label="sent">{{ $t('Successful') }}</el-radio-button>
-                    <el-radio-button label="failed">{{ $t('Failed') }}</el-radio-button>
+                    <el-radio-button value="">{{ $t('All Statuses') }}</el-radio-button>
+                    <el-radio-button value="sent">{{ $t('Successful') }}</el-radio-button>
+                    <el-radio-button value="failed">{{ $t('Failed') }}</el-radio-button>
                 </el-radio-group>
             </el-col>
 
             <el-col :span="10">
                 <el-date-picker
-                    format="dd-MM-yyyy"
-                    value-format="yyyy-MM-dd"
+                    format="DD-MM-YYYY"
+                    value-format="YYYY-MM-DD"
                     size="small"
-                    :picker-options="pickerOptions"
+                    :shortcuts="shortcuts"
+                    :disabled-date="disabledDate"
                     v-model="filter_query.date_range"
                     type="daterange"
                     :placeholder="$t('Select date and time')"
@@ -44,47 +45,30 @@ export default {
     props: ['filter_query'],
     data() {
         return {
-            pickerOptions: {
-                disabledDate(time) {
-                    return time.getTime() > Date.now();
-                },
-                shortcuts: [
-                    {
-                        text: this.$t('Today'),
-                        onClick(picker) {
-                            const today = new Date();
-                            picker.$emit('pick', [today, today]);
-                        }
-                    },
-                    {
-                        text: this.$t('Last week'),
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: this.$t('Last month'),
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }, {
-                        text: this.$t('Last 3 months'),
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }]
-            }
+            shortcuts: [
+                { text: this.$t('Today'), value: () => this.daysAgoRange(0) },
+                { text: this.$t('Last week'), value: () => this.daysAgoRange(7) },
+                { text: this.$t('Last month'), value: () => this.daysAgoRange(30) },
+                { text: this.$t('Last 3 months'), value: () => this.daysAgoRange(90) }
+            ]
         };
     },
     methods: {
+        /*
+         * Element Plus split Element UI's `picker-options` object into separate
+         * :shortcuts and :disabled-date props, and changed a shortcut's shape:
+         * it now returns the range as a `value`, where the old one reached into
+         * the picker instance and did `picker.$emit('pick', ...)`.
+         */
+        daysAgoRange(days) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * days);
+            return [start, end];
+        },
+        disabledDate(date) {
+            return date.getTime() > Date.now();
+        },
         applyFilter() {
             this.$emit('on-filter', this.filter_query);
         }

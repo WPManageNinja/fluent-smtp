@@ -21,7 +21,9 @@
                 width="400"
                 trigger="hover">
                 <p>{{$t('__PASSWORD_ENCRYPT_TIP')}}</p>
-                <i slot="reference" class="el-icon el-icon-info"></i>
+                <template #reference>
+                    <el-icon><FsmIconInfo /></el-icon>
+                </template>
             </el-popover>
         </p>
     </div>

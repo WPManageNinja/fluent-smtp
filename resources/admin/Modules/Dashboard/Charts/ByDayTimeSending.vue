@@ -132,6 +132,16 @@ export default {
     max-width: 100%;
     overflow-x: auto;
 
+    /*
+     * Element Plus's select is `width: 100%`, where Element UI's was sized by
+     * its content. This header's actions box is floated, so it is shrink-to-fit:
+     * a 100%-wide child inside it resolves to nothing and the control collapses
+     * to the width of its chevron.
+     */
+    .fss_widget_header .el-select {
+        width: 210px;
+    }
+
     .fss_wid_widget_body {
         min-width: 750px;
     }

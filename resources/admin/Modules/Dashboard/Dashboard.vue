@@ -45,11 +45,12 @@
                                     size="small"
                                     v-model="date_range"
                                     type="daterange"
-                                    :picker-options="pickerOptions"
+                                    :shortcuts="shortcuts"
+                                    :disabled-date="disabledDate"
                                     range-separator="To"
                                     :start-placeholder="$t('Start date')"
                                     :end-placeholder="$t('End date')"
-                                    value-format="yyyy-MM-dd"
+                                    value-format="YYYY-MM-DD"
                                 ></el-date-picker>
                                 <el-button style="padding: 8px 15px;" size="small" @click="filterReport" type="primary" plain>Apply</el-button>
                             </div>
@@ -142,41 +143,11 @@ export default {
             unhealthy_settings: [],
             date_range: '',
             showing_chart: true,
-            pickerOptions: {
-                disabledDate: function (date) {
-                    const now = new Date();
-                    return date > now;
-                },
-                shortcuts: [
-                    {
-                        text: this.$t('Last week'),
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: this.$t('Last month'),
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: this.$t('Last 3 months'),
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }
-                ]
-            },
+            shortcuts: [
+                { text: this.$t('Last week'), value: () => this.daysAgoRange(7) },
+                { text: this.$t('Last month'), value: () => this.daysAgoRange(30) },
+                { text: this.$t('Last 3 months'), value: () => this.daysAgoRange(90) }
+            ],
             loading: true,
             skip_recommended: false
         };
@@ -193,6 +164,21 @@ export default {
         }
     },
     methods: {
+        /*
+         * Element Plus split Element UI's `picker-options` object into separate
+         * :shortcuts and :disabled-date props, and changed a shortcut's shape:
+         * it now returns the range as a `value`, where the old one reached into
+         * the picker instance and did `picker.$emit('pick', ...)`.
+         */
+        daysAgoRange(days) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * days);
+            return [start, end];
+        },
+        disabledDate(date) {
+            return date.getTime() > Date.now();
+        },
         fetch() {
             this.loading = true;
             this.$get('/').then(res => {

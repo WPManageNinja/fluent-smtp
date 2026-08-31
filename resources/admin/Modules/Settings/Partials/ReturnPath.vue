@@ -1,8 +1,8 @@
 <template>
     <div>
         <el-checkbox
-            true-label="yes"
-            false-label="no"
+            true-value="yes"
+            false-value="no"
             v-model="schema.provider.options.return_path"
         >{{ $t('Set the return-path to match the From Email') }}</el-checkbox>
 

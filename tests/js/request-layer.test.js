@@ -1,57 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('vue', () => ({
-    default: {
-        use: vi.fn(),
-        mixin: vi.fn(),
-        filter: vi.fn(),
-        prototype: {}
-    }
-}));
-
-vi.mock('vue-router', () => ({ default: function Router() {} }));
-vi.mock('element-ui/lib/locale/lang/en', () => ({ default: {} }));
-vi.mock('element-ui/lib/locale', () => ({ default: { use: vi.fn() } }));
-vi.mock('element-ui', () => {
-    const plugin = {};
-    return {
-        Tag: plugin,
-        Row: plugin,
-        Col: plugin,
-        Menu: plugin,
-        Form: plugin,
-        Alert: plugin,
-        Table: plugin,
-        Input: plugin,
-        Option: plugin,
-        Radio: plugin,
-        Button: plugin,
-        Select: plugin,
-        Dialog: plugin,
-        Popover: plugin,
-        Loading: { directive: plugin },
-        Tooltip: plugin,
-        MenuItem: plugin,
-        Checkbox: plugin,
-        FormItem: plugin,
-        Pagination: plugin,
-        DatePicker: plugin,
-        TimePicker: plugin,
-        RadioGroup: plugin,
-        MessageBox: { alert: vi.fn(), confirm: vi.fn() },
-        OptionGroup: plugin,
-        ButtonGroup: plugin,
-        TableColumn: plugin,
-        Notification: vi.fn(),
-        CheckboxGroup: plugin,
-        RadioButton: plugin,
-        Switch: plugin,
-        Collapse: plugin,
-        CollapseItem: plugin,
-        Skeleton: plugin,
-        SkeletonItem: plugin
-    };
-});
+/*
+ * There is nothing left to mock here.
+ *
+ * This file used to stub `vue`, `vue-router`, `element-ui` and
+ * `element-ui/lib/locale` module by module, listing all 38 registered
+ * components, because Bits/FluentMail.js imported them all in order to mutate
+ * the global Vue constructor. Under Vue 3 an app is built by createApp() rather
+ * than by extending a constructor, so that file no longer imports a framework
+ * at all - the wiring moved to resources/admin/start.js - and the request layer
+ * it does own can be tested against the real module.
+ */
 
 import FluentMail from '../../resources/admin/Bits/FluentMail';
 
@@ -116,5 +75,33 @@ describe('FluentMail admin request layer', () => {
             action: 'fluentmail-post-logs/delete',
             nonce: 'suite-nonce'
         });
+    });
+
+    /*
+     * The mixin is the lever that kept the Vue 3 migration from touching 59
+     * component script blocks: every one of them calls these through `this.`,
+     * so the day one goes missing is the day a screen breaks at runtime with no
+     * build error to warn anyone.
+     */
+    it('exposes the helper methods every component reaches through this.', () => {
+        window.FluentMailAdmin.trans = { Save: 'Speichern' };
+        fluentMail.appVars = window.FluentMailAdmin;
+
+        const mixin = fluentMail.appMixin();
+        const methods = mixin.methods;
+
+        for (const name of [
+            'addFilter', 'applyFilters', 'doAction', 'addAction', 'removeAllActions',
+            '$dateFormat', 'ucFirst', 'ucWords', 'slugify', 'dayjs', 'escapeHtml',
+            'hasPro', '$t'
+        ]) {
+            expect(methods[name], name).toBeTypeOf('function');
+        }
+
+        expect(mixin.data().appVars).toBe(window.FluentMailAdmin);
+        expect(methods.$t('Save')).toBe('Speichern');
+        expect(methods.$t('Untranslated')).toBe('Untranslated');
+        expect(methods.ucFirst('sent')).toBe('Sent');
+        expect(methods.escapeHtml('<b>&</b>')).toBe('&lt;b&gt;&amp;&lt;/b&gt;');
     });
 });

@@ -8,16 +8,18 @@
                     $t('Add Additional Senders')
                 }}
             </el-button>
-            <el-dialog :visible.sync="showEmailManageModal" :title="$t('Manage Additional Senders')" width="50%">
+            <el-dialog v-model="showEmailManageModal" :title="$t('Manage Additional Senders')" width="50%">
                 <p style="font-size: 16px;">{{ $t('You may add additional sending emails in this') }}
                     {{ verificationSettings.connection_name }} {{ $t(' connection.') }}</p>
                 <el-input type="text"
                           :placeholder="$t('Enter new email address ex: new_sender@') + verificationSettings.verified_domain"
                           v-model="newSender">
-                    <el-button :disabled="addingNew" v-loading="addingNew" @click="addNewSender()" slot="append"
-                               type="primary" icon="el-icon-plus">
-                        {{ $t('Add') }}
-                    </el-button>
+                    <template #append>
+                        <el-button :disabled="addingNew" v-loading="addingNew" @click="addNewSender()"
+                                   type="primary" icon="FsmIconPlus">
+                            {{ $t('Add') }}
+                        </el-button>
+                    </template>
                 </el-input>
 
                 <p v-if="verificationSettings.email_help_message" v-html="verificationSettings.email_help_message"></p>
@@ -34,7 +36,7 @@
                     <tr v-for="sender in verificationSettings.all_senders" :key="sender">
                         <th>
                             {{ sender }}
-                            <el-button plain v-if="verificationSettings.verified_senders.indexOf(sender) === -1 || verificationSettings.supports_multi_domain" type="danger" size="mini" @click="removeSender(sender)">
+                            <el-button plain v-if="verificationSettings.verified_senders.indexOf(sender) === -1 || verificationSettings.supports_multi_domain" type="danger" size="small" @click="removeSender(sender)">
                                 {{ $t('Remove') }}
                             </el-button>
                         </th>

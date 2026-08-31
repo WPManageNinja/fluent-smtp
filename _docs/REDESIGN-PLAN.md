@@ -833,3 +833,89 @@ second mix config, still wired to `eslint-loader`).
 **Options API** throughout — no `<script setup>`, no Composition API rewrite. This is
 also what keeps §6.1's `app.mixin` lever working: the helpers stay on the instance, so
 no component's script block has to change to reach `$get`/`$post`/`$t`.
+
+### Phase 2 — Vue 3 + Element Plus, no redesign
+
+**Options API throughout, confirmed during the phase.** No `<script setup>`, no
+Composition API rewrite. This is also what keeps §6.1's `app.mixin` lever working: the
+helpers stay on the instance, so not one of the 59 component script blocks had to change
+to keep reaching `$get` / `$post` / `$t` / `ucFirst`.
+
+**`window.FluentMail.Vue` and `.Router` are published from `start.js`, not from the
+class.** §6.4 has them as constructor fields. Importing Vue inside `Bits/FluentMail.js`
+puts a *second* Vue in boot.js - 150 kB of duplicate payload, and, worse, a second
+reactivity system sitting on the public API under the name of the first. Assigning them
+in `start.js` means what an extension reaches through `.Vue` is the very module the app
+is running on. boot.js went from 952 kB to 13 kB as a side effect.
+
+**`ByDayTimeSending.vue` needed no chart work.** §6.6 budgets it as the larger of the two
+Chart.js rewrites. It is not a Chart.js chart at all - it is a hand-built heatmap of
+divs, and the only Chart.js consumer in the app is `Charts/_chart.js` plus `Emails.vue`.
+The chart rewrite came in far under its estimate as a result. Two behaviours had to be
+asked for explicitly that Chart.js 2 gave by default: `Filler` has to be registered, and
+the cumulative dataset needs `fill: true`, or the wash under the line disappears. The
+canvas also needs a parent with a height, because vue-chartjs 5 dropped the default
+`height` prop that vue-chartjs 2 put on the canvas.
+
+**Vendored Chart.js deleted, and its two `wp_enqueue_script` calls with it.** The
+vendored build was 2.7.1 while `package.json` declared `^3.4.1`, so the version anyone
+read was never the version that shipped.
+
+**The icon components are `FsmIcon*`, not `ElIcon*`.** `ElementPlusResolver` claims the
+`ElIcon*` namespace: `<el-icon-info />` makes it try to auto-import an `Info` export from
+`@element-plus/icons-vue`, which does not exist - the icon is `InfoFilled` - and the build
+fails. They are registered globally in `start.js` so that `icon="FsmIconSearch"` keeps
+working as a plain string attribute, including `_AlertListTable.vue`'s case where the
+icon is chosen by an expression at runtime.
+
+**Element Plus's variables are re-asserted under `body.settings_page_fluent-mail`.**
+FluentCart injects an inline `<style>` into *every* wp-admin page mapping 31 Element Plus
+variables onto its own `--fc-*` palette on `:root`. Inline styles in `<head>` win on
+source order, so FluentSMTP silently wore FluentCart's colours: the unselected status
+filters rendered white text on white, and every `type="info"` button came out near-black.
+§4.2 already prescribes the fix - declare on the body class, which beats `:root` on
+specificity - and Phase 2 puts the block in with Element Plus's own default values.
+Phase 3 changes the values; the selector is the part that matters.
+
+One trap inside the trap: `--el-button-text-color` must be set to
+`var(--el-text-color-regular)`, not to a literal. Element Plus never declares it at root
+scope - components read `var(--el-button-text-color, var(--el-text-color-regular))` and
+each coloured variant sets it on itself - so a literal would repaint every variant.
+
+**Two bugs the screenshots could not have caught, and the smoke did not:**
+
+- `this.$set` throws in Vue 3, at 11 call sites. The important one is
+  `ConnectionWizard.vue`'s watcher on `connection.provider`, which copies the provider's
+  defaults out of `config.php` into the form. It threw, so **a newly picked provider
+  received none of its defaults** - `auth` and `auto_tls` should both start on, and
+  started off. The screen looked entirely plausible. Found in the browser console, and
+  only because the build was temporarily made unminified with Vue's warnings on;
+  the production build strips them.
+- `el-radio` / `el-checkbox` `label`-as-value is deprecated in Element Plus 2.6 and
+  removed in 3.0. Converted to `value` / `true-value` / `false-value` at 25 files.
+
+The lesson worth keeping: a production Vue build is silent about exactly the class of
+problem a framework migration produces. Building once with `mode: 'development'` and
+walking all eight screens took two minutes and was the highest-yield check in the phase.
+
+**Pre-existing bug fixed because Vue 3's compiler will not tolerate it:** `Test.vue` had
+`v-else` twice on the same element. Vue 2's compiler accepted it silently.
+
+**Layout differences from the component swap, fixed rather than left:**
+
+- Element Plus lays a form item's content out with `display: flex; flex-wrap: wrap`,
+  where Element UI's was a plain block. A help line after a narrow control sat *beside*
+  it, reading as "OnSend this email in HTML...". `.small-help-text` now claims
+  `flex-basis: 100%`.
+- Element Plus's `el-select` is `width: 100%`, where Element UI's was content-sized.
+  Inside the floated (shrink-to-fit) widget header on the dashboard, the two collapsed
+  each other and the control rendered as a bare chevron.
+- An Element Plus button is a few pixels wider than the Element UI `mini` it replaced.
+  Three of them in the logs table came to 179px inside a 176px content box and wrapped
+  onto two lines; the Actions column went from 200px to 220px.
+
+**`tests/js/request-layer.test.js` lost its mocks entirely** rather than having them
+rewritten against `element-plus`. `Bits/FluentMail.js` no longer imports a framework at
+all - the wiring moved to `start.js` - so there is nothing to stub. Added one test that
+the mixin still exposes every helper, since that is the assumption holding 59 untouched
+component script blocks up.

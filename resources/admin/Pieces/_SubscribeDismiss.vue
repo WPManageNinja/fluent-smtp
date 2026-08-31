@@ -1,5 +1,5 @@
 <template>
-    <i @click="dismiss()" class="el-icon el-icon-close"></i>
+    <el-icon @click="dismiss()"><FsmIconClose /></el-icon>
 </template>
 
 <script type="text/babel">

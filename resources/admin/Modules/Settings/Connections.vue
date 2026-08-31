@@ -11,13 +11,13 @@
                             style="float:right;color:#46A0FC;cursor:pointer;"
                             @click="addConnection"
                         >
-                            <i class="el-icon-plus"></i> {{$t('Add Another Connection')}}
+                            <el-icon><FsmIconPlus /></el-icon> {{$t('Add Another Connection')}}
                         </span>
                     </div>
                     <div class="fss_content">
                         <el-table stripe border :data="connections">
                             <el-table-column :label="$t('Provider')">
-                                <template slot-scope="scope">
+                                <template #default="scope">
 
                                     <span v-if="settings.providers[scope.row.provider]">
                                         <img
@@ -32,31 +32,32 @@
                                 </template>
                             </el-table-column>
                             <el-table-column prop="sender_email" :label="$t('From Email')">
-                                <template slot-scope="scope">
+                                <template #default="scope">
                                     <span style="cursor: pointer;" @click="showConnection(scope.row)">{{ scope.row.sender_email }}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column width="120" :label="$t('Actions')" align="center">
-                                <template slot-scope="scope">
+                                <template #default="scope">
                                     <el-button
                                         type="primary"
-                                        size="mini"
-                                        icon="el-icon-edit"
+                                        size="small"
+                                        icon="FsmIconEdit"
                                         @click="editConnection(scope.row)"
                                     />
                                     <el-button
                                         type="info"
-                                        size="mini"
-                                        icon="el-icon-view"
+                                        size="small"
+                                        icon="FsmIconView"
                                         @click="showConnection(scope.row)"
                                     />
                                     <confirm @yes="deleteConnection(scope.row)">
-                                        <el-button
-                                            size="mini"
-                                            type="danger"
-                                            icon="el-icon-delete"
-                                            slot="reference"
-                                        />
+                                        <template #reference>
+                                            <el-button
+                                                size="small"
+                                                type="danger"
+                                                icon="FsmIconDelete"
+                                            />
+                                        </template>
                                     </confirm>
                                 </template>
                             </el-table-column>

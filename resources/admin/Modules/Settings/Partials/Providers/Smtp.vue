@@ -34,9 +34,9 @@
                     </div>
 
                     <div style="display:inline-block;margin-left: 20px;">
-                        <el-radio v-model="connection.encryption" label="none">{{ $t('None') }}</el-radio>
-                        <el-radio v-model="connection.encryption" label="ssl">{{ $t('SSL') }}</el-radio>
-                        <el-radio v-model="connection.encryption" label="tls">{{ $t('TLS') }}</el-radio>
+                        <el-radio v-model="connection.encryption" value="none">{{ $t('None') }}</el-radio>
+                        <el-radio v-model="connection.encryption" value="ssl">{{ $t('SSL') }}</el-radio>
+                        <el-radio v-model="connection.encryption" value="tls">{{ $t('TLS') }}</el-radio>
                     </div>
                 </el-form-item>
             </el-col>
@@ -83,9 +83,9 @@
         </el-row>
 
         <template v-if="connection.auth == 'yes'">
-            <el-radio-group size="mini" v-model="connection.key_store">
-                <el-radio-button value="db" label="db">{{ $t('Store Access Keys in DB') }}</el-radio-button>
-                <el-radio-button value="wp_config" label="wp_config">{{ $t('Access Keys in Config File') }}</el-radio-button>
+            <el-radio-group size="small" v-model="connection.key_store">
+                <el-radio-button value="db">{{ $t('Store Access Keys in DB') }}</el-radio-button>
+                <el-radio-button value="wp_config">{{ $t('Access Keys in Config File') }}</el-radio-button>
             </el-radio-group>
 
             <el-row :gutter="20" v-if="connection.key_store == 'db'" :class="{ disabled: connection.auth==='no' }">
@@ -124,7 +124,7 @@
 
                 <el-col :span="24">
                     <el-form-item>
-                        <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                        <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                             {{ $t('Disable Encryption for SMTP Password (Not Recommended)') }}
                         </el-checkbox>
                         <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
@@ -185,7 +185,7 @@ export default {
     },
     mounted() {
         if (!this.connection.key_store) {
-            this.$set(this.connection, 'key_store', 'db');
+            this.connection.key_store = 'db';
         }
     }
 };

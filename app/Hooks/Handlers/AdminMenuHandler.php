@@ -202,8 +202,15 @@ class AdminMenuHandler
             FLUENTMAIL_PLUGIN_VERSION
         );
 
-        wp_enqueue_script('fluentmail-chartjs', fluentMailMix('libs/chartjs/Chart.min.js'), [], FLUENTMAIL_PLUGIN_VERSION);
-        wp_enqueue_script('fluentmail-vue-chartjs', fluentMailMix('libs/chartjs/vue-chartjs.min.js'), [], FLUENTMAIL_PLUGIN_VERSION);
+        /*
+         * Chart.js and vue-chartjs used to be enqueued here from a vendored copy
+         * under resources/libs/chartjs/, publishing window.VueChartJs for the
+         * dashboard to pick up. The vendored build was Chart.js 2.7.1 while
+         * package.json declared ^3.4.1, so the version anyone read was not the
+         * version that shipped. They are bundle imports now - see
+         * resources/admin/Modules/Dashboard/Charts/_chart.js - which means one
+         * declared version, and one place it comes from.
+         */
         /*
          * DOMPurify 3.4.13, vendored at resources/libs/purify/ from the npm
          * package of the same version. It sanitizes logged email bodies before

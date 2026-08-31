@@ -2,12 +2,12 @@
     <div class="fss_alert_info__actions">
         <div v-if="show_test_button !== false" class="fss_alert_info__actions__test-button">
             <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" type="primary" size="small">
-                <i class="el-icon-message"></i> {{ $t('Send Test Message') }}
+                <el-icon><FsmIconMessage /></el-icon> {{ $t('Send Test Message') }}
             </el-button>
         </div>
         <div class="fss_alert_info__actions__disconnect">
             <el-button v-loading="disconnecting" @click="disconnect()" type="danger" size="small">
-                <i class="el-icon-delete"></i> {{ disconnectLabel }}
+                <el-icon><FsmIconDelete /></el-icon> {{ disconnectLabel }}
             </el-button>
         </div>
     </div>

@@ -1,5 +1,81 @@
-@import "./vendor";
+/*
+ * Element Plus components are pulled in on demand by ElementPlusResolver, and
+ * each one brings its own stylesheet with it. That replaced resources/scss/
+ * vendor.scss, which was 182 lines of hand-maintained @import statements that
+ * had to be edited by hand every time a component was added to the app.
+ *
+ * These four are the exceptions. They are used imperatively - ElNotification,
+ * ElLoading, ElMessageBox - or as a directive, so they never appear as a tag in
+ * a template and the resolver cannot see them. Their CSS has to be asked for.
+ */
+@import 'element-plus/theme-chalk/el-notification.css';
+@import 'element-plus/theme-chalk/el-loading.css';
+@import 'element-plus/theme-chalk/el-message-box.css';
+@import 'element-plus/theme-chalk/el-overlay.css';
+
 @import "./variables";
+
+/*
+ * Re-assert Element Plus's own variable defaults, scoped to this screen.
+ *
+ * FluentCart injects an inline <style> into every wp-admin page that maps 31
+ * Element Plus variables onto its own --fc-* palette on `:root`. That is a
+ * higher-priority origin than our enqueued stylesheet by source order, so
+ * without this block FluentSMTP silently wears FluentCart's colours: the status
+ * filter's radio buttons rendered white text on white, and every `type="info"`
+ * button came out near-black.
+ *
+ * `body.settings_page_fluent-mail` beats `:root` on specificity, and scoping it
+ * to the body class rather than to the app root is deliberate - Element Plus
+ * teleports dropdowns, dialogs and notifications to <body>, and they have to
+ * inherit these too.
+ *
+ * Phase 3 replaces these values with the --fsm-* design tokens. What matters
+ * here is the selector, not the values: this is the hook the theme hangs on.
+ */
+body.settings_page_fluent-mail {
+    --el-color-primary: #409eff;
+    --el-color-primary-light-3: #79bbff;
+    --el-color-primary-light-5: #a0cfff;
+    --el-color-primary-light-7: #c6e2ff;
+    --el-color-primary-light-8: #d9ecff;
+    --el-color-primary-light-9: #ecf5ff;
+    --el-color-primary-dark-2: #337ecc;
+    --el-color-success: #67c23a;
+    --el-color-warning: #e6a23c;
+    --el-color-danger: #f56c6c;
+    --el-color-error: #f56c6c;
+    --el-color-info: #909399;
+    --el-color-info-light-9: #f4f4f5;
+    --el-text-color-primary: #303133;
+    --el-text-color-regular: #606266;
+    --el-text-color-secondary: #909399;
+    --el-text-color-placeholder: #a8abb2;
+    --el-text-color-disabled: #c0c4cc;
+    --el-border-color: #dcdfe6;
+    --el-border-color-light: #e4e7ed;
+    --el-border-color-lighter: #ebeef5;
+    --el-border-color-dark: #d4d7de;
+    --el-fill-color: #f0f2f5;
+    --el-fill-color-light: #f5f7fa;
+    --el-fill-color-lighter: #fafafa;
+    --el-fill-color-blank: #fff;
+    --el-bg-color: #fff;
+    --el-bg-color-page: #f2f3f5;
+    --el-bg-color-overlay: #fff;
+    /*
+     * Element Plus never sets this at root scope - its components fall back to
+     * `var(--el-button-text-color, var(--el-text-color-regular))`, and each
+     * coloured variant sets it on itself. FluentCart's block does set it, at
+     * root, to white, which is what turned the unselected status filters into
+     * white text on a white button. Restoring the fallback value neutralises
+     * that without touching the variants, which still override it locally.
+     */
+    --el-button-text-color: var(--el-text-color-regular);
+    --el-border-radius-base: 4px;
+}
+
+
 @import "./docs";
 @import "./alerts";
 
@@ -498,6 +574,19 @@ span.fss_header_action_right {
 .fluent-mail-app .small-help-text {
   font-size: 12px;
   color: gray;
+}
+
+/*
+ * Element Plus lays a form item's content out with `display: flex; flex-wrap:
+ * wrap`, where Element UI's was a plain block. A help line after a narrow
+ * control - the HTML switch on the Email Test screen is the visible case - has
+ * room left on the row, so it sits beside the control instead of under it and
+ * reads as "OnSend this email in HTML...". Claiming the full basis puts it back
+ * on its own line without turning the whole content box back into a block,
+ * which Element Plus's inline forms rely on.
+ */
+.fluent-mail-app .el-form-item__content > .small-help-text {
+  flex-basis: 100%;
 }
 .fss_box_action .fss_header {
   cursor: pointer;

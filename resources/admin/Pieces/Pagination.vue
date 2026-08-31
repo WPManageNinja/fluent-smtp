@@ -5,7 +5,7 @@
                    @current-change="changePage"
                    @size-change="changeSize"
                    :hide-on-single-page="false"
-                   :current-page.sync="pagination.current_page"
+                   v-model:current-page="pagination.current_page"
                    :page-sizes="page_sizes"
                    :page-size="pagination.per_page"
                    :total="pagination.total"

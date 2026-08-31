@@ -34,9 +34,9 @@
             </div>
         </el-alert>
 
-        <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button label="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
-            <el-radio-button label="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
+        <el-radio-group size="small" v-model="connection.key_store">
+            <el-radio-button value="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
         </el-radio-group>
 
         <template v-if="connection.key_store == 'db'">
@@ -53,7 +53,7 @@
                 <error :error="errors.get('api_key')"/>
             </el-form-item>
             <el-form-item>
-                <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                     {{ $t('Disable Encryption for API Key (Not Recommended)') }}
                 </el-checkbox>
                 <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
@@ -91,7 +91,7 @@
                     :placeholder="$t('sender@yourdomain.com')"
                     size="small"
                     style="max-width: 320px;"
-                    @keyup.enter.native="addAdditional"
+                    @keyup.enter="addAdditional"
                 />
                 <el-button size="small" @click="addAdditional" :disabled="!newAdditional">
                     {{ $t('Add') }}
@@ -126,7 +126,7 @@ export default {
     },
     created() {
         if (!Array.isArray(this.connection.additional_senders)) {
-            this.$set(this.connection, 'additional_senders', []);
+            this.connection.additional_senders = [];
         }
     },
     computed: {

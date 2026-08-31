@@ -1,8 +1,8 @@
 <template>
     <div>
-        <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button label="db">{{ $t('Store Access Keys in DB') }}</el-radio-button>
-            <el-radio-button label="wp_config">{{ $t('Access Keys in Config File') }}</el-radio-button>
+        <el-radio-group size="small" v-model="connection.key_store">
+            <el-radio-button value="db">{{ $t('Store Access Keys in DB') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Access Keys in Config File') }}</el-radio-button>
         </el-radio-group>
         <el-row v-if="connection.key_store == 'db'" :gutter="20">
             <el-col :md="12" :sm="24">
@@ -38,7 +38,7 @@
 
             <el-col :span="24">
                 <el-form-item>
-                    <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                    <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                         {{ $t('Disable Encryption for Secret Key (Not Recommended)') }}
                     </el-checkbox>
                     <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">

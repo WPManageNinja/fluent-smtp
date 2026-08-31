@@ -7,8 +7,8 @@
             <el-form-item>
                 <el-checkbox
                     v-model="notification_settings.enabled"
-                    true-label="yes"
-                    false-label="no"
+                    true-value="yes"
+                    false-value="no"
                 >{{$t('Enable Email Summary')}}</el-checkbox>
             </el-form-item>
             <template v-if="notification_settings.enabled == 'yes'">
@@ -17,7 +17,7 @@
                 </el-form-item>
                 <el-form-item :label="$t('Notification Days')">
                     <el-checkbox-group v-model="notification_settings.notify_days">
-                        <el-checkbox v-for="(dayLabel, day) in sending_days" :key="day" :label="day">{{ dayLabel }}</el-checkbox>
+                        <el-checkbox v-for="(dayLabel, day) in sending_days" :key="day" :value="day">{{ dayLabel }}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
             </template>
