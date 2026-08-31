@@ -322,7 +322,14 @@ class Logger extends Model
             }
         }
 
-        $id = $data['id'];
+        /*
+         * The cursor is bound as '%d', so it cannot carry SQL either way, but
+         * an array-shaped `id` from the request reaches prepare() as an
+         * unsupported argument type and trips _doing_it_wrong(), which prints
+         * a notice into the AJAX response body on a debug site. Narrowed to an
+         * integer here instead.
+         */
+        $id = isset($data['id']) && is_scalar($data['id']) ? (int) $data['id'] : 0;
 
         $dir = isset($data['dir']) ? $data['dir'] : null;
 

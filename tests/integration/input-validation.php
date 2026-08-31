@@ -190,6 +190,49 @@ return function () {
         }
     });
 
+    FsmtpTest::case('log navigation narrows an array-shaped cursor id before binding', function () use ($captureSelects) {
+        global $wpdb;
+
+        $table = FsmtpFactory::emailLogTable();
+        $firstId = FsmtpFactory::insertLog($table, ['subject' => 'cursor first']);
+        $secondId = FsmtpFactory::insertLog($table, ['subject' => 'cursor second']);
+
+        // prepare() rejects an array argument through _doing_it_wrong(), which
+        // prints a notice into the AJAX response body on a debug site.
+        $notices = [];
+        $noticeObserver = function ($function) use (&$notices) {
+            $notices[] = $function;
+        };
+        add_action('doing_it_wrong_run', $noticeObserver);
+
+        try {
+            list($result, $queries) = $captureSelects($table, function () use ($table, $firstId) {
+                return FsmtpFactory::loggerForTable($table)->navigate([
+                    'id'  => [$firstId, $firstId],
+                    'dir' => 'next',
+                ]);
+            });
+
+            FsmtpTest::assertSame('', (string) $wpdb->last_error, 'array-shaped cursor database error');
+            FsmtpTest::assertSame([], $notices, 'array-shaped cursor raised a _doing_it_wrong notice');
+            FsmtpTest::assertSame(1, count($queries), 'array-shaped cursor navigation SELECT count');
+            FsmtpTest::assert(
+                strpos($queries[0], "`id` > '0'") !== false,
+                'array-shaped cursor did not bind as an integer'
+            );
+            FsmtpTest::assertSame(
+                $firstId,
+                isset($result['log']['id']) ? $result['log']['id'] : null,
+                'navigation result with an array-shaped cursor'
+            );
+            FsmtpTest::assertSame(true, $result['next'], 'array-shaped cursor next flag');
+            FsmtpTest::assert($secondId > $firstId, 'fixture ordering');
+        } finally {
+            remove_action('doing_it_wrong_run', $noticeObserver);
+            FsmtpFactory::dropTable($table);
+        }
+    });
+
     FsmtpTest::case('day-time statistics clamp the requested lookback to 365 days', function () {
         global $wpdb;
 
