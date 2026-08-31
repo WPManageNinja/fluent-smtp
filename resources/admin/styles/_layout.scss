@@ -155,6 +155,40 @@ body.settings_page_fluent-mail {
             outline-offset: -1px;
         }
     }
+
+    /*
+     * wp-admin paints its own ring on any focused field in the content area - the site's
+     * admin colour scheme, on `:focus`, so it is left behind after a mouse click too -
+     * and it lands on top of Element Plus's focus treatment, which is a ring of a
+     * different colour, width and radius. Two rings on one input is not an accent, it is
+     * a mistake.
+     *
+     * The shadow and border are handed back to Element Plus (its own live on the
+     * .el-input__wrapper around this element), and the keyboard ring is re-drawn on
+     * :focus-visible in the app's accent. Moved and recoloured, not removed.
+     */
+    input,
+    select,
+    textarea {
+        &:focus {
+            box-shadow: none;
+            border-color: var(--fsm-border-strong);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--fsm-accent);
+            outline-offset: 1px;
+        }
+    }
+
+    /* Element Plus draws its own ring on the wrapper, so the field inside needs none. */
+    .el-input__wrapper input,
+    .el-textarea__inner,
+    .el-select__wrapper input {
+        &:focus-visible {
+            outline: none;
+        }
+    }
 }
 
 /* ------------------------------------------------------------------ app bar */
@@ -434,8 +468,13 @@ body.settings_page_fluent-mail {
     .fsm_app_bar {
         @apply flex-wrap;
 
+        /*
+         * Sticky rather than pinned, and offset by wp-admin's own fixed admin bar, which
+         * is still fixed at this width. Below 782px WordPress stops fixing it and the
+         * offset goes back to 0 - see the next breakpoint.
+         */
         position: sticky;
-        top: 0;
+        top: 32px;
         left: auto;
         right: auto;
         height: auto;

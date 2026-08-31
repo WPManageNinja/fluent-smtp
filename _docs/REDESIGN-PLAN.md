@@ -1084,3 +1084,65 @@ fix, and it is worth remembering the next time a width is ignored.
 
 At the end of this phase there are **no literal colours left in any `.vue` file** - checked
 by grep across all 59.
+
+### Phase 6 — polish and release prep
+
+**Responsive, at the three widths where the layout actually changes.** 1180px drops the
+dashboard aside to a block at the end of the page. 960px unpins both the app bar and the
+settings pane - a pane pinned to the viewport needs room either side of it to be worth the
+trade, and wp-admin moves its own menu off-canvas below here anyway - and the bar's nav
+collapses behind a toggle. 782px is where WordPress stops fixing its admin bar, so the
+app bar's sticky offset goes from 32px to 0, and the stat tiles go to one column.
+
+**The focus ring was a real bug, not a nicety.** wp-admin paints its own ring on any
+focused field in the content area, in the site's admin colour scheme, on `:focus` - so it
+was left behind after a mouse click as well - and it landed *on top of* Element Plus's
+focus treatment, which is a ring of a different colour, width and radius. Two rings on one
+input is not an accent. The shadow and border are handed back to Element Plus, whose own
+ring now resolves to `--fsm-accent`, and the keyboard ring is re-drawn on `:focus-visible`.
+Moved and recoloured, as §9 asks, not removed.
+
+**Version bumped to 2.4.0** across `boot.php`, `fluent-smtp.php` and `readme.txt`'s stable
+tag, and the changelog written. It is a minor rather than a patch: the whole admin is
+reskinned, the navigation is reorganised and the frontend framework changed underneath.
+The number is a release decision and easy to change in those three places if the team
+wants a different one.
+
+The changelog leads with what a user sees and closes with a **for developers** note on
+`window.FluentMail.Vue`, per §6.4 - stated plainly as a break rather than dressed up as
+compatible, along with the list of everything on that global that *is* unchanged, because
+that is the part most add-ons actually use.
+
+---
+
+## 13. Where this ended up against §10
+
+Every acceptance criterion, checked rather than assumed:
+
+- [x] `./build.sh` completes and its two self-checks pass
+- [x] `tests/bin/run-all.sh` green - 15 suites, including `browser-route-coverage`
+- [x] All 8 browser smoke screens pass, in **both** themes
+- [x] All 8 route paths byte-identical to master (the `routes.js` diff touches `meta` only)
+- [x] `#/`, `#/connections`, `#/notification-settings` and `#/logs?status=failed` all
+      resolve; the last selects the Failed filter, the third lands on Alerts with no redirect
+- [x] Slack's OAuth round trip returns to a working Alerts screen - `#/notification-settings`
+      renders Slack Settings with its terms checkbox and its Continue button
+- [x] No literal colours in any `.vue` file - checked by grep across all 59
+- [x] Dark mode on all 8 screens, including teleported dialogs and popovers
+- [x] Switching theme in FluentCart moves an open FluentSMTP tab, and the reverse
+- [x] No Tailwind utility leaks - every utility is prefixed `#fluent_mail_app`
+- [x] `.fluent-mail-app` present exactly once and visible on every screen
+- [x] `registerTopMenu()`, `fluent_mail_top_menus` and `fluent_mail_global_routes` all
+      still function - exercised in the live console, not just read
+- [x] `_docs/` absent from `fluent-smtp.zip`
+
+### Left for later, deliberately
+
+- **The Vite dev server** (§5.5). `vite build --watch` needs no PHP change and was enough;
+  the dev server needs an origin switch in the enqueue and a CORS allowance, which is the
+  part of FluentCart's setup that carries the port finder and the env switcher.
+- **`.fsm_row` in the provider partials** (§7.3). See the Phase 5 note: a setting row is
+  for a name, an explanation and a switch. A provider partial is credential entry.
+- **The `.fss_header` / `.fss_content` markup** on Email Test, Alerts, About, Documentation
+  and the wizard. It is drawn as a card and reads as one; renaming the classes would be
+  five templates of churn for no user-visible change.

@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, wordpress mail smtp, amazon ses, sendgrid, mailgun
 Requires at least: 5.5
 Tested up to: 7.0
-Stable tag: 2.3.1
+Stable tag: 2.4.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -337,6 +337,40 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 
 
 == Changelog ==
+
+= 2.4.0 (Date: Aug 31, 2026) =
+- Redesigned the whole admin on the shared Fluent design system, so moving between
+  FluentSMTP, FluentCart and FluentAuth no longer feels like changing product
+- Added a dark theme. The toggle is the same one FluentCart uses, so choosing dark in
+  either plugin chooses it in both, and the screen paints in the right theme on first
+  frame rather than flashing light first
+- Reorganised the navigation: the top bar now carries only the places you go to look at
+  something - Dashboard, Email Logs, Settings - and everything configurable lives behind
+  Settings in one sidebar. Send Test Email keeps its own button in the bar
+- Every existing link into the admin still works. The addresses in Slack, Telegram and
+  Discord alerts, in the admin bar and in Slack's sign-in flow are unchanged
+- Improved the dashboard: sent, failed, connections and senders are now four figures you
+  can read at a glance, and the failed count links straight into the failed emails
+- Improved the email log: a failed email is marked with a word rather than by painting the
+  whole row, which leaves the rest of the row free to say something
+- Rebuilt the admin on Vue 3, Element Plus and Vite. Faster to load and no longer built on
+  a framework that stopped receiving updates
+- Fixed the delete-logs help text showing "delete_logs_info" instead of an explanation
+- Fixed the keyboard focus ring being left behind on buttons and links after a click
+
+**For developers**
+
+`window.FluentMail.Vue` was the Vue 2 constructor. Vue 3 has no constructor to extend - an
+app is created by `createApp()` - so it cannot be preserved as one, and there is no shim
+that could honestly pretend otherwise. It is now the Vue 3 module namespace
+(`{ createApp, ref, computed, h, ... }`), and `window.FluentMail.Router` is vue-router's.
+Everything else on the global is unchanged: `applyFilters`, `addFilter`, `addAction`,
+`doAction`, `registerTopMenu()`, `registerBlock()`, `$get`, `$post` and `appVars` all
+behave exactly as before, and the `fluent_mail_top_menus`, `fluent_mail_global_routes` and
+`fluent_mail_loading_app` hooks are all still in place.
+
+An add-on that reads `window.FluentMail.Vue` as a constructor will need updating. One that
+uses `registerTopMenu()` or the filters will not.
 
 = 2.3.1 (Date: Aug 13, 2026) =
 - Added an optional Directory (tenant) ID for Outlook / Office 365, for single-tenant Entra app registrations that cannot accept personal Microsoft accounts
