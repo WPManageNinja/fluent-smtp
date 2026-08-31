@@ -1,0 +1,494 @@
+/*
+ * Light and dark, as one set of names.
+ *
+ * Every colour the app paints with is declared here twice - once light, once dark - and
+ * referred to by what it is for rather than by what it looks like. A stylesheet that says
+ * `background: var(--fsm-surface)` is right in both themes; one that says `background:
+ * white` is right in one of them, which is how a half-dark screen happens.
+ *
+ * The values are FluentCart's, read off its own stylesheet rather than picked to look
+ * similar: the three plugins sit in the same admin, and a user moving between them should
+ * not see three different greys. FluentAuth uses `--fls-` and FluentCart `--fct-`;
+ * FluentSMTP takes `--fsm-`. If that palette changes there, it should be copied again
+ * rather than drifted towards.
+ *
+ *
+ * Where the switch lives
+ * ----------------------
+ * `.fluent_theme_dark` is FluentCart's class and `fluent_theme_mode` is its localStorage
+ * key, both deliberately - one plugin's toggle moves the other's screen (see
+ * Bits/ThemeSwitch.vue). FluentCart's own script puts the class on <html> before paint and
+ * then moves it to <body>, so both are matched here.
+ *
+ * The scope is the body class WordPress puts on this plugin's screen. FluentSMTP is a
+ * Settings submenu rather than a top-level menu, so that class is
+ * `settings_page_fluent-mail`. It is narrow enough that no other plugin's admin page
+ * changes colour, and wide enough to cover Element Plus's teleported popups - dropdowns,
+ * dialogs, notifications - which attach to <body> rather than to the app root.
+ */
+
+@mixin light-tokens {
+    /* --------------------------------------------------------------- surfaces */
+
+    /* The page behind everything. FluentCart's --body-bg. */
+    --fsm-body-bg: #F3F5FA;
+
+    /* A card, the app bar, the settings sidebar - anything that sits on the page. */
+    --fsm-surface: #FFFFFF;
+
+    /* A well inside a surface: a table's header band, a code block, a hovered row. */
+    --fsm-surface-sunk: #F9FAFB;
+
+    /* A selected thing on a surface: the active view tab, a progress track. */
+    --fsm-surface-raised: #EAECF0;
+
+    /* ---------------------------------------------------------------- borders */
+
+    --fsm-border: #EAECF0;
+    --fsm-border-strong: #D6DAE1;
+
+    /* ------------------------------------------------------------------- text */
+
+    /* A page heading - the one thing on the screen darker than the rest. */
+    --fsm-heading: #11171D;
+
+    /* Body text, card titles, table cells. */
+    --fsm-text: #2F3448;
+
+    /* A label beside a value, a description under a setting. */
+    --fsm-text-mid: #565865;
+
+    /* A timestamp, a count, a hint - present but not to be read first. */
+    --fsm-text-light: #9D9FAC;
+
+    /* Something to click that is not a button. */
+    --fsm-link: #253241;
+
+    /* --------------------------------------------------------------- emphasis */
+
+    /* The near-black FluentCart brand colour: focus rings, filled marks, bar fills. */
+    --fsm-accent: #253241;
+    --fsm-accent-contrast: #FFFFFF;
+
+    /* A tint of it, for the row a nav item is sitting on. */
+    --fsm-accent-wash: #F0F0F1;
+
+    /* ---------------------------------------------------------------- shadows */
+
+    /*
+     * A card is lifted off the page by a shadow here and outlined by a hairline in dark,
+     * where a shadow cast onto a near-black page is not visible. The border is declared in
+     * both so the box model does not change with the theme.
+     */
+    --fsm-card-line: transparent;
+    --fsm-shadow-card: 0 1px 2px rgba(10, 13, 20, .03);
+    --fsm-shadow-lift: 0 1px 8px rgba(16, 24, 40, .08);
+    --fsm-shadow-pop: 0 4px 12px rgba(16, 24, 40, .1);
+
+    /* ---------------------------------------------------------------- statuses */
+
+    /*
+     * Four each: a wash for a band across the page, a fill for a chip or an icon well, a
+     * line for the band's border, and the text colour that goes on top of all three.
+     */
+    --fsm-danger-wash: #FDF5F3;
+    --fsm-danger-bg: #FCEBE6;
+    --fsm-danger-line: #F8D6CE;
+    --fsm-danger-fg: #B12A07;
+
+    --fsm-warning-wash: #FFF9F3;
+    --fsm-warning-bg: #FEF4E6;
+    --fsm-warning-line: #FDE8CD;
+    --fsm-warning-fg: #C47206;
+
+    --fsm-success-wash: #F3FAF8;
+    --fsm-success-bg: #E8F5F1;
+    --fsm-success-line: #D1EAE4;
+    --fsm-success-fg: #137A5F;
+
+    /* Nothing is wrong and nothing has happened - it should not draw the eye either way. */
+    --fsm-neutral-bg: #EAECF0;
+    --fsm-neutral-fg: #565865;
+
+    /* ------------------------------------------------------------- stat tiles */
+
+    /*
+     * One hue per status on the dashboard's four tiles, from FluentCart's tile ramp. It
+     * colours tiles by position, which is fine when the four are always the same four:
+     * sent, failed, connections, senders.
+     */
+    --fsm-tile-sent-bg: #EBF1FF;
+    --fsm-tile-sent-fg: #122368;
+
+    --fsm-tile-failed-bg: #FFF3EB;
+    --fsm-tile-failed-fg: #71330A;
+
+    --fsm-tile-connections-bg: #EFEBFF;
+    --fsm-tile-connections-fg: #351A75;
+
+    --fsm-tile-senders-bg: #FFEBF4;
+    --fsm-tile-senders-fg: #68123D;
+
+    /* ------------------------------------------------------------- heat map */
+
+    /*
+     * The sending-by-time-of-day grid. Levels 1-5 are a data ramp and carry the
+     * same five colours in both themes - a count of emails does not mean
+     * something different in the dark. Level 0 is the empty cell behind them,
+     * which is chrome, so it is the only one that flips.
+     */
+    --fsm-heat-0: #F0F0F0;
+    --fsm-heat-1: #DFD9FF;
+    --fsm-heat-2: #A08DFF;
+    --fsm-heat-3: #6040FF;
+    --fsm-heat-4: #2900F3;
+    --fsm-heat-5: #1C00A6;
+}
+
+body.settings_page_fluent-mail {
+    @include light-tokens;
+}
+
+/*
+ * Dark. Only the values change - every name above still means the same thing, which is why
+ * no stylesheet has to know which theme it is in.
+ */
+.fluent_theme_dark body.settings_page_fluent-mail,
+body.settings_page_fluent-mail.fluent_theme_dark {
+    --fsm-body-bg: #11171D;
+    --fsm-surface: #1C2732;
+    --fsm-surface-sunk: #151D26;
+    --fsm-surface-raised: #253241;
+
+    --fsm-border: #2C3C4E;
+    --fsm-border-strong: #2C3C4E;
+
+    --fsm-heading: #F5F6F7;
+    --fsm-text: #F5F6F7;
+    --fsm-text-mid: #C1C7D1;
+    --fsm-text-light: #8E99AA;
+    --fsm-link: #C1C7D1;
+
+    /*
+     * The accent inverts rather than darkens. A near-black button on a near-black card is
+     * not a button, so on this theme the emphatic thing is the pale one - which is what
+     * FluentCart's own dark primary button does.
+     */
+    --fsm-accent: #D9DADC;
+    --fsm-accent-contrast: #2F3448;
+    --fsm-accent-wash: #253241;
+
+    --fsm-card-line: #2C3C4E;
+    --fsm-shadow-card: none;
+    --fsm-shadow-lift: 0 1px 8px rgba(0, 0, 0, .35);
+    --fsm-shadow-pop: 0 4px 14px rgba(0, 0, 0, .45);
+
+    /*
+     * The status tints are the same hues at low alpha rather than the light theme's solid
+     * pastels: a pastel chip on a dark card glows, and it stops looking like a quiet label.
+     * The text is lifted to the light end of each ramp so it still reads on the tint.
+     */
+    --fsm-danger-wash: #F0443814;
+    --fsm-danger-bg: #F0443829;
+    --fsm-danger-line: #F0443840;
+    --fsm-danger-fg: #EB856B;
+
+    --fsm-warning-wash: #F58E0714;
+    --fsm-warning-bg: #F58E0729;
+    --fsm-warning-line: #F58E0740;
+    --fsm-warning-fg: #F9BB6A;
+
+    --fsm-success-wash: #18987714;
+    --fsm-success-bg: #18987729;
+    --fsm-success-line: #18987740;
+    --fsm-success-fg: #74C1AD;
+
+    --fsm-neutral-bg: #253241;
+    --fsm-neutral-fg: #C1C7D1;
+
+    --fsm-tile-sent-bg: #476CFF29;
+    --fsm-tile-sent-fg: #6895FF;
+
+    --fsm-tile-failed-bg: #FA731929;
+    --fsm-tile-failed-fg: #FFA468;
+
+    --fsm-tile-connections-bg: #784DEF29;
+    --fsm-tile-connections-fg: #8C71F6;
+
+    --fsm-tile-senders-bg: #FB4BA329;
+    --fsm-tile-senders-fg: #FF68B3;
+
+    --fsm-heat-0: #202C39;
+}
+
+/*
+ * Anything the app draws that nobody thought to colour.
+ *
+ * Without this those elements inherit wp-admin's own #3c434a, which is invisible on a dark
+ * card - a heading inside a panel is the usual way to find one. Set on the app root rather
+ * than on the elements themselves so it is inherited and loses to every rule that does have
+ * an opinion, including the ones that colour something red or amber on purpose.
+ */
+#fluent_mail_app {
+    color: var(--fsm-text);
+
+    /*
+     * wp-admin colours its own headings outright (#1d2327), which an inherited colour
+     * cannot beat - so a card title inside the app stays near-black on a near-black
+     * card. Named here rather than beside each heading, so it loses to any rule that
+     * deliberately colours one red or amber.
+     */
+    h1, h2, h3, h4, h5, h6 {
+        color: var(--fsm-heading);
+    }
+}
+
+/* ------------------------------------------------------------- element plus */
+
+/*
+ * Element Plus is themed through its own variables rather than by restyling its
+ * components. They are declared on the same element as the tokens above so the popups it
+ * teleports to <body> inherit them too, and so a component this app never renders is still
+ * the right colour if it shows up later.
+ *
+ * Two reasons this has to be the body class rather than `:root`:
+ *
+ * 1. The components are auto-imported by ElementPlusResolver, which injects their pre-built
+ *    CSS into <head> at runtime - after this stylesheet - so a `:root` rule would lose on
+ *    source order no matter what it contained.
+ * 2. FluentCart injects an inline <style> into every wp-admin page mapping 31 of these
+ *    variables onto its own --fc-* palette on `:root`. Without the extra specificity here,
+ *    FluentSMTP silently wears FluentCart's colours.
+ *
+ * The full light set is spelled out rather than only the primary, because of (2): every one
+ * of the 31 has to be answered, or it leaks through.
+ */
+body.settings_page_fluent-mail {
+    --el-color-primary: var(--fsm-accent);
+    --el-color-primary-light-3: #4A5A6E;
+    --el-color-primary-light-5: #7C889A;
+    --el-color-primary-light-7: #AEB6C1;
+    --el-color-primary-light-8: #C7CCD4;
+    --el-color-primary-light-9: var(--fsm-accent-wash);
+    --el-color-primary-dark-2: #1B2632;
+
+    --el-color-success: var(--fsm-success-fg);
+    --el-color-warning: var(--fsm-warning-fg);
+    --el-color-danger: var(--fsm-danger-fg);
+    --el-color-error: var(--fsm-danger-fg);
+    --el-color-info: var(--fsm-text-mid);
+    --el-color-info-light-9: var(--fsm-surface-sunk);
+
+    --el-text-color-primary: var(--fsm-text);
+    --el-text-color-regular: var(--fsm-text-mid);
+    --el-text-color-secondary: var(--fsm-text-light);
+    --el-text-color-placeholder: var(--fsm-text-light);
+    --el-text-color-disabled: #C0C4CC;
+
+    --el-border-color: var(--fsm-border-strong);
+    --el-border-color-light: var(--fsm-border);
+    --el-border-color-lighter: var(--fsm-border);
+    --el-border-color-extra-light: var(--fsm-surface-sunk);
+    --el-border-color-dark: var(--fsm-border-strong);
+    --el-border-color-hover: var(--fsm-border-strong);
+
+    --el-fill-color: var(--fsm-surface-raised);
+    --el-fill-color-light: var(--fsm-surface-sunk);
+    --el-fill-color-lighter: var(--fsm-surface-sunk);
+    --el-fill-color-blank: var(--fsm-surface);
+
+    --el-bg-color: var(--fsm-surface);
+    --el-bg-color-page: var(--fsm-body-bg);
+    --el-bg-color-overlay: var(--fsm-surface);
+
+    /*
+     * Element Plus never declares this at root scope - its components read
+     * `var(--el-button-text-color, var(--el-text-color-regular))` and each coloured variant
+     * sets it on itself. FluentCart does declare it, at root, as white, which turned the
+     * unselected status filters into white text on a white button. Restoring the fallback
+     * value neutralises that without touching the variants.
+     */
+    --el-button-text-color: var(--el-text-color-regular);
+
+    --el-border-radius-base: 6px;
+
+    /*
+     * The horizontal nav. Element Plus declares --el-menu-bg-color as a literal #fff
+     * rather than deriving it from --el-bg-color, so setting the background variables
+     * above does not reach it and the bar stays white on a dark page.
+     */
+    --el-menu-bg-color: var(--fsm-surface);
+    --el-menu-text-color: var(--fsm-text-mid);
+    --el-menu-hover-bg-color: var(--fsm-surface-sunk);
+    --el-menu-hover-text-color: var(--fsm-text);
+    --el-menu-active-color: var(--fsm-text);
+    --el-menu-border-color: var(--fsm-border);
+}
+
+.fluent_theme_dark body.settings_page_fluent-mail,
+body.settings_page_fluent-mail.fluent_theme_dark {
+    color-scheme: dark;
+
+    --el-bg-color: var(--fsm-surface);
+    --el-bg-color-page: var(--fsm-body-bg);
+    --el-bg-color-overlay: var(--fsm-surface);
+
+    --el-text-color-primary: var(--fsm-text);
+    --el-text-color-regular: var(--fsm-text-mid);
+    --el-text-color-secondary: var(--fsm-text-light);
+    --el-text-color-placeholder: #758195;
+    --el-text-color-disabled: #5A5F66;
+
+    --el-border-color: var(--fsm-border);
+    --el-border-color-light: var(--fsm-border);
+    --el-border-color-lighter: var(--fsm-surface-raised);
+    --el-border-color-extra-light: var(--fsm-surface-raised);
+    --el-border-color-dark: #3A4B60;
+    --el-border-color-hover: #3A4B60;
+
+    --el-fill-color: var(--fsm-surface-raised);
+    --el-fill-color-light: var(--fsm-surface-raised);
+    --el-fill-color-lighter: var(--fsm-surface-sunk);
+    --el-fill-color-blank: var(--fsm-surface);
+    --el-fill-color-dark: var(--fsm-border);
+    --el-fill-color-darker: var(--fsm-border);
+
+    --el-mask-color: rgba(17, 23, 29, .8);
+    --el-mask-color-extra-light: rgba(17, 23, 29, .3);
+
+    --el-disabled-bg-color: var(--fsm-surface-raised);
+    --el-disabled-text-color: #758195;
+    --el-disabled-border-color: var(--fsm-border);
+
+    --el-box-shadow-light: var(--fsm-shadow-pop);
+    --el-box-shadow: var(--fsm-shadow-pop);
+
+    /*
+     * Element Plus derives a light ramp from the primary and uses it for anything tinted
+     * with the brand colour - a selected option, a chosen tag. Left alone, that ramp is
+     * still the light theme's, so those tints come out light on a dark card.
+     */
+    --el-color-primary-light-3: #3A4B60;
+    --el-color-primary-light-5: #33445A;
+    --el-color-primary-light-7: var(--fsm-surface-raised);
+    --el-color-primary-light-8: var(--fsm-surface-raised);
+    --el-color-primary-light-9: var(--fsm-surface-raised);
+    --el-color-primary-dark-2: #E6E7E9;
+
+    /* The skeleton is a shimmer between two greys, and both of them were light ones. */
+    --el-skeleton-color: #1C2732;
+    --el-skeleton-to-color: #283643;
+
+    /*
+     * The horizontal nav. Element Plus declares --el-menu-bg-color as a literal #fff
+     * rather than deriving it from --el-bg-color, so setting the background variables
+     * above does not reach it and the bar stays white on a dark page.
+     */
+    --el-menu-bg-color: var(--fsm-surface);
+    --el-menu-text-color: var(--fsm-text-mid);
+    --el-menu-hover-bg-color: var(--fsm-surface-sunk);
+    --el-menu-hover-text-color: var(--fsm-text);
+    --el-menu-active-color: var(--fsm-text);
+    --el-menu-border-color: var(--fsm-border);
+}
+
+/*
+ * A few Element Plus pieces paint a colour rather than read one, so they are named here.
+ * Kept together so there is one place to look when a component comes out the wrong shade.
+ */
+.fluent_theme_dark body.settings_page_fluent-mail,
+body.settings_page_fluent-mail.fluent_theme_dark {
+    /* Inverted, like the accent: a near-black button on a near-black card is not a button. */
+    .el-button--primary {
+        --el-button-text-color: var(--fsm-accent-contrast);
+        --el-button-hover-text-color: var(--fsm-accent-contrast);
+        --el-button-active-text-color: var(--fsm-accent-contrast);
+        --el-button-bg-color: var(--fsm-accent);
+        --el-button-hover-bg-color: #C0C2C4;
+        --el-button-active-bg-color: #C0C2C4;
+        --el-button-border-color: var(--fsm-accent);
+        --el-button-hover-border-color: #C0C2C4;
+        --el-button-active-border-color: #C0C2C4;
+    }
+
+    /* The chips inside a multi-select, which are tinted from the primary ramp. */
+    .el-tag {
+        --el-tag-bg-color: var(--fsm-surface-raised);
+        --el-tag-border-color: var(--fsm-border);
+        --el-tag-text-color: var(--fsm-text-mid);
+        --el-tag-hover-color: var(--fsm-text);
+    }
+
+    .el-table {
+        --el-table-bg-color: var(--fsm-surface);
+        --el-table-tr-bg-color: var(--fsm-surface);
+        --el-table-header-bg-color: var(--fsm-surface-sunk);
+        --el-table-row-hover-bg-color: var(--fsm-surface-sunk);
+        --el-table-border-color: var(--fsm-border);
+        --el-table-text-color: var(--fsm-text-mid);
+        --el-table-header-text-color: var(--fsm-text);
+    }
+
+    /* Element Plus's alerts tint themselves from their own light ramp, which is opaque. */
+    .el-alert {
+        --el-alert-bg-color: var(--fsm-surface-raised);
+
+        .el-alert__title,
+        .el-alert__description {
+            color: var(--fsm-text);
+        }
+    }
+
+    /*
+     * A checkbox's tick is white, and in this theme the accent it is drawn on is the
+     * pale one - white on near-white, so the box read as filled but empty. The tick
+     * takes the accent's contrast colour like every other mark on the accent does.
+     */
+    .el-checkbox,
+    .el-checkbox-button {
+        --el-checkbox-checked-bg-color: var(--fsm-accent);
+        --el-checkbox-checked-input-border-color: var(--fsm-accent);
+        --el-checkbox-checked-icon-color: var(--fsm-accent-contrast);
+        --el-checkbox-input-border-color-hover: var(--fsm-accent);
+        --el-checkbox-bg-color: var(--fsm-surface-sunk);
+        --el-checkbox-input-border: 1px solid var(--fsm-border-strong);
+    }
+
+    /* The radio's inner dot has the same problem, for the same reason. */
+    .el-radio {
+        --el-radio-input-border-color-hover: var(--fsm-accent);
+    }
+
+    /*
+     * Provider logos are brand marks drawn for a white page - the Postmark wordmark and
+     * the "Other SMTP" envelope are black on transparent, and vanish on a dark card.
+     * Recolouring them is not an option, so they keep the light backing they were drawn
+     * for. Matched on the file path rather than a class so no component markup has to
+     * change; Phase 5 gives them a class of their own when these screens are rebuilt.
+     */
+    img[src*="/images/provider-"] {
+        background: #FFFFFF;
+        border-radius: 4px;
+        padding: 4px;
+    }
+
+    /* The radio buttons the status filter is built from carry their own fill. */
+    .el-radio-button__inner {
+        --el-button-bg-color: var(--fsm-surface);
+        --el-button-border-color: var(--fsm-border);
+    }
+
+    /* wp-admin gives every input in its content area a white background of its own. */
+    input[type="text"],
+    input[type="search"],
+    input[type="email"],
+    input[type="url"],
+    input[type="number"],
+    input[type="password"],
+    textarea,
+    select {
+        background-color: var(--fsm-surface-sunk);
+        border-color: var(--fsm-border);
+        color: var(--fsm-text);
+    }
+}

@@ -85,7 +85,7 @@
                         :label="connection.title +' - '+ connection.provider_settings.sender_email"
                     ></el-option>
                 </el-select>
-                <p v-else style="color: #6d6b6b;margin: 0;">{{$t('Please add another connection to use fallback feature')}}</p>
+                <p v-else style="color: var(--fsm-text-light);margin: 0;">{{$t('Please add another connection to use fallback feature')}}</p>
             </el-form-item>
 
             <el-form-item :label="$t('Email Simulation')">
@@ -94,8 +94,8 @@
                     true-value="yes"
                     false-value="no"
                 >{{$t('__Email_Simulation_Label')}}</el-checkbox>
-                <p style="color: red;" v-if="settings.misc.simulate_emails == 'yes'">{{$t('__Email_Simulation_Yes')}}</p>
-                <p v-if="appVars.is_disabled_defined" style="color: red;">{{ ('Emails are being simulated due to the definition of ') }} <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ (' in your PHP code.') }}</p>
+                <p style="color: var(--fsm-danger-fg);" v-if="settings.misc.simulate_emails == 'yes'">{{$t('__Email_Simulation_Yes')}}</p>
+                <p v-if="appVars.is_disabled_defined" style="color: var(--fsm-danger-fg);">{{ ('Emails are being simulated due to the definition of ') }} <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ (' in your PHP code.') }}</p>
             </el-form-item>
 
             <el-form-item :label="$t('Add Multi-Part Plain Text for HTML Emails (beta)')">

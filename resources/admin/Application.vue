@@ -20,6 +20,15 @@
                     <span v-html="item.title"></span>
                 </el-menu-item>
             </el-menu>
+
+            <!--
+                The theme control sits beside the menu for now. Phase 4 replaces this
+                whole bar with the app bar from the redesign, where it moves to the
+                right-hand actions group alongside Send Test Email and the help link.
+            -->
+            <div class="fluent-mail-menu-actions">
+                <theme-switch/>
+            </div>
         </div>
 
         <div class="fluent-mail-body">
@@ -29,8 +38,13 @@
 </template>
 
 <script type="text/babel">
+    import ThemeSwitch from './Bits/ThemeSwitch.vue';
+
     export default {
         name: 'FluentMailApplication',
+        components: {
+            ThemeSwitch
+        },
         data() {
             return {
                 logo: '',

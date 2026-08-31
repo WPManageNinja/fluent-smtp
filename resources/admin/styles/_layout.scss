@@ -1,0 +1,119 @@
+/*
+ * The application shell.
+ *
+ * Structure and measurements follow FluentCart so the plugins feel like one product.
+ * The positioning is not copied literally - FluentCart pins its sidebar to a fixed
+ * offset that matches its own header - this measures wp-admin's menu at runtime, which
+ * survives the plugin being rendered inside whatever wp-admin gives it.
+ */
+
+/* --------------------------------------------------------------- wp-admin fit */
+
+/*
+ * Deliberately unscoped - it has to reach wp-admin's own elements - but narrowed to
+ * this plugin's screen by the body class WordPress puts there.
+ */
+body.settings_page_fluent-mail {
+    /*
+     * FluentCart's page background, copied from its `--body-bg` rather than approximated
+     * - wp-admin's own grey is #f0f0f1, a warmer and flatter one, and the difference is
+     * plain when the plugins sit next to each other in the same menu.
+     */
+    background-color: var(--fsm-body-bg);
+}
+
+/* ---------------------------------------------------------------- box model */
+
+/*
+ * Tailwind's preflight normally sets this, but preflight is off here because it would
+ * restyle the whole of wp-admin. Without it these elements inherit wp-admin's
+ * content-box, which makes every `min-h-*` and `h-*` utility add its padding on top of
+ * the height instead of inside it - a 36px nav link with 8px padding rendered at 52px.
+ * Scoped to the app root, so nothing outside it changes.
+ */
+#fluent_mail_app {
+    /* How wide the settings column is allowed to get, cards and header alike. */
+    --fsm-content-width: 1040px;
+
+    &,
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+}
+
+/* ------------------------------------------------------------ theme switch */
+
+/*
+ * FluentCart puts its theme control at the right-hand end of its own bar, at the same
+ * size and with the same glyphs, so the plugins are switched the same way in the same
+ * place.
+ *
+ * Written as plain declarations rather than with @apply, because the dropdown half of
+ * this is teleported to <body> by Element Plus. Tailwind is configured with
+ * `important: '#fluent_mail_app'`, which prefixes every utility with that selector - and
+ * a popup that has been moved out of the app root is no longer inside it to match.
+ */
+.fsm_theme_trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    cursor: pointer;
+    background: transparent;
+    color: var(--fsm-text-mid);
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    transition: background-color .15s ease, color .15s ease;
+
+    svg {
+        width: 18px;
+        height: 18px;
+        display: block;
+    }
+
+    &:hover {
+        background-color: var(--fsm-surface-sunk);
+        color: var(--fsm-text);
+    }
+
+    &:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--fsm-accent);
+        outline-offset: -1px;
+    }
+}
+
+/* Teleported to <body>, so it is styled here rather than beside the trigger. */
+.fsm_theme_menu {
+    .fsm_theme_item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .fsm_theme_item_icon {
+        display: flex;
+        flex: none;
+        align-items: center;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+
+    /* The one in force, marked by weight rather than by a tick that shifts the row. */
+    .is_current {
+        font-weight: 500;
+        color: var(--fsm-text);
+    }
+}

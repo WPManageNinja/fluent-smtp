@@ -22,7 +22,7 @@
                 <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                     {{ $t('Disable Encryption for API Key (Not Recommended)') }}
                 </el-checkbox>
-                <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
+                <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                     {{
                         $t('By disabling encryption, your API key will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
                     }}

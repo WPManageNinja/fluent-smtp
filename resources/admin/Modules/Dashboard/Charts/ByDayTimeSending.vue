@@ -1,5 +1,5 @@
 <template>
-    <div style="margin: 20px 0; background: white;" class="fss_wid_widget fss_wid_day_by_day">
+    <div style="margin: 20px 0; background: var(--fsm-surface);" class="fss_wid_widget fss_wid_day_by_day">
         <div class="fss_header fss_widget_header">
             <h3>{{ $t('Sending by time of day') }}</h3>
             <div class="widget_actions fss_to_right">
@@ -150,7 +150,7 @@ export default {
         margin-top: 20px;
         display: flex;
         align-items: center;
-        color: #6080a0;
+        color: var(--fsm-text-light);
         gap: 10px;
 
         .fss_wid_level {
@@ -177,29 +177,18 @@ export default {
     }
 
 
-    .fss_wid_level_5 {
-        background: #1c00a6;
-    }
-
-    .fss_wid_level_4 {
-        background: #2900f3;
-    }
-
-    .fss_wid_level_3 {
-        background: #6040ff;
-    }
-
-    .fss_wid_level_2 {
-        background: #a08dff;
-    }
-
-    .fss_wid_level_1 {
-        background: #dfd9ff;
-    }
-
-    .fss_wid_level_0 {
-        background: #f0f0f0;
-    }
+    /*
+     * The five filled levels are a data ramp - the same colours in both themes,
+     * because a count of emails does not mean something different in the dark.
+     * Level 0 is not data, it is the empty cell behind it, so it is chrome and
+     * flips with the theme. Both are declared in styles/_theme.scss.
+     */
+    .fss_wid_level_5 { background: var(--fsm-heat-5); }
+    .fss_wid_level_4 { background: var(--fsm-heat-4); }
+    .fss_wid_level_3 { background: var(--fsm-heat-3); }
+    .fss_wid_level_2 { background: var(--fsm-heat-2); }
+    .fss_wid_level_1 { background: var(--fsm-heat-1); }
+    .fss_wid_level_0 { background: var(--fsm-heat-0); }
 }
 
 .fcraft_time_widget {
@@ -214,7 +203,7 @@ export default {
 
         > div {
             height: 20px;
-            border: 2px solid white;
+            border: 2px solid var(--fsm-surface);
         }
     }
 
@@ -233,7 +222,7 @@ export default {
                 height: 22px;
                 width: 22px;
                 text-align: center;
-                border: 3px solid white;
+                border: 3px solid var(--fsm-surface);
                 opacity: 0.9;
 
                 .fcraft_time_hour_value {

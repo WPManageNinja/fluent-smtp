@@ -33,7 +33,7 @@
                             value="self"
                             style="display:block;margin:6px 0;"
                         >{{ $t('My account email') }}
-                            <span v-if="appVars.user_email" style="color:#909399;">
+                            <span v-if="appVars.user_email" style="color:var(--fsm-text-light);">
                                 ({{ appVars.user_email }})
                             </span>
                         </el-radio>

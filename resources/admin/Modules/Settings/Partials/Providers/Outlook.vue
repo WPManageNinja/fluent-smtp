@@ -44,7 +44,7 @@
                     <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                         {{ $t('Disable Encryption for Application Client Secret (Not Recommended)') }}
                     </el-checkbox>
-                    <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
+                    <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                         {{
                             $t('By disabling encryption, your Application Client Secret will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
                         }}
@@ -80,7 +80,7 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
             <p>
                 {{ $t('Leave empty unless your Entra app registration is single-tenant. Paste the Directory (tenant) ID from the app overview page, or a verified domain such as contoso.onmicrosoft.com. Use organizations to allow any work or school account but no personal Microsoft accounts.') }}
             </p>
-            <p v-if="connection.access_token" style="color: #E6A23C; margin-top: 0;">
+            <p v-if="connection.access_token" style="color: var(--fsm-warning-fg); margin-top: 0;">
                 {{ $t('Changing this requires authenticating with Office365 again.') }}
             </p>
         </el-form-item>

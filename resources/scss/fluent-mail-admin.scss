@@ -1,3 +1,7 @@
+/* Every colour the app paints with, light and dark, comes from here - so it goes first. */
+@import "../admin/styles/theme";
+@import "../admin/styles/layout";
+
 /*
  * Element Plus components are pulled in on demand by ElementPlusResolver, and
  * each one brings its own stylesheet with it. That replaced resources/scss/
@@ -14,70 +18,15 @@
 @import 'element-plus/theme-chalk/el-overlay.css';
 
 @import "./variables";
-
-/*
- * Re-assert Element Plus's own variable defaults, scoped to this screen.
- *
- * FluentCart injects an inline <style> into every wp-admin page that maps 31
- * Element Plus variables onto its own --fc-* palette on `:root`. That is a
- * higher-priority origin than our enqueued stylesheet by source order, so
- * without this block FluentSMTP silently wears FluentCart's colours: the status
- * filter's radio buttons rendered white text on white, and every `type="info"`
- * button came out near-black.
- *
- * `body.settings_page_fluent-mail` beats `:root` on specificity, and scoping it
- * to the body class rather than to the app root is deliberate - Element Plus
- * teleports dropdowns, dialogs and notifications to <body>, and they have to
- * inherit these too.
- *
- * Phase 3 replaces these values with the --fsm-* design tokens. What matters
- * here is the selector, not the values: this is the hook the theme hangs on.
- */
-body.settings_page_fluent-mail {
-    --el-color-primary: #409eff;
-    --el-color-primary-light-3: #79bbff;
-    --el-color-primary-light-5: #a0cfff;
-    --el-color-primary-light-7: #c6e2ff;
-    --el-color-primary-light-8: #d9ecff;
-    --el-color-primary-light-9: #ecf5ff;
-    --el-color-primary-dark-2: #337ecc;
-    --el-color-success: #67c23a;
-    --el-color-warning: #e6a23c;
-    --el-color-danger: #f56c6c;
-    --el-color-error: #f56c6c;
-    --el-color-info: #909399;
-    --el-color-info-light-9: #f4f4f5;
-    --el-text-color-primary: #303133;
-    --el-text-color-regular: #606266;
-    --el-text-color-secondary: #909399;
-    --el-text-color-placeholder: #a8abb2;
-    --el-text-color-disabled: #c0c4cc;
-    --el-border-color: #dcdfe6;
-    --el-border-color-light: #e4e7ed;
-    --el-border-color-lighter: #ebeef5;
-    --el-border-color-dark: #d4d7de;
-    --el-fill-color: #f0f2f5;
-    --el-fill-color-light: #f5f7fa;
-    --el-fill-color-lighter: #fafafa;
-    --el-fill-color-blank: #fff;
-    --el-bg-color: #fff;
-    --el-bg-color-page: #f2f3f5;
-    --el-bg-color-overlay: #fff;
-    /*
-     * Element Plus never sets this at root scope - its components fall back to
-     * `var(--el-button-text-color, var(--el-text-color-regular))`, and each
-     * coloured variant sets it on itself. FluentCart's block does set it, at
-     * root, to white, which is what turned the unselected status filters into
-     * white text on a white button. Restoring the fallback value neutralises
-     * that without touching the variants, which still override it locally.
-     */
-    --el-button-text-color: var(--el-text-color-regular);
-    --el-border-radius-base: 4px;
-}
-
-
 @import "./docs";
 @import "./alerts";
+
+/*
+ * No `@tailwind base` - that is preflight, which is off (see tailwind.config.js).
+ * WordPress supplies the base styles for this page and resetting them breaks wp-admin.
+ */
+@tailwind components;
+@tailwind utilities;
 
 .fluent-mail-app {
   max-width: 100%;
@@ -89,8 +38,21 @@ body.settings_page_fluent-mail {
 
   & .fluent-mail-main-menu-items {
     margin-bottom: 20px;
-    background: white;
+    background: var(--fsm-surface);
     margin-left: -20px;
+    display: flex;
+    align-items: center;
+
+    & .fluent-mail-navigation {
+      flex: 1;
+    }
+
+    & .fluent-mail-menu-actions {
+      display: flex;
+      align-items: center;
+      flex: none;
+      padding-right: 20px;
+    }
 
     & .fluent-mail-navigation {
       margin-left: -20px;
@@ -103,14 +65,14 @@ body.settings_page_fluent-mail {
     & .fss_header {
       display: block;
       width: auto;
-      border-bottom: 1px solid #e3e8ee;
+      border-bottom: 1px solid var(--fsm-border);
       clear: both;
       overflow: hidden;
       margin: 0;
       padding: 15px;
-      background-color: #f7fafc;
+      background-color: var(--fsm-surface-sunk);
       font-weight: 700;
-      color: #697386;
+      color: var(--fsm-text-mid);
 
       &.fss_widget_header {
         display: flex;
@@ -124,7 +86,7 @@ body.settings_page_fluent-mail {
 
     & .fss_content {
       padding: 20px;
-      background-color: #fff;
+      background-color: var(--fsm-surface);
       .fss_general_settings {
         .el-form {
           .el-form-item {
@@ -153,7 +115,7 @@ body.settings_page_fluent-mail {
   }
 
   & .fluent-mail-navigation.el-menu--horizontal.el-menu .el-menu-item.is-active {
-    background: #ecf5ff;
+    background: var(--fsm-accent-wash);
   }
 
   & .logo {
@@ -178,7 +140,7 @@ body.settings_page_fluent-mail {
       gap: 5px;
       text-align: center;
       &:hover {
-        color: #409EFF;
+        color: var(--fsm-link);
       }
       img {
         height: 50px;
@@ -188,29 +150,29 @@ body.settings_page_fluent-mail {
 }
 
 .fss_config_section {
-  background: #f7fafc;
+  background: var(--fsm-surface-sunk);
   padding: 20px;
   margin-bottom: 30px;
   border-radius: 5px;
-  box-shadow: 0px 0px 2px 2px #dcdfe5;
+  box-shadow: var(--fsm-shadow-card);
 }
 
 .fss_connection_intro {
   max-width: 1160px;
   margin: 0 auto;
   padding: 30px;
-  background: #eff4f7;
+  background: var(--fsm-surface-sunk);
   border-radius: 5px;
 
   .fss_config_section {
-    background: white;
+    background: var(--fsm-surface);
   }
 }
 
 .fss_intro {
   text-align: center;
   margin-bottom: 45px;
-  border-bottom: 1px solid #e3e8ed;
+  border-bottom: 1px solid var(--fsm-border);
   padding-bottom: 20px;
 }
 
@@ -240,7 +202,7 @@ ul.fss_log_items li {
   display: inline-block;
   width: 48%;
   margin-bottom: 10px;
-  border-bottom: 1px solid #ebeef4;
+  border-bottom: 1px solid var(--fsm-border);
   padding: 10px 0px;
 
   > div {
@@ -255,9 +217,9 @@ ul.fss_log_items li {
 }
 
 .el-table .el-table__row.row_type_failed, .el-table .el-table__row--striped.el-table__row.row_type_failed {
-  background: rgb(253, 226, 226) !important;
+  background: var(--fsm-danger-bg) !important;
   &:hover {
-    background: rgb(255 193 193) !important
+    background: var(--fsm-danger-line) !important
   }
   td {
     background: transparent !important;
@@ -272,11 +234,11 @@ ul.fss_log_items li {
 }
 
 .fluent-mail-app .dashboard .fss_content .fluent-mail-mailer-image {
-  background: #fff;
+  background: var(--fsm-surface);
   text-align: center;
   cursor: auto;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+  border: 1px solid var(--fsm-border);
+  box-shadow: var(--fsm-shadow-lift);
   border-radius: 4px;
   height: 76px;
   position: relative;
@@ -289,7 +251,7 @@ ul.fss_log_items li {
 }
 
 .fluent-mail-app .dashboard .fss_content .fluent-mail-mailer-image:hover {
-  box-shadow: 0 0 5px 5px #ccc;
+  box-shadow: var(--fsm-shadow-pop);
 }
 
 .fluent-mail-app .dashboard .fss_content .fluent-mail-mailer-image img {
@@ -317,25 +279,25 @@ ul.fss_log_items li {
 }
 
 .fluent-mail-app .dashboard .fss_content .email-stat:hover {
-  background: #ecf5ff;
+  background: var(--fsm-accent-wash);
   opacity: .7;
 }
 
 .logs {
   .successful {
-    color: #409EFF;
+    color: var(--fsm-link);
     font-size: 20px;
   }
   .unsuccessful {
-    color: #F56C6C;
+    color: var(--fsm-danger-fg);
     font-size: 20px;
   }
   .resent {
-    color: #a4da89;
+    color: var(--fsm-success-fg);
     font-size: 20px;
   }
   .dont-show {
-    color: #409EFF;
+    color: var(--fsm-link);
     margin-left: 10px;
     cursor: pointer;
     vertical-align: top;
@@ -350,8 +312,8 @@ ul.fss_dash_lists {
   li {
     font-size: 15px;
     padding: 0px 10px;
-    color: #697485;
-    border-bottom: 1px solid #e3e8ed;
+    color: var(--fsm-text-mid);
+    border-bottom: 1px solid var(--fsm-border);
     line-height: 44px;
     transition: all 0.3s ease;
     margin-bottom: 0;
@@ -362,8 +324,8 @@ ul.fss_dash_lists {
     }
 
     &:hover {
-      background: #f7fafc;
-      border-bottom: 1px solid #d2d2df;
+      background: var(--fsm-surface-sunk);
+      border-bottom: 1px solid var(--fsm-border);
     }
 
     &:last-child {
@@ -379,7 +341,7 @@ ul.fss_dash_lists {
 .fss_plugin_block {
   margin: 0px -20px;
   padding: 20px;
-  border-bottom: 1px solid #e3e8ed;
+  border-bottom: 1px solid var(--fsm-border);
 
   .fss_plugin_title {
     text-align: center;
@@ -390,7 +352,7 @@ ul.fss_dash_lists {
     }
 
     h3 {
-      color: #697386;
+      color: var(--fsm-text-mid);
       margin-bottom: 5px;
       font-size: 18px;
     }
@@ -409,6 +371,10 @@ ul.fss_dash_lists {
     margin-bottom: -20px;
   }
 
+  /*
+   * FluentCRM's own purple. A brand colour rather than a piece of chrome, so it
+   * is a literal in both themes - the button is meant to look like FluentCRM.
+   */
   .fss_fluentcrm_btn {
     background: #7743e6 !important;
     border-color: #7743e6 !important;
@@ -451,7 +417,7 @@ ul.fss_dash_lists {
   margin: 0 auto;
   max-width: 600px;
   text-align: center;
-  background: #e6eaec;
+  background: var(--fsm-surface-raised);
   padding: 20px;
   border-radius: 10px;
   h1 {
@@ -480,22 +446,19 @@ span.fss_header_action_right {
     }
   }
 
-  .con_gmail.is-active .el-radio-button__inner {
-    background: #eff4f7 !important;
-    border-color: #ea4435;
-    box-shadow: -1px 0 0 0 #ea4435;
-  }
-
-  .con_outlook.is-active .el-radio-button__inner {
-    background: #eff4f7 !important;
-    border-color: #ea4435;
-    box-shadow: -1px 0 0 0 #ea4435;
-  }
-
-  .con_postmark.is-active .el-radio-button__inner {
-    background: #ffde00;
-    border-color: #ffde00;
-    box-shadow: -1px 0 0 0 #ffde00;
+  /*
+   * One selected state for every provider, not one per provider.
+   *
+   * This used to be three blocks - .con_gmail, .con_outlook and .con_postmark -
+   * each painting the chosen tile in that service's own brand colour. Which
+   * provider it is, is already said by the logo inside the tile; what the tile
+   * needs to say is that it is the chosen one, and that is the same fact
+   * whichever provider it happens to be.
+   */
+  .el-radio-button.is-active .el-radio-button__inner {
+    background: var(--fsm-accent-wash);
+    border-color: var(--fsm-accent);
+    box-shadow: -1px 0 0 0 var(--fsm-accent);
   }
 }
 
@@ -527,7 +490,7 @@ span.fss_header_action_right {
 }
 
 *:fullscreen, *:-webkit-full-screen, *:-moz-full-screen {
-  background-color: white;
+  background-color: var(--fsm-surface);
 }
 
 
@@ -539,14 +502,14 @@ span.fss_header_action_right {
     word-wrap: break-word;       /* Internet Explorer 5.5+ */
   }
   .success {
-    color: #409EFF;
+    color: var(--fsm-link);
   }
   .fail {
-    color: #F56C6C;
+    color: var(--fsm-danger-fg);
   }
 
   .resent {
-    color: #409EFF;
+    color: var(--fsm-link);
   }
 
   .log-row {
@@ -555,7 +518,7 @@ span.fss_header_action_right {
 
   .log-border {
     border-bottom: 0;
-    border-color: #EBEEF5;
+    border-color: var(--fsm-border);
   }
   .nav {
     margin: 20px 0 10px 0;
@@ -573,7 +536,7 @@ span.fss_header_action_right {
 #fluent_mail_app .small-help-text,
 .fluent-mail-app .small-help-text {
   font-size: 12px;
-  color: gray;
+  color: var(--fsm-text-light);
 }
 
 /*
@@ -595,7 +558,7 @@ span.fss_header_action_right {
 .fsmtp_recommended {
   text-align: center;
   padding: 20px;
-  background: white;
+  background: var(--fsm-surface);
   border-radius: 6px;
 }
 

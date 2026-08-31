@@ -7,9 +7,9 @@
   .doc_each_items {
     width: 31.33%;
     transition: 0.8s opacity;
-    background-color: #fff;
+    background-color: var(--fsm-surface);
     border-radius: 0.375rem;
-    box-shadow: 0 1px 4px rgba(18, 25, 97, 0.08);
+    box-shadow: var(--fsm-shadow-card);
     box-sizing: border-box;
     font-size: 0.875rem;
     margin-right: 2%;
@@ -25,7 +25,7 @@
   text-align: left;
   .fc_doc_header {
     padding: 15px 15px;
-    background: #f4f7fa;
+    background: var(--fsm-surface-sunk);
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     h3 {
@@ -34,7 +34,7 @@
     }
   }
   .fc_doc_lists {
-    background: white;
+    background: var(--fsm-surface);
     padding: 10px 20px;
     ul {
       list-style: disc;

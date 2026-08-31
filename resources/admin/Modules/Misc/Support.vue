@@ -257,13 +257,13 @@ export default {
         display: block;
         text-align: center;
         text-decoration: none;
-        color: #5a5a5a;
+        color: var(--fsm-text-light);
 
         &:hover {
-            color: #1a7efb;
+            color: var(--fsm-link);
 
             img {
-                border-color: #1a7efb;
+                border-color: var(--fsm-link);
             }
         }
     }

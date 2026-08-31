@@ -13,6 +13,13 @@ use FluentMail\App\Services\TransStrings;
 
 class AdminMenuHandler
 {
+    /**
+     * The class that puts the admin app into its dark theme.
+     *
+     * FluentCart's, deliberately - see printThemeClass().
+     */
+    const DARK_CLASS = 'fluent_theme_dark';
+
     protected $app = null;
 
     public function __construct(Application $application)
@@ -26,6 +33,7 @@ class AdminMenuHandler
 
         if (isset($_GET['page']) && $_GET['page'] == 'fluent-mail' && is_admin()) {
             add_action('admin_enqueue_scripts', array($this, 'enqueueAssets'));
+            add_action('admin_head', array($this, 'printThemeClass'));
 
             if (isset($_REQUEST['sub_action']) && $_REQUEST['sub_action'] == 'slack_success') {
                 add_action('admin_init', function () {
@@ -157,6 +165,44 @@ class AdminMenuHandler
         }
 
         $this->app->view->render('admin.menu');
+    }
+
+    /**
+     * Applies the chosen theme to <html> before the page paints.
+     *
+     * The app itself could do this once Vue has booted, but by then the screen has
+     * already been drawn light and the switch reads as a flash. This runs synchronously
+     * in <head>, so the first frame is the right one.
+     *
+     * The storage key, the class name and the `system:<resolved>` form of the stored
+     * value are all FluentCart's rather than this plugin's. The plugins sit in the same
+     * admin, and a person who has chosen dark in one has chosen it for both - sharing the
+     * key is what makes that true without any of them knowing about the others.
+     */
+    public function printThemeClass()
+    {
+        if (!isset($_GET['page']) || $_GET['page'] !== 'fluent-mail') {
+            return;
+        }
+
+        ?>
+        <script>
+            (function () {
+                var key = 'fluent_theme_mode',
+                    stored = localStorage.getItem(key) || localStorage.getItem('fcart_admin_theme'),
+                    mode = stored === 'dark' ? 'dark' : (stored === 'light' ? 'light' : 'system'),
+                    dark = stored === 'dark' || stored === 'system:dark' ||
+                        ((!stored || stored === 'system') && window.matchMedia &&
+                            window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+                document.documentElement.setAttribute('data-fct-theme', mode);
+
+                if (dark) {
+                    document.documentElement.classList.add('<?php echo esc_js(self::DARK_CLASS); ?>');
+                }
+            })();
+        </script>
+        <?php
     }
 
     public function enqueueAssets()

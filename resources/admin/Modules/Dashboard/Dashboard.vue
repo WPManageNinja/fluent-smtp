@@ -74,8 +74,8 @@
                                 <li v-if="settings_stat.log_enabled == 'yes'">
                                     {{ $t('Total Email Sent (Logged):') }} <span>{{ stats.sent }}</span>
                                 </li>
-                                <li style="color: red" v-if="stats.failed > 0">
-                                    <router-link style="color: red"
+                                <li style="color: var(--fsm-danger-fg)" v-if="stats.failed > 0">
+                                    <router-link style="color: var(--fsm-danger-fg)"
                                                  :to="{ name: 'logs', query: { filterBy: 'status', filterValue: 'failed' } }">
                                         {{ $t('Email Failed:') }} <span>{{ stats.failed }}</span>
                                     </router-link>

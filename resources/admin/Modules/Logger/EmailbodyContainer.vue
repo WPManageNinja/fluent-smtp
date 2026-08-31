@@ -52,6 +52,19 @@ export default {
 
                 const doc = ifr.contentDocument || ifr.contentWindow.document;
                 if (doc && doc.body) {
+                    /*
+                     * Where the dark theme stops.
+                     *
+                     * This is a picture of the email as its recipient saw it, not part
+                     * of the app's chrome - and the recipient's mail client was not
+                     * running this plugin's dark theme. Without pinning the scheme the
+                     * frame inherits `color-scheme: dark` from the page, so the browser
+                     * paints its canvas near-black and flips the default text to light,
+                     * and any message written for a white background stops being legible.
+                     */
+                    doc.documentElement.style.colorScheme = 'light';
+                    doc.body.style.backgroundColor = '#FFFFFF';
+                    doc.body.style.color = '#1D2327';
                     doc.body.innerHTML = body;
                 }
             });

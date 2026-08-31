@@ -46,6 +46,24 @@ Chart.register(
 // interpolates between them. This was `ticks.userCallback` in v2.
 const wholeNumbersOnly = (value) => (Math.floor(value) === value ? value : undefined);
 
+/*
+ * Chart.js paints to a canvas, so it cannot read a CSS variable the way the rest of
+ * the app does - it needs values. Reading them off the live app root is what keeps the
+ * chart's grid and labels on the same palette as everything around it without either
+ * side holding a second copy of the colours.
+ */
+function themeColours() {
+    const root = document.getElementById('fluent_mail_app');
+    const styles = root ? getComputedStyle(root) : null;
+    const read = (name, fallback) =>
+        (styles ? styles.getPropertyValue(name).trim() : '') || fallback;
+
+    return {
+        grid: read('--fsm-border', '#EAECF0'),
+        tick: read('--fsm-text-light', '#9D9FAC')
+    };
+}
+
 export default {
     name: 'GrowthChart',
     props: {
@@ -54,13 +72,23 @@ export default {
             required: true
         }
     },
+    data() {
+        return {
+            colours: themeColours()
+        };
+    },
     computed: {
         options() {
+            const {grid, tick} = this.colours;
+
             return {
                 responsive: true,
                 maintainAspectRatio: false,
                 layout: {
                     padding: { left: 0, right: 0, top: 0, bottom: 20 }
+                },
+                plugins: {
+                    legend: { labels: { color: tick } }
                 },
                 scales: {
                     // Keyed by axis id in v4, where v2 took an array of axes.
@@ -68,23 +96,40 @@ export default {
                         type: 'linear',
                         position: 'left',
                         beginAtZero: true,
-                        grid: { drawOnChartArea: false },
-                        ticks: { callback: wholeNumbersOnly }
+                        border: { color: grid },
+                        grid: { drawOnChartArea: false, color: grid },
+                        ticks: { callback: wholeNumbersOnly, color: tick }
                     },
                     byCumulative: {
                         type: 'linear',
                         position: 'right',
                         beginAtZero: true,
-                        grid: { drawOnChartArea: true },
-                        ticks: { callback: wholeNumbersOnly }
+                        border: { color: grid },
+                        grid: { drawOnChartArea: true, color: grid },
+                        ticks: { callback: wholeNumbersOnly, color: tick }
                     },
                     x: {
-                        grid: { drawOnChartArea: false },
-                        ticks: { autoSkip: true, maxTicksLimit: 10 }
+                        border: { color: grid },
+                        grid: { drawOnChartArea: false, color: grid },
+                        ticks: { autoSkip: true, maxTicksLimit: 10, color: tick }
                     }
                 }
             };
         }
+    },
+    methods: {
+        // ThemeSwitch fires this whenever it applies a theme, including when the change
+        // arrived from another tab. Re-reading the root is enough: `options` is computed
+        // from `colours`, and vue-chartjs redraws when its options prop changes.
+        onThemeChange() {
+            this.colours = themeColours();
+        }
+    },
+    mounted() {
+        window.addEventListener('fluent_theme_applied', this.onThemeChange);
+    },
+    beforeUnmount() {
+        window.removeEventListener('fluent_theme_applied', this.onThemeChange);
     },
     render() {
         /*

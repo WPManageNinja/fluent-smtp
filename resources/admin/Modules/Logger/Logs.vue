@@ -56,7 +56,7 @@
                         <template #default="scope">
                             <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
                             <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
-                                  style="color: #ff0000;">{{ $t(' - Simulated') }}</span>
+                                  style="color: var(--fsm-danger-fg);">{{ $t(' - Simulated') }}</span>
                         </template>
                     </el-table-column>
 

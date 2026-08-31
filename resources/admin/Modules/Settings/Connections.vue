@@ -8,7 +8,7 @@
                             {{$t('Active Email Connections')}}
                         </span>
                         <span
-                            style="float:right;color:#46A0FC;cursor:pointer;"
+                            style="float:right;color:var(--fsm-link);cursor:pointer;"
                             @click="addConnection"
                         >
                             <el-icon><FsmIconPlus /></el-icon> {{$t('Add Another Connection')}}
@@ -28,7 +28,7 @@
                                         />
                                     </span>
                                     <span v-else>Unknown</span>
-                                    <span style="color: red;" v-if="scope.row.provider == 'gmail' && !scope.row.version">{{ $t('(Re Authentication Required)') }}</span>
+                                    <span style="color: var(--fsm-danger-fg);" v-if="scope.row.provider == 'gmail' && !scope.row.version">{{ $t('(Re Authentication Required)') }}</span>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="sender_email" :label="$t('From Email')">
@@ -72,7 +72,7 @@
                         <span style="float:left;">
                             {{$t('Connection Details')}}
                         </span>
-                        <span style="float:right;color:#46A0FC;cursor:pointer;" @click="showing_connection = ''">
+                        <span style="float:right;color:var(--fsm-link);cursor:pointer;" @click="showing_connection = ''">
                             {{$t('Close')}}
                         </span>
                     </div>

@@ -919,3 +919,60 @@ rewritten against `element-plus`. `Bits/FluentMail.js` no longer imports a frame
 all - the wiring moved to `start.js` - so there is nothing to stub. Added one test that
 the mixin still exposes every helper, since that is the assumption holding 59 untouched
 component script blocks up.
+
+### Phase 3 — design system in
+
+**The legacy stylesheet was tokenised here rather than left for Phase 5.** §9 puts the
+screen work in Phase 5, but Phase 3's gate is "light and dark both render", and 55 literal
+colours across `fluent-mail-admin.scss`, `_docs.scss` and `_alerts.scss` are exactly what
+stops that being true. Tokenising them now makes the gate mean something, and it means
+Phase 5 changes structure rather than structure *and* colour. Brand colours stay literal,
+as §4.2 allows: FluentCRM's purple on its own button, and the five filled levels of the
+sending heatmap, which are a data ramp.
+
+**The heatmap's empty cell is chrome, not data.** Levels 1-5 carry the same five colours
+in both themes - a count of emails does not mean something different in the dark - but
+level 0 is the cell behind them, so `--fsm-heat-0` flips and `--fsm-heat-1..5` do not.
+
+**The per-provider selected states became one rule.** §7.3 schedules this for Phase 5 with
+the wizard, but `.con_gmail`, `.con_outlook` and `.con_postmark` each painted the chosen
+tile in that service's brand colour with `!important`, which is three light chips on a
+dark card. Which provider it is, is already said by the logo inside the tile; what the
+tile needs to say is that it is the chosen one, and that is one fact and one rule.
+
+**Four things Element Plus needed told outright, none of which a token reaches:**
+
+- `--el-menu-bg-color` is declared as a literal `#fff` in Element Plus's own CSS rather
+  than derived from `--el-bg-color`, so setting the background variables did not reach the
+  nav and the bar stayed white on a dark page.
+- A checkbox's tick is `--el-color-white`. In dark the accent it is drawn on is the *pale*
+  one, so the box read as filled but empty. The tick takes `--fsm-accent-contrast`.
+- wp-admin colours its own headings outright (`#1d2327`), which an inherited colour cannot
+  beat - a card title inside the app stayed near-black on a near-black card.
+- Provider logos are brand marks drawn for a white page: the Postmark wordmark and the
+  "Other SMTP" envelope are black on transparent and vanish. They keep the light backing
+  they were drawn for, matched on the image path so no component markup changes.
+
+**Chart.js gets its colours as values and a signal to recompute them.** §6.6 item 5 called
+this: Chart.js paints to a canvas and cannot read a CSS variable. `themeColours()` reads
+`--fsm-border` and `--fsm-text-light` off the live app root, and `ThemeSwitch` dispatches a
+`fluent_theme_applied` event on every apply - including one that arrived from another tab
+over the BroadcastChannel - which the chart listens for. Options are computed from that,
+so vue-chartjs redraws on its own.
+
+**The email body frame is the light island.** fluent-security has one for its login
+preview; FluentSMTP's is the sanitised email body in the log viewer. It is a picture of
+what the *recipient* saw, and the recipient's mail client was not running this plugin's
+dark theme. Without pinning `color-scheme: light` on the frame's document it inherits the
+page's dark scheme, the browser paints its canvas near-black and flips default text to
+light, and any message written for a white background stops being legible.
+
+**Where the theme switch sits, for now.** Phase 4 owns the app bar, so Phase 3 hangs the
+control off the right-hand end of the existing horizontal menu. Its styles are written as
+plain declarations rather than with `@apply`, because the dropdown half is teleported to
+`<body>` by Element Plus - and Tailwind's `important: '#fluent_mail_app'` prefixes every
+utility with that selector, which a popup outside the app root no longer matches.
+
+**Verified both ways across plugins:** setting dark in FluentSMTP and loading FluentCart
+gives a dark FluentCart; writing the key from FluentCart and loading FluentSMTP gives a
+dark FluentSMTP, applied by `printThemeClass()` in `<head>` before the page paints.

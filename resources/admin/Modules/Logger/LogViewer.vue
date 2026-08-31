@@ -73,10 +73,10 @@
                         <div class="item_content">
                             <div v-for="(record, index) in resendHistory" :key="index" style="margin-bottom:2px;">
                                 <span>{{ record.to }}</span>
-                                <span style="color:#909399;"> — {{ record.at }}</span>
-                                <span v-if="record.by" style="color:#909399;"> ({{ record.by }})</span>
-                                <span v-if="record.ms" style="color:#909399;"> · {{ record.ms }}</span>
-                                <span v-if="!record.sent" style="color:#f56c6c;"> — {{ $t('failed') }}</span>
+                                <span style="color:var(--fsm-text-light);"> — {{ record.at }}</span>
+                                <span v-if="record.by" style="color:var(--fsm-text-light);"> ({{ record.by }})</span>
+                                <span v-if="record.ms" style="color:var(--fsm-text-light);"> · {{ record.ms }}</span>
+                                <span v-if="!record.sent" style="color:var(--fsm-danger-fg);"> — {{ $t('failed') }}</span>
                             </div>
                         </div>
                     </li>
@@ -103,7 +103,7 @@
                 <el-collapse v-model="activeName" style="margin-top:10px;">
                     <el-collapse-item name="email_body">
                         <template #title>
-                            <strong style="color:#606266">{{ $t('Email Body') }} (sanitized)</strong>
+                            <strong style="color:var(--fsm-text-mid)">{{ $t('Email Body') }} (sanitized)</strong>
                         </template>
                         <hr class="log-border">
                         <EmailbodyContainer :content="sanitize(log.body)"/>
@@ -118,7 +118,7 @@
                     <hr/>
                     <el-collapse-item name="tech_info">
                         <template #title>
-                            <strong style="color:#606266">{{ $t('Email Headers') }}</strong>
+                            <strong style="color:var(--fsm-text-mid)">{{ $t('Email Headers') }}</strong>
                         </template>
                         <div>
                             <pre>{{ log.headers }}</pre>
@@ -129,7 +129,7 @@
 
                     <el-collapse-item name="attachments">
                         <template #title>
-                            <strong style="color:#606266">
+                            <strong style="color:var(--fsm-text-mid)">
                                 {{ $t('Attachments') }} ({{ getAttachments(log).length }})
                             </strong>
                         </template>

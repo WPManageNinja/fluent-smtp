@@ -22,7 +22,7 @@
                                     data-form-type="other"
                                     name="fluentsmtp_sender_email"
                                 ></el-input>
-                                <p style="color: red;" v-if="is_conflicted">{{ $t('__ANOTHER_CONNECTION_NOTICE') }}</p>
+                                <p style="color: var(--fsm-danger-fg);" v-if="is_conflicted">{{ $t('__ANOTHER_CONNECTION_NOTICE') }}</p>
                             </el-form-item>
                             <div v-if="connection.force_from_email != undefined">
                                 <el-checkbox
@@ -94,7 +94,7 @@
                         :is_new="is_new"
                     />
                 </div>
-                <p v-if="providers[connection.provider].note" style="padding: 5px 0px; font-size: 16px; color: #ff5722;"
+                <p v-if="providers[connection.provider].note" style="padding: 5px 0px; font-size: 16px; color: var(--fsm-warning-fg);"
                    v-html="providers[connection.provider].note"></p>
                 <el-button v-loading="saving" @click="saveConnectionSettings()" type="success">
                     {{ $t('Save Connection Settings') }}
