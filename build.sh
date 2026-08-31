@@ -53,7 +53,8 @@ zip -r $ZIP_NAME . \
     -x "README.md" \
     -x "CLAUDE.md" \
     -x "research/*" \
-    -x "internal_docs/*"
+    -x "internal_docs/*" \
+    -x "_docs/*"
 
 echo "✅ Build Created: $ZIP_NAME"
 
@@ -65,7 +66,7 @@ composer install
 # The exclusion list is a denylist, so anything new is included by default and
 # is only caught by someone reading the zip. This fails the build instead.
 echo "🔍 Verifying $ZIP_NAME..."
-LEAKED=$(unzip -Z1 "$ZIP_NAME" | grep -E '^(\.|node_modules/|tests/|resources/|research/|internal_docs/|svn/)' || true)
+LEAKED=$(unzip -Z1 "$ZIP_NAME" | grep -E '^(\.|node_modules/|tests/|resources/|research/|internal_docs/|_docs/|svn/)' || true)
 
 if [ -n "$LEAKED" ]; then
     echo "❌ Development files found in $ZIP_NAME:"
