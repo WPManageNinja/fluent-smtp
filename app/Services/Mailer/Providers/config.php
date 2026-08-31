@@ -75,6 +75,7 @@ return [
                 'eu-north-1'     => __('Europe (Stockholm)', 'fluent-smtp'),
                 'eusc-de-east-1' => __('EU Sovereign Cloud (Germany, Brandenburg)', 'fluent-smtp'),
                 'ap-south-1'     => __('Asia Pacific (Mumbai)', 'fluent-smtp'),
+                'ap-south-2'     => __('Asia Pacific (Hyderabad)', 'fluent-smtp'),
                 'ap-northeast-2' => __('Asia Pacific (Seoul)', 'fluent-smtp'),
                 'ap-southeast-1' => __('Asia Pacific (Singapore)', 'fluent-smtp'),
                 'ap-southeast-2' => __('Asia Pacific (Sydney)', 'fluent-smtp'),
