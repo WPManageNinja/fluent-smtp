@@ -20,6 +20,23 @@ body.settings_page_fluent-mail {
      * plain when the plugins sit next to each other in the same menu.
      */
     background-color: var(--fsm-body-bg);
+
+    /*
+     * wp-admin reserves a 65px strip under the content for its own footer. That strip is
+     * where a pinned pane comes up short: the column it sits in ends 65px before the
+     * document does. Reclaimed only while the settings pane is on screen - Application.vue
+     * puts `fsm_settings_open` on <body> - so the plugin's footer credit and its review
+     * link survive on every other screen.
+     */
+    &.fsm_settings_open {
+        #wpbody-content {
+            padding-bottom: 0;
+        }
+
+        #wpfooter {
+            display: none;
+        }
+    }
 }
 
 /* ---------------------------------------------------------------- box model */
@@ -115,5 +132,376 @@ body.settings_page_fluent-mail {
     .is_current {
         font-weight: 500;
         color: var(--fsm-text);
+    }
+}
+
+/* ------------------------------------------------------------------- focus */
+
+/*
+ * wp-admin draws a blue ring on any focused link, which on a nav is left behind after
+ * every click and reads as a second selection. Keyboard users still need it, so it is
+ * moved to :focus-visible and recoloured, rather than removed.
+ */
+#fluent_mail_app {
+    .fsm_app_bar a,
+    .fsm_settings_nav a {
+        &:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--fsm-accent);
+            outline-offset: -1px;
+        }
+    }
+}
+
+/* ------------------------------------------------------------------ app bar */
+
+/* The bar is out of flow, so the page below it needs the space kept clear by hand. */
+.fsm_app {
+    padding-top: 56px;
+}
+
+.fsm_app_bar {
+    @apply flex items-center gap-6 bg-surface px-6 border-0 border-b border-solid border-hairline;
+
+    height: 56px;
+
+    /*
+     * Pinned rather than sticky. The settings pane below is pinned as well, which leaves
+     * this bar's container only as tall as the bar itself - and a sticky element whose
+     * container is its own height has no range to stick over, so it would scroll away the
+     * moment wp-admin's menu made the page scroll. `--fsm-shell-left` is the width of that
+     * menu, measured at runtime (see Application.vue) rather than hard-coded, so folding
+     * the menu or dropping to a narrow screen moves the bar with it.
+     */
+    position: fixed;
+    top: 32px;
+    left: var(--fsm-shell-left, 160px);
+    right: 0;
+    z-index: 2000;
+    transition: box-shadow .2s ease;
+
+    &.is-scrolled {
+        box-shadow: var(--fsm-shadow-lift);
+    }
+
+    .fsm_app_logo {
+        @apply flex items-center flex-shrink-0;
+
+        a {
+            @apply flex items-center;
+        }
+
+        img {
+            /*
+             * An explicit width, not just a max: logo.svg is authored with
+             * `width="100%" height="100%"`, which inside a flex row resolves against
+             * nothing and collapses the mark to a 0x0 box.
+             */
+            width: 132px;
+            height: auto;
+            display: block;
+        }
+
+        .fsm_logo_dark {
+            display: none;
+        }
+    }
+
+    .fsm_app_nav {
+        @apply flex items-center gap-1 m-0 p-0 list-none flex-1;
+
+        li {
+            @apply m-0;
+        }
+
+        a {
+            @apply flex items-center rounded px-3 py-2 text-sm font-medium no-underline text-ink-mid;
+
+            transition: background-color .15s ease, color .15s ease;
+
+            &:hover {
+                @apply bg-surface-sunk text-ink;
+            }
+
+            &.router-link-active {
+                @apply bg-accent-wash text-ink;
+            }
+        }
+    }
+
+    .fsm_app_bar_actions {
+        @apply flex items-center gap-2 flex-shrink-0;
+    }
+
+    .fsm_app_bar_help {
+        @apply flex items-center justify-center flex-none no-underline text-ink-mid;
+
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        transition: background-color .15s ease, color .15s ease;
+
+        .el-icon {
+            font-size: 18px;
+        }
+
+        &:hover {
+            @apply bg-surface-sunk text-ink;
+        }
+    }
+
+    .fsm_app_bar_toggle {
+        display: none;
+    }
+}
+
+.fluent_theme_dark .fsm_app_bar .fsm_app_logo {
+    .fsm_logo_light {
+        display: none;
+    }
+
+    .fsm_logo_dark {
+        display: block;
+    }
+}
+
+/* ----------------------------------------------------------------- the page */
+
+/*
+ * Dashboard, logs and documentation. The measurements are FluentCart's own, read off its
+ * rendered dashboard: a 1350px column centred in the page, 30px either side, and 28px to
+ * land the first row of content the same distance below the bar as FluentCart's lands
+ * below its own header.
+ */
+.fsm_page {
+    padding: 28px 30px;
+}
+
+.fsm_page_inner {
+    @apply mx-auto;
+
+    max-width: 1350px;
+}
+
+@media (min-width: 1800px) {
+    .fsm_page_inner {
+        max-width: 1600px;
+    }
+}
+
+/* ------------------------------------------------------------ settings shell */
+
+/*
+ * The settings screen is a pinned pane rather than part of the page, so the sidebar stays
+ * where it is and only the settings themselves move. The page is deliberately still
+ * scrollable: wp-admin's own menu is often taller than the viewport, and locking the body
+ * would put the bottom of it out of reach. Taking this pane out of flow means the page
+ * scrolls over exactly that much and no more.
+ */
+.fsm_settings {
+    @apply flex items-stretch;
+
+    position: fixed;
+    top: 88px;
+    left: var(--fsm-shell-left, 160px);
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: 20;
+}
+
+.fsm_settings_nav {
+    @apply bg-surface flex-shrink-0 flex flex-col border-0 border-r border-solid border-hairline;
+
+    width: 260px;
+    height: 100%;
+
+    .fsm_settings_nav_title {
+        @apply flex items-center flex-shrink-0 text-base font-medium text-ink px-5 border-0 border-b border-solid border-hairline;
+
+        min-height: 52px;
+        margin: 0;
+    }
+
+    > ul {
+        @apply list-none m-0 p-4 flex-1;
+
+        overflow-y: auto;
+        overscroll-behavior: contain;
+
+        /* Out of the way until the pointer is over the list, so it reads as one panel. */
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            @apply bg-transparent rounded;
+        }
+
+        &:hover::-webkit-scrollbar-thumb {
+            @apply bg-hairline-strong;
+        }
+    }
+
+    li {
+        @apply mb-1.5 last:mb-0;
+    }
+
+    a {
+        @apply relative flex items-center gap-2.5 rounded px-2.5 py-2 text-sm font-medium no-underline text-ink-mid;
+
+        min-height: 36px;
+        transition: background-color .15s ease, color .15s ease;
+
+        &:hover {
+            @apply bg-accent-wash text-ink;
+        }
+    }
+
+    .is-active > a {
+        @apply bg-accent-wash text-ink;
+    }
+
+    /* Children hang off a hairline, the way a tree reads. */
+    .fsm_settings_subnav {
+        @apply relative m-0 p-0 list-none;
+
+        padding-left: 26px;
+        margin: 4px 0;
+
+        &::before {
+            content: '';
+            @apply absolute bg-surface-raised rounded;
+
+            left: 18px;
+            top: 50%;
+            width: 2px;
+            height: calc(100% - 12px);
+            transform: translateY(-50%);
+        }
+
+        a {
+            @apply bg-transparent text-ink-mid font-normal;
+
+            min-height: 30px;
+
+            &:hover {
+                @apply bg-transparent text-ink;
+            }
+        }
+    }
+}
+
+/* The one part of the screen that scrolls. */
+.fsm_settings_body {
+    @apply flex-1;
+
+    min-width: 0;
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+/*
+ * A settings form does not get better for being wider - the text inside it is capped well
+ * before this, so past a point the cards only add empty space to the right of their own
+ * content. The leftover width is split either side rather than all dumped to the right, so
+ * the column sits in the middle of the pane.
+ */
+.fsm_settings_content {
+    @apply mx-auto;
+
+    padding: 28px;
+    max-width: var(--fsm-content-width);
+}
+
+/* --------------------------------------------------------------- responsive */
+
+/*
+ * Narrow screens get the ordinary page back. A pane pinned to the viewport needs room
+ * either side of it to be worth the trade, and wp-admin moves its own menu off-canvas down
+ * here anyway, so there is nothing left to pin against.
+ */
+@media (max-width: 960px) {
+    .fsm_app {
+        padding-top: 0;
+    }
+
+    .fsm_app_bar {
+        @apply flex-wrap;
+
+        position: sticky;
+        top: 0;
+        left: auto;
+        right: auto;
+        height: auto;
+        padding-top: 8px;
+        padding-bottom: 8px;
+
+        .fsm_app_bar_toggle {
+            @apply flex items-center justify-center flex-none cursor-pointer bg-transparent text-ink-mid;
+
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border: 0;
+            border-radius: 8px;
+            margin-left: auto;
+        }
+
+        .fsm_app_nav {
+            @apply hidden w-full flex-col items-stretch;
+
+            order: 3;
+
+            &.is-open {
+                @apply flex;
+            }
+        }
+
+        .fsm_app_bar_actions {
+            order: 2;
+        }
+    }
+
+    .fsm_settings {
+        @apply block;
+
+        position: static;
+        overflow: visible;
+    }
+
+    .fsm_settings_nav {
+        width: 100%;
+        height: auto;
+        @apply border-r-0 border-b;
+
+        > ul {
+            overflow-y: visible;
+        }
+    }
+
+    .fsm_settings_body {
+        height: auto;
+        overflow: visible;
+    }
+}
+
+@media (max-width: 782px) {
+    .fsm_page {
+        padding: 20px 12px;
+    }
+
+    .fsm_settings_content {
+        padding: 20px 12px;
+    }
+
+    /* wp-admin drops its own bar out of the way below this width. */
+    .fsm_app_bar {
+        top: 0;
     }
 }

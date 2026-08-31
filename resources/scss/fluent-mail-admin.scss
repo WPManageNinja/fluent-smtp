@@ -36,32 +36,7 @@
     box-sizing: border-box;
   }
 
-  & .fluent-mail-main-menu-items {
-    margin-bottom: 20px;
-    background: var(--fsm-surface);
-    margin-left: -20px;
-    display: flex;
-    align-items: center;
-
-    & .fluent-mail-navigation {
-      flex: 1;
-    }
-
-    & .fluent-mail-menu-actions {
-      display: flex;
-      align-items: center;
-      flex: none;
-      padding-right: 20px;
-    }
-
-    & .fluent-mail-navigation {
-      margin-left: -20px;
-    }
-  }
-
-  & .fluent-mail-body {
-    margin-right: 20px;
-
+  & {
     & .fss_header {
       display: block;
       width: auto;
@@ -112,14 +87,6 @@
         z-index: 1;
       }
     }
-  }
-
-  & .fluent-mail-navigation.el-menu--horizontal.el-menu .el-menu-item.is-active {
-    background: var(--fsm-accent-wash);
-  }
-
-  & .logo {
-    margin-left: 20px;
   }
 
   & .pager-wrap {

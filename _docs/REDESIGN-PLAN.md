@@ -976,3 +976,45 @@ utility with that selector, which a popup outside the app root no longer matches
 **Verified both ways across plugins:** setting dark in FluentSMTP and loading FluentCart
 gives a dark FluentCart; writing the key from FluentCart and loading FluentSMTP gives a
 dark FluentSMTP, applied by `printThemeClass()` in `<head>` before the page paints.
+
+### Phase 4 — shell and IA
+
+**All eight paths are byte-identical to master.** The diff on `routes.js` touches `meta`
+and nothing else; `browser-route-coverage.php` confirms 8 declared, 8 manifested.
+`meta.active` is chrome, not routing - it tells the app bar which of its three
+destinations to light up, so Settings stays marked while any screen behind it is open.
+
+**The settings shell is chosen by `meta.active`, not by a route hierarchy.** §7.2 allows
+adding child routes; none were needed. `Application.vue` renders the pinned pane and its
+sidebar when `meta.active === 'settings'` and an ordinary page otherwise, which means no
+screen component knows anything about the chrome around it and no path had to move.
+
+**General is a subnav anchor, not a route.** §7.3's table maps it to `/connections`, the
+same path as Connections, because it is the General Settings panel on that screen. Two
+sidebar items pointing at one route would be a nav that lies, so it is a child item that
+scrolls to the panel. Splitting that screen properly belongs to Phase 5, where it is
+rebuilt anyway.
+
+**`#wpfooter` is hidden only while the settings pane is open.** §4.4 says to reclaim
+wp-admin's 65px footer strip, which is where a pinned pane comes up short. Hiding it
+outright would also delete FluentSMTP's own footer credit and its review link on every
+screen, so `Application.vue` toggles `fsm_settings_open` on `<body>` and the rule is
+scoped to that. `#wpfooter` is outside the app root, which is why the class goes on the
+body rather than on the shell.
+
+**`registerTopMenu()` still lands an add-on's item in the bar.** The default list dropped
+from six items to three, but it is still passed through `fluent_mail_top_menus`, and an
+item registered without a `match` falls back to being active on its own route only.
+
+**Two small things the rewrite turned up:**
+
+- `logo.svg` is authored with `width="100%" height="100%"`. Inside the bar's flex row that
+  resolves against nothing and the mark collapses to a 0x0 box, which is why the bar
+  rendered with an empty space where the logo should be. It needs an explicit width.
+- The wordmark is a pink mark beside near-black lettering, so it cannot be flattened and
+  inverted for dark the way fluent-security's single-colour logo is. The plugin already
+  ships `fluentsmtp-white.png`; both are in the markup and CSS picks one.
+
+**The old `.fluent-mail-body` wrapper is gone from the markup**, but the rules nested
+inside it are not - they are the screen styling Phase 5 will replace. The selector became
+a bare `&`, lifting its children one level, rather than being rewritten twice.
