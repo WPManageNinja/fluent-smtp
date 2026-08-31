@@ -30,5 +30,7 @@ export {
     Promotion as FsmIconSPromotion,
     Message as FsmIconMessage,
     FullScreen as FsmIconFullScreen,
-    Close as FsmIconClose
+    Close as FsmIconClose,
+    Link as FsmIconLink,
+    User as FsmIconUser
 } from '@element-plus/icons-vue';

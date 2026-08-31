@@ -1146,3 +1146,23 @@ Every acceptance criterion, checked rather than assumed:
 - **The `.fss_header` / `.fss_content` markup** on Email Test, Alerts, About, Documentation
   and the wizard. It is drawn as a card and reads as one; renaming the classes would be
   five templates of churn for no user-visible change.
+
+### After Phase 6 — the side-by-side
+
+Comparing the three plugins on the same site, rendered rather than described, turned up one
+place where FluentSMTP was the odd one out: the **stat tiles**.
+
+§7.3 asks for tiles "matching FluentCart's dashboard", and I built fully tinted blocks with
+the figure above the label. FluentCart's tile - and FluentAuth's, which copies it - is a
+plain surface card carrying a *tinted icon well*, then the label, then the figure. Reading
+the brief was not enough to catch that; looking at the two screens side by side was. The
+tiles were rebuilt to the same anatomy.
+
+The tint belongs on the well rather than the whole tile for a reason beyond consistency:
+four fully coloured blocks in a 380px aside is four things shouting at once, and the well
+is enough to tell them apart while leaving the number as the loudest thing in the tile -
+which is what anyone is actually reading.
+
+The figure is also pushed to the bottom of each tile, so the four sit on one line even
+though "Total Email Sent (Logged)" wraps to two lines where "Email Failed" does not. A row
+of numbers at different heights reads as four unrelated boxes rather than one set.

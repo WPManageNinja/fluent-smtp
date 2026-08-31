@@ -679,9 +679,17 @@ body.settings_page_fluent-mail {
 /* ---------------------------------------------------------------- stat tiles */
 
 /*
- * The dashboard's headline numbers. One hue per subject, from FluentCart's tile ramp -
- * which colours by position, and works here because the four are always the same four.
- * They used to be list rows with a floated count, and "Failed" was red by way of an
+ * The dashboard's headline numbers, built the way FluentCart builds its own: a plain
+ * surface card carrying a tinted icon well, the label, and the figure below it. The hue
+ * is one per subject, from FluentCart's tile ramp - which colours by position, and works
+ * here because the four are always the same four.
+ *
+ * The tint is on the icon well rather than on the whole tile deliberately. Four fully
+ * coloured blocks in a 380px aside is four things shouting; the well is enough to tell
+ * them apart, and it leaves the number as the loudest thing in the tile, which is what
+ * anyone is actually reading.
+ *
+ * These used to be list rows with a floated count, and "Failed" was red by way of an
  * inline `style="color: red"`.
  */
 .fsm_tiles {
@@ -692,31 +700,44 @@ body.settings_page_fluent-mail {
 }
 
 .fsm_tile {
-    @apply block rounded no-underline;
+    @apply flex flex-col no-underline bg-surface rounded border border-solid border-hairline;
 
-    padding: 14px 16px;
-    background: var(--fsm-tile-bg, var(--fsm-surface-sunk));
-    color: var(--fsm-tile-fg, var(--fsm-text));
-    transition: opacity .15s ease;
+    padding: 14px;
+    color: var(--fsm-text);
+    transition: border-color .15s ease;
 
-    &:hover {
-        opacity: .85;
-    }
+    .fsm_tile_icon {
+        @apply flex items-center justify-center rounded-sm;
 
-    .fsm_tile_value {
-        @apply block font-semibold;
+        width: 32px;
+        height: 32px;
+        margin-bottom: 10px;
+        background: var(--fsm-tile-bg, var(--fsm-surface-sunk));
+        color: var(--fsm-tile-fg, var(--fsm-text-mid));
 
-        font-size: 24px;
-        line-height: 32px;
-        color: inherit;
+        .el-icon {
+            font-size: 17px;
+        }
     }
 
     .fsm_tile_label {
-        @apply block text-xs font-medium;
+        @apply block text-xs font-medium text-ink-mid;
+    }
 
-        margin-top: 2px;
-        color: inherit;
-        opacity: .85;
+    .fsm_tile_value {
+        @apply block font-semibold text-ink-head;
+
+        font-size: 22px;
+        line-height: 30px;
+
+        /*
+         * Pushed to the bottom of the tile so the four figures sit on one line even
+         * when a label above them wraps - "Total Email Sent (Logged)" takes two lines
+         * where "Email Failed" takes one, and a row of numbers at different heights
+         * reads as four unrelated boxes rather than one set.
+         */
+        margin-top: auto;
+        padding-top: 2px;
     }
 
     &.is_sent {
@@ -738,6 +759,11 @@ body.settings_page_fluent-mail {
         --fsm-tile-bg: var(--fsm-tile-senders-bg);
         --fsm-tile-fg: var(--fsm-tile-senders-fg);
     }
+}
+
+/* A tile you can follow says so on hover; the three that are only figures do not. */
+a.fsm_tile:hover {
+    @apply border-hairline-strong;
 }
 
 /* ---------------------------------------------------------------- the card */
