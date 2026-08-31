@@ -3,28 +3,17 @@
         <div>
             <div class="fsm_page_head">
                 <h1 class="fsm_page_title">{{ $t('Email Logs') }}</h1>
+                <!--
+                    Only the bulk action, and only while rows are selected. Searching,
+                    filtering and refreshing all narrow the same list, so they live
+                    together in the table's own toolbar rather than up here.
+                -->
                 <div class="fsm_page_actions">
                     <LogBulkAction
                         @on-bulk-action="handleBulkAction"
                         :selected="selectedLogs"
                         v-if="selectedLogs.length"
                     />
-                    <el-input
-                        class="fsm_log_search"
-                        clearable
-                        size="small"
-                        v-model="filter_query.search"
-                        @clear="filter_query.search=''"
-                        @keyup.enter="fetch"
-                        :placeholder="$t('Type & press enter...')"
-                    >
-                        <template #append>
-                            <el-button icon="FsmIconSearch" @click="fetch"/>
-                        </template>
-                    </el-input>
-                    <el-button @click="fetch" size="small" :title="$t('Refresh')">
-                        <el-icon><FsmIconRefresh /></el-icon>
-                    </el-button>
                 </div>
             </div>
 
@@ -38,8 +27,8 @@
                 <div class="fsm_card_head">
                     <LogFilter
                         :filter_query="filter_query"
-                        @on-filter="fetch()"
-                        @reset-page="pagination.current_page=1"
+                        @on-filter="applyFilter"
+                        @on-refresh="fetch"
                     />
                 </div>
 
@@ -57,7 +46,23 @@
                         @selection-change="handleSelectionChange"
                     >
                         <el-table-column type="selection" width="55"/>
-                        <el-table-column :label="$t('Subject')">
+
+                        <!--
+                            Subject is the only column that takes what is left over, and
+                            it truncates rather than wraps.
+
+                            It used to be one of two flexible columns, and El Plus lets
+                            those go as narrow as the space allows - on a phone that left
+                            Subject and To on 80px each, one word per line, while Status,
+                            Date-Time and Actions held their fixed widths beside them. A
+                            floor makes the table scroll sideways instead, which is the
+                            honest thing for six columns on a 480px screen. And a subject
+                            is a line to scan down, not a paragraph to read: an ellipsis
+                            keeps every row one line tall, with the whole subject a hover
+                            away and the full email a click away.
+                        -->
+                        <el-table-column :label="$t('Subject')" min-width="280"
+                                         show-overflow-tooltip>
                             <template #default="scope">
                                 <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
                                 <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
@@ -65,13 +70,19 @@
                             </template>
                         </el-table-column>
 
-                        <el-table-column :label="$t('To')">
+                        <!--
+                            A fixed width, not a second flexible column. Two flexible
+                            columns share the leftover space between them, which gave To
+                            286px on a desktop to hold one address - room it has nothing
+                            to do with, taken from the subject beside it.
+                        -->
+                        <el-table-column :label="$t('To')" width="240" show-overflow-tooltip>
                             <template #default="scope">
                                 <span v-html="formatAddresses(scope.row.to)"></span>
                             </template>
                         </el-table-column>
 
-                        <el-table-column :label="$t('Status')" width="120">
+                        <el-table-column :label="$t('Status')" width="90">
                             <template #default="scope">
                                 <!--
                                     One word, tinted, instead of the whole row. A failed
@@ -85,50 +96,61 @@
                             </template>
                         </el-table-column>
 
-                        <el-table-column prop="created_at" :label="$t('Date-Time')" width="200px">
+                        <el-table-column prop="created_at" :label="$t('Date-Time')" width="175">
                             <template #default="scope">
                                 {{ $dateFormat(scope.row.created_at, 'DD MMM YYYY LT') }}
                             </template>
                         </el-table-column>
 
-                        <el-table-column :label="$t('Actions')" width="220px" align="right">
+                        <!--
+                            Quiet buttons, as on the connection and channel rows.
+
+                            These were a solid green Resend, a solid dark View and a solid
+                            red Delete, three saturated blocks per row and thirty down a
+                            full page - which is more colour than the one thing on this
+                            screen that is meant to be coloured, the failed status chip.
+                            Nothing here is dangerous enough on its own to shout: delete
+                            asks first, and resend is the reason people open this screen.
+                        -->
+                        <el-table-column :label="$t('Actions')" width="190" align="right">
                             <template #default="scope">
-                                <el-button
-                                    size="small"
-                                    type="success"
-                                    icon="FsmIconRefresh"
-                                    @click="handleRetry(scope.row, 'retry')"
-                                    :plain="true"
-                                    v-if="scope.row.status == 'failed'"
-                                >{{ $t('Retry') }}
-                                </el-button>
-                                <el-button
-                                    size="small"
-                                    type="success"
-                                    icon="FsmIconRefreshRight"
-                                    @click="handleResendClick(scope.row)"
-                                    v-if="scope.row.status == 'sent'"
-                                >
-                                    {{ $t('Resend') }}
-                                    <span v-if="scope.row.resent_count > 0">({{ scope.row.resent_count }})</span>
-                                </el-button>
+                                <div class="fsm_log_actions">
+                                    <el-button
+                                        size="small"
+                                        icon="FsmIconRefresh"
+                                        @click="handleRetry(scope.row, 'retry')"
+                                        v-if="scope.row.status == 'failed'"
+                                    >{{ $t('Retry') }}
+                                    </el-button>
+                                    <el-button
+                                        size="small"
+                                        icon="FsmIconRefreshRight"
+                                        @click="handleResendClick(scope.row)"
+                                        v-if="scope.row.status == 'sent'"
+                                    >
+                                        {{ $t('Resend') }}
+                                        <span v-if="scope.row.resent_count > 0">({{ scope.row.resent_count }})</span>
+                                    </el-button>
 
-                                <el-button
-                                    size="small"
-                                    type="primary"
-                                    icon="FsmIconView"
-                                    @click="handleView(scope.row)"
-                                />
+                                    <el-button
+                                        size="small"
+                                        icon="FsmIconView"
+                                        :title="$t('View')"
+                                        :aria-label="$t('View')"
+                                        @click="handleView(scope.row)"
+                                    />
 
-                                <confirm @yes="handleDelete(scope.row.id)">
-                                    <template #reference>
-                                        <el-button
-                                            size="small"
-                                            type="danger"
-                                            icon="FsmIconDelete"
-                                        />
-                                    </template>
-                                </confirm>
+                                    <confirm @yes="handleDelete(scope.row.id)">
+                                        <template #reference>
+                                            <el-button
+                                                size="small"
+                                                icon="FsmIconDelete"
+                                                :title="$t('Delete')"
+                                                :aria-label="$t('Delete')"
+                                            />
+                                        </template>
+                                    </confirm>
+                                </div>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -230,6 +252,15 @@ export default {
         pageChanged() {
             this.fetch();
         },
+        /*
+         * Narrowing the list starts it again from the first page. Filtering while on
+         * page 5 used to ask for page 5 of the new, shorter result - an empty table for
+         * a filter that matches plenty.
+         */
+        applyFilter() {
+            this.pagination.current_page = 1;
+            this.fetch();
+        },
         fetch() {
             this.loading = true;
             const data = {
@@ -287,20 +318,6 @@ export default {
                 }
             });
             return result.join(', ');
-        },
-        onFilter(queryData) {
-            this.pagination.current_page = 1;
-            this.pageChanged();
-        },
-        onSearch(query) {
-            this.query = query;
-            this.pagination.current_page = 1;
-            this.pageChanged();
-            this.fetch();
-        },
-        onSearchChange(query) {
-            this.query = query;
-            this.fetch();
         },
         handleBulkAction({action}) {
             if (action === 'deleteall') {
@@ -381,10 +398,17 @@ export default {
             this.logViewerProps.log = row;
             this.logViewerProps.dialogVisible = true;
 
+            /*
+             * The viewer's Prev and Next walk the same list this screen is showing, so
+             * they are handed the filter that produced it. These three used to read
+             * `this.query`, `this.filterBy` and `this.filterByValue` - none of which are
+             * declared on this component - so every navigation went out unfiltered and
+             * Next off a filtered list could land on an email the list does not contain.
+             */
             this.$nextTick(() => {
-                this.logViewerProps.query = this.query;
-                this.logViewerProps.filterBy = this.filterBy;
-                this.logViewerProps.filterByValue = this.filterByValue;
+                this.logViewerProps.query = this.filter_query.search;
+                this.logViewerProps.filterBy = this.filter_query.status ? 'status' : '';
+                this.logViewerProps.filterByValue = this.filter_query.status;
 
                 // Vue 3 removed $children, which is what this used to walk to
                 // find the viewer by its component tag. A ref names it directly.

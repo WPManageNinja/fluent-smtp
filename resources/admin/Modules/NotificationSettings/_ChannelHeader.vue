@@ -1,16 +1,16 @@
 <template>
-    <div class="fss_alert_settings__header">
-        <el-button @click="goBack()" size="small" link class="fss_alert_settings__back-button">
-            <el-icon><FsmIconArrowLeft /></el-icon> {{ $t('Back to Alerts') }}
-        </el-button>
-        <div class="fss_alert_settings__header-content">
-            <img v-if="logo" class="fss_alert_settings__header-logo" :src="logo" :alt="title"/>
-            <div class="fss_alert_info__header">
-                <h3 class="fss_alert_settings__title">{{ displayTitle }}</h3>
-                <el-tag v-if="connected" type="success" class="fss_alert_info__status-badge">
-                    <el-icon><FsmIconSuccess /></el-icon> {{ $t('Connected') }}
-                </el-tag>
-            </div>
+    <!--
+        The head of the setup form that replaces the channel list inside the card. The
+        way back comes first, because it is the only way back - the list it covers is
+        gone until this is closed.
+    -->
+    <div class="fsm_chan_head">
+        <el-button @click="goBack()" size="small" link class="fsm_chan_back"
+                   icon="FsmIconArrowLeft">{{ $t('Back to Alerts') }}</el-button>
+        <div class="fsm_chan_head_main">
+            <img v-if="logo" class="fsm_chan_head_logo" :src="logo" :alt="displayTitle"/>
+            <h3 class="fsm_chan_head_title">{{ displayTitle }}</h3>
+            <span v-if="connected" class="fsm_tag is_sent">{{ $t('Connected') }}</span>
         </div>
     </div>
 </template>

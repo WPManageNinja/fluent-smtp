@@ -85,15 +85,14 @@
                     style="margin:0;"
                 >{{ email }}</el-tag>
             </div>
-            <div style="display:flex; gap:8px;">
+            <div class="fsm_field_group" style="display:flex; gap:8px;">
                 <el-input
                     v-model="newAdditional"
                     :placeholder="$t('sender@yourdomain.com')"
-                    size="small"
                     style="max-width: 320px;"
                     @keyup.enter="addAdditional"
                 />
-                <el-button size="small" @click="addAdditional" :disabled="!newAdditional">
+                <el-button @click="addAdditional" :disabled="!newAdditional">
                     {{ $t('Add') }}
                 </el-button>
             </div>

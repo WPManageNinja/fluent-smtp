@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h3 class="fs_config_title">{{ $t('SMTP Server Settings') }}</h3>
         <el-row :gutter="20">
             <el-col :md="12" :sm="24">
                 <el-form-item>

@@ -1,19 +1,25 @@
 <template>
     <div v-if="notification_settings.telegram !== undefined">
+        <!--
+            The card holding this is flush to its edges, because what is usually inside
+            is a list of rows. A setup form is not, so it brings the padding with it.
+        -->
         <template v-if="selectedChannel">
-            <channel-header
-                :channel-title="channelConfig.title"
-                :logo="channelConfig.logo"
-                :connected="isChannelConnected"
-                @back="goBack"
-            />
-            <component
-                :is="getChannelComponent(selectedChannel)"
-                :notification_settings="notification_settings"
-                :channel_key="selectedChannel"
-                :channel_config="channelConfig"
-                @back="goBack"
-            />
+            <div class="fsm_chan_config">
+                <channel-header
+                    :channel-title="channelConfig.title"
+                    :logo="channelConfig.logo"
+                    :connected="isChannelConnected"
+                    @back="goBack"
+                />
+                <component
+                    :is="getChannelComponent(selectedChannel)"
+                    :notification_settings="notification_settings"
+                    :channel_key="selectedChannel"
+                    :channel_config="channelConfig"
+                    @back="goBack"
+                />
+            </div>
         </template>
         <alert-list-table
             v-else

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>{{ $t('Outlook / Office365 API Settings') }}</h3>
+        <h3 class="fs_config_title">{{ $t('Outlook / Office365 API Settings') }}</h3>
         <p>{{ $t('Please ') }}<a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/setup-outlook-with-fluentsmtp/">{{ $t('check the documentation first to create API keys at Microsoft') }}</a></p>
         <el-radio-group size="small" v-model="connection.key_store">
             <el-radio-button value="db">{{ $t('Store Application Keys in DB') }}</el-radio-button>
@@ -91,9 +91,9 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
         </el-form-item>
 
         <div v-if="!connection.access_token">
-            <div style="text-align: center;">
-                <h3>{{ $t('Please authenticate with Office365 to get ') }}<b>{{ $t('Access Token') }}</b></h3>
-                <el-button v-loading="gettingRedirect" @click="redirectToMS()" type="danger">{{ $t('Authenticate with Office365 & Get Access Token') }}</el-button>
+            <div class="fsm_provider_auth">
+                <p>{{ $t('Please authenticate with Office365 to get ') }}<b>{{ $t('Access Token') }}</b></p>
+                <el-button v-loading="gettingRedirect" @click="redirectToMS()" type="primary">{{ $t('Authenticate with Office365 & Get Access Token') }}</el-button>
             </div>
             <el-row v-if="redirectUrl" :gutter="20">
                 <el-col :span="12">
@@ -112,7 +112,7 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
             </el-row>
         </div>
         <div style="text-align: center;" v-else>
-            <h3>{{ ('Your Outlook / Office365 Authentication has been enabled.No further action is needed.If you want to re-authenticate, ') }}<a @click.prevent="connection.access_token = ''" href="#">{{ ('click here') }}</a></h3>
+            <p class="fsm_provider_connected">{{ $t('Your Outlook / Office365 Authentication has been enabled. No further action is needed. If you want to re-authenticate, ') }}<a @click.prevent="connection.access_token = ''" href="#">{{ $t('click here') }}</a></p>
         </div>
 
     </div>

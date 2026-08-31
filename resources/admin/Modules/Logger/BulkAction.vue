@@ -1,32 +1,34 @@
 <template>
-    <div style="float:left;margin-left:10px;">
-        <el-row :gutter="10">
-            <el-col :span="12">
-                <el-select
-                    clearable
-                    v-model="action"
-                    size="small"
-                    :placeholder="$t('Bulk Action')"
-                >
-                    <el-option
-                        value="deleteselected"
-                        :label="$t('Delete Selected')"
-                        v-if="selected.length"
-                    />
-                    <el-option v-if="is_failed_selected" value="resend_selected" :label="$t('Resend Selected Emails')" />
-                </el-select>
-            </el-col>
+    <!--
+        A flex pair, not an el-row.
 
-            <el-col :span="2">
-                <el-button
-                    plain
-                    size="small"
-                    type="primary"
-                    :disabled="!action"
-                    @click="applyBulkAction"
-                >{{$t('Apply')}}</el-button>
-            </el-col>
-        </el-row>
+        This used to be a 24-column el-row - the select on `span=12`, Apply on `span=2` -
+        inside a floated div. A row's columns are percentages of the row's own width, and
+        the row's width came from a float sitting in the page head's flex line, which
+        gives a float the width of its content. So the select asked for half of nothing
+        and rendered about 60px wide, showing "B." where "Bulk Action" should be.
+    -->
+    <div class="fsm_log_bulk">
+        <el-select
+            clearable
+            v-model="action"
+            class="fsm_log_bulk_select"
+            :placeholder="$t('Bulk Action')"
+        >
+            <el-option
+                value="deleteselected"
+                :label="$t('Delete Selected')"
+                v-if="selected.length"
+            />
+            <el-option v-if="is_failed_selected" value="resend_selected" :label="$t('Resend Selected Emails')" />
+        </el-select>
+
+        <el-button
+            plain
+            type="primary"
+            :disabled="!action"
+            @click="applyBulkAction"
+        >{{$t('Apply')}}</el-button>
     </div>
 </template>
 

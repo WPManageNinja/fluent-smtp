@@ -1,13 +1,22 @@
 <template>
     <div class="fss_alert_info__actions">
         <div v-if="show_test_button !== false" class="fss_alert_info__actions__test-button">
-            <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test" type="primary" size="small">
-                <el-icon><FsmIconMessage /></el-icon> {{ $t('Send Test Message') }}
+            <!--
+                The `icon` prop, not an <el-icon> in the slot. A button is an inline flex
+                row, and a text node that begins with a space becomes an anonymous flex
+                item with that space stripped - so the icon ended up against the first
+                letter of the label. The prop renders the icon as a real child with the
+                6px Element Plus puts there.
+            -->
+            <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test"
+                       type="primary" icon="FsmIconMessage">
+                {{ $t('Send Test Message') }}
             </el-button>
         </div>
         <div class="fss_alert_info__actions__disconnect">
-            <el-button v-loading="disconnecting" @click="disconnect()" type="danger" size="small">
-                <el-icon><FsmIconDelete /></el-icon> {{ disconnectLabel }}
+            <el-button v-loading="disconnecting" @click="disconnect()" type="danger"
+                       icon="FsmIconDelete">
+                {{ disconnectLabel }}
             </el-button>
         </div>
     </div>

@@ -9,6 +9,7 @@ use FluentMail\Includes\Request\Request;
 use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Support\ValidationException;
 use FluentMail\App\Services\Mailer\Providers\Factory;
+use FluentMail\App\Services\ConnectionHealth;
 
 class SettingsController extends Controller
 {
@@ -19,8 +20,16 @@ class SettingsController extends Controller
         try {
             $setting = $settings->get();
 
+            /*
+             * The stored report, not a fresh one. getReport() reads the option the
+             * scheduled check writes; probing every connection here would put an OAuth
+             * token renewal on the critical path of opening the Connections screen.
+             * A row whose key is absent from it has simply not been checked yet, which
+             * the screen shows as unknown rather than as healthy.
+             */
             return $this->sendSuccess([
-                'settings' => $setting
+                'settings' => $setting,
+                'health'   => (new ConnectionHealth())->getReport()
             ]);
         } catch (Exception $e) {
             return $this->sendError([

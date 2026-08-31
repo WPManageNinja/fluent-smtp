@@ -35,8 +35,73 @@
                 :title="$t('Connection needs attention') + ': ' + connection.sender_email + ' (' + connection.provider + ')'"
                 :description="connection.message"
             />
+            <!--
+                The greeting is FluentCart's, kept deliberately literal - same avatar,
+                same "Good <part of day> <name>", same site line under it - because the
+                two dashboards are the first screen of the same admin and a user moving
+                between them should not be met by two different openings.
+
+                What is not copied is FluentCart's "Last 30 Days" line and its CTA. The
+                range here is chosen on the chart below rather than fixed, so a label
+                stating one would be wrong half the time; and the action a new install
+                needs is the connection wizard, which this screen already shows instead
+                of the dashboard when there is nothing connected.
+            -->
+            <div class="fsm_greeting">
+                <img class="fsm_greeting_avatar" :src="appVars.user_avatar" alt=""
+                     width="48" height="48"/>
+                <div class="fsm_greeting_text">
+                    <h2>{{ greeting }} {{ appVars.user_display_name }} 👋</h2>
+                    <p>{{ $t('Welcome to') }} {{ appVars.site_name }}</p>
+                </div>
+            </div>
+
             <div class="fsm_split">
                 <div class="fsm_split_main">
+                    <!--
+                        The four headline numbers, across the top of the column rather
+                        than stacked two-by-two in the aside. They are the first thing
+                        the screen is read for, and a full-width row is what FluentCart
+                        gives them. Sent and Failed are the pair an admin is actually
+                        here to check, so they lead; Failed carries a link into the log
+                        filtered to failures, which is the next thing you want when the
+                        number is not zero.
+                    -->
+                    <div v-if="!loading" class="fsm_tiles">
+                        <div v-if="settings_stat.log_enabled == 'yes'" class="fsm_tile is_sent">
+                            <span class="fsm_tile_icon"><el-icon><FsmIconSPromotion/></el-icon></span>
+                            <span class="fsm_tile_label">{{ stripColon($t('Total Email Sent (Logged):')) }}</span>
+                            <span class="fsm_tile_value">{{ stats.sent }}</span>
+                        </div>
+
+                        <!--
+                            `status`, which is the query the log screen reads in created()
+                            and writes back on every fetch. This used to link with
+                            `filterBy`/`filterValue`, a pair nothing on that screen has
+                            read since before the redesign - so clicking the failed count
+                            opened the log with no filter on it at all.
+                        -->
+                        <router-link
+                            class="fsm_tile is_failed"
+                            :to="{ name: 'logs', query: { status: 'failed' } }">
+                            <span class="fsm_tile_icon"><el-icon><FsmIconWarning/></el-icon></span>
+                            <span class="fsm_tile_label">{{ stripColon($t('Email Failed:')) }}</span>
+                            <span class="fsm_tile_value">{{ stats.failed || 0 }}</span>
+                        </router-link>
+
+                        <div class="fsm_tile is_connections">
+                            <span class="fsm_tile_icon"><el-icon><FsmIconLink/></el-icon></span>
+                            <span class="fsm_tile_label">{{ stripColon($t('Active Connections:')) }}</span>
+                            <span class="fsm_tile_value">{{ settings_stat.connection_counts }}</span>
+                        </div>
+
+                        <div class="fsm_tile is_senders">
+                            <span class="fsm_tile_icon"><el-icon><FsmIconUser/></el-icon></span>
+                            <span class="fsm_tile_label">{{ stripColon($t('Active Senders:')) }}</span>
+                            <span class="fsm_tile_value">{{ settings_stat.active_senders }}</span>
+                        </div>
+                    </div>
+
                     <div class="fsm_card">
                         <div class="fsm_card_head">
                             <h3>{{ $t('Sending Stats') }}</h3>
@@ -66,66 +131,27 @@
                 </div>
 
                 <div class="fsm_split_aside">
+                    <alerts-card/>
+
                     <div class="fsm_card">
                         <div class="fsm_card_head">
-                            <h3>{{ $t('Quick Overview') }}</h3>
+                            <h3>{{ $t('Email Logs') }}</h3>
                         </div>
 
                         <div class="fsm_card_body" v-if="!loading">
-                            <!--
-                                The four headline numbers, as tiles rather than as rows in
-                                a list with a floated count. Sent and Failed are the pair
-                                an admin is actually here to check, so they lead; Failed
-                                carries a link into the log filtered to failures, which is
-                                the next thing you want when the number is not zero.
-                            -->
-                            <div class="fsm_aside_block">
-                                <div class="fsm_tiles">
-                                    <div v-if="settings_stat.log_enabled == 'yes'"
-                                         class="fsm_tile is_sent">
-                                        <span class="fsm_tile_icon"><el-icon><FsmIconSPromotion/></el-icon></span>
-                                        <span class="fsm_tile_label">{{ stripColon($t('Total Email Sent (Logged):')) }}</span>
-                                        <span class="fsm_tile_value">{{ stats.sent }}</span>
-                                    </div>
-
-                                    <router-link
-                                        class="fsm_tile is_failed"
-                                        :to="{ name: 'logs', query: { filterBy: 'status', filterValue: 'failed' } }">
-                                        <span class="fsm_tile_icon"><el-icon><FsmIconWarning/></el-icon></span>
-                                        <span class="fsm_tile_label">{{ stripColon($t('Email Failed:')) }}</span>
-                                        <span class="fsm_tile_value">{{ stats.failed || 0 }}</span>
-                                    </router-link>
-
-                                    <div class="fsm_tile is_connections">
-                                        <span class="fsm_tile_icon"><el-icon><FsmIconLink/></el-icon></span>
-                                        <span class="fsm_tile_label">{{ stripColon($t('Active Connections:')) }}</span>
-                                        <span class="fsm_tile_value">{{ settings_stat.connection_counts }}</span>
-                                    </div>
-
-                                    <div class="fsm_tile is_senders">
-                                        <span class="fsm_tile_icon"><el-icon><FsmIconUser/></el-icon></span>
-                                        <span class="fsm_tile_label">{{ stripColon($t('Active Senders:')) }}</span>
-                                        <span class="fsm_tile_value">{{ settings_stat.active_senders }}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="fsm_aside_block">
-                                <h3>{{ $t('Email Logs') }}</h3>
-                                <ul class="fsm_fact_list">
-                                    <li>
-                                        <span>{{ $t('Save Email Logs:') }}</span>
-                                        <span style="text-transform: capitalize;">{{ settings_stat.log_enabled }}</span>
-                                    </li>
-                                    <li v-if="settings_stat.log_enabled == 'yes'">
-                                        <span>{{ $t('Delete Logs:') }}</span>
-                                        <span>{{ $t('After') }} {{ settings_stat.auto_delete_days }} {{ $t('Days') }}</span>
-                                    </li>
-                                </ul>
-                            </div>
+                            <ul class="fsm_fact_list">
+                                <li>
+                                    <span>{{ $t('Save Email Logs:') }}</span>
+                                    <span style="text-transform: capitalize;">{{ settings_stat.log_enabled }}</span>
+                                </li>
+                                <li v-if="settings_stat.log_enabled == 'yes'">
+                                    <span>{{ $t('Delete Logs:') }}</span>
+                                    <span>{{ $t('After') }} {{ settings_stat.auto_delete_days }} {{ $t('Days') }}</span>
+                                </li>
+                            </ul>
                         </div>
 
-                        <el-skeleton v-else class="fsm_card_body" :rows="8"></el-skeleton>
+                        <el-skeleton v-else class="fsm_card_body" :rows="3"></el-skeleton>
                     </div>
 
                     <div v-if="appVars.require_optin == 'yes' && stats.sent > 9" class="fsm_card">
@@ -139,6 +165,16 @@
                             <email-subscriber/>
                         </div>
                     </div>
+
+                    <!--
+                        Last in the column. The three cards above it answer a question
+                        each - is anything broken, is anything being logged, is this
+                        install signed up - and are the same height every time the screen
+                        loads. The activity list is the one card whose height depends on
+                        what happened, so anything after it would move down the page as
+                        the site sends mail; nothing is after it.
+                    -->
+                    <recent-activity v-if="settings_stat.log_enabled == 'yes'"/>
                 </div>
             </div>
         </div>
@@ -152,6 +188,8 @@ import EmailsChart from './Charts/Emails';
 import EmailSubscriber from '../../Pieces/_Subscribe';
 import SubscribeDismiss from '../../Pieces/_SubscribeDismiss';
 import ByDayTimeSending from "./Charts/ByDayTimeSending.vue";
+import RecentActivity from "./RecentActivity.vue";
+import AlertsCard from "./AlertsCard.vue";
 
 export default {
     name: 'Dashboard',
@@ -160,7 +198,9 @@ export default {
         EmailsChart,
         EmailSubscriber,
         SubscribeDismiss,
-        ByDayTimeSending
+        ByDayTimeSending,
+        RecentActivity,
+        AlertsCard
     },
     data() {
         return {
@@ -180,6 +220,24 @@ export default {
         };
     },
     computed: {
+        /*
+         * Read off the browser's clock rather than the site's. The greeting is about
+         * where the person reading it is, not where the server is - an admin in Dhaka
+         * looking at a site hosted in Frankfurt is having an afternoon regardless.
+         */
+        greeting() {
+            const hour = new Date().getHours();
+
+            if (hour < 12) {
+                return this.$t('Good morning');
+            }
+
+            if (hour < 18) {
+                return this.$t('Good afternoon');
+            }
+
+            return this.$t('Good evening');
+        },
         is_new() {
             return isEmpty(this.settings.connections);
         },

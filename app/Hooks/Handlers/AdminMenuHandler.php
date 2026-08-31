@@ -245,7 +245,7 @@ class AdminMenuHandler
             'fluent_mail_admin_app_boot',
             fluentMailMix('admin/js/boot.js'),
             ['jquery'],
-            FLUENTMAIL_PLUGIN_VERSION
+            fluentMailAssetVersion('admin/js/boot.js')
         );
 
         /*
@@ -269,10 +269,18 @@ class AdminMenuHandler
          * URL. The plugin version changes on every release that can carry a new
          * bundled library, so it cannot drift.
          */
-        wp_enqueue_script('dompurify', fluentMailMix('libs/purify/purify.min.js'), [], FLUENTMAIL_PLUGIN_VERSION);
+        wp_enqueue_script(
+            'dompurify',
+            fluentMailMix('libs/purify/purify.min.js'),
+            [],
+            fluentMailAssetVersion('libs/purify/purify.min.js')
+        );
 
         wp_enqueue_style(
-            'fluent_mail_admin_app', fluentMailMix('admin/css/fluent-mail-admin.css'), [], FLUENTMAIL_PLUGIN_VERSION
+            'fluent_mail_admin_app',
+            fluentMailMix('admin/css/fluent-mail-admin.css'),
+            [],
+            fluentMailAssetVersion('admin/css/fluent-mail-admin.css')
         );
 
         $user = get_user_by('ID', get_current_user_id());
@@ -303,6 +311,11 @@ class AdminMenuHandler
             'has_fluentform'         => defined('FLUENTFORM'),
             'user_email'             => $user->user_email,
             'user_display_name'      => $displayName,
+            // The dashboard greets the admin by name the way FluentCart's does, so it
+            // needs the same two things FluentCart reads off its own config: who is
+            // looking, and what site they are looking at.
+            'user_avatar'            => esc_url(get_avatar_url($user->ID, ['size' => 96])),
+            'site_name'              => get_bloginfo('name'),
             'require_optin'          => $this->isRequireOptin(),
             'has_ninja_tables'       => defined('NINJA_TABLES_VERSION'),
             'disable_recommendation' => apply_filters('fluentmail_disable_recommendation', false),
@@ -319,7 +332,7 @@ class AdminMenuHandler
             'fluent_mail_admin_app',
             fluentMailMix('admin/js/fluent-mail-admin-app.js'),
             ['fluent_mail_admin_app_boot'],
-            FLUENTMAIL_PLUGIN_VERSION,
+            fluentMailAssetVersion('admin/js/fluent-mail-admin-app.js'),
             true
         );
 

@@ -478,14 +478,17 @@ body.settings_page_fluent-mail.fluent_theme_dark {
         --el-button-border-color: var(--fsm-border);
     }
 
-    /* wp-admin gives every input in its content area a white background of its own. */
-    input[type="text"],
-    input[type="search"],
-    input[type="email"],
-    input[type="url"],
-    input[type="number"],
-    input[type="password"],
-    textarea,
+    /*
+     * wp-admin gives every field in its content area a white background of its own.
+     *
+     * Element Plus's are excluded: theirs is handed back to Element Plus in _layout.scss
+     * so that the field inside a wrapper stays transparent, and re-tinting it here would
+     * put a sunk-grey rectangle inside a surface-coloured input - the same box-in-a-box,
+     * drawn in the dark palette. What is left is the native fields the templates still
+     * use: the readonly `define()` blocks on the provider screens, and the editor.
+     */
+    input:not(.el-input__inner):not(.el-range-input):not(.el-select__input),
+    textarea:not(.el-textarea__inner),
     select {
         background-color: var(--fsm-surface-sunk);
         border-color: var(--fsm-border);

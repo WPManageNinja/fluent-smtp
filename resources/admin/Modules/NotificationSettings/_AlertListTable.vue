@@ -1,58 +1,66 @@
 <template>
-    <div>
-        <p>{{ $t('__REAL_NOTIFICATION_DESC') }}</p>
-        <el-table :data="alerts" class="fss_alert_list_table__table" v-loading="loading">
-            <el-table-column :label="$t('Channel')" min-width="200">
-                <template #default="scope">
-                    <div class="fss_alert_list_table__channel-cell">
-                        <img :src="scope.row.logo" class="fss_alert_list_table__logo" :alt="scope.row.title"/>
-                        <span>{{ scope.row.title }}</span>
-                    </div>
-                </template>
-            </el-table-column>
+    <div v-loading="loading" class="fsm_chan_wrap">
+        <!--
+            Rows rather than a table, the same shape the connections list uses. Four
+            channels with a name, a switch and two icon buttons is not tabular data - the
+            table spent three header cells saying Channel, Status and Actions above four
+            rows that could not be sorted, filtered or compared.
 
-            <el-table-column :label="$t('Status')" width="100" align="center">
-                <template #default="scope">
-                    <el-switch
-                        v-model="scope.row.is_active"
-                        active-value="yes"
-                        inactive-value="no"
-                        @change="toggleChannel()"
-                        :disabled="toggling || !scope.row.is_configured"
-                        :aria-label="scope.row.is_active ? $t('Enabled') : $t('Disabled') + ' - ' + scope.row.title">
-                    </el-switch>
-                </template>
-            </el-table-column>
+            A channel that has never been set up has nothing to switch on, so it offers
+            the one thing it can do instead: Set Up.
+        -->
+        <ul class="fsm_chan_list">
+            <li v-for="alert in alerts" :key="alert.key" class="fsm_chan">
+                <img class="fsm_chan_logo" :src="alert.logo" :alt="alert.title"/>
 
-            <el-table-column :label="$t('Actions')" width="150" align="right">
-                <template #default="scope">
-                    <el-button
-                        size="small"
-                        :type="scope.row.is_configured ? 'primary' : 'success'"
-                        :icon="scope.row.is_configured ? 'FsmIconEdit' : 'FsmIconPlus'"
-                        @click="editChannel(scope.row.key)"
-                        :aria-label="(scope.row.is_configured ? $t('Edit') : $t('Configure')) + ' ' + scope.row.title">
+                <div class="fsm_chan_main">
+                    <span class="fsm_chan_title">{{ alert.title }}</span>
+                    <span class="fsm_chan_note">
+                        {{ alert.is_configured ? $t('Connected') : $t('Not connected') }}
+                    </span>
+                </div>
+
+                <el-switch
+                    v-if="alert.is_configured"
+                    v-model="alert.is_active"
+                    active-value="yes"
+                    inactive-value="no"
+                    @change="toggleChannel()"
+                    :disabled="toggling"
+                    :aria-label="$t('Notify on failure') + ' - ' + alert.title">
+                </el-switch>
+
+                <div class="fsm_chan_actions">
+                    <template v-if="alert.is_configured">
+                        <el-button
+                            size="small"
+                            icon="FsmIconEdit"
+                            @click="editChannel(alert.key)"
+                            :title="$t('Edit')"
+                            :aria-label="$t('Edit') + ' ' + alert.title">
+                        </el-button>
+                        <el-button
+                            size="small"
+                            icon="FsmIconDelete"
+                            @click="deactivateChannel(alert.key)"
+                            :title="$t('Deactivate')"
+                            :aria-label="$t('Deactivate') + ' ' + alert.title">
+                        </el-button>
+                    </template>
+                    <el-button v-else size="small" type="primary" @click="editChannel(alert.key)">
+                        {{ $t('Set Up') }}
                     </el-button>
-                    <el-button
-                        v-if="scope.row.is_configured"
-                        size="small"
-                        type="danger"
-                        icon="FsmIconDelete"
-                        @click="deactivateChannel(scope.row.key)"
-                        :aria-label="$t('Deactivate') + ' ' + scope.row.title">
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+                </div>
+            </li>
+        </ul>
 
-        <div style="margin-top: 20px;" v-if="activatedChannelsCount > 1">
-            <el-alert
-                type="info"
-                :closable="false"
-                :title="$t('We recommend activating only one notification channel at a time.')"
-                show-icon>
-            </el-alert>
-        </div>
+        <!--
+            A note under the list rather than an alert box above it: nothing is wrong, and
+            a second channel is a choice the reader has just made deliberately.
+        -->
+        <p v-if="activatedChannelsCount > 1" class="fsm_chan_hint">
+            {{ $t('We recommend activating only one notification channel at a time.') }}
+        </p>
     </div>
 </template>
 
@@ -95,8 +103,6 @@ export default {
                         // Each channel may have different required fields, so we check if status is yes and settings exist
                         const isConfigured = settings.status === 'yes' && Object.keys(settings).length > 1;
 
-                        console.log(activeChannels.indexOf(key), key, isConfigured);
-
                         return {
                             key: key,
                             title: channel.title,
@@ -115,6 +121,11 @@ export default {
                     this.loading = false;
                 });
         },
+        /*
+         * The whole set of enabled channels is posted, not the one that changed, so the
+         * switch the reader just moved is already the truth of it - there is nothing to
+         * write back on success. On failure the row is put back the way it was.
+         */
         toggleChannel() {
             const enabledChannelKeys = [];
             this.alerts.forEach(alert => {
@@ -129,25 +140,11 @@ export default {
             })
                 .then((response) => {
                     this.$notify.success(response.data.message);
-                    // Update local state
-                    this.alerts.forEach(alert => {
-                        if (alert.key === channelKey) {
-                            alert.is_active = enable;
-                        } else if (enable) {
-                            // Disable others when enabling one
-                            alert.is_active = false;
-                        }
-                    });
-                    // Emit event to parent to reload settings
                     this.$emit('channel-toggled');
                 })
                 .catch((errors) => {
-                    // Revert the toggle
-                    const alert = this.alerts.find(a => a.key === channelKey);
-                    if (alert) {
-                        alert.is_active = !enable;
-                    }
                     this.$notify.error(errors.responseJSON?.data?.message || this.$t('Failed to toggle channel'));
+                    this.loadChannels();
                 })
                 .always(() => {
                     this.toggling = false;
@@ -175,7 +172,7 @@ export default {
                             const alert = this.alerts.find(a => a.key === channelKey);
                             if (alert) {
                                 alert.is_configured = false;
-                                alert.is_active = false;
+                                alert.is_active = 'no';
                                 alert.status = 'no';
                             }
                             // Reload channels to get fresh data from server

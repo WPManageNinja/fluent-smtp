@@ -69,7 +69,7 @@
                     {{ $t('Cancel') }}
                 </el-button>
                 <el-button
-                    type="success"
+                    type="primary"
                     size="small"
                     icon="FsmIconRefreshRight"
                     :loading="resending"

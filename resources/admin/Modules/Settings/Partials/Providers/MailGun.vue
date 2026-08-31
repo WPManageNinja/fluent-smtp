@@ -75,9 +75,7 @@ define( 'FLUENTMAIL_MAILGUN_DOMAIN', '********************' );</textarea>
         </div>
 
         <el-form-item>
-            <label for="region" style="vertical-align:baseline;">
-                {{ $t('Select Region') }}&nbsp;&nbsp;&nbsp;&nbsp;
-            </label>
+            <label for="region">{{ $t('Select Region') }}</label>
 
             <el-radio v-model="connection.region" value="us">US</el-radio>
             <el-radio v-model="connection.region" value="eu">EU</el-radio>

@@ -1,8 +1,20 @@
 <template>
+    <!--
+        `trigger="click"` is not a preference, it is the default that changed underneath
+        this component. Element UI's popover opened on click; Element Plus's opens on
+        hover, and neither this nor `v-model` said otherwise - so every delete
+        confirmation in the admin armed itself when the pointer crossed the button and
+        did nothing at all when you pressed it.
+
+        The visibility is the popover's own, reached through a ref. `v-model` bound
+        `modelValue`, which el-popover does not have (it takes `v-model:visible`), so it
+        was inert - and passing `visible` at all would put the popover in controlled
+        mode, where `trigger` is ignored and nothing would open it.
+    -->
     <el-popover
+        ref="popover"
+        trigger="click"
         width="170"
-        @hide="cancel"
-        v-model="visible"
         :placement="placement">
 
         <p v-html="message"></p>
@@ -42,14 +54,9 @@
                 default: 'Are you sure to delete this?'
             }
         },
-        data() {
-            return {
-                visible: false
-            }
-        },
         methods: {
             hide() {
-                this.visible = false;
+                this.$refs.popover && this.$refs.popover.hide();
             },
             confirm() {
                 this.hide();

@@ -8,7 +8,7 @@
 
                 <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
                     <el-form-item label="Your Email Address">
-                        <el-input size="small" v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
+                        <el-input v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
                     </el-form-item>
                     <el-form-item>
                         <el-checkbox v-model="newForm.terms" true-value="yes" false-value="no">

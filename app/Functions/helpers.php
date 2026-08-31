@@ -74,6 +74,36 @@ if (!function_exists('fluentMailMix')) {
     }
 }
 
+if (!function_exists('fluentMailAssetVersion')) {
+    /**
+     * Cache-busting version for an enqueued asset, given its path under assets/.
+     *
+     * The plugin version is the right stamp for a release: it changes exactly when the
+     * built files can change, and every visitor gets the new URL once. It is the wrong
+     * stamp while the admin is being worked on, where the same version covers dozens of
+     * rebuilds - the browser keeps serving the copy it already has, and a change that did
+     * land reads as a change that did not. With WP_DEBUG or SCRIPT_DEBUG on, the built
+     * file's own modification time is appended, so a rebuild is a new URL and an ordinary
+     * reload is enough to see it.
+     *
+     * @param string $path Path under the plugin's assets/ directory.
+     * @return string
+     */
+    function fluentMailAssetVersion($path)
+    {
+        $isDebug = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) || (defined('WP_DEBUG') && WP_DEBUG);
+
+        if (!$isDebug) {
+            return FLUENTMAIL_PLUGIN_VERSION;
+        }
+
+        $file = FLUENTMAIL_PLUGIN_PATH . 'assets/' . ltrim($path, '/');
+        $builtAt = is_readable($file) ? filemtime($file) : false;
+
+        return $builtAt ? FLUENTMAIL_PLUGIN_VERSION . '.' . $builtAt : FLUENTMAIL_PLUGIN_VERSION;
+    }
+}
+
 if (!function_exists('fluentMailAssetUrl')) {
     /**
      * Returns the URL for the assets of the Fluent Mail plugin.

@@ -7,11 +7,11 @@
                 </p>
                 <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
                     <el-form-item :label="$t('API Token')">
-                        <el-input size="small" v-model="newForm.api_token" :placeholder="$t('Pushover API Token')"/>
+                        <el-input v-model="newForm.api_token" :placeholder="$t('Pushover API Token')"/>
                     </el-form-item>
 
                     <el-form-item :label="$t('User Key')">
-                        <el-input size="small" v-model="newForm.user_key" :placeholder="$t('Pushover User Key')"/>
+                        <el-input v-model="newForm.user_key" :placeholder="$t('Pushover User Key')"/>
                     </el-form-item>
 
                     <el-form-item>

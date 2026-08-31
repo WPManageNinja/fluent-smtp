@@ -17,8 +17,9 @@
                 <pre class="fss_alert_info__error-pre">{{errors}}</pre>
                 <div class="fss_alert_info__actions">
                     <div class="fss_alert_info__actions__test-button">
-                        <el-button @click="getInfo()" :disabled="loading" v-loading="loading" type="primary" size="small">
-                            <el-icon><FsmIconRefresh /></el-icon> {{ $t('Try Again') }}
+                        <el-button @click="getInfo()" :disabled="loading" v-loading="loading"
+                                   type="primary" icon="FsmIconRefresh">
+                            {{ $t('Try Again') }}
                         </el-button>
                     </div>
                     <div class="fss_alert_info__actions__disconnect">

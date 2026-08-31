@@ -9,7 +9,7 @@
 
                 <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
                     <el-form-item :label="$t('Your Email Address')">
-                        <el-input size="small" v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
+                        <el-input v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
                     </el-form-item>
                     <el-form-item>
                         <el-checkbox v-model="newForm.terms" true-value="yes" false-value="no">
@@ -34,7 +34,7 @@
                     {{ $t('activate ') }} {{ newForm.site_pin }}
                     <span @click="copyPin()" class="fss_alert_settings__pin-container__copy-button">{{ $t('copy') }}</span>
                 </p>
-                <el-button :disabled="processing" v-loading="processing" @click="confirmConnection()" size="medium" type="success">{{ $t('I have sent the code') }}</el-button>
+                <el-button :disabled="processing" v-loading="processing" @click="confirmConnection()" type="primary">{{ $t('I have sent the code') }}</el-button>
             </div>
         </div>
         <div v-else>

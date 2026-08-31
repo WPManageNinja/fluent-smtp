@@ -1,10 +1,37 @@
 <template>
     <div class="fss_connection_wizard">
         <el-form :data="connection" label-position="top" autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore data-form-type="other">
-            <el-form-item :label="$t('Connection Provider')">
-                <connection-provider :providers="providers" :connection="connection"/>
-            </el-form-item>
-            <template v-if="connection.provider">
+            <!--
+                The picker, shown while there is nothing chosen and again when `change` is
+                pressed. It takes the whole width because it is fourteen logos, and the
+                form it replaces has nothing to say until one of them is picked.
+
+                `hide_chosen` is for the connection screen, which shows what you picked in
+                the page heading beside the title - a place this component cannot reach.
+                The dashboard's first-run wizard has no heading of its own, so it keeps
+                the plate here.
+            -->
+            <div v-if="pickerOpen" class="fss_config_section">
+                <h3 class="fs_config_title">{{ $t('Connection Provider') }}</h3>
+                <connection-provider :providers="providers" :connection="connection"
+                                     @picked="picker_open = false"/>
+                <p v-if="!connection.provider" class="fsm_form_hint">
+                    {{ $t('save_connection_error_1') }}
+                </p>
+            </div>
+
+            <template v-if="connection.provider && !pickerOpen">
+                <div v-if="!hide_chosen" class="fsm_provider_chosen">
+                    <span class="fsm_provider_chosen_mark">
+                        <img :src="providers[connection.provider].image"
+                             :alt="providers[connection.provider].title"
+                             :title="providers[connection.provider].title"/>
+                    </span>
+                    <el-button size="small" icon="FsmIconEdit" @click="picker_open = true">
+                        {{ $t('change') }}
+                    </el-button>
+                </div>
+
                 <div class="fss_config_section">
                     <h3 class="fs_config_title">{{ $t('Sender Settings') }}</h3>
                     <el-row :gutter="20">
@@ -94,15 +121,17 @@
                         :is_new="is_new"
                     />
                 </div>
-                <p v-if="providers[connection.provider].note" style="padding: 5px 0px; font-size: 16px; color: var(--fsm-warning-fg);"
+                <!--
+                    A provider's caveat - "not recommended for mass marketing" - which
+                    was set at 16px, larger than the form's own labels and every heading
+                    on the screen bar the page title.
+                -->
+                <p v-if="providers[connection.provider].note" class="fsm_provider_note"
                    v-html="providers[connection.provider].note"></p>
-                <el-button v-loading="saving" @click="saveConnectionSettings()" type="success">
+                <el-button v-loading="saving" @click="saveConnectionSettings()" type="primary">
                     {{ $t('Save Connection Settings') }}
                 </el-button>
             </template>
-            <div v-else>
-                <h3 style="text-align: center;">{{ $t('save_connection_error_1') }}</h3>
-            </div>
             <p v-if="saving">{{ $t('Validating Data. Please wait...') }}</p>
             <el-alert style="margin-top: 20px" v-if="has_error" type="error">{{ $t('save_connection_error_2') }}
             </el-alert>
@@ -132,7 +161,7 @@ import cloudflare from './Partials/Providers/Cloudflare';
 
 export default {
     name: 'ConnectionWizard',
-    props: ['connection', 'is_new', 'providers', 'connection_key', 'connections'],
+    props: ['connection', 'is_new', 'providers', 'connection_key', 'connections', 'hide_chosen'],
     components: {
         ses: AmazonSes,
         mailgun,
@@ -154,12 +183,18 @@ export default {
     data() {
         return {
             saving: false,
+            picker_open: false,
             errors: new Errors(),
             api_error: '',
             has_error: false
         }
     },
     computed: {
+        /* Open on purpose, or open because there is nothing to show instead. */
+        pickerOpen() {
+            return this.picker_open || !this.connection.provider;
+        },
+
         is_conflicted() {
             if (!this.connections) {
                 return false;
@@ -193,6 +228,11 @@ export default {
         }
     },
     methods: {
+        /* Called by the connection screen, whose `change` button lives in its heading. */
+        openPicker() {
+            this.picker_open = true;
+        },
+
         saveConnectionSettings() {
             this.saving = true;
             this.api_error = '';

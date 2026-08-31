@@ -2,7 +2,7 @@
     <div>
         <div v-if="connection_key && !connection.version" v-html="$t('__GCP_INTRO')" class="ff_smtp_warn">
         </div>
-        <h3>{{ $t('Gmail / Google Workspace API Settings') }}</h3>
+        <h3 class="fs_config_title">{{ $t('Gmail / Google Workspace API Settings') }}</h3>
         <p v-html="$t('__GCP_API_INST')"></p>
         
         <el-radio-group size="small" v-model="connection.key_store">
@@ -73,10 +73,16 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
             <p>{{ $t('*** It is very important to put ') }}<b>https://fluentsmtp.com/gapi/</b>{{ $t(' in the ') }} <b>{{ $t('Authorized Redirect URIs') }}</b>{{ $t(' option in the Google Cloud Project.') }}</p>
         </el-form-item>
 
+        <!--
+            The step that finishes this form, so it is the primary action. It was
+            `type="danger"`, which is the colour this admin uses for deleting a
+            connection - a red button under a centred heading, for the one thing the
+            screen is asking you to do.
+        -->
         <div v-if="!connection.access_token">
-            <div style="text-align: center;">
-                <h3>{{ $t('Please authenticate with Google to get ') }}<b>{{ $t('Access Token') }}</b></h3>
-                <el-button v-loading="gettingRedirect" @click="redirectToGoogle()" type="danger">{{
+            <div class="fsm_provider_auth">
+                <p>{{ $t('Please authenticate with Google to get ') }}<b>{{ $t('Access Token') }}</b></p>
+                <el-button v-loading="gettingRedirect" @click="redirectToGoogle()" type="primary">{{
                         $t('Authenticate with Google & Get Access Token') }}</el-button>
 
             </div>
@@ -97,7 +103,7 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
             </el-row>
         </div>
         <div style="text-align: center;" v-else>
-            <h3>{{ $t('__GMAIL_SUCCESS') }} <a @click.prevent="connection.access_token = ''" href="#">{{ $t('click here') }}</a></h3>
+            <p class="fsm_provider_connected">{{ $t('__GMAIL_SUCCESS') }} <a @click.prevent="connection.access_token = ''" href="#">{{ $t('click here') }}</a></p>
         </div>
 
     </div>

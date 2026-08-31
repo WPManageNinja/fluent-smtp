@@ -1,6 +1,9 @@
 .doc_body {
   display: flex;
   flex-wrap: wrap;
+  /* Each card is as tall as its own list. Stretched to the tallest in the row, a
+     category with one link stood as tall as one with fourteen and read as broken. */
+  align-items: flex-start;
   max-width: 1060px;
   padding: 0 20px;
   margin: 0 auto;

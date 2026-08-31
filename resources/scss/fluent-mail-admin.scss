@@ -38,9 +38,8 @@
 
   & {
     /*
-     * The screens that have not been rebuilt around .fsm_card still use this
-     * header-and-content pair - Email Test, Alerts, About, Documentation and the
-     * connection wizard. Rather than rewrite five templates to say the same thing a
+     * About is the last screen not rebuilt around .fsm_card, and it still uses this
+     * header-and-content pair. Rather than rewrite the template to say the same thing a
      * different way, the pair is drawn *as* a card: the header supplies the top of the
      * frame, the content the rest. A .fss_content without a header above it closes the
      * box on its own.
@@ -56,6 +55,7 @@
       border: 1px solid var(--fsm-border);
       border-bottom: 0;
       border-radius: 8px 8px 0 0;
+      box-shadow: var(--fsm-shadow-card);
       font-size: 14px;
       font-weight: 500;
       color: var(--fsm-text);
@@ -72,6 +72,19 @@
       }
     }
 
+    /*
+     * Joined to the header above it, so it only closes the bottom of the box.
+     *
+     * This used to be nested inside .fss_content, where it compiled to
+     * `.fss_content .fss_header + .fss_content` - a content box following a header
+     * *inside another content box*, which is not a thing this app builds. So it never
+     * matched, and every one of these cards drew its body with four rounded corners:
+     * two notches at the seam, right under a header squared off to meet it.
+     */
+    & .fss_header + .fss_content {
+      border-radius: 0 0 8px 8px;
+    }
+
     & .fss_content {
       padding: 16px 24px;
       margin-bottom: 20px;
@@ -79,12 +92,6 @@
       border: 1px solid var(--fsm-border);
       border-radius: 8px;
       box-shadow: var(--fsm-shadow-card);
-
-      /* Joined to the header above it, so it only closes the bottom of the box. */
-      .fss_header + & {
-        border-top: 1px solid var(--fsm-border);
-        border-radius: 0 0 8px 8px;
-      }
 
       .fss_general_settings {
         .el-form {
@@ -140,6 +147,16 @@
   }
 }
 
+/*
+ * .fsm_card_body pads 4px top and bottom, because what usually goes in one is a list of
+ * rows carrying 12px of their own - 4 and 12 make the 16 the card head uses. A form is
+ * not that: its first label and its Save button have no padding of their own, so the
+ * wizard brings the other 12 itself and the card keeps the same rhythm.
+ */
+.fss_connection_wizard {
+  padding: 12px 0;
+}
+
 /* A step of the connection wizard - one card per subject, the same as everywhere else. */
 .fss_config_section {
   background: var(--fsm-surface);
@@ -163,6 +180,20 @@
    */
   .el-form-item__content {
     gap: 8px;
+
+    /*
+     * A field's control takes the line under its label.
+     *
+     * The row above gives an inline control - a switch, a pair of radios - the space it
+     * was missing, but it also means a control with no width of its own sits beside the
+     * label rather than under it. An el-input fills the row and wraps on its own; these
+     * two have to say so.
+     */
+    > .fsm_input_password,
+    > .fsm_field_group,
+    > .code_snippet {
+      flex: 1 1 100%;
+    }
   }
 }
 
@@ -406,6 +437,43 @@ ul.fss_dash_lists {
   span.el-form-item__error {
     display: block;
     position: relative !important;
+  }
+}
+
+/*
+ * The wp-config.php snippet a provider offers instead of storing keys in the database.
+ *
+ * It had no styling at all - a bare <textarea style="width:100%"> inside a form item,
+ * which Element Plus lays out as a wrapping flex row. 100% of a flex item that shrinks to
+ * its content is not the width of the row, so the box collapsed to a couple of hundred
+ * pixels beside its own instruction and showed three words of the define() at a time.
+ * It is code to be copied, so it is set as code.
+ */
+.code_snippet {
+  margin-top: 6px;
+
+  textarea {
+    display: block;
+    width: 100%;
+    min-height: 74px;
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--fsm-border);
+    border-radius: 6px;
+    background: var(--fsm-surface-sunk);
+    color: var(--fsm-text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre;
+    overflow-x: auto;
+    resize: vertical;
+    box-shadow: none;
+
+    &:focus {
+      border-color: var(--fsm-accent);
+      outline: none;
+    }
   }
 }
 

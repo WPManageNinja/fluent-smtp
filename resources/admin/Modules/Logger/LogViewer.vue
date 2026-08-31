@@ -23,7 +23,7 @@
 
                                 <el-button
                                     size="small"
-                                    type="success"
+                                    type="primary"
                                     icon="FsmIconRefresh"
                                     @click="handleRetry(log, 'retry')"
                                     :plain="true"
@@ -32,7 +32,7 @@
 
                                 <el-button
                                     size="small"
-                                    type="success"
+                                    type="primary"
                                     icon="FsmIconRefreshRight"
                                     @click="handleResendClick"
                                     v-if="log.status == 'sent'"
@@ -147,23 +147,23 @@
                 <el-row :gutter="10">
                     <el-col :span="12">
                         <el-button
-                            size="small"
                             class="prev nav"
+                            icon="FsmIconArrowLeft"
                             :disabled="!prev"
                             @click="navigate('prev')"
-                        >
-                            <el-icon><FsmIconArrowLeft /></el-icon> {{ $t('Prev') }}
-                        </el-button>
+                        >{{ $t('Prev') }}</el-button>
                     </el-col>
                     <el-col :span="12">
+                        <!--
+                            The icon trails the label here, which the `icon` prop cannot
+                            do - so it stays in the slot and .fsm_btn_icon_right supplies
+                            the spacing the prop would have.
+                        -->
                         <el-button
-                            size="small"
                             class="next nav"
                             :disabled="!next"
                             @click="navigate('next')"
-                        >
-                            {{ $t('Next') }} <el-icon><FsmIconArrowRight /></el-icon>
-                        </el-button>
+                        >{{ $t('Next') }}<el-icon class="fsm_btn_icon_right"><FsmIconArrowRight/></el-icon></el-button>
                     </el-col>
                 </el-row>
             </div>

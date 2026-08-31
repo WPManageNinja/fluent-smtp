@@ -16,10 +16,13 @@ import NotificationSettings from './Modules/NotificationSettings/NotificationSet
  * `#/notification-settings` is where the Slack OAuth round trip returns to. Renaming one
  * breaks a link that has already been delivered and cannot be recalled.
  *
- * `meta.active` is new, and is chrome rather than routing: it tells the app bar which of
- * its three destinations to light up, so Settings stays marked while any of the screens
- * behind it is open. `tests/lint/browser-route-coverage.php` fails the build if a path is
- * added or removed on one side of the browser smoke manifest only.
+ * `meta.active` is chrome rather than routing: it tells the app bar which of its four
+ * destinations to light up. Settings - the connections screen, whose route keeps the
+ * `connections` name - stays marked while the add and edit screens behind it are open.
+ * Email Test and About light nothing - the first is the bar's own button, the second a
+ * footer link - so they carry a value no destination matches.
+ * `tests/lint/browser-route-coverage.php` fails the build if a path is added or removed
+ * on one side of the browser smoke manifest only.
  */
 export default [
     {
@@ -35,8 +38,8 @@ export default [
         name: 'connections',
         path: '/connections',
         meta: {
-            active: 'settings',
-            title: 'Connections'
+            active: 'connections',
+            title: 'Settings'
         },
         component: Connections
     },
@@ -44,7 +47,7 @@ export default [
         name: 'connection',
         path: '/connection',
         meta: {
-            active: 'settings',
+            active: 'connections',
             title: 'Add Connection'
         },
         component: Connection
@@ -53,7 +56,7 @@ export default [
         name: 'test',
         path: '/test',
         meta: {
-            active: 'settings',
+            active: 'test',
             title: 'Email Test'
         },
         component: Test
@@ -62,7 +65,7 @@ export default [
         name: 'support',
         path: '/support',
         meta: {
-            active: 'settings',
+            active: 'about',
             title: 'About'
         },
         component: Support
@@ -89,7 +92,7 @@ export default [
         name: 'notification_settings',
         path: '/notification-settings',
         meta: {
-            active: 'settings',
+            active: 'alerts',
             title: 'Alerts & Notifications'
         },
         component: NotificationSettings

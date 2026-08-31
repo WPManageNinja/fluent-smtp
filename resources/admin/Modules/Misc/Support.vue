@@ -89,7 +89,7 @@
                                     <div v-html="plugin.description"></div>
                                     <div class="fss_install_btn">
                                         <el-button v-if="!appVars.disable_installation" @click="installPlugin(plugin.slug)"
-                                                   :class="plugin.btn_class" type="success">{{ plugin.btn_text }}
+                                                   :class="plugin.btn_class" type="primary">{{ plugin.btn_text }}
                                         </el-button>
                                         <a v-else :href="plugin.plugin_url" target="_blank" rel="noopener"
                                            class="el-button el-button--success fss_ninjatables_btn">

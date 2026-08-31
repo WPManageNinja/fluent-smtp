@@ -7,11 +7,11 @@
                 </p>
                 <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
                     <el-form-item :label="$t('Your Discord Channel Name (For Internal Use)')">
-                        <el-input size="small" v-model="newForm.channel_name"/>
+                        <el-input v-model="newForm.channel_name"/>
                     </el-form-item>
 
                     <el-form-item :label="$t('Your Discord Channel Webhook URL')">
-                        <el-input size="small" v-model="newForm.webhook_url" :placeholder="$t('Discord Webhook URL')"/>
+                        <el-input v-model="newForm.webhook_url" :placeholder="$t('Discord Webhook URL')"/>
                     </el-form-item>
 
                     <el-form-item>

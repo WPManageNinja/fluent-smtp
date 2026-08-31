@@ -66,7 +66,7 @@
                     </el-checkbox>
                 </el-form-item>
                 <el-form-item :label="$t('Message Stream')">
-                    <el-input type="text" size="small" v-model="connection.message_stream"/>
+                    <el-input type="text" v-model="connection.message_stream"/>
                 </el-form-item>
             </el-col>
             <el-col :md="12" :sm="24">

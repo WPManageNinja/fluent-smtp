@@ -1,84 +1,104 @@
 <template>
-    <div>
-        <div class="fss_header">
-            {{ $t('Send Test Email') }}
+    <!--
+        The one screen you are sent to from the bar, so it says what it is like every
+        other screen does, and the form is a column rather than a page-wide row: a From
+        address and a recipient are short fields, and stretching them to 1300px only
+        makes the label further from the value it labels.
+    -->
+    <div class="fsm_test">
+        <div class="fsm_page_head">
+            <h1 class="fsm_page_title">{{ $t('Email Test') }}</h1>
         </div>
-        <div class="fss_content">
-            <div class="test_form" v-if="!email_success">
-                <el-form ref="form" :model="form" label-position="left" label-width="120px" autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore data-form-type="other">
 
-                    <el-form-item for="email" :label="$t('From')">
-                        <el-select autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore :placeholder="$t('Select Email or Type')" v-model="form.from">
+        <div class="fsm_card fsm_test_card">
+            <div class="fsm_card_head">
+                <h2>{{ $t('Send Test Email') }}</h2>
+            </div>
+
+            <div class="fsm_card_body" v-if="!email_success">
+                <div class="fsm_row fsm_row_stacked">
+                    <div class="fsm_row_label">
+                        <span class="fsm_row_title">{{ $t('From') }}</span>
+                        <p>{{ $t('Enter the sender email address(optional).') }}</p>
+                    </div>
+                    <div class="fsm_row_control">
+                        <el-select autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore
+                                   :placeholder="$t('Select Email or Type')" v-model="form.from">
                             <el-option
                                 v-for="(emailHash, email) in sender_emails"
                                 :key="email" :label="email"
                                 :value="email"
                             ></el-option>
                         </el-select>
+                    </div>
+                </div>
 
-                        <span class="small-help-text" style="display:block;margin-top:-10px">
-                            {{ $t('Enter the sender email address(optional).') }}
+                <div class="fsm_row fsm_row_stacked">
+                    <div class="fsm_row_label">
+                        <span class="fsm_row_title">{{ $t('Send To') }}</span>
+                        <p>{{ $t('__TEST_EMAIL_INST') }}</p>
+                    </div>
+                    <div class="fsm_row_control">
+                        <el-input id="from" v-model="form.email" autocomplete="off" data-bwignore
+                                  data-lpignore="true" data-1p-ignore name="fluentsmtp_test_to"/>
+                    </div>
+                </div>
+
+                <!--
+                    A switch is on or off; the On and Off labels Element can print either
+                    side of it said the same thing twice. The colours went with them - they
+                    were hard-coded to a green that appears nowhere else in the app.
+                -->
+                <div class="fsm_toggle">
+                    <div class="fsm_toggle_main">
+                        <el-switch v-model="form.isHtml" :aria-label="$t('HTML')"/>
+                        <span class="fsm_toggle_title" @click="form.isHtml = !form.isHtml">
+                            {{ $t('HTML') }}
                         </span>
-                    </el-form-item>
+                    </div>
+                    <div class="fsm_toggle_body">
+                        <p>{{ $t('Send this email in HTML or in plain text format.') }}</p>
+                    </div>
+                </div>
 
-                    <el-form-item for="from" :label="$t('Send To')">
-                        <el-input id="from" v-model="form.email" autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore name="fluentsmtp_test_to" />
+                <div class="fsm_row_actions">
+                    <el-button
+                        type="primary"
+                        icon="FsmIconSPromotion"
+                        :loading="loading"
+                        @click="sendEmail"
+                        :disabled="!maybeEnabled"
+                    >{{ $t('Send Test Email') }}</el-button>
 
-                        <span class="small-help-text" style="display:block;margin-top:-10px">
-                            {{ $t('__TEST_EMAIL_INST') }}
-                        </span>
-                    </el-form-item>
+                    <el-alert
+                        v-if="!maybeEnabled"
+                        :closable="false"
+                        type="warning"
+                        show-icon
+                        class="fsm_test_blocked"
+                    >{{ inactiveMessage }}</el-alert>
+                </div>
 
-                    <el-form-item for="isHtml" label="HTML">
-                        <el-switch
-                            v-model="form.isHtml"
-                            active-color="#13ce66"
-                            inactive-color="#dcdfe6"
-                            :active-text="$t('On')"
-                            :inactive-text="$t('Off')"
-                        />
-
-                        <span class="small-help-text" style="display:block;margin-top:-10px">
-                            {{ $t('Send this email in HTML or in plain text format.') }}
-                        </span>
-                    </el-form-item>
-
-                    <el-form-item align="left">
-                        <el-button
-                            type="primary"
-                            size="small"
-                            icon="FsmIconSPromotion"
-                            :loading="loading"
-                            @click="sendEmail"
-                            :disabled="!maybeEnabled"
-                        >{{ $t('Send Test Email') }}</el-button>
-
-                        <el-alert
-                            v-if="!maybeEnabled"
-                            :closable="false"
-                            type="warning"
-                            style="display:inline;margin-left:20px;"
-                        >{{ inactiveMessage }}</el-alert>
-                    </el-form-item>
-                </el-form>
-                <el-alert v-if="debug_info" type="error" :title="debug_info.message" show-icon />
+                <el-alert v-if="debug_info" type="error" :title="debug_info.message" show-icon/>
             </div>
-            <div v-else class="success_wrapper">
-                <h1><el-icon><FsmIconSuccess /></el-icon></h1>
-                <h3>{{ $t('Test Email Has been successfully sent') }}</h3>
-                <p v-if="time_taken_human" class="small-help-text">
-                    <el-icon><FsmIconTimer /></el-icon> {{ time_taken_human }}
-                </p>
-                <hr />
-                <div v-if="appVars.require_optin == 'yes'" style="margin-top: 10px;">
-                    <email-subscriber />
-                </div>
-                <el-button v-else @click="email_success = false">{{ $t('Run Another Test Email') }}</el-button>
 
-                <div v-if="appVars.require_optin != 'yes'" style="margin-top: 50px;">
-                    {{ $t('If you have a minute, consider ') }} <a target="_blank" href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5">{{ $t('write a review for FluentSMTP') }}</a>
-                </div>
+            <div v-else class="fsm_card_body">
+                <div class="success_wrapper">
+                    <h1><el-icon><FsmIconSuccess /></el-icon></h1>
+                    <h3>{{ $t('Test Email Has been successfully sent') }}</h3>
+                    <p v-if="time_taken_human" class="small-help-text">
+                        <el-icon><FsmIconTimer /></el-icon> {{ time_taken_human }}
+                    </p>
+                    <hr />
+                    <div v-if="appVars.require_optin == 'yes'" style="margin-top: 10px;">
+                        <email-subscriber />
+                    </div>
+                    <el-button v-else @click="email_success = false">{{ $t('Run Another Test Email') }}</el-button>
 
+                    <div v-if="appVars.require_optin != 'yes'" style="margin-top: 50px;">
+                        {{ $t('If you have a minute, consider ') }} <a target="_blank" href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5">{{ $t('write a review for FluentSMTP') }}</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h3 class="fs_config_title">{{ $t('Amazon SES API Settings') }}</h3>
         <el-radio-group size="small" v-model="connection.key_store">
             <el-radio-button value="db">{{ $t('Store Access Keys in DB') }}</el-radio-button>
             <el-radio-button value="wp_config">{{ $t('Access Keys in Config File') }}</el-radio-button>

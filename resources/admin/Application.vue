@@ -36,11 +36,11 @@
             <div class="fsm_app_bar_actions">
                 <!--
                     Sending a test email is the single most common thing an admin does on
-                    this plugin, so it is a button in the bar rather than an item buried
-                    inside Settings - even though the screen it opens is also listed in
-                    the settings sidebar, because that is where it belongs in the IA.
+                    this plugin, so it is a button in the bar rather than a screen buried
+                    behind Settings, which is where it used to live.
                 -->
                 <el-button type="primary" size="small" class="fsm_app_bar_cta"
+                           :class="{'is_current': onTestScreen}"
                            @click="$router.push({name: 'test'})">
                     {{ $t('Send Test Email') }}
                 </el-button>
@@ -55,38 +55,13 @@
         </div>
 
         <!--
-            Settings is a pinned pane with its own sidebar; everything else is an
-            ordinary page under the bar. Which one a route gets is decided by
-            `meta.active`, so no screen has to know about the chrome around it.
+            One chrome for every screen. There used to be a second one - Settings was a
+            pinned pane with a sidebar of its own, holding Connections, Alerts, Email
+            Test and About - which meant the screen this plugin exists for was two
+            clicks in. Settings is a destination in the bar now, reached in one, so the
+            pane has nothing left to hold and every route is a page.
         -->
-        <div v-if="isSettings" class="fsm_settings">
-            <nav class="fsm_settings_nav" :aria-label="$t('Settings')">
-                <div class="fsm_settings_nav_title">{{ $t('Settings') }}</div>
-                <ul>
-                    <li v-for="item in settingsNav" :key="item.route"
-                        :class="{'is-active': $route.name === item.route}">
-                        <router-link :to="{name: item.route}">{{ item.title }}</router-link>
-
-                        <ul v-if="item.children && $route.name === item.route"
-                            class="fsm_settings_subnav">
-                            <li v-for="child in item.children" :key="child.target">
-                                <a href="#" @click.prevent="scrollToSection(child.target)">
-                                    {{ child.title }}
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-
-            <div class="fsm_settings_body" ref="settingsBody">
-                <div class="fsm_settings_content">
-                    <router-view :key="$route.name"></router-view>
-                </div>
-            </div>
-        </div>
-
-        <div v-else class="fsm_page">
+        <div class="fsm_page">
             <div class="fsm_page_inner">
                 <router-view :key="$route.name"></router-view>
             </div>
@@ -110,45 +85,14 @@
             }
         },
         computed: {
-            isSettings() {
-                return this.$route.meta.active === 'settings';
-            },
-            /*
-             * Everything configurable, in one place.
-             *
-             * The old bar listed Settings, Email Test, Alerts and About as peers of
-             * Dashboard and Email Logs - three things you go to *change*, presented
-             * alongside the two you go to *look at*. These are those three, plus About,
-             * gathered behind one door.
-             *
-             * Every route here already existed. This is a change to where a link appears
-             * in the chrome, not to what any path resolves to - see routes.js.
-             */
-            settingsNav() {
-                return [
-                    {
-                        route: 'connections',
-                        title: this.$t('Connections'),
-                        /*
-                         * The General Settings panel lives on the same screen. It gets a
-                         * name of its own here because it is a separate subject, and an
-                         * anchor rather than a route of its own because splitting that
-                         * screen in two is Phase 5's job, not the shell's.
-                         */
-                        children: [
-                            {title: this.$t('General'), target: '.fsm_general_settings'}
-                        ]
-                    },
-                    {route: 'notification_settings', title: this.$t('Alerts & Notifications')},
-                    {route: 'test', title: this.$t('Email Test')},
-                    {route: 'support', title: this.$t('About')}
-                ];
+            /* Lit while the Email Test screen is open, since no nav item covers it. */
+            onTestScreen() {
+                return this.$route.name === 'test';
             }
         },
         watch: {
             $route(to) {
                 this.navOpen = false;
-                this.syncSettingsClass();
 
                 if (to.meta.title) {
                     document.title = this.$t(to.meta.title) + ' - FluentSMTP';
@@ -157,47 +101,38 @@
         },
         methods: {
             /*
-             * Only destinations - the places you go to look at something. Kept behind
-             * the `fluent_mail_top_menus` filter it has always been behind, so an add-on
-             * that called registerTopMenu() still lands its item in the bar.
+             * Only destinations - the places you go to look at something. Settings is
+             * the connections screen, under the name it has always had in this bar and
+             * in the docs; its route stays `connections` because that is what is linked
+             * from wp-admin and from the alerts the plugin has already sent. Alerts is
+             * a destination of its own rather than a card on the dashboard to click
+             * through: it is where a failing site gets told about, and something you go
+             * to set up on purpose. The dashboard still links to it. About is last,
+             * where a plugin's own page belongs - after everything the plugin is for.
+             * Kept behind the `fluent_mail_top_menus` filter it has always been behind,
+             * so an add-on that called registerTopMenu() still lands its item in the bar.
              */
             defaultRoutes() {
                 return [
                     {route: 'dashboard', title: this.$t('Dashboard'), match: 'dashboard'},
+                    {route: 'connections', title: this.$t('Settings'), match: 'connections'},
                     {route: 'logs', title: this.$t('Email Logs'), match: 'logs'},
-                    {route: 'connections', title: this.$t('Settings'), match: 'settings'}
+                    {route: 'notification_settings', title: this.$t('Alerts'), match: 'alerts'},
+                    {route: 'support', title: this.$t('About'), match: 'about'}
                 ];
             },
             setMenus() {
                 this.items = this.applyFilters('fluent_mail_top_menus', this.defaultRoutes());
             },
             /*
-             * `match` is what keeps Settings lit while any of the screens behind it is
-             * open. An item registered by an add-on has no `match`, so it falls back to
-             * being active only on its own route.
+             * `match` is what keeps Settings lit while the add and edit screens
+             * behind it are open. An item registered by an add-on has no `match`, so it
+             * falls back to being active only on its own route.
              */
             isActive(item) {
                 const active = this.$route.meta ? this.$route.meta.active : '';
 
                 return item.match ? active === item.match : this.$route.name === item.route;
-            },
-            scrollToSection(selector) {
-                const pane = this.$refs.settingsBody;
-                const target = pane ? pane.querySelector(selector) : null;
-
-                if (target) {
-                    target.scrollIntoView({behavior: 'smooth', block: 'start'});
-                }
-            },
-            /*
-             * The settings pane is pinned to the viewport, which puts it over the strip
-             * wp-admin reserves for its own footer. That strip has to be reclaimed or the
-             * pane comes up 65px short - but only while the pane is on screen, so the
-             * plugin's footer credit survives on every other screen. #wpfooter is outside
-             * the app root, so the class goes on <body> rather than on the shell.
-             */
-            syncSettingsClass() {
-                document.body.classList.toggle('fsm_settings_open', this.isSettings);
             },
             onScroll() {
                 this.scrolled = window.scrollY > 10;
@@ -224,8 +159,6 @@
             this.setMenus();
         },
         mounted() {
-            this.syncSettingsClass();
-
             window.addEventListener('scroll', this.onScroll);
             this.onScroll();
 
@@ -246,8 +179,6 @@
             }
         },
         beforeUnmount() {
-            document.body.classList.remove('fsm_settings_open');
-
             window.removeEventListener('scroll', this.onScroll);
             window.removeEventListener('resize', this.measureShell);
 
