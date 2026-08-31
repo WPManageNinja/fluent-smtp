@@ -1,8 +1,8 @@
 <template>
-    <div style="margin: 20px 0; background: var(--fsm-surface);" class="fss_wid_widget fss_wid_day_by_day">
-        <div class="fss_header fss_widget_header">
+    <div class="fsm_card fss_wid_widget fss_wid_day_by_day">
+        <div class="fsm_card_head">
             <h3>{{ $t('Sending by time of day') }}</h3>
-            <div class="widget_actions fss_to_right">
+            <div class="fsm_card_head_actions">
                 <el-select @change="fetchStats" size="small" v-model="last_day">
                     <el-option :value="7" :label="$t('Last 7 Days')"></el-option>
                     <el-option :value="30" :label="$t('Last 30 Days')"></el-option>
@@ -10,7 +10,7 @@
                 </el-select>
             </div>
         </div>
-        <div class="fss_content">
+        <div class="fsm_card_body">
             <div v-if="appReady" class="fcraft_time_widget">
                 <div class="fcraft_time_widget_header">
                     <div class="fcraft_time_day"></div>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <el-skeleton v-else class="fss_content" :rows="5"></el-skeleton>
+            <el-skeleton v-else :rows="5"></el-skeleton>
             <div class="fss_wid_label_info">
                 <span class="fss_wid_dir">{{ $t('Less') }}</span>
                 <span class="fss_wid_level fss_wid_level_1"></span>
@@ -138,7 +138,7 @@ export default {
      * a 100%-wide child inside it resolves to nothing and the control collapses
      * to the width of its chevron.
      */
-    .fss_widget_header .el-select {
+    .fsm_card_head .el-select {
         width: 210px;
     }
 
@@ -148,6 +148,7 @@ export default {
 
     .fss_wid_label_info {
         margin-top: 20px;
+        padding-bottom: 16px;
         display: flex;
         align-items: center;
         color: var(--fsm-text-light);

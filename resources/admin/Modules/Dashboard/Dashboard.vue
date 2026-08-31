@@ -35,85 +35,108 @@
                 :title="$t('Connection needs attention') + ': ' + connection.sender_email + ' (' + connection.provider + ')'"
                 :description="connection.message"
             />
-            <el-row :gutter="20">
-                <el-col :sm="24" :md="16">
-                    <div class="fss_dashboard_widget">
-                        <div class="fss_header fss_widget_header">
+            <div class="fsm_split">
+                <div class="fsm_split_main">
+                    <div class="fsm_card">
+                        <div class="fsm_card_head">
                             <h3>{{ $t('Sending Stats') }}</h3>
-                            <div class="fss_to_right">
+                            <div class="fsm_card_head_actions">
                                 <el-date-picker
                                     size="small"
                                     v-model="date_range"
                                     type="daterange"
                                     :shortcuts="shortcuts"
                                     :disabled-date="disabledDate"
-                                    range-separator="To"
+                                    :range-separator="$t('To')"
                                     :start-placeholder="$t('Start date')"
                                     :end-placeholder="$t('End date')"
                                     value-format="YYYY-MM-DD"
                                 ></el-date-picker>
-                                <el-button style="padding: 8px 15px;" size="small" @click="filterReport" type="primary" plain>Apply</el-button>
+                                <el-button size="small" @click="filterReport" type="primary" plain>
+                                    {{ $t('Apply') }}
+                                </el-button>
                             </div>
                         </div>
-                        <div class="fss_content">
+                        <div class="fsm_card_body">
                             <emails-chart v-if="showing_chart" :date_range="date_range"/>
                         </div>
                     </div>
-                    <div class="fss_dashboard_widget">
-                        <ByDayTimeSending/>
+
+                    <ByDayTimeSending/>
+                </div>
+
+                <div class="fsm_split_aside">
+                    <div class="fsm_card">
+                        <div class="fsm_card_head">
+                            <h3>{{ $t('Quick Overview') }}</h3>
+                        </div>
+
+                        <div class="fsm_card_body" v-if="!loading">
+                            <!--
+                                The four headline numbers, as tiles rather than as rows in
+                                a list with a floated count. Sent and Failed are the pair
+                                an admin is actually here to check, so they lead; Failed
+                                carries a link into the log filtered to failures, which is
+                                the next thing you want when the number is not zero.
+                            -->
+                            <div class="fsm_aside_block">
+                                <div class="fsm_tiles">
+                                    <div v-if="settings_stat.log_enabled == 'yes'"
+                                         class="fsm_tile is_sent">
+                                        <span class="fsm_tile_value">{{ stats.sent }}</span>
+                                        <span class="fsm_tile_label">{{ stripColon($t('Total Email Sent (Logged):')) }}</span>
+                                    </div>
+
+                                    <router-link
+                                        class="fsm_tile is_failed"
+                                        :to="{ name: 'logs', query: { filterBy: 'status', filterValue: 'failed' } }">
+                                        <span class="fsm_tile_value">{{ stats.failed || 0 }}</span>
+                                        <span class="fsm_tile_label">{{ stripColon($t('Email Failed:')) }}</span>
+                                    </router-link>
+
+                                    <div class="fsm_tile is_connections">
+                                        <span class="fsm_tile_value">{{ settings_stat.connection_counts }}</span>
+                                        <span class="fsm_tile_label">{{ stripColon($t('Active Connections:')) }}</span>
+                                    </div>
+
+                                    <div class="fsm_tile is_senders">
+                                        <span class="fsm_tile_value">{{ settings_stat.active_senders }}</span>
+                                        <span class="fsm_tile_label">{{ stripColon($t('Active Senders:')) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fsm_aside_block">
+                                <h3>{{ $t('Email Logs') }}</h3>
+                                <ul class="fsm_fact_list">
+                                    <li>
+                                        <span>{{ $t('Save Email Logs:') }}</span>
+                                        <span style="text-transform: capitalize;">{{ settings_stat.log_enabled }}</span>
+                                    </li>
+                                    <li v-if="settings_stat.log_enabled == 'yes'">
+                                        <span>{{ $t('Delete Logs:') }}</span>
+                                        <span>{{ $t('After') }} {{ settings_stat.auto_delete_days }} {{ $t('Days') }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <el-skeleton v-else class="fsm_card_body" :rows="8"></el-skeleton>
                     </div>
 
-                </el-col>
-                <el-col :sm="24" :md="8">
-                    <div class="fsm_card">
-                        <div class="fss_header">
-                            {{ $t('Quick Overview') }}
-                        </div>
-                        <div class="fss_content" v-if="!loading">
-                            <ul class="fss_dash_lists">
-                                <li v-if="settings_stat.log_enabled == 'yes'">
-                                    {{ $t('Total Email Sent (Logged):') }} <span>{{ stats.sent }}</span>
-                                </li>
-                                <li style="color: var(--fsm-danger-fg)" v-if="stats.failed > 0">
-                                    <router-link style="color: var(--fsm-danger-fg)"
-                                                 :to="{ name: 'logs', query: { filterBy: 'status', filterValue: 'failed' } }">
-                                        {{ $t('Email Failed:') }} <span>{{ stats.failed }}</span>
-                                    </router-link>
-                                </li>
-                                <li>
-                                    {{ $t('Active Connections:') }} <span>{{ settings_stat.connection_counts }}</span>
-                                </li>
-                                <li>
-                                    {{ $t('Active Senders:') }} <span>{{ settings_stat.active_senders }}</span>
-                                </li>
-                                <li>
-                                    {{ $t('Save Email Logs:') }}
-                                    <span style="text-transform: capitalize;">
-                                        {{ settings_stat.log_enabled }}
-                                    </span>
-                                </li>
-                                <li v-if="settings_stat.log_enabled == 'yes'">
-                                    {{ $t('Delete Logs:') }}
-                                    <span>After {{ settings_stat.auto_delete_days }} {{ $t('Days') }}</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <el-skeleton v-else class="fss_content" :rows="8"></el-skeleton>
-                    </div>
-                    <div v-if="appVars.require_optin == 'yes' && stats.sent > 9" style="margin-top: 20px;"
-                         class="fsm_card">
-                        <div class="fss_header">
-                            {{ $t('Subscribe To Updates') }}
-                            <span class="fss_header_action_right">
+                    <div v-if="appVars.require_optin == 'yes' && stats.sent > 9" class="fsm_card">
+                        <div class="fsm_card_head">
+                            <h3>{{ $t('Subscribe To Updates') }}</h3>
+                            <div class="fsm_card_head_actions">
                                 <subscribe-dismiss/>
-                            </span>
+                            </div>
                         </div>
-                        <div class="fss_content">
+                        <div class="fsm_card_body">
                             <email-subscriber/>
                         </div>
                     </div>
-                </el-col>
-            </el-row>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -164,6 +187,21 @@ export default {
         }
     },
     methods: {
+        /*
+         * The overview's labels were written as list rows - "Active Senders:" - and the
+         * colon is part of the translated string, so every locale already carries it. A
+         * tile's label does not introduce a value that follows it, so the colon comes off
+         * here rather than by rewording the keys, which would drop the translations too.
+         *
+         * It takes the already-translated text rather than the key on purpose:
+         * translation.node.js finds strings by scanning the source for $t call sites, so
+         * hiding the call inside a helper would drop all four from TransStrings.php.
+         * (Writing one out in this comment adds it to the file, which is how that was
+         * found - the extractor does not know a comment from code.)
+         */
+        stripColon(text) {
+            return (text || '').replace(/\s*[:\uFF1A]\s*$/, '');
+        },
         /*
          * Element Plus split Element UI's `picker-options` object into separate
          * :shortcuts and :disabled-date props, and changed a shortcut's shape:

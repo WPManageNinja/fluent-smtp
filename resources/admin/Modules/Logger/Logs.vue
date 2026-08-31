@@ -1,32 +1,16 @@
 <template>
     <div class="logs">
         <div>
-            <div v-if="!isLogsOn">
-                <div class="fss_content">
-                    <el-alert :closable="false" show-icon center>
-                        {{ $t('__EMAIL_LOGGING_OFF') }}
-                        <el-button link @click="turnOnEmailLogging">{{ $t('Turn On') }}</el-button>
-                        .
-                    </el-alert>
-                </div>
-            </div>
-            <div class="fss_header">
-                <LogBulkAction
-                    @on-bulk-action="handleBulkAction"
-                    :selected="selectedLogs"
-                    v-if="selectedLogs.length"
-                />
-                <div style="float:left;margin-top:6px;">{{ $t('Email Logs') }}</div>
-                <div style="float:right;margin-left: 6px;"><el-button @click="fetch" type="success" size="small" ><el-icon><FsmIconRefresh /></el-icon></el-button></div>
-
-                <LogFilter
-                    :filter_query="filter_query"
-                    @on-filter="fetch()"
-                    @reset-page="pagination.current_page=1"
-                />
-
-                <div style="float:right;">
+            <div class="fsm_page_head">
+                <h1 class="fsm_page_title">{{ $t('Email Logs') }}</h1>
+                <div class="fsm_page_actions">
+                    <LogBulkAction
+                        @on-bulk-action="handleBulkAction"
+                        :selected="selectedLogs"
+                        v-if="selectedLogs.length"
+                    />
                     <el-input
+                        class="fsm_log_search"
                         clearable
                         size="small"
                         v-model="filter_query.search"
@@ -38,112 +22,134 @@
                             <el-button icon="FsmIconSearch" @click="fetch"/>
                         </template>
                     </el-input>
+                    <el-button @click="fetch" size="small" :title="$t('Refresh')">
+                        <el-icon><FsmIconRefresh /></el-icon>
+                    </el-button>
+                </div>
+            </div>
+
+            <el-alert v-if="!isLogsOn" :closable="false" show-icon type="warning"
+                      style="margin-bottom: 20px;">
+                {{ $t('__EMAIL_LOGGING_OFF') }}
+                <el-button link @click="turnOnEmailLogging">{{ $t('Turn On') }}</el-button>
+            </el-alert>
+
+            <div class="fsm_card">
+                <div class="fsm_card_head">
+                    <LogFilter
+                        :filter_query="filter_query"
+                        @on-filter="fetch()"
+                        @reset-page="pagination.current_page=1"
+                    />
                 </div>
 
-            </div>
+                <div v-if="!loading" class="fsm_card_body fsm_card_flush">
+                    <!--
+                        `border` is gone and the table sits flush: the card already draws
+                        the frame, and a bordered table inside a bordered card is two
+                        boxes for one thing.
+                    -->
+                    <el-table
+                        class="fsm_table"
+                        :data="logs"
+                        v-loading="loading"
+                        style="width:100%"
+                        @selection-change="handleSelectionChange"
+                    >
+                        <el-table-column type="selection" width="55"/>
+                        <el-table-column :label="$t('Subject')">
+                            <template #default="scope">
+                                <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
+                                <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
+                                      class="fsm_log_simulated">{{ $t(' - Simulated') }}</span>
+                            </template>
+                        </el-table-column>
 
-            <div v-if="!loading" class="fss_content">
-                <el-table
-                    stripe
-                    :data="logs"
-                    v-loading="loading"
-                    style="width:100%"
-                    :row-class-name="tableRowClassName"
-                    @selection-change="handleSelectionChange"
-                >
-                    <el-table-column type="selection" width="55"/>
-                    <el-table-column :label="$t('Subject')">
-                        <template #default="scope">
-                            <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
-                            <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
-                                  style="color: var(--fsm-danger-fg);">{{ $t(' - Simulated') }}</span>
-                        </template>
-                    </el-table-column>
+                        <el-table-column :label="$t('To')">
+                            <template #default="scope">
+                                <span v-html="formatAddresses(scope.row.to)"></span>
+                            </template>
+                        </el-table-column>
 
-                    <el-table-column :label="$t('To')">
-                        <template #default="scope">
-                            <span v-html="formatAddresses(scope.row.to)"></span>
-                        </template>
-                    </el-table-column>
+                        <el-table-column :label="$t('Status')" width="120">
+                            <template #default="scope">
+                                <!--
+                                    One word, tinted, instead of the whole row. A failed
+                                    row used to be painted pink edge to edge, which is a
+                                    lot of colour for a fact that fits in a chip - and it
+                                    left no way to colour anything else in the row.
+                                -->
+                                <span class="fsm_tag" :class="statusClass(scope.row.status)">
+                                    {{ scope.row.status }}
+                                </span>
+                            </template>
+                        </el-table-column>
 
-                    <el-table-column :label="$t('Status')" width="120" align="center">
-                        <template #default="scope">
-                            {{ scope.row.status }}
-                        </template>
-                    </el-table-column>
+                        <el-table-column prop="created_at" :label="$t('Date-Time')" width="200px">
+                            <template #default="scope">
+                                {{ $dateFormat(scope.row.created_at, 'DD MMM YYYY LT') }}
+                            </template>
+                        </el-table-column>
 
-                    <el-table-column prop="created_at" :label="$t('Date-Time')" width="200px">
-                        <template #default="scope">
-                            {{ $dateFormat(scope.row.created_at, 'DD MMM YYYY LT') }}
-                        </template>
-                    </el-table-column>
+                        <el-table-column :label="$t('Actions')" width="220px" align="right">
+                            <template #default="scope">
+                                <el-button
+                                    size="small"
+                                    type="success"
+                                    icon="FsmIconRefresh"
+                                    @click="handleRetry(scope.row, 'retry')"
+                                    :plain="true"
+                                    v-if="scope.row.status == 'failed'"
+                                >{{ $t('Retry') }}
+                                </el-button>
+                                <el-button
+                                    size="small"
+                                    type="success"
+                                    icon="FsmIconRefreshRight"
+                                    @click="handleResendClick(scope.row)"
+                                    v-if="scope.row.status == 'sent'"
+                                >
+                                    {{ $t('Resend') }}
+                                    <span v-if="scope.row.resent_count > 0">({{ scope.row.resent_count }})</span>
+                                </el-button>
 
-                    <!-- 220px, not the old 200px: an Element Plus button is a few pixels
-                         wider than the Element UI `mini` it replaced, and three of them
-                         plus their margins came to 179px inside a 176px content box,
-                         which wrapped the row onto two lines. -->
-                    <el-table-column :label="$t('Actions')" width="220px" align="right">
-                        <template #default="scope">
-                            <el-button
-                                size="small"
-                                type="success"
-                                icon="FsmIconRefresh"
-                                @click="handleRetry(scope.row, 'retry')"
-                                :plain="true"
-                                v-if="scope.row.status == 'failed'"
-                            >{{ $t('Retry') }}
-                            </el-button>
-                            <el-button
-                                size="small"
-                                type="success"
-                                icon="FsmIconRefreshRight"
-                                @click="handleResendClick(scope.row)"
-                                v-if="scope.row.status == 'sent'"
-                            >
-                                {{ $t('Resend') }}
-                                <span v-if="scope.row.resent_count > 0">({{ scope.row.resent_count }})</span>
-                            </el-button>
+                                <el-button
+                                    size="small"
+                                    type="primary"
+                                    icon="FsmIconView"
+                                    @click="handleView(scope.row)"
+                                />
 
-                            <el-button
-                                size="small"
-                                type="primary"
-                                icon="FsmIconView"
-                                @click="handleView(scope.row)"
-                            />
+                                <confirm @yes="handleDelete(scope.row.id)">
+                                    <template #reference>
+                                        <el-button
+                                            size="small"
+                                            type="danger"
+                                            icon="FsmIconDelete"
+                                        />
+                                    </template>
+                                </confirm>
+                            </template>
+                        </el-table-column>
+                    </el-table>
 
-                            <confirm @yes="handleDelete(scope.row.id)">
-                                <template #reference>
-                                    <el-button
-                                        size="small"
-                                        type="danger"
-                                        icon="FsmIconDelete"
-                                    />
-                                </template>
-                            </confirm>
-                        </template>
-                    </el-table-column>
-                </el-table>
-
-                <el-row :gutter="20">
-                    <el-col :span="12">
-                        <div v-if="logs.length" style="margin-top:20px;">
-                            <confirm placement="right" :message="$t('Are you sure, you want to delete all the logs?')"
+                    <div class="fsm_pager">
+                        <div>
+                            <confirm v-if="logs.length" placement="right"
+                                     :message="$t('Are you sure, you want to delete all the logs?')"
                                      @yes="handleDelete(['all'])">
                                 <template #reference>
-                                    <el-button size="small" type="info">{{ $t('Delete All Logs') }}</el-button>
+                                    <el-button size="small" type="info" plain>
+                                        {{ $t('Delete All Logs') }}
+                                    </el-button>
                                 </template>
                             </confirm>
                         </div>
-                        <span v-else>&nbsp;</span>
-                    </el-col>
-                    <el-col :span="12">
-                        <div style="margin-top:20px;text-align:right;">
-                            <pagination :pagination="pagination" @fetch="pageChanged"/>
-                        </div>
-                    </el-col>
-                </el-row>
+                        <pagination :pagination="pagination" @fetch="pageChanged"/>
+                    </div>
+                </div>
+                <el-skeleton :animated="true" v-else class="fsm_card_body" :rows="15"></el-skeleton>
             </div>
-            <el-skeleton :animated="true" v-else class="fss_content" :rows="15"></el-skeleton>
 
             <LogViewer ref="logViewer" :logViewerProps="logViewerProps"/>
 
@@ -209,8 +215,17 @@ export default {
         };
     },
     methods: {
-        tableRowClassName({row}) {
-            return 'row_type_' + row.status;
+        /*
+         * The status column's chip. `sent` and `failed` are the two the logger writes;
+         * anything else is a state this build does not know about, and a neutral chip
+         * says that better than a colour picked at random would.
+         */
+        statusClass(status) {
+            return {
+                sent: 'is_sent',
+                failed: 'is_failed',
+                pending: 'is_pending'
+            }[status] || 'is_neutral';
         },
         pageChanged() {
             this.fetch();

@@ -1,41 +1,29 @@
 <template>
-    <div style="float:left;margin-left:10px;">
-        <el-row :gutter="10" style="margin-right:-20px;">
-            <el-col :span="10">
-                <el-radio-group @change="applyFilter()" v-model="filter_query.status" size="small">
-                    <el-radio-button value="">{{ $t('All Statuses') }}</el-radio-button>
-                    <el-radio-button value="sent">{{ $t('Successful') }}</el-radio-button>
-                    <el-radio-button value="failed">{{ $t('Failed') }}</el-radio-button>
-                </el-radio-group>
-            </el-col>
+    <div class="fsm_log_filter">
+        <el-radio-group @change="applyFilter()" v-model="filter_query.status" size="small">
+            <el-radio-button value="">{{ $t('All Statuses') }}</el-radio-button>
+            <el-radio-button value="sent">{{ $t('Successful') }}</el-radio-button>
+            <el-radio-button value="failed">{{ $t('Failed') }}</el-radio-button>
+        </el-radio-group>
 
-            <el-col :span="10">
-                <el-date-picker
-                    format="DD-MM-YYYY"
-                    value-format="YYYY-MM-DD"
-                    size="small"
-                    :shortcuts="shortcuts"
-                    :disabled-date="disabledDate"
-                    v-model="filter_query.date_range"
-                    type="daterange"
-                    :placeholder="$t('Select date and time')"
-                    :range-separator="$t('To')"
-                    :start-placeholder="$t('Start date')"
-                    :end-placeholder="$t('End date')"
-                    style="width:100%"
-                />
-            </el-col>
+        <el-date-picker
+            class="fsm_log_filter_dates"
+            format="DD-MM-YYYY"
+            value-format="YYYY-MM-DD"
+            size="small"
+            :shortcuts="shortcuts"
+            :disabled-date="disabledDate"
+            v-model="filter_query.date_range"
+            type="daterange"
+            :placeholder="$t('Select date and time')"
+            :range-separator="$t('To')"
+            :start-placeholder="$t('Start date')"
+            :end-placeholder="$t('End date')"
+        />
 
-            <el-col :span="4">
-                <el-button
-                    plain
-                    size="small"
-                    type="primary"
-                    @click="applyFilter"
-                >{{ $t('Filter') }}
-                </el-button>
-            </el-col>
-        </el-row>
+        <el-button plain size="small" type="primary" @click="applyFilter">
+            {{ $t('Filter') }}
+        </el-button>
     </div>
 </template>
 
@@ -85,3 +73,22 @@ export default {
     }
 };
 </script>
+
+<style lang="scss">
+/*
+ * One flex row, where this used to be an el-row of three columns inside a floated
+ * container. The date range is the only part that wants the leftover width.
+ */
+.fsm_log_filter {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    /* Qualified with .el-date-editor for the same reason .fsm_log_search is. */
+    .el-date-editor.fsm_log_filter_dates {
+        width: 260px;
+        flex: 0 1 260px;
+    }
+}
+</style>

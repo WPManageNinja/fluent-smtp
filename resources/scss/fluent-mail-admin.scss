@@ -37,17 +37,28 @@
   }
 
   & {
+    /*
+     * The screens that have not been rebuilt around .fsm_card still use this
+     * header-and-content pair - Email Test, Alerts, About, Documentation and the
+     * connection wizard. Rather than rewrite five templates to say the same thing a
+     * different way, the pair is drawn *as* a card: the header supplies the top of the
+     * frame, the content the rest. A .fss_content without a header above it closes the
+     * box on its own.
+     */
     & .fss_header {
       display: block;
       width: auto;
-      border-bottom: 1px solid var(--fsm-border);
       clear: both;
       overflow: hidden;
       margin: 0;
-      padding: 15px;
-      background-color: var(--fsm-surface-sunk);
-      font-weight: 700;
-      color: var(--fsm-text-mid);
+      padding: 16px 24px;
+      background-color: var(--fsm-surface);
+      border: 1px solid var(--fsm-border);
+      border-bottom: 0;
+      border-radius: 8px 8px 0 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fsm-text);
 
       &.fss_widget_header {
         display: flex;
@@ -55,13 +66,26 @@
         justify-content: space-between;
         h3 {
           margin: 0;
+          font-size: 14px;
+          font-weight: 500;
         }
       }
     }
 
     & .fss_content {
-      padding: 20px;
+      padding: 16px 24px;
+      margin-bottom: 20px;
       background-color: var(--fsm-surface);
+      border: 1px solid var(--fsm-border);
+      border-radius: 8px;
+      box-shadow: var(--fsm-shadow-card);
+
+      /* Joined to the header above it, so it only closes the bottom of the box. */
+      .fss_header + & {
+        border-top: 1px solid var(--fsm-border);
+        border-radius: 0 0 8px 8px;
+      }
+
       .fss_general_settings {
         .el-form {
           .el-form-item {
@@ -116,24 +140,35 @@
   }
 }
 
+/* A step of the connection wizard - one card per subject, the same as everywhere else. */
 .fss_config_section {
-  background: var(--fsm-surface-sunk);
-  padding: 20px;
-  margin-bottom: 30px;
-  border-radius: 5px;
+  background: var(--fsm-surface);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  border: 1px solid var(--fsm-border);
+  border-radius: 8px;
   box-shadow: var(--fsm-shadow-card);
+
+  .fs_config_title {
+    margin: 0 0 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--fsm-text);
+  }
+
+  /*
+   * Element Plus lays a form item's content out as a flex row, where Element UI's was a
+   * block. Without a gap an inline label and the control beside it touch - "Use Auto
+   * TLS" ran straight into its switch.
+   */
+  .el-form-item__content {
+    gap: 8px;
+  }
 }
 
 .fss_connection_intro {
   max-width: 1160px;
   margin: 0 auto;
-  padding: 30px;
-  background: var(--fsm-surface-sunk);
-  border-radius: 5px;
-
-  .fss_config_section {
-    background: var(--fsm-surface);
-  }
 }
 
 .fss_intro {
@@ -183,14 +218,25 @@ ul.fss_log_items li {
   }
 }
 
-.el-table .el-table__row.row_type_failed, .el-table .el-table__row--striped.el-table__row.row_type_failed {
-  background: var(--fsm-danger-bg) !important;
-  &:hover {
-    background: var(--fsm-danger-line) !important
-  }
-  td {
-    background: transparent !important;
-  }
+/*
+ * The logs table used to paint a failed row pink edge to edge. It says the same thing as
+ * the status chip that replaced it (.fsm_tag in styles/_layout.scss), in three columns'
+ * worth of colour instead of one word's, and while it was there no other cell in the row
+ * could be coloured for any other reason.
+ */
+
+/*
+ * Qualified with .el-input on purpose. Element Plus sets `.el-input { width: 100% }` and
+ * its component CSS is injected into <head> at runtime, after this stylesheet - so a
+ * single-class rule ties on specificity and loses on source order. Inside a flex-none
+ * container that resolves to a circular width and the search box swallows the row.
+ */
+.el-input.fsm_log_search {
+  width: 260px;
+}
+
+.fsm_log_simulated {
+  color: var(--fsm-danger-fg);
 }
 
 .fluent-mail-app .dashboard .fss_content .mailer-block {

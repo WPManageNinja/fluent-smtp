@@ -1,97 +1,103 @@
 <template>
     <div class="fluentmail_connections">
-        <el-row :gutter="20">
-            <el-col :md="14" :sm="24">
-                <div class="fss_content_box">
-                    <div class="fss_header">
-                        <span style="float:left;">
-                            {{$t('Active Email Connections')}}
-                        </span>
-                        <span
-                            style="float:right;color:var(--fsm-link);cursor:pointer;"
-                            @click="addConnection"
-                        >
-                            <el-icon><FsmIconPlus /></el-icon> {{$t('Add Another Connection')}}
-                        </span>
-                    </div>
-                    <div class="fss_content">
-                        <el-table stripe border :data="connections">
-                            <el-table-column :label="$t('Provider')">
-                                <template #default="scope">
+        <div class="fsm_page_head">
+            <h1 class="fsm_page_title">{{ $t('Active Email Connections') }}</h1>
+            <div class="fsm_page_actions">
+                <el-button type="primary" size="small" icon="FsmIconPlus" @click="addConnection">
+                    {{ $t('Add Another Connection') }}
+                </el-button>
+            </div>
+        </div>
 
-                                    <span v-if="settings.providers[scope.row.provider]">
-                                        <img
-                                            :title="settings.providers[scope.row.provider]?.title"
-                                            :src="settings.providers[scope.row.provider]?.image"
-                                            :alt="settings.providers[scope.row.provider]?.title"
-                                            style="max-height: 24px; vertical-align: middle; margin-right: 8px;"
-                                        />
-                                    </span>
-                                    <span v-else>Unknown</span>
-                                    <span style="color: var(--fsm-danger-fg);" v-if="scope.row.provider == 'gmail' && !scope.row.version">{{ $t('(Re Authentication Required)') }}</span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="sender_email" :label="$t('From Email')">
-                                <template #default="scope">
-                                    <span style="cursor: pointer;" @click="showConnection(scope.row)">{{ scope.row.sender_email }}</span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column width="120" :label="$t('Actions')" align="center">
-                                <template #default="scope">
+        <div class="fsm_card">
+            <div class="fsm_card_body fsm_card_flush">
+                <!-- Flush and unbordered: the card already draws the frame. -->
+                <el-table class="fsm_table" :data="connections">
+                    <el-table-column :label="$t('Provider')">
+                        <template #default="scope">
+                            <span class="fsm_provider" v-if="settings.providers[scope.row.provider]">
+                                <img
+                                    :title="settings.providers[scope.row.provider]?.title"
+                                    :src="settings.providers[scope.row.provider]?.image"
+                                    :alt="settings.providers[scope.row.provider]?.title"
+                                />
+                                <span>{{ settings.providers[scope.row.provider]?.title }}</span>
+                            </span>
+                            <span v-else>{{ $t('Unknown') }}</span>
+                            <span class="fsm_tag is_failed"
+                                  v-if="scope.row.provider == 'gmail' && !scope.row.version">
+                                {{ $t('(Re Authentication Required)') }}
+                            </span>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column prop="sender_email" :label="$t('From Email')">
+                        <template #default="scope">
+                            <span style="cursor: pointer;" @click="showConnection(scope.row)">{{ scope.row.sender_email }}</span>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column width="160" :label="$t('Actions')" align="right">
+                        <template #default="scope">
+                            <el-button
+                                size="small"
+                                icon="FsmIconEdit"
+                                :title="$t('Edit')"
+                                @click="editConnection(scope.row)"
+                            />
+                            <el-button
+                                size="small"
+                                icon="FsmIconView"
+                                :title="$t('View')"
+                                @click="showConnection(scope.row)"
+                            />
+                            <confirm @yes="deleteConnection(scope.row)">
+                                <template #reference>
                                     <el-button
-                                        type="primary"
                                         size="small"
-                                        icon="FsmIconEdit"
-                                        @click="editConnection(scope.row)"
+                                        type="danger"
+                                        plain
+                                        icon="FsmIconDelete"
+                                        :title="$t('Delete')"
                                     />
-                                    <el-button
-                                        type="info"
-                                        size="small"
-                                        icon="FsmIconView"
-                                        @click="showConnection(scope.row)"
-                                    />
-                                    <confirm @yes="deleteConnection(scope.row)">
-                                        <template #reference>
-                                            <el-button
-                                                size="small"
-                                                type="danger"
-                                                icon="FsmIconDelete"
-                                            />
-                                        </template>
-                                    </confirm>
                                 </template>
-                            </el-table-column>
-                        </el-table>
-                        <el-alert :closable="false" style="margin-top: 20px" type="info" v-if="connections.length > 1">
-                            {{ $t('__routing_info') }}
-                        </el-alert>
-                    </div>
+                            </confirm>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+
+        <el-alert :closable="false" type="info" v-if="connections.length > 1"
+                  style="margin-bottom: 20px;">
+            {{ $t('__routing_info') }}
+        </el-alert>
+
+        <div v-if="showing_connection" class="fsm_card">
+            <div class="fsm_card_head">
+                <h2>{{ $t('Connection Details') }}</h2>
+                <div class="fsm_card_head_actions">
+                    <el-button link @click="showing_connection = ''">{{ $t('Close') }}</el-button>
                 </div>
-                <div v-if="showing_connection" class="fss_content_box">
-                    <div class="fss_header">
-                        <span style="float:left;">
-                            {{$t('Connection Details')}}
-                        </span>
-                        <span style="float:right;color:var(--fsm-link);cursor:pointer;" @click="showing_connection = ''">
-                            {{$t('Close')}}
-                        </span>
-                    </div>
-                    <div class="fss_content">
-                        <connection-details :connection_id="showing_connection" />
-                    </div>
-                </div>
-            </el-col>
-            <el-col :md="10" :sm="24">
-                <div :class="{ fss_box_active: active_settings == 'general' }" style="margin-bottom: 0px;" class="fss_content_box fss_box_action">
-                    <div @click="active_settings = 'general'" class="fss_header">
-                        {{$t('General Settings')}}
-                    </div>
-                    <div v-if="active_settings == 'general'" class="fss_content">
-                        <general-settings />
-                    </div>
-                </div>
-            </el-col>
-        </el-row>
+            </div>
+            <div class="fsm_card_body">
+                <connection-details :connection_id="showing_connection" />
+            </div>
+        </div>
+
+        <!--
+            The General Settings panel. It is a separate subject from the connection list
+            above it, which is why the settings sidebar names it separately and scrolls
+            here - see settingsNav in Application.vue.
+        -->
+        <div class="fsm_card fsm_general_settings">
+            <div class="fsm_card_head">
+                <h2>{{ $t('General Settings') }}</h2>
+            </div>
+            <div class="fsm_card_body">
+                <general-settings />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -111,8 +117,7 @@
         },
         data() {
             return {
-                showing_connection: '',
-                active_settings: 'general'
+                showing_connection: ''
             };
         },
         methods: {
@@ -180,3 +185,18 @@
         }
     };
 </script>
+
+<style lang="scss">
+/* Logo and name together, so the column reads as a name rather than as a picture. */
+.fsm_provider {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    img {
+        max-height: 22px;
+        max-width: 72px;
+        display: block;
+    }
+}
+</style>

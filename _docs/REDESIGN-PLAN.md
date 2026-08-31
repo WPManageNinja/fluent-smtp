@@ -1018,3 +1018,69 @@ item registered without a `match` falls back to being active on its own route on
 **The old `.fluent-mail-body` wrapper is gone from the markup**, but the rules nested
 inside it are not - they are the screen styling Phase 5 will replace. The selector became
 a bare `&`, lifting its children one level, rather than being rewritten twice.
+
+### Phase 5 — screens
+
+**Dashboard.** The `minmax(0, 1fr) 380px` split from §4.4, with the aside sticky under the
+app bar and collapsing to a block below 1180px. The four headline numbers are stat tiles
+on the `--fsm-tile-*` ramp; they were list rows with a floated count, and "Failed" was red
+by way of an inline `style="color: red"`. Failed links into the log filtered to failures,
+which is the next thing anyone wants when the number is not zero. The heatmap became a
+card of its own instead of a bare white block.
+
+The tile labels were written as list rows - "Active Senders:" - and the colon is part of
+the translated string, so every locale already carries it. `stripColon($t('…'))` takes the
+translated text rather than the key on purpose: `translation.node.js` finds strings by
+scanning the source for `$t` call sites, so hiding the call inside a helper drops all four
+from `TransStrings.php`. That is not hypothetical - it happened, and the regenerated file
+showed the four removals.
+
+Two things the same regeneration turned up: `delete_logs_info` mapped to *itself* in
+`TransStrings.php`, so the popover it fed had been rendering the literal string
+"delete_logs_info" to users; and the extractor cannot tell a comment from code, so writing
+a `$t` call inside a code comment adds that string to the translation file.
+
+**Logs.** Status is a `.fsm_tag` chip. The table used to paint a failed row pink from edge
+to edge, which is three columns' worth of colour for a fact that fits in one word, and
+while it was there nothing else in the row could be coloured for any other reason. Table
+flush inside its card with `border` dropped, pagination and Delete All in one footer row,
+and the filter bar rebuilt as a flex row rather than an `el-row` of columns inside a
+floated container.
+
+**Connections.** Card plus flush table, `.fsm_card_head` in place of the inline-styled
+float header, and the provider column now shows the logo *and* the provider's name - a
+column of pictures is not a column of names. General Settings is a card of its own on the
+same screen, which is what the sidebar's General item scrolls to.
+
+**General Settings adopts `.fsm_row`** - label and explanation left, control pinned right.
+The checkboxes became switches: a row that is on or off reads better as a switch, and it
+also fixed the description that ran into the label ("…no email will be sent.No Emails will
+be sent from your WordPress.").
+
+**The provider partials keep their top-label forms.** §7.3 asks for `.fsm_row` here too.
+`.fsm_row` is for a setting - a name, an explanation, and a control that is usually a
+switch. A provider partial is credential entry: host, port, API key, secret. Those want a
+label above a full-width field, not a label on the left and a 300px input pinned right.
+The 15 partials get the card frame and the token-based selected state instead, and
+`_GeneralSettings.vue` - which *is* settings - got the rows.
+
+**The remaining screens were reskinned by restyling the pair, not the templates.** Email
+Test, Alerts, About, Documentation and the connection wizard all use the same
+`.fss_header` + `.fss_content` markup. Rather than rewrite five templates to say the same
+thing a different way, that pair is now drawn *as* a card: the header supplies the top of
+the frame, the content the rest, and a `.fss_content` without a header above it closes the
+box on its own.
+
+**Alerts is stacked, not two columns.** Summary Email and the channel table are two
+separate subjects rather than two halves of one, and inside the 1040px settings column the
+channel table had its Actions cells clipped off the end of its card.
+
+**Element Plus specificity, twice.** `.el-input` is `width: 100%` in Element Plus's own
+CSS, which the resolver injects into `<head>` at runtime - *after* our stylesheet. A
+single-class rule like `.fsm_log_search { width: 260px }` ties on specificity and loses on
+source order; inside a `flex-none` container that resolves to a circular width and the
+search box swallowed its row. Qualifying the selector (`.el-input.fsm_log_search`) is the
+fix, and it is worth remembering the next time a width is ignored.
+
+At the end of this phase there are **no literal colours left in any `.vue` file** - checked
+by grep across all 59.

@@ -505,3 +505,440 @@ body.settings_page_fluent-mail {
         top: 0;
     }
 }
+
+/* ------------------------------------------------------------ page heading */
+
+/* What the screen is, and what you can do to it. */
+.fsm_page_head {
+    @apply flex flex-wrap items-center justify-between;
+
+    gap: 12px;
+    min-height: 36px;
+    margin-bottom: 20px;
+
+    .fsm_page_title {
+        @apply m-0 p-0 text-ink;
+
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 28px;
+    }
+
+    .fsm_page_desc {
+        @apply text-sm text-ink-mid m-0;
+
+        margin-top: 4px;
+        line-height: 1.5;
+        max-width: 640px;
+    }
+
+    .fsm_page_actions {
+        @apply flex flex-wrap items-center flex-none;
+
+        gap: 12px;
+    }
+}
+
+/* ---------------------------------------------------- two-column dashboard */
+
+/*
+ * What is happening on the left, what is configured on the right. The measurements are
+ * FluentCart's own, read off its rendered dashboard: a fluid main column and a 380px
+ * aside with a 24px gutter.
+ */
+.fsm_split {
+    @apply grid;
+
+    grid-template-columns: minmax(0, 1fr) 380px;
+    grid-template-areas: "main aside";
+    gap: 24px;
+    align-items: start;
+}
+
+.fsm_split_main {
+    grid-area: main;
+    min-width: 0;
+}
+
+/*
+ * The aside sticks below the app bar and scrolls internally only if it is taller than
+ * what is left of the viewport. 88px is the admin bar plus the app bar; 116px is that
+ * plus the bottom gap.
+ */
+.fsm_split_aside {
+    grid-area: aside;
+    min-width: 0;
+    position: sticky;
+    top: 88px;
+    max-height: calc(100vh - 116px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+/*
+ * The aside is a column beside the content, not a panel that belongs anywhere in
+ * particular, so below the width where two columns fit it goes back to being a block at
+ * the end of the page rather than trying to stay stuck to anything.
+ */
+@media (max-width: 1180px) {
+    .fsm_split {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "main" "aside";
+    }
+
+    .fsm_split_aside {
+        position: static;
+        max-height: none;
+        overflow: visible;
+    }
+}
+
+/* One subject within the aside, separated from the next by a dashed rule. */
+.fsm_aside_block {
+    @apply border-0 border-b border-dashed;
+
+    border-color: var(--fsm-border-strong);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+
+    &:last-child {
+        @apply border-b-0;
+
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+
+    > h3 {
+        @apply flex items-center justify-between font-medium m-0 text-ink;
+
+        gap: 8px;
+        /* FluentCart's own aside heading size, a step below the card titles beside it. */
+        font-size: 15px;
+        margin-bottom: 14px;
+    }
+}
+
+/* A label on the left and its value on the right, down a quiet list. */
+.fsm_fact_list {
+    @apply list-none m-0 p-0;
+
+    li {
+        @apply flex items-baseline justify-between gap-4 text-sm text-ink-mid m-0;
+
+        padding: 7px 0;
+
+        + li {
+            @apply border-0 border-t border-solid border-hairline;
+        }
+
+        > span:last-child {
+            @apply font-medium text-ink flex-none;
+        }
+    }
+}
+
+/* ---------------------------------------------------------------- stat tiles */
+
+/*
+ * The dashboard's headline numbers. One hue per subject, from FluentCart's tile ramp -
+ * which colours by position, and works here because the four are always the same four.
+ * They used to be list rows with a floated count, and "Failed" was red by way of an
+ * inline `style="color: red"`.
+ */
+.fsm_tiles {
+    @apply grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.fsm_tile {
+    @apply block rounded no-underline;
+
+    padding: 14px 16px;
+    background: var(--fsm-tile-bg, var(--fsm-surface-sunk));
+    color: var(--fsm-tile-fg, var(--fsm-text));
+    transition: opacity .15s ease;
+
+    &:hover {
+        opacity: .85;
+    }
+
+    .fsm_tile_value {
+        @apply block font-semibold;
+
+        font-size: 24px;
+        line-height: 32px;
+        color: inherit;
+    }
+
+    .fsm_tile_label {
+        @apply block text-xs font-medium;
+
+        margin-top: 2px;
+        color: inherit;
+        opacity: .85;
+    }
+
+    &.is_sent {
+        --fsm-tile-bg: var(--fsm-tile-sent-bg);
+        --fsm-tile-fg: var(--fsm-tile-sent-fg);
+    }
+
+    &.is_failed {
+        --fsm-tile-bg: var(--fsm-tile-failed-bg);
+        --fsm-tile-fg: var(--fsm-tile-failed-fg);
+    }
+
+    &.is_connections {
+        --fsm-tile-bg: var(--fsm-tile-connections-bg);
+        --fsm-tile-fg: var(--fsm-tile-connections-fg);
+    }
+
+    &.is_senders {
+        --fsm-tile-bg: var(--fsm-tile-senders-bg);
+        --fsm-tile-fg: var(--fsm-tile-senders-fg);
+    }
+}
+
+/* ---------------------------------------------------------------- the card */
+
+.fsm_card {
+    @apply bg-surface rounded border border-solid;
+
+    border-color: var(--fsm-border);
+    box-shadow: var(--fsm-shadow-card);
+    margin-bottom: 20px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .fsm_card_head {
+        @apply flex items-start justify-between gap-4 px-6 border-0 border-b border-solid border-hairline;
+
+        padding-top: 16px;
+        padding-bottom: 16px;
+
+        h2, h3 {
+            @apply text-sm font-medium text-ink m-0;
+        }
+
+        p {
+            @apply text-xs text-ink-light m-0;
+
+            margin-top: 4px;
+        }
+
+        .fsm_card_head_actions {
+            @apply flex items-center gap-2 flex-shrink-0;
+        }
+    }
+
+    .fsm_card_body {
+        @apply px-6;
+
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    /* For a table or a chart, which draws its own edges right up to the card's. */
+    .fsm_card_flush {
+        padding: 0;
+    }
+}
+
+/* A table sits flush inside its card - the card already draws the frame. */
+.fsm_table {
+    margin-top: 4px;
+    margin-bottom: 4px;
+
+    /*
+     * Element Plus draws a full-width rule under the last row, which doubles up with the
+     * card's own bottom border.
+     */
+    &::before,
+    .el-table__inner-wrapper::before {
+        display: none;
+    }
+}
+
+.fsm_pager {
+    @apply flex items-center justify-between flex-wrap gap-4 px-6 border-0 border-t border-solid border-hairline;
+
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+/* ------------------------------------------------------------------- a tag */
+
+/*
+ * A status, as a word.
+ *
+ * The logs table used to tint the whole row instead - a pink band for failed. Three
+ * coloured bands across a full-width table is a lot of colour for a fact that fits in one
+ * word, and it left no way to colour anything else in the row.
+ */
+.fsm_tag {
+    @apply inline-block flex-none rounded-xs text-xs font-medium;
+
+    padding: 1px 8px;
+    line-height: 18px;
+    white-space: nowrap;
+
+    &.is_failed {
+        @apply bg-danger-bg text-danger-fg;
+    }
+
+    &.is_pending {
+        @apply bg-caution-bg text-caution-fg;
+    }
+
+    &.is_sent {
+        @apply bg-ok-bg text-ok-fg;
+    }
+
+    /* Nothing is wrong and nothing has happened - it should not draw the eye either way. */
+    &.is_neutral {
+        @apply bg-quiet-bg text-quiet-fg;
+    }
+}
+
+/* ----------------------------------------------------------- setting row */
+
+/*
+ * Label and explanation on the left, the control pinned to the right.
+ *
+ * The text takes the width and the control is only as wide as it needs to be. The other
+ * way round - a fixed label column and a fluid control - gives the widest part of the row
+ * to a 44px switch while the sentence explaining it wraps over four lines.
+ */
+.fsm_row {
+    @apply flex items-start gap-6 border-0 border-b border-solid border-hairline;
+
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    &:last-child {
+        @apply border-b-0;
+    }
+
+    .fsm_row_label {
+        flex: 1 1 auto;
+        max-width: 720px;
+        min-width: 0;
+
+        label,
+        .fsm_row_title {
+            @apply block text-sm font-medium text-ink m-0;
+        }
+
+        p {
+            @apply text-xs text-ink-light m-0;
+
+            margin-top: 3px;
+            line-height: 1.5;
+        }
+    }
+
+    .fsm_row_control {
+        flex: 0 0 auto;
+
+        /* Holds every control against the same right edge, so they read as one column. */
+        margin-left: auto;
+
+        .el-input,
+        .el-select,
+        .el-textarea {
+            width: 300px;
+        }
+
+        .el-form-item {
+            margin-bottom: 0;
+        }
+    }
+
+    /* For controls that need the whole width: a table, an editor, a group of cards. */
+    &.fsm_row_stacked {
+        @apply block;
+
+        .fsm_row_label {
+            max-width: none;
+            margin-bottom: 8px;
+        }
+
+        .fsm_row_control {
+            margin-left: 0;
+
+            .el-input,
+            .el-select,
+            .el-textarea {
+                width: 100%;
+            }
+        }
+    }
+}
+
+/* -------------------------------------------------------- setting toggle */
+
+/*
+ * On/off settings put the switch beside the name it belongs to. The explanation hangs
+ * underneath, indented to the width of the switch so the text lines up as one column down
+ * the card and the switches make a second, narrower one.
+ */
+.fsm_toggle {
+    @apply border-0 border-b border-solid border-hairline;
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    &:last-child {
+        @apply border-b-0;
+    }
+
+    .fsm_toggle_main {
+        @apply flex items-center gap-3;
+    }
+
+    .fsm_toggle_title {
+        @apply text-sm font-medium text-ink cursor-pointer select-none m-0;
+    }
+
+    .fsm_toggle_body {
+        /* The switch (40px) plus the gap beside it, so this starts under the title. */
+        padding-left: 52px;
+        max-width: 772px;
+
+        p {
+            @apply text-xs text-ink-light m-0;
+
+            margin-top: 3px;
+            line-height: 1.5;
+        }
+    }
+}
+
+@media (max-width: 782px) {
+    .fsm_tiles {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .fsm_row {
+        display: block;
+
+        .fsm_row_label {
+            max-width: none;
+            margin-bottom: 8px;
+        }
+
+        .fsm_row_control {
+            margin-left: 0;
+
+            .el-input,
+            .el-select,
+            .el-textarea {
+                width: 100%;
+            }
+        }
+    }
+}

@@ -1,33 +1,37 @@
 <template>
+    <!--
+        Setting rows rather than a stacked form: the label and its explanation take the
+        width on the left and the control is pinned right, only as wide as it needs to be.
+        Element's default label column gave the widest part of each row to a 44px
+        checkbox while the sentence explaining it wrapped.
+    -->
     <div class="fss_general_settings">
-        <el-form class="fss_compact_form" :data="settings.misc" label-position="top">
-            
-            <el-form-item :label="$t('Log Emails')">
-                <el-checkbox
-                    v-model="settings.misc.log_emails"
-                    true-value="yes"
-                    false-value="no"
-                >{{$t('Log All Emails for Reporting')}}</el-checkbox>
-            </el-form-item>
+        <div class="fsm_row">
+            <div class="fsm_row_label">
+                <span class="fsm_row_title">{{ $t('Log Emails') }}</span>
+                <p>{{ $t('Log All Emails for Reporting') }}</p>
+            </div>
+            <div class="fsm_row_control">
+                <el-switch v-model="settings.misc.log_emails" active-value="yes" inactive-value="no"/>
+            </div>
+        </div>
 
-            <el-form-item v-if="settings.misc.log_emails == 'yes' && !!appVars.has_fluentcrm" :label="$t('FluentCRM Email Logging')">
-                <el-checkbox v-model="settings.misc.disable_fluentcrm_logs" true-value="yes" false-value="no">{{$t('Disable Logging for FluentCRM Emails')}}</el-checkbox>
-            </el-form-item>
-            
-            <el-form-item v-if="settings.misc.log_emails == 'yes'">
-                <template #label>
-                    <label>
-                        {{$t('Delete Logs')}}
-                        <el-popover
-                            width="400"
-                            trigger="hover">
-                            <p>{{$t('delete_logs_info')}}</p>
-                            <template #reference>
-                                <el-icon><FsmIconInfo /></el-icon>
-                            </template>
-                        </el-popover>
-                    </label>
-                </template>
+        <div class="fsm_row" v-if="settings.misc.log_emails == 'yes' && !!appVars.has_fluentcrm">
+            <div class="fsm_row_label">
+                <span class="fsm_row_title">{{ $t('FluentCRM Email Logging') }}</span>
+                <p>{{ $t('Disable Logging for FluentCRM Emails') }}</p>
+            </div>
+            <div class="fsm_row_control">
+                <el-switch v-model="settings.misc.disable_fluentcrm_logs" active-value="yes" inactive-value="no"/>
+            </div>
+        </div>
+
+        <div class="fsm_row" v-if="settings.misc.log_emails == 'yes'">
+            <div class="fsm_row_label">
+                <span class="fsm_row_title">{{ $t('Delete Logs') }}</span>
+                <p>{{ $t('How long a logged email is kept before FluentSMTP deletes it automatically.') }}</p>
+            </div>
+            <div class="fsm_row_control">
                 <el-select v-model="settings.misc.log_saved_interval_days">
                     <el-option
                         v-for="(logLabel, logValue) in logging_days"
@@ -36,22 +40,15 @@
                         :label="logLabel"
                     ></el-option>
                 </el-select>
-            </el-form-item>
+            </div>
+        </div>
 
-            <el-form-item>
-                <template #label>
-                    <label>
-                        {{$t('Default Connection')}}
-                        <el-popover
-                            width="400"
-                            trigger="hover">
-                            <p>{{$t('__default_connection_popover')}}</p>
-                            <template #reference>
-                                <el-icon><FsmIconInfo /></el-icon>
-                            </template>
-                        </el-popover>
-                    </label>
-                </template>
+        <div class="fsm_row">
+            <div class="fsm_row_label">
+                <span class="fsm_row_title">{{ $t('Default Connection') }}</span>
+                <p>{{ $t('__default_connection_popover') }}</p>
+            </div>
+            <div class="fsm_row_control">
                 <el-select v-model="settings.misc.default_connection">
                     <el-option
                         v-for="(connection, connectionId) in settings.connections"
@@ -60,22 +57,15 @@
                         :label="connection.title +' - '+ connection.provider_settings.sender_email"
                     ></el-option>
                 </el-select>
-            </el-form-item>
+            </div>
+        </div>
 
-            <el-form-item>
-                <template #label>
-                    <label>
-                        {{ $t('Fallback Connection') }}
-                        <el-popover
-                            width="400"
-                            trigger="hover">
-                            <p>{{$t('__fallback_connection_popover')}}</p>
-                            <template #reference>
-                                <el-icon><FsmIconInfo /></el-icon>
-                            </template>
-                        </el-popover>
-                    </label>
-                </template>
+        <div class="fsm_row">
+            <div class="fsm_row_label">
+                <span class="fsm_row_title">{{ $t('Fallback Connection') }}</span>
+                <p>{{ $t('__fallback_connection_popover') }}</p>
+            </div>
+            <div class="fsm_row_control">
                 <el-select clearable v-if="connectionsCount > 1" v-model="settings.misc.fallback_connection">
                     <el-option
                         v-for="(connection, connectionId) in settings.connections"
@@ -85,33 +75,42 @@
                         :label="connection.title +' - '+ connection.provider_settings.sender_email"
                     ></el-option>
                 </el-select>
-                <p v-else style="color: var(--fsm-text-light);margin: 0;">{{$t('Please add another connection to use fallback feature')}}</p>
-            </el-form-item>
+                <p v-else class="fsm_row_note">{{ $t('Please add another connection to use fallback feature') }}</p>
+            </div>
+        </div>
 
-            <el-form-item :label="$t('Email Simulation')">
-                <el-checkbox
-                    v-model="settings.misc.simulate_emails"
-                    true-value="yes"
-                    false-value="no"
-                >{{$t('__Email_Simulation_Label')}}</el-checkbox>
-                <p style="color: var(--fsm-danger-fg);" v-if="settings.misc.simulate_emails == 'yes'">{{$t('__Email_Simulation_Yes')}}</p>
-                <p v-if="appVars.is_disabled_defined" style="color: var(--fsm-danger-fg);">{{ ('Emails are being simulated due to the definition of ') }} <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ (' in your PHP code.') }}</p>
-            </el-form-item>
+        <div class="fsm_row">
+            <div class="fsm_row_label">
+                <span class="fsm_row_title">{{ $t('Email Simulation') }}</span>
+                <p>{{ $t('__Email_Simulation_Label') }}</p>
+                <p class="fsm_row_warning" v-if="settings.misc.simulate_emails == 'yes'">
+                    {{ $t('__Email_Simulation_Yes') }}
+                </p>
+                <p class="fsm_row_warning" v-if="appVars.is_disabled_defined">
+                    {{ $t('Emails are being simulated due to the definition of ') }}
+                    <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ $t(' in your PHP code.') }}
+                </p>
+            </div>
+            <div class="fsm_row_control">
+                <el-switch v-model="settings.misc.simulate_emails" active-value="yes" inactive-value="no"/>
+            </div>
+        </div>
 
-            <el-form-item :label="$t('Add Multi-Part Plain Text for HTML Emails (beta)')">
-                <el-checkbox
-                    v-model="settings.misc.send_as_text"
-                    true-value="yes"
-                    false-value="no"
-                >{{$t('__Email_TEXT_PART_Label')}}</el-checkbox>
-            </el-form-item>
+        <div class="fsm_row">
+            <div class="fsm_row_label">
+                <span class="fsm_row_title">{{ $t('Add Multi-Part Plain Text for HTML Emails (beta)') }}</span>
+                <p>{{ $t('__Email_TEXT_PART_Label') }}</p>
+            </div>
+            <div class="fsm_row_control">
+                <el-switch v-model="settings.misc.send_as_text" active-value="yes" inactive-value="no"/>
+            </div>
+        </div>
 
-            <el-button
-                v-loading="saving"
-                @click="saveMiscSettings()"
-                type="success"
-            >{{$t('Save Settings')}}</el-button>
-        </el-form>
+        <div class="fsm_row_actions">
+            <el-button v-loading="saving" @click="saveMiscSettings()" type="primary">
+                {{ $t('Save Settings') }}
+            </el-button>
+        </div>
     </div>
 </template>
 
@@ -163,3 +162,24 @@
         }
     };
 </script>
+
+<style lang="scss">
+.fss_general_settings {
+    .fsm_row_note {
+        font-size: 12px;
+        color: var(--fsm-text-light);
+        margin: 0;
+    }
+
+    /* Only shown when the setting is not what it ought to be, so it reads as a flag. */
+    .fsm_row_warning {
+        font-size: 12px;
+        color: var(--fsm-warning-fg) !important;
+        margin-top: 6px !important;
+    }
+
+    .fsm_row_actions {
+        padding-top: 16px;
+    }
+}
+</style>
