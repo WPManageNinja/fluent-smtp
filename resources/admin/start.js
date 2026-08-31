@@ -1,4 +1,7 @@
+import '../scss/fluent-mail-admin.scss';
 import routes from './routes';
+import Application from './Application.vue';
+
 const vueRouter = new window.FluentMail.Router({
     routes: window.FluentMail.applyFilters('fluent_mail_global_routes', routes)
 });
@@ -10,6 +13,6 @@ window.FluentMail.Vue.prototype.$bus = new window.FluentMail.Vue();
 
 new window.FluentMail.Vue({
     el: '#fluent_mail_app',
-    render: h => h(require('./Application').default),
+    render: h => h(Application),
     router: vueRouter
 });

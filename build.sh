@@ -8,7 +8,8 @@ echo "🚀 Starting Build Process..."
 # 1. Build Frontend
 if [ -f "package.json" ]; then
     echo "📦 Building Frontend..."
-    npx mix --production
+    npx vite build --mode boot
+    npx vite build --mode app
 else
     echo "⚠️ package.json not found, skipping frontend build."
 fi
@@ -42,10 +43,11 @@ zip -r $ZIP_NAME . \
     -x "resources/*" \
     -x "build.sh" \
     -x "phpstan.neon" \
-    -x "webpack.config.js" \
     -x "translation.node.js" \
-    -x "webpack.mix.js" \
     -x "vitest.config.mjs" \
+    -x "vite.config.mjs" \
+    -x "tailwind.config.js" \
+    -x "postcss.config.js" \
     -x "package.json" \
     -x "package-lock.json" \
     -x "pnpm-lock.yaml" \

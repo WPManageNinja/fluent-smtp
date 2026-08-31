@@ -760,3 +760,76 @@ Read these before starting — they are the same problem, already solved:
 | Container widths (1350 / 1600, `px-7.5`) | `fluent-cart/resources/styles/tailwind/menu.scss:163` |
 | Card anatomy | `fluent-cart/resources/styles/tailwind/card.scss` |
 | Vite config (reference only — larger than we need) | `fluent-cart/vite.config.mjs` |
+
+---
+
+## 12. Decisions taken during execution
+
+Where reality disagreed with §1-§11, this is what was done and why. Written as the
+work happened, newest phase last.
+
+### Phase 1 — build swap
+
+**Two Vite builds, not one.** §5.2 specifies a single `vite build` with three inputs.
+Rollup refuses `output.format: 'iife'` for any build with more than one input, and `es`
+is not an alternative: `AdminMenuHandler::enqueueAssets()` emits plain `<script src>`
+tags, where an `import` statement is a syntax error. The config therefore takes a
+`--mode` (`boot` or `app`) and `package.json`'s `build` script runs both in sequence.
+`emptyOutDir` is `false` for the same reason — the second build would otherwise delete
+the first one's output.
+
+**The stylesheet is emitted by the `app` build, not by a third build of its own.**
+Laravel Mix pushed each SFC's `<style>` block through `vue-style-loader`, which injects
+it at runtime, so component styles were never in a file. Vite extracts them, and they
+have to be extracted into the one file `wp_enqueue_style` already asks for or they are
+silently dropped — a 2.5 kB hole in the styling with nothing in the console to say so.
+`start.js` therefore imports `resources/scss/fluent-mail-admin.scss`, which puts the
+vendor CSS ahead of the component CSS in the cascade, matching today's load order. This
+is also the shape §11's reference (`fluent-security/src/admin/app.js`) already uses.
+
+**The `renameBundle` fallback in §5.2 was needed.** Rollup has no concept of a
+stylesheet entry point, so Vite names the extracted file `style.css` regardless of the
+input's name and leaves behind an empty JS chunk. `renameExtractedCss()` in
+`vite.config.mjs` renames the first and drops the second. Its `order: 'post'` matters:
+Vite's own css plugin emits the stylesheet from *its* `generateBundle`, so a plugin that
+runs first sees a bundle with no CSS in it and quietly does nothing.
+
+**Vue 2.6.14 → 2.7.16, inside Phase 1.** `@vitejs/plugin-vue2` declares a peer of
+`vue ^2.7.0-0` at every version, so keeping the Vue 2 shim at all requires 2.7. Vue 2.7
+is Vue 2's terminal release and Element UI 2.15 supports it; templates and render output
+are unchanged. This is throwaway — Phase 2 replaces it with Vue 3.
+
+**Vite 7, not 5.** `vitest@4` (already in the repo, driving `tests/js/`) declares a peer
+of `vite ^6 || ^7 || ^8`. Pinning Vite 5 to match the plan would have left the JS test
+tier running against a Vite the suite does not support.
+
+**`resolve.alias.vue` pins Vue to one file.** This is the one real bug the phase turned
+up, and it is worth writing down because the failure is silent. Vue's package.json has
+`main: dist/vue.runtime.common.js` and `module: dist/vue.runtime.esm.js`. Our
+`import Vue from 'vue'` takes `module`; Element UI's CommonJS `require('vue')` takes
+`main`. Two Vues means two independent reactivity systems. `el-table` builds its column
+store as a Vue instance from Element's copy, so the app's copy never collects a
+dependency on it: the table rendered ten `<tr>` elements with **no `<td>` in any of
+them**, and nothing in the console. The browser smoke passed throughout, because its
+markers ('Email Logs', 'Filter') live in the header above the table. Caught by comparing
+screenshots against the pre-migration baseline, which is the argument for taking those.
+
+`resolve.dedupe` does not fix this — both specifiers already resolve inside the same
+installed package, just to different files in it.
+
+**`tailwind.config.js` and `postcss.config.js` land here structurally, not fully.**
+Scoping (`important: '#fluent_mail_app'`), `darkMode`, `content` and `preflight: false`
+are set now so the pipeline is proven wired; `theme.extend` and the token files arrive in
+Phase 3 with the `@tailwind` directives that make them do anything. Tailwind is a no-op
+until then. Autoprefixer is not: it rewrites Element UI's vendor prefixes against the
+default browserslist, which is add-and-remove only — verified by diffing the selector
+sets before and after, 28 prefixed selectors out and 6 in, no unprefixed rule touched.
+
+**Deleted as dead laravel-mix scaffolding:** `webpack.config.js` (a one-line re-export of
+`laravel-mix/setup/webpack.config.js`) and `resources/admin/Bits/mix.js` (an unreferenced
+second mix config, still wired to `eslint-loader`).
+
+**Direction confirmed mid-phase:** Vue 3 + Element Plus, and Vue 3 written in the
+**Options API** throughout — no `<script setup>`, no Composition API rewrite. This is
+also what keeps §6.1's `app.mixin` lever working: the helpers stay on the instance, so
+no component's script block has to change to reach `$get`/`$post`/`$t`.
