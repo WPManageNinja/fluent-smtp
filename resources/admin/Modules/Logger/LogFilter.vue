@@ -81,13 +81,21 @@ export default {
          * the picker instance and did `picker.$emit('pick', ...)`.
          */
         daysAgoRange(days) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * days);
-            return [start, end];
+            /*
+             * Dated on the site's clock, not the browser's, and carried across as
+             * calendar components rather than as an instant - see $siteCalendarDate.
+             */
+            return [this.$siteCalendarDate(days), this.$siteCalendarDate(0)];
         },
         disabledDate(date) {
-            return date.getTime() > Date.now();
+            /*
+             * Compared day against day, both in the browser's frame. The picker hands
+             * this a local midnight for the cell, and $siteCalendarDate gives the site's
+             * today in the same frame, so the two are comparable. Mixing the two frames
+             * is what used to grey out the site's own current day, leaving the Today
+             * shortcut selecting a date the calendar then refused.
+             */
+            return date.getTime() > this.$siteCalendarDate(0).getTime();
         },
         applyFilter() {
             this.$emit('on-filter', this.filter_query);
