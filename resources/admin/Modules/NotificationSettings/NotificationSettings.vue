@@ -31,7 +31,8 @@
                         replaces the list brings its own padding with it.
                     -->
                     <div class="fsm_card_body fsm_card_flush">
-                        <notification-manager :notification_settings="notification_settings"
+                        <notification-manager v-if="loaded"
+                                              :notification_settings="notification_settings"
                                               @reload-settings="getSettings"/>
                     </div>
                 </div>
@@ -45,8 +46,24 @@
                             <p>{{ $t('__EMAIL_SUMMARY_INTRO') }}</p>
                         </div>
                     </div>
+                    <!--
+                        The form is not rendered until the settings have arrived.
+
+                        `notification_settings` starts empty, so a failed GET used to
+                        leave a working Save button over an empty object. Pressing it
+                        posted that empty object, and the controller sanitised the
+                        missing `enabled` and `notify_email` keys into empty values and
+                        wrote them over the stored ones - turning off a working summary
+                        and clearing its recipient, with a success notice. A save may
+                        only ever be built from settings that were actually read.
+                    -->
                     <div class="fsm_card_body">
-                        <email-summary-form :notification_settings="notification_settings"/>
+                        <email-summary-form v-if="loaded"
+                                            :notification_settings="notification_settings"/>
+                        <div v-else-if="load_error" class="fsm_load_error">
+                            <p>{{ load_error }}</p>
+                            <el-button size="small" @click="getSettings()">{{ $t('Retry') }}</el-button>
+                        </div>
                     </div>
                 </div>
             </aside>
@@ -64,18 +81,27 @@ export default {
     data() {
         return {
             notification_settings: {},
+            /*
+             * Whether the GET actually returned. Distinct from `loading`, because the
+             * three states are loading / loaded / failed and the forms may only be
+             * rendered in the middle one - see the comment on the summary card.
+             */
+            loaded: false,
+            load_error: '',
             loading: false
         }
     },
     methods: {
         getSettings() {
             this.loading = true;
+            this.load_error = '';
             this.$get('settings/notification-settings')
                 .then((response) => {
                     this.notification_settings = response.data.settings;
+                    this.loaded = true;
                 })
-                .catch((errors) => {
-                    console.log(errors);
+                .fail((errors) => {
+                    this.load_error = this.$errorMessage(errors);
                 })
                 .always(() => {
                     this.loading = false;

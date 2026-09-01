@@ -24,6 +24,7 @@
                 </div>
                 <div class="fsm_row_control">
                     <el-input v-model="notification_settings.notify_email"
+                              :aria-label="$t('Notification Email Addresses')"
                               :placeholder="$t('Email Address')"/>
                 </div>
             </div>
@@ -96,7 +97,7 @@ export default {
                     this.$notify.success(response.data.message);
                 })
                 .catch((errors) => {
-                    console.log(errors);
+                    this.$notify.error(this.$errorMessage(errors));
                 })
                 .always(() => {
                     this.saving = false;

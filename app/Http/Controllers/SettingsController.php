@@ -744,8 +744,34 @@ class SettingsController extends Controller
 
         $settings = Arr::only($settings, ['enabled', 'notify_email', 'notify_days']);
 
-        $settings['notify_email'] = sanitize_text_field($settings['notify_email']);
-        $settings['enabled'] = sanitize_text_field($settings['enabled']);
+        /*
+         * A payload carrying none of these keys is a malformed request, not an
+         * instruction to clear the schedule, and it must not reach the write below.
+         *
+         * The screen used to be able to send one: `notification_settings` starts empty,
+         * and if the GET that fills it failed, the form still rendered with a working
+         * Save button over that empty object. The unconditional sanitize_text_field()
+         * calls that used to sit here then turned two missing keys into two empty
+         * strings - which wp_parse_args() treats as values, not absences - so the write
+         * disabled a working summary and blanked its recipient, and reported success.
+         * The form is now gated on a successful read as well; this is the half that
+         * does not depend on the client behaving.
+         */
+        if (!$settings) {
+            return $this->sendError([
+                'message' => __('No settings were submitted. Please reload the page and try again.', 'fluent-smtp')
+            ], 422);
+        }
+
+        /*
+         * Sanitize only what was actually sent. A key that is absent has to stay absent
+         * so that wp_parse_args() below can fall back to the stored value for it.
+         */
+        foreach (['notify_email', 'enabled'] as $key) {
+            if (isset($settings[$key])) {
+                $settings[$key] = sanitize_text_field($settings[$key]);
+            }
+        }
 
         $defaults = [
             'enabled'      => 'no',
