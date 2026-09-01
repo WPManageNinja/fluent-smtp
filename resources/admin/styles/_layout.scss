@@ -154,7 +154,7 @@ body.settings_page_fluent-mail {
     textarea {
         &:focus {
             box-shadow: none;
-            border-color: var(--fsm-border-strong);
+            border-color: var(--fsm-field-border);
         }
 
         &:focus-visible {
@@ -276,6 +276,97 @@ body.settings_page_fluent-mail {
     }
 }
 
+/* --------------------------------------------------------------- overlays */
+
+/*
+ * Scoped to the body class rather than to the app root for the same reason the block
+ * above is: a dialog can be appended to <body>, out of the reach of #fluent_mail_app,
+ * and one of them is (see Logger/ResendDialog.vue).
+ */
+body.settings_page_fluent-mail {
+    /*
+     * A dialog is given its width in the markup - some in per cent, some in pixels -
+     * and neither kind was told what to do when the viewport is smaller than the number.
+     * A cap rather than a width, so every desktop size set per dialog survives untouched
+     * and only the ones that would run off the screen are pulled back. 24px leaves a
+     * 12px gutter either side.
+     */
+    .el-dialog {
+        max-width: calc(100vw - 24px);
+    }
+
+    /*
+     * The confirm box has the same fixed width and the same problem, and it is the one
+     * overlay a user cannot avoid: every delete and disconnect goes through it.
+     */
+    .el-message-box {
+        max-width: calc(100vw - 24px);
+    }
+
+    /*
+     * The other half of the same problem: a dialog asking for 50% is 160px on a 320px
+     * phone, which is narrower than the buttons in its own footer. Below the width
+     * wp-admin itself switches layouts, every dialog takes the screen less the gutter,
+     * whichever way its own width was written.
+     */
+    @media (max-width: 782px) {
+        .el-dialog,
+        .el-message-box {
+            width: calc(100vw - 24px);
+        }
+    }
+
+}
+
+/* ------------------------------------------------------ wp-admin tables */
+
+/*
+ * The connection and provider detail tables are rendered by PHP with WordPress's own
+ * `widefat striped` classes, which are a white table with grey banding and no notion of
+ * a theme - a glaring white block inside a dark card. Retheming them here rather than
+ * dropping the classes keeps the server-rendered views as they are, including the ones
+ * an add-on may be filtering into them.
+ *
+ * Scoped to the app root, deliberately: `.widefat` is WordPress's class, not this
+ * plugin's, and every other list table in wp-admin has to be left exactly as it is.
+ */
+#fluent_mail_app {
+    .widefat {
+        background: var(--fsm-surface);
+        border-color: var(--fsm-border);
+        box-shadow: none;
+    }
+
+    .widefat th,
+    .widefat td,
+    .widefat tbody th,
+    .widefat tfoot th,
+    .widefat tfoot td {
+        color: var(--fsm-text-mid);
+        border-color: var(--fsm-border);
+
+        /* Transparent, so the banded row underneath is what colours the cell. */
+        background-color: transparent;
+    }
+
+    .widefat thead th,
+    .widefat thead td {
+        color: var(--fsm-text);
+        border-color: var(--fsm-border);
+        background-color: transparent;
+    }
+
+    /* WordPress bands the odd rows in a near-white of its own; this is the same idea. */
+    .widefat.striped > tbody > :nth-child(odd),
+    .widefat > tbody > tr.alternate {
+        background-color: var(--fsm-surface-sunk);
+    }
+
+    .widefat a {
+        color: var(--fsm-link);
+    }
+}
+
 /* ------------------------------------------------------------------ app bar */
 
 /* The bar is out of flow, so the page below it needs the space kept clear by hand. */
@@ -303,14 +394,16 @@ body.settings_page_fluent-mail {
      * Pinned rather than sticky. The settings pane below is pinned as well, which leaves
      * this bar's container only as tall as the bar itself - and a sticky element whose
      * container is its own height has no range to stick over, so it would scroll away the
-     * moment wp-admin's menu made the page scroll. `--fsm-shell-left` is the width of that
-     * menu, measured at runtime (see Application.vue) rather than hard-coded, so folding
-     * the menu or dropping to a narrow screen moves the bar with it.
+     * moment wp-admin's menu made the page scroll. `--fsm-shell-left` and
+     * `--fsm-shell-right` are the gaps either side of the content area, measured at
+     * runtime (see Application.vue) rather than hard-coded, so folding the menu or
+     * dropping to a narrow screen moves the bar with it. Both sides are named because on
+     * an RTL install the menu is the right-hand one; in LTR that measurement is 0.
      */
     position: fixed;
     top: 32px;
     left: var(--fsm-shell-left, 160px);
-    right: 0;
+    right: var(--fsm-shell-right, 0px);
     z-index: 2000;
     transition: box-shadow .2s ease;
 
@@ -1134,6 +1227,40 @@ a.fsm_tile:hover {
     margin: -8px 0 20px;
 }
 
+/*
+ * On a phone the row has more in it than there is width for: a 150px provider column,
+ * 48px of padding, three gaps, the address, the marks and two action buttons come to
+ * more than 320px before the address has said anything. So the row wraps - the logo and
+ * the marks share the first line, the address takes the second, and the actions the
+ * third. 782px is where wp-admin changes its own layout, which keeps the two in step.
+ */
+@media (max-width: 782px) {
+    .fsm_conn {
+        @apply flex-wrap;
+
+        padding: 14px 16px;
+
+        /* Sized by the logo now rather than holding a column open for the ones below. */
+        .fsm_conn_provider {
+            width: auto;
+        }
+
+        .fsm_conn_main {
+            flex: 1 1 100%;
+            order: 2;
+        }
+
+        .fsm_conn_marks {
+            margin-left: auto;
+        }
+
+        .fsm_conn_actions {
+            flex: 1 1 100%;
+            order: 3;
+        }
+    }
+}
+
 /* ---------------------------------------------------------------- the foot */
 
 /* Quiet, and the only place the app says which version of itself you are looking at. */
@@ -1186,6 +1313,15 @@ a.fsm_tile:hover {
  */
 .fsm_provider_chosen {
     @apply flex items-center gap-3;
+}
+
+/*
+ * The picker's own way out, for someone who opened it to look and then kept what they
+ * already had. Sits under the grid rather than beside the heading, which is where the
+ * connection screen puts its `change` button and so is already spoken for.
+ */
+.fsm_picker_actions {
+    @apply mt-4;
 }
 
 /*

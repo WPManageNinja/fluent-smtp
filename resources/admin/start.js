@@ -2,7 +2,7 @@ import '../scss/fluent-mail-admin.scss';
 
 import * as Vue from 'vue';
 import * as VueRouter from 'vue-router';
-import { ElLoading, ElNotification, ElMessageBox } from 'element-plus';
+import { ElLoading, ElNotification, ElMessageBox, notificationTypes, provideGlobalConfig } from 'element-plus';
 
 import * as icons from './Bits/icons';
 import routes from './routes';
@@ -28,14 +28,93 @@ app.use(router);
 app.use(ElLoading);
 
 /*
+ * Where Element Plus starts stacking.
+ *
+ * Its overlays count up from 2000, and wp-admin's chrome is far above that - the admin
+ * bar is at 99999 and the menu at 9990 - so a dialog opened over either of them was
+ * drawn underneath it. This is a range to move out of rather than a number to nudge, and
+ * moving the base is what keeps the components in the order Element Plus puts them in:
+ * they all count up from the same figure, so a dropdown inside a dialog still lands
+ * above its dialog.
+ *
+ * It has to go through the global *config*, not through `provide(zIndexContextKey)`.
+ * The two are not equivalent, and the difference is invisible until you open a confirm
+ * dialog on top of another dialog:
+ *
+ *   - `el-dialog` and the other in-tree components call `useZIndex()` with no argument,
+ *     which falls back to `inject(zIndexContextKey)`. Providing the key reaches them.
+ *   - `ElMessageBox` and `ElNotification` go through `useGlobalComponentSettings()`,
+ *     which calls `useZIndex(computed(() => config.value?.zIndex ?? 2000))`. Passing an
+ *     override makes `useZIndex` skip the inject fallback entirely, so the provided key
+ *     never reaches them and they keep counting from 2000.
+ *
+ * The result was a dialog at 100001 with its own confirmation drawn at 2001, underneath
+ * it: "Manage Additional Senders" could open, but the Remove confirmation behind it was
+ * unreachable, and any notification raised from inside a dialog was hidden by it.
+ *
+ * `provideGlobalConfig` sets the config both paths read, so the whole family counts from
+ * one base again. The third argument makes it the global default, which is what the
+ * imperative services pick up when they render outside the component tree.
+ */
+provideGlobalConfig({ zIndex: 100000 }, app, true);
+
+/*
+ * The message box and the notification are rendered outside the component tree, so
+ * neither can inject anything unless it has been handed the app's context - which is
+ * what their own install() does, and the only reason these two are `use`d rather than
+ * imported and called. This has to stay *after* provideGlobalConfig: install() is what
+ * binds them to the app whose config was just set.
+ */
+app.use(ElMessageBox);
+app.use(ElNotification);
+
+/**
+ * How far down the screen a notification has to start to clear wp-admin's own bar.
+ *
+ * Measured rather than assumed: the bar is 32px on a desktop and 46px below 782px, and
+ * below that width WordPress stops pinning it, at which point it scrolls away and there
+ * is nothing to clear.
+ */
+function adminBarOffset() {
+    const bar = document.getElementById('wpadminbar');
+
+    if (!bar || window.getComputedStyle(bar).position !== 'fixed') {
+        return 0;
+    }
+
+    return bar.offsetHeight;
+}
+
+/*
+ * A notification is positioned from the top of the viewport, so the 19px offset that
+ * around sixty call sites pass put the first one behind that bar. The offset is added
+ * here rather than at the call sites: none of them should have to know what wp-admin is
+ * doing above the app, and there are sixty of them to keep in step if they did.
+ */
+function withAdminBarOffset(options) {
+    const settings = typeof options === 'string' ? {message: options} : {...options};
+
+    settings.offset = (settings.offset || 0) + adminBarOffset();
+
+    return settings;
+}
+
+const notify = (options = {}) => ElNotification(withAdminBarOffset(options));
+
+// Every call site goes through $notify.success() or $notify.error(), so the type
+// helpers are the ones that actually have to carry the offset.
+notificationTypes.forEach((type) => {
+    notify[type] = (options = {}) => ElNotification[type](withAdminBarOffset(options));
+});
+
+/*
  * Element Plus does not put these on the instance the way Element UI did, but
  * roughly sixty call sites reach for `this.$notify` and `this.$confirm`. Putting
  * them back as global properties is what lets the components stay untouched.
  */
-app.config.globalProperties.$notify = ElNotification;
+app.config.globalProperties.$notify = notify;
 app.config.globalProperties.$confirm = ElMessageBox.confirm;
 
-app.config.globalProperties.$rest = window.FluentMail.$rest;
 app.config.globalProperties.$get = window.FluentMail.$get;
 app.config.globalProperties.$post = window.FluentMail.$post;
 
