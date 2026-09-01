@@ -1,7 +1,11 @@
 <template>
     <div v-loading="fetching" class="fss_body fss_chart_box">
         <div class="fss_chart_canvas">
-            <growth-chart v-if="chartData" :chart-data="chartData"/>
+            <el-alert v-if="load_error" type="error" :closable="false" show-icon>
+                <p>{{ load_error }}</p>
+                <el-button size="small" @click="fetchReport()">{{ $t('Retry') }}</el-button>
+            </el-alert>
+            <growth-chart v-else-if="chartData" :chart-data="chartData"/>
         </div>
     </div>
 </template>
@@ -19,6 +23,7 @@
         data() {
             return {
                 fetching: false,
+                load_error: '',
                 stats: {},
                 // null until the first report lands: Chart.js needs a data
                 // object with datasets in it, not an empty one.
@@ -28,6 +33,7 @@
         computed: {},
         methods: {
             fetchReport() {
+                this.load_error = '';
                 this.fetching = true;
                 this.$get('sending_stats', {
                     date_range: this.date_range
@@ -37,7 +43,7 @@
                         this.setupChartItems();
                     })
                     .fail(error => {
-                        console.log(error);
+                        this.load_error = this.$errorMessage(error);
                     })
                     .always(() => {
                         this.fetching = false;
@@ -45,19 +51,23 @@
             },
             setupChartItems() {
                 const labels = [];
+                /*
+                 * No colours here. They used to be hard-coded on each dataset, which
+                 * meant a chart drawn in the light theme kept its light-theme blue after
+                 * the theme went dark - and the blue itself measured 2.79:1 on the card
+                 * it was drawn on. _chart.js puts them on by axis id instead, off the
+                 * same tokens the grid and the labels come from, and re-reads them when
+                 * the theme changes.
+                 */
                 const ItemValues = {
                     label: this.$t('By Date'),
                     yAxisID: 'byDate',
-                    backgroundColor: 'rgba(81, 52, 178, 0.5)',
-                    borderColor: '#b175eb',
                     data: [],
                     fill: false
                 };
 
                 const cumulativeItems = {
                     label: this.$t('Cumulative'),
-                    backgroundColor: 'rgba(55, 162, 235, 0.1)',
-                    borderColor: '#37a2eb',
                     data: [],
                     yAxisID: 'byCumulative',
                     type: 'line',

@@ -12,14 +12,29 @@
         <div class="fsm_card_head">
             <h3>{{ $t('Alerts & Notifications') }}</h3>
             <div class="fsm_card_head_actions">
+                <!--
+                    "Set Up" is a claim that nothing is set up yet, which the card is in no
+                    position to make when the requests that would have told it failed.
+                -->
                 <router-link :to="{name: 'notification_settings'}">
-                    {{ configured ? $t('Manage') : $t('Set Up') }}
+                    {{ configured || failed ? $t('Manage') : $t('Set Up') }}
                 </router-link>
             </div>
         </div>
 
         <div class="fsm_card_body">
             <el-skeleton v-if="loading" :rows="2" animated/>
+
+            <!--
+                Not the fact list. Both facts default to off, so a failed request used to
+                render "Off" against both of them - the card reporting that this site has
+                no alerts and no summary when all it really knows is that it could not ask.
+                That is the one wrong answer here an admin would act on.
+            -->
+            <p v-else-if="failed" class="fsm_alerts_hint">
+                {{ $t('Could not load alert settings.') }}
+                <el-button link @click="fetch">{{ $t('Retry') }}</el-button>
+            </p>
 
             <template v-else>
                 <ul class="fsm_fact_list">
@@ -51,6 +66,7 @@
         data() {
             return {
                 loading: true,
+                failed: false,
                 summary_on: false,
                 channels: []
             }
@@ -68,6 +84,9 @@
              * `active_channel`. Neither is worth a new endpoint for one card.
              */
             fetch() {
+                this.loading = true;
+                this.failed = false;
+
                 const settings = this.$get('settings/notification-settings')
                     .then(res => {
                         this.summary_on = res.data.settings.enabled === 'yes';
@@ -80,9 +99,15 @@
                             .map(channel => channel.title);
                     });
 
-                jQuery.when(settings, channels).always(() => {
-                    this.loading = false;
-                });
+                // Either one failing means the card does not have the answer, so it says
+                // so rather than falling back to its own defaults and calling them facts.
+                jQuery.when(settings, channels)
+                    .fail(error => {
+                        this.failed = true;
+                    })
+                    .always(() => {
+                        this.loading = false;
+                    });
             }
         },
         mounted() {

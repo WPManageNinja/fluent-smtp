@@ -129,15 +129,22 @@
                                                    :title="$t('Actions')" :aria-label="$t('Actions')"/>
                                         <template #dropdown>
                                             <el-dropdown-menu>
+                                                <!--
+                                                    Health is shown on the row but does not gate routing. A
+                                                    connection reads as failing from a stored check that can be
+                                                    stale, and a legacy Gmail one always does; refusing to route
+                                                    to it also takes away the way to route back off it.
+                                                -->
                                                 <el-dropdown-item command="default"
-                                                                  :disabled="isDefault(connection) || !isUsable(connection)">
+                                                                  :disabled="routing || isDefault(connection)">
                                                     {{ $t('Set as Default') }}
                                                 </el-dropdown-item>
                                                 <el-dropdown-item command="fallback"
-                                                                  :disabled="isFallback(connection) || isDefault(connection) || !isUsable(connection)">
+                                                                  :disabled="routing || isFallback(connection) || isDefault(connection)">
                                                     {{ $t('Set as Fallback') }}
                                                 </el-dropdown-item>
-                                                <el-dropdown-item v-if="isFallback(connection)" command="clear_fallback">
+                                                <el-dropdown-item v-if="isFallback(connection)" command="clear_fallback"
+                                                                  :disabled="routing">
                                                     {{ $t('Clear Fallback') }}
                                                 </el-dropdown-item>
                                                 <el-dropdown-item command="view" divided>
@@ -219,12 +226,27 @@
                  * healthy. Saying "working" about something never tested would be worse
                  * than saying nothing.
                  */
-                health_report: {}
+                health_report: {},
+                /* A routing write is in flight; see setRouting(). */
+                routing: false
             };
         },
         methods: {
             async fetch() {
-                const settings = await this.$get('settings');
+                let settings;
+
+                try {
+                    settings = await this.$get('settings');
+                } catch (error) {
+                    /*
+                     * An expired nonce, a 500 or a dropped connection used to leave this
+                     * screen showing nothing at all, with the reason only in the console.
+                     */
+                    this.$notify.error(this.$errorMessage(error));
+                    this.$notify.error(this.$t('Could not load your connections. Please reload the page.'));
+                    return;
+                }
+
                 this.settings.mappings = settings.data.settings.mappings;
                 this.settings.connections = settings.data.settings.connections;
                 this.health_report = settings.data.health || {};
@@ -270,11 +292,6 @@
                 };
             },
 
-            /* A failing connection can still be edited and deleted, but not routed to. */
-            isUsable(connection) {
-                return this.health(connection).status !== 'error';
-            },
-
             isDefault(connection) {
                 return this.settings.misc.default_connection === connection.unique_key;
             },
@@ -318,17 +335,22 @@
                 }
 
                 if (command === 'default') {
-                    return this.setRouting({
-                        default_connection: connection.unique_key,
+                    return this.setRouting(
                         /*
-                         * One connection cannot be both. Promoting the fallback clears
-                         * the fallback rather than leaving the pair in a state the
-                         * General Settings form refuses to save.
+                         * Described against what is stored rather than against what is on
+                         * screen. One connection cannot be both, so promoting the fallback
+                         * has to clear the fallback, and reading which one that is from
+                         * the in-memory copy would put an unsaved edit - or another
+                         * session's change - into the write. See setRouting().
                          */
-                        fallback_connection: this.isFallback(connection)
-                            ? ''
-                            : this.settings.misc.fallback_connection
-                    }, this.$t('Default connection updated.'));
+                        (stored) => ({
+                            default_connection: connection.unique_key,
+                            fallback_connection: stored.fallback_connection === connection.unique_key
+                                ? ''
+                                : stored.fallback_connection
+                        }),
+                        this.$t('Default connection updated.')
+                    );
                 }
 
                 if (command === 'fallback') {
@@ -348,24 +370,61 @@
 
             /*
              * misc-settings replaces the whole misc object, so the change is merged onto
-             * what is already loaded rather than posted on its own - posting only the two
+             * what is already stored rather than posted on its own - posting only the two
              * routing keys would blank logging, simulation and the rest.
+             *
+             * The merge is onto a fresh read rather than onto `this.settings.misc`,
+             * because that is the very object the General Settings form on this same
+             * screen edits in place. Merging onto it meant that toggling Email Simulation
+             * to look at it and then picking "Set as Default" from a row quietly wrote
+             * that toggle to the database, from a menu that says nothing about it.
+             *
+             * Only the two routing keys are then updated in memory, so an edit the user
+             * has made in the form but not saved stays unsaved and stays on screen.
              */
-            setRouting(change, message) {
-                const previous = {...this.settings.misc};
-                const misc = {...previous, ...change};
+            async setRouting(describeChange, message) {
+                /*
+                 * One routing write at a time. Each one reads the stored settings and
+                 * posts the whole object back, so two started together both read the
+                 * same thing and the second silently undoes the first, leaving the
+                 * screen showing two changes of which only one was kept.
+                 */
+                if (this.routing) {
+                    return;
+                }
 
-                this.settings.misc = misc;
+                this.routing = true;
 
-                return this.$post('misc-settings', {settings: misc})
-                    .then(() => {
-                        this.$notify.success(message);
-                    })
-                    .fail(error => {
-                        this.settings.misc = previous;
-                        console.log(error);
-                        this.$notify.error(this.$t('Could not save. Please try again.'));
+                try {
+                    const response = await this.$get('settings');
+                    const stored = response.data.settings.misc || {...this.settings.misc};
+                    /*
+                     * A caller whose change depends on the current routing passes a
+                     * function, so that it too is answered from the stored copy rather
+                     * than from the one the form on this screen is editing.
+                     */
+                    const change = typeof describeChange === 'function'
+                        ? describeChange(stored)
+                        : describeChange;
+                    const misc = {...stored, ...change};
+
+                    await this.$post('misc-settings', {settings: misc});
+
+                    Object.keys(change).forEach(key => {
+                        this.settings.misc[key] = misc[key];
                     });
+
+                    this.$notify.success(message);
+                } catch (error) {
+                    /*
+                     * Nothing to roll back: the in-memory copy is only touched once the
+                     * write has come back, so a failure leaves the screen as it was.
+                     */
+                    this.$notify.error(this.$errorMessage(error));
+                    this.$notify.error(this.$t('Could not save. Please try again.'));
+                } finally {
+                    this.routing = false;
+                }
             },
 
             addConnection() {
@@ -390,9 +449,17 @@
             },
 
             async deleteConnection(connection) {
-                const result = await this.$post('settings/delete', {
-                    key: connection.unique_key
-                });
+                let result;
+
+                try {
+                    result = await this.$post('settings/delete', {
+                        key: connection.unique_key
+                    });
+                } catch (error) {
+                    this.$notify.error(this.$errorMessage(error));
+                    this.$notify.error(this.$t('Could not delete this connection. Please try again.'));
+                    return;
+                }
 
                 this.settings.connections = result.data.connections;
                 this.settings.misc.default_connection = result.data.misc.default_connection;

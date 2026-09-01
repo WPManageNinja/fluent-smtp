@@ -67,7 +67,13 @@
                         filtered to failures, which is the next thing you want when the
                         number is not zero.
                     -->
-                    <div v-if="!loading" class="fsm_tiles">
+                    <el-alert v-if="load_error" type="error" :closable="false"
+                              class="fsm_load_error" show-icon>
+                        <p>{{ load_error }}</p>
+                        <el-button size="small" @click="fetch()">{{ $t('Retry') }}</el-button>
+                    </el-alert>
+
+                    <div v-if="!loading && !load_error" class="fsm_tiles">
                         <div v-if="settings_stat.log_enabled == 'yes'" class="fsm_tile is_sent">
                             <span class="fsm_tile_icon"><el-icon><FsmIconSPromotion/></el-icon></span>
                             <span class="fsm_tile_label">{{ stripColon($t('Total Email Sent (Logged):')) }}</span>
@@ -216,6 +222,7 @@ export default {
                 { text: this.$t('Last 3 months'), value: () => this.daysAgoRange(90) }
             ],
             loading: true,
+            load_error: '',
             skip_recommended: false
         };
     },
@@ -270,23 +277,34 @@ export default {
          * it now returns the range as a `value`, where the old one reached into
          * the picker instance and did `picker.$emit('pick', ...)`.
          */
+        /*
+         * The site's clock, matching the log filter. This screen kept the browser's,
+         * so the chart's own range shortcuts disagreed with the log screen's by a day
+         * whenever the two clocks were on different sides of midnight.
+         */
         daysAgoRange(days) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * days);
-            return [start, end];
+            return [this.$siteCalendarDate(days), this.$siteCalendarDate(0)];
         },
         disabledDate(date) {
-            return date.getTime() > Date.now();
+            return date.getTime() > this.$siteCalendarDate(0).getTime();
         },
         fetch() {
             this.loading = true;
+            this.load_error = '';
             this.$get('/').then(res => {
                 this.stats = res.stats;
                 this.settings_stat = res.settings_stat;
                 this.unhealthy_settings = res.unhealthy_settings || [];
             }).fail(error => {
-                console.log(error);
+                /*
+                 * The tiles are hidden rather than left at their initial values.
+                 *
+                 * `stats` starts empty, so a failed request used to render "Email
+                 * Failed: 0" - an affirmative claim that nothing had bounced, on the
+                 * screen an admin opens specifically to check that. Zero is a real
+                 * answer here and must only ever come from the server.
+                 */
+                this.load_error = this.$errorMessage(error);
             }).always(() => {
                 this.loading = false;
             });

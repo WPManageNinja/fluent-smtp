@@ -2,7 +2,16 @@
     <div>
         <el-skeleton :animated="true" v-if="loading" :rows="3"></el-skeleton>
         <template v-else>
-            <div v-if="status == 'yes'" class="fss_alert_info">
+            <!--
+                Gated on `receiver`, not on `status`.
+
+                The two do not always agree: the endpoint can report a connected status
+                while returning no receiver - which is precisely the half-broken
+                connection this card exists to show - and the username line then threw
+                on a null. Requiring the object it actually reads keeps the connected
+                branch to the case where there is something to print.
+            -->
+            <div v-if="status == 'yes' && receiver" class="fss_alert_info">
                 <p class="fss_alert_info__description" v-html="$t('__TELEGRAM_NOTIFICATION_ENABLED')">
                 </p>
                 <p class="fss_alert_info__details">{{ $t('Receiver\'s Telegram Username: ') }}@{{ receiver.username }}</p>
@@ -27,7 +36,7 @@
                             :channel_key="'telegram'"
                             :channel_title="channel_config.title || 'Telegram'"
                             :disconnect_label="$t('Disconnect & Reconnect')"
-                            :show-test-button="false"
+                            :show_test_button="false"
                         />
                     </div>
                 </div>
@@ -65,12 +74,22 @@ export default {
                     if (response.data.telegram_receiver) {
                         this.receiver = response.data.telegram_receiver;
                     } else {
-                        this.errors = errors.responseJSON.data.errors;
+                        /*
+                         * A success carrying no receiver is the broken connection this
+                         * panel exists for. It used to read `errors` from the catch
+                         * handler's parameter, which is not in scope here, so the one
+                         * case that needed explaining rendered an empty box.
+                         */
+                        this.errors = response.data.errors || null;
                     }
                 })
                 .catch((errors) => {
-                    this.$notify.error(errors.responseJSON.data.message);
-                    this.errors = errors.responseJSON.data.errors;
+                    const data = errors.responseJSON ? errors.responseJSON.data : null;
+
+                    this.$notify.error(
+                        (data && data.message) || this.$t('Could not reach Telegram. Please try again.')
+                    );
+                    this.errors = (data && data.errors) || null;
                 })
                 .always(() => {
                     this.loading = false;

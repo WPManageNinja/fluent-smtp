@@ -12,7 +12,8 @@
                 Four ranges rather than a date picker. The aside is a glance, not a
                 report - the chart beside it is where a range gets chosen - so the
                 filter is the three questions an admin actually asks of a log they
-                are only passing over: today, yesterday, this week, or everything.
+                are only passing over: today, yesterday, the last seven days, or
+                everything.
             -->
             <div class="fsm_activity_filters" role="tablist">
                 <button v-for="range in ranges" :key="range.key" type="button"
@@ -25,6 +26,16 @@
             </div>
 
             <el-skeleton v-if="loading" :rows="4" animated/>
+
+            <!--
+                Its own state, ahead of the empty one. A request that never came back used
+                to fall through to "No activity found.", which tells the admin the site
+                sent nothing when what actually happened is that nobody knows.
+            -->
+            <p v-else-if="failed" class="fsm_activity_empty">
+                {{ $t('Could not load recent activity.') }}
+                <el-button link @click="fetch">{{ $t('Retry') }}</el-button>
+            </p>
 
             <p v-else-if="!logs.length" class="fsm_activity_empty">
                 {{ $t('No activity found.') }}
@@ -51,13 +62,13 @@
 </template>
 
 <script type="text/babel">
-    import dayjs from 'dayjs';
 
     export default {
         name: 'RecentActivity',
         data() {
             return {
                 loading: true,
+                failed: false,
                 active: 'all',
                 logs: []
             }
@@ -68,7 +79,7 @@
                     {key: 'all', label: this.$t('All')},
                     {key: 'today', label: this.$t('Today')},
                     {key: 'yesterday', label: this.$t('Yesterday')},
-                    {key: 'week', label: this.$t('This Week')}
+                    {key: 'week', label: this.$t('Last 7 Days')}
                 ];
             }
         },
@@ -87,19 +98,24 @@
              * successor. `all` sends no range at all.
              */
             dateRange() {
-                const today = dayjs().format('YYYY-MM-DD');
+                // The site's clock, not the browser's - the logs are filtered on the
+                // site's, so an administrator abroad was asking for the wrong day.
+                const today = this.$siteNow().format('YYYY-MM-DD');
 
                 if (this.active === 'today') {
                     return [today, today];
                 }
 
                 if (this.active === 'yesterday') {
-                    const yesterday = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
+                    const yesterday = this.$siteNow().subtract(1, 'day').format('YYYY-MM-DD');
                     return [yesterday, yesterday];
                 }
 
+                // Six days back plus today is seven days, which is what the label says.
+                // It used to say "This Week", which this is not: on a Tuesday it reaches
+                // back into the previous calendar week.
                 if (this.active === 'week') {
-                    return [dayjs().subtract(6, 'day').format('YYYY-MM-DD'), today];
+                    return [this.$siteNow().subtract(6, 'day').format('YYYY-MM-DD'), today];
                 }
 
                 return null;
@@ -129,6 +145,7 @@
 
             fetch() {
                 this.loading = true;
+                this.failed = false;
 
                 const data = {per_page: 5, page: 1};
                 const range = this.dateRange();
@@ -142,7 +159,8 @@
                         this.logs = res.data || [];
                     })
                     .fail(error => {
-                        console.log(error);
+                        this.failed = true;
+                        this.logs = [];
                     })
                     .always(() => {
                         this.loading = false;

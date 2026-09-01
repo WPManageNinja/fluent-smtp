@@ -11,8 +11,15 @@
                 v-model="search"
                 :placeholder="$t('Search Type and Enter...')"
             >
+                <!--
+                    A mark, not a control. It was a button with no label and nothing
+                    bound to its click, so a screen reader announced a nameless button
+                    that did nothing when pressed - and there is nothing for it to do:
+                    the field filters as it is typed in. An icon says the same thing to
+                    the eye without offering the keyboard a dead end.
+                -->
                 <template #append>
-                    <el-button icon="FsmIconSearch"></el-button>
+                    <el-icon aria-hidden="true"><FsmIconSearch/></el-icon>
                 </template>
             </el-input>
             <div v-if="search" class="search_result">
@@ -31,7 +38,13 @@
                 </div>
             </div>
         </div>
-        <div v-if="!fetching" class="doc_body">
+        <div v-if="load_error" class="doc_body">
+            <el-alert type="error" :closable="false" show-icon>
+                <p>{{ load_error }}</p>
+                <el-button size="small" @click="fetchDocs()">{{ $t('Retry') }}</el-button>
+            </el-alert>
+        </div>
+        <div v-else-if="!fetching" class="doc_body">
             <div class="doc_each_items" v-for="(docItems, docIndex) in doc_cats" :key="docIndex">
                 <div class="fc_doc_items">
                     <div class="fc_doc_header">
@@ -63,6 +76,7 @@
             return {
                 search: '',
                 fetching: false,
+                load_error: '',
                 docs: [],
                 utl_param: '?utm_source=wp&utm_medium=doc&utm_campaign=doc'
             }
@@ -116,12 +130,13 @@
             },
             fetchDocs() {
                 this.fetching = true;
+                this.load_error = '';
                 this.$get('docs')
                     .then(response => {
                         this.docs = response.docs;
                     })
                     .catch((errors) => {
-                        console.log(errors);
+                        this.load_error = this.$errorMessage(errors);
                     })
                     .always(() => {
                         this.fetching = false;

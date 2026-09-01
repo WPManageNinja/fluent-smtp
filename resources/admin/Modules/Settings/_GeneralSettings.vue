@@ -40,7 +40,8 @@
                 <p>{{ $t('How long a logged email is kept before FluentSMTP deletes it automatically.') }}</p>
             </div>
             <div class="fsm_row_control">
-                <el-select v-model="settings.misc.log_saved_interval_days">
+                <el-select v-model="settings.misc.log_saved_interval_days"
+                           :aria-label="$t('Delete Logs')">
                     <el-option
                         v-for="(logLabel, logValue) in logging_days"
                         :key="logValue"
@@ -137,7 +138,14 @@
                         this.$notify.success(response.data.message);
                     })
                     .fail((error) => {
-                        console.log(error);
+                        /*
+                         * The form is not reset here on purpose. The value the user
+                         * typed is still the value they want; telling them it did not
+                         * save lets them retry without typing it again. What must not
+                         * happen is silence, which reads as success until the next
+                         * reload puts the old value back.
+                         */
+                        this.$notify.error(this.$errorMessage(error));
                     })
                     .always(() => {
                         this.saving = false;

@@ -4,10 +4,16 @@
             v-if="log"
             :title="$t('Email Log')"
             @closed="closed"
-            v-loading="retrying"
             v-model="logViewerProps.dialogVisible"
         >
-            <div v-loading="loading">
+            <!--
+                v-loading used to sit on el-dialog itself, and a dialog renders through a
+                Teleport - so Vue had nowhere to hang the mask and dropped it. Retrying an
+                email showed nothing at all and left the button live, which is one click
+                away from sending the same email twice. It belongs on the content the
+                dialog actually renders, and the buttons carry their own loading state.
+            -->
+            <div v-loading="loading || retrying">
                 <ul class="fss_log_items">
                     <li>
                         <div class="item_header">{{ $t('Status:') }}</div>
@@ -27,6 +33,7 @@
                                     icon="FsmIconRefresh"
                                     @click="handleRetry(log, 'retry')"
                                     :plain="true"
+                                    :loading="retrying"
                                     v-if="log.status == 'failed'"
                                 >{{ $t('Retry') }}</el-button>
 
@@ -35,6 +42,7 @@
                                     type="primary"
                                     icon="FsmIconRefreshRight"
                                     @click="handleResendClick"
+                                    :disabled="retrying"
                                     v-if="log.status == 'sent'"
                                 >
                                     {{ $t('Resend') }}
@@ -211,6 +219,18 @@ export default {
                 filter_by_value: this.logViewerProps.filterByValue
             };
 
+            /*
+             * The date range the list was narrowed by, under the same key `logs` takes it.
+             * Prev and Next are meant to walk the result set the screen behind this dialog
+             * is showing, and without the range they walk the whole table instead - so
+             * stepping through one week of failures lands on an email from another month.
+             */
+            const dateRange = this.logViewerProps.dateRange;
+
+            if (Array.isArray(dateRange) && dateRange.length === 2) {
+                data.date_range = dateRange;
+            }
+
             this.loading = true;
             this.$get('logs/show', data).then(res => {
                 if (!dir) {
@@ -222,7 +242,7 @@ export default {
                 this.next = res.data.next;
                 this.prev = res.data.prev;
             }).fail(error => {
-                console.log(error);
+                this.$notify.error(this.$errorMessage(error));
             }).always(() => {
                 this.loading = false;
             });
@@ -278,7 +298,7 @@ export default {
                 this.$notify.error({
                     offset: 19,
                     title: 'Oops!!',
-                    message: error.responseJSON.data.message
+                    message: this.$errorMessage(error)
                 });
             }).always(() => {
                 this.retrying = false;

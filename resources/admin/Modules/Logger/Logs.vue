@@ -38,7 +38,14 @@
                         the frame, and a bordered table inside a bordered card is two
                         boxes for one thing.
                     -->
+                    <el-alert v-if="load_error" type="error" :closable="false" show-icon
+                              class="fsm_load_error">
+                        <p>{{ load_error }}</p>
+                        <el-button size="small" @click="fetch()">{{ $t('Retry') }}</el-button>
+                    </el-alert>
+
                     <el-table
+                        v-else
                         class="fsm_table"
                         :data="logs"
                         v-loading="loading"
@@ -211,6 +218,7 @@ export default {
             logs: [],
             saving: false,
             loading: false,
+            load_error: '',
             deleting: false,
             logViewerProps: {
                 log: null,
@@ -233,7 +241,8 @@ export default {
             },
             selectedLogs: [],
             form: null,
-            logAlertInfo: null
+            logAlertInfo: null,
+            fetchSeq: 0
         };
     },
     methods: {
@@ -263,6 +272,15 @@ export default {
         },
         fetch() {
             this.loading = true;
+
+            /*
+             * Which filter the table ends up showing used to be decided by whichever
+             * response happened to land last: click Failed, then All Statuses before the
+             * first one returns, and the Failed rows render under the All filter. Every
+             * fetch takes a ticket, and only the newest ticket may write to the table.
+             */
+            const seq = ++this.fetchSeq;
+
             const data = {
                 per_page: this.pagination.per_page,
                 page: this.pagination.current_page,
@@ -271,20 +289,39 @@ export default {
                 search: this.filter_query.search
             };
 
-            this.$router.replace({ query: data }).catch(err => {
-              if (err.name !== 'NavigationDuplicated') {
-                console.error(err);
-              }
-            });
+            /*
+             * No catch. vue-router 4 resolves with a NavigationFailure where vue-router 3
+             * rejected, so the `err.name !== 'NavigationDuplicated'` guard that used to
+             * sit here could never match - it caught nothing but a genuine guard error,
+             * and then only to hide it.
+             */
+            this.$router.replace({ query: data });
+
+            this.load_error = '';
 
             this.$get('logs', data).then(res => {
+                if (seq !== this.fetchSeq) {
+                    return;
+                }
                 this.logs = res.data;
                 this.pagination.total = res.total;
                 const page = Number(this.$route.query.page);
                 this.pagination.current_page = page || this.pagination.current_page;
             }).fail(error => {
-                console.log(error);
+                if (seq !== this.fetchSeq) {
+                    return;
+                }
+                /*
+                 * Held separately from an empty result. `logs` starts [] and the table
+                 * prints "No Data" for it, so a failed request used to look like a log
+                 * with nothing in it - which, on the screen that exists to prove mail
+                 * was sent, reads as "nothing was sent" or "the log was cleared".
+                 */
+                this.load_error = this.$errorMessage(error);
             }).always(() => {
+                if (seq !== this.fetchSeq) {
+                    return;
+                }
                 this.loading = false;
             });
         },
@@ -364,7 +401,7 @@ export default {
                 this.$notify.error({
                     offset: 19,
                     title: 'Oops!!',
-                    message: error.responseJSON.data.message
+                    message: this.$errorMessage(error)
                 });
                 return false;
             }).always(() => {
@@ -409,6 +446,9 @@ export default {
                 this.logViewerProps.query = this.filter_query.search;
                 this.logViewerProps.filterBy = this.filter_query.status ? 'status' : '';
                 this.logViewerProps.filterByValue = this.filter_query.status;
+                // The date range travels with them for the same reason: without it, Next
+                // off a list narrowed to one week walks straight out of that week.
+                this.logViewerProps.dateRange = this.filter_query.date_range;
 
                 // Vue 3 removed $children, which is what this used to walk to
                 // find the viewer by its component tag. A ref names it directly.
@@ -425,7 +465,8 @@ export default {
                     message: res.data.message
                 });
             }).fail(error => {
-                console.log(error);
+                // The rows are still there on a failure; saying nothing read as success.
+                this.$notify.error(this.$errorMessage(error));
             }).always(() => {
                 this.deleting = false;
             });
@@ -441,8 +482,8 @@ export default {
                 .then(response => {
                     this.$notify.success(response.data.message);
                 })
-                .catch((error) => {
-                    console.log(error);
+                .fail((error) => {
+                    this.$notify.error(this.$errorMessage(error));
                 })
                 .always(() => {
                     this.loading = false;
@@ -490,7 +531,7 @@ export default {
                     this.$notify.error({
                         offset: 19,
                         title: 'Oops!!',
-                        message: error.responseJSON.data.message
+                        message: this.$errorMessage(error)
                     });
                 }).always(() => {
                 this.loading = false;
@@ -515,12 +556,31 @@ export default {
             this.pagination.current_page = Number(currentPage);
         }
 
+        /*
+         * fetch() writes the whole filter into the URL, so a reload has to read the whole
+         * filter back out of it. Page size and date range were written but never read,
+         * which silently threw both away on every refresh of a filtered list.
+         */
+        const perPage = Number(this.$route.query.per_page);
+
+        if (perPage > 0) {
+            this.pagination.per_page = perPage;
+        }
+
         if(this.$route.query.status) {
             this.filter_query.status = this.$route.query.status;
         }
 
         if(this.$route.query.search) {
             this.filter_query.search = this.$route.query.search;
+        }
+
+        // A range is two plain dates. vue-router hands a bare string back when only one
+        // of them survives in the URL, which is not a range the picker can take.
+        const dateRange = this.$route.query.date_range;
+
+        if (Array.isArray(dateRange) && dateRange.length === 2) {
+            this.filter_query.date_range = dateRange.slice();
         }
 
         this.form = this.appVars.settings.misc;
