@@ -85,14 +85,31 @@ module.exports = {
      */
     important: '#fluent_mail_app',
 
+    /*
+     * `admin/` only, not all of `app/views/`.
+     *
+     * The wider glob pulled in the email templates - email_html.php and
+     * digest_email.php - which are rendered into an email body, never into this
+     * screen. Their markup happens to use `.container`, and that is enough for
+     * Tailwind to emit its container plugin.
+     */
     content: [
         './resources/admin/**/*.{vue,js}',
-        './app/views/**/*.php'
+        './app/views/admin/**/*.php'
     ],
 
     corePlugins: {
         // WordPress supplies its own base styles; resetting them breaks wp-admin.
-        preflight: false
+        preflight: false,
+
+        /*
+         * Unlike every other utility, the container plugin is emitted as a bare
+         * `.container` - `important` does not scope it - so it shipped a global
+         * `.container{width:100%}` plus four breakpoint max-widths into wp-admin,
+         * resizing anything else on the page that happened to use that class name.
+         * Nothing here uses it, so the whole plugin is off.
+         */
+        container: false
     },
 
     theme: {
