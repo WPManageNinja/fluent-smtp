@@ -11,9 +11,13 @@
             contentDocument. Never add allow-scripts alongside it — the two
             together let framed content clear its own sandbox, which would put
             script execution back inside the wp-admin origin.
+
+            The title is not decoration either: a frame is a document of its own to a
+            screen reader, announced by its title and skipped past when it has none.
         -->
         <iframe
             ref="ifr"
+            :title="$t('Email Body')"
             frameborder="0"
             sandbox="allow-same-origin"
             allowFullScreen

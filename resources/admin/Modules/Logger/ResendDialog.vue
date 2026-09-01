@@ -6,7 +6,7 @@
         :close-on-click-modal="false"
         append-to-body
         width="480px"
-        custom-class="fss_resend_dialog"
+        class="fss_resend_dialog"
     >
         <div v-if="log" v-loading="resending">
             <p style="margin-top:0;">
@@ -86,7 +86,7 @@
 export default {
     name: 'ResendDialog',
     props: {
-        value: {
+        modelValue: {
             type: Boolean,
             default: false
         },
@@ -99,6 +99,7 @@ export default {
             default: false
         }
     },
+    emits: ['update:modelValue', 'confirm', 'closed'],
     data() {
         return {
             form: {
@@ -110,15 +111,15 @@ export default {
     computed: {
         visible: {
             get() {
-                return this.value;
+                return this.modelValue;
             },
             set(val) {
-                this.$emit('input', val);
+                this.$emit('update:modelValue', val);
             }
         }
     },
     watch: {
-        value(newVal) {
+        modelValue(newVal) {
             if (newVal) {
                 this.form.target = 'original';
                 this.form.customEmail = '';

@@ -49,8 +49,8 @@ const wholeNumbersOnly = (value) => (Math.floor(value) === value ? value : undef
 /*
  * Chart.js paints to a canvas, so it cannot read a CSS variable the way the rest of
  * the app does - it needs values. Reading them off the live app root is what keeps the
- * chart's grid and labels on the same palette as everything around it without either
- * side holding a second copy of the colours.
+ * chart's grid, labels and plotted series on the same palette as everything around it
+ * without either side holding a second copy of the colours.
  */
 function themeColours() {
     const root = document.getElementById('fluent_mail_app');
@@ -60,7 +60,24 @@ function themeColours() {
 
     return {
         grid: read('--fsm-border', '#EAECF0'),
-        tick: read('--fsm-text-light', '#9D9FAC')
+        tick: read('--fsm-text-light', '#6D6F7B'),
+        /*
+         * Keyed by the axis a series is plotted against, which is the one thing the
+         * dataset already says about itself. That way the component building the data
+         * says what a series means and this says what it looks like in the theme that
+         * happens to be on - rather than the colour being written into the data once,
+         * at fetch time, and staying light after the theme has gone dark.
+         */
+        series: {
+            byDate: {
+                borderColor: read('--fsm-chart-bar', '#6741D9'),
+                backgroundColor: read('--fsm-chart-bar-fill', 'rgba(103, 65, 217, .75)')
+            },
+            byCumulative: {
+                borderColor: read('--fsm-chart-line', '#147DB3'),
+                backgroundColor: read('--fsm-chart-line-fill', 'rgba(20, 125, 179, .12)')
+            }
+        }
     };
 }
 
@@ -78,6 +95,17 @@ export default {
         };
     },
     computed: {
+        // The data as given, with each series wearing the current theme's colours.
+        themedData() {
+            const {series} = this.colours;
+
+            return {
+                ...this.chartData,
+                datasets: (this.chartData.datasets || []).map(
+                    dataset => ({...dataset, ...(series[dataset.yAxisID] || {})})
+                )
+            };
+        },
         options() {
             const {grid, tick} = this.colours;
 
@@ -119,8 +147,9 @@ export default {
     },
     methods: {
         // ThemeSwitch fires this whenever it applies a theme, including when the change
-        // arrived from another tab. Re-reading the root is enough: `options` is computed
-        // from `colours`, and vue-chartjs redraws when its options prop changes.
+        // arrived from another tab. Re-reading the root is enough: `options` and
+        // `themedData` are both computed from `colours`, and vue-chartjs redraws when
+        // either prop changes.
         onThemeChange() {
             this.colours = themeColours();
         }
@@ -138,7 +167,7 @@ export default {
          * just Vue's.
          */
         return h(Bar, {
-            data: this.chartData,
+            data: this.themedData,
             options: this.options
         });
     }

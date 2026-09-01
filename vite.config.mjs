@@ -59,6 +59,13 @@ const builds = {
     }
 };
 
+/*
+ * `npm run dev` runs both modes as concurrent watchers, and a watcher that clears
+ * the output directory on every rebuild would keep deleting the other one's bundle.
+ * Clearing is a release-build concern, so it is switched off while watching.
+ */
+const isWatching = process.argv.includes('--watch') || process.argv.includes('-w');
+
 export default defineConfig(({ mode }) => {
     const build = builds[mode];
     if (!build) {
@@ -87,7 +94,8 @@ export default defineConfig(({ mode }) => {
             AutoImport({ resolvers: [ElementPlusResolver()] }),
             Components({ resolvers: [ElementPlusResolver()], directives: false }),
             ...(build.copy ? [viteStaticCopy({ targets: build.copy })] : []),
-            ...(build.cssFileName ? [renameExtractedCss(build.cssFileName)] : [])
+            ...(build.cssFileName ? [renameExtractedCss(build.cssFileName)] : []),
+            sealIife()
         ],
         css: {
             preprocessorOptions: {
@@ -120,9 +128,18 @@ export default defineConfig(({ mode }) => {
         },
         build: {
             outDir: 'assets',
-            // Each mode writes different files into the same directory, so no
-            // build may clear it - the second would delete the first's output.
-            emptyOutDir: false,
+            /*
+             * Both modes write into the same directory, so only the first one may
+             * clear it - if the second did, it would delete the first's output. It has
+             * to be one of them: with neither clearing, a checkout that has been built
+             * on another branch keeps that branch's generated files forever, and they
+             * are picked up by the release zip. That is how deleted vendored copies of
+             * Chart.js and the Element UI fonts kept shipping.
+             *
+             * `npm run build` and build.sh both run boot first, and boot is also the
+             * mode that re-copies the static assets, so it is the one that clears.
+             */
+            emptyOutDir: mode === 'boot' && !isWatching,
             // One stylesheet, matching the one wp_enqueue_style call.
             cssCodeSplit: false,
             manifest: false,
@@ -145,6 +162,50 @@ export default defineConfig(({ mode }) => {
         }
     };
 });
+
+/*
+ * Keeps every declaration inside the bundle's own function scope.
+ *
+ * `format: 'iife'` wraps the module graph, but minification runs afterwards and
+ * esbuild hoists the helpers it generates for class fields to the top of the
+ * file, which puts them outside that wrapper. The app bundle shipped three of
+ * them - `a$e`, `i$e` and `Ut` - as `var` declarations at the top level of a
+ * classic script, which is to say as properties of `window` in wp-admin. A `var`
+ * colliding with another plugin's `var` is survivable; one colliding with a
+ * `let` or a `class` of the same name is a SyntaxError that kills whichever
+ * script loads second, and `Ut` is exactly the kind of name a minifier picks.
+ *
+ * This runs in generateBundle rather than renderChunk so that it lands after
+ * Vite's own minification rather than before it, which is what the hoisting
+ * would otherwise defeat. The assertion is the regression guard: if a future
+ * Vite or esbuild moves anything back out, the build fails here instead of
+ * shipping a global.
+ */
+function sealIife() {
+    return {
+        name: 'fluent-smtp:seal-iife',
+        generateBundle: {
+            order: 'post',
+            handler(_options, bundle) {
+                for (const output of Object.values(bundle)) {
+                    if (output.type !== 'chunk') {
+                        continue;
+                    }
+
+                    /*
+                     * Unconditional, and deliberately not guarded by a check that the
+                     * chunk leaked something first. Whatever shape the minifier's output
+                     * takes, nothing at its top level can reach `window` from inside a
+                     * function, so the containment holds by construction rather than by a
+                     * pattern that has to keep up with esbuild. Wrapping a chunk that had
+                     * nothing to contain costs 17 bytes.
+                     */
+                    output.code = `(function(){\n${output.code}\n})();\n`;
+                }
+            }
+        }
+    };
+}
 
 /*
  * Rename Vite's extracted `style.css` to the name wp_enqueue_style() uses.

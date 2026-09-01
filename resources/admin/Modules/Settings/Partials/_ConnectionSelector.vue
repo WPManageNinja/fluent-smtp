@@ -9,8 +9,13 @@
         the caller's now, and this is the picker.
     -->
     <el-radio-group class="fss_connections" v-model="connection.provider" @change="$emit('picked')">
+        <!--
+            `picked` also fires on click, not only on `change`. A native radio emits no
+            change event when the option already checked is clicked again, and without
+            this the caller that hid its form behind the picker would never get it back.
+        -->
         <el-radio-button :class="'con_'+providerName" v-for="(provider, providerName) in providers"
-                         :key="providerName" :value="providerName">
+                         :key="providerName" :value="providerName" @click="$emit('picked')">
             <img :title="provider.title" :alt="provider.title" :src="provider.image"/>
         </el-radio-button>
     </el-radio-group>

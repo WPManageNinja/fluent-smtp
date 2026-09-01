@@ -93,7 +93,7 @@ describe('FluentMail admin request layer', () => {
         for (const name of [
             'addFilter', 'applyFilters', 'doAction', 'addAction', 'removeAllActions',
             '$dateFormat', 'ucFirst', 'ucWords', 'slugify', 'dayjs', 'escapeHtml',
-            'hasPro', '$t'
+            'hasPro', '$siteNow', '$t'
         ]) {
             expect(methods[name], name).toBeTypeOf('function');
         }
@@ -103,5 +103,86 @@ describe('FluentMail admin request layer', () => {
         expect(methods.$t('Untranslated')).toBe('Untranslated');
         expect(methods.ucFirst('sent')).toBe('Sent');
         expect(methods.escapeHtml('<b>&</b>')).toBe('&lt;b&gt;&amp;&lt;/b&gt;');
+    });
+
+    /*
+     * Both placeholder styles shipped to users verbatim - a theme switch labelled
+     * "Theme: %s" and a confirmation asking about "{title} notifications" - because
+     * $t() took the argument and dropped it. Translators are already shipping strings
+     * that carry the placeholder, so this is the contract they are translating against.
+     */
+    describe('$t placeholder substitution', () => {
+        let $t;
+
+        beforeEach(() => {
+            window.FluentMailAdmin.trans = {
+                'Theme: %s': 'Design: %s',
+                'Are you sure you want to disconnect {title} notifications?':
+                    'Are you sure you want to disconnect {title} notifications?',
+                'From %s to %s': 'From %s to %s'
+            };
+            fluentMail.appVars = window.FluentMailAdmin;
+            $t = fluentMail.appMixin().methods.$t;
+        });
+
+        it('fills %s from positional arguments, translating first', () => {
+            expect($t('Theme: %s', 'Dark')).toBe('Design: Dark');
+            expect($t('From %s to %s', 'a@example.com', 'b@example.com'))
+                .toBe('From a@example.com to b@example.com');
+        });
+
+        it('fills {name} from an object argument', () => {
+            expect($t('Are you sure you want to disconnect {title} notifications?', {
+                title: 'Telegram'
+            })).toBe('Are you sure you want to disconnect Telegram notifications?');
+        });
+
+        it('leaves a placeholder alone when nothing was passed for it', () => {
+            expect($t('Theme: %s')).toBe('Design: %s');
+            expect($t('Are you sure you want to disconnect {title} notifications?', {}))
+                .toBe('Are you sure you want to disconnect {title} notifications?');
+        });
+
+        it('still returns an untranslated key unchanged', () => {
+            expect($t('Untranslated %s', 'value')).toBe('Untranslated value');
+        });
+    });
+
+    /*
+     * Logs are written and filtered in the site's timezone. Every date the app builds
+     * has to come from here rather than from new Date(), or an administrator in
+     * another timezone asks for a day the site has not reached yet.
+     */
+    describe('$siteNow', () => {
+        const siteNow = () => fluentMail.appMixin().methods.$siteNow();
+
+        it('reads the wall clock of the site timezone, not the browser one', () => {
+            window.FluentMailAdmin.site_timezone = 'Asia/Tokyo';
+            fluentMail.appVars = window.FluentMailAdmin;
+
+            const tokyoHour = Number(new Intl.DateTimeFormat('en-GB', {
+                timeZone: 'Asia/Tokyo', hour: 'numeric', hour12: false
+            }).format(new Date()));
+
+            expect(siteNow().hour()).toBe(tokyoHour % 24);
+            expect(Math.abs(siteNow().valueOf() - Date.now())).toBeLessThan(60000);
+        });
+
+        it('accepts the fixed-offset form wp_timezone_string() can return', () => {
+            window.FluentMailAdmin.site_timezone = '+05:30';
+            fluentMail.appVars = window.FluentMailAdmin;
+
+            expect(siteNow().utcOffset()).toBe(330);
+        });
+
+        it('falls back to the browser clock for an absent or unknown zone', () => {
+            delete window.FluentMailAdmin.site_timezone;
+            fluentMail.appVars = window.FluentMailAdmin;
+            expect(Math.abs(siteNow().diff(new Date(), 'minute'))).toBeLessThanOrEqual(1);
+
+            window.FluentMailAdmin.site_timezone = 'Not/AZone';
+            fluentMail.appVars = window.FluentMailAdmin;
+            expect(Math.abs(siteNow().diff(new Date(), 'minute'))).toBeLessThanOrEqual(1);
+        });
     });
 });

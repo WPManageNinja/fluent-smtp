@@ -316,6 +316,15 @@ class AdminMenuHandler
             // looking, and what site they are looking at.
             'user_avatar'            => esc_url(get_avatar_url($user->ID, ['size' => 96])),
             'site_name'              => get_bloginfo('name'),
+            /*
+             * Logs are stored and filtered in the site's timezone, but every date the
+             * app computed came from the browser's. An administrator working from
+             * another timezone got a "Today" that was the site's yesterday, and the
+             * dashboard filed records under the wrong day. This is what the app dates
+             * from instead of new Date(). A zone rather than a timestamp, so it stays
+             * right across a daylight-saving change on a page nobody has reloaded.
+             */
+            'site_timezone'          => wp_timezone_string(),
             'require_optin'          => $this->isRequireOptin(),
             'has_ninja_tables'       => defined('NINJA_TABLES_VERSION'),
             'disable_recommendation' => apply_filters('fluentmail_disable_recommendation', false),

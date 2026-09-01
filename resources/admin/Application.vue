@@ -146,12 +146,27 @@
              * 160px: collapsing the menu, the automatic fold on a narrow window and the
              * off-canvas menu on a phone all land on different widths, and all of them
              * show up here.
+             *
+             * Both edges are measured, not just the left one. On an RTL install
+             * WordPress puts the admin menu on the right, so the gap to clear is on that
+             * side and a bar pinned to `left: <menu width>; right: 0` runs underneath it.
+             * In LTR the right-hand measurement is 0 and nothing moves.
              */
             measureShell() {
                 const content = document.getElementById('wpcontent');
-                const left = content ? content.getBoundingClientRect().left : 0;
+                const rect = content ? content.getBoundingClientRect() : null;
+
+                /*
+                 * clientWidth rather than innerWidth: it is the width a fixed element's
+                 * `right: 0` resolves against, so it excludes a classic scrollbar where
+                 * innerWidth would count it and push the bar a scrollbar too far.
+                 */
+                const viewport = document.documentElement.clientWidth || window.innerWidth;
+                const left = rect ? rect.left : 0;
+                const right = rect ? Math.max(0, viewport - rect.right) : 0;
 
                 document.documentElement.style.setProperty('--fsm-shell-left', left + 'px');
+                document.documentElement.style.setProperty('--fsm-shell-right', right + 'px');
             }
         },
         created() {

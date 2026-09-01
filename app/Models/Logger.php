@@ -122,6 +122,20 @@ class Logger extends Model
             }
         }
 
+        /*
+         * The date range travels beside filter_by rather than through it.
+         *
+         * There is only one filter_by slot and the logs screen already spends it on
+         * status, so a viewer opened from a date-filtered list had no range at all and
+         * its Prev/Next walked straight out of the result set the user was looking at.
+         * Normalized through the same helper so the pair reaching the loop is scalar.
+         */
+        $dateRange = $this->normalizeFilterValue('created_at', Arr::get($data, 'date_range'));
+
+        if (!isset($where['created_at']) && is_array($dateRange)) {
+            $where['created_at'] = $dateRange;
+        }
+
         if (isset($data['query']) && is_scalar($data['query'])) {
             foreach ($this->searchables as $column) {
                 if (isset($where[$column])) {

@@ -103,9 +103,16 @@ export default {
         InputPassword,
         Error
     },
-    'connection.key_store'(value) {
-        if (value === 'wp_config') {
-            this.connection.api_key = '';
+    /*
+     * Vue 3 ignores an unknown top-level option, so this handler sat here for
+     * years never running: choosing the config-file key store left the typed key
+     * in the form and it was posted and stored in the database anyway.
+     */
+    watch: {
+        'connection.key_store'(value) {
+            if (value === 'wp_config') {
+                this.connection.api_key = '';
+            }
         }
     },
     data() {
