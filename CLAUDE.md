@@ -9,19 +9,19 @@ FluentSMTP is a WordPress SMTP plugin that connects WordPress with various email
 ## Development Commands
 
 ### Frontend Development
+
+Requires Node `^20.19.0 || >=22.12.0` (see `.nvmrc`) and pnpm, pinned via
+`packageManager` in package.json.
+
 ```bash
-# Install dependencies
-npm install
+# Install dependencies (respects the committed lockfile)
+pnpm install
 
 # Development mode with watch
-npm run start
-# or
-npx mix watch
+pnpm run dev
 
 # Production build
-npm run prod
-# or
-npx mix --production
+pnpm run build
 ```
 
 ### Backend Development
@@ -85,10 +85,11 @@ The build script:
 **Location:** `resources/admin/`
 
 **Tech Stack:**
-- Vue.js 2
-- Vue Router
-- Element UI component library
-- Chart.js for analytics
+- Vue.js 3
+- Vue Router 4
+- Element Plus component library
+- Chart.js 4 via vue-chartjs for analytics
+- Tailwind (utilities only, scoped to `#fluent_mail_app`) alongside the SCSS design system
 
 **Entry Points:**
 - `boot.js` → Compiled to `assets/admin/js/boot.js`
