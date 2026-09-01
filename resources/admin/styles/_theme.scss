@@ -47,6 +47,14 @@
     --fsm-border: #EAECF0;
     --fsm-border-strong: #D6DAE1;
 
+    /*
+     * The line around a form control. A hairline is decoration and can be as quiet as it
+     * likes; the edge of an input is what tells you where the field is, so it needs 3:1
+     * against whatever is behind it. This is wp-admin's own field grey within a shade of
+     * it, and measures 3.33:1 on a card, 3.19:1 on a sunk well and 3.05:1 on the page.
+     */
+    --fsm-field-border: #8A8D92;
+
     /* ------------------------------------------------------------------- text */
 
     /* A page heading - the one thing on the screen darker than the rest. */
@@ -58,8 +66,13 @@
     /* A label beside a value, a description under a setting. */
     --fsm-text-mid: #565865;
 
-    /* A timestamp, a count, a hint - present but not to be read first. */
-    --fsm-text-light: #9D9FAC;
+    /*
+     * A timestamp, a count, a hint - present but not to be read first, which is a
+     * matter of weight rather than of being unreadable. Dark enough to clear 4.5:1 on
+     * every surface it is drawn on: 4.99:1 on a card, 4.77:1 on a sunk well and 4.57:1
+     * on the page behind them, where the grey it used to be managed 2.6:1.
+     */
+    --fsm-text-light: #6D6F7B;
 
     /* Something to click that is not a button. */
     --fsm-link: #253241;
@@ -99,7 +112,13 @@
     --fsm-warning-wash: #FFF9F3;
     --fsm-warning-bg: #FEF4E6;
     --fsm-warning-line: #FDE8CD;
-    --fsm-warning-fg: #C47206;
+
+    /*
+     * Darker than the amber it stands for, because this one is read rather than looked
+     * at: 5.29:1 on a card, 5.06:1 on the wash and 4.86:1 on the chip. The brighter
+     * orange it replaces cleared none of the three.
+     */
+    --fsm-warning-fg: #966000;
 
     --fsm-success-wash: #F3FAF8;
     --fsm-success-bg: #E8F5F1;
@@ -143,6 +162,21 @@
     --fsm-heat-3: #6040FF;
     --fsm-heat-4: #2900F3;
     --fsm-heat-5: #1C00A6;
+
+    /* ---------------------------------------------------------------- charts */
+
+    /*
+     * The two series on the dashboard's sending chart. Chart.js paints to a canvas and
+     * cannot read a variable, so Charts/_chart.js reads these off the live root the way
+     * it already reads the grid and the tick colour, and re-reads them when the theme
+     * changes. A plotted shape carries the meaning of the chart, so both clear 3:1
+     * against the card they are drawn on - the bars at 6.30:1 and the line at 4.55:1,
+     * where the blue that used to be hard-coded in Emails.vue managed 2.79:1.
+     */
+    --fsm-chart-bar: #6741D9;
+    --fsm-chart-bar-fill: rgba(103, 65, 217, .75);
+    --fsm-chart-line: #147DB3;
+    --fsm-chart-line-fill: rgba(20, 125, 179, .12);
 }
 
 body.settings_page_fluent-mail {
@@ -162,6 +196,9 @@ body.settings_page_fluent-mail.fluent_theme_dark {
 
     --fsm-border: #2C3C4E;
     --fsm-border-strong: #2C3C4E;
+
+    /* 3.38:1 on a card, 3.79:1 on a sunk well, 4.02:1 on the page. */
+    --fsm-field-border: #66798C;
 
     --fsm-heading: #F5F6F7;
     --fsm-text: #F5F6F7;
@@ -219,6 +256,12 @@ body.settings_page_fluent-mail.fluent_theme_dark {
     --fsm-tile-senders-fg: #FF68B3;
 
     --fsm-heat-0: #202C39;
+
+    /* The same two series, lifted to clear 3:1 on the dark card: 5.59:1 and 6.46:1. */
+    --fsm-chart-bar: #A08DFF;
+    --fsm-chart-bar-fill: rgba(160, 141, 255, .75);
+    --fsm-chart-line: #4FB3E8;
+    --fsm-chart-line-fill: rgba(79, 179, 232, .16);
 }
 
 /*
@@ -285,12 +328,17 @@ body.settings_page_fluent-mail {
     --el-text-color-placeholder: var(--fsm-text-light);
     --el-text-color-disabled: #C0C4CC;
 
-    --el-border-color: var(--fsm-border-strong);
+    /*
+     * --el-border-color is what every field frames itself with, so it takes the field
+     * token rather than the hairline one. The three below it are dividers and card
+     * edges, which are decoration and stay quiet.
+     */
+    --el-border-color: var(--fsm-field-border);
     --el-border-color-light: var(--fsm-border);
     --el-border-color-lighter: var(--fsm-border);
     --el-border-color-extra-light: var(--fsm-surface-sunk);
-    --el-border-color-dark: var(--fsm-border-strong);
-    --el-border-color-hover: var(--fsm-border-strong);
+    --el-border-color-dark: var(--fsm-field-border);
+    --el-border-color-hover: var(--fsm-field-border);
 
     --el-fill-color: var(--fsm-surface-raised);
     --el-fill-color-light: var(--fsm-surface-sunk);
@@ -336,15 +384,21 @@ body.settings_page_fluent-mail.fluent_theme_dark {
     --el-text-color-primary: var(--fsm-text);
     --el-text-color-regular: var(--fsm-text-mid);
     --el-text-color-secondary: var(--fsm-text-light);
-    --el-text-color-placeholder: #758195;
+    /*
+     * A placeholder is instruction ("SMTP Host", "Email Address"), not disabled text,
+     * so it has to clear 4.5:1 like any other content. The literal this replaced was
+     * 3.85:1 on the field surface and 3.31:1 on a raised one; the shared token is
+     * 5.26:1 and 4.52:1 for the same two.
+     */
+    --el-text-color-placeholder: var(--fsm-text-light);
     --el-text-color-disabled: #5A5F66;
 
-    --el-border-color: var(--fsm-border);
+    --el-border-color: var(--fsm-field-border);
     --el-border-color-light: var(--fsm-border);
     --el-border-color-lighter: var(--fsm-surface-raised);
     --el-border-color-extra-light: var(--fsm-surface-raised);
-    --el-border-color-dark: #3A4B60;
-    --el-border-color-hover: #3A4B60;
+    --el-border-color-dark: var(--fsm-field-border);
+    --el-border-color-hover: var(--fsm-field-border);
 
     --el-fill-color: var(--fsm-surface-raised);
     --el-fill-color-light: var(--fsm-surface-raised);
@@ -411,6 +465,69 @@ body.settings_page_fluent-mail.fluent_theme_dark {
         --el-button-active-border-color: #C0C2C4;
     }
 
+    /*
+     * Everything Element Plus paints `--el-color-white` on.
+     *
+     * The dark accent and the dark semantic colours are all *light* - the accent is
+     * #D9DADC, danger is #EB856B - because they have to read against a near-black card.
+     * Element Plus does not know that: it puts white on each of them for the selected,
+     * checked and solid states, which in dark mode is white on a pale fill. The worst
+     * was the checked radio button at 1.40:1, and that is the control choosing whether
+     * credentials are stored in the database or read from wp-config.php - the one place
+     * on the screen where not being able to read your own selection matters most.
+     *
+     * `--fsm-accent-contrast` is the dark ink already used for text on the accent, and
+     * it clears 4.5:1 on every one of these fills: accent 8.80:1, info 7.25:1, warning
+     * 7.24:1, success 5.85:1, danger 4.75:1.
+     */
+    .el-radio-button {
+        --el-radio-button-checked-text-color: var(--fsm-accent-contrast);
+        --el-radio-button-checked-bg-color: var(--fsm-accent);
+        --el-radio-button-checked-border-color: var(--fsm-accent);
+    }
+
+    /* The dot inside a checked radio, drawn white on the pale checked fill. */
+    .el-radio__inner::after {
+        background-color: var(--fsm-accent-contrast);
+    }
+
+    /* The switch thumb, same white, on the pale "on" track. */
+    .el-switch.is-checked .el-switch__action {
+        background-color: var(--fsm-accent-contrast);
+    }
+
+    /*
+     * The solid semantic buttons - Skip, Disconnect, and the destructive actions.
+     * Same inversion as .el-button--primary above, applied to the ramps Element Plus
+     * leaves at their light-theme foregrounds.
+     */
+    .el-button--info,
+    .el-button--success,
+    .el-button--warning,
+    .el-button--danger {
+        --el-button-text-color: var(--fsm-accent-contrast);
+        --el-button-hover-text-color: var(--fsm-accent-contrast);
+        --el-button-active-text-color: var(--fsm-accent-contrast);
+        --el-button-disabled-text-color: var(--fsm-accent-contrast);
+    }
+
+    /*
+     * The plain variants read the `-light-9` ramp for their background, which is still
+     * the light theme's near-white tint - a bright patch inside a dark dialog, with the
+     * semantic colour as text on top of it at 2.34:1. Sunk surface instead, which the
+     * same text clears comfortably: danger 6.56:1, success 8.07:1, warning 9.99:1.
+     */
+    .el-button--info.is-plain,
+    .el-button--success.is-plain,
+    .el-button--warning.is-plain,
+    .el-button--danger.is-plain {
+        --el-button-bg-color: var(--fsm-surface-sunk);
+        --el-button-hover-bg-color: var(--fsm-surface-raised);
+        --el-button-active-bg-color: var(--fsm-surface-raised);
+        --el-button-text-color: var(--el-button-border-color);
+        --el-button-hover-text-color: var(--el-button-border-color);
+    }
+
     /* The chips inside a multi-select, which are tinted from the primary ramp. */
     .el-tag {
         --el-tag-bg-color: var(--fsm-surface-raised);
@@ -451,7 +568,7 @@ body.settings_page_fluent-mail.fluent_theme_dark {
         --el-checkbox-checked-icon-color: var(--fsm-accent-contrast);
         --el-checkbox-input-border-color-hover: var(--fsm-accent);
         --el-checkbox-bg-color: var(--fsm-surface-sunk);
-        --el-checkbox-input-border: 1px solid var(--fsm-border-strong);
+        --el-checkbox-input-border: 1px solid var(--fsm-field-border);
     }
 
     /* The radio's inner dot has the same problem, for the same reason. */
