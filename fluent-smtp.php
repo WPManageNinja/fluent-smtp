@@ -10,6 +10,8 @@ License:      GPL2
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain:  fluent-smtp
 Domain Path:  /language
+Requires at least: 6.5
+Requires PHP: 7.4
 */
 
 !defined('WPINC') && die;

@@ -1,8 +1,8 @@
 === FluentSMTP – WP SMTP Plugin with Amazon SES, SendGrid, Mailgun, Postmark, Cloudflare, toSend, Gmail and Any SMTP ===
 Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, wordpress mail smtp, amazon ses, sendgrid, mailgun
-Requires at least: 5.5
-Tested up to: 7.0
+Requires at least: 6.5
+Tested up to: 7.1
 Stable tag: 2.4.0
 Requires PHP: 7.4
 License: GPLv2 or later
@@ -444,10 +444,23 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 app is created by `createApp()` - so it cannot be preserved as one, and there is no shim
 that could honestly pretend otherwise. It is now the Vue 3 module namespace
 (`{ createApp, ref, computed, h, ... }`), and `window.FluentMail.Router` is vue-router's.
-Everything else on the global is unchanged: `applyFilters`, `addFilter`, `addAction`,
-`doAction`, `registerTopMenu()`, `registerBlock()`, `$get`, `$post` and `appVars` all
-behave exactly as before, and the `fluent_mail_top_menus`, `fluent_mail_global_routes` and
-`fluent_mail_loading_app` hooks are all still in place.
+The `applyFilters`, `addFilter`, `addAction`, `doAction`, `registerTopMenu()`,
+`registerBlock()`, `$get`, `$post` and `appVars` members are all still there, as are the
+`fluent_mail_top_menus`, `fluent_mail_global_routes` and `fluent_mail_loading_app` hooks.
+Three things about them did change, and an add-on that renders its own screen is likely
+to need updating:
+
+- `window.FluentMail.Vue` and `.Router` are published by the app bundle in the footer,
+  which runs *after* `fluent_mail_loading_app`. Code hooked there cannot read them yet.
+- Element components are no longer registered globally, so a component supplied at
+  runtime through `registerTopMenu()` has to import the ones it uses itself.
+- The `fluentmail-chartjs` and `fluentmail-vue-chartjs` script handles are gone, along
+  with the `window.Chart` and `window.VueChartJs` globals they defined. Chart.js 4 is
+  bundled privately now.
+
+`$get` and `$post` also reject rather than resolve when the nonce has expired or the
+capability check fails - those responses now carry HTTP 403 instead of 200, so handle
+them in `.fail()` rather than in `.then()`.
 
 An add-on that reads `window.FluentMail.Vue` as a constructor will need updating. One that
 uses `registerTopMenu()` or the filters will not.
