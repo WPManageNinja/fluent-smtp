@@ -25,7 +25,7 @@
 
         <el-row :gutter="20">
             <el-col :span="24">
-                <el-form-item style="margin: 20px 0">
+                <el-form-item style="margin: 20px 0" role="radiogroup" :aria-label="$t('Encryption')">
                     <label>
                         {{ $t('Encryption') }}
                     </label>
@@ -46,12 +46,20 @@
         <el-row :gutter="20">
             <el-col :span="24">
                 <el-form-item>
-                    <label for="auth">
+                    <!--
+                        `aria-label` rather than a `for`, because el-switch renders its
+                        own input with an id this template does not control. Both
+                        switches on this screen carried `for="auth"` - the same id,
+                        matching neither of them - so clicking either label did nothing
+                        and a screen reader announced two unnamed switches.
+                    -->
+                    <label>
                         {{ $t('Use Auto TLS') }}
                     </label>
 
                     <el-switch
                         v-model="connection.auto_tls"
+                        :aria-label="$t('Use Auto TLS')"
                         active-value="yes"
                         inactive-value="no">
                     </el-switch>
@@ -66,12 +74,13 @@
         <el-row :gutter="20">
             <el-col :span="24">
                 <el-form-item>
-                    <label for="auth">
+                    <label>
                         {{ $t('Authentication') }}
                     </label>
 
                     <el-switch
                         v-model="connection.auth"
+                        :aria-label="$t('Authentication')"
                         active-value="yes"
                         inactive-value="no">
                     </el-switch>
