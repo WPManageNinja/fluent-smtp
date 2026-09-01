@@ -23,6 +23,7 @@
                     </div>
                     <div class="fsm_row_control">
                         <el-select autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore
+                                   :aria-label="$t('From')"
                                    :placeholder="$t('Select Email or Type')" v-model="form.from">
                             <el-option
                                 v-for="(emailHash, email) in sender_emails"
@@ -39,7 +40,8 @@
                         <p>{{ $t('__TEST_EMAIL_INST') }}</p>
                     </div>
                     <div class="fsm_row_control">
-                        <el-input id="from" v-model="form.email" autocomplete="off" data-bwignore
+                        <el-input v-model="form.email" autocomplete="off" data-bwignore
+                                  :aria-label="$t('Send To')"
                                   data-lpignore="true" data-1p-ignore name="fluentsmtp_test_to"/>
                     </div>
                 </div>
@@ -151,16 +153,29 @@
                         });
                     }
 
-                    const responseJSON = res.responseJSON;
+                    /*
+                     * A test send is the one screen where a failure is the useful
+                     * result, so it has to survive a response that is not JSON - which
+                     * is exactly what a PHP fatal inside a mailer produces.
+                     */
+                    const payload = res && res.responseJSON && res.responseJSON.data;
 
-                    if (responseJSON.data.email_error) {
+                    if (!payload) {
                         return this.$notify.error({
                             title: this.$t('Oops!'),
                             offset: 19,
-                            message: responseJSON.data.email_error
+                            message: this.$errorMessage(res)
                         });
                     }
-                    this.debug_info = responseJSON.data;
+
+                    if (payload.email_error) {
+                        return this.$notify.error({
+                            title: this.$t('Oops!'),
+                            offset: 19,
+                            message: payload.email_error
+                        });
+                    }
+                    this.debug_info = payload;
                 }).always(() => {
                     this.loading = false;
                 });

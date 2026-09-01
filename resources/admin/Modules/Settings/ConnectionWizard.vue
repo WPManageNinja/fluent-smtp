@@ -1,6 +1,6 @@
 <template>
     <div class="fss_connection_wizard">
-        <el-form :data="connection" label-position="top" autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore data-form-type="other">
+        <el-form :model="connection" label-position="top" autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore data-form-type="other">
             <!--
                 The picker, shown while there is nothing chosen and again when `change` is
                 pressed. It takes the whole width because it is fourteen logos, and the
@@ -18,6 +18,16 @@
                 <p v-if="!connection.provider" class="fsm_form_hint">
                     {{ $t('save_connection_error_1') }}
                 </p>
+                <!--
+                    The way back out for someone who opened the picker to look and then
+                    changed their mind. Only offered once there is something to go back
+                    to - with no provider chosen the picker is the whole screen.
+                -->
+                <div v-else class="fsm_picker_actions">
+                    <el-button size="small" @click="picker_open = false">
+                        {{ $t('Cancel') }}
+                    </el-button>
+                </div>
             </div>
 
             <template v-if="connection.provider && !pickerOpen">
@@ -133,7 +143,15 @@
                 </el-button>
             </template>
             <p v-if="saving">{{ $t('Validating Data. Please wait...') }}</p>
-            <el-alert style="margin-top: 20px" v-if="has_error" type="error">{{ $t('save_connection_error_2') }}
+            <!--
+                `error_message` is set only when the failure was not about the
+                credentials - an expired nonce, a lost connection, an HTML error page.
+                Falling back to the credential wording in those cases sent people off to
+                re-enter a password that was never wrong.
+            -->
+            <el-alert style="margin-top: 20px" v-if="has_error" type="error">{{
+                    error_message || $t('save_connection_error_2')
+                }}
             </el-alert>
         </el-form>
     </div>
@@ -186,6 +204,7 @@ export default {
             picker_open: false,
             errors: new Errors(),
             api_error: '',
+            error_message: '',
             has_error: false
         }
     },
@@ -236,6 +255,7 @@ export default {
         saveConnectionSettings() {
             this.saving = true;
             this.api_error = '';
+            this.error_message = '';
             this.has_error = false;
             this.$post('settings', {
                 connection: this.connection,
@@ -250,9 +270,32 @@ export default {
                         name: 'connections'
                     });
                 })
+                /*
+                 * Three different failures arrive here and only one of them is about
+                 * what the user typed.
+                 *
+                 * An expired nonce comes back 403 with "Security Failed. Please reload
+                 * the page". Recording that against the field list found nothing to
+                 * attach it to - `errors.get('sender_email')` returns undefined - so no
+                 * field error rendered and the template fell through to its generic
+                 * "Credential Verification Failed. Please check your inputs" alert. The
+                 * admin's next move was to go and reset an SMTP password that had never
+                 * stopped working. It is shown as what it is instead.
+                 *
+                 * A transport or non-JSON failure has no field payload either, so it
+                 * takes the same path rather than throwing on `.data`.
+                 */
                 .fail((error) => {
-                    this.errors.record(error.responseJSON.data);
-                    this.api_error = error.responseJSON.data.api_error;
+                    const payload = error && error.responseJSON && error.responseJSON.data;
+
+                    if (this.$isAuthError(error) || !payload) {
+                        this.error_message = this.$errorMessage(error);
+                        this.has_error = true;
+                        return;
+                    }
+
+                    this.errors.record(payload);
+                    this.api_error = payload.api_error;
                     this.has_error = true;
                 })
                 .always(() => {

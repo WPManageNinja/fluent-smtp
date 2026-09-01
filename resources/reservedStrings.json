@@ -62,5 +62,13 @@
   "save_connection_error_2": "Credential Verification Failed. Please check your inputs",
   "__REAL_NOTIFICATION_DESC": "Get real-time notification on your favorite messaging channel on any email sending failure. Configure any of the following channel to start getting real time notifications.",
   "__PUSHOVER_INTRO": "Pushover makes it easy to get real-time notifications on your Android, iPhone, iPad, and Desktop",
-  "__PUSHOVER_NOTIFICATION_ENABLED": "Pushover channel is enabled"
+  "__PUSHOVER_NOTIFICATION_ENABLED": "Pushover channel is enabled",
+  "Mon": "Mon",
+  "Tue": "Tue",
+  "Wed": "Wed",
+  "Thu": "Thu",
+  "Fri": "Fri",
+  "Sat": "Sat",
+  "Sun": "Sun",
+  "__REQUEST_FAILED": "The request did not complete. Please reload the page and check whether the change was saved before trying again."
 }

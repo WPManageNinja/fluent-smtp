@@ -155,7 +155,19 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
                         window.open(response.data.auth_url, '_blank');
                     })
                     .catch(errors => {
-                        this.errors.record(errors.responseJSON.data);
+                        /*
+                         * A 403 or an HTML error page carries no field list, so
+                         * recording it would attach nothing and the button would go
+                         * quiet with no explanation of why the redirect never came.
+                         */
+                        const payload = errors && errors.responseJSON && errors.responseJSON.data;
+
+                        if (payload && !this.$isAuthError(errors)) {
+                            this.errors.record(payload);
+                            return;
+                        }
+
+                        this.$notify.error(this.$errorMessage(errors));
                     })
                     .always(() => {
                         this.gettingRedirect = false;

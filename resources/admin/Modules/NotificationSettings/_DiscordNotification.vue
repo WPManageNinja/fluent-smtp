@@ -5,7 +5,7 @@
                 <p class="fss_alert_settings__intro">
                     {{ $t('__DISCORD_INTRO') }} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-discord/">{{ $t('Read the documentation') }}</a>.
                 </p>
-                <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
+                <el-form class="fss_compact_form fss_alert_settings__form" :model="newForm" label-position="top">
                     <el-form-item :label="$t('Your Discord Channel Name (For Internal Use)')">
                         <el-input v-model="newForm.channel_name"/>
                     </el-form-item>
@@ -78,7 +78,7 @@ export default {
                     window.location.reload();
                 })
                 .catch((errors) => {
-                    this.$notify.error(errors.responseJSON.data.message);
+                    this.$notify.error(this.$errorMessage(errors));
                 })
                 .always(() => {
                     this.processing = false;

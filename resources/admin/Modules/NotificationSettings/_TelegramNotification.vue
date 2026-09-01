@@ -7,7 +7,7 @@
                     <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-telegram/">{{ $t('Read the documentation') }}</a>.
                 </p>
 
-                <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
+                <el-form class="fss_compact_form fss_alert_settings__form" :model="newForm" label-position="top">
                     <el-form-item :label="$t('Your Email Address')">
                         <el-input v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
                     </el-form-item>
@@ -89,7 +89,7 @@ export default {
                     this.configure_state = 'pin';
                 })
                 .catch((errors) => {
-                    this.$notify.error(errors.responseJSON.data.message);
+                    this.$notify.error(this.$errorMessage(errors));
                 })
                 .always(() => {
                     this.processing = false;
@@ -106,7 +106,7 @@ export default {
                     window.location.reload();
                 })
                 .catch((errors) => {
-                    this.$notify.error(errors.responseJSON.data.message);
+                    this.$notify.error(this.$errorMessage(errors));
                 })
                 .always(() => {
                     this.processing = false;

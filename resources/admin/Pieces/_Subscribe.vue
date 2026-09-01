@@ -94,7 +94,7 @@
                         this.$notify.success(response.data.message);
                     })
                     .catch((errors) => {
-                        this.$notify.error(errors.responseJSON.data.message);
+                        this.$notify.error(this.$errorMessage(errors));
                     })
                     .always(() => {
                         this.saving = false

@@ -65,19 +65,27 @@ export default {
                 cancelButtonText: this.$t('Cancel'),
                 type: 'warning'
             })
-                .then(() => {
-                    this.disconnecting = true;
-                    this.$post(`settings/${this.channel_key}/disconnect`)
-                        .then((response) => {
-                            this.$notify.success(response.data.message);
-                            window.location.reload();
-                        })
-                        .catch((errors) => {
-                            this.$notify.error(errors.responseJSON.data.message);
-                        })
-                        .always(() => {
-                            this.disconnecting = false;
-                        });
+                .then(() => this.confirmedDisconnect())
+                /*
+                 * ElMessageBox rejects on cancel and on close, so a chain with no catch
+                 * throws an uncaught 'cancel' into the console on every dismissal. Same
+                 * shape as confirmDelete() on the connections screen.
+                 */
+                .catch(() => {});
+        },
+        confirmedDisconnect() {
+            this.disconnecting = true;
+
+            return this.$post(`settings/${this.channel_key}/disconnect`)
+                .then((response) => {
+                    this.$notify.success(response.data.message);
+                    window.location.reload();
+                })
+                .catch((errors) => {
+                    this.$notify.error(this.$errorMessage(errors));
+                })
+                .always(() => {
+                    this.disconnecting = false;
                 });
         },
         sendTest() {
@@ -87,7 +95,7 @@ export default {
                     this.$notify.success(response.data.message);
                 })
                 .catch((errors) => {
-                    this.$notify.error(errors.responseJSON.data.message);
+                    this.$notify.error(this.$errorMessage(errors));
                 })
                 .always(() => {
                     this.sending_test = false;

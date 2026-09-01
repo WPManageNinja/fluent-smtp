@@ -74,7 +74,7 @@ export default {
                 })
                 .catch(errors => {
                     this.connection_content = errors.responseText;
-                    console.log(errors);
+                    this.$notify.error(this.$errorMessage(errors));
                 })
                 .always(() => {
                     this.loading = false;
@@ -120,7 +120,7 @@ export default {
                 .catch(errors => {
                     this.$notify.error({
                         title: 'Validation Failed',
-                        message: errors.responseJSON.data.message
+                        message: this.$errorMessage(errors)
                     });
                 })
                 .always(() => {
@@ -145,14 +145,19 @@ export default {
                     .catch(errors => {
                         this.$notify.error({
                             title: 'Validation Failed',
-                            message: errors.responseJSON.data.message
+                            message: this.$errorMessage(errors)
                         });
                     })
                     .always(() => {
                         this.loading = false;
                         this.fetchDetails();
                     });
-            });
+            })
+                /*
+                 * ElMessageBox rejects on cancel and on close, so without this every
+                 * dismissal of the confirmation threw an uncaught 'cancel'.
+                 */
+                .catch(() => {});
         }
     },
     created() {

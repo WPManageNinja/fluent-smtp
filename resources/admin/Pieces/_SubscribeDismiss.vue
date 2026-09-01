@@ -20,7 +20,7 @@
                         this.appVars.require_optin = 'no';
                     })
                     .catch((errors) => {
-                        this.$notify.error(errors.responseJSON.data.message);
+                        this.$notify.error(this.$errorMessage(errors));
                     });
             }
         }

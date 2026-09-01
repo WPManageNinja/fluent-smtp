@@ -114,7 +114,7 @@ export default {
                     });
                 })
                 .catch((errors) => {
-                    console.log(errors);
+                    this.$notify.error(this.$errorMessage(errors));
                     this.$notify.error(this.$t('Failed to load notification channels'));
                 })
                 .always(() => {
@@ -193,7 +193,16 @@ export default {
         this.loadChannels();
     },
     watch: {
-        notification_settings: {
+        /*
+         * Only the channel list, not the whole settings object.
+         *
+         * `notification_settings` is one object shared with the email summary form
+         * rendered beside this on the same screen, and that form writes into it with
+         * v-model. Watching it deeply meant a full notification-channels request, and
+         * the loading spinner with it, on every keystroke typed into the summary's
+         * recipient field. `active_channel` is what this table actually reads.
+         */
+        'notification_settings.active_channel': {
             handler() {
                 this.loadChannels();
             },

@@ -206,8 +206,7 @@ export default {
                     this.installed_message = response.message;
                 })
                 .fail((error) => {
-                    this.$notify.error(error.responseJSON.data.message);
-                    alert(error.responseJSON.data.message);
+                    this.$notify.error(this.$errorMessage(error));
                 })
                 .always(() => {
                     this.installing = false;
