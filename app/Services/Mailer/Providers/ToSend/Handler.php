@@ -21,7 +21,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong.', 'fluent-smtp'), []));
     }
 
     public function postSend()
@@ -373,7 +373,7 @@ class Handler extends BaseHandler
                 'verified_domain'       => $validSenders['verified_domain'],
                 'supports_multi_domain' => $hasMultiDomain,
                 'api_info'              => $stats,
-                'email_help_message'    => $hasMultiDomain ? __('Make sure to verify your sender emails or domain in toSend dashboard and available in the provided API Key.', 'fluent-smtp') : ''
+                'email_help_message'    => $hasMultiDomain ? __('Verify this sender address, or its domain, in your toSend dashboard, and make sure the API key can send from it.', 'fluent-smtp') : ''
             ]
         ];
     }
@@ -405,7 +405,7 @@ class Handler extends BaseHandler
         $emailDomain = $emailDomain[1];
 
         if (!in_array($emailDomain, $verifiedDomains)) {
-            return new \WP_Error(422, __('Invalid email address! Please use an email with verified domain.', 'fluent-smtp'));
+            return new \WP_Error(422, __('Use an email address on a domain you have verified.', 'fluent-smtp'));
         }
 
         $settings = fluentMailGetSettings();
@@ -433,7 +433,7 @@ class Handler extends BaseHandler
         $mappings = Arr::get($settings, 'mappings', []);
 
         if (!isset($mappings[$email])) {
-            return new \WP_Error(422, __('Email does not exists. Please try again.', 'fluent-smtp'));
+            return new \WP_Error(422, __('That email address does not exist. Please try again.', 'fluent-smtp'));
         }
 
         if ($email == $connection['sender_email']) {
@@ -442,7 +442,7 @@ class Handler extends BaseHandler
 
         // check if the it's the same email or not
         if ($mappings[$email] != md5($connection['sender_email'])) {
-            return new \WP_Error(422, __('Email does not exists. Please try again.', 'fluent-smtp'));
+            return new \WP_Error(422, __('That email address does not exist. Please try again.', 'fluent-smtp'));
         }
 
         $settings = get_option('fluentmail-settings');

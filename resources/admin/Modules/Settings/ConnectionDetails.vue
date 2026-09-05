@@ -1,11 +1,11 @@
 <template>
-    <div v-loading="loading" style="min-height: 200px" element-loading-text="Loading Details..."
+    <div v-loading="loading" style="min-height: 200px" :element-loading-text="$t('Loading connection details...')"
          class="fss_connection_details">
         <div v-html="connection_content"></div>
 
         <template v-if="verificationSettings && verificationSettings.verified_domain">
             <el-button style="margin-top: 10px;" @click="showEmailManageModal = true" type="primary">
-                {{ $t('Add Additional Senders') }}
+                {{ $t('Manage Additional Senders') }}
             </el-button>
 
             <sender-manager v-model="showEmailManageModal"

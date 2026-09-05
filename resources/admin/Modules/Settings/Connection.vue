@@ -90,7 +90,20 @@
                 }
 
                 this.title = this.$t('Edit Connection');
-                this.provider = connection.provider_settings;
+
+                /*
+                 * Over the provider's defaults, so the form has a value for every field
+                 * it binds a control to. A connection saved before an option existed -
+                 * SMTP's Auto TLS, say - has no key for it, and a switch handed
+                 * undefined refuses to render ("model-value must be active-value or
+                 * inactive-value") rather than falling back to its off position.
+                 */
+                const defaults = this.settings.providers[connection.provider_settings.provider];
+
+                this.provider = {
+                    ...(defaults ? defaults.options : {}),
+                    ...connection.provider_settings
+                };
                 this.provider_key = key;
             }
         }

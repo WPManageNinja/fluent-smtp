@@ -2,8 +2,8 @@
     <div>
         <h3 class="fs_config_title">{{ $t('Postmark API Settings') }}</h3>
         <el-radio-group size="small" v-model="connection.key_store">
-            <el-radio-button value="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
-            <el-radio-button value="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
+            <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store in wp-config.php') }}</el-radio-button>
         </el-radio-group>
 
         <template v-if="connection.key_store == 'db'">
@@ -25,7 +25,7 @@
                 </el-checkbox>
                 <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                     {{
-                        $t('By disabling encryption, your API key will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                        $t('Your API key will be stored as readable text in the database. Only turn this on if a security plugin on this site rotates the WordPress SALT keys, which would otherwise invalidate the encrypted value.')
                     }}
                 </p>
             </el-form-item>
@@ -54,7 +54,7 @@
                         false-value="no"
                         v-model="connection.track_opens"
                     >
-                        {{ $t('Enable email opens tracking on postmark(For HTML Emails only).') }}
+                        {{ $t('Track opens in Postmark (HTML emails only).') }}
                         <el-tooltip effect="dark" placement="top-start">
                             <template #content>
                                 <div>
@@ -70,13 +70,13 @@
                 </el-form-item>
             </el-col>
             <el-col :md="12" :sm="24">
-                <el-form-item label="Track Links">
+                <el-form-item :label="$t('Track Links')">
                     <el-checkbox
                         true-value="yes"
                         false-value="no"
                         v-model="connection.track_links"
                     >
-                        {{ $t('Enable link tracking on postmark (For HTML Emails only).') }}
+                        {{ $t('Track link clicks in Postmark (HTML emails only).') }}
                         <el-tooltip effect="dark" placement="top-start">
                             <template #content>
                                 <div>

@@ -17,21 +17,21 @@
         width="170"
         :placement="placement">
 
-        <p v-html="message"></p>
+        <p v-html="messageText"></p>
 
         <div class="action-buttons">
             <el-button
                 size="small"
                 link
                 @click="cancel()">
-                {{$t('cancel')}}
+                {{ $t('Cancel') }}
             </el-button>
 
             <el-button
                 type="primary"
                 size="small"
                 @click="confirm()">
-                {{ $t('confirm') }}
+                {{ $t('Confirm') }}
             </el-button>
         </div>
 
@@ -50,8 +50,17 @@
             placement: {
                 default: 'top-end'
             },
+            /*
+             * Empty by default rather than carrying English: a prop default cannot
+             * reach $t(), so the fallback wording is resolved in messageText instead.
+             */
             message: {
-                default: 'Are you sure to delete this?'
+                default: ''
+            }
+        },
+        computed: {
+            messageText() {
+                return this.message || this.$t('Delete this?');
             }
         },
         methods: {

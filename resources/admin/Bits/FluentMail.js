@@ -156,7 +156,7 @@ export default class FluentMail {
                     }
 
                     if (this.$isAuthError(error)) {
-                        return this.$t('Security Failed. Please reload the page');
+                        return this.$t('Security check failed. Please reload the page.');
                     }
 
                     /*

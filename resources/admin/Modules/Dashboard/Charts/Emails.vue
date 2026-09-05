@@ -1,36 +1,56 @@
 <template>
     <div v-loading="fetching" class="fss_body fss_chart_box">
-        <div class="fss_chart_canvas">
-            <el-alert v-if="load_error" type="error" :closable="false" show-icon>
-                <p>{{ load_error }}</p>
-                <el-button size="small" @click="fetchReport()">{{ $t('Retry') }}</el-button>
-            </el-alert>
-            <growth-chart v-else-if="chartData" :chart-data="chartData"/>
+        <el-alert v-if="load_error" type="error" :closable="false" show-icon>
+            <p>{{ load_error }}</p>
+            <el-button size="small" @click="fetchReport()">{{ $t('Retry') }}</el-button>
+        </el-alert>
+        <p v-else-if="is_empty" class="fss_chart_empty">
+            {{ $t('No emails were sent in this date range.') }}
+        </p>
+        <div v-else-if="labels.length" class="fss_chart_canvas">
+            <sending-chart :labels="labels" :sent="sent" :failed="failed"
+                           :chart-type="chart_type.current"/>
         </div>
     </div>
 </template>
 
 <script type="text/babel">
-    import GrowthChart from './_chart'
-    import each from 'lodash/each';
+    import SendingChart from './_chart'
+    import chartType from './chartType'
 
     export default {
         name: 'email-sendings',
         props: ['date_range'],
         components: {
-            GrowthChart
+            SendingChart
         },
         data() {
             return {
                 fetching: false,
                 load_error: '',
-                stats: {},
-                // null until the first report lands: Chart.js needs a data
-                // object with datasets in it, not an empty one.
-                chartData: null
+                chart_type: chartType,
+                // The bucket keys the endpoint returned, and the two series read off
+                // them: what went out in each bucket, and what came back as a failure.
+                labels: [],
+                sent: [],
+                failed: []
             }
         },
-        computed: {},
+        computed: {
+            /*
+             * A range with buckets in it but nothing in any of them. Worth saying out
+             * loud: an axis drawn from 0 to 1 with a flat line along the bottom looks
+             * like a chart that failed to load rather than like a quiet week.
+             */
+            is_empty() {
+                return this.labels.length > 0
+                    && this.sent.every(count => !count)
+                    && this.failed.every(count => !count);
+            }
+        },
+        watch: {
+            date_range: 'fetchReport'
+        },
         methods: {
             fetchReport() {
                 this.load_error = '';
@@ -39,8 +59,7 @@
                     date_range: this.date_range
                 })
                     .then(res => {
-                        this.stats = res.stats;
-                        this.setupChartItems();
+                        this.setupChartItems(res.stats || {});
                     })
                     .fail(error => {
                         this.load_error = this.$errorMessage(error);
@@ -49,44 +68,19 @@
                         this.fetching = false;
                     });
             },
-            setupChartItems() {
-                const labels = [];
-                /*
-                 * No colours here. They used to be hard-coded on each dataset, which
-                 * meant a chart drawn in the light theme kept its light-theme blue after
-                 * the theme went dark - and the blue itself measured 2.79:1 on the card
-                 * it was drawn on. _chart.js puts them on by axis id instead, off the
-                 * same tokens the grid and the labels come from, and re-reads them when
-                 * the theme changes.
-                 */
-                const ItemValues = {
-                    label: this.$t('By Date'),
-                    yAxisID: 'byDate',
-                    data: [],
-                    fill: false
-                };
+            /*
+             * The endpoint answers with one entry per bucket - a day, a Monday or a
+             * month, depending on how long the range is - keyed by the bucket and
+             * holding {sent, failed}, with the empty buckets already filled in. The keys
+             * are kept as they came: _chart.js is what decides how a bucket is written
+             * on the axis and in the tooltip.
+             */
+            setupChartItems(stats) {
+                const count = (bucket, key) => parseInt(bucket && bucket[key]) || 0;
 
-                const cumulativeItems = {
-                    label: this.$t('Cumulative'),
-                    data: [],
-                    yAxisID: 'byCumulative',
-                    type: 'line',
-                    // Chart.js 2 filled a line dataset by default and 4 does
-                    // not, so the wash under this line has to be asked for.
-                    fill: true
-                };
-
-                let currentTotal = 0;
-                each(this.stats, (count, label) => {
-                    ItemValues.data.push(count);
-                    labels.push(label);
-                    currentTotal += parseInt(count);
-                    cumulativeItems.data.push(currentTotal);
-                });
-                this.chartData = {
-                    labels: labels,
-                    datasets: [ItemValues, cumulativeItems]
-                }
+                this.labels = Object.keys(stats);
+                this.sent = this.labels.map(label => count(stats[label], 'sent'));
+                this.failed = this.labels.map(label => count(stats[label], 'failed'));
             }
         },
         mounted() {
@@ -97,13 +91,40 @@
 
 <style lang="scss">
     /*
-     * Chart.js sizes its canvas to the parent when maintainAspectRatio is off,
-     * so the parent has to have a height. vue-chartjs 2 carried a default
-     * height prop of 400 on the canvas itself; vue-chartjs 5 does not, and
-     * without this the chart collapses to nothing.
+     * ECharts sizes its canvas in pixels at init, so the box it is given has to have a
+     * height of its own - a chart in an auto-height parent measures zero and draws
+     * nothing. The height is on the box rather than only on the canvas so that the card
+     * is the same size while the report is still loading and while it is empty, which
+     * is what stops the dashboard jumping under the cursor when the range changes.
      */
-    .fss_chart_canvas {
-        position: relative;
+    .fss_chart_box {
+        min-height: 400px;
+    }
+
+    .fss_chart_canvas,
+    .fss_chart_plot {
         height: 400px;
+    }
+
+    .fss_chart_empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 400px;
+        margin: 0;
+        color: var(--fsm-text-light);
+    }
+
+    /* A phone is not tall enough to give four hundred pixels to one card. */
+    @media (max-width: 640px) {
+        .fss_chart_box {
+            min-height: 280px;
+        }
+
+        .fss_chart_canvas,
+        .fss_chart_plot,
+        .fss_chart_empty {
+            height: 280px;
+        }
     }
 </style>

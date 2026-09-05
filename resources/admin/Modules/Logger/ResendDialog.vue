@@ -14,7 +14,7 @@
             </p>
             <p>
                 <strong>{{ $t('Original recipient(s)') }}:</strong>
-                <span>{{ formatOriginalRecipients(log.to) }}</span>
+                {{ formatOriginalRecipients(log.to) }}
             </p>
 
             <el-form
@@ -154,7 +154,7 @@ export default {
                 if (!userEmail) {
                     this.$notify.error({
                         offset: 19,
-                        title: this.$t('Oops!'),
+                        title: this.$t('Error'),
                         message: this.$t('No account email is available for the current user.')
                     });
                     return;
@@ -169,8 +169,8 @@ export default {
                 if (!parsed.valid.length && !parsed.invalid.length) {
                     this.$notify.error({
                         offset: 19,
-                        title: this.$t('Oops!'),
-                        message: this.$t('Please enter a valid email address')
+                        title: this.$t('Error'),
+                        message: this.$t('Please enter a valid email address.')
                     });
                     return;
                 }
@@ -178,8 +178,8 @@ export default {
                 if (parsed.invalid.length) {
                     this.$notify.error({
                         offset: 19,
-                        title: this.$t('Oops!'),
-                        message: this.$t('Please enter a valid email address') + ': ' + parsed.invalid.join(', ')
+                        title: this.$t('Error'),
+                        message: this.$t('Please enter a valid email address.') + ': ' + parsed.invalid.join(', ')
                     });
                     return;
                 }

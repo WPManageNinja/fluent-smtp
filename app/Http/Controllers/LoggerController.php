@@ -89,7 +89,7 @@ class LoggerController extends Controller
                 ]);
             }
 
-            throw new \Exception(esc_html__('Something went wrong', 'fluent-smtp'), 400);
+            throw new \Exception(esc_html__('Something went wrong.', 'fluent-smtp'), 400);
 
         } catch (\Exception $e) {
             return $this->sendError([
@@ -195,14 +195,14 @@ class LoggerController extends Controller
                 $failedInitiated++;
             }
         }
-        $message = __('Selected Emails have been proceed to send.', 'fluent-smtp');
+        $message = __('The selected emails have been resent.', 'fluent-smtp');
 
         if ($failedCount) {
-            $message .= sprintf(__(' But %d emails are reported to failed to send.', 'fluent-smtp'), $failedCount);
+            $message .= sprintf(__(' %d of them failed to send.', 'fluent-smtp'), $failedCount);
         }
 
         if ($failedInitiated) {
-            $message .= sprintf(__(' And %d emails are failed to init the emails', 'fluent-smtp'), $failedInitiated);
+            $message .= sprintf(__(' %d could not be prepared for sending.', 'fluent-smtp'), $failedInitiated);
         }
 
         return $this->sendSuccess([

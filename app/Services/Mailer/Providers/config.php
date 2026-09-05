@@ -6,7 +6,7 @@ return [
     'providers'   => [
         'smtp'        => [
             'key'      => 'smtp',
-            'title'    => __('SMTP server', 'fluent-smtp'),
+            'title'    => __('SMTP Server', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/provider-smtp.svg'),
             'provider' => 'Smtp',
             'need_pro' => 'no',
@@ -283,13 +283,22 @@ return [
                 'return_path'      => 'yes',
                 'key_store'        => 'db'
             ],
-            'note'     => __('The Default option does not use SMTP or any Email Service Providers so it will not improve email delivery on your site.', 'fluent-smtp')
+            'note'     => __('The Default option does not use SMTP or an email service, so it will not improve email delivery on your site.', 'fluent-smtp')
         ],
     ],
+    /*
+     * Every key the General Settings form binds a control to has to be here, whether or
+     * not it has ever been saved. The form's switches are 'yes'/'no' switches, and an
+     * absent key reaches them as undefined, which Element Plus rejects at render time
+     * ("model-value must be active-value or inactive-value") and which the form then
+     * writes back over the setting.
+     */
     'misc'        => [
         'log_emails'              => 'yes',
         'log_saved_interval_days' => '14',
         'disable_fluentcrm_logs'  => 'no',
+        'simulate_emails'         => 'no',
+        'send_as_text'            => 'no',
         'default_connection'      => '',
         'fallback_connection'     => ''
     ]

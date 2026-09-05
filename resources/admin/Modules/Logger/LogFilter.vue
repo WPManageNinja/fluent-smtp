@@ -10,8 +10,8 @@
     <div class="fsm_log_filter">
         <el-radio-group class="fsm_log_filter_status" @change="applyFilter()"
                         v-model="filter_query.status">
-            <el-radio-button value="">{{ $t('All Statuses') }}</el-radio-button>
-            <el-radio-button value="sent">{{ $t('Successful') }}</el-radio-button>
+            <el-radio-button value="">{{ $t('All') }}</el-radio-button>
+            <el-radio-button value="sent">{{ $t('Sent') }}</el-radio-button>
             <el-radio-button value="failed">{{ $t('Failed') }}</el-radio-button>
         </el-radio-group>
 
@@ -24,8 +24,8 @@
                 :disabled-date="disabledDate"
                 v-model="filter_query.date_range"
                 type="daterange"
-                :placeholder="$t('Select date and time')"
-                :range-separator="$t('To')"
+                :placeholder="$t('Date range')"
+                :range-separator="$t('to')"
                 :start-placeholder="$t('Start date')"
                 :end-placeholder="$t('End date')"
             />
@@ -40,7 +40,7 @@
                 v-model="filter_query.search"
                 @clear="applyFilter"
                 @keyup.enter="applyFilter"
-                :placeholder="$t('Type & press enter...')"
+                :placeholder="$t('Search logs')"
             >
                 <template #append>
                     <el-button icon="FsmIconSearch" @click="applyFilter"
@@ -67,9 +67,9 @@ export default {
         return {
             shortcuts: [
                 { text: this.$t('Today'), value: () => this.daysAgoRange(0) },
-                { text: this.$t('Last week'), value: () => this.daysAgoRange(7) },
-                { text: this.$t('Last month'), value: () => this.daysAgoRange(30) },
-                { text: this.$t('Last 3 months'), value: () => this.daysAgoRange(90) }
+                { text: this.$t('Last 7 Days'), value: () => this.daysAgoRange(7) },
+                { text: this.$t('Last 30 Days'), value: () => this.daysAgoRange(30) },
+                { text: this.$t('Last 90 Days'), value: () => this.daysAgoRange(90) }
             ]
         };
     },
@@ -146,6 +146,41 @@ export default {
     .el-input.fsm_log_filter_search {
         width: 230px;
         flex: 0 1 230px;
+    }
+
+    /*
+     * On a phone the row above wraps into three ragged lines, the last of them a single
+     * refresh button. Stacked deliberately instead: the statuses across the top, the
+     * date range under them, and the three controls that act on the list in one row.
+     */
+    @media (max-width: 782px) {
+        .fsm_log_filter_status {
+            display: flex;
+            width: 100%;
+
+            .el-radio-button {
+                flex: 1 1 0;
+            }
+
+            .el-radio-button__inner {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .fsm_log_filter_tools {
+            width: 100%;
+        }
+
+        .el-date-editor.fsm_log_filter_dates {
+            flex: 1 1 100%;
+            width: 100%;
+        }
+
+        .el-input.fsm_log_filter_search {
+            flex: 1 1 120px;
+            width: auto;
+        }
     }
 }
 </style>

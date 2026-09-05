@@ -32,7 +32,7 @@
                     <h1 class="fsm_page_title">{{ $t('Settings') }}</h1>
                     <div class="fsm_page_actions">
                         <el-button type="primary" icon="FsmIconPlus" @click="addConnection">
-                            {{ $t('Add Another Connection') }}
+                            {{ $t('Add Connection') }}
                         </el-button>
                     </div>
                 </div>
@@ -308,7 +308,7 @@
                 if (connection.provider === 'gmail' && !connection.version) {
                     return {
                         status: 'error',
-                        message: this.$t('(Re Authentication Required)')
+                        message: this.$t('Needs re-authentication')
                     };
                 }
 
@@ -536,8 +536,8 @@
                 this.settings.misc.fallback_connection = result.data.misc.fallback_connection || '';
 
                 this.$notify.success({
-                    title: this.$t('Great!'),
-                    message: this.$t('Connection deleted Successfully.'),
+                    title: this.$t('Done'),
+                    message: this.$t('Connection deleted.'),
                     offset: 19
                 });
             },

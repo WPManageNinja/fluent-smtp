@@ -166,17 +166,25 @@
     /* ---------------------------------------------------------------- charts */
 
     /*
-     * The two series on the dashboard's sending chart. Chart.js paints to a canvas and
-     * cannot read a variable, so Charts/_chart.js reads these off the live root the way
-     * it already reads the grid and the tick colour, and re-reads them when the theme
-     * changes. A plotted shape carries the meaning of the chart, so both clear 3:1
-     * against the card they are drawn on - the bars at 6.30:1 and the line at 4.55:1,
-     * where the blue that used to be hard-coded in Emails.vue managed 2.79:1.
+     * The two series on the dashboard's sending chart: emails sent, and emails that
+     * failed. ECharts paints to a canvas and cannot read a variable, so Charts/_chart.js
+     * reads these off the live root the way it already reads the grid and the tick
+     * colour, and re-reads them when the theme changes. A plotted shape carries the
+     * meaning of the chart, so both clear 3:1 against the card they are drawn on - sent
+     * at 4.55:1 and failed at 6.56:1, where the blue that used to be hard-coded in
+     * Emails.vue managed 2.79:1.
+     *
+     * Failed is the danger red the rest of the app reports a failure in, so the chart
+     * agrees with the failed counter above it and the failed rows in the log. Each
+     * `-fill` is the wash under the line; the solid draws the stroke, the symbols and
+     * the bars. Failed's wash is .3 and Sent's is .12: the failed line is almost
+     * always inside the sent area, and two washes of equal weight turned that band
+     * muddy enough to hide the one that matters.
      */
-    --fsm-chart-bar: #6741D9;
-    --fsm-chart-bar-fill: rgba(103, 65, 217, .75);
     --fsm-chart-line: #147DB3;
     --fsm-chart-line-fill: rgba(20, 125, 179, .12);
+    --fsm-chart-failed: #B12A07;
+    --fsm-chart-failed-fill: rgba(177, 42, 7, .3);
 }
 
 body.settings_page_fluent-mail {
@@ -255,13 +263,18 @@ body.settings_page_fluent-mail.fluent_theme_dark {
     --fsm-tile-senders-bg: #FB4BA329;
     --fsm-tile-senders-fg: #FF68B3;
 
-    --fsm-heat-0: #202C39;
+    /*
+     * Lifted off the card: at #202C39 on a #1C2732 surface an empty hour was
+     * indistinguishable from the gutter around it, so a quiet week read as a grid
+     * with cells missing rather than a grid with nothing in them.
+     */
+    --fsm-heat-0: #2A3948;
 
-    /* The same two series, lifted to clear 3:1 on the dark card: 5.59:1 and 6.46:1. */
-    --fsm-chart-bar: #A08DFF;
-    --fsm-chart-bar-fill: rgba(160, 141, 255, .75);
+    /* The same two series, lifted to clear 3:1 on the dark card: 6.46:1 and 5.85:1. */
     --fsm-chart-line: #4FB3E8;
-    --fsm-chart-line-fill: rgba(79, 179, 232, .16);
+    --fsm-chart-line-fill: rgba(79, 179, 232, .14);
+    --fsm-chart-failed: #EB856B;
+    --fsm-chart-failed-fill: rgba(235, 133, 107, .3);
 }
 
 /*

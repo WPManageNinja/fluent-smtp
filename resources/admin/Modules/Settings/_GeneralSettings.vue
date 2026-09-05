@@ -16,21 +16,21 @@
                 <span class="fsm_toggle_title" @click="toggle('log_emails')">{{ $t('Log Emails') }}</span>
             </div>
             <div class="fsm_toggle_body">
-                <p>{{ $t('Log All Emails for Reporting') }}</p>
+                <p>{{ $t('Keep a record of every email this site sends, so you can review, search and resend it.') }}</p>
             </div>
         </div>
 
         <div class="fsm_toggle" v-if="settings.misc.log_emails == 'yes' && !!appVars.has_fluentcrm">
             <div class="fsm_toggle_main">
                 <el-switch v-model="settings.misc.disable_fluentcrm_logs"
-                           :aria-label="$t('FluentCRM Email Logging')"
+                           :aria-label="$t('Exclude FluentCRM Emails')"
                            active-value="yes" inactive-value="no"/>
                 <span class="fsm_toggle_title" @click="toggle('disable_fluentcrm_logs')">
-                    {{ $t('FluentCRM Email Logging') }}
+                    {{ $t('Exclude FluentCRM Emails') }}
                 </span>
             </div>
             <div class="fsm_toggle_body">
-                <p>{{ $t('Disable Logging for FluentCRM Emails') }}</p>
+                <p>{{ $t('Keep campaign and automation emails sent by FluentCRM out of this log. FluentCRM keeps its own record of them.') }}</p>
             </div>
         </div>
 
@@ -64,8 +64,8 @@
                     {{ $t('__Email_Simulation_Yes') }}
                 </p>
                 <p class="fsm_row_warning" v-if="appVars.is_disabled_defined">
-                    {{ $t('Emails are being simulated due to the definition of ') }}
-                    <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ $t(' in your PHP code.') }}
+                    {{ $t('Simulation is turned on by ') }}
+                    <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ $t(' in your PHP code, so this switch has no effect.') }}
                 </p>
             </div>
         </div>
@@ -73,10 +73,10 @@
         <div class="fsm_toggle">
             <div class="fsm_toggle_main">
                 <el-switch v-model="settings.misc.send_as_text"
-                           :aria-label="$t('Add Multi-Part Plain Text for HTML Emails (beta)')"
+                           :aria-label="$t('Plain Text Alternative (beta)')"
                            active-value="yes" inactive-value="no"/>
                 <span class="fsm_toggle_title" @click="toggle('send_as_text')">
-                    {{ $t('Add Multi-Part Plain Text for HTML Emails (beta)') }}
+                    {{ $t('Plain Text Alternative (beta)') }}
                 </span>
             </div>
             <div class="fsm_toggle_body">

@@ -23,7 +23,7 @@
                         </el-button>
                     </el-form-item>
                 </el-form>
-                <p class="fss_alert_settings__privacy-note">{{ $t('FluentSMTP does not store your email notifications data. ')}} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.</p>
+                <p class="fss_alert_settings__privacy-note">{{ $t('FluentSMTP does not store your notification data. ')}} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.</p>
             </div>
         </div>
         <div v-else>

@@ -19,12 +19,12 @@
                 <div class="fsm_row fsm_row_stacked">
                     <div class="fsm_row_label">
                         <span class="fsm_row_title">{{ $t('From') }}</span>
-                        <p>{{ $t('Enter the sender email address(optional).') }}</p>
+                        <p>{{ $t('Which address to send from. Leave empty to use the default connection.') }}</p>
                     </div>
                     <div class="fsm_row_control">
                         <el-select autocomplete="off" data-bwignore data-lpignore="true" data-1p-ignore
                                    :aria-label="$t('From')"
-                                   :placeholder="$t('Select Email or Type')" v-model="form.from">
+                                   :placeholder="$t('Pick an address, or type one')" v-model="form.from">
                             <el-option
                                 v-for="(emailHash, email) in sender_emails"
                                 :key="email" :label="email"
@@ -59,7 +59,7 @@
                         </span>
                     </div>
                     <div class="fsm_toggle_body">
-                        <p>{{ $t('Send this email in HTML or in plain text format.') }}</p>
+                        <p>{{ $t('Send the test as HTML. Turn this off to send plain text.') }}</p>
                     </div>
                 </div>
 
@@ -87,7 +87,7 @@
             <div v-else class="fsm_card_body">
                 <div class="success_wrapper">
                     <h1><el-icon><FsmIconSuccess /></el-icon></h1>
-                    <h3>{{ $t('Test Email Has been successfully sent') }}</h3>
+                    <h3>{{ $t('Test email sent') }}</h3>
                     <p v-if="time_taken_human" class="small-help-text">
                         <el-icon><FsmIconTimer /></el-icon> {{ time_taken_human }}
                     </p>
@@ -95,10 +95,10 @@
                     <div v-if="appVars.require_optin == 'yes'" style="margin-top: 10px;">
                         <email-subscriber />
                     </div>
-                    <el-button v-else @click="email_success = false">{{ $t('Run Another Test Email') }}</el-button>
+                    <el-button v-else @click="email_success = false">{{ $t('Send Another Test') }}</el-button>
 
                     <div v-if="appVars.require_optin != 'yes'" style="margin-top: 50px;">
-                        {{ $t('If you have a minute, consider ') }} <a target="_blank" href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5">{{ $t('write a review for FluentSMTP') }}</a>
+                        {{ $t('If you have a minute, please ') }} <a target="_blank" href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5">{{ $t('leave a review for FluentSMTP') }}</a>.
                     </div>
                 </div>
             </div>
@@ -137,7 +137,7 @@
                 this.$post('settings/test', { ...this.form }).then(res => {
                     this.time_taken_human = res.data.time_taken_human || '';
                     this.$notify.success({
-                        title: this.$t('Great!'),
+                        title: this.$t('Done'),
                         offset: 19,
                         message: this.time_taken_human
                             ? `${res.data.message} (${this.time_taken_human})`
@@ -147,7 +147,7 @@
                 }).fail(res => {
                     if (Number(res.status) === 504) {
                         return this.$notify.error({
-                            title: this.$t('Oops!'),
+                            title: this.$t('Error'),
                             offset: 19,
                             message: '504 Gateway Time-out.'
                         });
@@ -162,7 +162,7 @@
 
                     if (!payload) {
                         return this.$notify.error({
-                            title: this.$t('Oops!'),
+                            title: this.$t('Error'),
                             offset: 19,
                             message: this.$errorMessage(res)
                         });
@@ -170,7 +170,7 @@
 
                     if (payload.email_error) {
                         return this.$notify.error({
-                            title: this.$t('Oops!'),
+                            title: this.$t('Error'),
                             offset: 19,
                             message: payload.email_error
                         });
@@ -189,7 +189,7 @@
                 return true;
             },
             inactiveMessage() {
-                const msg = this.$t('Plugin is not configured properly.');
+                const msg = this.$t('Add an email connection before sending a test.');
 
                 return msg;
             },

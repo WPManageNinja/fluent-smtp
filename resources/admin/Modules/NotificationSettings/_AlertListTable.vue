@@ -115,7 +115,7 @@ export default {
                 })
                 .catch((errors) => {
                     this.$notify.error(this.$errorMessage(errors));
-                    this.$notify.error(this.$t('Failed to load notification channels'));
+                    this.$notify.error(this.$t('Could not load the notification channels.'));
                 })
                 .always(() => {
                     this.loading = false;
@@ -143,7 +143,7 @@ export default {
                     this.$emit('channel-toggled');
                 })
                 .catch((errors) => {
-                    this.$notify.error(errors.responseJSON?.data?.message || this.$t('Failed to toggle channel'));
+                    this.$notify.error(errors.responseJSON?.data?.message || this.$t('Could not change that channel. Please try again.'));
                     this.loadChannels();
                 })
                 .always(() => {
@@ -181,7 +181,7 @@ export default {
                             this.$emit('channel-toggled');
                         })
                         .catch((errors) => {
-                            this.$notify.error(errors.responseJSON?.data?.message || this.$t('Failed to deactivate channel'));
+                            this.$notify.error(errors.responseJSON?.data?.message || this.$t('Could not deactivate that channel. Please try again.'));
                         });
                 })
                 .catch(() => {

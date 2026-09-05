@@ -231,21 +231,59 @@
   }
 }
 
-ul.fss_log_items li {
-  display: inline-block;
-  width: 48%;
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--fsm-border);
-  padding: 10px 0px;
+/*
+ * Two columns of label/value pairs, each pair a grid of its own so the values line up
+ * with each other rather than starting wherever the label before them happened to end.
+ * The inline-blocks this replaced put "Status: Sent [Resend]" and "Date: ..." at two
+ * different left edges on the same row.
+ */
+.fss_log_failure {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--fsm-danger-line);
+  border-radius: 6px;
+  background: var(--fsm-danger-bg);
+  color: var(--fsm-danger-fg);
 
-  > div {
-    display: inline-block;
+  p {
+    margin: 4px 0 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+ul.fss_log_items {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+
+  li {
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1fr);
+    align-items: baseline;
+    gap: 4px 8px;
+    margin: 0;
+    border-bottom: 1px solid var(--fsm-border);
+    padding: 10px 0;
+    min-width: 0;
   }
 
   .item_header {
     font-weight: 500;
-    padding-right: 10px;
-    min-width: 42px;
+    color: var(--fsm-text-mid);
+  }
+
+  /* A subject line or a recipient list has no spaces to break on when it is long. */
+  .item_content {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 782px) {
+    grid-template-columns: minmax(0, 1fr);
+
+    li {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 }
 

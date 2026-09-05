@@ -80,7 +80,7 @@ export default {
             root.classList.toggle(DARK_CLASS, this.resolved === 'dark');
 
             /*
-             * Anything that paints in JS rather than CSS has to be told. Chart.js is the
+             * Anything that paints in JS rather than CSS has to be told. ECharts is the
              * one here: it cannot read a CSS variable, so its grid and tick colours are
              * passed in as values and have to be recomputed and redrawn when they change.
              */

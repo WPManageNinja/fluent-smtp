@@ -1,10 +1,10 @@
 <template>
     <div>
         <h3 class="fs_config_title">{{ $t('Outlook / Office365 API Settings') }}</h3>
-        <p>{{ $t('Please ') }}<a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/setup-outlook-with-fluentsmtp/">{{ $t('check the documentation first to create API keys at Microsoft') }}</a></p>
+        <p><a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/setup-outlook-with-fluentsmtp/">{{ $t('Read the documentation') }}</a>{{ $t(' before you start, to create the API keys at Microsoft.') }}</p>
         <el-radio-group size="small" v-model="connection.key_store">
-            <el-radio-button value="db">{{ $t('Store Application Keys in DB') }}</el-radio-button>
-            <el-radio-button value="wp_config">{{ $t('Application Keys in Config File') }}</el-radio-button>
+            <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store in wp-config.php') }}</el-radio-button>
         </el-radio-group>
 
         <el-row :gutter="20" v-if="connection.key_store == 'db'">
@@ -46,7 +46,7 @@
                     </el-checkbox>
                     <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                         {{
-                            $t('By disabling encryption, your Application Client Secret will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                            $t('Your Application Client Secret will be stored as readable text in the database. Only turn this on if a security plugin on this site rotates the WordPress SALT keys, which would otherwise invalidate the encrypted value.')
                         }}
                     </p>
                 </el-form-item>
@@ -86,7 +86,7 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
         </el-form-item>
 
         <el-form-item>
-            <label>{{ $t('App Callback URL(Use this URL to your APP)') }}</label>
+            <label>{{ $t('App Callback URL (paste this into your Microsoft app)') }}</label>
             <el-input :readonly="true" v-model="provider.callback_url" />
         </el-form-item>
 
@@ -96,8 +96,8 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
         -->
         <div v-if="connection.has_access_token !== 'yes'">
             <div class="fsm_provider_auth">
-                <p>{{ $t('Please authenticate with Office365 to get ') }}<b>{{ $t('Access Token') }}</b></p>
-                <el-button v-loading="gettingRedirect" @click="redirectToMS()" type="primary">{{ $t('Authenticate with Office365 & Get Access Token') }}</el-button>
+                <p>{{ $t('Authenticate with Office365 to get an access token.') }}</p>
+                <el-button v-loading="gettingRedirect" @click="redirectToMS()" type="primary">{{ $t('Authenticate with Office365') }}</el-button>
             </div>
             <el-row v-if="redirectUrl" :gutter="20">
                 <el-col :span="12">
@@ -110,13 +110,13 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
                             v-model="connection.auth_token"
                         />
                         <error :error="errors.get('auth_token')" />
-                        <p>{{ $t('Please send test email to confirm if the connection is working or not.') }}</p>
+                        <p>{{ $t('Send a test email to confirm the connection works.') }}</p>
                     </el-form-item>
                 </el-col>
             </el-row>
         </div>
         <div style="text-align: center;" v-else>
-            <p class="fsm_provider_connected">{{ $t('Your Outlook / Office365 Authentication has been enabled. No further action is needed. If you want to re-authenticate, ') }}<a @click.prevent="connection.has_access_token = 'no'" href="#">{{ $t('click here') }}</a></p>
+            <p class="fsm_provider_connected">{{ $t('Outlook / Office365 is connected and nothing else is needed here. To authenticate again, ') }}<a @click.prevent="connection.has_access_token = 'no'" href="#">{{ $t('click here') }}</a></p>
         </div>
 
     </div>

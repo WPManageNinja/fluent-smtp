@@ -93,7 +93,14 @@ export default {
             cursor: {day: 0, slot: 0},
             days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
             filledSlots: ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
-            tipIndexes: ['1am', '4am', '7am', '10am', '1pm', '4pm', '7pm', '10pm'],
+            /*
+             * Every third hour, starting at midnight. The labels are drawn on the same
+             * grid as the cells below them and each one spans the three columns it
+             * starts, so a label sits over the hour it names rather than a column or
+             * two off it - which is what eight labels at an eighth of the width each,
+             * over twenty-four cells, gave.
+             */
+            tipIndexes: ['12am', '3am', '6am', '9am', '12pm', '3pm', '6pm', '9pm'],
         }
     },
     computed: {
@@ -290,20 +297,27 @@ export default {
         }
     }
 
+    /*
+     * The hour labels, on the same twenty-four tracks as the cells under them.
+     *
+     * They used to be eight blocks floated at 12.5% each, which is an eighth of the
+     * row rather than three of its twenty-four columns - so "1am" sat over midnight
+     * and every label after it drifted further from the hour it named. This row and
+     * the day rows below it are both children of the same flex column, so both are
+     * exactly as wide as the widest of them: one `1fr` here is one cell there, at
+     * whatever width the cells have ended up, and a label spanning three of them
+     * starts on the hour it names.
+     */
     .fss_wid_sub_headers {
-        display: block;
-        text-align: center;
+        display: grid;
+        grid-template-columns: repeat(24, minmax(0, 1fr));
         margin-bottom: 5px;
 
         .fss_wid_sub_header {
-            width: 12.5%;
-            float: left;
-            text-align: left;
+            grid-column: span 3;
             font-size: 11px;
-
-            &:first-child {
-                text-align: center;
-            }
+            /* Three 22px columns hold "12am" with room to spare; nothing may wrap. */
+            white-space: nowrap;
         }
     }
 

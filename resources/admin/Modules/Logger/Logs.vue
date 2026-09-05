@@ -44,127 +44,133 @@
                         <el-button size="small" @click="fetch()">{{ $t('Retry') }}</el-button>
                     </el-alert>
 
-                    <el-table
-                        v-else
-                        class="fsm_table"
-                        :data="logs"
-                        style="width:100%"
-                        @selection-change="handleSelectionChange"
-                    >
-                        <el-table-column type="selection" width="55"/>
+                    <!--
+                        Six columns do not fit a phone. The table scrolls sideways inside
+                        this wrapper rather than making the card - and the page under it,
+                        which clips horizontal overflow - wider than the screen.
+                    -->
+                    <div v-else class="fsm_table_scroll">
+                        <el-table
+                            class="fsm_table"
+                            :data="logs"
+                            style="width:100%"
+                            @selection-change="handleSelectionChange"
+                        >
+                            <el-table-column type="selection" width="55"/>
 
-                        <!--
-                            Subject is the only column that takes what is left over, and
-                            it truncates rather than wraps.
+                            <!--
+                                Subject is the only column that takes what is left over, and
+                                it truncates rather than wraps.
 
-                            It used to be one of two flexible columns, and El Plus lets
-                            those go as narrow as the space allows - on a phone that left
-                            Subject and To on 80px each, one word per line, while Status,
-                            Date-Time and Actions held their fixed widths beside them. A
-                            floor makes the table scroll sideways instead, which is the
-                            honest thing for six columns on a 480px screen. And a subject
-                            is a line to scan down, not a paragraph to read: an ellipsis
-                            keeps every row one line tall, with the whole subject a hover
-                            away and the full email a click away.
-                        -->
-                        <el-table-column :label="$t('Subject')" min-width="280"
-                                         show-overflow-tooltip>
-                            <template #default="scope">
-                                <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
-                                <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
-                                      class="fsm_log_simulated">{{ $t(' - Simulated') }}</span>
-                            </template>
-                        </el-table-column>
+                                It used to be one of two flexible columns, and El Plus lets
+                                those go as narrow as the space allows - on a phone that left
+                                Subject and To on 80px each, one word per line, while Status,
+                                Date-Time and Actions held their fixed widths beside them. A
+                                floor makes the table scroll sideways instead, which is the
+                                honest thing for six columns on a 480px screen. And a subject
+                                is a line to scan down, not a paragraph to read: an ellipsis
+                                keeps every row one line tall, with the whole subject a hover
+                                away and the full email a click away.
+                            -->
+                            <el-table-column :label="$t('Subject')" min-width="280"
+                                             show-overflow-tooltip>
+                                <template #default="scope">
+                                    <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
+                                    <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
+                                          class="fsm_log_simulated">{{ $t(' - Simulated') }}</span>
+                                </template>
+                            </el-table-column>
 
-                        <!--
-                            A fixed width, not a second flexible column. Two flexible
-                            columns share the leftover space between them, which gave To
-                            286px on a desktop to hold one address - room it has nothing
-                            to do with, taken from the subject beside it.
-                        -->
-                        <el-table-column :label="$t('To')" width="240" show-overflow-tooltip>
-                            <template #default="scope">
-                                <span v-html="formatAddresses(scope.row.to)"></span>
-                            </template>
-                        </el-table-column>
+                            <!--
+                                A fixed width, not a second flexible column. Two flexible
+                                columns share the leftover space between them, which gave To
+                                286px on a desktop to hold one address - room it has nothing
+                                to do with, taken from the subject beside it.
+                            -->
+                            <el-table-column :label="$t('To')" width="240" show-overflow-tooltip>
+                                <template #default="scope">
+                                    <span v-html="formatAddresses(scope.row.to)"></span>
+                                </template>
+                            </el-table-column>
 
-                        <el-table-column :label="$t('Status')" width="90">
-                            <template #default="scope">
-                                <!--
-                                    One word, tinted, instead of the whole row. A failed
-                                    row used to be painted pink edge to edge, which is a
-                                    lot of colour for a fact that fits in a chip - and it
-                                    left no way to colour anything else in the row.
-                                -->
-                                <span class="fsm_tag" :class="statusClass(scope.row.status)">
-                                    {{ scope.row.status }}
-                                </span>
-                            </template>
-                        </el-table-column>
+                            <el-table-column :label="$t('Status')" width="90">
+                                <template #default="scope">
+                                    <!--
+                                        One word, tinted, instead of the whole row. A failed
+                                        row used to be painted pink edge to edge, which is a
+                                        lot of colour for a fact that fits in a chip - and it
+                                        left no way to colour anything else in the row.
+                                    -->
+                                    <span class="fsm_tag" :class="statusClass(scope.row.status)">
+                                        {{ statusLabel(scope.row.status) }}
+                                    </span>
+                                </template>
+                            </el-table-column>
 
-                        <el-table-column prop="created_at" :label="$t('Date-Time')" width="175">
-                            <template #default="scope">
-                                {{ $dateFormat(scope.row.created_at, 'DD MMM YYYY LT') }}
-                            </template>
-                        </el-table-column>
+                            <el-table-column prop="created_at" :label="$t('Date')" width="175">
+                                <template #default="scope">
+                                    {{ $dateFormat(scope.row.created_at, 'DD MMM YYYY LT') }}
+                                </template>
+                            </el-table-column>
 
-                        <!--
-                            Quiet buttons, as on the connection and channel rows.
+                            <!--
+                                Quiet buttons, as on the connection and channel rows.
 
-                            These were a solid green Resend, a solid dark View and a solid
-                            red Delete, three saturated blocks per row and thirty down a
-                            full page - which is more colour than the one thing on this
-                            screen that is meant to be coloured, the failed status chip.
-                            Nothing here is dangerous enough on its own to shout: delete
-                            asks first, and resend is the reason people open this screen.
-                        -->
-                        <el-table-column :label="$t('Actions')" width="190" align="right">
-                            <template #default="scope">
-                                <div class="fsm_log_actions">
-                                    <el-button
-                                        size="small"
-                                        icon="FsmIconRefresh"
-                                        @click="handleRetry(scope.row, 'retry')"
-                                        v-if="scope.row.status == 'failed'"
-                                    >{{ $t('Retry') }}
-                                    </el-button>
-                                    <el-button
-                                        size="small"
-                                        icon="FsmIconRefreshRight"
-                                        @click="handleResendClick(scope.row)"
-                                        v-if="scope.row.status == 'sent'"
-                                    >
-                                        {{ $t('Resend') }}
-                                        <span v-if="scope.row.resent_count > 0">({{ scope.row.resent_count }})</span>
-                                    </el-button>
+                                These were a solid green Resend, a solid dark View and a solid
+                                red Delete, three saturated blocks per row and thirty down a
+                                full page - which is more colour than the one thing on this
+                                screen that is meant to be coloured, the failed status chip.
+                                Nothing here is dangerous enough on its own to shout: delete
+                                asks first, and resend is the reason people open this screen.
+                            -->
+                            <el-table-column :label="$t('Actions')" width="190" align="right">
+                                <template #default="scope">
+                                    <div class="fsm_log_actions">
+                                        <el-button
+                                            size="small"
+                                            icon="FsmIconRefresh"
+                                            @click="handleRetry(scope.row, 'retry')"
+                                            v-if="scope.row.status == 'failed'"
+                                        >{{ $t('Retry') }}
+                                        </el-button>
+                                        <el-button
+                                            size="small"
+                                            icon="FsmIconRefreshRight"
+                                            @click="handleResendClick(scope.row)"
+                                            v-if="scope.row.status == 'sent'"
+                                        >
+                                            {{ $t('Resend') }}
+                                            <span v-if="scope.row.resent_count > 0">({{ scope.row.resent_count }})</span>
+                                        </el-button>
 
-                                    <el-button
-                                        size="small"
-                                        icon="FsmIconView"
-                                        :title="$t('View')"
-                                        :aria-label="$t('View')"
-                                        @click="handleView(scope.row)"
-                                    />
+                                        <el-button
+                                            size="small"
+                                            icon="FsmIconView"
+                                            :title="$t('View')"
+                                            :aria-label="$t('View')"
+                                            @click="handleView(scope.row)"
+                                        />
 
-                                    <confirm @yes="handleDelete(scope.row.id)">
-                                        <template #reference>
-                                            <el-button
-                                                size="small"
-                                                icon="FsmIconDelete"
-                                                :title="$t('Delete')"
-                                                :aria-label="$t('Delete')"
-                                            />
-                                        </template>
-                                    </confirm>
-                                </div>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                                        <confirm @yes="handleDelete(scope.row.id)">
+                                            <template #reference>
+                                                <el-button
+                                                    size="small"
+                                                    icon="FsmIconDelete"
+                                                    :title="$t('Delete')"
+                                                    :aria-label="$t('Delete')"
+                                                />
+                                            </template>
+                                        </confirm>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
 
                     <div class="fsm_pager">
                         <div>
                             <confirm v-if="logs.length" placement="right"
-                                     :message="$t('Are you sure, you want to delete all the logs?')"
+                                     :message="$t('Delete every logged email? This cannot be undone.')"
                                      @yes="handleDelete(['all'])">
                                 <template #reference>
                                     <el-button size="small" type="info" plain>
@@ -256,6 +262,17 @@ export default {
                 failed: 'is_failed',
                 pending: 'is_pending'
             }[status] || 'is_neutral';
+        },
+        /*
+         * The column shows the stored value, which is a lowercase English word the
+         * database understands. A status a locale has no word for falls back to it.
+         */
+        statusLabel(status) {
+            return {
+                sent: this.$t('Sent'),
+                failed: this.$t('Failed'),
+                pending: this.$t('Pending')
+            }[status] || status;
         },
         pageChanged() {
             this.fetch();
@@ -380,7 +397,7 @@ export default {
                 if (!res.data.email) {
                     this.$notify.error({
                         offset: 19,
-                        title: this.$t('Oops!!'),
+                        title: this.$t('Error'),
                         message: res.data.message
                     });
                     return false;
@@ -392,14 +409,14 @@ export default {
                 row.extra = res.data.email.extra;
                 this.$notify.success({
                     offset: 19,
-                    title: this.$t('Great!'),
+                    title: this.$t('Done'),
                     message: res.data.message
                 });
                 return true;
             }).fail(error => {
                 this.$notify.error({
                     offset: 19,
-                    title: this.$t('Oops!!'),
+                    title: this.$t('Error'),
                     message: this.$errorMessage(error)
                 });
                 return false;
@@ -460,7 +477,7 @@ export default {
                 this.fetch();
                 this.$notify.success({
                     offset: 19,
-                    title: this.$t('Great!'),
+                    title: this.$t('Done'),
                     message: res.data.message
                 });
             }).fail(error => {
@@ -508,8 +525,8 @@ export default {
             if (selectedIds.length > 20) {
                 this.$notify.error({
                     offset: 19,
-                    title: this.$t('Oops!!'),
-                    message: 'Sorry, You can not resend more than 20 emails at once'
+                    title: this.$t('Error'),
+                    message: this.$t('You can resend up to 20 emails at a time.')
                 });
                 return false;
             }
@@ -520,7 +537,7 @@ export default {
             }).then(res => {
                 this.$notify.success({
                     offset: 19,
-                    title: this.$t('Result'),
+                    title: this.$t('Done'),
                     message: res.data.message
                 });
                 this.selectedLogs = [];
@@ -529,7 +546,7 @@ export default {
                 .fail(error => {
                     this.$notify.error({
                         offset: 19,
-                        title: this.$t('Oops!!'),
+                        title: this.$t('Error'),
                         message: this.$errorMessage(error)
                     });
                 }).always(() => {

@@ -16,7 +16,7 @@
             <div v-loading="loading || retrying">
                 <ul class="fss_log_items">
                     <li>
-                        <div class="item_header">{{ $t('Status:') }}</div>
+                        <div class="item_header">{{ $t('Status') }}:</div>
                         <div class="item_content">
                             <span :class="{
                                 success: log.status == 'sent',
@@ -51,8 +51,8 @@
                         </div>
                     </li>
                     <li>
-                        <div class="item_header">{{ $t('Date-Time') }}:</div>
-                        <div class="item_content">{{ log.created_at }}</div>
+                        <div class="item_header">{{ $t('Date') }}:</div>
+                        <div class="item_content">{{ $dateFormat(log.created_at, 'DD MMM YYYY LT') }}</div>
                     </li>
                     <li>
                         <div class="item_header">{{ $t('From') }}:</div>
@@ -65,13 +65,13 @@
                         </div>
                     </li>
                     <li v-if="sendTime">
-                        <div class="item_header">{{ $t('Send Time') }}:</div>
+                        <div class="item_header">{{ $t('Time to Send') }}:</div>
                         <div class="item_content">
                             <span>{{ sendTime }}</span>
                         </div>
                     </li>
                     <li v-if="log.resent_count > 0">
-                        <div class="item_header">{{ $t('Resent Count') }}:</div>
+                        <div class="item_header">{{ $t('Times Resent') }}:</div>
                         <div class="item_content">
                             <span v-html="log.resent_count"></span>
                         </div>
@@ -95,23 +95,34 @@
                         </div>
                     </li>
                     <li v-if="log.extra && log.extra.provider && settings.providers[log.extra.provider]">
-                        <div class="item_header">{{ $t('Mailer') }}:</div>
+                        <div class="item_header">{{ $t('Email Service') }}:</div>
                         <div class="item_content">
                             <span>{{ settings.providers[log.extra.provider].title }}</span>
                         </div>
                     </li>
                     <li v-else-if="log.extra && log.extra.provider">
-                        <div class="item_header">{{ $t('Mailer') }}:</div>
+                        <div class="item_header">{{ $t('Email Service') }}:</div>
                         <div class="item_content">
                             <span>{{ log.extra.provider }}</span>
                         </div>
                     </li>
                 </ul>
 
+                <!--
+                    The reason a send failed, up where the status is. The full server
+                    response is still printed further down, but that sits under a 400px
+                    preview of the message body, and the reason is what a failed log is
+                    opened for.
+                -->
+                <div v-if="failureReason" class="fss_log_failure">
+                    <strong>{{ $t('Why it failed') }}</strong>
+                    <p>{{ failureReason }}</p>
+                </div>
+
                 <el-collapse v-model="activeName" style="margin-top:10px;">
                     <el-collapse-item name="email_body">
                         <template #title>
-                            <strong style="color:var(--fsm-text-mid)">{{ $t('Email Body') }} (sanitized)</strong>
+                            <strong style="color:var(--fsm-text-mid)">{{ $t('Email Body (sanitized)') }}</strong>
                         </template>
                         <hr class="log-border">
                         <EmailbodyContainer :content="sanitize(log.body)"/>
@@ -291,13 +302,13 @@ export default {
                 this.logViewerProps.log.extra = res.data.email.extra;
                 this.$notify.success({
                     offset: 19,
-                    title: this.$t('Great!'),
+                    title: this.$t('Done'),
                     message: res.data.message
                 });
             }).fail(error => {
                 this.$notify.error({
                     offset: 19,
-                    title: this.$t('Oops!!'),
+                    title: this.$t('Error'),
                     message: this.$errorMessage(error)
                 });
             }).always(() => {
@@ -368,6 +379,25 @@ export default {
         }
     },
     computed: {
+        /*
+         * The provider's own words for a failure. Handlers log a failed send as
+         * {code, message, errors}; a fallback attempt adds `fallback` on top, and that
+         * is the more useful line when it is there because it names the connection
+         * that was tried.
+         */
+        failureReason() {
+            if (!this.log || this.log.status !== 'failed' || !this.log.response) {
+                return '';
+            }
+
+            const response = this.log.response;
+
+            if (typeof response === 'string') {
+                return response;
+            }
+
+            return [response.fallback, response.message].filter(Boolean).join(' ');
+        },
         log: {
             get() {
                 let log;

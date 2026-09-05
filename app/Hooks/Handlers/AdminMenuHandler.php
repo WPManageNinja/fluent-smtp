@@ -116,12 +116,12 @@ class AdminMenuHandler
             <div
                 style="background-color: #fff;border: 1px solid #dcdcde;box-sizing: border-box;padding: 20px;margin: 15px 0;"
                 class="fluent_smtp_box">
-                <h3 style="margin: 0;"><?php esc_html_e('For SMTP, you already have FluentSMTP Installed', 'fluent-smtp'); ?></h3>
-                <p><?php esc_html_e('You seem to be looking for an SMTP plugin, but there\'s no need for another one — FluentSMTP is already installed on your site. FluentSMTP is a comprehensive, free, and open-source plugin with full features available without any upsell', 'fluent-smtp'); ?>
-                    (<a href="https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/"><?php esc_html_e('learn why it\'s free', 'fluent-smtp'); ?></a>)<?php esc_html_e('. It\'s compatible with various SMTP services, including Amazon SES, SendGrid, MailGun, ElasticEmail, SendInBlue, Google, Microsoft, and others, providing you with a wide range of options for your email needs.', 'fluent-smtp'); ?>
+                <h3 style="margin: 0;"><?php esc_html_e('You already have an SMTP plugin: FluentSMTP', 'fluent-smtp'); ?></h3>
+                <p><?php esc_html_e('This site already has FluentSMTP installed, so there is no need for a second SMTP plugin. FluentSMTP is free and open source, with every feature included and nothing to upgrade to', 'fluent-smtp'); ?>
+                    (<a href="https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/"><?php esc_html_e('learn why it\'s free', 'fluent-smtp'); ?></a>)<?php esc_html_e('. It sends through Amazon SES, SendGrid, Mailgun, Elastic Email, Brevo, Gmail, Outlook and a dozen other services, or through any plain SMTP server.', 'fluent-smtp'); ?>
                 </p><a href="<?php echo esc_url(admin_url('options-general.php?page=fluent-mail#/')); ?>"
                        class="wp-core-ui button button-primary"><?php esc_html_e('Go To FluentSMTP Settings', 'fluent-smtp'); ?></a>
-                <p style="font-size: 80%; margin: 15px 0 0;"><?php esc_html_e('This notice is from FluentSMTP plugin to prevent plugin conflict.', 'fluent-smtp'); ?></p>
+                <p style="font-size: 80%; margin: 15px 0 0;"><?php esc_html_e('FluentSMTP shows this notice so you do not end up running two SMTP plugins against each other.', 'fluent-smtp'); ?></p>
             </div>
             <?php
         }, 1);
@@ -254,9 +254,9 @@ class AdminMenuHandler
          * under resources/libs/chartjs/, publishing window.VueChartJs for the
          * dashboard to pick up. The vendored build was Chart.js 2.7.1 while
          * package.json declared ^3.4.1, so the version anyone read was not the
-         * version that shipped. They are bundle imports now - see
-         * resources/admin/Modules/Dashboard/Charts/_chart.js - which means one
-         * declared version, and one place it comes from.
+         * version that shipped. The dashboard chart is Apache ECharts now, a
+         * bundle import - see resources/admin/Modules/Dashboard/Charts/_chart.js -
+         * which means one declared version, and one place it comes from.
          */
         /*
          * DOMPurify 3.4.13, vendored at resources/libs/purify/ from the npm
@@ -360,10 +360,10 @@ class AdminMenuHandler
 
         add_filter('admin_footer_text', function ($text) {
             return sprintf(
-                __('%1$s is a free plugin & it will be always free %2$s. %3$s', 'fluent-smtp'),
+                __('%1$s is free, and it will stay free. %2$s · %3$s', 'fluent-smtp'),
                 '<b>FluentSMTP</b>',
-                '<a href="https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/" target="_blank" rel="noopener noreferrer">'. esc_html__('(Learn why it\'s free)', 'fluent-smtp') .'</a>',
-                '<a href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5" target="_blank" rel="noopener noreferrer">'. esc_html__('Write a review ★★★★★', 'fluent-smtp') .'</a>'
+                '<a href="https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/" target="_blank" rel="noopener noreferrer">'. esc_html__('Why it is free', 'fluent-smtp') .'</a>',
+                '<a href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5" target="_blank" rel="noopener noreferrer">'. esc_html__('Leave a review', 'fluent-smtp') .'</a>'
             );
         });
     }
@@ -429,7 +429,7 @@ class AdminMenuHandler
             ?>
             <div class="notice notice-warning">
                 <p>
-                    <?php esc_html_e('FluentSMTP needs to be configured for it to work.', 'fluent-smtp'); ?>
+                    <?php esc_html_e('FluentSMTP is installed, but no email connection has been set up yet.', 'fluent-smtp'); ?>
                 </p>
                 <p>
                     <a href="<?php echo esc_url(admin_url('options-general.php?page=fluent-mail#/')); ?>"
@@ -454,7 +454,7 @@ class AdminMenuHandler
             $args = [
                 'parent' => 'top-secondary',
                 'id'     => 'fluentsmtp_simulated',
-                'title'  => __('Email Disabled', 'fluent-smtp'),
+                'title'  => __('Email Simulated', 'fluent-smtp'),
                 'href'   => admin_url('options-general.php?page=fluent-mail#/connections'),
                 'meta'   => false
             ];
@@ -528,7 +528,7 @@ class AdminMenuHandler
                             if (response && response.html) {
                                 document.getElementById('fsmtp_dashboard_widget_html').innerHTML = response.html;
                             } else {
-                                document.getElementById('fsmtp_dashboard_widget_html').innerHTML = '<h3>Failed to load FluentSMTP Reports</h3>';
+                                document.getElementById('fsmtp_dashboard_widget_html').innerHTML = '<h3><?php echo esc_js(__('Could not load the FluentSMTP report.', 'fluent-smtp')); ?></h3>';
                             }
                         }
                     };
@@ -557,13 +557,13 @@ class AdminMenuHandler
 
         $lastWeek = gmdate('Y-m-d 00:00:01', strtotime('-7 days'));
         $stats['week'] = [
-            'title'  => __('Last 7 days', 'fluent-smtp'),
+            'title'  => __('Last 7 Days', 'fluent-smtp'),
             'sent'   => ($allTime['sent']) ? $logModel->getTotalCountStat('sent', $lastWeek) : 0,
             'failed' => ($allTime['failed']) ? $logModel->getTotalCountStat('failed', $lastWeek) : 0,
         ];
 
         $stats['all_time'] = [
-            'title'  => __('All', 'fluent-smtp'),
+            'title'  => __('All Time', 'fluent-smtp'),
             'sent'   => $allTime['sent'],
             'failed' => $allTime['failed'],
         ];
@@ -572,7 +572,7 @@ class AdminMenuHandler
         <table class="fsmtp_dash_table wp-list-table widefat fixed striped">
             <thead>
             <tr>
-                <th><?php esc_html_e('Date', 'fluent-smtp'); ?></th>
+                <th><?php esc_html_e('Period', 'fluent-smtp'); ?></th>
                 <th><?php esc_html_e('Sent', 'fluent-smtp'); ?></th>
                 <th><?php esc_html_e('Failed', 'fluent-smtp'); ?></th>
             </tr>

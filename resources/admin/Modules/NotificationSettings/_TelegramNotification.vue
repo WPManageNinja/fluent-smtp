@@ -24,10 +24,10 @@
                         </el-button>
                     </el-form-item>
                 </el-form>
-                <p class="fss_alert_settings__privacy-note">{{ $t('FluentSMTP does not store your email notifications data.') }}</p>
+                <p class="fss_alert_settings__privacy-note">{{ $t('FluentSMTP does not store your notification data.') }}</p>
             </div>
             <div v-else-if="configure_state == 'pin'">
-                <h3 class="fss_alert_settings__section-title">{{ $t('Last step!') }}</h3>
+                <h3 class="fss_alert_settings__section-title">{{ $t('Last Step') }}</h3>
                 <p class="fss_alert_settings__intro" v-html="$t('__TELE_LAST_STEP')"></p>
                 <h3 class="fss_alert_settings__section-title">{{ $t('Activation Pin') }}</h3>
                 <p class="fss_alert_settings__pin-container">

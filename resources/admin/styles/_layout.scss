@@ -293,6 +293,25 @@ body.settings_page_fluent-mail {
      */
     .el-dialog {
         max-width: calc(100vw - 24px);
+
+        /*
+         * The same treatment vertically. A dialog grows to whatever it contains - the
+         * email log carries a 400px preview of the message and everything under it -
+         * and the parts that did not fit were drawn past the bottom of the screen with
+         * only the overlay behind them to scroll. The dialog stops at the viewport and
+         * its body is what scrolls; the title and the close button stay put.
+         */
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100vh - var(--el-dialog-margin-top, 15vh) - 24px);
+
+        /* min-height, because a flex item in a column will not shrink below its own
+         * content without it - and a body that cannot shrink cannot scroll. */
+        .el-dialog__body {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+        }
     }
 
     /*
@@ -992,7 +1011,7 @@ a.fsm_tile:hover {
      * own 4px margin and nothing else.
      */
     .fsm_card_head {
-        @apply flex flex-wrap items-start justify-between gap-x-4 px-6 border-0 border-b border-solid border-hairline;
+        @apply flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-6 border-0 border-b border-solid border-hairline;
 
         padding-top: 16px;
         padding-bottom: 16px;
@@ -1036,6 +1055,22 @@ a.fsm_tile:hover {
                 }
             }
         }
+
+        /*
+         * Under the title rather than beside it once the screen is narrow. A date range
+         * picker asks for 350px before anything standing next to it, and flex-shrink-0
+         * kept the group from being squeezed - so on a phone the Sending Stats picker
+         * and its Apply button were drawn past the right edge of their own card.
+         */
+        @media (max-width: 782px) {
+            .fsm_card_head_actions {
+                @apply w-full flex-wrap shrink;
+            }
+
+            .fsm_card_head_actions .el-date-editor.el-input__wrapper {
+                width: 100%;
+            }
+        }
     }
 
     .fsm_card_body {
@@ -1048,6 +1083,22 @@ a.fsm_tile:hover {
     /* For a table or a chart, which draws its own edges right up to the card's. */
     .fsm_card_flush {
         padding: 0;
+    }
+}
+
+/*
+ * Where a table narrower than its columns scrolls.
+ *
+ * The floor is the sum of the column widths the logs table asks for (55 + 280 + 240 +
+ * 90 + 175 + 190). Without it the table lays itself out to whatever the card is, and on
+ * a phone that is a card wider than the screen inside a page that clips what hangs off
+ * it - so the last three columns were not off to the side, they were gone.
+ */
+.fsm_table_scroll {
+    overflow-x: auto;
+
+    .fsm_table {
+        min-width: 1030px;
     }
 }
 

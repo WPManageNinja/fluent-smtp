@@ -38,7 +38,7 @@
             </p>
 
             <p v-else-if="!logs.length" class="fsm_activity_empty">
-                {{ $t('No activity found.') }}
+                {{ $t('No emails in this range.') }}
             </p>
 
             <ul v-else class="fsm_activity_list">

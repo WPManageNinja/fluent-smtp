@@ -14,12 +14,11 @@
         <div v-loading="loading" style="min-height: 120px;">
             <template v-if="verificationSettings && verificationSettings.verified_domain">
                 <p style="margin-top: 0;">
-                    {{ $t('You may add additional sending emails in this') }}
-                    {{ verificationSettings.connection_name }}{{ $t(' connection.') }}
+                    {{ $t('Add more From addresses that send through the {connection} connection.', {connection: verificationSettings.connection_name}) }}
                 </p>
 
                 <el-input type="text"
-                          :placeholder="$t('Enter new email address ex: new_sender@') + verificationSettings.verified_domain"
+                          :placeholder="$t('New email address, e.g. sender@') + verificationSettings.verified_domain"
                           v-model="newSender"
                           @keyup.enter="addNewSender">
                     <template #append>
@@ -39,7 +38,7 @@
 
                 <hr/>
 
-                <h3>{{ $t('Current verified senders:') }}</h3>
+                <h3>{{ $t('Verified senders') }}</h3>
                 <table class="wp-list-table widefat striped">
                     <tbody>
                     <tr v-for="sender in verificationSettings.all_senders" :key="sender">
@@ -127,7 +126,7 @@ export default {
             if (!email) {
                 this.$notify.error({
                     title: this.$t('Error'),
-                    message: this.$t('Please enter a valid email address')
+                    message: this.$t('Please enter a valid email address.')
                 });
                 return;
             }
@@ -135,7 +134,7 @@ export default {
             if (this.verificationSettings.all_senders.indexOf(email) > -1) {
                 this.$notify.error({
                     title: this.$t('Error'),
-                    message: this.$t('The email address already exists in the list')
+                    message: this.$t('That address is already in the list.')
                 });
                 return;
             }
@@ -161,7 +160,7 @@ export default {
                 })
                 .catch(errors => {
                     this.$notify.error({
-                        title: this.$t('Validation Failed'),
+                        title: this.$t('Error'),
                         message: this.$errorMessage(errors)
                     });
                 })
@@ -187,7 +186,7 @@ export default {
                     })
                     .catch(errors => {
                         this.$notify.error({
-                            title: this.$t('Validation Failed'),
+                            title: this.$t('Error'),
                             message: this.$errorMessage(errors)
                         });
                     })

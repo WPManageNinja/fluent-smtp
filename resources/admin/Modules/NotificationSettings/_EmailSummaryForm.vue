@@ -20,11 +20,12 @@
         <template v-if="notification_settings.enabled == 'yes'">
             <div class="fsm_row fsm_row_stacked">
                 <div class="fsm_row_label">
-                    <span class="fsm_row_title">{{ $t('Notification Email Addresses') }}</span>
+                    <span class="fsm_row_title">{{ $t('Send To') }}</span>
+                    <p>{{ $t('Separate multiple addresses with commas. Use {site_admin} for the site admin address.') }}</p>
                 </div>
                 <div class="fsm_row_control">
                     <el-input v-model="notification_settings.notify_email"
-                              :aria-label="$t('Notification Email Addresses')"
+                              :aria-label="$t('Send To')"
                               :placeholder="$t('Email Address')"/>
                 </div>
             </div>
@@ -36,7 +37,7 @@
             -->
             <div class="fsm_row fsm_row_stacked">
                 <div class="fsm_row_label">
-                    <span class="fsm_row_title">{{ $t('Notification Days') }}</span>
+                    <span class="fsm_row_title">{{ $t('Send On') }}</span>
                 </div>
                 <div class="fsm_row_control">
                     <el-checkbox-group v-model="notification_settings.notify_days" class="fsm_day_grid">

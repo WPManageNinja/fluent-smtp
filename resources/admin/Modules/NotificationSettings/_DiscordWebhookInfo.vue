@@ -4,7 +4,7 @@
             <p class="fss_alert_info__description">
             {{ $t('__DISCORD_NOTIFICATION_ENABLED') }}
         </p>
-        <p class="fss_alert_info__details">{{ $t('Discord Channel Details: ') }}{{ notification_settings.discord.channel_name }}</p>
+        <p class="fss_alert_info__details">{{ $t('Discord channel: ') }}{{ notification_settings.discord.channel_name }}</p>
         <channel-actions
             :channel_key="'discord'"
             :channel_title="channel_config.title || 'Discord'"

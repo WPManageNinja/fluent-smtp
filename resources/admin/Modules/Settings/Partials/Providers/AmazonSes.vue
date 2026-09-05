@@ -2,8 +2,8 @@
     <div>
         <h3 class="fs_config_title">{{ $t('Amazon SES API Settings') }}</h3>
         <el-radio-group size="small" v-model="connection.key_store">
-            <el-radio-button value="db">{{ $t('Store Access Keys in DB') }}</el-radio-button>
-            <el-radio-button value="wp_config">{{ $t('Access Keys in Config File') }}</el-radio-button>
+            <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store in wp-config.php') }}</el-radio-button>
         </el-radio-group>
         <el-row v-if="connection.key_store == 'db'" :gutter="20">
             <el-col :md="12" :sm="24">
@@ -44,7 +44,7 @@
                     </el-checkbox>
                     <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                         {{
-                            $t('By disabling encryption, your Secret Key will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                            $t('Your Secret Key will be stored as readable text in the database. Only turn this on if a security plugin on this site rotates the WordPress SALT keys, which would otherwise invalidate the encrypted value.')
                         }}
                     </p>
                 </el-form-item>
@@ -66,7 +66,7 @@ define( 'FLUENTMAIL_AWS_SECRET_ACCESS_KEY', '********************' );</textarea>
             <label for="ses-region">
                 {{ $t('Region ') }}<span
                     class="small-help-text"
-                >{{ $t('(Default: US East(N.Virginia) / us - east - 1)') }}</span>
+                >{{ $t('(default: US East, N. Virginia / us-east-1)') }}</span>
             </label>
 
             <el-select

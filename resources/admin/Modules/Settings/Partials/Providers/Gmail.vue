@@ -6,8 +6,8 @@
         <p v-html="$t('__GCP_API_INST')"></p>
         
         <el-radio-group size="small" v-model="connection.key_store">
-            <el-radio-button value="db">{{ $t('Store Application Keys in DB') }}</el-radio-button>
-            <el-radio-button value="wp_config">{{ $t('Application Keys in Config File') }}</el-radio-button>
+            <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store in wp-config.php') }}</el-radio-button>
         </el-radio-group>
 
         <el-row :gutter="20" v-if="connection.key_store == 'db'">
@@ -45,11 +45,11 @@
             <el-col :span="24">
                 <el-form-item>
                     <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
-                        {{ $t('Disable Encryption for Application Client Secret Key (Not Recommended)') }}
+                        {{ $t('Disable Encryption for Application Client Secret (Not Recommended)') }}
                     </el-checkbox>
                     <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                         {{
-                            $t('By disabling encryption, your Application Client Secret will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                            $t('Your Application Client Secret will be stored as readable text in the database. Only turn this on if a security plugin on this site rotates the WordPress SALT keys, which would otherwise invalidate the encrypted value.')
                         }}
                     </p>
                 </el-form-item>
@@ -70,7 +70,7 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
         </div>
         <el-form-item :label="$t('Authorized Redirect URI')">
             <el-input :readonly="true" v-model="AuthorizedRedirectURI" />
-            <p>{{ $t('*** It is very important to put ') }}<b>https://fluentsmtp.com/gapi/</b>{{ $t(' in the ') }} <b>{{ $t('Authorized Redirect URIs') }}</b>{{ $t(' option in the Google Cloud Project.') }}</p>
+            <p>{{ $t('Add ') }}<b>https://fluentsmtp.com/gapi/</b>{{ $t(' to the ') }}<b>{{ $t('Authorized Redirect URIs') }}</b>{{ $t(' list in your Google Cloud project, or authentication will be refused.') }}</p>
         </el-form-item>
 
         <!--
@@ -87,9 +87,9 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
         -->
         <div v-if="connection.has_access_token !== 'yes'">
             <div class="fsm_provider_auth">
-                <p>{{ $t('Please authenticate with Google to get ') }}<b>{{ $t('Access Token') }}</b></p>
+                <p>{{ $t('Authenticate with Google to get an access token.') }}</p>
                 <el-button v-loading="gettingRedirect" @click="redirectToGoogle()" type="primary">{{
-                        $t('Authenticate with Google & Get Access Token') }}</el-button>
+                        $t('Authenticate with Google') }}</el-button>
 
             </div>
             <el-row v-if="redirectUrl" :gutter="20">
@@ -103,7 +103,7 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
                             v-model="connection.auth_token"
                         />
                         <error :error="errors.get('auth_token')" />
-                        <p>{{ $t('Please send test email to confirm if the connection is working or not.') }}</p>
+                        <p>{{ $t('Send a test email to confirm the connection works.') }}</p>
                     </el-form-item>
                 </el-col>
             </el-row>

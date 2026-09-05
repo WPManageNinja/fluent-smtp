@@ -14,14 +14,14 @@
             <div v-if="status == 'yes' && receiver" class="fss_alert_info">
                 <p class="fss_alert_info__description" v-html="$t('__TELEGRAM_NOTIFICATION_ENABLED')">
                 </p>
-                <p class="fss_alert_info__details">{{ $t('Receiver\'s Telegram Username: ') }}@{{ receiver.username }}</p>
+                <p class="fss_alert_info__details">{{ $t('Telegram username: ') }}@{{ receiver.username }}</p>
                 <channel-actions
                     :channel_key="'telegram'"
                     :channel_title="channel_config.title || 'Telegram'"
                 />
             </div>
             <div v-else class="fss_alert_info">
-                <h3 class="fss_alert_info__title">{{ $t('Telegram Connection Status: ') }}{{ status }}</h3>
+                <h3 class="fss_alert_info__title">{{ $t('Telegram connection status: ') }}{{ status }}</h3>
                 <p class="fss_alert_info__description">{{ $t('__TELE_RESPONSE_ERROR') }}</p>
                 <pre class="fss_alert_info__error-pre">{{errors}}</pre>
                 <div class="fss_alert_info__actions">

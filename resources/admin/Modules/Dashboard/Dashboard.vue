@@ -11,7 +11,7 @@
                     <h2>{{ recommended.title }}</h2>
                     <p>{{ recommended.subtitle }}</p>
                     <el-button @click="setRecommendation()" type="primary">{{ recommended.button_text }}</el-button>
-                    <el-button @click="skip_recommended = true" type="info">Skip</el-button>
+                    <el-button @click="skip_recommended = true" type="info">{{ $t('Skip') }}</el-button>
                 </div>
                 <template v-else>
                     <h2>{{ $t('__wizard_instruction') }}</h2>
@@ -79,7 +79,7 @@
                     <div v-if="!loading && !load_error" class="fsm_tiles">
                         <div v-if="settings_stat.log_enabled == 'yes'" class="fsm_tile is_sent">
                             <span class="fsm_tile_icon"><el-icon><FsmIconSPromotion/></el-icon></span>
-                            <span class="fsm_tile_label">{{ stripColon($t('Total Email Sent (Logged):')) }}</span>
+                            <span class="fsm_tile_label">{{ $t('Emails sent') }}</span>
                             <span class="fsm_tile_value">{{ stats.sent }}</span>
                         </div>
 
@@ -94,19 +94,19 @@
                             class="fsm_tile is_failed"
                             :to="{ name: 'logs', query: { status: 'failed' } }">
                             <span class="fsm_tile_icon"><el-icon><FsmIconWarning/></el-icon></span>
-                            <span class="fsm_tile_label">{{ stripColon($t('Email Failed:')) }}</span>
+                            <span class="fsm_tile_label">{{ $t('Emails failed') }}</span>
                             <span class="fsm_tile_value">{{ stats.failed || 0 }}</span>
                         </router-link>
 
                         <div class="fsm_tile is_connections">
                             <span class="fsm_tile_icon"><el-icon><FsmIconLink/></el-icon></span>
-                            <span class="fsm_tile_label">{{ stripColon($t('Active Connections:')) }}</span>
+                            <span class="fsm_tile_label">{{ $t('Active connections') }}</span>
                             <span class="fsm_tile_value">{{ settings_stat.connection_counts }}</span>
                         </div>
 
                         <div class="fsm_tile is_senders">
                             <span class="fsm_tile_icon"><el-icon><FsmIconUser/></el-icon></span>
-                            <span class="fsm_tile_label">{{ stripColon($t('Active Senders:')) }}</span>
+                            <span class="fsm_tile_label">{{ $t('Active senders') }}</span>
                             <span class="fsm_tile_value">{{ settings_stat.active_senders }}</span>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                                     type="daterange"
                                     :shortcuts="shortcuts"
                                     :disabled-date="disabledDate"
-                                    :range-separator="$t('To')"
+                                    :range-separator="$t('to')"
                                     :start-placeholder="$t('Start date')"
                                     :end-placeholder="$t('End date')"
                                     value-format="YYYY-MM-DD"
@@ -129,6 +129,7 @@
                                 <el-button size="small" @click="filterReport" type="primary" plain>
                                     {{ $t('Apply') }}
                                 </el-button>
+                                <chart-type-toggle/>
                             </div>
                         </div>
                         <div class="fsm_card_body">
@@ -150,12 +151,12 @@
                         <div class="fsm_card_body" v-if="!loading">
                             <ul class="fsm_fact_list">
                                 <li>
-                                    <span>{{ $t('Save Email Logs:') }}</span>
-                                    <span style="text-transform: capitalize;">{{ settings_stat.log_enabled }}</span>
+                                    <span>{{ $t('Logging') }}</span>
+                                    <span>{{ settings_stat.log_enabled == 'yes' ? $t('On') : $t('Off') }}</span>
                                 </li>
                                 <li v-if="settings_stat.log_enabled == 'yes'">
-                                    <span>{{ $t('Delete Logs:') }}</span>
-                                    <span>{{ $t('After') }} {{ settings_stat.auto_delete_days }} {{ $t('Days') }}</span>
+                                    <span>{{ $t('Kept for') }}</span>
+                                    <span>{{ $t('{days} days', {days: settings_stat.auto_delete_days}) }}</span>
                                 </li>
                             </ul>
                         </div>
@@ -194,6 +195,7 @@
 import isEmpty from 'lodash/isEmpty';
 import ConnectionWizard from '../Settings/ConnectionWizard';
 import EmailsChart from './Charts/Emails';
+import ChartTypeToggle from './Charts/ChartTypeToggle.vue';
 import EmailSubscriber from '../../Pieces/_Subscribe';
 import SubscribeDismiss from '../../Pieces/_SubscribeDismiss';
 import ByDayTimeSending from "./Charts/ByDayTimeSending.vue";
@@ -205,6 +207,7 @@ export default {
     components: {
         ConnectionWizard,
         EmailsChart,
+        ChartTypeToggle,
         EmailSubscriber,
         SubscribeDismiss,
         ByDayTimeSending,
@@ -220,9 +223,9 @@ export default {
             date_range: '',
             showing_chart: true,
             shortcuts: [
-                { text: this.$t('Last week'), value: () => this.daysAgoRange(7) },
-                { text: this.$t('Last month'), value: () => this.daysAgoRange(30) },
-                { text: this.$t('Last 3 months'), value: () => this.daysAgoRange(90) }
+                { text: this.$t('Last 7 Days'), value: () => this.daysAgoRange(7) },
+                { text: this.$t('Last 30 Days'), value: () => this.daysAgoRange(30) },
+                { text: this.$t('Last 90 Days'), value: () => this.daysAgoRange(90) }
             ],
             loading: true,
             load_error: '',
@@ -259,21 +262,6 @@ export default {
         }
     },
     methods: {
-        /*
-         * The overview's labels were written as list rows - "Active Senders:" - and the
-         * colon is part of the translated string, so every locale already carries it. A
-         * tile's label does not introduce a value that follows it, so the colon comes off
-         * here rather than by rewording the keys, which would drop the translations too.
-         *
-         * It takes the already-translated text rather than the key on purpose:
-         * translation.node.js finds strings by scanning the source for $t call sites, so
-         * hiding the call inside a helper would drop all four from TransStrings.php.
-         * (Writing one out in this comment adds it to the file, which is how that was
-         * found - the extractor does not know a comment from code.)
-         */
-        stripColon(text) {
-            return (text || '').replace(/\s*[:\uFF1A]\s*$/, '');
-        },
         /*
          * Element Plus split Element UI's `picker-options` object into separate
          * :shortcuts and :disabled-date props, and changed a shortcut's shape:

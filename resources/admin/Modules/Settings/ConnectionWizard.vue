@@ -12,7 +12,7 @@
                 the plate here.
             -->
             <div v-if="pickerOpen" class="fss_config_section">
-                <h3 class="fs_config_title">{{ $t('Connection Provider') }}</h3>
+                <h3 class="fs_config_title">{{ $t('Email Service') }}</h3>
                 <connection-provider :providers="providers" :connection="connection"
                                      @picked="picker_open = false"/>
                 <p v-if="!connection.provider" class="fsm_form_hint">
@@ -67,7 +67,7 @@
                                     false-value="no"
                                     v-model="connection.force_from_email"
                                 >
-                                    {{ $t('Force From Email (Recommended Settings: Enable)') }}
+                                    {{ $t('Force From Email (recommended)') }}
                                     <el-tooltip effect="dark" placement="top-start">
                                         <template #content>
                                             <div>
@@ -113,7 +113,7 @@
                                 <el-tooltip effect="dark" placement="top-start">
                                     <template #content>
                                         <div>
-                                            {{ $t('force_sender_tooltip') }}
+                                            {{ $t('__FORCE_SENDER_NAME_TIP') }}
                                         </div>
                                     </template>
                                     <el-icon><FsmIconInfo /></el-icon>
@@ -142,7 +142,7 @@
                     {{ $t('Save Connection Settings') }}
                 </el-button>
             </template>
-            <p v-if="saving">{{ $t('Validating Data. Please wait...') }}</p>
+            <p v-if="saving">{{ $t('Checking these settings...') }}</p>
             <!--
                 `error_message` is set only when the failure was not about the
                 credentials - an expired nonce, a lost connection, an HTML error page.
@@ -281,11 +281,11 @@ export default {
                  * Three different failures arrive here and only one of them is about
                  * what the user typed.
                  *
-                 * An expired nonce comes back 403 with "Security Failed. Please reload
-                 * the page". Recording that against the field list found nothing to
+                 * An expired nonce comes back 403 with "Security check failed. Please
+                 * reload the page". Recording that against the field list found nothing to
                  * attach it to - `errors.get('sender_email')` returns undefined - so no
                  * field error rendered and the template fell through to its generic
-                 * "Credential Verification Failed. Please check your inputs" alert. The
+                 * "Could not verify these credentials" alert. The
                  * admin's next move was to go and reset an SMTP password that had never
                  * stopped working. It is shown as what it is instead.
                  *

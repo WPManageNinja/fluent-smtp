@@ -31,7 +31,7 @@
             <el-checkbox class="fsm_optin_share" true-value="yes" false-value="no"
                          v-model="share_details">
                 <span class="fsm_optin_share_text">
-                    {{ $t('(Optional) Share Non - Sensitive Data. It will help us to improve the integrations') }}
+                    {{ $t('Optional: send us non-sensitive details about this install, to help us improve the integrations.') }}
                     <!--
                         Inside the checkbox's own label, so the sentence and its footnote
                         wrap as one paragraph - but the click is stopped, because reading
@@ -39,7 +39,7 @@
                         send it.
                     -->
                     <el-tooltip effect="dark" placement="top"
-                                :content="$t('Access Data: Active SMTP Connection Provider, installed plugin names, php & mysql version')">
+                                :content="$t('What is sent: the email service you connected, the names of your installed plugins, and your PHP and MySQL versions.')">
                         <el-icon class="fsm_optin_info" @click.stop.prevent><FsmIconInfo/></el-icon>
                     </el-tooltip>
                 </span>
@@ -52,7 +52,7 @@
         </template>
 
         <p v-else class="fsm_optin_done">
-            {{ $t('Awesome! Please check your email inbox and confirm your subscription.') }}
+            {{ $t('Check your inbox and confirm your subscription.') }}
         </p>
     </div>
 </template>
@@ -74,7 +74,7 @@
         methods: {
             subscribeToEmail() {
                 if (!this.formData.email) {
-                    this.$notify.error(this.$t('Please Provide an email'));
+                    this.$notify.error(this.$t('Please enter an email address.'));
                     return false;
                 }
 

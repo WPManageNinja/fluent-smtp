@@ -31,8 +31,8 @@
         </el-alert>
 
         <el-radio-group size="small" v-model="connection.key_store">
-            <el-radio-button value="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
-            <el-radio-button value="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
+            <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store in wp-config.php') }}</el-radio-button>
         </el-radio-group>
 
         <template v-if="connection.key_store == 'db'">
@@ -50,11 +50,11 @@
             </el-form-item>
             <el-form-item>
                 <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
-                    {{ $t('Disable Encryption for API Key (Not Recommended)') }}
+                    {{ $t('Disable Encryption for API Token (Not Recommended)') }}
                 </el-checkbox>
                 <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                     {{
-                        $t('By disabling encryption, your API key will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                        $t('Your API token will be stored as readable text in the database. Only turn this on if a security plugin on this site rotates the WordPress SALT keys, which would otherwise invalidate the encrypted value.')
                     }}
                 </p>
             </el-form-item>

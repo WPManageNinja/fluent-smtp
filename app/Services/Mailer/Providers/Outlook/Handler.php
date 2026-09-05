@@ -17,7 +17,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong.', 'fluent-smtp'), []));
     }
 
     protected function postSend()
@@ -120,7 +120,7 @@ class Handler extends BaseHandler
             }
 
             if (!$clientSecret) {
-                $errors['client_secret']['required'] = __('Application Client Secret key is required.', 'fluent-smtp');
+                $errors['client_secret']['required'] = __('Application Client Secret is required.', 'fluent-smtp');
             }
         } else if ($keyStoreType == 'wp_config') {
             if (!defined('FLUENTMAIL_OUTLOOK_CLIENT_ID') || !FLUENTMAIL_OUTLOOK_CLIENT_ID) {
@@ -180,7 +180,7 @@ class Handler extends BaseHandler
                 }, 10, 2);
             }
         } else if (!$authToken && !$accessToken) {
-            $errors['auth_token']['required'] = __('Please Provide Auth Token.', 'fluent-smtp');
+            $errors['auth_token']['required'] = __('Please provide an auth token.', 'fluent-smtp');
         }
 
         if ($errors) {

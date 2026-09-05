@@ -18,7 +18,7 @@
                         <el-button @click="registerSite()" v-loading="processing"
                                    :disabled="!newForm.api_token || !newForm.user_key"
                                    type="primary">
-                            {{ $t('Configure Pushover Notification') }}
+                            {{ $t('Connect Pushover') }}
                         </el-button>
                     </el-form-item>
                 </el-form>

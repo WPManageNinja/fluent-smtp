@@ -9,7 +9,7 @@
                 :disabled="fetching"
                 size="large"
                 v-model="search"
-                :placeholder="$t('Search Type and Enter...')"
+                :placeholder="$t('Search the documentation')"
             >
                 <!--
                     A mark, not a control. It was a button with no label and nothing
@@ -33,7 +33,7 @@
                                 <a target="_blank" :href="doc.link + utl_param" v-html="doc.title"></a>
                             </li>
                         </ul>
-                        <p v-else>{{ $t('Sorry! No docs found') }}</p>
+                        <p v-else>{{ $t('No documentation matched that.') }}</p>
                     </div>
                 </div>
             </div>
@@ -93,7 +93,7 @@
                         docs: []
                     },
                     item_5: {
-                        label: this.$t('Connect With Your Email Providers'),
+                        label: this.$t('Connecting an Email Service'),
                         docs: []
                     },
                     item_6: {

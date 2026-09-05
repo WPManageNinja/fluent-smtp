@@ -45,8 +45,8 @@ class NotificationHelper
 
     public static function sendTestPushoverMessage($apiToken, $userKey)
     {
-        $message = __('This is a test message for ', 'fluent-smtp') . site_url() . '. ' .
-            __('If you get this message, then your site is connected successfully.', 'fluent-smtp');
+        $message = __('Test message from ', 'fluent-smtp') . site_url() . '. ' .
+            __('If you can read this, the connection is working.', 'fluent-smtp');
 
         return self::sendPushoverMessage($message, $apiToken, $userKey, true, 1);
     }
@@ -357,7 +357,7 @@ class NotificationHelper
                         ],
                         [
                             'type' => "mrkdwn",
-                            'text' => "*Sending Driver:*\n " . strtoupper($handler->getSetting('provider'))
+                            'text' => "*Email Service:*\n " . strtoupper($handler->getSetting('provider'))
                         ],
                         [
                             'type' => "mrkdwn",
@@ -403,7 +403,7 @@ class NotificationHelper
 
         $content = '## ' . $heading . "\n";
         $content .= __('**Website URL:** ', 'fluent-smtp') . site_url() . "\n";
-        $content .= __('**Sending Driver:** ', 'fluent-smtp') . strtoupper($handler->getSetting('provider')) . "\n";
+        $content .= __('**Email Service:** ', 'fluent-smtp') . strtoupper($handler->getSetting('provider')) . "\n";
         $content .= __('**To Email Address:** ', 'fluent-smtp') . $sendingTo . "\n";
         $content .= __('**Email Subject:** ', 'fluent-smtp') . Arr::get($logData, 'subject') . "\n";
         $content .= __('**Error Message:** ```', 'fluent-smtp') . self::getErrorMessageFromResponse(self::unserialize(Arr::get($logData, 'response'))) . "```\n";
@@ -428,7 +428,7 @@ class NotificationHelper
         $subject = Arr::get($logData, 'subject');
 
         $message = '<b>' . __('Website URL:', 'fluent-smtp') . '</b> ' . esc_html(site_url()) . "<br>";
-        $message .= '<b>' . __('Sending Driver:', 'fluent-smtp') . '</b> ' . esc_html($provider) . "<br>";
+        $message .= '<b>' . __('Email Service:', 'fluent-smtp') . '</b> ' . esc_html($provider) . "<br>";
         $message .= '<b>' . __('To Email Address:', 'fluent-smtp') . '</b> ' . esc_html($sendingTo) . "<br>";
         $message .= '<b>' . __('Email Subject:', 'fluent-smtp') . '</b> ' . esc_html($subject) . "<br>";
         $message .= '<b>' . __('Error Message:', 'fluent-smtp') . '</b><br>';

@@ -20,7 +20,7 @@
                 :label="$t('Delete Selected')"
                 v-if="selected.length"
             />
-            <el-option v-if="is_failed_selected" value="resend_selected" :label="$t('Resend Selected Emails')" />
+            <el-option v-if="is_failed_selected" value="resend_selected" :label="$t('Resend Selected')" />
         </el-select>
 
         <el-button
@@ -28,7 +28,7 @@
             type="primary"
             :disabled="!action"
             @click="applyBulkAction"
-        >{{$t('Apply')}}</el-button>
+        >{{ $t('Apply') }}</el-button>
     </div>
 </template>
 

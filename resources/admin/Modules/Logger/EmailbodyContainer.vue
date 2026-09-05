@@ -1,5 +1,16 @@
 <template>
-    <div>
+    <div class="fsm_email_body">
+        <!--
+            Above the frame rather than under it. Under it the button was the last thing
+            in a dialog that is already taller than the screen, so it was drawn against
+            the bottom edge of the modal and read as part of the page behind it.
+        -->
+        <div class="fsm_email_body_bar">
+            <el-button size="small" type="primary" icon="FsmIconFullScreen" ref="fullscreen" @click="fullScreen">
+                {{ $t('Full Screen') }}
+            </el-button>
+        </div>
+
         <!--
             The body is arbitrary HTML from whoever called wp_mail(), which on
             most sites includes a public contact form. DOMPurify runs over it
@@ -26,10 +37,6 @@
             style="width:100%;height: 400px;"
             @load="setBody(content)"
         ></iframe>
-        <el-button size="small" type="primary" icon="FsmIconFullScreen" ref="fullscreen" @click="fullScreen">
-            {{$t('Enter Full Screen')}}
-        </el-button>
-
     </div>
 </template>
 
@@ -102,3 +109,11 @@ export default {
     }
 };
 </script>
+
+<style lang="scss">
+.fsm_email_body_bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+}
+</style>
