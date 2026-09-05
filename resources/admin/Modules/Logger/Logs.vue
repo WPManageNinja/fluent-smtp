@@ -48,7 +48,6 @@
                         v-else
                         class="fsm_table"
                         :data="logs"
-                        v-loading="loading"
                         style="width:100%"
                         @selection-change="handleSelectionChange"
                     >
@@ -381,7 +380,7 @@ export default {
                 if (!res.data.email) {
                     this.$notify.error({
                         offset: 19,
-                        title: 'Oops!!',
+                        title: this.$t('Oops!!'),
                         message: res.data.message
                     });
                     return false;
@@ -393,14 +392,14 @@ export default {
                 row.extra = res.data.email.extra;
                 this.$notify.success({
                     offset: 19,
-                    title: 'Great!',
+                    title: this.$t('Great!'),
                     message: res.data.message
                 });
                 return true;
             }).fail(error => {
                 this.$notify.error({
                     offset: 19,
-                    title: 'Oops!!',
+                    title: this.$t('Oops!!'),
                     message: this.$errorMessage(error)
                 });
                 return false;
@@ -461,7 +460,7 @@ export default {
                 this.fetch();
                 this.$notify.success({
                     offset: 19,
-                    title: 'Great!',
+                    title: this.$t('Great!'),
                     message: res.data.message
                 });
             }).fail(error => {
@@ -509,7 +508,7 @@ export default {
             if (selectedIds.length > 20) {
                 this.$notify.error({
                     offset: 19,
-                    title: 'Oops!!',
+                    title: this.$t('Oops!!'),
                     message: 'Sorry, You can not resend more than 20 emails at once'
                 });
                 return false;
@@ -521,7 +520,7 @@ export default {
             }).then(res => {
                 this.$notify.success({
                     offset: 19,
-                    title: 'Result',
+                    title: this.$t('Result'),
                     message: res.data.message
                 });
                 this.selectedLogs = [];
@@ -530,7 +529,7 @@ export default {
                 .fail(error => {
                     this.$notify.error({
                         offset: 19,
-                        title: 'Oops!!',
+                        title: this.$t('Oops!!'),
                         message: this.$errorMessage(error)
                     });
                 }).always(() => {

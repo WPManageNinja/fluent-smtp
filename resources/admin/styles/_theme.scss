@@ -375,7 +375,16 @@ body.settings_page_fluent-mail {
 
 .fluent_theme_dark body.settings_page_fluent-mail,
 body.settings_page_fluent-mail.fluent_theme_dark {
-    color-scheme: dark;
+    /*
+     * On the app and on what Element Plus teleports out of it, not on the body:
+     * color-scheme is what the browser paints native scrollbars, selects and
+     * checkboxes with, and the wp-admin menu and bar beside the app are still light.
+     */
+    #fluent_mail_app,
+    .el-overlay,
+    .el-popper {
+        color-scheme: dark;
+    }
 
     --el-bg-color: var(--fsm-surface);
     --el-bg-color-page: var(--fsm-body-bg);
@@ -603,12 +612,18 @@ body.settings_page_fluent-mail.fluent_theme_dark {
      * put a sunk-grey rectangle inside a surface-coloured input - the same box-in-a-box,
      * drawn in the dark palette. What is left is the native fields the templates still
      * use: the readonly `define()` blocks on the provider screens, and the editor.
+     *
+     * Scoped to the app and to the dialogs it teleports out of itself: the body is
+     * shared with wp-admin and whatever another plugin renders on this page.
      */
-    input:not(.el-input__inner):not(.el-range-input):not(.el-select__input),
-    textarea:not(.el-textarea__inner),
-    select {
-        background-color: var(--fsm-surface-sunk);
-        border-color: var(--fsm-border);
-        color: var(--fsm-text);
+    #fluent_mail_app,
+    .el-overlay {
+        input:not(.el-input__inner):not(.el-range-input):not(.el-select__input),
+        textarea:not(.el-textarea__inner),
+        select {
+            background-color: var(--fsm-surface-sunk);
+            border-color: var(--fsm-border);
+            color: var(--fsm-text);
+        }
     }
 }

@@ -361,7 +361,7 @@ class Handler extends BaseHandler
          * and the dialog refused addresses that addNewSenderEmail() would have accepted:
          * that check reads `verified_domains`, so this reads the same thing.
          */
-        $verifiedDomains = Arr::get($stats, 'verified_domains', []);
+        $verifiedDomains = (array) Arr::get($stats, 'verified_domains', []);
         $hasMultiDomain = count($verifiedDomains) > 1;
 
         return [
@@ -400,7 +400,7 @@ class Handler extends BaseHandler
         if (is_wp_error($stats)) {
             return new \WP_Error(422, __('Unable to verify the connection details. Please check the API Key.', 'fluent-smtp'));
         }
-        $verifiedDomains = Arr::get($stats, 'verified_domains', []);
+        $verifiedDomains = (array) Arr::get($stats, 'verified_domains', []);
         $emailDomain = explode('@', $email);
         $emailDomain = $emailDomain[1];
 

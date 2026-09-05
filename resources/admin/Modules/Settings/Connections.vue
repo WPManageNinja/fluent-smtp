@@ -536,7 +536,7 @@
                 this.settings.misc.fallback_connection = result.data.misc.fallback_connection || '';
 
                 this.$notify.success({
-                    title: 'Great!',
+                    title: this.$t('Great!'),
                     message: this.$t('Connection deleted Successfully.'),
                     offset: 19
                 });

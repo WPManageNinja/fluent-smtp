@@ -7,7 +7,7 @@
                 </p>
 
                 <el-form class="fss_compact_form fss_alert_settings__form" :model="newForm" label-position="top">
-                    <el-form-item label="Your Email Address">
+                    <el-form-item :label="$t('Your Email Address')">
                         <el-input v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
                     </el-form-item>
                     <el-form-item>

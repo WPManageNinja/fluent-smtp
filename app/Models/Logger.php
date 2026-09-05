@@ -136,12 +136,32 @@ class Logger extends Model
             $where['created_at'] = $dateRange;
         }
 
-        if (isset($data['query']) && is_scalar($data['query'])) {
-            foreach ($this->searchables as $column) {
+        if (isset($data['query']) && is_scalar($data['query']) && trim($data['query']) !== '') {
+            $query = trim($data['query']);
+            $columns = $this->searchables;
+
+            /*
+             * The same reading get() gives the search box: `subject:invoice` is a
+             * search of that one column, not of every column for the literal text.
+             * The viewer's Prev and Next walk the list the search produced, so a
+             * column search that the list understood and the navigation did not
+             * left Next with nothing to land on.
+             */
+            if (strpos($query, ':')) {
+                $parts = explode(':', $query);
+                $column = array_shift($parts);
+
+                if (in_array($column, $this->filterables, true)) {
+                    $columns = [$column];
+                    $query = trim(implode(':', $parts));
+                }
+            }
+
+            foreach ($columns as $column) {
                 if (isset($where[$column])) {
-                    $where[$column] .= '|' . $data['query'];
+                    $where[$column] .= '|' . $query;
                 } else {
-                    $where[$column] = $data['query'];
+                    $where[$column] = $query;
                 }
             }
         }

@@ -570,7 +570,14 @@ span.fss_header_action_right {
   }
 }
 
-*:fullscreen, *:-webkit-full-screen, *:-moz-full-screen {
+/* The email-body frame in the log viewer, which lives in a dialog teleported to body. */
+#fluent_mail_app iframe:fullscreen,
+.el-overlay iframe:fullscreen {
+  background-color: var(--fsm-surface);
+}
+
+#fluent_mail_app iframe:-webkit-full-screen,
+.el-overlay iframe:-webkit-full-screen {
   background-color: var(--fsm-surface);
 }
 

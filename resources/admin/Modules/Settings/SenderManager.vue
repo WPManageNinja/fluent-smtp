@@ -126,7 +126,7 @@ export default {
 
             if (!email) {
                 this.$notify.error({
-                    title: 'Error',
+                    title: this.$t('Error'),
                     message: this.$t('Please enter a valid email address')
                 });
                 return;
@@ -134,7 +134,7 @@ export default {
 
             if (this.verificationSettings.all_senders.indexOf(email) > -1) {
                 this.$notify.error({
-                    title: 'Error',
+                    title: this.$t('Error'),
                     message: this.$t('The email address already exists in the list')
                 });
                 return;
@@ -142,7 +142,7 @@ export default {
 
             if (!this.verificationSettings.supports_multi_domain && email.split('@')[1] !== this.verificationSettings.verified_domain) {
                 this.$notify.error({
-                    title: 'Error',
+                    title: this.$t('Error'),
                     message: this.$t('The email address must match the domain: ') + this.verificationSettings.verified_domain
                 });
                 return;
@@ -161,7 +161,7 @@ export default {
                 })
                 .catch(errors => {
                     this.$notify.error({
-                        title: 'Validation Failed',
+                        title: this.$t('Validation Failed'),
                         message: this.$errorMessage(errors)
                     });
                 })
@@ -171,9 +171,9 @@ export default {
         },
 
         removeSender(email) {
-            this.$confirm(this.$t('Are you sure you want to remove this email address?'), 'Warning', {
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
+            this.$confirm(this.$t('Are you sure you want to remove this email address?'), this.$t('Warning'), {
+                confirmButtonText: this.$t('Yes'),
+                cancelButtonText: this.$t('No'),
                 type: 'warning'
             }).then(() => {
                 this.loading = true;
@@ -187,7 +187,7 @@ export default {
                     })
                     .catch(errors => {
                         this.$notify.error({
-                            title: 'Validation Failed',
+                            title: this.$t('Validation Failed'),
                             message: this.$errorMessage(errors)
                         });
                     })

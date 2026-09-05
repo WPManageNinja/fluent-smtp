@@ -339,6 +339,8 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 == Changelog ==
 
 = 2.4.0 (Date: Aug 31, 2026) =
+- Requires WordPress 6.5 or newer, up from 5.5. The rebuilt admin needs the jQuery 3 that
+  WordPress 5.5 did not ship, and the releases in between are no longer tested against
 - Redesigned the whole admin on the shared Fluent design system, so moving between
   FluentSMTP, FluentCart and FluentAuth no longer feels like changing product
 - Added a dark theme. The toggle is the same one FluentCart uses, so choosing dark in
@@ -462,8 +464,9 @@ to need updating:
 capability check fails - those responses now carry HTTP 403 instead of 200, so handle
 them in `.fail()` rather than in `.then()`.
 
-An add-on that reads `window.FluentMail.Vue` as a constructor will need updating. One that
-uses `registerTopMenu()` or the filters will not.
+An add-on that reads `window.FluentMail.Vue` as a constructor, or renders Element
+components it never imported, will need updating. One that only uses the filters, or
+registers a screen through `registerTopMenu()` with components it imports itself, will not.
 
 = 2.3.1 (Date: Aug 13, 2026) =
 - Added an optional Directory (tenant) ID for Outlook / Office 365, for single-tenant Entra app registrations that cannot accept personal Microsoft accounts

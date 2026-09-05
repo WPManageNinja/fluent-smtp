@@ -244,6 +244,13 @@ export default {
             each(options, (value, key) => {
                 this.connection[key] = value;
             });
+
+            /*
+             * Derived from the previous provider's tokens, which the server will not
+             * carry over to this one. Left in place, an Outlook form opened from a
+             * Gmail connection reads as already authenticated.
+             */
+            delete this.connection.has_access_token;
         }
     },
     methods: {

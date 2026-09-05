@@ -94,11 +94,7 @@
         data() {
             return {
                 type: 'password',
-                replacing: false,
-                styleObject: {
-                    'text-decoration': 'line-through'
-                },
-                src: window.FluentMail.appVars.image_url + '/eye-cross.png'
+                replacing: false
             };
         },
         computed: {
@@ -140,11 +136,6 @@
             cancelReplacing() {
                 this.replacing = false;
                 this.$emit('update:modelValue', this.maskedKey);
-            },
-
-            toggle() {
-                this.type = this.type === 'text' ? 'password' : 'text';
-                this.styleObject['text-decoration'] = this.type === 'text' ? 'none' : 'line-through';
             }
         }
     };

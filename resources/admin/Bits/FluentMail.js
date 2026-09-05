@@ -168,15 +168,16 @@ export default class FluentMail {
                     return fallback || this.$t('__REQUEST_FAILED');
                 },
                 /*
-                 * An expired nonce and a revoked capability both arrive as 403 from
-                 * Controller::verify(). Neither is anything the user typed, so a screen
-                 * that treats a failure as invalid input has to be able to tell them
-                 * apart - see ConnectionWizard, which was reporting an expired session
-                 * as "check your inputs" and sending people off to reset a working
-                 * SMTP password.
+                 * A revoked capability arrives as 403 from Controller::verify(). An
+                 * expired nonce on a POST never gets that far: the router rejects it
+                 * first, as 401. Neither is anything the user typed, so a screen that
+                 * treats a failure as invalid input has to be able to tell them apart -
+                 * see ConnectionWizard, which was reporting an expired session as
+                 * "check your inputs" and sending people off to reset a working SMTP
+                 * password.
                  */
                 $isAuthError(error) {
-                    return Boolean(error && error.status === 403);
+                    return Boolean(error && (error.status === 403 || error.status === 401));
                 },
                 $t(string, ...args) {
                     const translated = window.FluentMailAdmin.trans[string] || string;

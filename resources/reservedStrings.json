@@ -70,5 +70,7 @@
   "Fri": "Fri",
   "Sat": "Sat",
   "Sun": "Sun",
-  "__REQUEST_FAILED": "The request did not complete. Please reload the page and check whether the change was saved before trying again."
+  "__REQUEST_FAILED": "The request did not complete. Please reload the page and check whether the change was saved before trying again.",
+  "__SECRET_SAVED_HELP": "Saved and hidden. This credential is never sent back to your browser - press Replace to enter a new one.",
+  "__SMTP_PORT_HELP": "Select <strong>ssl</strong> on port <strong>465</strong>, or <strong>tls</strong> on port <strong>25</strong> or <strong>587</strong>"
 }

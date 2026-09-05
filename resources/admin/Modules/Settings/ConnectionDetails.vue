@@ -44,7 +44,6 @@ export default {
                     this.verificationSettings = response.data.verificationSettings;
                 })
                 .catch(errors => {
-                    this.connection_content = errors.responseText;
                     this.$notify.error(this.$errorMessage(errors));
                 })
                 .always(() => {

@@ -291,13 +291,13 @@ export default {
                 this.logViewerProps.log.extra = res.data.email.extra;
                 this.$notify.success({
                     offset: 19,
-                    title: 'Great!',
+                    title: this.$t('Great!'),
                     message: res.data.message
                 });
             }).fail(error => {
                 this.$notify.error({
                     offset: 19,
-                    title: 'Oops!!',
+                    title: this.$t('Oops!!'),
                     message: this.$errorMessage(error)
                 });
             }).always(() => {

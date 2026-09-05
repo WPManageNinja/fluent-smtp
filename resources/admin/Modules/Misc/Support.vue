@@ -93,7 +93,7 @@
                                         </el-button>
                                         <a v-else :href="plugin.plugin_url" target="_blank" rel="noopener"
                                            class="el-button el-button--success fss_ninjatables_btn">
-                                            <span>View {{ plugin.title }}</span>
+                                            <span>{{ $t('View') }} {{ plugin.title }}</span>
                                         </a>
                                     </div>
                                 </div>

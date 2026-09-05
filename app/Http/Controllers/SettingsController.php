@@ -79,7 +79,10 @@ class SettingsController extends Controller
              */
             $data['connection'] = SecretMasker::resolve(
                 $data['connection'],
-                $this->getStoredConnection(Arr::get($data, 'connection_key'))
+                $this->getStoredConnection(
+                    Arr::get($data, 'connection_key'),
+                    Arr::get($data, 'connection.provider')
+                )
             );
 
             $provider = $factory->make($data['connection']['provider']);
@@ -152,7 +155,7 @@ class SettingsController extends Controller
      * @param string|null $connectionKey
      * @return array
      */
-    protected function getStoredConnection($connectionKey)
+    protected function getStoredConnection($connectionKey, $provider = null)
     {
         if (!$connectionKey || $connectionKey === '0') {
             return [];
@@ -160,7 +163,20 @@ class SettingsController extends Controller
 
         $connections = (new Settings())->getConnections();
 
-        return Arr::get($connections, $connectionKey . '.provider_settings', []);
+        $stored = Arr::get($connections, $connectionKey . '.provider_settings', []);
+
+        /*
+         * A connection switched to a different provider is a new set of credentials,
+         * not the old ones under a new name. Without this, editing a Gmail connection
+         * onto Outlook restored Google's tokens into it: the form still said
+         * "authenticated", the Outlook validator saw an access token and skipped its
+         * own authorization, and an unusable connection was saved over a working one.
+         */
+        if ($provider && Arr::get($stored, 'provider') !== $provider) {
+            return [];
+        }
+
+        return $stored;
     }
 
     public function storeMiscSettings(Request $request, Settings $settings)
@@ -180,7 +196,13 @@ class SettingsController extends Controller
 
         $settings = $settings->delete($request->get('key'));
 
-        return $this->sendSuccess($settings);
+        /*
+         * The same contract as every other response carrying connections: the screen
+         * installs these straight into its shared state, so the ones that remain
+         * have to arrive masked, with `has_access_token` derived, exactly as the
+         * initial page load handed them over.
+         */
+        return $this->sendSuccess(SecretMasker::mask($settings));
     }
 
     public function storeGlobals(Request $request, Settings $settings)
@@ -649,7 +671,10 @@ class SettingsController extends Controller
          */
         $connection = SecretMasker::resolve(
             $connection,
-            $this->getStoredConnection($request->get('connection_key'))
+            $this->getStoredConnection(
+                $request->get('connection_key'),
+                Arr::get($connection, 'provider')
+            )
         );
 
         $clientId = Arr::get($connection, 'client_id');
@@ -716,7 +741,10 @@ class SettingsController extends Controller
         /* As above - the form holds a mask, the API call needs the real secret. */
         $connection = SecretMasker::resolve(
             $connection,
-            $this->getStoredConnection($request->get('connection_key'))
+            $this->getStoredConnection(
+                $request->get('connection_key'),
+                Arr::get($connection, 'provider')
+            )
         );
 
         $clientId = Arr::get($connection, 'client_id');

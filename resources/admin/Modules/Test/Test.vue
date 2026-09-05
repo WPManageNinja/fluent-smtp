@@ -189,7 +189,7 @@
                 return true;
             },
             inactiveMessage() {
-                const msg = 'Plugin is not configured properly.';
+                const msg = this.$t('Plugin is not configured properly.');
 
                 return msg;
             },

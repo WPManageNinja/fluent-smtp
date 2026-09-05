@@ -81,8 +81,16 @@
         created() {
             const key = this.$route.query.connection_key;
             if (key && key !== '0') {
+                const connection = this.settings.connections[key];
+
+                // A bookmarked or back-buttoned edit URL for a connection deleted since.
+                if (!connection) {
+                    this.$router.replace({name: 'connections'});
+                    return;
+                }
+
                 this.title = this.$t('Edit Connection');
-                this.provider = this.settings.connections[key].provider_settings;
+                this.provider = connection.provider_settings;
                 this.provider_key = key;
             }
         }
