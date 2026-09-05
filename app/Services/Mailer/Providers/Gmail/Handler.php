@@ -260,7 +260,7 @@ class Handler extends BaseHandler
         $client = new \FluentSmtpLib\Google\Client();
         $client->setClientId($data['client_id']);
         $client->setClientSecret($data['client_secret']);
-        $client->addScope("https://www.googleapis.com/auth/gmail.compose");
+        $client->addScope("https://www.googleapis.com/auth/gmail.send");
         $client->setAccessType('offline');
         $client->setApprovalPrompt('force');
 

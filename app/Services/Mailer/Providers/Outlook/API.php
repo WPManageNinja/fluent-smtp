@@ -190,7 +190,16 @@ class API
             'urlAuthorize'            => 'https://login.microsoftonline.com/' . $this->tenantId . '/oauth2/v2.0/authorize',
             'urlAccessToken'          => 'https://login.microsoftonline.com/' . $this->tenantId . '/oauth2/v2.0/token',
             'urlResourceOwnerDetails' => '',
-            'scopes'                  => 'https://graph.microsoft.com/user.read https://graph.microsoft.com/mail.readwrite https://graph.microsoft.com/mail.send https://graph.microsoft.com/mail.send.shared offline_access'
+            /*
+             * Send-only. The one Graph call this plugin makes is
+             * POST /me/sendMail, so a leaked refresh token should be able to
+             * do no more than that. Mail.Send.Shared stays because the From
+             * address comes from the connection and from wp_mail() headers,
+             * which may name a shared mailbox; Graph refuses that under
+             * Mail.Send alone. Tokens granted under the older, wider scope set
+             * keep working - a refresh returns whatever was consented to.
+             */
+            'scopes'                  => 'https://graph.microsoft.com/mail.send https://graph.microsoft.com/mail.send.shared offline_access'
         ];
     }
 

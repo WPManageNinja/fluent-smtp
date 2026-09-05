@@ -6,6 +6,31 @@ use FluentMail\Includes\Support\Arr;
 
 class Converter
 {
+    /**
+     * The suggested settings if they are for the given provider, else an empty array.
+     *
+     * The other source a masked credential can be restored from on save. The
+     * dashboard's import offer leaves the server with its credentials masked like
+     * every other credential (see AdminMenuHandler), so when the admin accepts it
+     * and saves, SettingsController::store() has to put the real values back from
+     * the place they were derived from. Restricting it to the same provider means a
+     * mask in an unrelated new connection resolves to nothing, as it should.
+     *
+     * @param string|null $provider
+     * @return array
+     */
+    public function suggestedSettingsFor($provider)
+    {
+        if (!$provider) {
+            return [];
+        }
+
+        $suggestion = $this->getSuggestedConnection();
+        $settings = is_array($suggestion) ? Arr::get($suggestion, 'settings', []) : [];
+
+        return Arr::get($settings, 'provider') === $provider ? $settings : [];
+    }
+
     public function getSuggestedConnection()
     {
         $wpMailSmtp = $this->maybeWPMailSmtp();

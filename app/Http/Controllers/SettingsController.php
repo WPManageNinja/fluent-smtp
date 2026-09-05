@@ -10,6 +10,7 @@ use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Support\ValidationException;
 use FluentMail\App\Services\Mailer\Providers\Factory;
 use FluentMail\App\Services\ConnectionHealth;
+use FluentMail\App\Services\Converter;
 use FluentMail\App\Services\SecretMasker;
 
 class SettingsController extends Controller
@@ -76,13 +77,17 @@ class SettingsController extends Controller
              * An empty value is not a mask and is not restored: clearing a field is
              * how the admin removes a credential, and how the provider forms hand
              * the key over to wp-config when `key_store` is switched.
+             *
+             * A connection being added has nothing stored. Its one legitimate source
+             * of a mask is the dashboard's offer to import another SMTP plugin's
+             * settings, which arrive masked too; those resolve from the Converter.
              */
             $data['connection'] = SecretMasker::resolve(
                 $data['connection'],
                 $this->getStoredConnection(
                     Arr::get($data, 'connection_key'),
                     Arr::get($data, 'connection.provider')
-                )
+                ) ?: $this->getSuggestedConnection(Arr::get($data, 'connection.provider'))
             );
 
             $provider = $factory->make($data['connection']['provider']);
@@ -179,6 +184,26 @@ class SettingsController extends Controller
         return $stored;
     }
 
+    /**
+     * The import suggestion's settings for a provider, while there is nothing to
+     * import into yet.
+     *
+     * Only offered on the dashboard when no connection exists, so it is only a
+     * resolve source under the same condition - once a connection exists, a mask
+     * without a stored value behind it is an error, not an import.
+     *
+     * @param string|null $provider
+     * @return array
+     */
+    protected function getSuggestedConnection($provider)
+    {
+        if (!empty((new Settings())->getConnections())) {
+            return [];
+        }
+
+        return (new Converter())->suggestedSettingsFor($provider);
+    }
+
     public function storeMiscSettings(Request $request, Settings $settings)
     {
         $this->verify();
@@ -203,20 +228,6 @@ class SettingsController extends Controller
          * initial page load handed them over.
          */
         return $this->sendSuccess(SecretMasker::mask($settings));
-    }
-
-    public function storeGlobals(Request $request, Settings $settings)
-    {
-        $this->verify();
-
-        $settings->saveGlobalSettings(
-            $data = $request->except(['action', 'nonce'])
-        );
-
-        return $this->sendSuccess([
-            'form'    => $data,
-            'message' => __('Settings saved successfully.', 'fluent-smtp')
-        ]);
     }
 
     public function sendTestEmail(Request $request, Settings $settings)
@@ -723,9 +734,16 @@ class SettingsController extends Controller
             'client_id'              => $clientId,
             'redirect_uri'           => apply_filters('fluentsmtp_gapi_callback', 'https://fluentsmtp.com/gapi/'),
             'state'                  => admin_url('options-general.php?page=fluent-mail&gapi=1'),
-            'scope'                  => 'https://mail.google.com/',
-            'approval_prompt'        => 'force',
-            'include_granted_scopes' => 'true'
+            /*
+             * Send-only. The plugin's one Gmail API call is
+             * users.messages.send, which gmail.send covers, attachments
+             * included. The full https://mail.google.com/ grant this used to
+             * ask for lets a leaked refresh token read and delete the mailbox.
+             * include_granted_scopes is gone with it, so a re-authentication
+             * does not fold an old wide grant back into the new token.
+             */
+            'scope'                  => 'https://www.googleapis.com/auth/gmail.send',
+            'approval_prompt'        => 'force'
         ], 'https://accounts.google.com/o/oauth2/auth');
 
         return $this->sendSuccess([

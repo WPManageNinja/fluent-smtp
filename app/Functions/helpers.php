@@ -871,25 +871,20 @@ if (!function_exists('fluentMailGetSettings')) {
         }
 
         if (!empty($settings['use_encrypt'])) {
-            $providerKeyMaps = [
-                'smtp'        => 'password',
-                'ses'         => 'secret_key',
-                'mailgun'     => 'api_key',
-                'sendgrid'    => 'api_key',
-                'sendinblue'  => 'api_key',
-                'sparkpost'   => 'api_key',
-                'pepipost'    => 'api_key',
-                'postmark'    => 'api_key',
-                'elasticmail' => 'api_key',
-                'gmail'       => 'client_secret',
-                'outlook'     => 'client_secret',
-                'tosend'      => 'api_key',
-                'cloudflare'  => 'api_key',
-            ];
+            /*
+             * The version the blob was last written under decides which fields are
+             * ciphertext. A field that joined the map later than that is still the
+             * plaintext an older release stored, and decrypting it would turn a
+             * working token into `false`. The next save - a token refresh is one -
+             * writes the blob at the current version with every field encrypted.
+             */
+            $storedVersion = isset($settings['encrypt_version']) ? (int) $settings['encrypt_version'] : 1;
+            $encryptedFields = \FluentMail\App\Services\SecretMasker::ENCRYPTED_FIELDS;
+
             if (!empty($settings['connections']) && is_array($settings['connections'])) {
                 foreach ($settings['connections'] as $key => $connection) {
                     $providerKey = $connection['provider_settings']['provider'];
-                    if (empty($providerKeyMaps[$providerKey])) {
+                    if (empty($encryptedFields[$providerKey])) {
                         continue;
                     }
 
@@ -897,13 +892,17 @@ if (!function_exists('fluentMailGetSettings')) {
                         continue;
                     }
 
-                    $secretFieldKey = $providerKeyMaps[$providerKey];
+                    foreach ($encryptedFields[$providerKey] as $secretFieldKey => $sinceVersion) {
+                        if ($sinceVersion > $storedVersion) {
+                            continue;
+                        }
 
-                    if (empty($connection['provider_settings'][$secretFieldKey])) {
-                        continue;
+                        if (empty($connection['provider_settings'][$secretFieldKey])) {
+                            continue;
+                        }
+
+                        $settings['connections'][$key]['provider_settings'][$secretFieldKey] = fluentMailEncryptDecrypt($connection['provider_settings'][$secretFieldKey], 'd');
                     }
-
-                    $settings['connections'][$key]['provider_settings'][$secretFieldKey] = fluentMailEncryptDecrypt($connection['provider_settings'][$secretFieldKey], 'd');
                 }
             }
         }
@@ -957,43 +956,32 @@ if (!function_exists('fluentMailSetSettings')) {
         $hasSecretField = false;
 
         if (!empty($settings['use_encrypt'])) {
-            $providerKeyMaps = [
-                'smtp'        => 'password',
-                'ses'         => 'secret_key',
-                'mailgun'     => 'api_key',
-                'sendgrid'    => 'api_key',
-                'sendinblue'  => 'api_key',
-                'sparkpost'   => 'api_key',
-                'pepipost'    => 'api_key',
-                'postmark'    => 'api_key',
-                'elasticmail' => 'api_key',
-                'gmail'       => 'client_secret',
-                'outlook'     => 'client_secret',
-                'tosend'      => 'api_key',
-                'cloudflare'  => 'api_key',
-            ];
+            $encryptedFields = \FluentMail\App\Services\SecretMasker::ENCRYPTED_FIELDS;
             if (!empty($settings['connections']) && is_array($settings['connections'])) {
                 foreach ($settings['connections'] as $key => $connection) {
                     $providerKey = $connection['provider_settings']['provider'];
-                    if (empty($providerKeyMaps[$providerKey])) {
+                    if (empty($encryptedFields[$providerKey])) {
                         continue;
                     }
                     if (\FluentMail\Includes\Support\Arr::get($connection, 'provider_settings.disable_encryption') === 'yes') {
                         continue;
                     }
 
-                    $secretFieldKey = $providerKeyMaps[$providerKey];
+                    foreach (array_keys($encryptedFields[$providerKey]) as $secretFieldKey) {
+                        if (empty($connection['provider_settings'][$secretFieldKey])) {
+                            continue;
+                        }
 
-                    if (empty($connection['provider_settings'][$secretFieldKey])) {
-                        continue;
+                        $hasSecretField = true;
+
+                        $settings['connections'][$key]['provider_settings'][$secretFieldKey] = fluentMailEncryptDecrypt($connection['provider_settings'][$secretFieldKey], 'e');
                     }
-
-                    $hasSecretField = true;
-
-                    $settings['connections'][$key]['provider_settings'][$secretFieldKey] = fluentMailEncryptDecrypt($connection['provider_settings'][$secretFieldKey], 'e');
                 }
             }
         }
+
+        // Every write is a current-version write; the read side keys off this.
+        $settings['encrypt_version'] = \FluentMail\App\Services\SecretMasker::ENCRYPT_VERSION;
 
         if ($hasSecretField) {
             $settings['test'] = fluentMailEncryptDecrypt('test', 'e');

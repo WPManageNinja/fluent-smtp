@@ -11,6 +11,11 @@ namespace FluentMail\App\Services;
  * resolve() puts the stored value back. The OAuth tokens are not even masked; see
  * WITHHELD_FIELDS.
  *
+ * The class also answers the other question about a stored credential - which
+ * fields are ciphertext in wp_options - through ENCRYPTED_FIELDS and
+ * ENCRYPT_VERSION, so the two lists sit side by side and cannot drift apart
+ * unnoticed. fluentMailGetSettings() and fluentMailSetSettings() read them.
+ *
  * Every method here is a pure transform of the array it is given, and returns
  * anything that is not an array untouched.
  */
@@ -85,6 +90,49 @@ class SecretMasker
      * a freshly typed value and never a mask.
      */
     const NOTIFICATION_SECRET_FIELDS = ['token', 'site_token', 'webhook_url', 'api_token', 'user_key'];
+
+    /**
+     * The encryption layout the current release writes to wp_options.
+     *
+     * Bump it whenever a field is added to ENCRYPTED_FIELDS, and tag the new field
+     * with the new number. A stored blob carries the version it was written under
+     * in `encrypt_version` (absent means 1), which is how fluentMailGetSettings()
+     * knows a newly covered field in an older blob is still plaintext.
+     *
+     * 1 - one credential per provider: SMTP password, API keys, OAuth client secret.
+     * 2 - plus the Gmail and Outlook access/refresh tokens and the SES access key.
+     */
+    const ENCRYPT_VERSION = 2;
+
+    /**
+     * The connection fields that are stored encrypted, per provider.
+     *
+     * Each field maps to the ENCRYPT_VERSION that first covered it.
+     * fluentMailSetSettings() encrypts every field listed here;
+     * fluentMailGetSettings() decrypts only those the stored blob's version says
+     * are ciphertext.
+     *
+     * The OAuth tokens are the most powerful thing in the blob - a refresh token is
+     * standing access to the mailbox with no password involved - so they belong
+     * here at least as much as the client secret that sits next to them. The SES
+     * access key is half of a credential pair, and SECRET_FIELDS already treats it
+     * as one.
+     */
+    const ENCRYPTED_FIELDS = [
+        'smtp'        => ['password' => 1],
+        'ses'         => ['secret_key' => 1, 'access_key' => 2],
+        'mailgun'     => ['api_key' => 1],
+        'sendgrid'    => ['api_key' => 1],
+        'sendinblue'  => ['api_key' => 1],
+        'sparkpost'   => ['api_key' => 1],
+        'pepipost'    => ['api_key' => 1],
+        'postmark'    => ['api_key' => 1],
+        'elasticmail' => ['api_key' => 1],
+        'gmail'       => ['client_secret' => 1, 'access_token' => 2, 'refresh_token' => 2],
+        'outlook'     => ['client_secret' => 1, 'access_token' => 2, 'refresh_token' => 2],
+        'tosend'      => ['api_key' => 1],
+        'cloudflare'  => ['api_key' => 1],
+    ];
 
     /**
      * Replace every stored credential in a settings array with the mask.

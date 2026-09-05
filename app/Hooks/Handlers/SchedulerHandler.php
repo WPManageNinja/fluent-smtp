@@ -346,7 +346,7 @@ class SchedulerHandler
             $client = new \FluentSmtpLib\Google\Client();
             $client->setClientId($settings['client_id']);
             $client->setClientSecret($settings['client_secret']);
-            $client->addScope("https://www.googleapis.com/auth/gmail.compose");
+            $client->addScope("https://www.googleapis.com/auth/gmail.send");
             $client->setAccessType('offline');
             $client->setApprovalPrompt('force');
 

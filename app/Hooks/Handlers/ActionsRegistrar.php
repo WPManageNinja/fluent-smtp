@@ -181,12 +181,23 @@ class ActionsRegistrar
     /**
      * Verify the 'state' parameter in the OAuth callback.
      *
+     * The state is the one this site generated when it built the authorize URL
+     * (OAuth2Provider::getRandomState()). Read from the REST request rather than
+     * the superglobal, compared in constant time, and refused outright when either
+     * side is missing - an absent stored state must not match an absent parameter.
+     *
+     * @param WP_REST_Request $request
      * @return bool
      */
-    public function verifyOutlookCallbackState()
+    public function verifyOutlookCallbackState(WP_REST_Request $request)
     {
-        $state = $_REQUEST['state'] ?? null;
+        $state = $request->get_param('state');
+        $expected = get_option('_fluentmail_last_generated_state');
 
-        return $state === get_option('_fluentmail_last_generated_state');
+        if (!is_string($state) || $state === '' || !is_string($expected) || $expected === '') {
+            return false;
+        }
+
+        return hash_equals($expected, $state);
     }
 }

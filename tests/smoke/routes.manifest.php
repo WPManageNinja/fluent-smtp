@@ -1,6 +1,6 @@
 <?php
 /**
- * All 42 routes from app/Http/routes.php.
+ * All 41 routes from app/Http/routes.php.
  *
  * GET variations mirror the actual values/options in resources/admin. POST
  * payloads preserve the request shapes used by the SPA and are intentionally
@@ -64,7 +64,6 @@ return [
     $post('/settings/delete', 'SettingsController@delete', 'resources/admin/Modules/Settings/Connections.vue:142', [
         'key' => 'fsmtp-suite-missing-connection',
     ]),
-    $post('/settings/misc', 'SettingsController@storeGlobals', 'app/Http/routes.php:11', []),
     $post('/settings/test', 'SettingsController@sendTestEmail', 'resources/admin/Modules/Test/Test.vue:115', [
         'email' => 'fsmtp-suite@example.test', 'from' => '', 'isHtml' => 'true',
     ]),

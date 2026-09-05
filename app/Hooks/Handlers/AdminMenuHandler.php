@@ -295,6 +295,17 @@ class AdminMenuHandler
         $recommendedSettings = false;
         if (empty($settings['connections'])) {
             $recommendedSettings = (new Converter())->getSuggestedConnection();
+
+            /*
+             * The offer carries another plugin's SMTP password or API key, read
+             * from its option and decrypted. It goes to the page under the same
+             * rule as this plugin's own credentials: masked. The form shows the
+             * mask as "saved", and store() restores the real value from the
+             * Converter when the admin accepts the import.
+             */
+            if (is_array($recommendedSettings) && !empty($recommendedSettings['settings'])) {
+                $recommendedSettings['settings'] = SecretMasker::maskFields($recommendedSettings['settings']);
+            }
         }
 
         $displayName = trim($user->first_name . ' ' . $user->last_name);
