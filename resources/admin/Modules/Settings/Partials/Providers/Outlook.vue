@@ -80,7 +80,7 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
             <p>
                 {{ $t('Leave empty unless your Entra app registration is single-tenant. Paste the Directory (tenant) ID from the app overview page, or a verified domain such as contoso.onmicrosoft.com. Use organizations to allow any work or school account but no personal Microsoft accounts.') }}
             </p>
-            <p v-if="connection.access_token" style="color: var(--fsm-warning-fg); margin-top: 0;">
+            <p v-if="connection.has_access_token === 'yes'" style="color: var(--fsm-warning-fg); margin-top: 0;">
                 {{ $t('Changing this requires authenticating with Office365 again.') }}
             </p>
         </el-form-item>
@@ -90,7 +90,11 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
             <el-input :readonly="true" v-model="provider.callback_url" />
         </el-form-item>
 
-        <div v-if="!connection.access_token">
+        <!--
+            `has_access_token`, not the token - see the note on the Gmail form. The
+            tokens are server-side only; this flag is the whole of what the form sees.
+        -->
+        <div v-if="connection.has_access_token !== 'yes'">
             <div class="fsm_provider_auth">
                 <p>{{ $t('Please authenticate with Office365 to get ') }}<b>{{ $t('Access Token') }}</b></p>
                 <el-button v-loading="gettingRedirect" @click="redirectToMS()" type="primary">{{ $t('Authenticate with Office365 & Get Access Token') }}</el-button>
@@ -112,7 +116,7 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
             </el-row>
         </div>
         <div style="text-align: center;" v-else>
-            <p class="fsm_provider_connected">{{ $t('Your Outlook / Office365 Authentication has been enabled. No further action is needed. If you want to re-authenticate, ') }}<a @click.prevent="connection.access_token = ''" href="#">{{ $t('click here') }}</a></p>
+            <p class="fsm_provider_connected">{{ $t('Your Outlook / Office365 Authentication has been enabled. No further action is needed. If you want to re-authenticate, ') }}<a @click.prevent="connection.has_access_token = 'no'" href="#">{{ $t('click here') }}</a></p>
         </div>
 
     </div>
@@ -133,7 +137,8 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
             return {
                 app_ready: false,
                 gettingRedirect: false,
-                redirectUrl: ''
+                redirectUrl: '',
+                connection_key: this.$route.query.connection_key
             };
         },
         watch: {
@@ -148,7 +153,10 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
             redirectToMS() {
                 this.gettingRedirect = true;
                 this.$post('settings/outlook_auth_url', {
-                    connection: this.connection
+                    connection: this.connection,
+                    // Which saved connection the masked client secret belongs to, so
+                    // the server can restore it. Absent when adding a new one.
+                    connection_key: this.connection_key
                 })
                     .then(response => {
                         this.redirectUrl = response.data.auth_url;

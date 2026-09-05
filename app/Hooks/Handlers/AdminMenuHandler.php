@@ -6,6 +6,7 @@ use FluentMail\App\Models\Logger;
 use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\Converter;
 use FluentMail\App\Services\NotificationHelper;
+use FluentMail\App\Services\SecretMasker;
 use FluentMail\Includes\Core\Application;
 use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\Includes\Support\Arr;
@@ -303,6 +304,9 @@ class AdminMenuHandler
 
         wp_localize_script('fluent_mail_admin_app_boot', 'FluentMailAdmin', [
             'slug'                   => FLUENTMAIL,
+            // What a saved-but-not-shown credential looks like in `settings`. The
+            // password fields compare against it to render themselves as "saved".
+            'masked_key'             => SecretMasker::MASK,
             'brand_logo'             => esc_url(fluentMailMix('images/logo.svg')),
             'nonce'                  => wp_create_nonce(FLUENTMAIL),
             'settings'               => $settings,
@@ -312,10 +316,8 @@ class AdminMenuHandler
             'user_email'             => $user->user_email,
             'user_display_name'      => $displayName,
             // The dashboard greets the admin by name the way FluentCart's does, so it
-            // needs the same two things FluentCart reads off its own config: who is
-            // looking, and what site they are looking at.
+            // needs the avatar FluentCart reads off its own config.
             'user_avatar'            => esc_url(get_avatar_url($user->ID, ['size' => 96])),
-            'site_name'              => get_bloginfo('name'),
             /*
              * Logs are stored and filtered in the site's timezone, but every date the
              * app computed came from the browser's. An administrator working from
@@ -376,7 +378,22 @@ class AdminMenuHandler
             ]
         );
 
-        return $settings;
+        /*
+         * The last thing that happens before this array is printed into the page.
+         *
+         * Everything above reads the settings the way the mailers do, with the stored
+         * credentials decrypted, because that is what fluentMailGetSettings() returns.
+         * Handing that to wp_localize_script() put every SMTP password, API key and
+         * OAuth refresh token into the HTML of every screen this plugin renders - the
+         * dashboard and the logs included, not just the connection form - where
+         * view-source reads them without a click, and where any admin-side XSS from
+         * any other plugin collects the lot in a single property read.
+         *
+         * The app does not need them. It needs to know a credential is set, which the
+         * mask tells it, and the admin needs to be able to replace one, which typing
+         * over the mask does. See SecretMasker::resolve() for the other half.
+         */
+        return SecretMasker::mask($settings);
     }
 
     public function maybeAdminNotice()

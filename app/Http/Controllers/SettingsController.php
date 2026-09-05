@@ -10,6 +10,7 @@ use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Support\ValidationException;
 use FluentMail\App\Services\Mailer\Providers\Factory;
 use FluentMail\App\Services\ConnectionHealth;
+use FluentMail\App\Services\SecretMasker;
 
 class SettingsController extends Controller
 {
@@ -28,7 +29,7 @@ class SettingsController extends Controller
              * the screen shows as unknown rather than as healthy.
              */
             return $this->sendSuccess([
-                'settings' => $setting,
+                'settings' => SecretMasker::mask($setting),
                 'health'   => (new ConnectionHealth())->getReport()
             ]);
         } catch (Exception $e) {
@@ -65,6 +66,21 @@ class SettingsController extends Controller
             $data = $request->except(['action', 'nonce']);
 
             $data = wp_unslash($data);
+
+            /*
+             * The credentials come back masked unless the admin typed over them, so
+             * the stored ones are put back here - before validateConnection() and
+             * checkConnection() below, which both have to test the real key rather
+             * than the sentinel standing in for it.
+             *
+             * An empty value is not a mask and is not restored: clearing a field is
+             * how the admin removes a credential, and how the provider forms hand
+             * the key over to wp-config when `key_store` is switched.
+             */
+            $data['connection'] = SecretMasker::resolve(
+                $data['connection'],
+                $this->getStoredConnection(Arr::get($data, 'connection_key'))
+            );
 
             $provider = $factory->make($data['connection']['provider']);
 
@@ -110,7 +126,7 @@ class SettingsController extends Controller
 
             return $this->sendSuccess([
                 'message'     => __('Settings saved successfully.', 'fluent-smtp'),
-                'connections' => $settings->getConnections(),
+                'connections' => SecretMasker::maskConnections($settings->getConnections()),
                 'mappings'    => $settings->getMappings(),
                 'misc'        => $settings->getMisc()
             ]);
@@ -121,6 +137,30 @@ class SettingsController extends Controller
                 'message' => $e->getMessage()
             ], 422);
         }
+    }
+
+    /**
+     * The credentials currently saved under a connection key, decrypted.
+     *
+     * The source the masked fields of an incoming payload are restored from. An
+     * unknown or absent key - a connection being added rather than edited - gives an
+     * empty array, which SecretMasker::resolve() turns into empty fields
+     * rather than into the sentinel.
+     *
+     * '0' is the connection form's own way of saying "new", so it is not a key.
+     *
+     * @param string|null $connectionKey
+     * @return array
+     */
+    protected function getStoredConnection($connectionKey)
+    {
+        if (!$connectionKey || $connectionKey === '0') {
+            return [];
+        }
+
+        $connections = (new Settings())->getConnections();
+
+        return Arr::get($connections, $connectionKey . '.provider_settings', []);
     }
 
     public function storeMiscSettings(Request $request, Settings $settings)
@@ -603,6 +643,15 @@ class SettingsController extends Controller
         $this->verify();
         $connection = wp_unslash($request->get('connection'));
 
+        /*
+         * Re-authenticating an existing connection sends back the masked secret,
+         * since that is what the form was given. Restore it before it is read below.
+         */
+        $connection = SecretMasker::resolve(
+            $connection,
+            $this->getStoredConnection($request->get('connection_key'))
+        );
+
         $clientId = Arr::get($connection, 'client_id');
         $clientSecret = Arr::get($connection, 'client_secret');
 
@@ -664,6 +713,12 @@ class SettingsController extends Controller
         $this->verify();
         $connection = wp_unslash($request->get('connection'));
 
+        /* As above - the form holds a mask, the API call needs the real secret. */
+        $connection = SecretMasker::resolve(
+            $connection,
+            $this->getStoredConnection($request->get('connection_key'))
+        );
+
         $clientId = Arr::get($connection, 'client_id');
         $clientSecret = Arr::get($connection, 'client_secret');
         $tenantId = Arr::get($connection, 'tenant_id');
@@ -724,6 +779,28 @@ class SettingsController extends Controller
         ]);
     }
 
+    /**
+     * Mask the credentials held by every alert channel in a notification settings array.
+     *
+     * @param array $settings
+     * @return array
+     */
+    protected function maskNotificationSecrets($settings)
+    {
+        foreach ((new NotificationManager())->getAllChannelKeys() as $channelKey) {
+            if (empty($settings[$channelKey]) || !is_array($settings[$channelKey])) {
+                continue;
+            }
+
+            $settings[$channelKey] = SecretMasker::maskFields(
+                $settings[$channelKey],
+                SecretMasker::NOTIFICATION_SECRET_FIELDS
+            );
+        }
+
+        return $settings;
+    }
+
     public function getNotificationSettings()
     {
         $settings = (new Settings())->notificationSettings();
@@ -732,7 +809,7 @@ class SettingsController extends Controller
         $settings['telegram_notify_token'] = '';
 
         return $this->sendSuccess([
-            'settings' => $settings
+            'settings' => $this->maskNotificationSecrets($settings)
         ]);
     }
 
@@ -807,7 +884,16 @@ class SettingsController extends Controller
             $channelsWithStatus[$key] = array_merge($channel, [
                 'status'    => Arr::get($channelSettings, 'status', 'no'),
                 'is_active' => in_array($key, $activeChannel),
-                'settings'  => $channelSettings
+                /*
+                 * Masked, not omitted. The screen reads these to decide whether a
+                 * channel is configured - `!!settings.webhook_url` and the like - and
+                 * the mask is truthy, so a connected channel still reads as connected
+                 * without the bot token or webhook URL travelling with it.
+                 */
+                'settings'  => SecretMasker::maskFields(
+                    $channelSettings,
+                    SecretMasker::NOTIFICATION_SECRET_FIELDS
+                )
             ]);
         }
 

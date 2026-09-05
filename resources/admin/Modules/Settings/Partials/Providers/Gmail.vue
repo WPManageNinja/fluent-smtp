@@ -79,7 +79,13 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
             connection - a red button under a centred heading, for the one thing the
             screen is asking you to do.
         -->
-        <div v-if="!connection.access_token">
+        <!--
+            `has_access_token`, not the token. The tokens are issued by Google and
+            written by the server, and no field here has ever edited one, so they are
+            not sent to the browser at all - this flag carries the only thing the form
+            needs to know about them.
+        -->
+        <div v-if="connection.has_access_token !== 'yes'">
             <div class="fsm_provider_auth">
                 <p>{{ $t('Please authenticate with Google to get ') }}<b>{{ $t('Access Token') }}</b></p>
                 <el-button v-loading="gettingRedirect" @click="redirectToGoogle()" type="primary">{{
@@ -103,7 +109,7 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
             </el-row>
         </div>
         <div style="text-align: center;" v-else>
-            <p class="fsm_provider_connected">{{ $t('__GMAIL_SUCCESS') }} <a @click.prevent="connection.access_token = ''" href="#">{{ $t('click here') }}</a></p>
+            <p class="fsm_provider_connected">{{ $t('__GMAIL_SUCCESS') }} <a @click.prevent="connection.has_access_token = 'no'" href="#">{{ $t('click here') }}</a></p>
         </div>
 
     </div>
@@ -141,7 +147,10 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
             redirectToGoogle() {
                 this.gettingRedirect = true;
                 this.$post('settings/gmail_auth_url', {
-                    connection: this.connection
+                    connection: this.connection,
+                    // Which saved connection the masked client secret belongs to, so
+                    // the server can restore it. Absent when adding a new one.
+                    connection_key: this.connection_key
                 })
                     .then(response => {
                         this.redirectUrl = response.data.auth_url;

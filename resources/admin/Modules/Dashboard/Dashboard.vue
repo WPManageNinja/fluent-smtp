@@ -36,10 +36,13 @@
                 :description="connection.message"
             />
             <!--
-                The greeting is FluentCart's, kept deliberately literal - same avatar,
-                same "Good <part of day> <name>", same site line under it - because the
-                two dashboards are the first screen of the same admin and a user moving
-                between them should not be met by two different openings.
+                The greeting is FluentCart's, kept deliberately close - same avatar,
+                same "Good <part of day> <name>", a one-line subtitle under it - because
+                the two dashboards are the first screen of the same admin and a user
+                moving between them should not be met by two different openings. The
+                subtitle says what the screen is about rather than "Welcome to <site>":
+                the admin already knows which site they are on, and the line reads as
+                filler when it tells them.
 
                 What is not copied is FluentCart's "Last 30 Days" line and its CTA. The
                 range here is chosen on the chart below rather than fixed, so a label
@@ -52,7 +55,7 @@
                      width="48" height="48"/>
                 <div class="fsm_greeting_text">
                     <h2>{{ greeting }} {{ appVars.user_display_name }} 👋</h2>
-                    <p>{{ $t('Welcome to') }} {{ appVars.site_name }}</p>
+                    <p>{{ $t("Here's how your site's email sending is doing.") }}</p>
                 </div>
             </div>
 

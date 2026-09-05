@@ -33,6 +33,15 @@ return [
             'title'    => 'toSend',
             'image'    => fluentMailAssetUrl('images/provider-tosend.svg'),
             'provider' => 'tosend',
+            /*
+             * toSend and SES let one connection send as several From addresses, so the
+             * Connections list offers to manage them from the row. The flag is static
+             * because that list draws every row on load and must not call a provider's
+             * API to find out whether a button belongs there; whether the account has a
+             * verified domain to add senders on is still checked, but only once the
+             * manager is opened for one connection.
+             */
+            'supports_additional_senders' => true,
             'options'  => [
                 'sender_name'       => '',
                 'sender_email'      => '',
@@ -49,6 +58,7 @@ return [
             'title'    => __('Amazon SES', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/provider-aws-ses.svg'),
             'provider' => 'AmazonSes',
+            'supports_additional_senders' => true,
             'options'  => [
                 'sender_name'      => '',
                 'sender_email'     => '',

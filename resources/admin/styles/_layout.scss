@@ -296,11 +296,18 @@ body.settings_page_fluent-mail {
     }
 
     /*
-     * The confirm box has the same fixed width and the same problem, and it is the one
-     * overlay a user cannot avoid: every delete and disconnect goes through it.
+     * The confirm box has the same problem and not the same shape, which is the trap
+     * here. A dialog is `width: var(--el-dialog-width)`, so capping its max-width adds a
+     * limit it did not have. The message box is already `width: 100%` held in by
+     * `max-width: var(--el-messagebox-width)` - so the same cap written the same way
+     * *replaced* its 420px and let every confirmation run the width of the screen.
+     *
+     * Narrow the variable instead of the property. Element Plus keeps its own rule, the
+     * box is 420px wherever there is room for it, and less the gutter where there is not
+     * - which is also why the small-screen rule below names only the dialog.
      */
     .el-message-box {
-        max-width: calc(100vw - 24px);
+        --el-messagebox-width: min(420px, calc(100vw - 24px));
     }
 
     /*
@@ -310,8 +317,7 @@ body.settings_page_fluent-mail {
      * whichever way its own width was written.
      */
     @media (max-width: 782px) {
-        .el-dialog,
-        .el-message-box {
+        .el-dialog {
             width: calc(100vw - 24px);
         }
     }
@@ -1139,6 +1145,32 @@ a.fsm_tile:hover {
         color: var(--fsm-text-mid);
         border-color: var(--fsm-border-strong);
         padding: 0 7px;
+    }
+
+    /*
+     * The extra-senders mark is the one tag you can press, so it is the one tag drawn
+     * dashed: a solid outline would have read as a second Fallback sitting beside the
+     * first, and the count it carries is a thing you can change rather than a state the
+     * connection is in. It stays in the quiet palette either way - how many addresses a
+     * connection sends as is never the answer to "which connection sends my mail".
+     */
+    &.is_senders {
+        @apply cursor-pointer border border-dashed;
+
+        background: transparent;
+        color: var(--fsm-text-mid);
+        border-color: var(--fsm-border-strong);
+        padding: 0 7px;
+        margin: 0;
+        line-height: 18px;
+
+        /* A <button>, so it arrives with the UA's own font rather than the page's. */
+        font-family: inherit;
+
+        &:hover {
+            color: var(--fsm-text);
+            border-color: var(--fsm-accent);
+        }
     }
 }
 

@@ -109,6 +109,28 @@
                                     <span v-if="isFallback(connection)" class="fsm_tag is_fallback">
                                         {{ $t('Fallback') }}
                                     </span>
+
+                                    <!--
+                                        toSend and SES let one connection send as more
+                                        than one From address, and until now the only way
+                                        to say so was to open the connection and read it.
+                                        So the row states it, in the same line of marks
+                                        that carries Default and Fallback, and the mark
+                                        is the way in - a connection that can hold extra
+                                        senders offers to manage them where you are
+                                        already looking at it.
+
+                                        The count comes from the mappings the store
+                                        already holds, so no row costs a call to the
+                                        provider to be drawn.
+                                    -->
+                                    <button v-if="supportsSenders(connection)"
+                                            type="button"
+                                            class="fsm_tag is_senders"
+                                            :title="$t('Manage additional sender addresses')"
+                                            @click="manageSenders(connection)">
+                                        {{ senderLabel(connection) }}
+                                    </button>
                                 </div>
 
                                 <!--
@@ -185,7 +207,8 @@
                         </div>
                     </div>
                     <div class="fsm_card_body">
-                        <connection-details :connection_id="showing_connection" />
+                        <connection-details :connection_id="showing_connection"
+                                            @senders_changed="fetch" />
                     </div>
                 </div>
             </div>
@@ -201,6 +224,10 @@
                 </div>
             </aside>
         </div>
+
+        <sender-manager v-model="managing_senders"
+                        :connection_id="managing_connection"
+                        @updated="fetch"/>
     </div>
 </template>
 
@@ -209,12 +236,14 @@
     import GeneralSettings from './_GeneralSettings'
 
     import ConnectionDetails from './ConnectionDetails'
+    import SenderManager from './SenderManager'
 
     export default {
         name: 'Connections',
         components: {
             GeneralSettings,
-            ConnectionDetails
+            ConnectionDetails,
+            SenderManager
         },
         data() {
             return {
@@ -228,7 +257,10 @@
                  */
                 health_report: {},
                 /* A routing write is in flight; see setRouting(). */
-                routing: false
+                routing: false,
+                /* The connection whose extra senders the manager dialog is open on. */
+                managing_senders: false,
+                managing_connection: ''
             };
         },
         methods: {
@@ -290,6 +322,44 @@
                         ? this.$t('Connection needs attention')
                         : this.$t('Working'))
                 };
+            },
+
+            /*
+             * A static fact about the provider, not about the account: whether this kind
+             * of connection can send as more than one address at all. Whether this
+             * particular account has a verified domain to add senders on is a question
+             * for the provider's API, and is asked when the manager opens - a list of
+             * ten connections cannot make ten API calls to decide which rows get a mark.
+             */
+            supportsSenders(connection) {
+                const provider = this.providerOf(connection);
+
+                return !!(provider && provider.supports_additional_senders);
+            },
+
+            /*
+             * Mappings are address -> connection key, and the connection's own address is
+             * always among them, so the extras are what is left after it. The store has
+             * them already, which is what lets the count sit on every row for free.
+             */
+            senderCount(connection) {
+                const mappings = this.settings.mappings || {};
+
+                return Object.keys(mappings).filter(email => {
+                    return mappings[email] === connection.unique_key
+                        && email !== connection.sender_email;
+                }).length;
+            },
+
+            senderLabel(connection) {
+                const count = this.senderCount(connection);
+
+                return count ? `+${count} ${this.$t('senders')}` : this.$t('Add senders');
+            },
+
+            manageSenders(connection) {
+                this.managing_connection = connection.unique_key;
+                this.managing_senders = true;
             },
 
             isDefault(connection) {

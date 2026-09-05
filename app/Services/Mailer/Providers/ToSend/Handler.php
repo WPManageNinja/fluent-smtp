@@ -353,7 +353,16 @@ class Handler extends BaseHandler
             'error'      => $error
         ]);
 
-        $hasMultiDomain = $stats['verified_domains'] ? count($validSenders['verified_senders']) > 1 : false;
+        /*
+         * Whether the manager may take a sender on a domain other than the primary
+         * one, which is decided by the account and not by how many senders are already
+         * mapped. This counted `verified_senders` - a list that holds the connection's
+         * own From address and nothing else - so it was false on every toSend account,
+         * and the dialog refused addresses that addNewSenderEmail() would have accepted:
+         * that check reads `verified_domains`, so this reads the same thing.
+         */
+        $verifiedDomains = Arr::get($stats, 'verified_domains', []);
+        $hasMultiDomain = count($verifiedDomains) > 1;
 
         return [
             'info'                 => $info,
@@ -409,6 +418,7 @@ class Handler extends BaseHandler
         $settings = get_option('fluentmail-settings');
 
         $settings['mappings'][$email] = md5($connection['sender_email']);
+        $settings = $this->writeAdditionalSenders($settings, $connection, $email, true);
 
         update_option('fluentmail-settings', $settings);
 
@@ -438,10 +448,43 @@ class Handler extends BaseHandler
         $settings = get_option('fluentmail-settings');
 
         unset($settings['mappings'][$email]);
+        $settings = $this->writeAdditionalSenders($settings, $connection, $email, false);
 
         update_option('fluentmail-settings', $settings);
 
         return true;
+    }
+
+    /*
+     * A sender added here has to land in the connection's own `additional_senders` as
+     * well as in the global mappings, because those two are not equal partners: saving
+     * the connection clears every mapping that points at it and rebuilds the list from
+     * getValidSenders(), which reads `additional_senders`. A sender written only to the
+     * mappings would send correctly right up until the next time anyone opened the
+     * connection and pressed Save, and then quietly stop.
+     */
+    private function writeAdditionalSenders($settings, $connection, $email, $add)
+    {
+        $key = md5($connection['sender_email']);
+
+        if (!isset($settings['connections'][$key]['provider_settings'])) {
+            return $settings;
+        }
+
+        $current = Arr::get($settings['connections'][$key]['provider_settings'], 'additional_senders', []);
+        $current = array_values(array_filter((array) $current));
+
+        if ($add) {
+            $current[] = $email;
+        } else {
+            $current = array_filter($current, function ($existing) use ($email) {
+                return $existing != $email;
+            });
+        }
+
+        $settings['connections'][$key]['provider_settings']['additional_senders'] = array_values(array_unique($current));
+
+        return $settings;
     }
 
     private function getSendersFromMappings($connection)
@@ -449,6 +492,15 @@ class Handler extends BaseHandler
         $validSenders = [
             'emails' => [$connection['sender_email']]
         ];
+
+        /*
+         * Read from the connection as well as the mappings. An install that added its
+         * extra senders in the connection form - or one saved before those two were kept
+         * in step - has them in `additional_senders` only, and the manager listing just
+         * the mappings would offer to add addresses that are already sending.
+         */
+        $additional = array_filter((array) Arr::get($connection, 'additional_senders', []));
+
         $verifiedDomain = explode('@', $connection['sender_email'])[1] ?? '';
 
         if ($verifiedDomain) {
@@ -466,10 +518,14 @@ class Handler extends BaseHandler
                 $mapSenders[$email] = $email;
             }
 
+            foreach ($additional as $email) {
+                $mapSenders[$email] = $email;
+            }
+
             $mapSenders = array_keys($mapSenders);
 
         } else {
-            $mapSenders = $validSenders['emails'];
+            $mapSenders = array_values(array_unique(array_merge($validSenders['emails'], $additional)));
         }
 
         return [
