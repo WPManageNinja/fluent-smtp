@@ -55,6 +55,13 @@ $app->post('settings/pushover/register', 'PushoverController@registerSite');
 $app->post('settings/pushover/send-test', 'PushoverController@sendTestMessage');
 $app->post('settings/pushover/disconnect', 'PushoverController@disconnect');
 
+/*
+ * Gotify Routes
+ */
+$app->post('settings/gotify/register', 'GotifyController@registerSite');
+$app->post('settings/gotify/send-test', 'GotifyController@sendTestMessage');
+$app->post('settings/gotify/disconnect', 'GotifyController@disconnect');
+
 
 
 $app->get('/logs', 'LoggerController@get');

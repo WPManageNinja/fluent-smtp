@@ -30,6 +30,7 @@ import TelegramNotification from './_TelegramNotification.vue';
 import SlackNotification from './_SlackNotification.vue';
 import DiscordNotification from './_DiscordNotification.vue';
 import PushoverNotification from './_PushoverNotification.vue';
+import GotifyNotification from './_GotifyNotification.vue';
 import ChannelHeader from './_ChannelHeader.vue';
 
 export default {
@@ -40,6 +41,7 @@ export default {
         SlackNotification,
         DiscordNotification,
         PushoverNotification,
+        GotifyNotification,
         ChannelHeader
     },
     props: {
@@ -91,6 +93,8 @@ export default {
                     return !!settings.webhook_url;
                 case 'pushover':
                     return !!(settings.api_token && settings.user_key);
+                case 'gotify':
+                    return !!(settings.server_url && settings.app_token);
                 default:
                     return false;
             }
@@ -108,7 +112,8 @@ export default {
                 'telegram': 'telegram-notification',
                 'slack': 'slack-notification',
                 'discord': 'discord-notification',
-                'pushover': 'pushover-notification'
+                'pushover': 'pushover-notification',
+                'gotify': 'gotify-notification'
             };
             return componentMap[channelKey] || null;
         },
