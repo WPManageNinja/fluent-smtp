@@ -437,6 +437,9 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 - Fixed the keyboard focus ring being left behind on buttons and links after a click
 - Fixed text fields and checkboxes picking up WordPress 7.1's own form styling, which drew
   a second bordered box inside every input and left the field standing a row too tall
+- Fixed Bcc recipients never receiving an email sent over the Outlook / Office 365
+  connection. Microsoft's API ignores a Bcc header in a raw message, so a message with
+  Bcc is now sent as a structured request that names its Bcc recipients outright
 
 **For developers**
 
