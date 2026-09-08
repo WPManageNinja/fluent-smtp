@@ -8,6 +8,7 @@ use FluentMail\App\Services\Mailer\Manager;
 use FluentMail\App\Services\Reporting;
 use FluentMail\Includes\Request\Request;
 use FluentMail\Includes\Support\Arr;
+use FluentMail\App\Services\Documentation;
 
 class DashboardController extends Controller
 {
@@ -113,30 +114,45 @@ class DashboardController extends Controller
 
     }
 
-    public function getDocs()
+    public function getDocs(Manager $manager)
     {
         $this->verify();
 
-        $request = wp_remote_get('https://fluentsmtp.com/wp-json/wp/v2/docs?per_page=100');
+        $documentation = new Documentation();
+        $docs = $documentation->getDocs();
+        if (is_wp_error($docs)) {
+            return $this->sendError(['message' => $docs->get_error_message()], 503);
+        }
 
-        $docs = json_decode(wp_remote_retrieve_body($request), true);
-
-
-        $formattedDocs = [];
-
-        foreach ($docs as $doc) {
-            $primaryCategory = Arr::get($doc, 'taxonomy_info.doc_category.0', ['value' => 'none', 'label' => 'Other']);
-            $formattedDocs[] = [
-                'title'    => $doc['title']['rendered'],
-                'content'  => $doc['content']['rendered'],
-                'link'     => $doc['link'],
-                'category' => $primaryCategory
-            ];
+        // The guides for the services this site actually sends through, so the page
+        // can put them first. Keyed by article, valued by provider key so the page
+        // can show the provider's logo on the tile.
+        $providers = [];
+        foreach ($manager->getSettings('connections', []) as $connection) {
+            $providers[] = Arr::get($connection, 'provider_settings.provider');
         }
 
         return $this->send([
-            'docs' => $formattedDocs
+            'docs'      => $docs,
+            'suggested' => $documentation->suggestedFor($docs, $providers),
+            'providers' => $this->providerCards($manager)
         ]);
+    }
+
+    /**
+     * Title and logo per provider, which is all the docs page needs to label a
+     * suggested article with the connection it is for.
+     */
+    private function providerCards(Manager $manager)
+    {
+        $cards = [];
+        foreach ($manager->getConfig('providers', []) as $key => $provider) {
+            $cards[$key] = [
+                'title' => Arr::get($provider, 'title', $key),
+                'image' => Arr::get($provider, 'image', '')
+            ];
+        }
+        return $cards;
     }
 
 }

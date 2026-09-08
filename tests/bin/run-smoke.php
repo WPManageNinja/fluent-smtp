@@ -21,23 +21,36 @@ foreach ((array) $args as $argument) {
     }
 }
 
+// Preserve the docs caches: smoke fixtures must not become the site's saved feed.
+$docsOptions = [];
+foreach (['_transient_fluent_smtp_docs_v1', '_transient_timeout_fluent_smtp_docs_v1', 'fluent_smtp_docs_v1_last_success'] as $name) {
+    $docsOptions[$name] = get_option($name);
+}
+register_shutdown_function(function () use ($docsOptions) {
+    delete_transient('fluent_smtp_docs_v1');
+    foreach ($docsOptions as $name => $value) {
+        if ($value === false) {
+            delete_option($name);
+        } else {
+            update_option($name, $value, false);
+        }
+    }
+});
+delete_transient('fluent_smtp_docs_v1');
+
 // The docs route intentionally reads a remote public feed. Exercise the
-// controller formatter with a deterministic fixture and block every other
+// documentation feed with a deterministic fixture and block every other
 // outbound request (notification/provider calls included).
 FsmtpTest::interceptHttp(function ($url) {
-    if (strpos($url, 'fluentsmtp.com/wp-json/wp/v2/docs') !== false) {
-        $body = wp_json_encode([
-            [
-                'title' => ['rendered' => 'Test document'],
-                'content' => ['rendered' => '<p>Fixture</p>'],
-                'link' => 'https://example.test/docs/fixture',
-                'taxonomy_info' => [
-                    'doc_category' => [
-                        ['value' => 'testing', 'label' => 'Testing'],
-                    ],
-                ],
-            ],
-        ]);
+    if ($url === 'https://fluentsmtp.com/docs/api/v1/docs.json') {
+        $body = wp_json_encode(['version' => 1, 'docs' => [[
+            'id' => 'test-document',
+            'title' => 'Test document',
+            'description' => 'Fixture description',
+            'content' => '# Fixture',
+            'link' => 'https://fluentsmtp.com/docs/test-document/',
+            'category' => ['value' => 'testing', 'label' => 'Testing'],
+        ]]]);
 
         return [
             'headers'  => [],

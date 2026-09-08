@@ -1828,3 +1828,195 @@ a.fsm_tile:hover {
         }
     }
 }
+
+/* ------------------------------------------------------------ documentation */
+
+/*
+ * The docs index: one section per category, each a grid of tiles. Not cards holding
+ * bullet lists - the categories run from one article to fifteen, and three equal
+ * cards side by side put a single link at the height of a column of fourteen.
+ *
+ * A tile is the article's title over its one-line description, so the choice of
+ * which to open is made here rather than by opening three tabs. The description is
+ * clamped to two lines: they are written to one sentence and a tile that grew to fit
+ * a long one would break the row's shared baseline.
+ */
+.fsm_docs {
+    .fsm_page_head_text {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    /* The page's one control. Wide enough for a sentence, narrow enough to stay
+     * on the title's line down to a tablet. */
+    .el-input.fsm_docs_search {
+        width: 320px;
+    }
+
+    .fsm_load_error {
+        margin-bottom: 20px;
+    }
+}
+
+.fsm_docs_section {
+    margin-bottom: 28px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    /*
+     * Wraps: on a phone the description goes under the title rather than
+     * squeezing beside it into a column three words wide.
+     */
+    .fsm_docs_section_head {
+        @apply flex flex-wrap items-baseline gap-x-2 gap-y-1;
+
+        margin-bottom: 12px;
+
+        h2 {
+            @apply text-sm font-semibold text-ink-head m-0;
+
+            line-height: 22px;
+        }
+
+        p {
+            @apply text-xs text-ink-light m-0;
+        }
+
+        /* How many are in the section, in the head rather than the eye counting
+         * fifteen tiles - and quieter than the title, since it is not the point. */
+        .fsm_docs_section_count {
+            @apply text-xs text-ink-light;
+        }
+    }
+}
+
+.fsm_docs_grid {
+    @apply grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+@media (max-width: 1180px) {
+    .fsm_docs_grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .fsm_docs_grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.fsm_docs_tile {
+    @apply flex flex-col no-underline bg-surface rounded border border-solid border-hairline;
+
+    padding: 14px 16px;
+    box-shadow: var(--fsm-shadow-card);
+    transition: border-color .15s ease, box-shadow .15s ease;
+
+    &:hover,
+    &:focus-visible {
+        @apply border-hairline-strong;
+
+        box-shadow: var(--fsm-shadow-lift);
+    }
+
+    .fsm_docs_tile_title {
+        @apply block text-sm font-medium text-ink;
+
+        line-height: 20px;
+    }
+
+    .fsm_docs_tile_desc {
+        @apply block text-xs text-ink-light;
+
+        margin-top: 4px;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /*
+     * The provider's wordmark on a suggested tile, at the height the Settings rows
+     * draw it so the same logo is the same size two screens apart. A provider with
+     * no image gets its name in the same slot; the row keeps its shape either way.
+     */
+    .fsm_docs_tile_logo {
+        @apply flex items-center;
+
+        height: 24px;
+        margin-bottom: 10px;
+
+        img {
+            max-height: 24px;
+            max-width: 110px;
+            width: auto;
+            height: auto;
+        }
+
+        span {
+            @apply text-xs font-medium text-ink-mid;
+        }
+    }
+}
+
+/* Search results: a list, since a ranked order is the point and a grid has none. */
+.fsm_docs_results {
+    .fsm_card_body {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .fsm_docs_result_list {
+        @apply list-none m-0 p-0;
+    }
+
+    .fsm_docs_result {
+        @apply block no-underline border-0 border-b border-solid border-hairline;
+
+        padding: 12px 0;
+    }
+
+    li:last-child .fsm_docs_result {
+        @apply border-b-0;
+    }
+
+    .fsm_docs_result_head {
+        @apply flex flex-wrap items-center gap-2;
+    }
+
+    .fsm_docs_result_title {
+        @apply text-sm font-medium text-ink;
+    }
+
+    .fsm_docs_result:hover .fsm_docs_result_title {
+        text-decoration: underline;
+    }
+
+    .fsm_docs_result_desc {
+        @apply block text-xs text-ink-light;
+
+        margin-top: 3px;
+        line-height: 1.5;
+    }
+
+    .fsm_docs_empty {
+        @apply text-sm text-ink-mid m-0;
+
+        padding: 14px 0;
+    }
+}
+
+/* The search takes the whole line once it has dropped under the title. */
+@media (max-width: 782px) {
+    .fsm_docs .fsm_page_actions,
+    .fsm_docs .el-input.fsm_docs_search {
+        width: 100%;
+    }
+}
