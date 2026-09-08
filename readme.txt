@@ -337,137 +337,15 @@ We use Patchstack to manage our security report. <a href="https://patchstack.com
 == Changelog ==
 
 = 2.4.0 (Date: Aug 31, 2026) =
-- Requires WordPress 6.5 or newer, up from 5.5. The rebuilt admin needs the jQuery 3 that
-  WordPress 5.5 did not ship, and the releases in between are no longer tested against
-- Redesigned the whole admin on the shared Fluent design system, so moving between
-  FluentSMTP, FluentCart and FluentAuth no longer feels like changing product
-- Added a dark theme. The toggle is the same one FluentCart uses, so choosing dark in
-  either plugin chooses it in both, and the screen paints in the right theme on first
-  frame rather than flashing light first
-- Reorganised the navigation around the five places you actually go: Dashboard, Settings,
-  Email Logs, Alerts and About. Settings is the connections screen itself, one click from
-  anywhere, rather than a sidebar of screens to pick from - and Send Test Email keeps its
-  button in the bar
-- Rebuilt the Settings screen around the question it is opened to answer. Each connection
-  is a row showing its provider's logo, what it sends as, and whether it is the Default
-  or the Fallback - and Default and Fallback are set from the row itself rather than from
-  two dropdowns further down the page. A connection that needs attention says so in
-  words. Edit is a button on the row, and General Settings is beside the list rather than
-  below it
-- Rebuilt the Alerts screen: Telegram, Slack, Discord and Pushover are rows showing
-  whether each is connected and whether failures go to it, setting one up opens in place
-  where there is room for it, and the weekly summary email sits beside them
-- Added Alerts & Notifications to the dashboard as well, next to the failed count that is
-  the reason to set them up, showing which channels are on
-- Every existing link into the admin still works. The addresses in Slack, Telegram and
-  Discord alerts, in the admin bar and in Slack's sign-in flow are unchanged
-- Improved the dashboard: it opens by greeting you and naming the site, and sent, failed,
-  connections and senders are four figures across the top of the page
-- Fixed the failed count on the dashboard opening the email log with no filter on it, so
-  it now shows the failed emails it was counting
-- Fixed Prev and Next in the log viewer walking every email rather than the filtered list
-  you opened one from
-- Added a Recent Activity panel to the dashboard, showing the last emails sent with a
-  filter for today, yesterday and this week
-- Improved the email log: a failed email is marked with a word rather than by painting the
-  whole row, which leaves the rest of the row free to say something
-- Rebuilt the admin on Vue 3, Element Plus and Vite. Faster to load and no longer built on
-  a framework that stopped receiving updates
-- Improved the email test screen: it says what it is like every other screen, and the
-  form is a column rather than a page-wide row
-- Improved the email log rows: Resend, View and Delete are quiet buttons rather than
-  three solid blocks of colour per row, so the only colour left in the table is the one
-  that means something - a failed status
-- Added a way back to Settings from the add and edit connection screens
-- Improved the subscribe card on the dashboard: the two fields have their labels above
-  them and take the full width of the column, instead of spending a quarter of a 380px
-  card on right-aligned labels
-- Improved the email log's toolbar: the statuses sit on the left and the date range,
-  search and refresh on the right, all in the table's own header. Search and refresh used
-  to be up in the page heading, a card away from the other controls that narrow the same
-  list
-- Improved the controls in a page's heading row: bulk action, search, refresh and Add
-  Another Connection are all one standard height now, where the search box used to stand
-  taller than the three controls beside it
-- Fixed filtering the email log while on a later page asking for that page of the new,
-  shorter result - an empty table for a filter that matches plenty
-- Fixed the bulk action dropdown on the email log rendering about 60px wide, showing
-  "B." where "Bulk Action" should be
-- Improved the email log table: a long subject or recipient ends in an ellipsis with the
-  rest a hover away, so every row is one line tall instead of four, and Subject is the
-  only column that takes the leftover width - To, Status, Date-Time and Actions are all
-  narrower than they were
-- Improved the email log on a phone: Subject has a minimum width, so the table scrolls
-  sideways instead of squeezing it to 80px and wrapping a subject one word per line
-- Fixed the pagination on the email log running off the edge of the screen on a phone,
-  where the page buttons were clipped rather than reachable
-- Fixed buttons that carry an icon beside their label - Send Test Message, Disconnect,
-  Try Again, Back to Alerts, Prev and Next - printing the icon hard against the first
-  letter, with no space between them
-- Improved the text fields on the alert setup forms and in the PostMark and toSend
-  connection settings, which stood a row shorter than every other field in the admin
-- Fixed every delete confirmation opening on hover and not at all on click. Element UI's
-  popover opened on click and Element Plus's opens on hover, so Delete All Logs and the
-  delete on each row, connection and sender armed themselves when the pointer crossed
-  them and did nothing when pressed
-- Fixed API key and password fields on every connection form neither showing a saved
-  value nor keeping a typed one, from a component still using Vue 2's v-model contract
-- Fixed the API key field's label sitting out in the margin beside it rather than above
-  it, on toSend, SendGrid, Brevo, SparkPost, Netcore, Postmark, ElasticEmail, SMTP2GO and
-  Cloudflare
-- Fixed the "keys in the config file" snippet on all fourteen providers that offer it:
-  the box had collapsed to a couple of hundred pixels beside its own instruction, showing
-  three words of the define() at a time. It is a full-width code block now
-- Rebuilt the add and edit connection screen. The heading runs the full width and carries
-  what the connection is - its title on the left, the provider's logo and the button to
-  change it on the right - and the form below is a centred column rather than a page.
-  Two fields side by side at 1400px read as unrelated, and a port number does not want
-  eight hundred pixels to sit in
-- Improved the connection wizard: the provider you picked shows as its logo on a plate
-  with the button to change it beside, instead of a logo, a stray black tick and a button
-  stacked down three lines
-- Improved the Amazon SES and SMTP forms, which were the two of fifteen with no heading
-  over their settings
-- Improved the Gmail and Office365 forms: authenticating is the step that finishes them,
-  so its button is the primary one rather than the red used for deleting a connection
-- Improved a provider's caveat note, which was set larger than the form's own labels
-- Fixed the About cards drawing rounded corners on the top of their body, which put two
-  notches in the seam under the header
-- Fixed the delete-logs help text showing "delete_logs_info" instead of an explanation
-- Fixed the keyboard focus ring being left behind on buttons and links after a click
-- Fixed text fields and checkboxes picking up WordPress 7.1's own form styling, which drew
-  a second bordered box inside every input and left the field standing a row too tall
-- Fixed Bcc recipients never receiving an email sent over the Outlook / Office 365
-  connection. Microsoft's API ignores a Bcc header in a raw message, so a message with
-  Bcc is now sent as a structured request that names its Bcc recipients outright
+- Redesigned the whole admin on the shared Fluent design system and rebuilt it on Vue 3, Element Plus and Vite
+- Added a dark theme, shared with FluentCart so choosing it in one plugin chooses it in both
+- Simplified the navigation to Dashboard, Settings, Email Logs, Alerts and About, with Settings and Alerts rebuilt as at-a-glance lists
+- Improved the dashboard with sent, failed, connections and senders at the top, a Recent Activity panel and an Alerts & Notifications summary
+- Improved the email log: one-line rows, a toolbar with all filters together, and fixes for the failed-count link, Prev/Next in the viewer, filtering on a later page and pagination on phones
+- Fixed Bcc recipients never receiving an email sent over the Outlook / Office 365 connection
+- Requires WordPress 6.5 or newer (was 5.5)
 
-**For developers**
-
-`window.FluentMail.Vue` was the Vue 2 constructor. Vue 3 has no constructor to extend - an
-app is created by `createApp()` - so it cannot be preserved as one, and there is no shim
-that could honestly pretend otherwise. It is now the Vue 3 module namespace
-(`{ createApp, ref, computed, h, ... }`), and `window.FluentMail.Router` is vue-router's.
-The `applyFilters`, `addFilter`, `addAction`, `doAction`, `registerTopMenu()`,
-`registerBlock()`, `$get`, `$post` and `appVars` members are all still there, as are the
-`fluent_mail_top_menus`, `fluent_mail_global_routes` and `fluent_mail_loading_app` hooks.
-Three things about them did change, and an add-on that renders its own screen is likely
-to need updating:
-
-- `window.FluentMail.Vue` and `.Router` are published by the app bundle in the footer,
-  which runs *after* `fluent_mail_loading_app`. Code hooked there cannot read them yet.
-- Element components are no longer registered globally, so a component supplied at
-  runtime through `registerTopMenu()` has to import the ones it uses itself.
-- The `fluentmail-chartjs` and `fluentmail-vue-chartjs` script handles are gone, along
-  with the `window.Chart` and `window.VueChartJs` globals they defined. The dashboard
-  charts are Apache ECharts now, bundled privately.
-
-`$get` and `$post` also reject rather than resolve when the nonce has expired or the
-capability check fails - those responses now carry HTTP 403 instead of 200, so handle
-them in `.fail()` rather than in `.then()`.
-
-An add-on that reads `window.FluentMail.Vue` as a constructor, or renders Element
-components it never imported, will need updating. One that only uses the filters, or
-registers a screen through `registerTopMenu()` with components it imports itself, will not.
+**For developers:** <code>window.FluentMail.Vue</code> is now the Vue 3 module namespace rather than a Vue 2 constructor, and <code>window.FluentMail.Router</code> is vue-router's. Both are published by the app bundle, after the <code>fluent_mail_loading_app</code> hook fires. Element components are no longer registered globally, the <code>fluentmail-chartjs</code> and <code>fluentmail-vue-chartjs</code> script handles are gone, and <code>$get</code>/<code>$post</code> now reject with HTTP 403 on an expired nonce or failed capability check. The filters, actions, <code>registerTopMenu()</code> and <code>registerBlock()</code> are unchanged.
 
 = 2.3.1 (Date: Aug 13, 2026) =
 - Added an optional Directory (tenant) ID for Outlook / Office 365, for single-tenant Entra app registrations that cannot accept personal Microsoft accounts
