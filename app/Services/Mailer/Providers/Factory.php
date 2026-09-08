@@ -4,6 +4,7 @@ namespace FluentMail\App\Services\Mailer\Providers;
 
 use InvalidArgumentException;
 use FluentMail\App\Models\Settings;
+use FluentMail\App\Services\Mailer\BaseHandler;
 use FluentMail\Includes\Core\Application;
 
 class Factory
@@ -19,9 +20,31 @@ class Factory
         $this->settings = $settings;
     }
 
+    /**
+     * @param string $provider a provider key from app/Bindings.php
+     * @return BaseHandler
+     * @throws InvalidArgumentException for anything that is not one
+     */
     public function make($provider)
     {
-        return $this->app->make($provider);
+        /*
+         * The key arrives in the admin's own POST in several controllers, and the
+         * container builds any instantiable class it is handed by name. Only the
+         * aliases registered in app/Bindings.php are mail handlers, so anything
+         * else - a class name, a service alias such as 'view' - is refused, and
+         * a class name is refused before the container is asked to construct it.
+         */
+        if (!is_string($provider) || !$this->app->isAlias($provider)) {
+            throw new InvalidArgumentException(esc_html__('Unknown mail provider.', 'fluent-smtp'));
+        }
+
+        $handler = $this->app->make($provider);
+
+        if (!$handler instanceof BaseHandler) {
+            throw new InvalidArgumentException(esc_html__('Unknown mail provider.', 'fluent-smtp'));
+        }
+
+        return $handler;
     }
 
     public function get($email)

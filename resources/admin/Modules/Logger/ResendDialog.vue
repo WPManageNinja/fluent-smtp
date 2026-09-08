@@ -1,12 +1,12 @@
 <template>
     <el-dialog
         :title="$t('Resend Email')"
-        :visible.sync="visible"
+        v-model="visible"
         @closed="handleClosed"
         :close-on-click-modal="false"
         append-to-body
         width="480px"
-        custom-class="fss_resend_dialog"
+        class="fss_resend_dialog"
     >
         <div v-if="log" v-loading="resending">
             <p style="margin-top:0;">
@@ -14,31 +14,31 @@
             </p>
             <p>
                 <strong>{{ $t('Original recipient(s)') }}:</strong>
-                <span>{{ formatOriginalRecipients(log.to) }}</span>
+                {{ formatOriginalRecipients(log.to) }}
             </p>
 
             <el-form
                 ref="form"
                 label-position="top"
                 :model="form"
-                @submit.native.prevent
+                @submit.prevent
             >
                 <el-form-item :label="$t('Send this email to:')">
                     <el-radio-group v-model="form.target" style="display:block;">
                         <el-radio
-                            label="original"
+                            value="original"
                             style="display:block;margin:6px 0;"
                         >{{ $t('Original recipient(s)') }}</el-radio>
                         <el-radio
-                            label="self"
+                            value="self"
                             style="display:block;margin:6px 0;"
                         >{{ $t('My account email') }}
-                            <span v-if="appVars.user_email" style="color:#909399;">
+                            <span v-if="appVars.user_email" style="color:var(--fsm-text-light);">
                                 ({{ appVars.user_email }})
                             </span>
                         </el-radio>
                         <el-radio
-                            label="custom"
+                            value="custom"
                             style="display:block;margin:6px 0;"
                         >{{ $t('A different email address') }}</el-radio>
                     </el-radio-group>
@@ -50,7 +50,7 @@
                         type="text"
                         v-model="form.customEmail"
                         :placeholder="$t('e.g. you@example.com')"
-                        @keyup.enter.native="handleConfirm"
+                        @keyup.enter="handleConfirm"
                         autocomplete="off"
                         data-bwignore
                         data-lpignore="true"
@@ -63,20 +63,22 @@
             </el-form>
         </div>
 
-        <span slot="footer" class="dialog-footer">
-            <el-button size="small" @click="visible = false" :disabled="resending">
-                {{ $t('Cancel') }}
-            </el-button>
-            <el-button
-                type="success"
-                size="small"
-                icon="el-icon-refresh-right"
-                :loading="resending"
-                @click="handleConfirm"
-            >
-                {{ $t('Resend') }}
-            </el-button>
-        </span>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button size="small" @click="visible = false" :disabled="resending">
+                    {{ $t('Cancel') }}
+                </el-button>
+                <el-button
+                    type="primary"
+                    size="small"
+                    icon="FsmIconRefreshRight"
+                    :loading="resending"
+                    @click="handleConfirm"
+                >
+                    {{ $t('Resend') }}
+                </el-button>
+            </span>
+        </template>
     </el-dialog>
 </template>
 
@@ -84,7 +86,7 @@
 export default {
     name: 'ResendDialog',
     props: {
-        value: {
+        modelValue: {
             type: Boolean,
             default: false
         },
@@ -97,6 +99,7 @@ export default {
             default: false
         }
     },
+    emits: ['update:modelValue', 'confirm', 'closed'],
     data() {
         return {
             form: {
@@ -108,15 +111,15 @@ export default {
     computed: {
         visible: {
             get() {
-                return this.value;
+                return this.modelValue;
             },
             set(val) {
-                this.$emit('input', val);
+                this.$emit('update:modelValue', val);
             }
         }
     },
     watch: {
-        value(newVal) {
+        modelValue(newVal) {
             if (newVal) {
                 this.form.target = 'original';
                 this.form.customEmail = '';
@@ -151,7 +154,7 @@ export default {
                 if (!userEmail) {
                     this.$notify.error({
                         offset: 19,
-                        title: this.$t('Oops!'),
+                        title: this.$t('Error'),
                         message: this.$t('No account email is available for the current user.')
                     });
                     return;
@@ -166,8 +169,8 @@ export default {
                 if (!parsed.valid.length && !parsed.invalid.length) {
                     this.$notify.error({
                         offset: 19,
-                        title: this.$t('Oops!'),
-                        message: this.$t('Please enter a valid email address')
+                        title: this.$t('Error'),
+                        message: this.$t('Please enter a valid email address.')
                     });
                     return;
                 }
@@ -175,8 +178,8 @@ export default {
                 if (parsed.invalid.length) {
                     this.$notify.error({
                         offset: 19,
-                        title: this.$t('Oops!'),
-                        message: this.$t('Please enter a valid email address') + ': ' + parsed.invalid.join(', ')
+                        title: this.$t('Error'),
+                        message: this.$t('Please enter a valid email address.') + ': ' + parsed.invalid.join(', ')
                     });
                     return;
                 }

@@ -1,142 +1,191 @@
 <template>
     <div class="logs">
         <div>
-            <div v-if="!isLogsOn">
-                <div class="fss_content">
-                    <el-alert :closable="false" show-icon center>
-                        {{ $t('__EMAIL_LOGGING_OFF') }}
-                        <el-button type="text" @click="turnOnEmailLogging">{{ $t('Turn On') }}</el-button>
-                        .
+            <div class="fsm_page_head">
+                <h1 class="fsm_page_title">{{ $t('Email Logs') }}</h1>
+                <!--
+                    Only the bulk action, and only while rows are selected. Searching,
+                    filtering and refreshing all narrow the same list, so they live
+                    together in the table's own toolbar rather than up here.
+                -->
+                <div class="fsm_page_actions">
+                    <LogBulkAction
+                        @on-bulk-action="handleBulkAction"
+                        :selected="selectedLogs"
+                        v-if="selectedLogs.length"
+                    />
+                </div>
+            </div>
+
+            <el-alert v-if="!isLogsOn" :closable="false" show-icon type="warning"
+                      style="margin-bottom: 20px;">
+                {{ $t('__EMAIL_LOGGING_OFF') }}
+                <el-button link @click="turnOnEmailLogging">{{ $t('Turn On') }}</el-button>
+            </el-alert>
+
+            <div class="fsm_card">
+                <div class="fsm_card_head">
+                    <LogFilter
+                        :filter_query="filter_query"
+                        @on-filter="applyFilter"
+                        @on-refresh="fetch"
+                    />
+                </div>
+
+                <div v-if="!loading" class="fsm_card_body fsm_card_flush">
+                    <!--
+                        `border` is gone and the table sits flush: the card already draws
+                        the frame, and a bordered table inside a bordered card is two
+                        boxes for one thing.
+                    -->
+                    <el-alert v-if="load_error" type="error" :closable="false" show-icon
+                              class="fsm_load_error">
+                        <p>{{ load_error }}</p>
+                        <el-button size="small" @click="fetch()">{{ $t('Retry') }}</el-button>
                     </el-alert>
-                </div>
-            </div>
-            <div class="fss_header">
-                <LogBulkAction
-                    @on-bulk-action="handleBulkAction"
-                    :selected="selectedLogs"
-                    v-if="selectedLogs.length"
-                />
-                <div style="float:left;margin-top:6px;">{{ $t('Email Logs') }}</div>
-                <div style="float:right;margin-left: 6px;"><el-button @click="fetch" type="success" size="small" ><i class="el-icon-refresh"></i></el-button></div>
 
-                <LogFilter
-                    :filter_query="filter_query"
-                    @on-filter="fetch()"
-                    @reset-page="pagination.current_page=1"
-                />
+                    <!--
+                        Six columns do not fit a phone. The table scrolls sideways inside
+                        this wrapper rather than making the card - and the page under it,
+                        which clips horizontal overflow - wider than the screen.
+                    -->
+                    <div v-else class="fsm_table_scroll">
+                        <el-table
+                            class="fsm_table"
+                            :data="logs"
+                            style="width:100%"
+                            @selection-change="handleSelectionChange"
+                        >
+                            <el-table-column type="selection" width="55"/>
 
-                <div style="float:right;">
-                    <el-input
-                        clearable
-                        size="small"
-                        v-model="filter_query.search"
-                        @clear="filter_query.search=''"
-                        @keyup.enter.native="fetch"
-                        :placeholder="$t('Type & press enter...')"
-                    >
-                        <el-button slot="append" icon="el-icon-search" @click="fetch"/>
-                    </el-input>
-                </div>
+                            <!--
+                                Subject is the only column that takes what is left over, and
+                                it truncates rather than wraps.
 
-            </div>
+                                It used to be one of two flexible columns, and El Plus lets
+                                those go as narrow as the space allows - on a phone that left
+                                Subject and To on 80px each, one word per line, while Status,
+                                Date-Time and Actions held their fixed widths beside them. A
+                                floor makes the table scroll sideways instead, which is the
+                                honest thing for six columns on a 480px screen. And a subject
+                                is a line to scan down, not a paragraph to read: an ellipsis
+                                keeps every row one line tall, with the whole subject a hover
+                                away and the full email a click away.
+                            -->
+                            <el-table-column :label="$t('Subject')" min-width="280"
+                                             show-overflow-tooltip>
+                                <template #default="scope">
+                                    <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
+                                    <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
+                                          class="fsm_log_simulated">{{ $t(' - Simulated') }}</span>
+                                </template>
+                            </el-table-column>
 
-            <div v-if="!loading" class="fss_content">
-                <el-table
-                    stripe
-                    :data="logs"
-                    v-loading="loading"
-                    style="width:100%"
-                    :row-class-name="tableRowClassName"
-                    @selection-change="handleSelectionChange"
-                >
-                    <el-table-column type="selection" width="55"/>
-                    <el-table-column :label="$t('Subject')">
-                        <template slot-scope="scope">
-                            <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
-                            <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
-                                  style="color: #ff0000;">{{ $t(' - Simulated') }}</span>
-                        </template>
-                    </el-table-column>
+                            <!--
+                                A fixed width, not a second flexible column. Two flexible
+                                columns share the leftover space between them, which gave To
+                                286px on a desktop to hold one address - room it has nothing
+                                to do with, taken from the subject beside it.
+                            -->
+                            <el-table-column :label="$t('To')" width="240" show-overflow-tooltip>
+                                <template #default="scope">
+                                    <span v-html="formatAddresses(scope.row.to)"></span>
+                                </template>
+                            </el-table-column>
 
-                    <el-table-column :label="$t('To')">
-                        <template slot-scope="scope">
-                            <span v-html="formatAddresses(scope.row.to)"></span>
-                        </template>
-                    </el-table-column>
+                            <el-table-column :label="$t('Status')" width="90">
+                                <template #default="scope">
+                                    <!--
+                                        One word, tinted, instead of the whole row. A failed
+                                        row used to be painted pink edge to edge, which is a
+                                        lot of colour for a fact that fits in a chip - and it
+                                        left no way to colour anything else in the row.
+                                    -->
+                                    <span class="fsm_tag" :class="statusClass(scope.row.status)">
+                                        {{ statusLabel(scope.row.status) }}
+                                    </span>
+                                </template>
+                            </el-table-column>
 
-                    <el-table-column :label="$t('Status')" width="120" align="center">
-                        <template slot-scope="scope">
-                            {{ scope.row.status }}
-                        </template>
-                    </el-table-column>
+                            <el-table-column prop="created_at" :label="$t('Date')" width="175">
+                                <template #default="scope">
+                                    {{ $dateFormat(scope.row.created_at, 'DD MMM YYYY LT') }}
+                                </template>
+                            </el-table-column>
 
-                    <el-table-column prop="created_at" :label="$t('Date-Time')" width="200px">
-                        <template slot-scope="scope">
-                            {{ $dateFormat(scope.row.created_at, 'DD MMM YYYY LT') }}
-                        </template>
-                    </el-table-column>
+                            <!--
+                                Quiet buttons, as on the connection and channel rows.
 
-                    <el-table-column :label="$t('Actions')" width="200px" align="right">
-                        <template slot-scope="scope">
-                            <el-button
-                                size="mini"
-                                type="success"
-                                icon="el-icon-refresh"
-                                @click="handleRetry(scope.row, 'retry')"
-                                :plain="true"
-                                v-if="scope.row.status == 'failed'"
-                            >{{ $t('Retry') }}
-                            </el-button>
-                            <el-button
-                                size="mini"
-                                type="success"
-                                icon="el-icon-refresh-right"
-                                @click="handleResendClick(scope.row)"
-                                v-if="scope.row.status == 'sent'"
-                            >
-                                {{ $t('Resend') }}
-                                <span v-if="scope.row.resent_count > 0">({{ scope.row.resent_count }})</span>
-                            </el-button>
+                                These were a solid green Resend, a solid dark View and a solid
+                                red Delete, three saturated blocks per row and thirty down a
+                                full page - which is more colour than the one thing on this
+                                screen that is meant to be coloured, the failed status chip.
+                                Nothing here is dangerous enough on its own to shout: delete
+                                asks first, and resend is the reason people open this screen.
+                            -->
+                            <el-table-column :label="$t('Actions')" width="190" align="right">
+                                <template #default="scope">
+                                    <div class="fsm_log_actions">
+                                        <el-button
+                                            size="small"
+                                            icon="FsmIconRefresh"
+                                            @click="handleRetry(scope.row, 'retry')"
+                                            v-if="scope.row.status == 'failed'"
+                                        >{{ $t('Retry') }}
+                                        </el-button>
+                                        <el-button
+                                            size="small"
+                                            icon="FsmIconRefreshRight"
+                                            @click="handleResendClick(scope.row)"
+                                            v-if="scope.row.status == 'sent'"
+                                        >
+                                            {{ $t('Resend') }}
+                                            <span v-if="scope.row.resent_count > 0">({{ scope.row.resent_count }})</span>
+                                        </el-button>
 
-                            <el-button
-                                size="mini"
-                                type="primary"
-                                icon="el-icon-view"
-                                @click="handleView(scope.row)"
-                            />
+                                        <el-button
+                                            size="small"
+                                            icon="FsmIconView"
+                                            :title="$t('View')"
+                                            :aria-label="$t('View')"
+                                            @click="handleView(scope.row)"
+                                        />
 
-                            <confirm @yes="handleDelete(scope.row.id)">
-                                <el-button
-                                    size="mini"
-                                    type="danger"
-                                    icon="el-icon-delete"
-                                    slot="reference"
-                                />
-                            </confirm>
-                        </template>
-                    </el-table-column>
-                </el-table>
+                                        <confirm @yes="handleDelete(scope.row.id)">
+                                            <template #reference>
+                                                <el-button
+                                                    size="small"
+                                                    icon="FsmIconDelete"
+                                                    :title="$t('Delete')"
+                                                    :aria-label="$t('Delete')"
+                                                />
+                                            </template>
+                                        </confirm>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </div>
 
-                <el-row :gutter="20">
-                    <el-col :span="12">
-                        <div v-if="logs.length" style="margin-top:20px;">
-                            <confirm placement="right" :message="$t('Are you sure, you want to delete all the logs?')"
+                    <div class="fsm_pager">
+                        <div>
+                            <confirm v-if="logs.length" placement="right"
+                                     :message="$t('Delete every logged email? This cannot be undone.')"
                                      @yes="handleDelete(['all'])">
-                                <el-button slot="reference" size="mini" type="info">{{ $t('Delete All Logs') }}</el-button>
+                                <template #reference>
+                                    <el-button size="small" type="info" plain>
+                                        {{ $t('Delete All Logs') }}
+                                    </el-button>
+                                </template>
                             </confirm>
                         </div>
-                        <span v-else>&nbsp;</span>
-                    </el-col>
-                    <el-col :span="12">
-                        <div style="margin-top:20px;text-align:right;">
-                            <pagination :pagination="pagination" @fetch="pageChanged"/>
-                        </div>
-                    </el-col>
-                </el-row>
+                        <pagination :pagination="pagination" @fetch="pageChanged"/>
+                    </div>
+                </div>
+                <el-skeleton :animated="true" v-else class="fsm_card_body" :rows="15"></el-skeleton>
             </div>
-            <el-skeleton :animated="true" v-else class="fss_content" :rows="15"></el-skeleton>
 
-            <LogViewer :logViewerProps="logViewerProps"/>
+            <LogViewer ref="logViewer" :logViewerProps="logViewerProps"/>
 
             <ResendDialog
                 v-model="resendDialog.visible"
@@ -174,6 +223,7 @@ export default {
             logs: [],
             saving: false,
             loading: false,
+            load_error: '',
             deleting: false,
             logViewerProps: {
                 log: null,
@@ -196,18 +246,57 @@ export default {
             },
             selectedLogs: [],
             form: null,
-            logAlertInfo: null
+            logAlertInfo: null,
+            fetchSeq: 0
         };
     },
     methods: {
-        tableRowClassName({row}) {
-            return 'row_type_' + row.status;
+        /*
+         * The status column's chip. `sent` and `failed` are the two the logger writes;
+         * anything else is a state this build does not know about, and a neutral chip
+         * says that better than a colour picked at random would.
+         */
+        statusClass(status) {
+            return {
+                sent: 'is_sent',
+                failed: 'is_failed',
+                pending: 'is_pending'
+            }[status] || 'is_neutral';
+        },
+        /*
+         * The column shows the stored value, which is a lowercase English word the
+         * database understands. A status a locale has no word for falls back to it.
+         */
+        statusLabel(status) {
+            return {
+                sent: this.$t('Sent'),
+                failed: this.$t('Failed'),
+                pending: this.$t('Pending')
+            }[status] || status;
         },
         pageChanged() {
             this.fetch();
         },
+        /*
+         * Narrowing the list starts it again from the first page. Filtering while on
+         * page 5 used to ask for page 5 of the new, shorter result - an empty table for
+         * a filter that matches plenty.
+         */
+        applyFilter() {
+            this.pagination.current_page = 1;
+            this.fetch();
+        },
         fetch() {
             this.loading = true;
+
+            /*
+             * Which filter the table ends up showing used to be decided by whichever
+             * response happened to land last: click Failed, then All Statuses before the
+             * first one returns, and the Failed rows render under the All filter. Every
+             * fetch takes a ticket, and only the newest ticket may write to the table.
+             */
+            const seq = ++this.fetchSeq;
+
             const data = {
                 per_page: this.pagination.per_page,
                 page: this.pagination.current_page,
@@ -216,20 +305,39 @@ export default {
                 search: this.filter_query.search
             };
 
-            this.$router.replace({ query: data }).catch(err => {
-              if (err.name !== 'NavigationDuplicated') {
-                console.error(err);
-              }
-            });
+            /*
+             * No catch. vue-router 4 resolves with a NavigationFailure where vue-router 3
+             * rejected, so the `err.name !== 'NavigationDuplicated'` guard that used to
+             * sit here could never match - it caught nothing but a genuine guard error,
+             * and then only to hide it.
+             */
+            this.$router.replace({ query: data });
+
+            this.load_error = '';
 
             this.$get('logs', data).then(res => {
+                if (seq !== this.fetchSeq) {
+                    return;
+                }
                 this.logs = res.data;
                 this.pagination.total = res.total;
                 const page = Number(this.$route.query.page);
                 this.pagination.current_page = page || this.pagination.current_page;
             }).fail(error => {
-                console.log(error);
+                if (seq !== this.fetchSeq) {
+                    return;
+                }
+                /*
+                 * Held separately from an empty result. `logs` starts [] and the table
+                 * prints "No Data" for it, so a failed request used to look like a log
+                 * with nothing in it - which, on the screen that exists to prove mail
+                 * was sent, reads as "nothing was sent" or "the log was cleared".
+                 */
+                this.load_error = this.$errorMessage(error);
             }).always(() => {
+                if (seq !== this.fetchSeq) {
+                    return;
+                }
                 this.loading = false;
             });
         },
@@ -264,20 +372,6 @@ export default {
             });
             return result.join(', ');
         },
-        onFilter(queryData) {
-            this.pagination.current_page = 1;
-            this.pageChanged();
-        },
-        onSearch(query) {
-            this.query = query;
-            this.pagination.current_page = 1;
-            this.pageChanged();
-            this.fetch();
-        },
-        onSearchChange(query) {
-            this.query = query;
-            this.fetch();
-        },
         handleBulkAction({action}) {
             if (action === 'deleteall') {
                 return this.handleDelete('all');
@@ -303,7 +397,7 @@ export default {
                 if (!res.data.email) {
                     this.$notify.error({
                         offset: 19,
-                        title: 'Oops!!',
+                        title: this.$t('Error'),
                         message: res.data.message
                     });
                     return false;
@@ -312,18 +406,18 @@ export default {
                 row.retries = res.data.email.retries;
                 row.resent_count = res.data.email.resent_count;
                 row.updated_at = res.data.email.updated_at;
-                this.$set(row, 'extra', res.data.email.extra);
+                row.extra = res.data.email.extra;
                 this.$notify.success({
                     offset: 19,
-                    title: 'Great!',
+                    title: this.$t('Done'),
                     message: res.data.message
                 });
                 return true;
             }).fail(error => {
                 this.$notify.error({
                     offset: 19,
-                    title: 'Oops!!',
-                    message: error.responseJSON.data.message
+                    title: this.$t('Error'),
+                    message: this.$errorMessage(error)
                 });
                 return false;
             }).always(() => {
@@ -357,16 +451,24 @@ export default {
             this.logViewerProps.log = row;
             this.logViewerProps.dialogVisible = true;
 
+            /*
+             * The viewer's Prev and Next walk the same list this screen is showing, so
+             * they are handed the filter that produced it. These three used to read
+             * `this.query`, `this.filterBy` and `this.filterByValue` - none of which are
+             * declared on this component - so every navigation went out unfiltered and
+             * Next off a filtered list could land on an email the list does not contain.
+             */
             this.$nextTick(() => {
-                this.logViewerProps.query = this.query;
-                this.logViewerProps.filterBy = this.filterBy;
-                this.logViewerProps.filterByValue = this.filterByValue;
+                this.logViewerProps.query = this.filter_query.search;
+                this.logViewerProps.filterBy = this.filter_query.status ? 'status' : '';
+                this.logViewerProps.filterByValue = this.filter_query.status;
+                // The date range travels with them for the same reason: without it, Next
+                // off a list narrowed to one week walks straight out of that week.
+                this.logViewerProps.dateRange = this.filter_query.date_range;
 
-                const logViewer = this.$children.find(
-                    c => c.$options._componentTag === 'LogViewer'
-                );
-
-                logViewer && logViewer.navigate();
+                // Vue 3 removed $children, which is what this used to walk to
+                // find the viewer by its component tag. A ref names it directly.
+                this.$refs.logViewer && this.$refs.logViewer.navigate();
             });
         },
         handleDelete(id) {
@@ -375,11 +477,12 @@ export default {
                 this.fetch();
                 this.$notify.success({
                     offset: 19,
-                    title: 'Great!',
+                    title: this.$t('Done'),
                     message: res.data.message
                 });
             }).fail(error => {
-                console.log(error);
+                // The rows are still there on a failure; saying nothing read as success.
+                this.$notify.error(this.$errorMessage(error));
             }).always(() => {
                 this.deleting = false;
             });
@@ -395,8 +498,8 @@ export default {
                 .then(response => {
                     this.$notify.success(response.data.message);
                 })
-                .catch((error) => {
-                    console.log(error);
+                .fail((error) => {
+                    this.$notify.error(this.$errorMessage(error));
                 })
                 .always(() => {
                     this.loading = false;
@@ -422,8 +525,8 @@ export default {
             if (selectedIds.length > 20) {
                 this.$notify.error({
                     offset: 19,
-                    title: 'Oops!!',
-                    message: 'Sorry, You can not resend more than 20 emails at once'
+                    title: this.$t('Error'),
+                    message: this.$t('You can resend up to 20 emails at a time.')
                 });
                 return false;
             }
@@ -434,7 +537,7 @@ export default {
             }).then(res => {
                 this.$notify.success({
                     offset: 19,
-                    title: 'Result',
+                    title: this.$t('Done'),
                     message: res.data.message
                 });
                 this.selectedLogs = [];
@@ -443,8 +546,8 @@ export default {
                 .fail(error => {
                     this.$notify.error({
                         offset: 19,
-                        title: 'Oops!!',
-                        message: error.responseJSON.data.message
+                        title: this.$t('Error'),
+                        message: this.$errorMessage(error)
                     });
                 }).always(() => {
                 this.loading = false;
@@ -469,12 +572,31 @@ export default {
             this.pagination.current_page = Number(currentPage);
         }
 
+        /*
+         * fetch() writes the whole filter into the URL, so a reload has to read the whole
+         * filter back out of it. Page size and date range were written but never read,
+         * which silently threw both away on every refresh of a filtered list.
+         */
+        const perPage = Number(this.$route.query.per_page);
+
+        if (perPage > 0) {
+            this.pagination.per_page = perPage;
+        }
+
         if(this.$route.query.status) {
             this.filter_query.status = this.$route.query.status;
         }
 
         if(this.$route.query.search) {
             this.filter_query.search = this.$route.query.search;
+        }
+
+        // A range is two plain dates. vue-router hands a bare string back when only one
+        // of them survives in the URL, which is not a range the picker can take.
+        const dateRange = this.$route.query.date_range;
+
+        if (Array.isArray(dateRange) && dateRange.length === 2) {
+            this.filter_query.date_range = dateRange.slice();
         }
 
         this.form = this.appVars.settings.misc;

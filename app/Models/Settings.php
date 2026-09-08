@@ -83,15 +83,6 @@ class Settings
 
         $misc = $this->getMisc();
 
-        if (!$misc) {
-            $misc = [
-                'log_emails'              => 'yes',
-                'log_saved_interval_days' => '14',
-                'disable_fluentcrm_logs'  => 'no',
-                'default_connection'      => ''
-            ];
-        }
-
         if (empty($misc['default_connection']) || $misc['default_connection'] == $key) {
             $misc['default_connection'] = $uniqueKey;
             $settings['misc'] = $misc;
@@ -192,11 +183,29 @@ class Settings
         return Arr::get($settings, 'mappings', []);
     }
 
+    /**
+     * The misc settings, filled out with the defaults for anything never saved.
+     *
+     * Responses carrying this are installed straight into the app's `settings.misc`,
+     * where the General Settings form binds a control to each key. A key that is
+     * missing - or stored as null by an older release - reaches a switch as undefined
+     * and Element Plus refuses to render it, so the shape has to be complete here
+     * rather than patched up in the screen that happens to read it.
+     *
+     * @param array|null $settings
+     * @return array
+     */
     public function getMisc($settings = null)
     {
         $settings = $settings ?: $this->getSettings();
 
-        return Arr::get($settings, 'misc', []);
+        $stored = array_filter(Arr::get($settings, 'misc', []), function ($value) {
+            return !is_null($value);
+        });
+
+        $defaults = fluentMail(Manager::class)->getConfig('misc', []);
+
+        return array_merge($defaults, $stored);
     }
 
     public function getConnection($email)

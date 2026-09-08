@@ -19,7 +19,7 @@ class SlackController extends Controller
 
         if (!is_email($userEmail)) {
             return $this->sendError([
-                'message' => __('Please provide a valid email address', 'fluent-smtp')
+                'message' => __('Please provide a valid email address.', 'fluent-smtp')
             ], 422);
         }
 
@@ -50,7 +50,7 @@ class SlackController extends Controller
         ]);
 
         return $this->sendSuccess([
-            'message'      => __('Awesome! You are redirecting to slack', 'fluent-smtp'),
+            'message'      => __('Redirecting you to Slack...', 'fluent-smtp'),
             'redirect_url' => Arr::get($activationData, 'redirect_url')
         ]);
     }
@@ -64,11 +64,11 @@ class SlackController extends Controller
 
         if (Arr::get($settings, 'slack.status') != 'yes') {
             return $this->sendError([
-                'message' => __('Slack notification is not enabled', 'fluent-smtp')
+                'message' => __('Slack notifications are not enabled.', 'fluent-smtp')
             ], 422);
         }
 
-        $message = 'This is a test message for ' . site_url() . '. If you get this message, then your site is connected successfully.';
+        $message = __('Test message from ', 'fluent-smtp') . site_url() . '. ' . __('If you can read this, the connection is working.', 'fluent-smtp');
 
         $result = NotificationHelper::sendSlackMessage($message, Arr::get($settings, 'slack.webhook_url'));
 
@@ -80,7 +80,7 @@ class SlackController extends Controller
         }
 
         return $this->sendSuccess([
-            'message' => __('Test message sent successfully', 'fluent-smtp')
+            'message' => __('Test message sent.', 'fluent-smtp')
         ]);
     }
 
@@ -95,7 +95,7 @@ class SlackController extends Controller
         ]);
 
         return $this->sendSuccess([
-            'message' => __('Slack connection has been disconnected successfully', 'fluent-smtp')
+            'message' => __('Slack has been disconnected.', 'fluent-smtp')
         ]);
     }
 

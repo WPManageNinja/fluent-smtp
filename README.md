@@ -53,7 +53,7 @@ Most importantly, this plugin is free and will always be free.
 👉 <a href="https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/">Read Why it's 100% free (always)</a> 👈
 
 #### Contribute
-FluentSMTP is built with VueJS and ElementUI (frontend). It's backend communication is based on standard WordPress AJAX endpoints.
+FluentSMTP is built with Vue 3 and Element Plus (frontend), bundled with Vite. It's backend communication is based on standard WordPress AJAX endpoints.
 
 All endpoints can be found in `app/Http/routes.php`.
 
@@ -66,12 +66,19 @@ All the email connection drivers can be found in `app/Services/Mailer/Providers`
 #### Getting Started
 - Clone this repository.
 - Run `composer install` to install PHP dependencies.
-- Run `npm install` to install the frontend dependencies.
+- Run `pnpm install` to install the frontend dependencies. The lockfile is
+  `pnpm-lock.yaml`, so pnpm is the package manager here; `npm install` would
+  ignore it and resolve its own versions.
 
 #### Build JavaScript source
 
-- Run `npm run start` (or `npx mix watch`) for development.
-- Run `npm run prod` (or `npx mix --production`) to build for production.
+- Run `pnpm run dev` (alias: `pnpm run start`) for development. It builds `boot.js`
+  once and then watches the app bundle, which is where nearly all the code is. If you
+  are editing `boot.js` or `Bits/FluentMail.js`, run `pnpm run dev:boot` alongside it
+  in a second terminal.
+- Run `pnpm run build` (alias: `pnpm run prod`) to build for production.
+- Run `./build.sh` to produce the release zip. It installs from the lockfile
+  first, so it does not depend on what is already in `node_modules`.
 
 All VueJS code can be found in `resources/admin`.
 

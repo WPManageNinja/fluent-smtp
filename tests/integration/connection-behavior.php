@@ -167,6 +167,29 @@ class FsmtpSuiteToSendProbe extends \FluentMail\App\Services\Mailer\Providers\To
     }
 }
 
+/**
+ * Runs the real Outlook postSend() against the harness HTTP interceptor with
+ * the logging tail replaced, so the assertions are about which Graph request
+ * shape left the handler and what it carried.
+ */
+class FsmtpSuiteOutlookProbe extends \FluentMail\App\Services\Mailer\Providers\Outlook\Handler
+{
+    public function runPostSend($phpMailer, $settings)
+    {
+        $this->phpMailer = $phpMailer;
+        $this->setSettings($settings);
+        $this->attributes = $this->setAttributes();
+        $phpMailer->preSend();
+
+        return $this->postSend();
+    }
+
+    public function handleResponse($response)
+    {
+        return $response;
+    }
+}
+
 return function () {
     /** Build one toSend request body from a PHPMailer carrying custom headers. */
     $toSendBodyWithHeaders = function (array $headers) {
@@ -536,6 +559,164 @@ return function () {
             isset($body['headers']['X-Suite-Repeated']) ? $body['headers']['X-Suite-Repeated'] : null,
             'toSend repeated custom header value'
         );
+    });
+
+    /**
+     * Send one message through the Outlook probe and return the single Graph
+     * request it produced, with the harness answering 202 Accepted the way
+     * Graph does. The token is fresh so no refresh request is in the way.
+     */
+    $outlookRequestFor = function (callable $configure) {
+        FsmtpTest::requirePhpMailer();
+
+        $phpMailer = new \PHPMailer\PHPMailer\PHPMailer(true);
+        $phpMailer->CharSet = 'UTF-8';
+        $phpMailer->setFrom('sender@example.test', 'Suite Sender');
+        $phpMailer->Subject = 'Suite Outlook message';
+        $phpMailer->Body = 'Suite Outlook body';
+        $configure($phpMailer);
+
+        $headersClass = class_exists('\WpOrg\Requests\Utility\CaseInsensitiveDictionary')
+            ? '\WpOrg\Requests\Utility\CaseInsensitiveDictionary'
+            : 'Requests_Utility_CaseInsensitiveDictionary';
+
+        FsmtpTest::interceptHttp(function ($url) use ($headersClass) {
+            if (strpos($url, 'https://graph.microsoft.com/v1.0/me/sendMail') !== 0) {
+                return null;
+            }
+
+            return [
+                'headers'  => new $headersClass(['request-id' => 'suite-request-id']),
+                'body'     => '',
+                'response' => ['code' => 202, 'message' => 'Accepted'],
+                'cookies'  => [],
+                'filename' => null,
+            ];
+        });
+
+        try {
+            $probe = new FsmtpSuiteOutlookProbe();
+            $result = $probe->runPostSend($phpMailer, [
+                'provider'      => 'outlook',
+                'sender_email'  => 'sender@example.test',
+                'sender_name'   => 'Suite Sender',
+                'key_store'     => 'db',
+                'client_id'     => 'suite-client',
+                'client_secret' => 'suite-secret',
+                'access_token'  => 'suite-access-token',
+                'refresh_token' => 'suite-refresh-token',
+                'expire_stamp'  => time() + 3600,
+            ]);
+
+            $requests = FsmtpTest::httpRequests();
+        } finally {
+            FsmtpTest::releaseHttpInterceptor();
+        }
+
+        FsmtpTest::assert(!is_wp_error($result), 'Outlook probe send failed: ' . (is_wp_error($result) ? $result->get_error_message() : ''));
+        FsmtpTest::assertSame(1, count($requests), 'Graph requests made by one Outlook send');
+        FsmtpTest::assertSame('suite-request-id', isset($result['RequestId']) ? $result['RequestId'] : null, 'Outlook send result request id');
+
+        return $requests[0];
+    };
+
+    FsmtpTest::case('Outlook sends a message carrying Bcc as a structured Graph payload with bccRecipients', function () use ($outlookRequestFor) {
+        $request = $outlookRequestFor(function ($phpMailer) {
+            $phpMailer->addAddress('to@example.test', 'To Person');
+            $phpMailer->addCC('cc@example.test');
+            $phpMailer->addBCC('hidden-one@example.test', 'Hidden One');
+            $phpMailer->addBCC('hidden-two@example.test');
+            $phpMailer->addReplyTo('replies@example.test', 'Replies');
+            $phpMailer->addCustomHeader('X-Suite-Tag', 'suite');
+            $phpMailer->addCustomHeader('List-Unsubscribe', '<https://example.test/unsubscribe>');
+            $phpMailer->isHTML(true);
+            $phpMailer->Body = '<p>Suite Outlook body</p>';
+        });
+
+        FsmtpTest::assertSame('application/json', $request['args']['headers']['Content-Type'], 'Graph request content type with Bcc');
+
+        $payload = json_decode($request['args']['body'], true);
+        $message = isset($payload['message']) ? $payload['message'] : [];
+
+        $addresses = function ($recipients) {
+            return array_map(function ($recipient) {
+                return $recipient['emailAddress']['address'];
+            }, (array)$recipients);
+        };
+
+        FsmtpTest::assertSame(['hidden-one@example.test', 'hidden-two@example.test'], $addresses(isset($message['bccRecipients']) ? $message['bccRecipients'] : []), 'Graph bccRecipients');
+        FsmtpTest::assertSame('Hidden One', $message['bccRecipients'][0]['emailAddress']['name'], 'Graph bcc recipient name');
+        FsmtpTest::assertSame(['to@example.test'], $addresses($message['toRecipients']), 'Graph toRecipients');
+        FsmtpTest::assertSame('To Person', $message['toRecipients'][0]['emailAddress']['name'], 'Graph to recipient name');
+        FsmtpTest::assertSame(['cc@example.test'], $addresses(isset($message['ccRecipients']) ? $message['ccRecipients'] : []), 'Graph ccRecipients');
+        FsmtpTest::assertSame(['replies@example.test'], $addresses(isset($message['replyTo']) ? $message['replyTo'] : []), 'Graph replyTo');
+        FsmtpTest::assertSame('sender@example.test', $message['from']['emailAddress']['address'], 'Graph from address');
+        FsmtpTest::assertSame('Suite Sender', $message['from']['emailAddress']['name'], 'Graph from name');
+        FsmtpTest::assertSame('Suite Outlook message', $message['subject'], 'Graph subject');
+        FsmtpTest::assertSame('HTML', $message['body']['contentType'], 'Graph body content type for an HTML message');
+        FsmtpTest::assertSame('<p>Suite Outlook body</p>', $message['body']['content'], 'Graph body content');
+        FsmtpTest::assertSame(
+            [['name' => 'X-Suite-Tag', 'value' => 'suite']],
+            isset($message['internetMessageHeaders']) ? $message['internetMessageHeaders'] : [],
+            'Graph internetMessageHeaders carry only x- headers'
+        );
+    });
+
+    FsmtpTest::case('Outlook carries attachments and inline images on the structured Graph payload', function () use ($outlookRequestFor) {
+        // A real extension, so PHPMailer types the row the way it would for a
+        // site upload; wp_tempnam() would end the name in .tmp.
+        $file = get_temp_dir() . 'suite-outlook-' . wp_generate_password(8, false) . '.txt';
+        file_put_contents($file, 'suite file bytes');
+
+        try {
+            $request = $outlookRequestFor(function ($phpMailer) use ($file) {
+                $phpMailer->addAddress('to@example.test');
+                $phpMailer->addBCC('hidden@example.test');
+                $phpMailer->addAttachment($file, 'report.txt');
+                $phpMailer->addStringAttachment('suite string bytes', 'notes.txt', 'base64', 'text/plain');
+                $phpMailer->addStringEmbeddedImage('GIF89a', 'suite-logo', 'logo.gif', 'base64', 'image/gif');
+            });
+        } finally {
+            @unlink($file);
+        }
+
+        $payload = json_decode($request['args']['body'], true);
+        $attachments = isset($payload['message']['attachments']) ? $payload['message']['attachments'] : [];
+
+        FsmtpTest::assertSame(3, count($attachments), 'Graph attachment count');
+
+        $byName = [];
+        foreach ($attachments as $attachment) {
+            $byName[$attachment['name']] = $attachment;
+            FsmtpTest::assertSame('#microsoft.graph.fileAttachment', $attachment['@odata.type'], 'Graph attachment type for ' . $attachment['name']);
+        }
+
+        FsmtpTest::assertSame('suite file bytes', base64_decode($byName['report.txt']['contentBytes']), 'Graph file attachment bytes');
+        FsmtpTest::assertSame('text/plain', $byName['report.txt']['contentType'], 'Graph file attachment content type');
+        FsmtpTest::assert(empty($byName['report.txt']['isInline']), 'a regular attachment is not marked inline');
+
+        FsmtpTest::assertSame('suite string bytes', base64_decode($byName['notes.txt']['contentBytes']), 'Graph string attachment bytes');
+
+        FsmtpTest::assertSame('GIF89a', base64_decode($byName['logo.gif']['contentBytes']), 'Graph inline image bytes');
+        FsmtpTest::assertSame('image/gif', $byName['logo.gif']['contentType'], 'Graph inline image content type');
+        FsmtpTest::assertSame(true, $byName['logo.gif']['isInline'], 'Graph inline image flag');
+        FsmtpTest::assertSame('suite-logo', $byName['logo.gif']['contentId'], 'Graph inline image content id');
+    });
+
+    FsmtpTest::case('Outlook keeps the raw MIME path for a message without Bcc', function () use ($outlookRequestFor) {
+        $request = $outlookRequestFor(function ($phpMailer) {
+            $phpMailer->addAddress('to@example.test');
+            $phpMailer->addCC('cc@example.test');
+            $phpMailer->addCustomHeader('List-Unsubscribe', '<https://example.test/unsubscribe>');
+        });
+
+        FsmtpTest::assertSame('text/plain', $request['args']['headers']['Content-Type'], 'Graph request content type without Bcc');
+
+        $mime = base64_decode($request['args']['body'], true);
+
+        FsmtpTest::assert(is_string($mime) && strpos($mime, 'To: to@example.test') !== false, 'MIME message carries the To header');
+        FsmtpTest::assert(strpos($mime, 'Cc: cc@example.test') !== false, 'MIME message carries the Cc header');
+        FsmtpTest::assert(strpos($mime, 'List-Unsubscribe: <https://example.test/unsubscribe>') !== false, 'MIME message keeps the List-Unsubscribe header');
     });
 
     $outlookSettings = function ($sender) {

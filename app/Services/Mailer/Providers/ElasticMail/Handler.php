@@ -21,7 +21,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong.', 'fluent-smtp'), []));
     }
 
     public function postSend()
@@ -319,7 +319,7 @@ class Handler extends BaseHandler
         $response = json_decode(wp_remote_retrieve_body($request), true);
 
         if (!$response || empty($response['success'])) {
-            $error = 'API Key is invalid';
+            $error = __('API Key is invalid', 'fluent-smtp');
             if (!empty($response['error'])) {
                 $error = $response['error'];
             }

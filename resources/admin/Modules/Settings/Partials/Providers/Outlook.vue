@@ -1,10 +1,10 @@
 <template>
     <div>
-        <h3>{{ $t('Outlook / Office365 API Settings') }}</h3>
-        <p>{{ $t('Please ') }}<a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/setup-outlook-with-fluentsmtp/">{{ $t('check the documentation first to create API keys at Microsoft') }}</a></p>
-        <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button value="db" label="db">{{ $t('Store Application Keys in DB') }}</el-radio-button>
-            <el-radio-button value="wp_config" label="wp_config">{{ $t('Application Keys in Config File') }}</el-radio-button>
+        <h3 class="fs_config_title">{{ $t('Outlook / Office365 API Settings') }}</h3>
+        <p><a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/setup-outlook-with-fluentsmtp/">{{ $t('Read the documentation') }}</a>{{ $t(' before you start, to create the API keys at Microsoft.') }}</p>
+        <el-radio-group size="small" v-model="connection.key_store">
+            <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store in wp-config.php') }}</el-radio-button>
         </el-radio-group>
 
         <el-row :gutter="20" v-if="connection.key_store == 'db'">
@@ -14,10 +14,16 @@
                         {{ $t('Application Client ID') }}
                     </label>
 
-                    <InputPassword
+                    <!--
+                        A plain input, not InputPassword. The client ID identifies the
+                        app - it is shown on the consent screen and never masked or
+                        encrypted (see SecretMasker) - so hiding it behind dots only
+                        made people unable to check which app registration they pasted.
+                    -->
+                    <el-input
                         id="client_id"
                         v-model="connection.client_id"
-                        :disable_help="connection.disable_encryption === 'yes'"
+                        autocomplete="off"
                     />
 
                     <error :error="errors.get('client_id')" />
@@ -41,12 +47,12 @@
 
             <el-col :md="24">
                 <el-form-item>
-                    <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                    <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                         {{ $t('Disable Encryption for Application Client Secret (Not Recommended)') }}
                     </el-checkbox>
-                    <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
+                    <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                         {{
-                            $t('By disabling encryption, your Application Client Secret will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                            $t('Your Application Client Secret will be stored as readable text in the database. Only turn this on if a security plugin on this site rotates the WordPress SALT keys, which would otherwise invalidate the encrypted value.')
                         }}
                     </p>
                 </el-form-item>
@@ -78,22 +84,26 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
             />
             <error :error="errors.get('tenant_id')" />
             <p>
-                {{ $t('Leave empty unless your Entra app registration is single-tenant. Paste the Directory (tenant) ID from the app overview page, or a verified domain such as contoso.onmicrosoft.com. Use organizations to allow any work or school account but no personal Microsoft accounts.') }}
+                {{ $t('Leave empty unless your Entra app registration is single-tenant. Paste the Directory (tenant) ID from the app overview page, or a verified domain such as contoso.onmicrosoft.com. Use organizations to allow any work or school account but no personal Microsoft accounts, or consumers if the app registration only allows personal Microsoft accounts such as outlook.com or hotmail.com.') }}
             </p>
-            <p v-if="connection.access_token" style="color: #E6A23C; margin-top: 0;">
+            <p v-if="connection.has_access_token === 'yes'" style="color: var(--fsm-warning-fg); margin-top: 0;">
                 {{ $t('Changing this requires authenticating with Office365 again.') }}
             </p>
         </el-form-item>
 
         <el-form-item>
-            <label>{{ $t('App Callback URL(Use this URL to your APP)') }}</label>
+            <label>{{ $t('App Callback URL (paste this into your Microsoft app)') }}</label>
             <el-input :readonly="true" v-model="provider.callback_url" />
         </el-form-item>
 
-        <div v-if="!connection.access_token">
-            <div style="text-align: center;">
-                <h3>{{ $t('Please authenticate with Office365 to get ') }}<b>{{ $t('Access Token') }}</b></h3>
-                <el-button v-loading="gettingRedirect" @click="redirectToMS()" type="danger">{{ $t('Authenticate with Office365 & Get Access Token') }}</el-button>
+        <!--
+            `has_access_token`, not the token - see the note on the Gmail form. The
+            tokens are server-side only; this flag is the whole of what the form sees.
+        -->
+        <div v-if="connection.has_access_token !== 'yes'">
+            <div class="fsm_provider_auth">
+                <p>{{ $t('Authenticate with Office365 to get an access token.') }}</p>
+                <el-button v-loading="gettingRedirect" @click="redirectToMS()" type="primary">{{ $t('Authenticate with Office365') }}</el-button>
             </div>
             <el-row v-if="redirectUrl" :gutter="20">
                 <el-col :span="12">
@@ -106,13 +116,13 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
                             v-model="connection.auth_token"
                         />
                         <error :error="errors.get('auth_token')" />
-                        <p>{{ $t('Please send test email to confirm if the connection is working or not.') }}</p>
+                        <p>{{ $t('Send a test email to confirm the connection works.') }}</p>
                     </el-form-item>
                 </el-col>
             </el-row>
         </div>
         <div style="text-align: center;" v-else>
-            <h3>{{ ('Your Outlook / Office365 Authentication has been enabled.No further action is needed.If you want to re-authenticate, ') }}<a @click.prevent="connection.access_token = ''" href="#">{{ ('click here') }}</a></h3>
+            <p class="fsm_provider_connected">{{ $t('Outlook / Office365 is connected and nothing else is needed here. To authenticate again, ') }}<a @click.prevent="connection.has_access_token = 'no'" href="#">{{ $t('click here') }}</a></p>
         </div>
 
     </div>
@@ -133,7 +143,8 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
             return {
                 app_ready: false,
                 gettingRedirect: false,
-                redirectUrl: ''
+                redirectUrl: '',
+                connection_key: this.$route.query.connection_key
             };
         },
         watch: {
@@ -148,14 +159,29 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
             redirectToMS() {
                 this.gettingRedirect = true;
                 this.$post('settings/outlook_auth_url', {
-                    connection: this.connection
+                    connection: this.connection,
+                    // Which saved connection the masked client secret belongs to, so
+                    // the server can restore it. Absent when adding a new one.
+                    connection_key: this.connection_key
                 })
                     .then(response => {
                         this.redirectUrl = response.data.auth_url;
                         window.open(response.data.auth_url, '_blank');
                     })
                     .catch(errors => {
-                        this.errors.record(errors.responseJSON.data);
+                        /*
+                         * A 403 or an HTML error page carries no field list, so
+                         * recording it would attach nothing and the button would go
+                         * quiet with no explanation of why the redirect never came.
+                         */
+                        const payload = errors && errors.responseJSON && errors.responseJSON.data;
+
+                        if (payload && !this.$isAuthError(errors)) {
+                            this.errors.record(payload);
+                            return;
+                        }
+
+                        this.$notify.error(this.$errorMessage(errors));
                     })
                     .always(() => {
                         this.gettingRedirect = false;
@@ -164,7 +190,7 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
         },
         mounted() {
             if (!this.connection.key_store) {
-                this.$set(this.connection, 'key_store', 'db');
+                this.connection.key_store = 'db';
             }
         }
     };

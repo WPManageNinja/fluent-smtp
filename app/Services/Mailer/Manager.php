@@ -52,8 +52,18 @@ class Manager
         Arr::set(static::$config, 'connections', Arr::get($databaseSettings, 'connections'));
 
         if (isset($databaseSettings['misc'])) {
+            /*
+             * Nulls are dropped rather than merged. A key stored as null - which is how
+             * an unset fallback connection was written for a while - would otherwise
+             * replace its default and reach the app as null, where a switch or a select
+             * bound to it has no value it can render.
+             */
+            $storedMisc = array_filter((array) $databaseSettings['misc'], function ($value) {
+                return !is_null($value);
+            });
+
             Arr::set(static::$config, "misc", array_merge(
-                static::$config['misc'], $databaseSettings['misc']
+                static::$config['misc'], $storedMisc
             ));
         }
 

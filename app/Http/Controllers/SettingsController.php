@@ -9,6 +9,9 @@ use FluentMail\Includes\Request\Request;
 use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Support\ValidationException;
 use FluentMail\App\Services\Mailer\Providers\Factory;
+use FluentMail\App\Services\ConnectionHealth;
+use FluentMail\App\Services\Converter;
+use FluentMail\App\Services\SecretMasker;
 
 class SettingsController extends Controller
 {
@@ -19,8 +22,16 @@ class SettingsController extends Controller
         try {
             $setting = $settings->get();
 
+            /*
+             * The stored report, not a fresh one. getReport() reads the option the
+             * scheduled check writes; probing every connection here would put an OAuth
+             * token renewal on the critical path of opening the Connections screen.
+             * A row whose key is absent from it has simply not been checked yet, which
+             * the screen shows as unknown rather than as healthy.
+             */
             return $this->sendSuccess([
-                'settings' => $setting
+                'settings' => SecretMasker::mask($setting),
+                'health'   => (new ConnectionHealth())->getReport()
             ]);
         } catch (Exception $e) {
             return $this->sendError([
@@ -56,6 +67,28 @@ class SettingsController extends Controller
             $data = $request->except(['action', 'nonce']);
 
             $data = wp_unslash($data);
+
+            /*
+             * The credentials come back masked unless the admin typed over them, so
+             * the stored ones are put back here - before validateConnection() and
+             * checkConnection() below, which both have to test the real key rather
+             * than the sentinel standing in for it.
+             *
+             * An empty value is not a mask and is not restored: clearing a field is
+             * how the admin removes a credential, and how the provider forms hand
+             * the key over to wp-config when `key_store` is switched.
+             *
+             * A connection being added has nothing stored. Its one legitimate source
+             * of a mask is the dashboard's offer to import another SMTP plugin's
+             * settings, which arrive masked too; those resolve from the Converter.
+             */
+            $data['connection'] = SecretMasker::resolve(
+                $data['connection'],
+                $this->getStoredConnection(
+                    Arr::get($data, 'connection_key'),
+                    Arr::get($data, 'connection.provider')
+                ) ?: $this->getSuggestedConnection(Arr::get($data, 'connection.provider'))
+            );
 
             $provider = $factory->make($data['connection']['provider']);
 
@@ -100,8 +133,8 @@ class SettingsController extends Controller
             $settings->store($data);
 
             return $this->sendSuccess([
-                'message'     => __('Settings saved successfully.', 'fluent-smtp'),
-                'connections' => $settings->getConnections(),
+                'message'     => __('Settings saved.', 'fluent-smtp'),
+                'connections' => SecretMasker::maskConnections($settings->getConnections()),
                 'mappings'    => $settings->getMappings(),
                 'misc'        => $settings->getMisc()
             ]);
@@ -114,6 +147,63 @@ class SettingsController extends Controller
         }
     }
 
+    /**
+     * The credentials currently saved under a connection key, decrypted.
+     *
+     * The source the masked fields of an incoming payload are restored from. An
+     * unknown or absent key - a connection being added rather than edited - gives an
+     * empty array, which SecretMasker::resolve() turns into empty fields
+     * rather than into the sentinel.
+     *
+     * '0' is the connection form's own way of saying "new", so it is not a key.
+     *
+     * @param string|null $connectionKey
+     * @return array
+     */
+    protected function getStoredConnection($connectionKey, $provider = null)
+    {
+        if (!$connectionKey || $connectionKey === '0') {
+            return [];
+        }
+
+        $connections = (new Settings())->getConnections();
+
+        $stored = Arr::get($connections, $connectionKey . '.provider_settings', []);
+
+        /*
+         * A connection switched to a different provider is a new set of credentials,
+         * not the old ones under a new name. Without this, editing a Gmail connection
+         * onto Outlook restored Google's tokens into it: the form still said
+         * "authenticated", the Outlook validator saw an access token and skipped its
+         * own authorization, and an unusable connection was saved over a working one.
+         */
+        if ($provider && Arr::get($stored, 'provider') !== $provider) {
+            return [];
+        }
+
+        return $stored;
+    }
+
+    /**
+     * The import suggestion's settings for a provider, while there is nothing to
+     * import into yet.
+     *
+     * Only offered on the dashboard when no connection exists, so it is only a
+     * resolve source under the same condition - once a connection exists, a mask
+     * without a stored value behind it is an error, not an import.
+     *
+     * @param string|null $provider
+     * @return array
+     */
+    protected function getSuggestedConnection($provider)
+    {
+        if (!empty((new Settings())->getConnections())) {
+            return [];
+        }
+
+        return (new Converter())->suggestedSettingsFor($provider);
+    }
+
     public function storeMiscSettings(Request $request, Settings $settings)
     {
         $this->verify();
@@ -121,7 +211,7 @@ class SettingsController extends Controller
         $misc = $request->get('settings');
         $settings->updateMiscSettings($misc);
         $this->sendSuccess([
-            'message' => __('General Settings has been updated', 'fluent-smtp')
+            'message' => __('General settings saved.', 'fluent-smtp')
         ]);
     }
 
@@ -131,21 +221,13 @@ class SettingsController extends Controller
 
         $settings = $settings->delete($request->get('key'));
 
-        return $this->sendSuccess($settings);
-    }
-
-    public function storeGlobals(Request $request, Settings $settings)
-    {
-        $this->verify();
-
-        $settings->saveGlobalSettings(
-            $data = $request->except(['action', 'nonce'])
-        );
-
-        return $this->sendSuccess([
-            'form'    => $data,
-            'message' => __('Settings saved successfully.', 'fluent-smtp')
-        ]);
+        /*
+         * The same contract as every other response carrying connections: the screen
+         * installs these straight into its shared state, so the ones that remain
+         * have to arrive masked, with `has_access_token` derived, exactly as the
+         * initial page load handed them over.
+         */
+        return $this->sendSuccess(SecretMasker::mask($settings));
     }
 
     public function sendTestEmail(Request $request, Settings $settings)
@@ -182,7 +264,8 @@ class SettingsController extends Controller
             return $this->sendSuccess([
                 'message'          => __('Email delivered successfully.', 'fluent-smtp'),
                 'time_taken'       => round($timeTaken, 3),
-                'time_taken_human' => $this->formatDuration($timeTaken)
+                'time_taken_human' => $this->formatDuration($timeTaken),
+                'throughput'       => $this->throughputFromDuration($timeTaken)
             ]);
         } catch (\Throwable $e) {
             /*
@@ -218,6 +301,39 @@ class SettingsController extends Controller
             __('Delivered in %s seconds', 'fluent-smtp'),
             number_format_i18n($seconds, 2)
         );
+    }
+
+    /**
+     * The sending-speed ceiling one round trip implies.
+     *
+     * A campaign sender (FluentCRM is the usual one) hands emails to the provider
+     * one after another from a single PHP process, so it can never send faster than
+     * 1 / round-trip. Showing that number next to the test result lets a user see
+     * whether a "slow" campaign is actually running at the pace their server's
+     * connection to the provider allows, or well below it - in which case the
+     * bottleneck is somewhere else (cron, the sending engine, a rate limit).
+     *
+     * The figures are a ceiling, not a forecast: they ignore provider rate limits
+     * and the time the sender spends building each email.
+     *
+     * @param float $seconds Round trip of the test send.
+     * @return array{per_second: string, per_minute: string, per_hour: string}
+     */
+    protected function throughputFromDuration($seconds)
+    {
+        // A clock that reads zero (or negative, after an NTP step) would divide by
+        // zero; nothing hands an email over in under a millisecond anyway.
+        $seconds = max((float)$seconds, 0.001);
+
+        $perSecond = 1 / $seconds;
+
+        return [
+            // Below ten a second the first decimal is the whole story ("0.8" vs
+            // "1"); above it the decimal is noise.
+            'per_second' => number_format_i18n($perSecond, $perSecond < 10 ? 1 : 0),
+            'per_minute' => number_format_i18n(floor($perSecond * 60)),
+            'per_hour'   => number_format_i18n(floor($perSecond * 3600)),
+        ];
     }
 
     public function onFail($response)
@@ -258,7 +374,7 @@ class SettingsController extends Controller
 
         if (!isset($connections[$connectionId]['provider_settings'])) {
             return $this->sendSuccess([
-                'info' => __('Sorry no connection found. Please reload the page and try again', 'fluent-smtp')
+                'info' => __('No connection found. Please reload the page and try again.', 'fluent-smtp')
             ]);
         }
 
@@ -278,7 +394,7 @@ class SettingsController extends Controller
 
         if (!isset($connections[$connectionId]['provider_settings'])) {
             return $this->sendSuccess([
-                'info' => __('Sorry no connection found. Please reload the page and try again', 'fluent-smtp')
+                'info' => __('No connection found. Please reload the page and try again.', 'fluent-smtp')
             ]);
         }
 
@@ -289,7 +405,7 @@ class SettingsController extends Controller
 
         if (!is_email($email)) {
             return $this->sendError([
-                'message' => __('Please provide a valid email address', 'fluent-smtp')
+                'message' => __('Please provide a valid email address.', 'fluent-smtp')
             ]);
         }
 
@@ -302,7 +418,7 @@ class SettingsController extends Controller
         }
 
         return $this->sendSuccess([
-            'message' => __('Email has been added successfully', 'fluent-smtp')
+            'message' => __('Email address added.', 'fluent-smtp')
         ]);
     }
 
@@ -315,7 +431,7 @@ class SettingsController extends Controller
 
         if (!isset($connections[$connectionId]['provider_settings'])) {
             return $this->sendSuccess([
-                'info' => __('Sorry no connection found. Please reload the page and try again', 'fluent-smtp')
+                'info' => __('No connection found. Please reload the page and try again.', 'fluent-smtp')
             ]);
         }
 
@@ -326,7 +442,7 @@ class SettingsController extends Controller
 
         if (!is_email($email)) {
             return $this->sendError([
-                'message' => __('Please provide a valid email address', 'fluent-smtp')
+                'message' => __('Please provide a valid email address.', 'fluent-smtp')
             ]);
         }
 
@@ -339,7 +455,7 @@ class SettingsController extends Controller
         }
 
         return $this->sendSuccess([
-            'message' => __('Email has been removed successfully', 'fluent-smtp')
+            'message' => __('Email address removed.', 'fluent-smtp')
         ]);
     }
 
@@ -534,7 +650,7 @@ class SettingsController extends Controller
         // Validate email format
         if (!is_email($email)) {
             return $this->sendError([
-                'message' => __('Sorry! The provided email is not valid', 'fluent-smtp')
+                'message' => __('That email address is not valid.', 'fluent-smtp')
             ], 422);
         }
 
@@ -550,7 +666,7 @@ class SettingsController extends Controller
         $this->pushData($email, $shareEssentials, $displayName);
 
         return $this->sendSuccess([
-            'message' => __('You are subscribed to plugin update and monthly tips', 'fluent-smtp')
+            'message' => __('You are subscribed to release notes and monthly tips.', 'fluent-smtp')
         ]);
     }
 
@@ -594,6 +710,18 @@ class SettingsController extends Controller
         $this->verify();
         $connection = wp_unslash($request->get('connection'));
 
+        /*
+         * Re-authenticating an existing connection sends back the masked secret,
+         * since that is what the form was given. Restore it before it is read below.
+         */
+        $connection = SecretMasker::resolve(
+            $connection,
+            $this->getStoredConnection(
+                $request->get('connection_key'),
+                Arr::get($connection, 'provider')
+            )
+        );
+
         $clientId = Arr::get($connection, 'client_id');
         $clientSecret = Arr::get($connection, 'client_secret');
 
@@ -621,7 +749,7 @@ class SettingsController extends Controller
         if (!$clientId) {
             return $this->sendError([
                 'client_id' => [
-                    'required' => __('Please provide application client id', 'fluent-smtp')
+                    'required' => __('Please provide the application client ID.', 'fluent-smtp')
                 ]
             ]);
         }
@@ -629,7 +757,7 @@ class SettingsController extends Controller
         if (!$clientSecret) {
             return $this->sendError([
                 'client_secret' => [
-                    'required' => __('Please provide application client secret', 'fluent-smtp')
+                    'required' => __('Please provide the application client secret.', 'fluent-smtp')
                 ]
             ]);
         }
@@ -640,9 +768,16 @@ class SettingsController extends Controller
             'client_id'              => $clientId,
             'redirect_uri'           => apply_filters('fluentsmtp_gapi_callback', 'https://fluentsmtp.com/gapi/'),
             'state'                  => admin_url('options-general.php?page=fluent-mail&gapi=1'),
-            'scope'                  => 'https://mail.google.com/',
-            'approval_prompt'        => 'force',
-            'include_granted_scopes' => 'true'
+            /*
+             * Send-only. The plugin's one Gmail API call is
+             * users.messages.send, which gmail.send covers, attachments
+             * included. The full https://mail.google.com/ grant this used to
+             * ask for lets a leaked refresh token read and delete the mailbox.
+             * include_granted_scopes is gone with it, so a re-authentication
+             * does not fold an old wide grant back into the new token.
+             */
+            'scope'                  => 'https://www.googleapis.com/auth/gmail.send',
+            'approval_prompt'        => 'force'
         ], 'https://accounts.google.com/o/oauth2/auth');
 
         return $this->sendSuccess([
@@ -654,6 +789,15 @@ class SettingsController extends Controller
     {
         $this->verify();
         $connection = wp_unslash($request->get('connection'));
+
+        /* As above - the form holds a mask, the API call needs the real secret. */
+        $connection = SecretMasker::resolve(
+            $connection,
+            $this->getStoredConnection(
+                $request->get('connection_key'),
+                Arr::get($connection, 'provider')
+            )
+        );
 
         $clientId = Arr::get($connection, 'client_id');
         $clientSecret = Arr::get($connection, 'client_secret');
@@ -697,7 +841,7 @@ class SettingsController extends Controller
         if (!$clientId) {
             return $this->sendError([
                 'client_id' => [
-                    'required' => __('Please provide application client id', 'fluent-smtp')
+                    'required' => __('Please provide the application client ID.', 'fluent-smtp')
                 ]
             ]);
         }
@@ -705,7 +849,7 @@ class SettingsController extends Controller
         if (!$clientSecret) {
             return $this->sendError([
                 'client_secret' => [
-                    'required' => __('Please provide application client secret', 'fluent-smtp')
+                    'required' => __('Please provide the application client secret.', 'fluent-smtp')
                 ]
             ]);
         }
@@ -713,6 +857,28 @@ class SettingsController extends Controller
         return $this->sendSuccess([
             'auth_url' => (new \FluentMail\App\Services\Mailer\Providers\Outlook\API($clientId, $clientSecret, $tenantId))->getAuthUrl()
         ]);
+    }
+
+    /**
+     * Mask the credentials held by every alert channel in a notification settings array.
+     *
+     * @param array $settings
+     * @return array
+     */
+    protected function maskNotificationSecrets($settings)
+    {
+        foreach ((new NotificationManager())->getAllChannelKeys() as $channelKey) {
+            if (empty($settings[$channelKey]) || !is_array($settings[$channelKey])) {
+                continue;
+            }
+
+            $settings[$channelKey] = SecretMasker::maskFields(
+                $settings[$channelKey],
+                SecretMasker::NOTIFICATION_SECRET_FIELDS
+            );
+        }
+
+        return $settings;
     }
 
     public function getNotificationSettings()
@@ -723,7 +889,7 @@ class SettingsController extends Controller
         $settings['telegram_notify_token'] = '';
 
         return $this->sendSuccess([
-            'settings' => $settings
+            'settings' => $this->maskNotificationSecrets($settings)
         ]);
     }
 
@@ -735,8 +901,34 @@ class SettingsController extends Controller
 
         $settings = Arr::only($settings, ['enabled', 'notify_email', 'notify_days']);
 
-        $settings['notify_email'] = sanitize_text_field($settings['notify_email']);
-        $settings['enabled'] = sanitize_text_field($settings['enabled']);
+        /*
+         * A payload carrying none of these keys is a malformed request, not an
+         * instruction to clear the schedule, and it must not reach the write below.
+         *
+         * The screen used to be able to send one: `notification_settings` starts empty,
+         * and if the GET that fills it failed, the form still rendered with a working
+         * Save button over that empty object. The unconditional sanitize_text_field()
+         * calls that used to sit here then turned two missing keys into two empty
+         * strings - which wp_parse_args() treats as values, not absences - so the write
+         * disabled a working summary and blanked its recipient, and reported success.
+         * The form is now gated on a successful read as well; this is the half that
+         * does not depend on the client behaving.
+         */
+        if (!$settings) {
+            return $this->sendError([
+                'message' => __('No settings were submitted. Please reload the page and try again.', 'fluent-smtp')
+            ], 422);
+        }
+
+        /*
+         * Sanitize only what was actually sent. A key that is absent has to stay absent
+         * so that wp_parse_args() below can fall back to the stored value for it.
+         */
+        foreach (['notify_email', 'enabled'] as $key) {
+            if (isset($settings[$key])) {
+                $settings[$key] = sanitize_text_field($settings[$key]);
+            }
+        }
 
         $defaults = [
             'enabled'      => 'no',
@@ -752,7 +944,7 @@ class SettingsController extends Controller
         update_option('_fluent_smtp_notify_settings', $settings, false);
 
         return $this->sendSuccess([
-            'message' => __('Settings has been updated successfully', 'fluent-smtp')
+            'message' => __('Settings saved.', 'fluent-smtp')
         ]);
     }
 
@@ -772,7 +964,16 @@ class SettingsController extends Controller
             $channelsWithStatus[$key] = array_merge($channel, [
                 'status'    => Arr::get($channelSettings, 'status', 'no'),
                 'is_active' => in_array($key, $activeChannel),
-                'settings'  => $channelSettings
+                /*
+                 * Masked, not omitted. The screen reads these to decide whether a
+                 * channel is configured - `!!settings.webhook_url` and the like - and
+                 * the mask is truthy, so a connected channel still reads as connected
+                 * without the bot token or webhook URL travelling with it.
+                 */
+                'settings'  => SecretMasker::maskFields(
+                    $channelSettings,
+                    SecretMasker::NOTIFICATION_SECRET_FIELDS
+                )
             ]);
         }
 
@@ -800,7 +1001,7 @@ class SettingsController extends Controller
         update_option('_fluent_smtp_notify_settings', $settings, false);
 
         return $this->sendSuccess([
-            'message'         => __('Notification channel updated successfully', 'fluent-smtp'),
+            'message'         => __('Notification channel updated.', 'fluent-smtp'),
             'active_channels' => $channelKeys
         ]);
     }

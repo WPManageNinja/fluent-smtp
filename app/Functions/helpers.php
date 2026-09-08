@@ -74,6 +74,36 @@ if (!function_exists('fluentMailMix')) {
     }
 }
 
+if (!function_exists('fluentMailAssetVersion')) {
+    /**
+     * Cache-busting version for an enqueued asset, given its path under assets/.
+     *
+     * The plugin version is the right stamp for a release: it changes exactly when the
+     * built files can change, and every visitor gets the new URL once. It is the wrong
+     * stamp while the admin is being worked on, where the same version covers dozens of
+     * rebuilds - the browser keeps serving the copy it already has, and a change that did
+     * land reads as a change that did not. With WP_DEBUG or SCRIPT_DEBUG on, the built
+     * file's own modification time is appended, so a rebuild is a new URL and an ordinary
+     * reload is enough to see it.
+     *
+     * @param string $path Path under the plugin's assets/ directory.
+     * @return string
+     */
+    function fluentMailAssetVersion($path)
+    {
+        $isDebug = (defined('SCRIPT_DEBUG') && SCRIPT_DEBUG) || (defined('WP_DEBUG') && WP_DEBUG);
+
+        if (!$isDebug) {
+            return FLUENTMAIL_PLUGIN_VERSION;
+        }
+
+        $file = FLUENTMAIL_PLUGIN_PATH . 'assets/' . ltrim($path, '/');
+        $builtAt = is_readable($file) ? filemtime($file) : false;
+
+        return $builtAt ? FLUENTMAIL_PLUGIN_VERSION . '.' . $builtAt : FLUENTMAIL_PLUGIN_VERSION;
+    }
+}
+
 if (!function_exists('fluentMailAssetUrl')) {
     /**
      * Returns the URL for the assets of the Fluent Mail plugin.
@@ -841,25 +871,20 @@ if (!function_exists('fluentMailGetSettings')) {
         }
 
         if (!empty($settings['use_encrypt'])) {
-            $providerKeyMaps = [
-                'smtp'        => 'password',
-                'ses'         => 'secret_key',
-                'mailgun'     => 'api_key',
-                'sendgrid'    => 'api_key',
-                'sendinblue'  => 'api_key',
-                'sparkpost'   => 'api_key',
-                'pepipost'    => 'api_key',
-                'postmark'    => 'api_key',
-                'elasticmail' => 'api_key',
-                'gmail'       => 'client_secret',
-                'outlook'     => 'client_secret',
-                'tosend'      => 'api_key',
-                'cloudflare'  => 'api_key',
-            ];
+            /*
+             * The version the blob was last written under decides which fields are
+             * ciphertext. A field that joined the map later than that is still the
+             * plaintext an older release stored, and decrypting it would turn a
+             * working token into `false`. The next save - a token refresh is one -
+             * writes the blob at the current version with every field encrypted.
+             */
+            $storedVersion = isset($settings['encrypt_version']) ? (int) $settings['encrypt_version'] : 1;
+            $encryptedFields = \FluentMail\App\Services\SecretMasker::ENCRYPTED_FIELDS;
+
             if (!empty($settings['connections']) && is_array($settings['connections'])) {
                 foreach ($settings['connections'] as $key => $connection) {
                     $providerKey = $connection['provider_settings']['provider'];
-                    if (empty($providerKeyMaps[$providerKey])) {
+                    if (empty($encryptedFields[$providerKey])) {
                         continue;
                     }
 
@@ -867,13 +892,17 @@ if (!function_exists('fluentMailGetSettings')) {
                         continue;
                     }
 
-                    $secretFieldKey = $providerKeyMaps[$providerKey];
+                    foreach ($encryptedFields[$providerKey] as $secretFieldKey => $sinceVersion) {
+                        if ($sinceVersion > $storedVersion) {
+                            continue;
+                        }
 
-                    if (empty($connection['provider_settings'][$secretFieldKey])) {
-                        continue;
+                        if (empty($connection['provider_settings'][$secretFieldKey])) {
+                            continue;
+                        }
+
+                        $settings['connections'][$key]['provider_settings'][$secretFieldKey] = fluentMailEncryptDecrypt($connection['provider_settings'][$secretFieldKey], 'd');
                     }
-
-                    $settings['connections'][$key]['provider_settings'][$secretFieldKey] = fluentMailEncryptDecrypt($connection['provider_settings'][$secretFieldKey], 'd');
                 }
             }
         }
@@ -927,43 +956,32 @@ if (!function_exists('fluentMailSetSettings')) {
         $hasSecretField = false;
 
         if (!empty($settings['use_encrypt'])) {
-            $providerKeyMaps = [
-                'smtp'        => 'password',
-                'ses'         => 'secret_key',
-                'mailgun'     => 'api_key',
-                'sendgrid'    => 'api_key',
-                'sendinblue'  => 'api_key',
-                'sparkpost'   => 'api_key',
-                'pepipost'    => 'api_key',
-                'postmark'    => 'api_key',
-                'elasticmail' => 'api_key',
-                'gmail'       => 'client_secret',
-                'outlook'     => 'client_secret',
-                'tosend'      => 'api_key',
-                'cloudflare'  => 'api_key',
-            ];
+            $encryptedFields = \FluentMail\App\Services\SecretMasker::ENCRYPTED_FIELDS;
             if (!empty($settings['connections']) && is_array($settings['connections'])) {
                 foreach ($settings['connections'] as $key => $connection) {
                     $providerKey = $connection['provider_settings']['provider'];
-                    if (empty($providerKeyMaps[$providerKey])) {
+                    if (empty($encryptedFields[$providerKey])) {
                         continue;
                     }
                     if (\FluentMail\Includes\Support\Arr::get($connection, 'provider_settings.disable_encryption') === 'yes') {
                         continue;
                     }
 
-                    $secretFieldKey = $providerKeyMaps[$providerKey];
+                    foreach (array_keys($encryptedFields[$providerKey]) as $secretFieldKey) {
+                        if (empty($connection['provider_settings'][$secretFieldKey])) {
+                            continue;
+                        }
 
-                    if (empty($connection['provider_settings'][$secretFieldKey])) {
-                        continue;
+                        $hasSecretField = true;
+
+                        $settings['connections'][$key]['provider_settings'][$secretFieldKey] = fluentMailEncryptDecrypt($connection['provider_settings'][$secretFieldKey], 'e');
                     }
-
-                    $hasSecretField = true;
-
-                    $settings['connections'][$key]['provider_settings'][$secretFieldKey] = fluentMailEncryptDecrypt($connection['provider_settings'][$secretFieldKey], 'e');
                 }
             }
         }
+
+        // Every write is a current-version write; the read side keys off this.
+        $settings['encrypt_version'] = \FluentMail\App\Services\SecretMasker::ENCRYPT_VERSION;
 
         if ($hasSecretField) {
             $settings['test'] = fluentMailEncryptDecrypt('test', 'e');
@@ -1119,10 +1137,16 @@ function fluentMailFuncCouldNotBeLoadedRecheckPluginsLoad()
         $hints = $details->getFileName() . ':' . $details->getStartLine();
         ?>
         <div class="notice notice-warning fluentsmtp_urgent is-dismissible">
-            <p>The <strong>FluentSMTP</strong> plugin depends on <a target="_blank"
-                                                                    href="https://developer.wordpress.org/reference/functions/wp_mail/">wp_mail</a>
-                pluggable function and plugin is not able to extend it. Please check if another plugin is using this and
-                disable it for <strong>FluentSMTP</strong> to work!</p>
+            <p>
+                <?php
+                echo wp_kses(sprintf(
+                    /* translators: 1: plugin name wrapped in <strong>, 2: link to the wp_mail() documentation */
+                    __('The %1$s plugin depends on the %2$s pluggable function and is not able to extend it. Please check if another plugin is using this and disable it for %1$s to work!', 'fluent-smtp'),
+                    '<strong>FluentSMTP</strong>',
+                    '<a target="_blank" href="https://developer.wordpress.org/reference/functions/wp_mail/">wp_mail</a>'
+                ), ['strong' => [], 'a' => ['href' => [], 'target' => []]]);
+                ?>
+            </p>
             <p style="color: red;">
                 <?php esc_html_e('Possible Conflict: ', 'fluent-smtp'); ?>
                 <?php echo esc_html($hints); ?>

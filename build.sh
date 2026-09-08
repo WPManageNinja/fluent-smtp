@@ -5,10 +5,69 @@ set -e
 
 echo "🚀 Starting Build Process..."
 
+# 0. Check Node before anything destructive runs.
+#
+# This has to come first. `pnpm run build` clears assets/ in its boot pass and
+# only then compiles the app, so on an unsupported Node the boot pass succeeds,
+# empties the directory, and the app pass dies on the first Vue SFC with
+# `crypto.hash is not a function`. That leaves the checkout with no app bundle
+# and no CSS - a plugin with no UI - and no zip to show for it.
+#
+# The range is Vite 7's own (^20.19.0 || >=22.12.0), not "20 or newer": 21.x and
+# 22.0-22.11 are outside it, and a looser check here would just move the same
+# failure a few seconds later.
+if ! command -v node > /dev/null 2>&1; then
+    echo "❌ node not found on PATH. FluentSMTP builds require Node ^20.19.0 || >=22.12.0."
+    exit 1
+fi
+
+NODE_RAW=$(node -v)                      # v20.19.0
+NODE_VER=${NODE_RAW#v}
+NODE_MAJOR=${NODE_VER%%.*}
+NODE_REST=${NODE_VER#*.}
+NODE_MINOR=${NODE_REST%%.*}
+
+NODE_OK=0
+if [ "$NODE_MAJOR" -eq 20 ] && [ "$NODE_MINOR" -ge 19 ]; then
+    NODE_OK=1
+elif [ "$NODE_MAJOR" -eq 22 ] && [ "$NODE_MINOR" -ge 12 ]; then
+    NODE_OK=1
+elif [ "$NODE_MAJOR" -ge 23 ]; then
+    NODE_OK=1
+fi
+
+if [ "$NODE_OK" -ne 1 ]; then
+    echo "❌ Node $NODE_VER is not supported by this build."
+    echo "   Vite 7 requires ^20.19.0 || >=22.12.0 (21.x and 22.0-22.11 are excluded)."
+    echo "   Nothing has been modified. Switch Node and re-run:"
+    echo "     nvm use            # reads .nvmrc"
+    exit 1
+fi
+
+echo "✅ Node $NODE_VER"
+
 # 1. Build Frontend
+#
+# The dependencies are installed here, from the committed lockfile, rather than
+# assumed to be present. `npx vite` on a checkout without node_modules does not
+# fail - it fetches whatever version of Vite the registry currently serves, which
+# is how a release could be built with a different major of the bundler than the
+# one this was tested against. `--frozen-lockfile` makes that impossible.
 if [ -f "package.json" ]; then
+    # Resolved once and reused. The fallback exists for a machine with no pnpm on
+    # PATH, so every later call has to go through it too.
+    if command -v pnpm > /dev/null 2>&1; then
+        PNPM="pnpm"
+    else
+        PNPM="corepack pnpm"
+    fi
+
+    echo "📦 Installing Frontend Dependencies..."
+    $PNPM install --frozen-lockfile
+
     echo "📦 Building Frontend..."
-    npx mix --production
+    # The pinned local Vite, not whatever `npx` would fetch from the registry.
+    $PNPM run build
 else
     echo "⚠️ package.json not found, skipping frontend build."
 fi
@@ -42,10 +101,11 @@ zip -r $ZIP_NAME . \
     -x "resources/*" \
     -x "build.sh" \
     -x "phpstan.neon" \
-    -x "webpack.config.js" \
     -x "translation.node.js" \
-    -x "webpack.mix.js" \
     -x "vitest.config.mjs" \
+    -x "vite.config.mjs" \
+    -x "tailwind.config.js" \
+    -x "postcss.config.js" \
     -x "package.json" \
     -x "package-lock.json" \
     -x "pnpm-lock.yaml" \
@@ -53,7 +113,8 @@ zip -r $ZIP_NAME . \
     -x "README.md" \
     -x "CLAUDE.md" \
     -x "research/*" \
-    -x "internal_docs/*"
+    -x "internal_docs/*" \
+    -x "_docs/*"
 
 echo "✅ Build Created: $ZIP_NAME"
 
@@ -65,7 +126,7 @@ composer install
 # The exclusion list is a denylist, so anything new is included by default and
 # is only caught by someone reading the zip. This fails the build instead.
 echo "🔍 Verifying $ZIP_NAME..."
-LEAKED=$(unzip -Z1 "$ZIP_NAME" | grep -E '^(\.|node_modules/|tests/|resources/|research/|internal_docs/|svn/)' || true)
+LEAKED=$(unzip -Z1 "$ZIP_NAME" | grep -E '^(\.|node_modules/|tests/|resources/|research/|internal_docs/|_docs/|svn/)' || true)
 
 if [ -n "$LEAKED" ]; then
     echo "❌ Development files found in $ZIP_NAME:"
@@ -78,6 +139,18 @@ fi
 # frontend build silently did nothing and the zip ships a plugin with no UI.
 if [ -z "$(unzip -Z1 "$ZIP_NAME" | grep '^assets/')" ]; then
     echo "❌ $ZIP_NAME contains no assets/ - the frontend build did not run."
+    exit 1
+fi
+
+# Step 2 strips the dev PHP dependencies, but nothing downstream confirmed it.
+# The denylist above does not name vendor/, so a step 2 that silently did nothing
+# would ship phpstan and its tree to wordpress.org.
+DEV_DEPS=$(unzip -Z1 "$ZIP_NAME" | grep -E '^vendor/(phpstan|bin/phpstan)' || true)
+
+if [ -n "$DEV_DEPS" ]; then
+    echo "❌ Development PHP dependencies found in $ZIP_NAME:"
+    echo "$DEV_DEPS" | sed 's/^/     /'
+    echo "   Step 2 did not strip them. Check the composer install output above."
     exit 1
 fi
 

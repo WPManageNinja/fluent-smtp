@@ -168,6 +168,16 @@ case "$SUITE" in
     else
       echo "${YELLOW}S2/S3 — integration: phase not built yet, skipping${OFF}"; echo
     fi
+    # S5 is deliberately not run here. It drives a real browser through the
+    # developer's authenticated admin session, and this runner never stores or
+    # synthesizes login credentials - see tests/browser/README.md.
+    #
+    # It is named anyway. `all` previously finished green without mentioning the
+    # one phase that actually mounts the Vue screens, so a green run read as
+    # "the admin app works" when nothing had loaded it. Saying so is the point:
+    # browser-route-coverage only compares path strings and cannot tell whether
+    # a route mounts.
+    BROWSER_MANUAL=1
     ;;
   *)
     echo "Unknown suite: $SUITE (use: static|smoke|permissions|integration|js|all)"
@@ -187,6 +197,13 @@ fi
 hr
 echo "${BOLD}SUMMARY${OFF}"
 for result in "${RESULTS[@]}"; do echo "  $result"; done
+
+if [ "${BROWSER_MANUAL:-0}" -eq 1 ]; then
+  echo "  ${YELLOW}MANUAL${OFF}  S5 — browser screens (not run; see tests/browser/README.md)"
+  echo
+  echo "  ${YELLOW}A green run above does not mean the admin screens mount.${OFF}"
+  echo "  Run S5 by hand before tagging a release."
+fi
 hr
 
 exit "$FAILED"

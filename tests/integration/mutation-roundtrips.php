@@ -2,6 +2,7 @@
 
 use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\NotificationHelper;
+use FluentMail\App\Services\SecretMasker;
 use FluentMail\Includes\Support\Arr;
 
 return function () {
@@ -60,6 +61,15 @@ return function () {
         return Arr::get($result, 'data.data.settings', []);
     };
 
+    /**
+     * One connection's settings as the mailers read them. The GET above hands
+     * connections to the browser through SecretMasker, which withholds the OAuth
+     * tokens entirely, so anything about a token has to be asserted here.
+     */
+    $storedProviderSettings = function ($connectionKey) {
+        return Arr::get(fluentMailGetSettings([], false), 'connections.' . $connectionKey . '.provider_settings', []);
+    };
+
     $readNotificationSettings = function () {
         $result = FsmtpTest::ajax('GET', 'settings/notification-settings');
         FsmtpTest::assertAjaxHealthy($result, 'read notification settings');
@@ -81,13 +91,18 @@ return function () {
         );
     };
 
+    /**
+     * Seeded straight into storage, so it has to look like what a real save
+     * leaves there: Request::clean() turns an empty SPA field into null before
+     * any controller sees it, which is why the fallback is null and not ''.
+     */
     $baseMisc = function ($defaultConnection = '') {
         return [
             'log_emails'              => 'yes',
             'log_saved_interval_days' => '14',
             'disable_fluentcrm_logs'  => 'no',
             'default_connection'      => $defaultConnection,
-            'fallback_connection'     => '',
+            'fallback_connection'     => null,
             'simulate_emails'         => 'yes',
             'send_as_text'            => 'no',
         ];
@@ -96,10 +111,11 @@ return function () {
     FsmtpTest::case('global settings round-trip preserves OAuth tokens during an unrelated misc save', function () use (
         $withOptionTransaction,
         $readSettings,
+        $storedProviderSettings,
         $assertOnlyFieldChanged,
         $baseMisc
     ) {
-        $withOptionTransaction(function () use ($readSettings, $assertOnlyFieldChanged, $baseMisc) {
+        $withOptionTransaction(function () use ($readSettings, $storedProviderSettings, $assertOnlyFieldChanged, $baseMisc) {
             $sender = 'outlook-roundtrip-' . FsmtpTest::uniq() . '@example.test';
             $connectionKey = md5($sender);
             $expireStamp = time() + 7200;
@@ -128,18 +144,22 @@ return function () {
                 'suite_marker' => ['source' => 'global-roundtrip', 'version' => 1],
             ];
 
-            $create = FsmtpTest::ajax('POST', '/settings/misc', $initial);
-            FsmtpTest::assertAjaxHealthy($create, 'create global settings');
+            FsmtpTest::assert(fluentMailSetSettings($initial), 'create global settings');
             $before = $readSettings();
+
+            $browserView = Arr::get($before, 'connections.' . $connectionKey . '.provider_settings', []);
+            FsmtpTest::assert(!array_key_exists('access_token', $browserView), 'GET handed the access token to the browser');
+            FsmtpTest::assert(!array_key_exists('refresh_token', $browserView), 'GET handed the refresh token to the browser');
+            FsmtpTest::assertSame('yes', Arr::get($browserView, 'has_access_token'), 'authenticated flag in place of the token');
 
             FsmtpTest::assertSame(
                 'suite-access-token',
-                Arr::get($before, 'connections.' . $connectionKey . '.provider_settings.access_token'),
+                Arr::get($storedProviderSettings($connectionKey), 'access_token'),
                 'created OAuth access token'
             );
             FsmtpTest::assertSame(
                 'suite-refresh-token',
-                Arr::get($before, 'connections.' . $connectionKey . '.provider_settings.refresh_token'),
+                Arr::get($storedProviderSettings($connectionKey), 'refresh_token'),
                 'created OAuth refresh token'
             );
             FsmtpTest::assertSame(
@@ -163,12 +183,12 @@ return function () {
             );
             FsmtpTest::assertSame(
                 'suite-access-token',
-                Arr::get($after, 'connections.' . $connectionKey . '.provider_settings.access_token'),
+                Arr::get($storedProviderSettings($connectionKey), 'access_token'),
                 'OAuth access token after unrelated save'
             );
             FsmtpTest::assertSame(
                 'suite-refresh-token',
-                Arr::get($after, 'connections.' . $connectionKey . '.provider_settings.refresh_token'),
+                Arr::get($storedProviderSettings($connectionKey), 'refresh_token'),
                 'OAuth refresh token after unrelated save'
             );
             FsmtpTest::assertSame(
@@ -243,7 +263,7 @@ return function () {
         });
     });
 
-    FsmtpTest::case('sender alias round-trip adds and removes one mapping without changing connection data', function () use (
+    FsmtpTest::case('sender alias round-trip adds and removes one mapping and its alias without touching other connection data', function () use (
         $withOptionTransaction,
         $readSettings,
         $baseMisc
@@ -294,8 +314,7 @@ return function () {
                     'suite_marker' => ['source' => 'sender-alias', 'version' => 1],
                 ];
 
-                $create = FsmtpTest::ajax('POST', '/settings/misc', $initial);
-                FsmtpTest::assertAjaxHealthy($create, 'create sender alias connection');
+                FsmtpTest::assert(fluentMailSetSettings($initial), 'create sender alias connection');
                 $before = $readSettings();
 
                 $add = FsmtpTest::ajax('POST', 'settings/add_new_sender_email', [
@@ -311,8 +330,15 @@ return function () {
                     isset($afterAdd['mappings'][$alias]) ? $afterAdd['mappings'][$alias] : null,
                     'added sender mapping'
                 );
+                // toSend records the alias on the connection too, so it can be offered as a sender.
+                FsmtpTest::assertSame(
+                    [$alias],
+                    Arr::get($afterAdd, 'connections.' . $connectionKey . '.provider_settings.additional_senders'),
+                    'alias recorded on the connection'
+                );
                 $withoutAlias = $afterAdd;
                 unset($withoutAlias['mappings'][$alias]);
+                Arr::set($withoutAlias, 'connections.' . $connectionKey . '.provider_settings.additional_senders', []);
                 FsmtpTest::assertSame($before, $withoutAlias, 'sender add every other field unchanged');
 
                 $remove = FsmtpTest::ajax('POST', 'settings/remove_sender_email', [
@@ -385,10 +411,14 @@ return function () {
                 'summary-after@example.test',
                 'notification settings'
             );
-            FsmtpTest::assertSame('suite-slack-token', Arr::get($after, 'slack.token'), 'Slack token after summary save');
+            // The GET masks channel credentials (SecretMasker::NOTIFICATION_SECRET_FIELDS); storage keeps them.
+            FsmtpTest::assertSame(SecretMasker::MASK, Arr::get($after, 'slack.token'), 'Slack token on its way to the browser');
+            FsmtpTest::assertSame(SecretMasker::MASK, Arr::get($after, 'slack.webhook_url'), 'Slack webhook on its way to the browser');
+            $stored = (new Settings())->notificationSettings();
+            FsmtpTest::assertSame('suite-slack-token', Arr::get($stored, 'slack.token'), 'Slack token after summary save');
             FsmtpTest::assertSame(
                 'https://hooks.example.test/suite',
-                Arr::get($after, 'slack.webhook_url'),
+                Arr::get($stored, 'slack.webhook_url'),
                 'Slack webhook after summary save'
             );
             FsmtpTest::assert(
@@ -403,6 +433,121 @@ return function () {
                 get_option('_fluent_smtp_notify_settings', null),
                 'notification fixture delete'
             );
+        });
+    });
+    FsmtpTest::case('OAuth tokens and the SES access key are ciphertext at rest and plaintext on read', function () use (
+        $withOptionTransaction,
+        $baseMisc
+    ) {
+        $withOptionTransaction(function () use ($baseMisc) {
+            $gmailSender = 'gmail-cipher-' . FsmtpTest::uniq() . '@example.test';
+            $sesSender = 'ses-cipher-' . FsmtpTest::uniq() . '@example.test';
+            $gmailKey = md5($gmailSender);
+            $sesKey = md5($sesSender);
+            $settings = [
+                'connections' => [
+                    $gmailKey => [
+                        'title' => 'Suite Gmail',
+                        'provider_settings' => [
+                            'provider'      => 'gmail',
+                            'sender_name'   => 'Suite Gmail Sender',
+                            'sender_email'  => $gmailSender,
+                            'key_store'     => 'db',
+                            'client_id'     => 'suite-client-id',
+                            'client_secret' => 'suite-client-secret',
+                            'access_token'  => 'suite-access-token',
+                            'refresh_token' => 'suite-refresh-token',
+                            'expire_stamp'  => time() + 3600,
+                        ],
+                    ],
+                    $sesKey => [
+                        'title' => 'Suite SES',
+                        'provider_settings' => [
+                            'provider'     => 'ses',
+                            'sender_name'  => 'Suite SES Sender',
+                            'sender_email' => $sesSender,
+                            'key_store'    => 'db',
+                            'access_key'   => 'AKIASUITEACCESSKEY00',
+                            'secret_key'   => 'suite-ses-secret-key',
+                            'region'       => 'us-east-1',
+                        ],
+                    ],
+                ],
+                'mappings' => [$gmailSender => $gmailKey, $sesSender => $sesKey],
+                'misc'     => $baseMisc($gmailKey),
+            ];
+
+            FsmtpTest::assert(fluentMailSetSettings($settings), 'settings write failed');
+
+            wp_cache_delete('fluentmail-settings', 'options');
+            $raw = get_option('fluentmail-settings');
+            $rawSerialized = serialize($raw);
+
+            FsmtpTest::assertSame(SecretMasker::ENCRYPT_VERSION, (int) Arr::get($raw, 'encrypt_version'), 'stored encryption version');
+            foreach (['suite-access-token', 'suite-refresh-token', 'suite-client-secret', 'AKIASUITEACCESSKEY00', 'suite-ses-secret-key'] as $secret) {
+                FsmtpTest::assert(strpos($rawSerialized, $secret) === false, 'plaintext secret at rest: ' . $secret);
+            }
+
+            $read = fluentMailGetSettings([], false);
+            FsmtpTest::assertSame('suite-access-token', Arr::get($read, 'connections.' . $gmailKey . '.provider_settings.access_token'), 'decrypted access token');
+            FsmtpTest::assertSame('suite-refresh-token', Arr::get($read, 'connections.' . $gmailKey . '.provider_settings.refresh_token'), 'decrypted refresh token');
+            FsmtpTest::assertSame('suite-client-secret', Arr::get($read, 'connections.' . $gmailKey . '.provider_settings.client_secret'), 'decrypted client secret');
+            FsmtpTest::assertSame('AKIASUITEACCESSKEY00', Arr::get($read, 'connections.' . $sesKey . '.provider_settings.access_key'), 'decrypted SES access key');
+            FsmtpTest::assertSame('suite-ses-secret-key', Arr::get($read, 'connections.' . $sesKey . '.provider_settings.secret_key'), 'decrypted SES secret key');
+        });
+    });
+
+    FsmtpTest::case('a blob written before tokens were encrypted reads intact and the next save encrypts it', function () use (
+        $withOptionTransaction,
+        $baseMisc
+    ) {
+        $withOptionTransaction(function () use ($baseMisc) {
+            $sender = 'gmail-legacy-' . FsmtpTest::uniq() . '@example.test';
+            $key = md5($sender);
+
+            // What a 2.3.x release left in wp_options: client_secret encrypted, tokens plain, no version.
+            $legacy = [
+                'connections' => [
+                    $key => [
+                        'title' => 'Suite Legacy Gmail',
+                        'provider_settings' => [
+                            'provider'      => 'gmail',
+                            'sender_name'   => 'Suite Legacy Sender',
+                            'sender_email'  => $sender,
+                            'key_store'     => 'db',
+                            'client_id'     => 'suite-client-id',
+                            'client_secret' => fluentMailEncryptDecrypt('suite-client-secret', 'e'),
+                            'access_token'  => 'ya29.suite-legacy-access',
+                            'refresh_token' => '1//suite-legacy-refresh',
+                            'expire_stamp'  => time() + 3600,
+                        ],
+                    ],
+                ],
+                'mappings'    => [$sender => $key],
+                'misc'        => $baseMisc($key),
+                'use_encrypt' => 'yes',
+                'test'        => fluentMailEncryptDecrypt('test', 'e'),
+            ];
+            update_option('fluentmail-settings', $legacy);
+
+            $read = fluentMailGetSettings([], false);
+            FsmtpTest::assertSame('ya29.suite-legacy-access', Arr::get($read, 'connections.' . $key . '.provider_settings.access_token'), 'legacy access token read as-is');
+            FsmtpTest::assertSame('1//suite-legacy-refresh', Arr::get($read, 'connections.' . $key . '.provider_settings.refresh_token'), 'legacy refresh token read as-is');
+            FsmtpTest::assertSame('suite-client-secret', Arr::get($read, 'connections.' . $key . '.provider_settings.client_secret'), 'legacy client secret decrypted');
+
+            // What a token refresh does: Settings::updateConnection() -> fluentMailSetSettings() with the read settings.
+            FsmtpTest::assert(fluentMailSetSettings($read), 'legacy blob save failed');
+
+            wp_cache_delete('fluentmail-settings', 'options');
+            $raw = get_option('fluentmail-settings');
+            FsmtpTest::assertSame(SecretMasker::ENCRYPT_VERSION, (int) Arr::get($raw, 'encrypt_version'), 'rewritten blob version');
+            FsmtpTest::assert(strpos(serialize($raw), 'suite-legacy') === false, 'legacy token still plaintext after rewrite');
+
+            $reread = fluentMailGetSettings([], false);
+            FsmtpTest::assertSame('ya29.suite-legacy-access', Arr::get($reread, 'connections.' . $key . '.provider_settings.access_token'), 'access token after rewrite');
+            FsmtpTest::assertSame('1//suite-legacy-refresh', Arr::get($reread, 'connections.' . $key . '.provider_settings.refresh_token'), 'refresh token after rewrite');
+            FsmtpTest::assertSame('suite-client-secret', Arr::get($reread, 'connections.' . $key . '.provider_settings.client_secret'), 'client secret after rewrite');
+
         });
     });
 };

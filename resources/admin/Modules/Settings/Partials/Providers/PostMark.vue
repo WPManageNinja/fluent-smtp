@@ -1,9 +1,9 @@
 <template>
     <div>
         <h3 class="fs_config_title">{{ $t('Postmark API Settings') }}</h3>
-        <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button label="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
-            <el-radio-button label="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
+        <el-radio-group size="small" v-model="connection.key_store">
+            <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store in wp-config.php') }}</el-radio-button>
         </el-radio-group>
 
         <template v-if="connection.key_store == 'db'">
@@ -20,12 +20,12 @@
                 <error :error="errors.get('api_key')"/>
             </el-form-item>
             <el-form-item>
-                <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                     {{ $t('Disable Encryption for API Key (Not Recommended)') }}
                 </el-checkbox>
-                <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
+                <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                     {{
-                        $t('By disabling encryption, your API key will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                        $t('Your API key will be stored as readable text in the database. Only turn this on if a security plugin on this site rotates the WordPress SALT keys, which would otherwise invalidate the encrypted value.')
                     }}
                 </p>
             </el-form-item>
@@ -43,43 +43,47 @@
 
         <span class="small-help-text" style="display:block;margin-top:-10px">
             {{ $t('__POSTMARK_HELP') }}
-            <a target="_blank" href="https://account.postmarkapp.com/servers">Postmark Server.</a>
+            <a target="_blank" href="https://account.postmarkapp.com/servers">{{ $t('Postmark Server.') }}</a>
         </span>
 
         <el-row class="fsmtp_compact" :gutter="30">
             <el-col :md="12" :sm="24">
                 <el-form-item :label="$t('Track Opens')">
                     <el-checkbox
-                        true-label="yes"
-                        false-label="no"
+                        true-value="yes"
+                        false-value="no"
                         v-model="connection.track_opens"
                     >
-                        {{ $t('Enable email opens tracking on postmark(For HTML Emails only).') }}
+                        {{ $t('Track opens in Postmark (HTML emails only).') }}
                         <el-tooltip effect="dark" placement="top-start">
-                            <div slot="content">
-                                {{ $t('__POSTMARK_OPEN') }}
-                            </div>
-                            <i class="el-icon-info"></i>
+                            <template #content>
+                                <div>
+                                    {{ $t('__POSTMARK_OPEN') }}
+                                </div>
+                            </template>
+                            <el-icon><FsmIconInfo /></el-icon>
                         </el-tooltip>
                     </el-checkbox>
                 </el-form-item>
                 <el-form-item :label="$t('Message Stream')">
-                    <el-input type="text" size="small" v-model="connection.message_stream"/>
+                    <el-input type="text" v-model="connection.message_stream"/>
                 </el-form-item>
             </el-col>
             <el-col :md="12" :sm="24">
-                <el-form-item label="Track Links">
+                <el-form-item :label="$t('Track Links')">
                     <el-checkbox
-                        true-label="yes"
-                        false-label="no"
+                        true-value="yes"
+                        false-value="no"
                         v-model="connection.track_links"
                     >
-                        {{ $t('Enable link tracking on postmark (For HTML Emails only).') }}
+                        {{ $t('Track link clicks in Postmark (HTML emails only).') }}
                         <el-tooltip effect="dark" placement="top-start">
-                            <div slot="content">
-                                {{ $t('__POSTMARK_CLICK') }}
-                            </div>
-                            <i class="el-icon-info"></i>
+                            <template #content>
+                                <div>
+                                    {{ $t('__POSTMARK_CLICK') }}
+                                </div>
+                            </template>
+                            <el-icon><FsmIconInfo /></el-icon>
                         </el-tooltip>
                     </el-checkbox>
                 </el-form-item>
@@ -99,9 +103,16 @@ export default {
         InputPassword,
         Error
     },
-    'connection.key_store'(value) {
-        if (value === 'wp_config') {
-            this.connection.api_key = '';
+    /*
+     * Vue 3 ignores an unknown top-level option, so this handler sat here for
+     * years never running: choosing the config-file key store left the typed key
+     * in the form and it was posted and stored in the database anyway.
+     */
+    watch: {
+        'connection.key_store'(value) {
+            if (value === 'wp_config') {
+                this.connection.api_key = '';
+            }
         }
     },
     data() {

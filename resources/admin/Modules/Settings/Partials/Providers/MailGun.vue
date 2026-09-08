@@ -1,9 +1,9 @@
 <template>
     <div>
         <h3 class="fs_config_title">{{ $t('Mailgun API Settings') }}</h3>
-        <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button label="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
-            <el-radio-button label="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
+        <el-radio-group size="small" v-model="connection.key_store">
+            <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store in wp-config.php') }}</el-radio-button>
         </el-radio-group>
 
         <el-row v-if="connection.key_store == 'db'" :gutter="20">
@@ -22,7 +22,7 @@
                     <error :error="errors.get('api_key')" />
 
                     <span class="small-help-text">
-                        {{ $t('Follow this link to get an API Key from Mailgun:') }}
+                        {{ $t('Get an API key from Mailgun:') }}
                         <a
                             target="_blank"
                             href="https://app.mailgun.com/settings/api_security"
@@ -40,7 +40,7 @@
                     <error :error="errors.get('domain_name')" />
 
                     <span class="small-help-text">
-                        {{ $t('Follow this link to get a Domain Name from Mailgun:') }}
+                        {{ $t('Find your sending domain in Mailgun:') }}
                         <a target="_blank" href="https://app.mailgun.com/mg/sending/domains">
                             {{ $t('Get a Domain Name.') }}
                         </a>
@@ -50,12 +50,12 @@
 
             <el-col :span="24">
                 <el-form-item>
-                    <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                    <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                         {{ $t('Disable Encryption for API Key (Not Recommended)') }}
                     </el-checkbox>
-                    <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
+                    <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                         {{
-                            $t('By disabling encryption, your API key will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                            $t('Your API key will be stored as readable text in the database. Only turn this on if a security plugin on this site rotates the WordPress SALT keys, which would otherwise invalidate the encrypted value.')
                         }}
                     </p>
                 </el-form-item>
@@ -75,12 +75,10 @@ define( 'FLUENTMAIL_MAILGUN_DOMAIN', '********************' );</textarea>
         </div>
 
         <el-form-item>
-            <label for="region" style="vertical-align:baseline;">
-                {{ $t('Select Region') }}&nbsp;&nbsp;&nbsp;&nbsp;
-            </label>
+            <label for="region">{{ $t('Select Region') }}</label>
 
-            <el-radio v-model="connection.region" label="us">US</el-radio>
-            <el-radio v-model="connection.region" label="eu">EU</el-radio>
+            <el-radio v-model="connection.region" value="us">US</el-radio>
+            <el-radio v-model="connection.region" value="eu">EU</el-radio>
             
             <el-alert :closable="false">
                 <span>

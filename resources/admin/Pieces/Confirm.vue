@@ -1,31 +1,43 @@
 <template>
+    <!--
+        `trigger="click"` is not a preference, it is the default that changed underneath
+        this component. Element UI's popover opened on click; Element Plus's opens on
+        hover, and neither this nor `v-model` said otherwise - so every delete
+        confirmation in the admin armed itself when the pointer crossed the button and
+        did nothing at all when you pressed it.
+
+        The visibility is the popover's own, reached through a ref. `v-model` bound
+        `modelValue`, which el-popover does not have (it takes `v-model:visible`), so it
+        was inert - and passing `visible` at all would put the popover in controlled
+        mode, where `trigger` is ignored and nothing would open it.
+    -->
     <el-popover
+        ref="popover"
+        trigger="click"
         width="170"
-        @hide="cancel"
-        v-model="visible"
         :placement="placement">
 
-        <p v-html="message"></p>
+        <p v-html="messageText"></p>
 
         <div class="action-buttons">
             <el-button
-                size="mini"
-                type="text"
+                size="small"
+                link
                 @click="cancel()">
-                {{$t('cancel')}}
+                {{ $t('Cancel') }}
             </el-button>
 
             <el-button
                 type="primary"
-                size="mini"
+                size="small"
                 @click="confirm()">
-                {{ $t('confirm') }}
+                {{ $t('Confirm') }}
             </el-button>
         </div>
 
-        <template slot="reference">
+        <template #reference>
             <slot name="reference">
-                <i class="el-icon-delete"/>
+                <el-icon><FsmIconDelete /></el-icon>
             </slot>
         </template>
     </el-popover>
@@ -38,18 +50,22 @@
             placement: {
                 default: 'top-end'
             },
+            /*
+             * Empty by default rather than carrying English: a prop default cannot
+             * reach $t(), so the fallback wording is resolved in messageText instead.
+             */
             message: {
-                default: 'Are you sure to delete this?'
+                default: ''
             }
         },
-        data() {
-            return {
-                visible: false
+        computed: {
+            messageText() {
+                return this.message || this.$t('Delete this?');
             }
         },
         methods: {
             hide() {
-                this.visible = false;
+                this.$refs.popover && this.$refs.popover.hide();
             },
             confirm() {
                 this.hide();

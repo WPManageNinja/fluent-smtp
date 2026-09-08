@@ -4,24 +4,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-FluentSMTP is a WordPress SMTP plugin that connects WordPress with various email service providers. It provides native integrations with 15+ email services, email routing, logging, and detailed reporting. The plugin uses a modern stack with VueJS 2 frontend and PHP backend following WordPress plugin architecture.
+FluentSMTP is a WordPress SMTP plugin that connects WordPress with various email service providers. It provides native integrations with 15+ email services, email routing, logging, and detailed reporting. The plugin uses a modern stack with a Vue 3 frontend and PHP backend following WordPress plugin architecture.
 
 ## Development Commands
 
 ### Frontend Development
+
+Requires Node `^20.19.0 || >=22.12.0` (see `.nvmrc`) and pnpm, pinned via
+`packageManager` in package.json.
+
 ```bash
-# Install dependencies
-npm install
+# Install dependencies (respects the committed lockfile)
+pnpm install
 
 # Development mode with watch
-npm run start
-# or
-npx mix watch
+pnpm run dev
 
 # Production build
-npm run prod
-# or
-npx mix --production
+pnpm run build
 ```
 
 ### Backend Development
@@ -85,10 +85,11 @@ The build script:
 **Location:** `resources/admin/`
 
 **Tech Stack:**
-- Vue.js 2
-- Vue Router
-- Element UI component library
-- Chart.js for analytics
+- Vue.js 3
+- Vue Router 4
+- Element Plus component library
+- Chart.js 4 via vue-chartjs for analytics
+- Tailwind (utilities only, scoped to `#fluent_mail_app`) alongside the SCSS design system
 
 **Entry Points:**
 - `boot.js` → Compiled to `assets/admin/js/boot.js`
@@ -160,7 +161,7 @@ Defined in `boot.php`:
 
 1. Create component in `resources/admin/Bits/` (reusable) or `resources/admin/Modules/` (feature-specific)
 2. Import and register in parent component or routes
-3. Run `npm run start` to watch changes
+3. Run `pnpm run dev` to watch changes
 
 ## Testing
 
@@ -172,7 +173,7 @@ Currently no automated test suite. PHPStan configured at level 0 for static anal
 - Google API Client in `includes/libs/google-api-client/` (excluded from autoload)
 
 **JavaScript:**
-- Element UI for components
+- Element Plus for components
 - Chart.js for analytics
 - Day.js for date handling
 - Lodash for utilities
@@ -183,4 +184,4 @@ Currently no automated test suite. PHPStan configured at level 0 for static anal
 - Email logging stores all outbound emails for debugging/resending
 - OAuth2 implementation in `includes/OAuth2Provider.php` for Gmail/Outlook
 - Translation strings extracted to `app/Services/TransStrings.php`
-- Assets built with Laravel Mix (webpack wrapper)
+- Assets built with Vite (`vite.config.mjs`)

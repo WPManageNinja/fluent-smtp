@@ -17,7 +17,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong.', 'fluent-smtp'), []));
     }
 
     protected function postSend()
@@ -76,19 +76,36 @@ class Handler extends BaseHandler
 
     private function sendViaApi()
     {
-        $rawMessage = $this->normalizeListHeaders(
-            $this->phpMailer->getSentMIMEMessage()
-        );
-
-        $mime = chunk_split(base64_encode($rawMessage), 76, "\n");
-
         $data = $this->getSetting();
 
         $accessToken = $this->getAccessToken($data);
 
         $api = (new API($data['client_id'], $data['client_secret'], Arr::get($data, 'tenant_id')));
 
-        $result = $api->sendMime($mime, $accessToken);
+        /*
+         * Two ways to hand Graph a message, and neither covers everything.
+         *
+         * Raw MIME keeps every header PHPMailer built - In-Reply-To and
+         * References for threading, List-Unsubscribe, whatever a plugin added -
+         * but Graph takes its recipients from To and Cc alone and does not
+         * deliver to a Bcc header in MIME content. Our wp_mail() leaves
+         * PHPMailer in mail() mode, which writes that header, so a Bcc arrived
+         * at Graph and went nowhere.
+         *
+         * The structured payload carries Bcc as its own bccRecipients field,
+         * which Graph honours, but it accepts custom headers only under an x-
+         * prefix. So the message stays on the MIME path unless it has a Bcc,
+         * which is the one thing that path cannot do.
+         */
+        if ($this->getParam('headers.bcc')) {
+            $result = $api->sendMail($this->buildGraphMessage(), $accessToken);
+        } else {
+            $rawMessage = $this->normalizeListHeaders(
+                $this->phpMailer->getSentMIMEMessage()
+            );
+
+            $result = $api->sendMime(chunk_split(base64_encode($rawMessage), 76, "\n"), $accessToken);
+        }
 
         if(is_wp_error($result)) {
             $errorMessage = $result->get_error_message();
@@ -99,6 +116,172 @@ class Handler extends BaseHandler
             );
         }
 
+    }
+
+    /**
+     * The sendMail request body for the message PHPMailer holds, in Graph's
+     * JSON shape. Mirrors what the MIME path sends: the same From, the same
+     * recipients, and the attachments in the same disposition.
+     *
+     * @return array
+     */
+    protected function buildGraphMessage()
+    {
+        $contentType = $this->getHeader('content-type');
+
+        $message = [
+            'subject'      => $this->getSubject(),
+            'body'         => [
+                'contentType' => in_array($contentType, ['text/html', 'multipart/alternative'], true) ? 'HTML' : 'Text',
+                'content'     => (string)$this->getParam('message')
+            ],
+            'from'         => $this->graphRecipient($this->phpMailer->From, $this->phpMailer->FromName),
+            'toRecipients' => $this->graphRecipients($this->getParam('to')),
+        ];
+
+        if ($cc = $this->graphRecipients($this->getParam('headers.cc'))) {
+            $message['ccRecipients'] = $cc;
+        }
+
+        if ($bcc = $this->graphRecipients($this->getParam('headers.bcc'))) {
+            $message['bccRecipients'] = $bcc;
+        }
+
+        if ($replyTo = $this->graphRecipients($this->getParam('headers.reply-to'))) {
+            $message['replyTo'] = $replyTo;
+        }
+
+        if ($headers = $this->graphInternetMessageHeaders()) {
+            $message['internetMessageHeaders'] = $headers;
+        }
+
+        if ($attachments = $this->graphAttachments()) {
+            $message['attachments'] = $attachments;
+        }
+
+        return ['message' => $message];
+    }
+
+    /**
+     * @param array $recipients Rows of ['email' => ..., 'name' => ...] as setAttributes() builds them
+     * @return array
+     */
+    private function graphRecipients($recipients)
+    {
+        $list = [];
+
+        foreach ((array)$recipients as $recipient) {
+            if (empty($recipient['email'])) {
+                continue;
+            }
+
+            $list[] = $this->graphRecipient($recipient['email'], Arr::get($recipient, 'name'));
+        }
+
+        return $list;
+    }
+
+    private function graphRecipient($email, $name = '')
+    {
+        $address = ['address' => $email];
+
+        if ($name) {
+            $address['name'] = $name;
+        }
+
+        return ['emailAddress' => $address];
+    }
+
+    /**
+     * Graph refuses an internetMessageHeaders entry whose name does not start
+     * with x-, so only those can travel on this path. Anything else that a
+     * plugin added is dropped here rather than failing the whole send.
+     *
+     * @return array
+     */
+    private function graphInternetMessageHeaders()
+    {
+        $headers = [];
+
+        foreach ((array)$this->getParam('custom_headers') as $header) {
+            $name = trim((string)Arr::get($header, 'key'));
+            $value = trim((string)Arr::get($header, 'value'));
+
+            if ($value === '' || stripos($name, 'x-') !== 0) {
+                continue;
+            }
+
+            $headers[] = [
+                'name'  => $name,
+                'value' => $value
+            ];
+        }
+
+        return $headers;
+    }
+
+    /**
+     * PHPMailer's attachment rows as Graph fileAttachment objects. An inline
+     * image keeps its Content-ID so the HTML body can still refer to it.
+     *
+     * @return array
+     */
+    private function graphAttachments()
+    {
+        $attachments = [];
+
+        foreach ((array)$this->getParam('attachments') as $attachment) {
+            $isString = !empty($attachment[5]);
+
+            if ($isString) {
+                $content = (string)$attachment[0];
+            } else {
+                try {
+                    $content = $this->secureFileRead($attachment[0]);
+                } catch (\Exception $e) {
+                    $this->logAttachmentFailure('Outlook', $e);
+                    continue;
+                }
+            }
+
+            $row = [
+                '@odata.type'  => '#microsoft.graph.fileAttachment',
+                'name'         => $this->getAttachmentName($attachment),
+                'contentType'  => $this->attachmentContentType($attachment, $isString),
+                'contentBytes' => base64_encode($content)
+            ];
+
+            if (isset($attachment[6]) && $attachment[6] === 'inline' && !empty($attachment[7])) {
+                $row['isInline'] = true;
+                $row['contentId'] = $attachment[7];
+            }
+
+            $attachments[] = $row;
+        }
+
+        return $attachments;
+    }
+
+    /**
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @param bool $isString Whether index 0 is the content rather than a path
+     * @return string
+     */
+    private function attachmentContentType($attachment, $isString)
+    {
+        if (!empty($attachment[4])) {
+            return $attachment[4];
+        }
+
+        if (!$isString && function_exists('mime_content_type')) {
+            $type = @mime_content_type($attachment[0]);
+
+            if ($type) {
+                return $type;
+            }
+        }
+
+        return 'application/octet-stream';
     }
 
     public function validateProviderInformation($connection)
@@ -120,7 +303,7 @@ class Handler extends BaseHandler
             }
 
             if (!$clientSecret) {
-                $errors['client_secret']['required'] = __('Application Client Secret key is required.', 'fluent-smtp');
+                $errors['client_secret']['required'] = __('Application Client Secret is required.', 'fluent-smtp');
             }
         } else if ($keyStoreType == 'wp_config') {
             if (!defined('FLUENTMAIL_OUTLOOK_CLIENT_ID') || !FLUENTMAIL_OUTLOOK_CLIENT_ID) {
@@ -180,7 +363,7 @@ class Handler extends BaseHandler
                 }, 10, 2);
             }
         } else if (!$authToken && !$accessToken) {
-            $errors['auth_token']['required'] = __('Please Provide Auth Token.', 'fluent-smtp');
+            $errors['auth_token']['required'] = __('Please provide an auth token.', 'fluent-smtp');
         }
 
         if ($errors) {
@@ -319,13 +502,17 @@ class Handler extends BaseHandler
 
         $extraRow = [
             'title'   => __('Token Validity', 'fluent-smtp'),
-            'content' => 'Valid (' . intval(((Arr::get($connection, 'expire_stamp') - time()) / 60)) . 'm)'
+            'content' => sprintf(
+                /* translators: %s: number of minutes until the access token expires */
+                __('Valid (%s minutes)', 'fluent-smtp'),
+                number_format_i18n(intval(((Arr::get($connection, 'expire_stamp') - time()) / 60)))
+            )
         ];
 
         if ($tokenError) {
             $extraRow['content'] = $tokenError;
         } elseif (Arr::get($connection, 'expire_stamp') < time()) {
-            $extraRow['content'] = 'Invalid. Please re-authenticate';
+            $extraRow['content'] = __('Invalid. Please authenticate again.', 'fluent-smtp');
         }
 
         $connection['extra_rows'] = [$extraRow];

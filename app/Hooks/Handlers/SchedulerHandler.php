@@ -119,18 +119,28 @@ class SchedulerHandler
             $failedStats['subjects'] = $loggerModel->getSubjectStat('failed', $startDate, $endDate);
         }
 
+        $reportingPeriod = ($reportingDays < 2)
+            ? __('day', 'fluent-smtp')
+            : sprintf(
+                /* translators: %s: number of days covered by the email summary */
+                _n('%s day', '%s days', $reportingDays, 'fluent-smtp'),
+                number_format_i18n($reportingDays)
+            );
+
         $sentSubTitle = sprintf(
+            /* translators: 1: number of subject lines shown, 2: number of unique subject lines, 3: reporting period, e.g. "7 days" */
             __('Showing %1$s of %2$s different subject lines sent in the past %3$s', 'fluent-smtp'),
             number_format_i18n(count($sentStats['subjects'])),
             number_format_i18n($sentStats['unique_subjects']),
-            ($reportingDays < 2) ? 'day' : $reportingDays . ' days'
+            $reportingPeriod
         );
 
         $failedSubTitle = sprintf(
+            /* translators: 1: number of subject lines shown, 2: number of unique subject lines, 3: reporting period, e.g. "7 days" */
             __('Showing %1$s of %2$s different subject lines failed in the past %3$s', 'fluent-smtp'),
             number_format_i18n(count($failedStats['subjects'])),
             number_format_i18n($failedStats['unique_subjects']),
-            ($reportingDays < 2) ? 'day' : $reportingDays . ' days'
+            $reportingPeriod
         );
 
         $sentTitle = __('Emails Sent', 'fluent-smtp');
@@ -162,7 +172,12 @@ class SchedulerHandler
         ];
 
         $emailBody = (string)fluentMail('view')->make('admin.digest_email', $data);
-        $emailSubject = $reportingDate . ' email sending stats for ' . $this->getDomainName();
+        $emailSubject = sprintf(
+            /* translators: 1: reporting date range, 2: site domain name */
+            __('%1$s email sending stats for %2$s', 'fluent-smtp'),
+            $reportingDate,
+            $this->getDomainName()
+        );
 
         $headers = array('Content-Type: text/html; charset=UTF-8');
 
@@ -346,7 +361,7 @@ class SchedulerHandler
             $client = new \FluentSmtpLib\Google\Client();
             $client->setClientId($settings['client_id']);
             $client->setClientSecret($settings['client_secret']);
-            $client->addScope("https://www.googleapis.com/auth/gmail.compose");
+            $client->addScope("https://www.googleapis.com/auth/gmail.send");
             $client->setAccessType('offline');
             $client->setApprovalPrompt('force');
 

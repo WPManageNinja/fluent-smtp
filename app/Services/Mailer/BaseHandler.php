@@ -602,14 +602,14 @@ class BaseHandler
 
             if (is_object($item) || is_resource($item)) {
                 throw new InvalidArgumentException(
-                    "Invalid Data: Array cannot contain an object or resource."
+                    esc_html__('Invalid Data: Array cannot contain an object or resource.', 'fluent-smtp')
                 );
             }
 
             if (is_string($item)) {
                 if (is_serialized($item)) {
                     throw new InvalidArgumentException(
-                        "Invalid Data: Array cannot contain serialized data."
+                        esc_html__('Invalid Data: Array cannot contain serialized data.', 'fluent-smtp')
                     );
                 }
 

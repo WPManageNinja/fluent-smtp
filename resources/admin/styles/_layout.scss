@@ -1,0 +1,2022 @@
+/*
+ * The application shell.
+ *
+ * Structure and measurements follow FluentCart so the plugins feel like one product.
+ * The positioning is not copied literally - FluentCart pins its sidebar to a fixed
+ * offset that matches its own header - this measures wp-admin's menu at runtime, which
+ * survives the plugin being rendered inside whatever wp-admin gives it.
+ */
+
+/* --------------------------------------------------------------- wp-admin fit */
+
+/*
+ * Deliberately unscoped - it has to reach wp-admin's own elements - but narrowed to
+ * this plugin's screen by the body class WordPress puts there.
+ */
+body.settings_page_fluent-mail {
+    /*
+     * FluentCart's page background, copied from its `--body-bg` rather than approximated
+     * - wp-admin's own grey is #f0f0f1, a warmer and flatter one, and the difference is
+     * plain when the plugins sit next to each other in the same menu.
+     */
+    background-color: var(--fsm-body-bg);
+}
+
+/* ---------------------------------------------------------------- box model */
+
+/*
+ * Tailwind's preflight normally sets this, but preflight is off here because it would
+ * restyle the whole of wp-admin. Without it these elements inherit wp-admin's
+ * content-box, which makes every `min-h-*` and `h-*` utility add its padding on top of
+ * the height instead of inside it - a 36px nav link with 8px padding rendered at 52px.
+ * Scoped to the app root, so nothing outside it changes.
+ */
+#fluent_mail_app {
+    /* How wide the settings column is allowed to get, cards and header alike. */
+    --fsm-content-width: 1040px;
+
+    &,
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+}
+
+/* ------------------------------------------------------------ theme switch */
+
+/*
+ * FluentCart puts its theme control at the right-hand end of its own bar, at the same
+ * size and with the same glyphs, so the plugins are switched the same way in the same
+ * place.
+ *
+ * Written as plain declarations rather than with @apply, because the dropdown half of
+ * this is teleported to <body> by Element Plus. Tailwind is configured with
+ * `important: '#fluent_mail_app'`, which prefixes every utility with that selector - and
+ * a popup that has been moved out of the app root is no longer inside it to match.
+ */
+.fsm_theme_trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    cursor: pointer;
+    background: transparent;
+    color: var(--fsm-text-mid);
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    transition: background-color .15s ease, color .15s ease;
+
+    svg {
+        width: 18px;
+        height: 18px;
+        display: block;
+    }
+
+    &:hover {
+        background-color: var(--fsm-surface-sunk);
+        color: var(--fsm-text);
+    }
+
+    &:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--fsm-accent);
+        outline-offset: -1px;
+    }
+}
+
+/* Teleported to <body>, so it is styled here rather than beside the trigger. */
+.fsm_theme_menu {
+    .fsm_theme_item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .fsm_theme_item_icon {
+        display: flex;
+        flex: none;
+        align-items: center;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+
+    /* The one in force, marked by weight rather than by a tick that shifts the row. */
+    .is_current {
+        font-weight: 500;
+        color: var(--fsm-text);
+    }
+}
+
+/* ------------------------------------------------------------------- focus */
+
+/*
+ * wp-admin draws a blue ring on any focused link, which on a nav is left behind after
+ * every click and reads as a second selection. Keyboard users still need it, so it is
+ * moved to :focus-visible and recoloured, rather than removed.
+ */
+#fluent_mail_app {
+    .fsm_app_bar a {
+        &:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--fsm-accent);
+            outline-offset: -1px;
+        }
+    }
+
+    /*
+     * wp-admin paints its own ring on any focused field in the content area - the site's
+     * admin colour scheme, on `:focus`, so it is left behind after a mouse click too -
+     * and it lands on top of Element Plus's focus treatment, which is a ring of a
+     * different colour, width and radius. Two rings on one input is not an accent, it is
+     * a mistake.
+     *
+     * The shadow and border are handed back to Element Plus (its own live on the
+     * .el-input__wrapper around this element), and the keyboard ring is re-drawn on
+     * :focus-visible in the app's accent. Moved and recoloured, not removed.
+     */
+    input,
+    select,
+    textarea {
+        &:focus {
+            box-shadow: none;
+            border-color: var(--fsm-field-border);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--fsm-accent);
+            outline-offset: 1px;
+        }
+    }
+
+    /* Element Plus draws its own ring on the wrapper, so the field inside needs none. */
+    .el-input__wrapper input,
+    .el-textarea__inner,
+    .el-select__wrapper input {
+        &:focus-visible {
+            outline: none;
+        }
+    }
+}
+
+/* --------------------------------------------------- wp-admin form defaults */
+
+/*
+ * wp-admin styles fields by input *type* - `input[type="text"]`, `input[type="email"]`,
+ * `input[type="checkbox"]` and the rest. An attribute selector outranks the single class
+ * Element Plus paints its own fields with, so wp-admin wins every property the two both
+ * set, and a field ends up with a second field drawn inside it: WP's 1px #8c8f94 border,
+ * white fill, 4px radius and 30px floor, sitting inside the wrapper that was already the
+ * visible input. Outer border ours, inner border WP's - a box in a box.
+ *
+ * It has always been there and WP 6.9 made it plain: the text rule gained a `min-height`
+ * and the checkbox rule a `min-width`, so a field that used to sit a couple of pixels
+ * wrong now stands a whole row taller than the label beside it.
+ *
+ * Element Plus's own values are handed back below. This is not a blanket reset - every
+ * selector names an Element Plus part, so a native field on the page keeps the styling
+ * wp-admin means it to have. Scoped to the body class rather than to the app root
+ * because dialogs, dropdowns and pickers are teleported to <body>, out of the reach of
+ * #fluent_mail_app - and the double border was most obvious inside a dialog.
+ */
+body.settings_page_fluent-mail {
+
+    /*
+     * The field itself is transparent and unframed by design: the wrapper around it is
+     * the part that looks like an input, and it is what carries the border, the fill and
+     * the focus ring.
+     */
+    .el-input__inner,
+    .el-select__input,
+    .el-range-input {
+        margin: 0;
+        padding: 0;
+        min-height: 0;
+        border: none;
+        border-radius: 0;
+        background-color: transparent;
+        box-shadow: none;
+        color: var(--el-input-text-color, var(--el-text-color-regular));
+
+        /* wp-admin's focus ring would be drawn inside the wrapper's own. */
+        &:focus {
+            border: none;
+            box-shadow: none;
+            outline: none;
+        }
+    }
+
+    /*
+     * The native checkbox, radio and switch behind an Element Plus mark. The visible box
+     * is a sibling <span>; these are transparent and out of flow, kept only to hold the
+     * value and take the keyboard. wp-admin gives them a size, a border and a fill of
+     * their own - a second control, waiting for anything to disturb the opacity or the
+     * positioning that is currently all that hides it.
+     */
+    .el-checkbox__original,
+    .el-radio__original,
+    .el-switch__input {
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+
+        &:focus {
+            border: none;
+            box-shadow: none;
+            outline: none;
+        }
+    }
+
+    /*
+     * Handing the text colour back costs one selector more than Element Plus spends on
+     * its own disabled field, so that field has to be named again or it comes out at
+     * full strength. wp-admin's `input:disabled` is what made this necessary: it outranks
+     * Element Plus too, so neither side can be left to its defaults.
+     */
+    .el-input.is-disabled .el-input__inner,
+    .el-select.is-disabled .el-select__input,
+    .el-date-editor.is-disabled .el-range-input {
+        color: var(--el-disabled-text-color);
+        -webkit-text-fill-color: var(--el-disabled-text-color);
+    }
+
+    /* Sized to nothing, because the box that is seen and clicked is the <span>. */
+    .el-checkbox__original,
+    .el-switch__input {
+        width: 0;
+        height: 0;
+    }
+
+    /*
+     * The radio is stretched across its whole label instead, by four zeroed insets, so
+     * that it is what receives the click. wp-admin's 1rem square over-constrains that
+     * and shrinks the target to one corner of the row.
+     */
+    .el-radio__original {
+        width: auto;
+        height: auto;
+    }
+}
+
+/* --------------------------------------------------------------- overlays */
+
+/*
+ * Scoped to the body class rather than to the app root for the same reason the block
+ * above is: a dialog can be appended to <body>, out of the reach of #fluent_mail_app,
+ * and one of them is (see Logger/ResendDialog.vue).
+ */
+body.settings_page_fluent-mail {
+    /*
+     * A dialog is given its width in the markup - some in per cent, some in pixels -
+     * and neither kind was told what to do when the viewport is smaller than the number.
+     * A cap rather than a width, so every desktop size set per dialog survives untouched
+     * and only the ones that would run off the screen are pulled back. 24px leaves a
+     * 12px gutter either side.
+     */
+    .el-dialog {
+        max-width: calc(100vw - 24px);
+
+        /*
+         * The same treatment vertically. A dialog grows to whatever it contains - the
+         * email log carries a 400px preview of the message and everything under it -
+         * and the parts that did not fit were drawn past the bottom of the screen with
+         * only the overlay behind them to scroll. The dialog stops at the viewport and
+         * its body is what scrolls; the title and the close button stay put.
+         */
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100vh - var(--el-dialog-margin-top, 15vh) - 24px);
+
+        /* min-height, because a flex item in a column will not shrink below its own
+         * content without it - and a body that cannot shrink cannot scroll. */
+        .el-dialog__body {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+        }
+    }
+
+    /*
+     * The confirm box has the same problem and not the same shape, which is the trap
+     * here. A dialog is `width: var(--el-dialog-width)`, so capping its max-width adds a
+     * limit it did not have. The message box is already `width: 100%` held in by
+     * `max-width: var(--el-messagebox-width)` - so the same cap written the same way
+     * *replaced* its 420px and let every confirmation run the width of the screen.
+     *
+     * Narrow the variable instead of the property. Element Plus keeps its own rule, the
+     * box is 420px wherever there is room for it, and less the gutter where there is not
+     * - which is also why the small-screen rule below names only the dialog.
+     */
+    .el-message-box {
+        --el-messagebox-width: min(420px, calc(100vw - 24px));
+    }
+
+    /*
+     * The other half of the same problem: a dialog asking for 50% is 160px on a 320px
+     * phone, which is narrower than the buttons in its own footer. Below the width
+     * wp-admin itself switches layouts, every dialog takes the screen less the gutter,
+     * whichever way its own width was written.
+     */
+    @media (max-width: 782px) {
+        .el-dialog {
+            width: calc(100vw - 24px);
+        }
+    }
+
+}
+
+/* ------------------------------------------------------ wp-admin tables */
+
+/*
+ * The connection and provider detail tables are rendered by PHP with WordPress's own
+ * `widefat striped` classes, which are a white table with grey banding and no notion of
+ * a theme - a glaring white block inside a dark card. Retheming them here rather than
+ * dropping the classes keeps the server-rendered views as they are, including the ones
+ * an add-on may be filtering into them.
+ *
+ * Scoped to the app root, deliberately: `.widefat` is WordPress's class, not this
+ * plugin's, and every other list table in wp-admin has to be left exactly as it is.
+ */
+#fluent_mail_app {
+    .widefat {
+        background: var(--fsm-surface);
+        border-color: var(--fsm-border);
+        box-shadow: none;
+    }
+
+    .widefat th,
+    .widefat td,
+    .widefat tbody th,
+    .widefat tfoot th,
+    .widefat tfoot td {
+        color: var(--fsm-text-mid);
+        border-color: var(--fsm-border);
+
+        /* Transparent, so the banded row underneath is what colours the cell. */
+        background-color: transparent;
+    }
+
+    .widefat thead th,
+    .widefat thead td {
+        color: var(--fsm-text);
+        border-color: var(--fsm-border);
+        background-color: transparent;
+    }
+
+    /* WordPress bands the odd rows in a near-white of its own; this is the same idea. */
+    .widefat.striped > tbody > :nth-child(odd),
+    .widefat > tbody > tr.alternate {
+        background-color: var(--fsm-surface-sunk);
+    }
+
+    .widefat a {
+        color: var(--fsm-link);
+    }
+}
+
+/* ------------------------------------------------------------------ app bar */
+
+/* The bar is out of flow, so the page below it needs the space kept clear by hand. */
+.fsm_app {
+    padding-top: 56px;
+}
+
+.fsm_app_bar {
+    /*
+     * Three groups spread across the bar - logo, nav, actions - rather than a nav that
+     * hugs the logo with the rest of the bar left empty. It is how FluentCart's bar is
+     * built, and with three items in ours the nav lands near the middle, which is what
+     * makes the two plugins read as the same product rather than two takes on one.
+     *
+     * 30px either side, not 24px, so the logo starts on the same vertical line as the
+     * first card below it - .fsm_page pads by 30px.
+     */
+    @apply flex items-center justify-between gap-6 bg-surface border-0 border-b border-solid border-hairline;
+
+    padding-left: 30px;
+    padding-right: 30px;
+    height: 56px;
+
+    /*
+     * Pinned rather than sticky. The settings pane below is pinned as well, which leaves
+     * this bar's container only as tall as the bar itself - and a sticky element whose
+     * container is its own height has no range to stick over, so it would scroll away the
+     * moment wp-admin's menu made the page scroll. `--fsm-shell-left` and
+     * `--fsm-shell-right` are the gaps either side of the content area, measured at
+     * runtime (see Application.vue) rather than hard-coded, so folding the menu or
+     * dropping to a narrow screen moves the bar with it. Both sides are named because on
+     * an RTL install the menu is the right-hand one; in LTR that measurement is 0.
+     */
+    position: fixed;
+    top: 32px;
+    left: var(--fsm-shell-left, 160px);
+    right: var(--fsm-shell-right, 0px);
+    z-index: 2000;
+    transition: box-shadow .2s ease;
+
+    &.is-scrolled {
+        box-shadow: var(--fsm-shadow-lift);
+    }
+
+    .fsm_app_logo {
+        @apply flex items-center flex-shrink-0;
+
+        a {
+            @apply flex items-center;
+        }
+
+        img {
+            /*
+             * An explicit width, not just a max: logo.svg is authored with
+             * `width="100%" height="100%"`, which inside a flex row resolves against
+             * nothing and collapses the mark to a 0x0 box.
+             */
+            width: 132px;
+            height: auto;
+            display: block;
+        }
+
+        .fsm_logo_dark {
+            display: none;
+        }
+    }
+
+    /* No flex-1: the bar spreads the groups, so the nav is sized by its own items. */
+    .fsm_app_nav {
+        @apply flex items-center gap-1 m-0 p-0 list-none;
+
+        li {
+            @apply m-0;
+        }
+
+        a {
+            @apply flex items-center rounded px-3 py-2 text-sm font-medium no-underline text-ink-mid;
+
+            transition: background-color .15s ease, color .15s ease;
+
+            &:hover {
+                @apply bg-surface-sunk text-ink;
+            }
+
+            &.router-link-active {
+                @apply bg-accent-wash text-ink;
+            }
+        }
+    }
+
+    .fsm_app_bar_actions {
+        @apply flex items-center gap-2 flex-shrink-0;
+    }
+
+    .fsm_app_bar_help {
+        @apply flex items-center justify-center flex-none no-underline text-ink-mid;
+
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        transition: background-color .15s ease, color .15s ease;
+
+        .el-icon {
+            font-size: 18px;
+        }
+
+        &:hover {
+            @apply bg-surface-sunk text-ink;
+        }
+    }
+
+    .fsm_app_bar_toggle {
+        display: none;
+    }
+}
+
+.fluent_theme_dark .fsm_app_bar .fsm_app_logo {
+    .fsm_logo_light {
+        display: none;
+    }
+
+    .fsm_logo_dark {
+        display: block;
+    }
+}
+
+/* ----------------------------------------------------------------- the page */
+
+/*
+ * Dashboard, logs and documentation. The measurements are FluentCart's own, read off its
+ * rendered dashboard: a 1350px column centred in the page, 30px either side, and 28px to
+ * land the first row of content the same distance below the bar as FluentCart's lands
+ * below its own header.
+ */
+.fsm_page {
+    padding: 28px 30px;
+}
+
+.fsm_page_inner {
+    @apply mx-auto;
+
+    max-width: 1350px;
+}
+
+@media (min-width: 1800px) {
+    .fsm_page_inner {
+        max-width: 1600px;
+    }
+}
+
+/* --------------------------------------------------------------- responsive */
+
+/*
+ * The app bar is pinned to the viewport, which needs room either side of it to be worth
+ * the trade. wp-admin moves its own menu off-canvas down here anyway, so there is nothing
+ * left to pin against and the bar goes back to being sticky.
+ */
+@media (max-width: 960px) {
+    .fsm_app {
+        padding-top: 0;
+    }
+
+    .fsm_app_bar {
+        @apply flex-wrap;
+
+        /*
+         * Sticky rather than pinned, and offset by wp-admin's own fixed admin bar, which
+         * is still fixed at this width. Below 782px WordPress stops fixing it and the
+         * offset goes back to 0 - see the next breakpoint.
+         */
+        position: sticky;
+        top: 32px;
+        left: auto;
+        right: auto;
+        height: auto;
+        padding-top: 8px;
+        padding-bottom: 8px;
+
+        .fsm_app_bar_toggle {
+            @apply flex items-center justify-center flex-none cursor-pointer bg-transparent text-ink-mid;
+
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border: 0;
+            border-radius: 8px;
+            margin-left: auto;
+        }
+
+        .fsm_app_nav {
+            @apply hidden w-full flex-col items-stretch;
+
+            order: 3;
+
+            &.is-open {
+                @apply flex;
+            }
+        }
+
+        .fsm_app_bar_actions {
+            order: 2;
+        }
+    }
+
+}
+
+@media (max-width: 782px) {
+    .fsm_page {
+        padding: 20px 12px;
+    }
+
+    /* wp-admin drops its own bar out of the way below this width. */
+    .fsm_app_bar {
+        top: 0;
+    }
+}
+
+/* ------------------------------------------------------------ page heading */
+
+/* What the screen is, and what you can do to it. */
+.fsm_page_head {
+    @apply flex flex-wrap items-center justify-between;
+
+    gap: 12px;
+    min-height: 36px;
+    margin-bottom: 20px;
+
+    .fsm_page_title {
+        @apply m-0 p-0 text-ink;
+
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 28px;
+    }
+
+    .fsm_page_desc {
+        @apply text-sm text-ink-mid m-0;
+
+        margin-top: 4px;
+        line-height: 1.5;
+        max-width: 640px;
+    }
+
+    .fsm_page_actions {
+        @apply flex flex-wrap items-center flex-none;
+
+        gap: 12px;
+    }
+}
+
+/* ---------------------------------------------------- two-column dashboard */
+
+/*
+ * What is happening on the left, what is configured on the right. The measurements are
+ * FluentCart's own, read off its rendered dashboard: a fluid main column and a 380px
+ * aside with a 24px gutter.
+ *
+ * Used by the dashboard and by Settings, which puts General Settings in the aside beside
+ * the connections. Both screens share it so the column lands in the same place and at
+ * the same width on each - two grids of nearly the same measurement is a difference an
+ * admin sees when moving between the screens, and cannot read as anything but a mistake.
+ */
+.fsm_split {
+    @apply grid;
+
+    grid-template-columns: minmax(0, 1fr) 380px;
+    grid-template-areas: "main aside";
+    gap: 24px;
+    align-items: start;
+}
+
+.fsm_split_main {
+    grid-area: main;
+    min-width: 0;
+}
+
+/*
+ * The aside sticks below the app bar - 88px is the admin bar plus the app bar - and has
+ * no scroller of its own. It used to cap its height at the viewport and scroll inside,
+ * which put a second scrollbar on the page: a wheel over the right column moved the
+ * column, a wheel two pixels to its left moved the page, and the cards near the bottom
+ * of the aside were only reachable by finding the right half of the screen first. The
+ * column is short enough to stand on its own, so the page is the only thing that
+ * scrolls.
+ */
+.fsm_split_aside {
+    grid-area: aside;
+    min-width: 0;
+    position: sticky;
+    top: 88px;
+}
+
+/*
+ * The aside is a column beside the content, not a panel that belongs anywhere in
+ * particular, so below the width where two columns fit it goes back to being a block at
+ * the end of the page rather than trying to stay stuck to anything.
+ */
+@media (max-width: 1180px) {
+    .fsm_split {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "main" "aside";
+    }
+
+    .fsm_split_aside {
+        position: static;
+    }
+}
+
+/* A label on the left and its value on the right, down a quiet list. */
+.fsm_fact_list {
+    @apply list-none m-0 p-0;
+
+    li {
+        @apply flex items-baseline justify-between gap-4 text-sm text-ink-mid m-0;
+
+        padding: 7px 0;
+
+        + li {
+            @apply border-0 border-t border-solid border-hairline;
+        }
+
+        > span:last-child {
+            @apply font-medium text-ink flex-none;
+        }
+    }
+}
+
+/* ---------------------------------------------------------------- stat tiles */
+
+/*
+ * The dashboard's headline numbers, built the way FluentCart builds its own: a plain
+ * surface card carrying a tinted icon well, the label, and the figure below it. The hue
+ * is one per subject, from FluentCart's tile ramp - which colours by position, and works
+ * here because the four are always the same four.
+ *
+ * The tint is on the icon well rather than on the whole tile deliberately. Four fully
+ * coloured blocks in a 380px aside is four things shouting; the well is enough to tell
+ * them apart, and it leaves the number as the loudest thing in the tile, which is what
+ * anyone is actually reading.
+ *
+ * These used to be list rows with a floated count, and "Failed" was red by way of an
+ * inline `style="color: red"`.
+ */
+/*
+ * Four across the top of the main column, dropping to two before it drops to one - the
+ * shape FluentCart's stat row has. The gap is 16px rather than the 12px these tiles had
+ * in the aside: at aside width four tiles in a 2x2 want to read as one block, at page
+ * width four in a row want to read as four figures.
+ */
+.fsm_tiles {
+    @apply grid;
+
+    /*
+     * Columns from the count rather than a fixed four: Total Sent is only shown when
+     * logging is on, so the row is three tiles as often as four, and `repeat(4, 1fr)`
+     * leaves the fourth column standing empty at the end of it.
+     */
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 1400px) {
+    .fsm_tiles {
+        grid-auto-flow: row;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.fsm_tile {
+    @apply flex flex-col no-underline bg-surface rounded border border-solid border-hairline;
+
+    padding: 14px;
+    color: var(--fsm-text);
+    transition: border-color .15s ease;
+
+    .fsm_tile_icon {
+        @apply flex items-center justify-center rounded-sm;
+
+        width: 32px;
+        height: 32px;
+        margin-bottom: 10px;
+        background: var(--fsm-tile-bg, var(--fsm-surface-sunk));
+        color: var(--fsm-tile-fg, var(--fsm-text-mid));
+
+        .el-icon {
+            font-size: 17px;
+        }
+    }
+
+    .fsm_tile_label {
+        @apply block text-xs font-medium text-ink-mid;
+    }
+
+    .fsm_tile_value {
+        @apply block font-semibold text-ink-head;
+
+        font-size: 22px;
+        line-height: 30px;
+
+        /*
+         * Pushed to the bottom of the tile so the four figures sit on one line even
+         * when a label above them wraps - "Total Email Sent (Logged)" takes two lines
+         * where "Email Failed" takes one, and a row of numbers at different heights
+         * reads as four unrelated boxes rather than one set.
+         */
+        margin-top: auto;
+        padding-top: 2px;
+    }
+
+    &.is_sent {
+        --fsm-tile-bg: var(--fsm-tile-sent-bg);
+        --fsm-tile-fg: var(--fsm-tile-sent-fg);
+    }
+
+    &.is_failed {
+        --fsm-tile-bg: var(--fsm-tile-failed-bg);
+        --fsm-tile-fg: var(--fsm-tile-failed-fg);
+    }
+
+    &.is_connections {
+        --fsm-tile-bg: var(--fsm-tile-connections-bg);
+        --fsm-tile-fg: var(--fsm-tile-connections-fg);
+    }
+
+    &.is_senders {
+        --fsm-tile-bg: var(--fsm-tile-senders-bg);
+        --fsm-tile-fg: var(--fsm-tile-senders-fg);
+    }
+}
+
+/* A tile you can follow says so on hover; the three that are only figures do not. */
+/*
+ * The sending-speed ceiling under a successful test send. Three figures always, so
+ * this is its own three-column grid rather than `.fsm_tiles`, whose column count
+ * follows the tile count and folds to two below 1400px - which would leave the
+ * third tile orphaned on its own row inside a 600px card. The tiles themselves are
+ * `.fsm_tile`, centred to match the card they sit in.
+ */
+.fsm_test_speed {
+    margin-top: 20px;
+    text-align: left;
+
+    .fsm_test_speed_title {
+        @apply text-sm font-semibold text-ink-head;
+
+        margin: 0 0 10px;
+        text-align: center;
+    }
+
+    .fsm_test_speed_tiles {
+        @apply grid;
+
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .fsm_tile {
+        align-items: center;
+        text-align: center;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .fsm_test_speed .fsm_test_speed_tiles {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+a.fsm_tile:hover {
+    @apply border-hairline-strong;
+}
+
+/* ------------------------------------------------------------- the greeting */
+
+/*
+ * The row that opens the dashboard. Deliberately not a card - it sits on the page the
+ * way FluentCart's does, so that the first framed thing on the screen is a number and
+ * not a welcome.
+ */
+.fsm_greeting {
+    @apply flex items-center gap-4;
+
+    margin-bottom: 20px;
+
+    .fsm_greeting_avatar {
+        @apply flex-none rounded-full;
+
+        width: 48px;
+        height: 48px;
+        display: block;
+    }
+
+    .fsm_greeting_text {
+        @apply min-w-0;
+
+        h2 {
+            @apply text-ink-head m-0;
+
+            font-size: 20px;
+            line-height: 28px;
+            font-weight: 600;
+        }
+
+        p {
+            @apply text-xs text-ink-mid m-0;
+
+            margin-top: 2px;
+        }
+    }
+}
+
+/* ------------------------------------------------------------ the activity */
+
+.fsm_activity {
+    /*
+     * A row of ranges, not Element Plus radio buttons: these switch what a list shows
+     * rather than set a value on a form, and the segmented control Element Plus draws
+     * for a radio group is heavier than a card's aside can carry.
+     */
+    .fsm_activity_filters {
+        @apply flex flex-wrap items-center gap-1;
+
+        margin-bottom: 10px;
+    }
+
+    .fsm_activity_filter {
+        @apply cursor-pointer bg-transparent text-xs font-medium text-ink-mid;
+
+        padding: 5px 10px;
+        border: 0;
+        border-radius: 6px;
+        transition: background-color .15s ease, color .15s ease;
+
+        &:hover {
+            @apply bg-surface-sunk text-ink;
+        }
+
+        &.is_active {
+            @apply bg-accent-wash text-ink;
+        }
+    }
+
+    .fsm_activity_empty {
+        @apply text-xs text-ink-light m-0;
+    }
+
+    .fsm_activity_list {
+        @apply m-0 p-0 list-none;
+    }
+
+    /*
+     * The rule down the left is FluentCart's activity timeline. It is drawn on the item
+     * rather than the list so the last entry can stop it - a line running past the final
+     * icon into empty card reads as a list that failed to load the rest.
+     */
+    .fsm_activity_item {
+        @apply relative flex gap-3 m-0;
+
+        padding-bottom: 12px;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 13px;
+            top: 28px;
+            bottom: 4px;
+            width: 1px;
+            background: var(--fsm-border);
+        }
+
+        &:last-child {
+            padding-bottom: 0;
+
+            &::before {
+                display: none;
+            }
+        }
+    }
+
+    .fsm_activity_icon {
+        @apply flex flex-none items-center justify-center rounded-sm;
+
+        width: 27px;
+        height: 27px;
+        background: var(--fsm-tile-bg, var(--fsm-surface-sunk));
+        color: var(--fsm-tile-fg, var(--fsm-text-mid));
+
+        .el-icon {
+            font-size: 14px;
+        }
+    }
+
+    /* The same two tints the Sent and Failed tiles carry, so one status reads one way. */
+    .fsm_activity_item.is_sent .fsm_activity_icon {
+        --fsm-tile-bg: var(--fsm-tile-sent-bg);
+        --fsm-tile-fg: var(--fsm-tile-sent-fg);
+    }
+
+    .fsm_activity_item.is_failed .fsm_activity_icon {
+        --fsm-tile-bg: var(--fsm-tile-failed-bg);
+        --fsm-tile-fg: var(--fsm-tile-failed-fg);
+    }
+
+    .fsm_activity_body {
+        @apply flex flex-col min-w-0;
+
+        padding-top: 2px;
+    }
+
+    /* One line each: the column is 380px wide and three wrapped lines is not a glance. */
+    .fsm_activity_subject,
+    .fsm_activity_meta,
+    .fsm_activity_time {
+        @apply block truncate;
+    }
+
+    .fsm_activity_subject {
+        @apply text-xs font-medium text-ink;
+    }
+
+    .fsm_activity_meta {
+        @apply text-xs text-ink-mid;
+
+        margin-top: 1px;
+    }
+
+    .fsm_activity_time {
+        @apply text-xs text-ink-light;
+
+        margin-top: 2px;
+    }
+}
+
+/* ---------------------------------------------------------------- the card */
+
+.fsm_card {
+    @apply bg-surface rounded border border-solid;
+
+    border-color: var(--fsm-border);
+    box-shadow: var(--fsm-shadow-card);
+    margin-bottom: 20px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    /*
+     * `gap-x` rather than `gap`: the only thing that wraps onto a second row here is the
+     * description, and it wants to sit just under its title. A row gap the size of the
+     * gutter between the title and the buttons beside it - 16px - reads as a gap between
+     * two separate things instead, so the spacing under the title is the description's
+     * own 4px margin and nothing else.
+     */
+    .fsm_card_head {
+        @apply flex flex-wrap items-start justify-between gap-x-4 gap-y-2 px-6 border-0 border-b border-solid border-hairline;
+
+        padding-top: 16px;
+        padding-bottom: 16px;
+
+        h2, h3 {
+            @apply text-sm font-medium text-ink m-0;
+        }
+
+        /*
+         * A title with a description under it is one flex item, not two.
+         *
+         * The head is a row - title on the left, actions on the right - so an <h2> and a
+         * <p> dropped into it side by side become two columns of that row, and a
+         * three-word title beside a two-line sentence ends up wrapping in a narrow
+         * column of its own. Wrapping them in a block is what actually stacks them;
+         * trying to make the paragraph claim a whole line of the row instead is a rule
+         * about line breaking that reads as an accident and behaves like one.
+         */
+        .fsm_card_head_text {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        p {
+            @apply text-xs text-ink-light m-0;
+
+            margin-top: 4px;
+            max-width: 80ch;
+        }
+
+        .fsm_card_head_actions {
+            @apply flex items-center gap-2 flex-shrink-0;
+
+            /* A card's own "View All" / "Manage", which is a quiet way out of the card
+             * rather than a link in a sentence - so no underline and no link colour. */
+            a {
+                @apply text-xs font-medium no-underline text-ink-mid;
+
+                &:hover {
+                    @apply text-ink;
+                }
+            }
+        }
+
+        /*
+         * Under the title rather than beside it once the screen is narrow. A date range
+         * picker asks for 350px before anything standing next to it, and flex-shrink-0
+         * kept the group from being squeezed - so on a phone the Sending Stats picker
+         * and its Apply button were drawn past the right edge of their own card.
+         */
+        @media (max-width: 782px) {
+            .fsm_card_head_actions {
+                @apply w-full flex-wrap shrink;
+            }
+
+            .fsm_card_head_actions .el-date-editor.el-input__wrapper {
+                width: 100%;
+            }
+        }
+    }
+
+    .fsm_card_body {
+        @apply px-6;
+
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    /* For a table or a chart, which draws its own edges right up to the card's. */
+    .fsm_card_flush {
+        padding: 0;
+    }
+}
+
+/*
+ * Where a table narrower than its columns scrolls.
+ *
+ * The floor is the sum of the column widths the logs table asks for (55 + 280 + 240 +
+ * 90 + 175 + 190). Without it the table lays itself out to whatever the card is, and on
+ * a phone that is a card wider than the screen inside a page that clips what hangs off
+ * it - so the last three columns were not off to the side, they were gone.
+ */
+.fsm_table_scroll {
+    overflow-x: auto;
+
+    .fsm_table {
+        min-width: 1030px;
+    }
+}
+
+/* A table sits flush inside its card - the card already draws the frame. */
+.fsm_table {
+    margin-top: 4px;
+    margin-bottom: 4px;
+
+    /*
+     * Element Plus draws a full-width rule under the last row, which doubles up with the
+     * card's own bottom border.
+     */
+    &::before,
+    .el-table__inner-wrapper::before {
+        display: none;
+    }
+}
+
+.fsm_pager {
+    @apply flex items-center justify-between flex-wrap gap-4 px-6 border-0 border-t border-solid border-hairline;
+
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+/*
+ * The pager on a phone.
+ *
+ * `sizes` is a 110px select offering seven page lengths, which is not a choice anyone
+ * makes on a 480px screen - and with it in the row the pagination measures 538px inside a
+ * 444px card. It ran off the edge of a page whose body clips horizontal overflow, so the
+ * last page buttons were not off to the side, they were gone.
+ */
+@media (max-width: 782px) {
+    .fsm_pager {
+        .el-pagination {
+            @apply flex-wrap;
+
+            row-gap: 8px;
+        }
+
+        .el-pagination__sizes {
+            display: none;
+        }
+    }
+}
+
+/* ------------------------------------------------------------------- a tag */
+
+/*
+ * A status, as a word.
+ *
+ * The logs table used to tint the whole row instead - a pink band for failed. Three
+ * coloured bands across a full-width table is a lot of colour for a fact that fits in one
+ * word, and it left no way to colour anything else in the row.
+ */
+.fsm_tag {
+    @apply inline-block flex-none rounded-xs text-xs font-medium;
+
+    padding: 1px 8px;
+    line-height: 18px;
+    white-space: nowrap;
+
+    &.is_failed {
+        @apply bg-danger-bg text-danger-fg;
+    }
+
+    &.is_pending {
+        @apply bg-caution-bg text-caution-fg;
+    }
+
+    &.is_sent {
+        @apply bg-ok-bg text-ok-fg;
+    }
+
+    /* Nothing is wrong and nothing has happened - it should not draw the eye either way. */
+    &.is_neutral {
+        @apply bg-quiet-bg text-quiet-fg;
+    }
+
+    /*
+     * The Default mark is the one fact the Connections screen exists to state, so it is
+     * the only tag drawn in the accent. Fallback is the understudy and reads as one -
+     * outlined rather than filled, so a glance down the list finds the Default first.
+     */
+    &.is_default {
+        background: var(--fsm-accent);
+        color: var(--fsm-accent-contrast);
+    }
+
+    &.is_fallback {
+        @apply border border-solid;
+
+        background: transparent;
+        color: var(--fsm-text-mid);
+        border-color: var(--fsm-border-strong);
+        padding: 0 7px;
+    }
+
+    /*
+     * The extra-senders mark is the one tag you can press, so it is the one tag drawn
+     * dashed: a solid outline would have read as a second Fallback sitting beside the
+     * first, and the count it carries is a thing you can change rather than a state the
+     * connection is in. It stays in the quiet palette either way - how many addresses a
+     * connection sends as is never the answer to "which connection sends my mail".
+     */
+    &.is_senders {
+        @apply cursor-pointer border border-dashed;
+
+        background: transparent;
+        color: var(--fsm-text-mid);
+        border-color: var(--fsm-border-strong);
+        padding: 0 7px;
+        margin: 0;
+        line-height: 18px;
+
+        /* A <button>, so it arrives with the UA's own font rather than the page's. */
+        font-family: inherit;
+
+        &:hover {
+            color: var(--fsm-text);
+            border-color: var(--fsm-accent);
+        }
+    }
+}
+
+/* --------------------------------------------------------- connection row */
+
+/*
+ * A connection, as one row: is it working, what does it send as, and is it the Default
+ * or the Fallback. See the comment in Connections.vue for why this replaced a table.
+ */
+.fsm_conn_list {
+    @apply m-0 p-0 list-none;
+}
+
+.fsm_conn {
+    @apply flex items-center gap-4 m-0 border-0 border-b border-solid border-hairline;
+
+    padding: 14px 24px;
+
+    &:last-child {
+        @apply border-b-0;
+    }
+
+    &:hover {
+        @apply bg-surface-sunk;
+    }
+}
+
+/* A dot, not a word: the message it stands for is on the title, and a row that is fine
+ * should not spend a column saying so. Unknown is hollow rather than grey-filled, so
+ * "not checked yet" cannot be misread as a third health state. */
+/*
+ * A fixed column, because the logos are every shape between 2:1 and 5:1 - capped by
+ * height so they all sit on the same line, and left-aligned in a box of one width so the
+ * addresses beside them line up down the list.
+ */
+.fsm_conn_provider {
+    @apply flex flex-none items-center text-xs font-medium text-ink-mid truncate;
+
+    width: 150px;
+
+    img {
+        max-width: 110px;
+        max-height: 24px;
+        width: auto;
+        height: auto;
+    }
+}
+
+.fsm_conn_main {
+    @apply flex flex-col min-w-0 flex-1;
+}
+
+/* The address is what you click to open the connection, so it is a button that reads as
+ * a link rather than a cell with a pointer cursor bolted on. */
+.fsm_conn_email {
+    @apply block cursor-pointer bg-transparent p-0 text-sm font-medium text-ink truncate text-left;
+
+    border: 0;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.fsm_conn_note {
+    @apply block text-xs text-ink-light truncate;
+
+    margin-top: 2px;
+}
+
+.fsm_conn_marks {
+    @apply flex flex-none items-center gap-2;
+}
+
+.fsm_conn_actions {
+    @apply flex flex-none items-center;
+
+    gap: 6px;
+}
+
+/* The rule the list is an instance of, stated once under it rather than in an alert. */
+.fsm_conn_rule {
+    @apply text-xs text-ink-light;
+
+    max-width: 80ch;
+    margin: -8px 0 20px;
+}
+
+/*
+ * On a phone the row has more in it than there is width for: a 150px provider column,
+ * 48px of padding, three gaps, the address, the marks and two action buttons come to
+ * more than 320px before the address has said anything. So the row wraps - the logo and
+ * the marks share the first line, the address takes the second, and the actions the
+ * third. 782px is where wp-admin changes its own layout, which keeps the two in step.
+ */
+@media (max-width: 782px) {
+    .fsm_conn {
+        @apply flex-wrap;
+
+        padding: 14px 16px;
+
+        /* Sized by the logo now rather than holding a column open for the ones below. */
+        .fsm_conn_provider {
+            width: auto;
+        }
+
+        .fsm_conn_main {
+            flex: 1 1 100%;
+            order: 2;
+        }
+
+        .fsm_conn_marks {
+            margin-left: auto;
+        }
+
+        .fsm_conn_actions {
+            flex: 1 1 100%;
+            order: 3;
+        }
+    }
+}
+
+/* ---------------------------------------------------------------- the foot */
+
+/* Quiet, and the only place the app says which version of itself you are looking at. */
+/* ------------------------------------------------------- back link + hint */
+
+/* Above the title, so the title still reads as the first line of the page. */
+.fsm_page_back {
+    @apply inline-flex items-center text-xs font-medium text-ink-mid no-underline;
+
+    gap: 4px;
+    margin-bottom: 6px;
+
+    &:hover {
+        @apply text-ink;
+    }
+}
+
+/*
+ * An icon that trails a button's label.
+ *
+ * Element Plus's `icon` prop always puts the icon first and gives it 6px of margin. For
+ * the handful of buttons where the icon points forward - Next, on the log viewer - the
+ * icon stays in the slot, and this is the margin the prop would have supplied. Nothing
+ * in a flex row supplies it on its own: a text node beginning with a space becomes an
+ * anonymous flex item with that space stripped.
+ */
+.fsm_btn_icon_right {
+    margin-left: 6px;
+}
+
+/*
+ * A form that is a column rather than a page.
+ *
+ * A settings form has a readable measure like any other body of text: two fields side by
+ * side at 1400px are far enough apart to read as unrelated, and a port number does not
+ * want eight hundred pixels to sit in. The page heading above it still runs full width,
+ * because a title and the provider it belongs to are the two ends of one line.
+ */
+.fsm_form_column {
+    max-width: 880px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*
+ * The provider chosen in the connection wizard: its mark on a plate, and the button that
+ * takes you back to the grid. A fixed plate rather than a bare image because the logos
+ * run from 2:1 to 5:1, and one that changed shape with the provider would move the
+ * button beside it every time you picked a different one.
+ */
+.fsm_provider_chosen {
+    @apply flex items-center gap-3;
+}
+
+/*
+ * The picker's own way out, for someone who opened it to look and then kept what they
+ * already had. Sits under the grid rather than beside the heading, which is where the
+ * connection screen puts its `change` button and so is already spoken for.
+ */
+.fsm_picker_actions {
+    @apply mt-4;
+}
+
+/*
+ * The plate itself, on its own rather than nested under the row above, because it is
+ * shown in two places now - the connection screen's heading and the dashboard's
+ * first-run wizard - and a rule that only works inside one of them is a rule that will
+ * be wrong in the other.
+ */
+.fsm_provider_chosen_mark {
+    @apply flex flex-none items-center justify-center rounded border border-solid;
+
+    width: 124px;
+    height: 40px;
+    padding: 5px 12px;
+    border-color: var(--fsm-border);
+    background: var(--fsm-surface);
+
+    img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+}
+
+.fsm_provider_note {
+    @apply text-xs;
+
+    color: var(--fsm-warning-fg);
+    margin: 0 0 16px;
+    max-width: 80ch;
+    line-height: 1.5;
+}
+
+/* Said once the token is in hand: a sentence, so it is set as one. */
+.fsm_provider_connected {
+    @apply text-sm text-ink-mid m-0;
+
+    line-height: 1.5;
+}
+
+/* The prompt and the button that finishes an OAuth provider's form. */
+.fsm_provider_auth {
+    @apply flex flex-col items-center;
+
+    gap: 10px;
+    padding: 8px 0 4px;
+
+    p {
+        @apply text-sm text-ink-mid m-0;
+    }
+}
+
+/* The next thing to do when a form has nothing in it yet. */
+.fsm_form_hint {
+    @apply text-sm text-ink-light;
+
+    margin: 4px 0 0;
+}
+
+/* ------------------------------------------------------------ log actions */
+
+/* One group, right-aligned, with the same 6px between buttons as every other row. */
+.fsm_log_actions {
+    @apply flex items-center justify-end;
+
+    gap: 6px;
+
+    .el-button + .el-button,
+    .el-button + .el-popover,
+    .el-button {
+        margin-left: 0;
+    }
+}
+
+/* ---------------------------------------------------------- email test */
+
+/*
+ * A column, not a page. The fields are a From address, a recipient and a switch, and a
+ * 1350px-wide input is harder to read than a 500px one, not easier.
+ */
+/*
+ * A single 720px column on a page with no sidebar: left-aligned it leaves the
+ * right two thirds of a wide screen empty and the card looking parked in a
+ * corner, so the column - heading and card together, or the heading would sit
+ * over empty space - is centred.
+ */
+.fsm_test {
+    .fsm_page_head,
+    .fsm_test_card {
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.fsm_test_card {
+
+    .fsm_row_actions {
+        @apply flex flex-wrap items-center;
+
+        gap: 12px;
+        padding-top: 16px;
+        padding-bottom: 12px;
+    }
+
+    /* Says why the button above it cannot be pressed, so it sits beside it. */
+    .fsm_test_blocked {
+        width: auto;
+        flex: 1 1 240px;
+    }
+}
+
+/* ------------------------------------------------------- log bulk action */
+
+/*
+ * Appears in the page head as soon as a row is ticked, so it has to hold its own width
+ * in a flex line rather than inherit one - "Resend Selected Emails" is the longest thing
+ * it has to show, and the select is what tells you the action exists.
+ */
+.fsm_log_bulk {
+    @apply flex items-center;
+
+    gap: 8px;
+
+    .fsm_log_bulk_select {
+        width: 180px;
+    }
+}
+
+/* ------------------------------------------------------------ channel row */
+
+/*
+ * A notification channel, as one row: what it is, whether it is connected, whether a
+ * failure goes to it, and the two things you can do to it. The same shape as a
+ * connection row, because it is the same kind of thing - a place mail goes - and the
+ * el-table it replaced spent three header cells on four rows that cannot be sorted.
+ */
+.fsm_chan_wrap {
+    /* Holds the loading mask up while the channels are being fetched, and never applies
+     * once they are there - four rows are twice this tall. */
+    min-height: 120px;
+}
+
+.fsm_chan_list {
+    @apply m-0 p-0 list-none;
+}
+
+.fsm_chan {
+    @apply flex items-center gap-4 m-0 border-0 border-b border-solid border-hairline;
+
+    padding: 14px 24px;
+
+    &:last-child {
+        @apply border-b-0;
+    }
+
+    &:hover {
+        @apply bg-surface-sunk;
+    }
+}
+
+/* Telegram, Slack, Discord and Pushover are marks rather than wordmarks, and the row
+ * says the name beside them, so the logo is doing what a logo is good at. */
+.fsm_chan_logo {
+    @apply flex-none;
+
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.fsm_chan_main {
+    @apply flex flex-col min-w-0 flex-1;
+}
+
+.fsm_chan_title {
+    @apply block text-sm font-medium text-ink truncate;
+}
+
+.fsm_chan_note {
+    @apply block text-xs text-ink-light truncate;
+
+    margin-top: 2px;
+}
+
+.fsm_chan_actions {
+    @apply flex flex-none items-center;
+
+    gap: 6px;
+}
+
+/* Inside a flush card, so it carries the padding the card body is not giving it. */
+.fsm_chan_hint {
+    @apply text-xs text-ink-light border-0 border-t border-solid border-hairline;
+
+    margin: 0;
+    padding: 12px 24px 16px;
+}
+
+/* The setup form that replaces the list in the same card. */
+.fsm_chan_config {
+    padding: 16px 24px 24px;
+}
+
+.fsm_chan_head {
+    margin-bottom: 20px;
+
+    .fsm_chan_back {
+        @apply text-xs text-ink-mid;
+
+        margin-bottom: 12px;
+
+        &:hover {
+            @apply text-ink;
+        }
+    }
+
+    .fsm_chan_head_main {
+        @apply flex items-center gap-3;
+    }
+
+    .fsm_chan_head_logo {
+        @apply flex-none;
+
+        width: 28px;
+        height: 28px;
+        object-fit: contain;
+    }
+
+    .fsm_chan_head_title {
+        @apply m-0 p-0 text-ink;
+
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 22px;
+    }
+}
+
+/* The alerts card says what is set rather than how much - the values are short tags. */
+.fsm_alerts_hint {
+    @apply text-xs text-ink-light m-0;
+
+    margin-top: 12px;
+}
+
+/* ----------------------------------------------------------- setting row */
+
+/*
+ * Label and explanation on the left, the control pinned to the right.
+ *
+ * The text takes the width and the control is only as wide as it needs to be. The other
+ * way round - a fixed label column and a fluid control - gives the widest part of the row
+ * to a 44px switch while the sentence explaining it wraps over four lines.
+ */
+.fsm_row {
+    @apply flex items-start gap-6 border-0 border-b border-solid border-hairline;
+
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    &:last-child {
+        @apply border-b-0;
+    }
+
+    .fsm_row_label {
+        flex: 1 1 auto;
+        max-width: 720px;
+        min-width: 0;
+
+        label,
+        .fsm_row_title {
+            @apply block text-sm font-medium text-ink m-0;
+        }
+
+        p {
+            @apply text-xs text-ink-light m-0;
+
+            margin-top: 3px;
+            line-height: 1.5;
+        }
+    }
+
+    .fsm_row_control {
+        flex: 0 0 auto;
+
+        /* Holds every control against the same right edge, so they read as one column. */
+        margin-left: auto;
+
+        .el-input,
+        .el-select,
+        .el-textarea {
+            width: 300px;
+        }
+
+        .el-form-item {
+            margin-bottom: 0;
+        }
+    }
+
+    /* For controls that need the whole width: a table, an editor, a group of cards. */
+    &.fsm_row_stacked {
+        @apply block;
+
+        .fsm_row_label {
+            max-width: none;
+            margin-bottom: 8px;
+        }
+
+        .fsm_row_control {
+            margin-left: 0;
+
+            .el-input,
+            .el-select,
+            .el-textarea {
+                width: 100%;
+            }
+        }
+    }
+}
+
+/* -------------------------------------------------------- setting toggle */
+
+/*
+ * On/off settings put the switch beside the name it belongs to. The explanation hangs
+ * underneath, indented to the width of the switch so the text lines up as one column down
+ * the card and the switches make a second, narrower one.
+ */
+.fsm_toggle {
+    @apply border-0 border-b border-solid border-hairline;
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    &:last-child {
+        @apply border-b-0;
+    }
+
+    .fsm_toggle_main {
+        @apply flex items-center gap-3;
+    }
+
+    .fsm_toggle_title {
+        @apply text-sm font-medium text-ink cursor-pointer select-none m-0;
+    }
+
+    .fsm_toggle_body {
+        /* The switch (40px) plus the gap beside it, so this starts under the title. */
+        padding-left: 52px;
+        max-width: 772px;
+
+        p {
+            @apply text-xs text-ink-light m-0;
+
+            margin-top: 3px;
+            line-height: 1.5;
+        }
+    }
+}
+
+@media (max-width: 782px) {
+    .fsm_tiles {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .fsm_row {
+        display: block;
+
+        .fsm_row_label {
+            max-width: none;
+            margin-bottom: 8px;
+        }
+
+        .fsm_row_control {
+            margin-left: 0;
+
+            .el-input,
+            .el-select,
+            .el-textarea {
+                width: 100%;
+            }
+        }
+    }
+}
+
+/* ------------------------------------------------------------ documentation */
+
+/*
+ * The docs index: one section per category, each a grid of tiles. Not cards holding
+ * bullet lists - the categories run from one article to fifteen, and three equal
+ * cards side by side put a single link at the height of a column of fourteen.
+ *
+ * A tile is the article's title over its one-line description, so the choice of
+ * which to open is made here rather than by opening three tabs. The description is
+ * clamped to two lines: they are written to one sentence and a tile that grew to fit
+ * a long one would break the row's shared baseline.
+ */
+.fsm_docs {
+    .fsm_page_head_text {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    /* The page's one control. Wide enough for a sentence, narrow enough to stay
+     * on the title's line down to a tablet. */
+    .el-input.fsm_docs_search {
+        width: 320px;
+    }
+
+    .fsm_load_error {
+        margin-bottom: 20px;
+    }
+}
+
+.fsm_docs_section {
+    margin-bottom: 28px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    /*
+     * Wraps: on a phone the description goes under the title rather than
+     * squeezing beside it into a column three words wide.
+     */
+    .fsm_docs_section_head {
+        @apply flex flex-wrap items-baseline gap-x-2 gap-y-1;
+
+        margin-bottom: 12px;
+
+        h2 {
+            @apply text-sm font-semibold text-ink-head m-0;
+
+            line-height: 22px;
+        }
+
+        p {
+            @apply text-xs text-ink-light m-0;
+        }
+
+        /* How many are in the section, in the head rather than the eye counting
+         * fifteen tiles - and quieter than the title, since it is not the point. */
+        .fsm_docs_section_count {
+            @apply text-xs text-ink-light;
+        }
+    }
+}
+
+.fsm_docs_grid {
+    @apply grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+@media (max-width: 1180px) {
+    .fsm_docs_grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .fsm_docs_grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.fsm_docs_tile {
+    @apply flex flex-col no-underline bg-surface rounded border border-solid border-hairline;
+
+    padding: 14px 16px;
+    box-shadow: var(--fsm-shadow-card);
+    transition: border-color .15s ease, box-shadow .15s ease;
+
+    &:hover,
+    &:focus-visible {
+        @apply border-hairline-strong;
+
+        box-shadow: var(--fsm-shadow-lift);
+    }
+
+    .fsm_docs_tile_title {
+        @apply block text-sm font-medium text-ink;
+
+        line-height: 20px;
+    }
+
+    .fsm_docs_tile_desc {
+        @apply block text-xs text-ink-light;
+
+        margin-top: 4px;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /*
+     * The provider's wordmark on a suggested tile, at the height the Settings rows
+     * draw it so the same logo is the same size two screens apart. A provider with
+     * no image gets its name in the same slot; the row keeps its shape either way.
+     */
+    .fsm_docs_tile_logo {
+        @apply flex items-center;
+
+        height: 24px;
+        margin-bottom: 10px;
+
+        img {
+            max-height: 24px;
+            max-width: 110px;
+            width: auto;
+            height: auto;
+        }
+
+        span {
+            @apply text-xs font-medium text-ink-mid;
+        }
+    }
+}
+
+/* Search results: a list, since a ranked order is the point and a grid has none. */
+.fsm_docs_results {
+    .fsm_card_body {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .fsm_docs_result_list {
+        @apply list-none m-0 p-0;
+    }
+
+    .fsm_docs_result {
+        @apply block no-underline border-0 border-b border-solid border-hairline;
+
+        padding: 12px 0;
+    }
+
+    li:last-child .fsm_docs_result {
+        @apply border-b-0;
+    }
+
+    .fsm_docs_result_head {
+        @apply flex flex-wrap items-center gap-2;
+    }
+
+    .fsm_docs_result_title {
+        @apply text-sm font-medium text-ink;
+    }
+
+    .fsm_docs_result:hover .fsm_docs_result_title {
+        text-decoration: underline;
+    }
+
+    .fsm_docs_result_desc {
+        @apply block text-xs text-ink-light;
+
+        margin-top: 3px;
+        line-height: 1.5;
+    }
+
+    .fsm_docs_empty {
+        @apply text-sm text-ink-mid m-0;
+
+        padding: 14px 0;
+    }
+}
+
+/* The search takes the whole line once it has dropped under the title. */
+@media (max-width: 782px) {
+    .fsm_docs .fsm_page_actions,
+    .fsm_docs .el-input.fsm_docs_search {
+        width: 100%;
+    }
+}

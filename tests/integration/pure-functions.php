@@ -81,6 +81,28 @@ return function () {
         );
     });
 
+    FsmtpTest::case('test send throughput is the ceiling one round trip implies', function () use (
+        $invoke,
+        $withoutConstructor
+    ) {
+        $controller = $withoutConstructor(SettingsController::class);
+
+        // 1.21 s round trip: under one a second, so the decimal is kept.
+        $slow = $invoke($controller, 'throughputFromDuration', [1.21]);
+        FsmtpTest::assertSame(number_format_i18n(1 / 1.21, 1), $slow['per_second'], 'slow per second keeps a decimal');
+        FsmtpTest::assertSame(number_format_i18n(49), $slow['per_minute'], 'slow per minute floors');
+        FsmtpTest::assertSame(number_format_i18n(2975), $slow['per_hour'], 'slow per hour floors');
+
+        // 50 ms round trip: twenty a second, so the decimal is dropped.
+        $fast = $invoke($controller, 'throughputFromDuration', [0.05]);
+        FsmtpTest::assertSame(number_format_i18n(20), $fast['per_second'], 'fast per second is whole');
+        FsmtpTest::assertSame(number_format_i18n(1200), $fast['per_minute'], 'fast per minute');
+
+        // A zero reading must not divide by zero; it is clamped to a millisecond.
+        $zero = $invoke($controller, 'throughputFromDuration', [0]);
+        FsmtpTest::assertSame(number_format_i18n(1000), $zero['per_second'], 'zero clamps to one millisecond');
+    });
+
     FsmtpTest::case('connection health preserves the message from an ordinary exception', function () use ($invoke) {
         $message = 'provider unavailable ' . FsmtpTest::uniq();
 

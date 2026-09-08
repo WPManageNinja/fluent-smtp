@@ -1,8 +1,8 @@
 <template>
     <div>
-        <h3 class="fs_config_title">{{ $t('toSend Api Settings') }}</h3>
+        <h3 class="fs_config_title">{{ $t('toSend API Settings') }}</h3>
 
-        <div v-if="is_new" class="tosend_signup_hint" style="padding: 10px 14px; margin-bottom: 15px; background: #f6fbff; border: 1px solid #cfe5ff; border-radius: 4px; font-size: 13px; line-height: 1.55; color: #2c3e50;">
+        <div v-if="is_new" class="tosend_signup_hint" style="padding: 10px 14px; margin-bottom: 15px; background: var(--fsm-accent-wash); border: 1px solid var(--fsm-border); border-radius: 4px; font-size: 13px; line-height: 1.55; color: var(--fsm-text);">
             {{ $t("Don't have a toSend account yet?") }}
             <a target="_blank" rel="noopener" href="https://tosend.com/?fluent-smtp=connect" style="font-weight: 600;">
                 {{ $t('Create one free') }}
@@ -34,9 +34,9 @@
             </div>
         </el-alert>
 
-        <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button label="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
-            <el-radio-button label="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
+        <el-radio-group size="small" v-model="connection.key_store">
+            <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store in wp-config.php') }}</el-radio-button>
         </el-radio-group>
 
         <template v-if="connection.key_store == 'db'">
@@ -53,12 +53,12 @@
                 <error :error="errors.get('api_key')"/>
             </el-form-item>
             <el-form-item>
-                <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                     {{ $t('Disable Encryption for API Key (Not Recommended)') }}
                 </el-checkbox>
-                <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
+                <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                     {{
-                        $t('By disabling encryption, your API key will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                        $t('Your API key will be stored as readable text in the database. Only turn this on if a security plugin on this site rotates the WordPress SALT keys, which would otherwise invalidate the encrypted value.')
                     }}
                 </p>
             </el-form-item>
@@ -85,20 +85,19 @@
                     style="margin:0;"
                 >{{ email }}</el-tag>
             </div>
-            <div style="display:flex; gap:8px;">
+            <div class="fsm_field_group" style="display:flex; gap:8px;">
                 <el-input
                     v-model="newAdditional"
                     :placeholder="$t('sender@yourdomain.com')"
-                    size="small"
                     style="max-width: 320px;"
-                    @keyup.enter.native="addAdditional"
+                    @keyup.enter="addAdditional"
                 />
-                <el-button size="small" @click="addAdditional" :disabled="!newAdditional">
+                <el-button @click="addAdditional" :disabled="!newAdditional">
                     {{ $t('Add') }}
                 </el-button>
             </div>
-            <p v-if="addError" style="color:#dc3232; font-size:12px; margin:4px 0 0;">{{ addError }}</p>
-            <p class="small-help-text" style="font-size:12px; margin:6px 0 0; color:#909399;">
+            <p v-if="addError" style="color:var(--fsm-danger-fg); font-size:12px; margin:4px 0 0;">{{ addError }}</p>
+            <p class="small-help-text" style="font-size:12px; margin:6px 0 0; color:var(--fsm-text-light);">
                 {{ $t('Add more From addresses that route through this toSend connection. Each email must be on a domain verified in your toSend account — this is checked when you save.') }}
             </p>
             <error :error="errors.get('additional_senders')"/>
@@ -126,7 +125,7 @@ export default {
     },
     created() {
         if (!Array.isArray(this.connection.additional_senders)) {
-            this.$set(this.connection, 'additional_senders', []);
+            this.connection.additional_senders = [];
         }
     },
     computed: {

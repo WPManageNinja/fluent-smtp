@@ -1,7 +1,31 @@
-@import "./vendor";
+/* Every colour the app paints with, light and dark, comes from here - so it goes first. */
+@import "../admin/styles/theme";
+@import "../admin/styles/layout";
+
+/*
+ * Element Plus components are pulled in on demand by ElementPlusResolver, and
+ * each one brings its own stylesheet with it. That replaced resources/scss/
+ * vendor.scss, which was 182 lines of hand-maintained @import statements that
+ * had to be edited by hand every time a component was added to the app.
+ *
+ * These four are the exceptions. They are used imperatively - ElNotification,
+ * ElLoading, ElMessageBox - or as a directive, so they never appear as a tag in
+ * a template and the resolver cannot see them. Their CSS has to be asked for.
+ */
+@import 'element-plus/theme-chalk/el-notification.css';
+@import 'element-plus/theme-chalk/el-loading.css';
+@import 'element-plus/theme-chalk/el-message-box.css';
+@import 'element-plus/theme-chalk/el-overlay.css';
+
 @import "./variables";
-@import "./docs";
 @import "./alerts";
+
+/*
+ * No `@tailwind base` - that is preflight, which is off (see tailwind.config.js).
+ * WordPress supplies the base styles for this page and resetting them breaks wp-admin.
+ */
+@tailwind components;
+@tailwind utilities;
 
 .fluent-mail-app {
   max-width: 100%;
@@ -11,30 +35,29 @@
     box-sizing: border-box;
   }
 
-  & .fluent-mail-main-menu-items {
-    margin-bottom: 20px;
-    background: white;
-    margin-left: -20px;
-
-    & .fluent-mail-navigation {
-      margin-left: -20px;
-    }
-  }
-
-  & .fluent-mail-body {
-    margin-right: 20px;
-
+  & {
+    /*
+     * About is the last screen not rebuilt around .fsm_card, and it still uses this
+     * header-and-content pair. Rather than rewrite the template to say the same thing a
+     * different way, the pair is drawn *as* a card: the header supplies the top of the
+     * frame, the content the rest. A .fss_content without a header above it closes the
+     * box on its own.
+     */
     & .fss_header {
       display: block;
       width: auto;
-      border-bottom: 1px solid #e3e8ee;
       clear: both;
       overflow: hidden;
       margin: 0;
-      padding: 15px;
-      background-color: #f7fafc;
-      font-weight: 700;
-      color: #697386;
+      padding: 16px 24px;
+      background-color: var(--fsm-surface);
+      border: 1px solid var(--fsm-border);
+      border-bottom: 0;
+      border-radius: 8px 8px 0 0;
+      box-shadow: var(--fsm-shadow-card);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fsm-text);
 
       &.fss_widget_header {
         display: flex;
@@ -42,13 +65,33 @@
         justify-content: space-between;
         h3 {
           margin: 0;
+          font-size: 14px;
+          font-weight: 500;
         }
       }
     }
 
+    /*
+     * Joined to the header above it, so it only closes the bottom of the box.
+     *
+     * This used to be nested inside .fss_content, where it compiled to
+     * `.fss_content .fss_header + .fss_content` - a content box following a header
+     * *inside another content box*, which is not a thing this app builds. So it never
+     * matched, and every one of these cards drew its body with four rounded corners:
+     * two notches at the seam, right under a header squared off to meet it.
+     */
+    & .fss_header + .fss_content {
+      border-radius: 0 0 8px 8px;
+    }
+
     & .fss_content {
-      padding: 20px;
-      background-color: #fff;
+      padding: 16px 24px;
+      margin-bottom: 20px;
+      background-color: var(--fsm-surface);
+      border: 1px solid var(--fsm-border);
+      border-radius: 8px;
+      box-shadow: var(--fsm-shadow-card);
+
       .fss_general_settings {
         .el-form {
           .el-form-item {
@@ -76,14 +119,6 @@
     }
   }
 
-  & .fluent-mail-navigation.el-menu--horizontal.el-menu .el-menu-item.is-active {
-    background: #ecf5ff;
-  }
-
-  & .logo {
-    margin-left: 20px;
-  }
-
   & .pager-wrap {
     margin-top: 20px;
     text-align: right;
@@ -102,7 +137,7 @@
       gap: 5px;
       text-align: center;
       &:hover {
-        color: #409EFF;
+        color: var(--fsm-link);
       }
       img {
         height: 50px;
@@ -111,30 +146,65 @@
   }
 }
 
+/*
+ * .fsm_card_body pads 4px top and bottom, because what usually goes in one is a list of
+ * rows carrying 12px of their own - 4 and 12 make the 16 the card head uses. A form is
+ * not that: its first label and its Save button have no padding of their own, so the
+ * wizard brings the other 12 itself and the card keeps the same rhythm.
+ */
+.fss_connection_wizard {
+  padding: 12px 0;
+}
+
+/* A step of the connection wizard - one card per subject, the same as everywhere else. */
 .fss_config_section {
-  background: #f7fafc;
-  padding: 20px;
-  margin-bottom: 30px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 2px 2px #dcdfe5;
+  background: var(--fsm-surface);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  border: 1px solid var(--fsm-border);
+  border-radius: 8px;
+  box-shadow: var(--fsm-shadow-card);
+
+  .fs_config_title {
+    margin: 0 0 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--fsm-text);
+  }
+
+  /*
+   * Element Plus lays a form item's content out as a flex row, where Element UI's was a
+   * block. Without a gap an inline label and the control beside it touch - "Use Auto
+   * TLS" ran straight into its switch.
+   */
+  .el-form-item__content {
+    gap: 8px;
+
+    /*
+     * A field's control takes the line under its label.
+     *
+     * The row above gives an inline control - a switch, a pair of radios - the space it
+     * was missing, but it also means a control with no width of its own sits beside the
+     * label rather than under it. An el-input fills the row and wraps on its own; these
+     * two have to say so.
+     */
+    > .fsm_input_password,
+    > .fsm_field_group,
+    > .code_snippet {
+      flex: 1 1 100%;
+    }
+  }
 }
 
 .fss_connection_intro {
   max-width: 1160px;
   margin: 0 auto;
-  padding: 30px;
-  background: #eff4f7;
-  border-radius: 5px;
-
-  .fss_config_section {
-    background: white;
-  }
 }
 
 .fss_intro {
   text-align: center;
   margin-bottom: 45px;
-  border-bottom: 1px solid #e3e8ed;
+  border-bottom: 1px solid var(--fsm-border);
   padding-bottom: 20px;
 }
 
@@ -160,32 +230,81 @@
   }
 }
 
-ul.fss_log_items li {
-  display: inline-block;
-  width: 48%;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ebeef4;
-  padding: 10px 0px;
+/*
+ * Two columns of label/value pairs, each pair a grid of its own so the values line up
+ * with each other rather than starting wherever the label before them happened to end.
+ * The inline-blocks this replaced put "Status: Sent [Resend]" and "Date: ..." at two
+ * different left edges on the same row.
+ */
+.fss_log_failure {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--fsm-danger-line);
+  border-radius: 6px;
+  background: var(--fsm-danger-bg);
+  color: var(--fsm-danger-fg);
 
-  > div {
-    display: inline-block;
+  p {
+    margin: 4px 0 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+ul.fss_log_items {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+
+  li {
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1fr);
+    align-items: baseline;
+    gap: 4px 8px;
+    margin: 0;
+    border-bottom: 1px solid var(--fsm-border);
+    padding: 10px 0;
+    min-width: 0;
   }
 
   .item_header {
     font-weight: 500;
-    padding-right: 10px;
-    min-width: 42px;
+    color: var(--fsm-text-mid);
+  }
+
+  /* A subject line or a recipient list has no spaces to break on when it is long. */
+  .item_content {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 782px) {
+    grid-template-columns: minmax(0, 1fr);
+
+    li {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 }
 
-.el-table .el-table__row.row_type_failed, .el-table .el-table__row--striped.el-table__row.row_type_failed {
-  background: rgb(253, 226, 226) !important;
-  &:hover {
-    background: rgb(255 193 193) !important
-  }
-  td {
-    background: transparent !important;
-  }
+/*
+ * The logs table used to paint a failed row pink edge to edge. It says the same thing as
+ * the status chip that replaced it (.fsm_tag in styles/_layout.scss), in three columns'
+ * worth of colour instead of one word's, and while it was there no other cell in the row
+ * could be coloured for any other reason.
+ */
+
+/*
+ * Qualified with .el-input on purpose. Element Plus sets `.el-input { width: 100% }` and
+ * its component CSS is injected into <head> at runtime, after this stylesheet - so a
+ * single-class rule ties on specificity and loses on source order. Inside a flex-none
+ * container that resolves to a circular width and the search box swallows the row.
+ */
+.el-input.fsm_log_search {
+  width: 260px;
+}
+
+.fsm_log_simulated {
+  color: var(--fsm-danger-fg);
 }
 
 .fluent-mail-app .dashboard .fss_content .mailer-block {
@@ -196,11 +315,11 @@ ul.fss_log_items li {
 }
 
 .fluent-mail-app .dashboard .fss_content .fluent-mail-mailer-image {
-  background: #fff;
+  background: var(--fsm-surface);
   text-align: center;
   cursor: auto;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
+  border: 1px solid var(--fsm-border);
+  box-shadow: var(--fsm-shadow-lift);
   border-radius: 4px;
   height: 76px;
   position: relative;
@@ -213,7 +332,7 @@ ul.fss_log_items li {
 }
 
 .fluent-mail-app .dashboard .fss_content .fluent-mail-mailer-image:hover {
-  box-shadow: 0 0 5px 5px #ccc;
+  box-shadow: var(--fsm-shadow-pop);
 }
 
 .fluent-mail-app .dashboard .fss_content .fluent-mail-mailer-image img {
@@ -241,25 +360,25 @@ ul.fss_log_items li {
 }
 
 .fluent-mail-app .dashboard .fss_content .email-stat:hover {
-  background: #ecf5ff;
+  background: var(--fsm-accent-wash);
   opacity: .7;
 }
 
 .logs {
   .successful {
-    color: #409EFF;
+    color: var(--fsm-link);
     font-size: 20px;
   }
   .unsuccessful {
-    color: #F56C6C;
+    color: var(--fsm-danger-fg);
     font-size: 20px;
   }
   .resent {
-    color: #a4da89;
+    color: var(--fsm-success-fg);
     font-size: 20px;
   }
   .dont-show {
-    color: #409EFF;
+    color: var(--fsm-link);
     margin-left: 10px;
     cursor: pointer;
     vertical-align: top;
@@ -274,8 +393,8 @@ ul.fss_dash_lists {
   li {
     font-size: 15px;
     padding: 0px 10px;
-    color: #697485;
-    border-bottom: 1px solid #e3e8ed;
+    color: var(--fsm-text-mid);
+    border-bottom: 1px solid var(--fsm-border);
     line-height: 44px;
     transition: all 0.3s ease;
     margin-bottom: 0;
@@ -286,8 +405,8 @@ ul.fss_dash_lists {
     }
 
     &:hover {
-      background: #f7fafc;
-      border-bottom: 1px solid #d2d2df;
+      background: var(--fsm-surface-sunk);
+      border-bottom: 1px solid var(--fsm-border);
     }
 
     &:last-child {
@@ -303,7 +422,7 @@ ul.fss_dash_lists {
 .fss_plugin_block {
   margin: 0px -20px;
   padding: 20px;
-  border-bottom: 1px solid #e3e8ed;
+  border-bottom: 1px solid var(--fsm-border);
 
   .fss_plugin_title {
     text-align: center;
@@ -314,7 +433,7 @@ ul.fss_dash_lists {
     }
 
     h3 {
-      color: #697386;
+      color: var(--fsm-text-mid);
       margin-bottom: 5px;
       font-size: 18px;
     }
@@ -333,6 +452,10 @@ ul.fss_dash_lists {
     margin-bottom: -20px;
   }
 
+  /*
+   * FluentCRM's own purple. A brand colour rather than a piece of chrome, so it
+   * is a literal in both themes - the button is meant to look like FluentCRM.
+   */
   .fss_fluentcrm_btn {
     background: #7743e6 !important;
     border-color: #7743e6 !important;
@@ -351,6 +474,43 @@ ul.fss_dash_lists {
   span.el-form-item__error {
     display: block;
     position: relative !important;
+  }
+}
+
+/*
+ * The wp-config.php snippet a provider offers instead of storing keys in the database.
+ *
+ * It had no styling at all - a bare <textarea style="width:100%"> inside a form item,
+ * which Element Plus lays out as a wrapping flex row. 100% of a flex item that shrinks to
+ * its content is not the width of the row, so the box collapsed to a couple of hundred
+ * pixels beside its own instruction and showed three words of the define() at a time.
+ * It is code to be copied, so it is set as code.
+ */
+.code_snippet {
+  margin-top: 6px;
+
+  textarea {
+    display: block;
+    width: 100%;
+    min-height: 74px;
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--fsm-border);
+    border-radius: 6px;
+    background: var(--fsm-surface-sunk);
+    color: var(--fsm-text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre;
+    overflow-x: auto;
+    resize: vertical;
+    box-shadow: none;
+
+    &:focus {
+      border-color: var(--fsm-accent);
+      outline: none;
+    }
   }
 }
 
@@ -375,7 +535,7 @@ ul.fss_dash_lists {
   margin: 0 auto;
   max-width: 600px;
   text-align: center;
-  background: #e6eaec;
+  background: var(--fsm-surface-raised);
   padding: 20px;
   border-radius: 10px;
   h1 {
@@ -404,22 +564,19 @@ span.fss_header_action_right {
     }
   }
 
-  .con_gmail.is-active .el-radio-button__inner {
-    background: #eff4f7 !important;
-    border-color: #ea4435;
-    box-shadow: -1px 0 0 0 #ea4435;
-  }
-
-  .con_outlook.is-active .el-radio-button__inner {
-    background: #eff4f7 !important;
-    border-color: #ea4435;
-    box-shadow: -1px 0 0 0 #ea4435;
-  }
-
-  .con_postmark.is-active .el-radio-button__inner {
-    background: #ffde00;
-    border-color: #ffde00;
-    box-shadow: -1px 0 0 0 #ffde00;
+  /*
+   * One selected state for every provider, not one per provider.
+   *
+   * This used to be three blocks - .con_gmail, .con_outlook and .con_postmark -
+   * each painting the chosen tile in that service's own brand colour. Which
+   * provider it is, is already said by the logo inside the tile; what the tile
+   * needs to say is that it is the chosen one, and that is the same fact
+   * whichever provider it happens to be.
+   */
+  .el-radio-button.is-active .el-radio-button__inner {
+    background: var(--fsm-accent-wash);
+    border-color: var(--fsm-accent);
+    box-shadow: -1px 0 0 0 var(--fsm-accent);
   }
 }
 
@@ -450,8 +607,15 @@ span.fss_header_action_right {
   }
 }
 
-*:fullscreen, *:-webkit-full-screen, *:-moz-full-screen {
-  background-color: white;
+/* The email-body frame in the log viewer, which lives in a dialog teleported to body. */
+#fluent_mail_app iframe:fullscreen,
+.el-overlay iframe:fullscreen {
+  background-color: var(--fsm-surface);
+}
+
+#fluent_mail_app iframe:-webkit-full-screen,
+.el-overlay iframe:-webkit-full-screen {
+  background-color: var(--fsm-surface);
 }
 
 
@@ -463,14 +627,14 @@ span.fss_header_action_right {
     word-wrap: break-word;       /* Internet Explorer 5.5+ */
   }
   .success {
-    color: #409EFF;
+    color: var(--fsm-link);
   }
   .fail {
-    color: #F56C6C;
+    color: var(--fsm-danger-fg);
   }
 
   .resent {
-    color: #409EFF;
+    color: var(--fsm-link);
   }
 
   .log-row {
@@ -479,7 +643,7 @@ span.fss_header_action_right {
 
   .log-border {
     border-bottom: 0;
-    border-color: #EBEEF5;
+    border-color: var(--fsm-border);
   }
   .nav {
     margin: 20px 0 10px 0;
@@ -497,7 +661,20 @@ span.fss_header_action_right {
 #fluent_mail_app .small-help-text,
 .fluent-mail-app .small-help-text {
   font-size: 12px;
-  color: gray;
+  color: var(--fsm-text-light);
+}
+
+/*
+ * Element Plus lays a form item's content out with `display: flex; flex-wrap:
+ * wrap`, where Element UI's was a plain block. A help line after a narrow
+ * control - the HTML switch on the Email Test screen is the visible case - has
+ * room left on the row, so it sits beside the control instead of under it and
+ * reads as "OnSend this email in HTML...". Claiming the full basis puts it back
+ * on its own line without turning the whole content box back into a block,
+ * which Element Plus's inline forms rely on.
+ */
+.fluent-mail-app .el-form-item__content > .small-help-text {
+  flex-basis: 100%;
 }
 .fss_box_action .fss_header {
   cursor: pointer;
@@ -506,7 +683,7 @@ span.fss_header_action_right {
 .fsmtp_recommended {
   text-align: center;
   padding: 20px;
-  background: white;
+  background: var(--fsm-surface);
   border-radius: 6px;
 }
 

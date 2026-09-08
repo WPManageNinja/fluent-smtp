@@ -12,15 +12,15 @@
                             {{ $t('Cloudflare Account API Tokens') }}
                         </a>
                         {{ $t('and click') }} <em>{{ $t('Create Token') }}</em>.
-                        <span v-if="!connection.account_id" style="color:#888;">
+                        <span v-if="!connection.account_id" style="color:var(--fsm-text-light);">
                             ({{ $t("you'll be prompted to pick the account") }})
                         </span>
                     </li>
-                    <li>{{ $t('Set Permission policies to') }} <strong>Custom</strong>.</li>
+                    <li>{{ $t('Set Permission policies to') }} <strong>{{ $t('Custom') }}</strong>.</li>
                     <li>
-                        {{ $t('Add a policy with scope') }} <strong>Entire Account</strong>,
-                        {{ $t('then pick') }} <strong>Email &amp; Messaging → Email Sending</strong>
-                        {{ $t('and check both') }} <strong>Read</strong> {{ $t('and') }} <strong>Edit</strong>.
+                        {{ $t('Add a policy with scope') }} <strong>{{ $t('Entire Account') }}</strong>,
+                        {{ $t('then pick') }} <strong>{{ $t('Email & Messaging → Email Sending') }}</strong>
+                        {{ $t('and check both') }} <strong>{{ $t('Read') }}</strong> {{ $t('and') }} <strong>{{ $t('Edit') }}</strong>.
                     </li>
                     <li>{{ $t('Save and copy the token, then paste it below along with your Account ID.') }}</li>
                 </ol>
@@ -30,9 +30,9 @@
             </div>
         </el-alert>
 
-        <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button label="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
-            <el-radio-button label="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
+        <el-radio-group size="small" v-model="connection.key_store">
+            <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store in wp-config.php') }}</el-radio-button>
         </el-radio-group>
 
         <template v-if="connection.key_store == 'db'">
@@ -49,12 +49,12 @@
                 <error :error="errors.get('api_key')"/>
             </el-form-item>
             <el-form-item>
-                <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
-                    {{ $t('Disable Encryption for API Key (Not Recommended)') }}
+                <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
+                    {{ $t('Disable Encryption for API Token (Not Recommended)') }}
                 </el-checkbox>
-                <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
+                <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                     {{
-                        $t('By disabling encryption, your API key will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                        $t('Your API token will be stored as readable text in the database. Only turn this on if a security plugin on this site rotates the WordPress SALT keys, which would otherwise invalidate the encrypted value.')
                     }}
                 </p>
             </el-form-item>

@@ -11,7 +11,7 @@
                     <h2>{{ recommended.title }}</h2>
                     <p>{{ recommended.subtitle }}</p>
                     <el-button @click="setRecommendation()" type="primary">{{ recommended.button_text }}</el-button>
-                    <el-button @click="skip_recommended = true" type="info">Skip</el-button>
+                    <el-button @click="skip_recommended = true" type="info">{{ $t('Skip') }}</el-button>
                 </div>
                 <template v-else>
                     <h2>{{ $t('__wizard_instruction') }}</h2>
@@ -35,84 +35,158 @@
                 :title="$t('Connection needs attention') + ': ' + connection.sender_email + ' (' + connection.provider + ')'"
                 :description="connection.message"
             />
-            <el-row :gutter="20">
-                <el-col :sm="24" :md="16">
-                    <div class="fss_dashboard_widget">
-                        <div class="fss_header fss_widget_header">
+            <!--
+                The greeting is FluentCart's, kept deliberately close - same avatar,
+                same "Good <part of day> <name>", a one-line subtitle under it - because
+                the two dashboards are the first screen of the same admin and a user
+                moving between them should not be met by two different openings. The
+                subtitle says what the screen is about rather than "Welcome to <site>":
+                the admin already knows which site they are on, and the line reads as
+                filler when it tells them.
+
+                What is not copied is FluentCart's "Last 30 Days" line and its CTA. The
+                range here is chosen on the chart below rather than fixed, so a label
+                stating one would be wrong half the time; and the action a new install
+                needs is the connection wizard, which this screen already shows instead
+                of the dashboard when there is nothing connected.
+            -->
+            <div class="fsm_greeting">
+                <img class="fsm_greeting_avatar" :src="appVars.user_avatar" alt=""
+                     width="48" height="48"/>
+                <div class="fsm_greeting_text">
+                    <h2>{{ greeting }} {{ appVars.user_display_name }} 👋</h2>
+                    <p>{{ $t("Here's how your site's email sending is doing.") }}</p>
+                </div>
+            </div>
+
+            <div class="fsm_split">
+                <div class="fsm_split_main">
+                    <!--
+                        The four headline numbers, across the top of the column rather
+                        than stacked two-by-two in the aside. They are the first thing
+                        the screen is read for, and a full-width row is what FluentCart
+                        gives them. Sent and Failed are the pair an admin is actually
+                        here to check, so they lead; Failed carries a link into the log
+                        filtered to failures, which is the next thing you want when the
+                        number is not zero.
+                    -->
+                    <el-alert v-if="load_error" type="error" :closable="false"
+                              class="fsm_load_error" show-icon>
+                        <p>{{ load_error }}</p>
+                        <el-button size="small" @click="fetch()">{{ $t('Retry') }}</el-button>
+                    </el-alert>
+
+                    <div v-if="!loading && !load_error" class="fsm_tiles">
+                        <div v-if="settings_stat.log_enabled == 'yes'" class="fsm_tile is_sent">
+                            <span class="fsm_tile_icon"><el-icon><FsmIconSPromotion/></el-icon></span>
+                            <span class="fsm_tile_label">{{ $t('Emails sent') }}</span>
+                            <span class="fsm_tile_value">{{ stats.sent }}</span>
+                        </div>
+
+                        <!--
+                            `status`, which is the query the log screen reads in created()
+                            and writes back on every fetch. This used to link with
+                            `filterBy`/`filterValue`, a pair nothing on that screen has
+                            read since before the redesign - so clicking the failed count
+                            opened the log with no filter on it at all.
+                        -->
+                        <router-link
+                            class="fsm_tile is_failed"
+                            :to="{ name: 'logs', query: { status: 'failed' } }">
+                            <span class="fsm_tile_icon"><el-icon><FsmIconWarning/></el-icon></span>
+                            <span class="fsm_tile_label">{{ $t('Emails failed') }}</span>
+                            <span class="fsm_tile_value">{{ stats.failed || 0 }}</span>
+                        </router-link>
+
+                        <div class="fsm_tile is_connections">
+                            <span class="fsm_tile_icon"><el-icon><FsmIconLink/></el-icon></span>
+                            <span class="fsm_tile_label">{{ $t('Active connections') }}</span>
+                            <span class="fsm_tile_value">{{ settings_stat.connection_counts }}</span>
+                        </div>
+
+                        <div class="fsm_tile is_senders">
+                            <span class="fsm_tile_icon"><el-icon><FsmIconUser/></el-icon></span>
+                            <span class="fsm_tile_label">{{ $t('Active senders') }}</span>
+                            <span class="fsm_tile_value">{{ settings_stat.active_senders }}</span>
+                        </div>
+                    </div>
+
+                    <div class="fsm_card">
+                        <div class="fsm_card_head">
                             <h3>{{ $t('Sending Stats') }}</h3>
-                            <div class="fss_to_right">
+                            <div class="fsm_card_head_actions">
                                 <el-date-picker
                                     size="small"
                                     v-model="date_range"
                                     type="daterange"
-                                    :picker-options="pickerOptions"
-                                    range-separator="To"
+                                    :shortcuts="shortcuts"
+                                    :disabled-date="disabledDate"
+                                    :range-separator="$t('to')"
                                     :start-placeholder="$t('Start date')"
                                     :end-placeholder="$t('End date')"
-                                    value-format="yyyy-MM-dd"
+                                    value-format="YYYY-MM-DD"
                                 ></el-date-picker>
-                                <el-button style="padding: 8px 15px;" size="small" @click="filterReport" type="primary" plain>Apply</el-button>
+                                <el-button size="small" @click="filterReport" type="primary" plain>
+                                    {{ $t('Apply') }}
+                                </el-button>
+                                <chart-type-toggle/>
                             </div>
                         </div>
-                        <div class="fss_content">
+                        <div class="fsm_card_body">
                             <emails-chart v-if="showing_chart" :date_range="date_range"/>
                         </div>
                     </div>
-                    <div class="fss_dashboard_widget">
-                        <ByDayTimeSending/>
-                    </div>
 
-                </el-col>
-                <el-col :sm="24" :md="8">
+                    <ByDayTimeSending/>
+                </div>
+
+                <div class="fsm_split_aside">
+                    <alerts-card/>
+
                     <div class="fsm_card">
-                        <div class="fss_header">
-                            {{ $t('Quick Overview') }}
+                        <div class="fsm_card_head">
+                            <h3>{{ $t('Email Logs') }}</h3>
                         </div>
-                        <div class="fss_content" v-if="!loading">
-                            <ul class="fss_dash_lists">
-                                <li v-if="settings_stat.log_enabled == 'yes'">
-                                    {{ $t('Total Email Sent (Logged):') }} <span>{{ stats.sent }}</span>
-                                </li>
-                                <li style="color: red" v-if="stats.failed > 0">
-                                    <router-link style="color: red"
-                                                 :to="{ name: 'logs', query: { filterBy: 'status', filterValue: 'failed' } }">
-                                        {{ $t('Email Failed:') }} <span>{{ stats.failed }}</span>
-                                    </router-link>
-                                </li>
+
+                        <div class="fsm_card_body" v-if="!loading">
+                            <ul class="fsm_fact_list">
                                 <li>
-                                    {{ $t('Active Connections:') }} <span>{{ settings_stat.connection_counts }}</span>
-                                </li>
-                                <li>
-                                    {{ $t('Active Senders:') }} <span>{{ settings_stat.active_senders }}</span>
-                                </li>
-                                <li>
-                                    {{ $t('Save Email Logs:') }}
-                                    <span style="text-transform: capitalize;">
-                                        {{ settings_stat.log_enabled }}
-                                    </span>
+                                    <span>{{ $t('Logging') }}</span>
+                                    <span>{{ settings_stat.log_enabled == 'yes' ? $t('On') : $t('Off') }}</span>
                                 </li>
                                 <li v-if="settings_stat.log_enabled == 'yes'">
-                                    {{ $t('Delete Logs:') }}
-                                    <span>After {{ settings_stat.auto_delete_days }} {{ $t('Days') }}</span>
+                                    <span>{{ $t('Kept for') }}</span>
+                                    <span>{{ $t('{days} days', {days: settings_stat.auto_delete_days}) }}</span>
                                 </li>
                             </ul>
                         </div>
-                        <el-skeleton v-else class="fss_content" :rows="8"></el-skeleton>
+
+                        <el-skeleton v-else class="fsm_card_body" :rows="3"></el-skeleton>
                     </div>
-                    <div v-if="appVars.require_optin == 'yes' && stats.sent > 9" style="margin-top: 20px;"
-                         class="fsm_card">
-                        <div class="fss_header">
-                            {{ $t('Subscribe To Updates') }}
-                            <span class="fss_header_action_right">
+
+                    <div v-if="appVars.require_optin == 'yes' && stats.sent > 9" class="fsm_card">
+                        <div class="fsm_card_head">
+                            <h3>{{ $t('Subscribe To Updates') }}</h3>
+                            <div class="fsm_card_head_actions">
                                 <subscribe-dismiss/>
-                            </span>
+                            </div>
                         </div>
-                        <div class="fss_content">
+                        <div class="fsm_card_body">
                             <email-subscriber/>
                         </div>
                     </div>
-                </el-col>
-            </el-row>
+
+                    <!--
+                        Last in the column. The three cards above it answer a question
+                        each - is anything broken, is anything being logged, is this
+                        install signed up - and are the same height every time the screen
+                        loads. The activity list is the one card whose height depends on
+                        what happened, so anything after it would move down the page as
+                        the site sends mail; nothing is after it.
+                    -->
+                    <recent-activity v-if="settings_stat.log_enabled == 'yes'"/>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -121,18 +195,24 @@
 import isEmpty from 'lodash/isEmpty';
 import ConnectionWizard from '../Settings/ConnectionWizard';
 import EmailsChart from './Charts/Emails';
+import ChartTypeToggle from './Charts/ChartTypeToggle.vue';
 import EmailSubscriber from '../../Pieces/_Subscribe';
 import SubscribeDismiss from '../../Pieces/_SubscribeDismiss';
 import ByDayTimeSending from "./Charts/ByDayTimeSending.vue";
+import RecentActivity from "./RecentActivity.vue";
+import AlertsCard from "./AlertsCard.vue";
 
 export default {
     name: 'Dashboard',
     components: {
         ConnectionWizard,
         EmailsChart,
+        ChartTypeToggle,
         EmailSubscriber,
         SubscribeDismiss,
-        ByDayTimeSending
+        ByDayTimeSending,
+        RecentActivity,
+        AlertsCard
     },
     data() {
         return {
@@ -142,46 +222,35 @@ export default {
             unhealthy_settings: [],
             date_range: '',
             showing_chart: true,
-            pickerOptions: {
-                disabledDate: function (date) {
-                    const now = new Date();
-                    return date > now;
-                },
-                shortcuts: [
-                    {
-                        text: this.$t('Last week'),
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: this.$t('Last month'),
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: this.$t('Last 3 months'),
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }
-                ]
-            },
+            shortcuts: [
+                { text: this.$t('Last 7 Days'), value: () => this.daysAgoRange(7) },
+                { text: this.$t('Last 30 Days'), value: () => this.daysAgoRange(30) },
+                { text: this.$t('Last 90 Days'), value: () => this.daysAgoRange(90) }
+            ],
             loading: true,
+            load_error: '',
             skip_recommended: false
         };
     },
     computed: {
+        /*
+         * Read off the browser's clock rather than the site's. The greeting is about
+         * where the person reading it is, not where the server is - an admin in Dhaka
+         * looking at a site hosted in Frankfurt is having an afternoon regardless.
+         */
+        greeting() {
+            const hour = new Date().getHours();
+
+            if (hour < 12) {
+                return this.$t('Good morning');
+            }
+
+            if (hour < 18) {
+                return this.$t('Good afternoon');
+            }
+
+            return this.$t('Good evening');
+        },
         is_new() {
             return isEmpty(this.settings.connections);
         },
@@ -193,14 +262,40 @@ export default {
         }
     },
     methods: {
+        /*
+         * Element Plus split Element UI's `picker-options` object into separate
+         * :shortcuts and :disabled-date props, and changed a shortcut's shape:
+         * it now returns the range as a `value`, where the old one reached into
+         * the picker instance and did `picker.$emit('pick', ...)`.
+         */
+        /*
+         * The site's clock, matching the log filter. This screen kept the browser's,
+         * so the chart's own range shortcuts disagreed with the log screen's by a day
+         * whenever the two clocks were on different sides of midnight.
+         */
+        daysAgoRange(days) {
+            return [this.$siteCalendarDate(days), this.$siteCalendarDate(0)];
+        },
+        disabledDate(date) {
+            return date.getTime() > this.$siteCalendarDate(0).getTime();
+        },
         fetch() {
             this.loading = true;
+            this.load_error = '';
             this.$get('/').then(res => {
                 this.stats = res.stats;
                 this.settings_stat = res.settings_stat;
                 this.unhealthy_settings = res.unhealthy_settings || [];
             }).fail(error => {
-                console.log(error);
+                /*
+                 * The tiles are hidden rather than left at their initial values.
+                 *
+                 * `stats` starts empty, so a failed request used to render "Email
+                 * Failed: 0" - an affirmative claim that nothing had bounced, on the
+                 * screen an admin opens specifically to check that. Zero is a real
+                 * answer here and must only ever come from the server.
+                 */
+                this.load_error = this.$errorMessage(error);
             }).always(() => {
                 this.loading = false;
             });

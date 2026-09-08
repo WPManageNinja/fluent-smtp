@@ -4,7 +4,7 @@
             <p class="fss_alert_info__description">
             {{$t('__SLACK_NOTIFICATION_ENABLED')}}
         </p>
-        <p class="fss_alert_info__details">{{ $t('Slack Channel Details: ') }}@{{ notification_settings.slack.slack_team }}</p>
+        <p class="fss_alert_info__details">{{ $t('Slack channel: ') }}@{{ notification_settings.slack.slack_team }}</p>
         <channel-actions
             :channel_key="'slack'"
             :channel_title="channel_config.title || 'Slack'"
