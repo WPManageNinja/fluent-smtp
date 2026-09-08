@@ -213,7 +213,7 @@ class Handler extends BaseHandler
         $body = json_decode(wp_remote_retrieve_body($request), true);
 
         if (!empty($body['error'])) {
-            $error = 'Unknown Error';
+            $error = __('Unknown Error', 'fluent-smtp');
             if (isset($body['error_description'])) {
                 $error = $body['error_description'];
             } else if (!empty($body['error']['message'])) {
@@ -334,7 +334,11 @@ class Handler extends BaseHandler
 
         $extraRow = [
             'title'   => __('Token Validity', 'fluent-smtp'),
-            'content' => 'Valid (' . (int)((Arr::get($connection, 'expire_stamp') - time()) / 60) . 'minutes)'
+            'content' => sprintf(
+                /* translators: %s: number of minutes until the access token expires */
+                __('Valid (%s minutes)', 'fluent-smtp'),
+                number_format_i18n((int)((Arr::get($connection, 'expire_stamp') - time()) / 60))
+            )
         ];
 
         if ($tokenError) {

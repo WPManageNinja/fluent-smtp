@@ -93,7 +93,7 @@ function extractStrings(files) {
 
         while ((match = dynamicCall.exec(content)) !== null) {
             // `$t(string) {` is the helper's own definition, not a call site.
-            if (/^\$t\(\s*[A-Za-z_$][\w$]*\s*\)\s*\{/.test(content.slice(match.index))) {
+            if (/^\$t\(\s*[A-Za-z_$][\w$]*(\s*,\s*\.\.\.[A-Za-z_$][\w$]*)?\s*\)\s*\{/.test(content.slice(match.index))) {
                 continue;
             }
 

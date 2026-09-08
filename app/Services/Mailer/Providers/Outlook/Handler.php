@@ -502,13 +502,17 @@ class Handler extends BaseHandler
 
         $extraRow = [
             'title'   => __('Token Validity', 'fluent-smtp'),
-            'content' => 'Valid (' . intval(((Arr::get($connection, 'expire_stamp') - time()) / 60)) . 'm)'
+            'content' => sprintf(
+                /* translators: %s: number of minutes until the access token expires */
+                __('Valid (%s minutes)', 'fluent-smtp'),
+                number_format_i18n(intval(((Arr::get($connection, 'expire_stamp') - time()) / 60)))
+            )
         ];
 
         if ($tokenError) {
             $extraRow['content'] = $tokenError;
         } elseif (Arr::get($connection, 'expire_stamp') < time()) {
-            $extraRow['content'] = 'Invalid. Please re-authenticate';
+            $extraRow['content'] = __('Invalid. Please authenticate again.', 'fluent-smtp');
         }
 
         $connection['extra_rows'] = [$extraRow];

@@ -70,7 +70,7 @@ class Handler extends BaseHandler {
                     'succeeded' => Arr::get($responseBody, 'data.succeeded'),
                 ];
             } else {
-                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'data.error', 'Unknown Error'), $responseBody);
+                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'data.error', __('Unknown Error', 'fluent-smtp')), $responseBody);
             }
         }
 

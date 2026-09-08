@@ -343,7 +343,7 @@ class SimpleEmailService
         $ses_response = $ses_request->getResponse();
 
         if ($ses_response->error === false && $ses_response->code !== 200) {
-            $ses_response->error = array('code' => $ses_response->code, 'message' => 'Unexpected HTTP status');
+            $ses_response->error = array('code' => $ses_response->code, 'message' => __('Unexpected HTTP status', 'fluent-smtp'));
         }
         if ($ses_response->error !== false) {
             return new \WP_Error($ses_response->code, $this->getErrorMessage('ListIdentities', $ses_response->error), $ses_response->error);
@@ -389,7 +389,7 @@ class SimpleEmailService
 
         $ses_response = $ses_request->getResponse();
         if ($ses_response->error === false && $ses_response->code !== 200) {
-            $ses_response->error = array('code' => $ses_response->code, 'message' => 'Unexpected HTTP status');
+            $ses_response->error = array('code' => $ses_response->code, 'message' => __('Unexpected HTTP status', 'fluent-smtp'));
         }
         if ($ses_response->error !== false) {
             $this->__triggerError('verifyEmailAddress', $ses_response->error);
@@ -414,7 +414,7 @@ class SimpleEmailService
 
         $ses_response = $ses_request->getResponse();
         if ($ses_response->error === false && $ses_response->code !== 200) {
-            $ses_response->error = array('code' => $ses_response->code, 'message' => 'Unexpected HTTP status');
+            $ses_response->error = array('code' => $ses_response->code, 'message' => __('Unexpected HTTP status', 'fluent-smtp'));
         }
         if ($ses_response->error !== false) {
             $this->__triggerError('deleteVerifiedEmailAddress', $ses_response->error);
@@ -439,7 +439,7 @@ class SimpleEmailService
         $ses_response = $ses_request->getResponse();
 
         if ($ses_response->error === false && $ses_response->code !== 200) {
-            $ses_response->error = array('code' => $ses_response->code, 'message' => 'Unexpected HTTP status');
+            $ses_response->error = array('code' => $ses_response->code, 'message' => __('Unexpected HTTP status', 'fluent-smtp'));
         }
         if ($ses_response->error !== false) {
             return new \WP_Error($ses_response->code, $this->getErrorMessage('getSendQuota', $ses_response->error), $ses_response->error);
@@ -471,7 +471,7 @@ class SimpleEmailService
 
         $ses_response = $ses_request->getResponse();
         if ($ses_response->error === false && $ses_response->code !== 200) {
-            $ses_response->error = array('code' => $ses_response->code, 'message' => 'Unexpected HTTP status');
+            $ses_response->error = array('code' => $ses_response->code, 'message' => __('Unexpected HTTP status', 'fluent-smtp'));
         }
         if ($ses_response->error !== false) {
             $this->__triggerError('getSendStatistics', $ses_response->error);
@@ -602,7 +602,7 @@ class SimpleEmailService
         if ($ses_response->error === false && $ses_response->code !== 200) {
             $response = array(
                 'code'  => $ses_response->code,
-                'error' => array('Error' => array('message' => 'Unexpected HTTP status')),
+                'error' => array('Error' => array('message' => __('Unexpected HTTP status', 'fluent-smtp'))),
             );
             return $response;
         }

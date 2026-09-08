@@ -98,7 +98,7 @@ trait ValidatorTrait
         $body = json_decode($body, true);
 
         if (!$body || !is_array($body)) {
-            return new \WP_Error('invalid_response', 'Invalid Response from remote server');
+            return new \WP_Error('invalid_response', __('Invalid Response from remote server', 'fluent-smtp'));
         }
 
         if ($statusCode === 200) {
@@ -119,7 +119,7 @@ trait ValidatorTrait
         $message = Arr::get($body, 'message');
 
         if (!$message) {
-            $message = 'Unknown error from remote server';
+            $message = __('Unknown error from remote server', 'fluent-smtp');
         }
 
         return new \WP_Error('invalid_response', $message, $body);

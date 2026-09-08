@@ -93,17 +93,22 @@ export default {
             cursor: {day: 0, slot: 0},
             days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
             filledSlots: ['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
-            /*
-             * Every third hour, starting at midnight. The labels are drawn on the same
-             * grid as the cells below them and each one spans the three columns it
-             * starts, so a label sits over the hour it names rather than a column or
-             * two off it - which is what eight labels at an eighth of the width each,
-             * over twenty-four cells, gave.
-             */
-            tipIndexes: ['12am', '3am', '6am', '9am', '12pm', '3pm', '6pm', '9pm'],
         }
     },
     computed: {
+        /*
+         * Every third hour, starting at midnight. The labels are drawn on the same
+         * grid as the cells below them and each one spans the three columns it
+         * starts, so a label sits over the hour it names rather than a column or
+         * two off it - which is what eight labels at an eighth of the width each,
+         * over twenty-four cells, gave. Literal $t() calls so the extractor sees them.
+         */
+        tipIndexes() {
+            return [
+                this.$t('12am'), this.$t('3am'), this.$t('6am'), this.$t('9am'),
+                this.$t('12pm'), this.$t('3pm'), this.$t('6pm'), this.$t('9pm')
+            ];
+        },
         maxValue() {
             let max = 0;
             for (let day in this.dataItems) {

@@ -1137,10 +1137,16 @@ function fluentMailFuncCouldNotBeLoadedRecheckPluginsLoad()
         $hints = $details->getFileName() . ':' . $details->getStartLine();
         ?>
         <div class="notice notice-warning fluentsmtp_urgent is-dismissible">
-            <p>The <strong>FluentSMTP</strong> plugin depends on <a target="_blank"
-                                                                    href="https://developer.wordpress.org/reference/functions/wp_mail/">wp_mail</a>
-                pluggable function and plugin is not able to extend it. Please check if another plugin is using this and
-                disable it for <strong>FluentSMTP</strong> to work!</p>
+            <p>
+                <?php
+                echo wp_kses(sprintf(
+                    /* translators: 1: plugin name wrapped in <strong>, 2: link to the wp_mail() documentation */
+                    __('The %1$s plugin depends on the %2$s pluggable function and is not able to extend it. Please check if another plugin is using this and disable it for %1$s to work!', 'fluent-smtp'),
+                    '<strong>FluentSMTP</strong>',
+                    '<a target="_blank" href="https://developer.wordpress.org/reference/functions/wp_mail/">wp_mail</a>'
+                ), ['strong' => [], 'a' => ['href' => [], 'target' => []]]);
+                ?>
+            </p>
             <p style="color: red;">
                 <?php esc_html_e('Possible Conflict: ', 'fluent-smtp'); ?>
                 <?php echo esc_html($hints); ?>

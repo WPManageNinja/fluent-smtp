@@ -57,7 +57,7 @@
                         </ul>
                         <div v-else-if="!contributorsLoading && !contributors.length" style="text-align: center;">
                             <a target="_blank" rel="noopener noreferrer" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
-                                <img title="Contributors" :src="appVars.images_url + 'contributors.png'"/>
+                                <img :title="$t('Contributors')" :src="appVars.images_url + 'contributors.png'"/>
                             </a>
                         </div>
 

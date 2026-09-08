@@ -16,11 +16,11 @@
                             ({{ $t("you'll be prompted to pick the account") }})
                         </span>
                     </li>
-                    <li>{{ $t('Set Permission policies to') }} <strong>Custom</strong>.</li>
+                    <li>{{ $t('Set Permission policies to') }} <strong>{{ $t('Custom') }}</strong>.</li>
                     <li>
-                        {{ $t('Add a policy with scope') }} <strong>Entire Account</strong>,
-                        {{ $t('then pick') }} <strong>Email &amp; Messaging → Email Sending</strong>
-                        {{ $t('and check both') }} <strong>Read</strong> {{ $t('and') }} <strong>Edit</strong>.
+                        {{ $t('Add a policy with scope') }} <strong>{{ $t('Entire Account') }}</strong>,
+                        {{ $t('then pick') }} <strong>{{ $t('Email & Messaging → Email Sending') }}</strong>
+                        {{ $t('and check both') }} <strong>{{ $t('Read') }}</strong> {{ $t('and') }} <strong>{{ $t('Edit') }}</strong>.
                     </li>
                     <li>{{ $t('Save and copy the token, then paste it below along with your Account ID.') }}</li>
                 </ol>

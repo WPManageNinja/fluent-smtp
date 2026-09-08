@@ -43,7 +43,7 @@
 
         <span class="small-help-text" style="display:block;margin-top:-10px">
             {{ $t('__POSTMARK_HELP') }}
-            <a target="_blank" href="https://account.postmarkapp.com/servers">Postmark Server.</a>
+            <a target="_blank" href="https://account.postmarkapp.com/servers">{{ $t('Postmark Server.') }}</a>
         </span>
 
         <el-row class="fsmtp_compact" :gutter="30">

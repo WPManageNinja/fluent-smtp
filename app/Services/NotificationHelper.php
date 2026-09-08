@@ -145,7 +145,7 @@ class NotificationHelper
         $responseData = json_decode($body, true);
 
         if (!$responseData || empty($responseData['success']) || $responseCode !== 200) {
-            return new \WP_Error('invalid_data', 'Something went wrong', $responseData);
+            return new \WP_Error('invalid_data', __('Something went wrong', 'fluent-smtp'), $responseData);
         }
 
         return $responseData;
@@ -183,7 +183,7 @@ class NotificationHelper
         $responseData = json_decode($body, true);
 
         if (!$responseData || empty($responseData['success']) || $responseCode !== 200) {
-            return new \WP_Error('invalid_data', 'Something went wrong', $responseData);
+            return new \WP_Error('invalid_data', __('Something went wrong', 'fluent-smtp'), $responseData);
         }
 
         return $responseData;
@@ -353,19 +353,19 @@ class NotificationHelper
                     'fields' => [
                         [
                             'type' => "mrkdwn",
-                            'text' => "*Website URL:*\n " . site_url()
+                            'text' => '*' . __('Website URL:', 'fluent-smtp') . "*\n " . site_url()
                         ],
                         [
                             'type' => "mrkdwn",
-                            'text' => "*Email Service:*\n " . strtoupper($handler->getSetting('provider'))
+                            'text' => '*' . __('Email Service:', 'fluent-smtp') . "*\n " . strtoupper($handler->getSetting('provider'))
                         ],
                         [
                             'type' => "mrkdwn",
-                            'text' => "*To Email Address:*\n " . $sendingTo
+                            'text' => '*' . __('To Email Address:', 'fluent-smtp') . "*\n " . $sendingTo
                         ],
                         [
                             'type' => "mrkdwn",
-                            'text' => "*Email Subject:*\n " . Arr::get($logData, 'subject')
+                            'text' => '*' . __('Email Subject:', 'fluent-smtp') . "*\n " . Arr::get($logData, 'subject')
                         ]
                     ]
                 ],
@@ -373,14 +373,14 @@ class NotificationHelper
                     'type' => 'section',
                     'text' => [
                         'type' => "mrkdwn",
-                        'text' => "*Error Message:*\n ```" . self::getErrorMessageFromResponse(self::unserialize(Arr::get($logData, 'response'))) . "```"
+                        'text' => '*' . __('Error Message:', 'fluent-smtp') . "*\n ```" . self::getErrorMessageFromResponse(self::unserialize(Arr::get($logData, 'response'))) . "```"
                     ]
                 ],
                 [
                     'type' => 'section',
                     'text' => [
                         'type' => "mrkdwn",
-                        'text' => "<" . admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=') . "|View Failed Email(s)>"
+                        'text' => "<" . admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=') . '|' . __('View Failed Email(s)', 'fluent-smtp') . '>'
                     ]
                 ]
             ]

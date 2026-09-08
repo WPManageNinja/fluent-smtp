@@ -96,7 +96,7 @@ class Handler extends BaseHandler
                     'id' => $messageId
                 ];
             } else {
-                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'message', 'Unknown Error'), $responseBody);
+                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'message', __('Unknown Error', 'fluent-smtp')), $responseBody);
             }
         }
 
@@ -299,7 +299,7 @@ class Handler extends BaseHandler
             curl_close(self::$curlHandle);
             self::$curlHandle = null;
 
-            return new \WP_Error('curl_' . $errno, $error ?: 'cURL request failed', [$error]);
+            return new \WP_Error('curl_' . $errno, $error ?: __('cURL request failed', 'fluent-smtp'), [$error]);
         }
 
         return [

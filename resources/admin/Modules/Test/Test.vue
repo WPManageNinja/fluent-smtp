@@ -176,7 +176,7 @@
                         return this.$notify.error({
                             title: this.$t('Error'),
                             offset: 19,
-                            message: '504 Gateway Time-out.'
+                            message: this.$t('504 Gateway Time-out.')
                         });
                     }
 

@@ -319,7 +319,7 @@ class Handler extends BaseHandler
         $response = json_decode(wp_remote_retrieve_body($request), true);
 
         if (!$response || empty($response['success'])) {
-            $error = 'API Key is invalid';
+            $error = __('API Key is invalid', 'fluent-smtp');
             if (!empty($response['error'])) {
                 $error = $response['error'];
             }

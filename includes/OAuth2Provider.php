@@ -189,7 +189,7 @@ class OAuth2Provider
 
         if (!is_array($responseBody)) {
             throw new \Exception(
-                'Invalid response received from Authorization Server. Expected JSON.'
+                esc_html__('Invalid response received from Authorization Server. Expected JSON.', 'fluent-smtp')
             );
         }
 
@@ -211,13 +211,17 @@ class OAuth2Provider
             }
 
             throw new \Exception(
-                wp_kses_post('Authorization Server rejected the request: ' . $description)
+                wp_kses_post(sprintf(
+                    /* translators: %s: error description returned by the OAuth authorization server */
+                    __('Authorization Server rejected the request: %s', 'fluent-smtp'),
+                    $description
+                ))
             );
         }
 
         if (empty($responseBody['access_token'])) {
             throw new \Exception(
-                'Invalid response received from Authorization Server. No access token was returned.'
+                esc_html__('Invalid response received from Authorization Server. No access token was returned.', 'fluent-smtp')
             );
         }
 

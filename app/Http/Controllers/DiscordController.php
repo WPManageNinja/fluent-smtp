@@ -56,7 +56,7 @@ class DiscordController extends Controller
 
         if (Arr::get($settings, 'discord.status') != 'yes') {
             return $this->sendError([
-                'message' => __('Slack notifications are not enabled.', 'fluent-smtp')
+                'message' => __('Discord notifications are not enabled.', 'fluent-smtp')
             ], 422);
         }
 

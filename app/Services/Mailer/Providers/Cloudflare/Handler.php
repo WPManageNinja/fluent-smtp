@@ -91,7 +91,7 @@ class Handler extends BaseHandler
                     'message' => __('Email sent successfully via Cloudflare', 'fluent-smtp')
                 ];
             } else {
-                $errorMessage = Arr::get($responseBody, 'errors.0.message', 'Unknown Error');
+                $errorMessage = Arr::get($responseBody, 'errors.0.message', __('Unknown Error', 'fluent-smtp'));
                 $returnResponse = new \WP_Error($responseCode ?: 400, $errorMessage, $responseBody);
             }
         }

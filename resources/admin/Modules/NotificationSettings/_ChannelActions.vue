@@ -60,7 +60,7 @@ export default {
     },
     methods: {
         disconnect() {
-            this.$confirm(this.disconnectMessage, 'Warning', {
+            this.$confirm(this.disconnectMessage, this.$t('Warning'), {
                 confirmButtonText: this.$t('Yes, Disconnect'),
                 cancelButtonText: this.$t('Cancel'),
                 type: 'warning'

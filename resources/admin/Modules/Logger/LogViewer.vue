@@ -25,7 +25,7 @@
                             }">
                                 <span
                                     style="text-transform:capitalize;margin-right:10px;"
-                                >{{ log.status }}</span>
+                                >{{ statusLabel(log.status) }}</span>
 
                                 <el-button
                                     size="small"
@@ -221,6 +221,14 @@ export default {
         };
     },
     methods: {
+        statusLabel(status) {
+            return {
+                sent: this.$t('Sent'),
+                resent: this.$t('Resent'),
+                failed: this.$t('Failed'),
+                pending: this.$t('Pending')
+            }[status] || status;
+        },
         navigate(dir) {
             const data = {
                 dir: dir,
@@ -352,10 +360,10 @@ export default {
             }
 
             if (value < 1000) {
-                return `${Math.round(value)} ms`;
+                return this.$t('%s ms', Math.round(value));
             }
 
-            return `${(value / 1000).toFixed(2)} s`;
+            return this.$t('%s s', (value / 1000).toFixed(2));
         },
         // The single escaping choke point for the v-html that renders `to`.
         // The display name is attacker-controllable via the To header, so

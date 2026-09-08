@@ -67,7 +67,7 @@ class Handler extends BaseHandler
                     'message' => Arr::get($responseBody, 'message')
                 ];
             } else {
-                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'errors.0.message', 'Unknown Error'), $responseBody);
+                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'errors.0.message', __('Unknown Error', 'fluent-smtp')), $responseBody);
             }
         }
 
