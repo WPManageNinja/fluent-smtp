@@ -17,10 +17,16 @@
                         {{ $t('Application Client ID') }}
                     </label>
 
-                    <InputPassword
+                    <!--
+                        A plain input, not InputPassword. The client ID identifies the
+                        app - it is shown on the consent screen and never masked or
+                        encrypted (see SecretMasker) - so hiding it behind dots only
+                        made people unable to check which app registration they pasted.
+                    -->
+                    <el-input
                         id="client_id"
                         v-model="connection.client_id"
-                        :disable_help="connection.disable_encryption === 'yes'"
+                        autocomplete="off"
                     />
 
                     <error :error="errors.get('client_id')" />

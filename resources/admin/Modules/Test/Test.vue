@@ -91,6 +91,30 @@
                     <p v-if="time_taken_human" class="small-help-text">
                         <el-icon><FsmIconTimer /></el-icon> {{ time_taken_human }}
                     </p>
+
+                    <!--
+                        The ceiling this round trip puts on bulk sending. "Why is my
+                        campaign slow?" is a support question the test screen can
+                        answer: if the campaign runs near these figures, the server's
+                        connection to the provider is the limit, not the sender.
+                    -->
+                    <div v-if="throughput" class="fsm_test_speed">
+                        <h4 class="fsm_test_speed_title">{{ $t('Maximum sending speed on this connection') }}</h4>
+                        <div class="fsm_test_speed_tiles">
+                            <div class="fsm_tile">
+                                <span class="fsm_tile_label">{{ $t('Emails per second') }}</span>
+                                <span class="fsm_tile_value">{{ throughput.per_second }}</span>
+                            </div>
+                            <div class="fsm_tile">
+                                <span class="fsm_tile_label">{{ $t('Emails per minute') }}</span>
+                                <span class="fsm_tile_value">{{ throughput.per_minute }}</span>
+                            </div>
+                            <div class="fsm_tile">
+                                <span class="fsm_tile_label">{{ $t('Emails per hour') }}</span>
+                                <span class="fsm_tile_value">{{ throughput.per_hour }}</span>
+                            </div>
+                        </div>
+                    </div>
                     <hr />
                     <div v-if="appVars.require_optin == 'yes'" style="margin-top: 10px;">
                         <email-subscriber />
@@ -125,7 +149,8 @@
                     isHtml: true
                 },
                 email_success: false,
-                time_taken_human: ''
+                time_taken_human: '',
+                throughput: null
             };
         },
         methods: {
@@ -133,9 +158,11 @@
                 this.loading = true;
                 this.debug_info = '';
                 this.time_taken_human = '';
+                this.throughput = null;
 
                 this.$post('settings/test', { ...this.form }).then(res => {
                     this.time_taken_human = res.data.time_taken_human || '';
+                    this.throughput = res.data.throughput || null;
                     this.$notify.success({
                         title: this.$t('Done'),
                         offset: 19,

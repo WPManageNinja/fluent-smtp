@@ -211,6 +211,75 @@ return function () {
         });
     });
 
+    FsmtpTest::case('Outlook callback renders the Microsoft error and a tenant hint instead of an empty code box', function () use (
+        $withProtectedState,
+        $outlookEndpoint
+    ) {
+        $withProtectedState(function ($state) use ($outlookEndpoint) {
+            wp_set_current_user(0);
+            $endpoint = $outlookEndpoint();
+            $description = "The request is not valid for the application's 'userAudience' configuration.";
+            // WordPress unsets $_GET['error'] during parse_request, so the
+            // handler reads the OAuth error code back from QUERY_STRING.
+            $params = [
+                'state'             => $state,
+                'error_description' => $description,
+            ];
+            $request = new WP_REST_Request('GET', '/fluent-smtp/outlook_callback');
+            $request->set_query_params($params);
+            $oldRequest = $_REQUEST;
+            $oldQuery = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
+            $_REQUEST = $params;
+            $_SERVER['QUERY_STRING'] = http_build_query(['error' => 'invalid_request'] + $params);
+
+            $died = false;
+            $body = '';
+            $args = [];
+            $handlerProvider = function () use (&$died, &$body, &$args) {
+                return function ($message = '', $title = '', $dieArgs = []) use (&$died, &$body, &$args) {
+                    $died = true;
+                    $body = is_scalar($message) || (is_object($message) && method_exists($message, '__toString'))
+                        ? (string)$message
+                        : '';
+                    $args = is_array($dieArgs) ? $dieArgs : [];
+                    throw new FsmtpAjaxExit('REST callback completed through wp_die.');
+                };
+            };
+            $handlerFilters = [
+                'wp_die_handler',
+                'wp_die_ajax_handler',
+                'wp_die_json_handler',
+                'wp_die_jsonp_handler',
+            ];
+            foreach ($handlerFilters as $filter) {
+                add_filter($filter, $handlerProvider, PHP_INT_MAX);
+            }
+
+            try {
+                call_user_func($endpoint['callback'], $request);
+            } catch (FsmtpAjaxExit $e) {
+                // Expected: the endpoint renders the error page.
+            } finally {
+                foreach ($handlerFilters as $filter) {
+                    remove_filter($filter, $handlerProvider, PHP_INT_MAX);
+                }
+                $_REQUEST = $oldRequest;
+                if ($oldQuery === null) {
+                    unset($_SERVER['QUERY_STRING']);
+                } else {
+                    $_SERVER['QUERY_STRING'] = $oldQuery;
+                }
+            }
+
+            FsmtpTest::assert($died, 'error callback did not complete through wp_die');
+            FsmtpTest::assertSame(400, isset($args['response']) ? $args['response'] : null, 'error callback HTTP status');
+            FsmtpTest::assert(strpos($body, '<textarea') === false, 'error callback still rendered the access code textarea');
+            FsmtpTest::assert(strpos($body, 'invalid_request') !== false, 'error callback did not show the OAuth error code');
+            FsmtpTest::assert(strpos($body, esc_html($description)) !== false, 'error callback did not show error_description');
+            FsmtpTest::assert(strpos($body, 'consumers') !== false, 'error callback did not hint at the consumers tenant');
+        });
+    });
+
     FsmtpTest::case('router runtime inventory contains no anonymous AJAX actions', function () use ($optionFingerprints) {
         global $wp_filter;
         wp_set_current_user(0);

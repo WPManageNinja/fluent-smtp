@@ -114,6 +114,13 @@
      */
     padding: 12px 0;
 
+    /*
+     * A form reads left to right whatever its host does: on the test screen it sits
+     * inside a centred success card, and centred labels over left-aligned inputs
+     * put the label away from the value it names.
+     */
+    text-align: left;
+
     .fsm_optin_intro {
         @apply text-xs text-ink-light m-0;
 

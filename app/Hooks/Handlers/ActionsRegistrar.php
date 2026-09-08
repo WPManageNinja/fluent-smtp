@@ -167,15 +167,131 @@ class ActionsRegistrar
     {
         $code = $request->get_param('code');
 
+        if (!is_string($code) || $code === '') {
+            $output = $this->app->view->make('admin.html_code', [
+                'title' => __('Microsoft sign-in did not complete', 'fluent-smtp'),
+                'body'  => $this->outlookCallbackErrorBody(
+                    $this->outlookCallbackErrorCode($request),
+                    $request->get_param('error_description')
+                ),
+            ]);
+
+            wp_die($output, esc_html__('Microsoft sign-in did not complete', 'fluent-smtp'), ['response' => 400]);
+        }
+
         $output = $this->app->view->make('admin.html_code', [
-            'title' => 'Your Access Code',
+            'title' => __('Your Access Code', 'fluent-smtp'),
             'body'  => sprintf(
-                '<p>Copy the following code and paste in the fluentSMTP settings</p><textarea readonly>%s</textarea>',
-                sanitize_textarea_field($code)
+                '<p>%s</p><textarea readonly>%s</textarea>',
+                esc_html__('Copy the following code and paste in the FluentSMTP settings', 'fluent-smtp'),
+                esc_textarea(sanitize_textarea_field($code))
             ),
         ]);
 
-        wp_die($output, 'Access Code');
+        wp_die($output, esc_html__('Access Code', 'fluent-smtp'));
+    }
+
+    /**
+     * The OAuth `error` parameter of the callback.
+     *
+     * `error` is one of WordPress's reserved public query vars, and
+     * WP::parse_request() unsets $_GET['error'] before the REST server
+     * collects its query params, so the request object never carries it.
+     * Read it back from the raw query string instead.
+     *
+     * @param WP_REST_Request $request
+     * @return string Empty when Microsoft sent none
+     */
+    private function outlookCallbackErrorCode(WP_REST_Request $request)
+    {
+        $error = $request->get_param('error');
+
+        if (!is_string($error) || $error === '') {
+            $query = isset($_SERVER['QUERY_STRING']) ? (string)$_SERVER['QUERY_STRING'] : '';
+            wp_parse_str($query, $parsed);
+            $error = isset($parsed['error']) && is_string($parsed['error']) ? $parsed['error'] : '';
+        }
+
+        return sanitize_text_field(wp_unslash($error));
+    }
+
+    /**
+     * Body of the callback page when Microsoft sent an error instead of a code.
+     *
+     * Microsoft explains the refusal in error_description, so that is shown
+     * verbatim. The common refusals all come down to the connection's
+     * Directory (tenant) ID or the app's redirect URI not matching the Entra
+     * app registration, so a hint naming the field to change follows it.
+     *
+     * @param mixed $error            OAuth error code from the query string
+     * @param mixed $errorDescription OAuth error_description from the query string
+     * @return string Escaped HTML
+     */
+    private function outlookCallbackErrorBody($error, $errorDescription)
+    {
+        $error            = is_string($error) ? $error : '';
+        $errorDescription = is_string($errorDescription) ? sanitize_textarea_field($errorDescription) : '';
+
+        $html = '<p>' . esc_html__('Microsoft did not return an authorization code, so there is nothing to paste into FluentSMTP yet.', 'fluent-smtp') . '</p>';
+
+        if ($errorDescription || $error) {
+            $html .= '<p style="text-align:left;background:#fef2f2;border:1px solid #fecaca;padding:10px;word-break:break-word;">'
+                . '<strong>' . esc_html($error ?: __('Error', 'fluent-smtp')) . '</strong>';
+
+            if ($errorDescription) {
+                $html .= '<br>' . esc_html($errorDescription);
+            }
+
+            $html .= '</p>';
+        }
+
+        $hint = $this->outlookCallbackErrorHint($error, $errorDescription);
+
+        if ($hint) {
+            $html .= '<p style="text-align:left;"><strong>' . esc_html__('How to fix', 'fluent-smtp') . ':</strong> ' . esc_html($hint) . '</p>';
+        }
+
+        $html .= '<p>' . esc_html__('Close this window, adjust the connection settings in FluentSMTP, and click the authenticate button again.', 'fluent-smtp') . '</p>';
+
+        return $html;
+    }
+
+    /**
+     * A remedy for the Microsoft refusals this plugin sees most often.
+     *
+     * Matched on the description text rather than only the AADSTS code
+     * because some refusals (the userAudience one among them) arrive with a
+     * generic error code and the useful detail only in the description.
+     *
+     * @param string $error
+     * @param string $errorDescription
+     * @return string Empty when there is no specific advice
+     */
+    private function outlookCallbackErrorHint($error, $errorDescription)
+    {
+        $haystack = strtolower($error . ' ' . $errorDescription);
+
+        if (strpos($haystack, 'useraudience') !== false || strpos($haystack, "'consumer'") !== false) {
+            return __('Your Entra app registration only allows personal Microsoft accounts, but the connection is using the common sign-in endpoint. Either enter consumers in the Directory (tenant) ID field of the connection, or change the app registration\'s Supported account types to "Accounts in any organizational directory and personal Microsoft accounts".', 'fluent-smtp');
+        }
+
+        if (strpos($haystack, 'aadsts50194') !== false || strpos($haystack, 'multi-tenant') !== false) {
+            return __('Your Entra app registration is single-tenant, so it cannot use the common sign-in endpoint. Paste the Directory (tenant) ID from the app registration overview page into the Directory (tenant) ID field of the connection.', 'fluent-smtp');
+        }
+
+        if (strpos($haystack, 'aadsts700016') !== false) {
+            return __('Microsoft could not find this Application (client) ID in the tenant that was used to sign in. Check the Application (client) ID, and make sure the Directory (tenant) ID field matches the tenant the app is registered in.', 'fluent-smtp');
+        }
+
+        if (strpos($haystack, 'aadsts50011') !== false || strpos($haystack, 'redirect uri') !== false || strpos($haystack, 'reply url') !== false) {
+            return __('The redirect URI registered in Entra does not match this site. Copy the App Callback URL shown in the FluentSMTP connection form and add it under Authentication > Web > Redirect URIs in the app registration.', 'fluent-smtp');
+        }
+
+        if ($error === 'access_denied') {
+            return __('The sign-in was cancelled or consent was declined. Start the authentication again and accept the requested permissions.', 'fluent-smtp');
+        }
+
+        return '';
     }
 
     /**

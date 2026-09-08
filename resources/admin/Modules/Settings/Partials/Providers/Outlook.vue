@@ -14,10 +14,16 @@
                         {{ $t('Application Client ID') }}
                     </label>
 
-                    <InputPassword
+                    <!--
+                        A plain input, not InputPassword. The client ID identifies the
+                        app - it is shown on the consent screen and never masked or
+                        encrypted (see SecretMasker) - so hiding it behind dots only
+                        made people unable to check which app registration they pasted.
+                    -->
+                    <el-input
                         id="client_id"
                         v-model="connection.client_id"
-                        :disable_help="connection.disable_encryption === 'yes'"
+                        autocomplete="off"
                     />
 
                     <error :error="errors.get('client_id')" />
@@ -78,7 +84,7 @@ define( 'FLUENTMAIL_OUTLOOK_CLIENT_SECRET', '********************' );</textarea>
             />
             <error :error="errors.get('tenant_id')" />
             <p>
-                {{ $t('Leave empty unless your Entra app registration is single-tenant. Paste the Directory (tenant) ID from the app overview page, or a verified domain such as contoso.onmicrosoft.com. Use organizations to allow any work or school account but no personal Microsoft accounts.') }}
+                {{ $t('Leave empty unless your Entra app registration is single-tenant. Paste the Directory (tenant) ID from the app overview page, or a verified domain such as contoso.onmicrosoft.com. Use organizations to allow any work or school account but no personal Microsoft accounts, or consumers if the app registration only allows personal Microsoft accounts such as outlook.com or hotmail.com.') }}
             </p>
             <p v-if="connection.has_access_token === 'yes'" style="color: var(--fsm-warning-fg); margin-top: 0;">
                 {{ $t('Changing this requires authenticating with Office365 again.') }}

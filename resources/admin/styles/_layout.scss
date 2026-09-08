@@ -825,6 +825,44 @@ body.settings_page_fluent-mail {
 }
 
 /* A tile you can follow says so on hover; the three that are only figures do not. */
+/*
+ * The sending-speed ceiling under a successful test send. Three figures always, so
+ * this is its own three-column grid rather than `.fsm_tiles`, whose column count
+ * follows the tile count and folds to two below 1400px - which would leave the
+ * third tile orphaned on its own row inside a 600px card. The tiles themselves are
+ * `.fsm_tile`, centred to match the card they sit in.
+ */
+.fsm_test_speed {
+    margin-top: 20px;
+    text-align: left;
+
+    .fsm_test_speed_title {
+        @apply text-sm font-semibold text-ink-head;
+
+        margin: 0 0 10px;
+        text-align: center;
+    }
+
+    .fsm_test_speed_tiles {
+        @apply grid;
+
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .fsm_tile {
+        align-items: center;
+        text-align: center;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .fsm_test_speed .fsm_test_speed_tiles {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
 a.fsm_tile:hover {
     @apply border-hairline-strong;
 }
@@ -1487,8 +1525,22 @@ a.fsm_tile:hover {
  * A column, not a page. The fields are a From address, a recipient and a switch, and a
  * 1350px-wide input is harder to read than a 500px one, not easier.
  */
+/*
+ * A single 720px column on a page with no sidebar: left-aligned it leaves the
+ * right two thirds of a wide screen empty and the card looking parked in a
+ * corner, so the column - heading and card together, or the heading would sit
+ * over empty space - is centred.
+ */
+.fsm_test {
+    .fsm_page_head,
+    .fsm_test_card {
+        max-width: 720px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
 .fsm_test_card {
-    max-width: 720px;
 
     .fsm_row_actions {
         @apply flex flex-wrap items-center;

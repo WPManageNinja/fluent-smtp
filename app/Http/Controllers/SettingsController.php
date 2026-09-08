@@ -264,7 +264,8 @@ class SettingsController extends Controller
             return $this->sendSuccess([
                 'message'          => __('Email delivered successfully.', 'fluent-smtp'),
                 'time_taken'       => round($timeTaken, 3),
-                'time_taken_human' => $this->formatDuration($timeTaken)
+                'time_taken_human' => $this->formatDuration($timeTaken),
+                'throughput'       => $this->throughputFromDuration($timeTaken)
             ]);
         } catch (\Throwable $e) {
             /*
@@ -300,6 +301,39 @@ class SettingsController extends Controller
             __('Delivered in %s seconds', 'fluent-smtp'),
             number_format_i18n($seconds, 2)
         );
+    }
+
+    /**
+     * The sending-speed ceiling one round trip implies.
+     *
+     * A campaign sender (FluentCRM is the usual one) hands emails to the provider
+     * one after another from a single PHP process, so it can never send faster than
+     * 1 / round-trip. Showing that number next to the test result lets a user see
+     * whether a "slow" campaign is actually running at the pace their server's
+     * connection to the provider allows, or well below it - in which case the
+     * bottleneck is somewhere else (cron, the sending engine, a rate limit).
+     *
+     * The figures are a ceiling, not a forecast: they ignore provider rate limits
+     * and the time the sender spends building each email.
+     *
+     * @param float $seconds Round trip of the test send.
+     * @return array{per_second: string, per_minute: string, per_hour: string}
+     */
+    protected function throughputFromDuration($seconds)
+    {
+        // A clock that reads zero (or negative, after an NTP step) would divide by
+        // zero; nothing hands an email over in under a millisecond anyway.
+        $seconds = max((float)$seconds, 0.001);
+
+        $perSecond = 1 / $seconds;
+
+        return [
+            // Below ten a second the first decimal is the whole story ("0.8" vs
+            // "1"); above it the decimal is noise.
+            'per_second' => number_format_i18n($perSecond, $perSecond < 10 ? 1 : 0),
+            'per_minute' => number_format_i18n(floor($perSecond * 60)),
+            'per_hour'   => number_format_i18n(floor($perSecond * 3600)),
+        ];
     }
 
     public function onFail($response)
