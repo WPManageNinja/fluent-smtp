@@ -59,6 +59,7 @@ class ActionsRegistrar
         $this->registerCliCommands();
 
         $this->purgeLegacyOutlookSecret();
+        $this->maybeWidenLogToColumn();
     }
 
     /**
@@ -79,6 +80,34 @@ class ActionsRegistrar
     {
         if (get_option('_fluentsmtp_intended_outlook_info') !== false) {
             delete_option('_fluentsmtp_intended_outlook_info');
+        }
+    }
+
+    /**
+     * Widen fsmpt_email_logs.to from VARCHAR(255) to TEXT on existing sites.
+     *
+     * migrate() only runs on activation and new-site creation. A plugin update
+     * from wordpress.org does not re-run that hook, so a VARCHAR column would
+     * keep clipping serialized recipient lists until someone deactivated and
+     * reactivated the plugin. The option is autoloaded, so the common case
+     * where the column is already TEXT costs no extra query.
+     *
+     * @return void
+     */
+    protected function maybeWidenLogToColumn()
+    {
+        if (get_option('fluentmail_log_to_column') === 'text') {
+            return;
+        }
+
+        global $wpdb;
+
+        require_once FLUENTMAIL_PLUGIN_PATH . 'database/migrations/EmailLogs.php';
+
+        $table = $wpdb->prefix . FLUENT_MAIL_DB_PREFIX . 'email_logs';
+
+        if (\FluentMailMigrations\EmailLogs::maybeWidenToColumn($table)) {
+            update_option('fluentmail_log_to_column', 'text', true);
         }
     }
 

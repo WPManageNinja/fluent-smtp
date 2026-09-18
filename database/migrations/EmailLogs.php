@@ -22,7 +22,7 @@ class EmailLogs
             $sql = "CREATE TABLE $table (
                 `id` INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
                 `site_id` INT UNSIGNED NULL,
-                `to` VARCHAR(255),
+                `to` TEXT NULL,
                 `from` VARCHAR(255),
                 `subject` VARCHAR(255),
                 `body` LONGTEXT NULL,
@@ -42,6 +42,7 @@ class EmailLogs
             dbDelta($sql);
         } else {
             self::maybeUpgradeIndexes($table);
+            self::maybeWidenToColumn($table);
         }
     }
 
@@ -78,6 +79,80 @@ class EmailLogs
         if (self::hasIndex($table, 'status') && self::hasIndex($table, 'created_at_status')) {
             $wpdb->query("ALTER TABLE $table DROP INDEX `status`");
         }
+    }
+
+    /**
+     * Widen `to` from VARCHAR(255) to TEXT.
+     *
+     * Recipients are stored as a PHP-serialized array of `{email, name}` rows.
+     * Five typical addresses already exceed 255 characters, MySQL silently
+     * clips the blob, `is_serialized()` then rejects it, and the log UI prints
+     * the truncated `a:7:{i:0;a:1:{s:5:"email";...` string. Sending is
+     * unaffected because the provider reads the in-memory list.
+     *
+     * Idempotent: a TEXT/BLOB column is left alone, so this is safe to call
+     * from migrate() and from the one-shot app-load upgrade.
+     *
+     * @param string $table
+     * @return bool True when `to` can hold a serialized recipient list.
+     */
+    public static function maybeWidenToColumn($table)
+    {
+        global $wpdb;
+
+        if (!is_string($table) || !preg_match('/^[A-Za-z0-9_]+$/', $table)) {
+            return false;
+        }
+
+        $type = self::columnType($table, 'to');
+
+        if ($type === null) {
+            return false;
+        }
+
+        if (self::isUnboundedStringType($type)) {
+            return true;
+        }
+
+        $wpdb->query("ALTER TABLE `{$table}` MODIFY `to` TEXT NULL");
+
+        $type = self::columnType($table, 'to');
+
+        return $type !== null && self::isUnboundedStringType($type);
+    }
+
+    /**
+     * @param string $table
+     * @param string $column
+     * @return string|null Lowercased MySQL type, or null when the column is missing.
+     */
+    private static function columnType($table, $column)
+    {
+        global $wpdb;
+
+        if (!preg_match('/^[A-Za-z0-9_]+$/', $column)) {
+            return null;
+        }
+
+        $row = $wpdb->get_row(
+            $wpdb->prepare("SHOW COLUMNS FROM `{$table}` LIKE %s", $column),
+            ARRAY_A
+        );
+
+        if (!is_array($row) || empty($row['Type'])) {
+            return null;
+        }
+
+        return strtolower((string)$row['Type']);
+    }
+
+    /**
+     * @param string $type Lowercased MySQL column type from SHOW COLUMNS.
+     * @return bool
+     */
+    private static function isUnboundedStringType($type)
+    {
+        return (bool)preg_match('/(text|blob)/', $type);
     }
 
     /**
