@@ -122,10 +122,10 @@
                 <el-collapse v-model="activeName" style="margin-top:10px;">
                     <el-collapse-item name="email_body">
                         <template #title>
-                            <strong style="color:var(--fsm-text-mid)">{{ $t('Email Body (sanitized)') }}</strong>
+                            <strong style="color:var(--fsm-text-mid)">{{ isPlainText ? $t('Email Body') : $t('Email Body (sanitized)') }}</strong>
                         </template>
                         <hr class="log-border">
-                        <EmailbodyContainer :content="sanitize(log.body)"/>
+                        <EmailbodyContainer :content="isPlainText ? log.body : sanitize(log.body)" :plain-text="isPlainText"/>
                         <hr/>
                     </el-collapse-item>
                     <p><strong>{{ $t('Server Response') }}</strong></p>
@@ -200,6 +200,7 @@
 
 <script>
 import EmailbodyContainer from './EmailbodyContainer';
+import {isPlainTextLog} from './bodyFormat';
 import ResendDialog from './ResendDialog';
 
 export default {
@@ -387,6 +388,9 @@ export default {
         }
     },
     computed: {
+        isPlainText() {
+            return isPlainTextLog(this.log && this.log.headers);
+        },
         /*
          * The provider's own words for a failure. Handlers log a failed send as
          * {code, message, errors}; a fallback attempt adds `fallback` on top, and that
