@@ -1,6 +1,7 @@
 <?php
 
 use FluentMail\App\Http\Controllers\SettingsController;
+use FluentMail\App\Models\Logger;
 use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\Mailer\Providers\Simulator\Handler as SimulatorHandler;
 use FluentMail\App\Services\Reporting;
@@ -173,5 +174,64 @@ return function () {
             $invoke(new ConnectionHealth(), 'flattenMessage', [$exception]),
             'flattened health validation message'
         );
+    });
+
+    FsmtpTest::case('truncated serialized log recipients are recovered as addresses', function () use (
+        $invoke,
+        $withoutConstructor
+    ) {
+        $logger = $withoutConstructor(Logger::class);
+        $full = serialize([
+            ['email' => 'ryan@mail.example.test'],
+            ['email' => 'mackenzie@mail.example.test'],
+            ['email' => 'summar@mail.example.test'],
+            ['email' => 'madeline@mail.example.test'],
+            ['email' => 'allisen@mail.example.test'],
+            ['email' => 'jordan@mail.example.test'],
+            ['email' => 'info@mail.example.test'],
+        ]);
+        $truncated = substr($full, 0, 255);
+
+        FsmtpTest::assert(strlen($full) > 255, 'fixture exceeds VARCHAR(255)');
+        FsmtpTest::assert(!is_serialized($truncated), 'clipped blob is not valid serialized PHP');
+
+        $row = $invoke($logger, 'maybeUnserialize', [[
+            'to' => $truncated,
+            'subject' => 'Contact Form submission',
+        ]]);
+
+        $emails = array_column($row['to'], 'email');
+
+        FsmtpTest::assertSame(
+            [
+                'ryan@mail.example.test',
+                'mackenzie@mail.example.test',
+                'summar@mail.example.test',
+                'madeline@mail.example.test',
+            ],
+            $emails,
+            'complete addresses recovered from a clipped serialize blob'
+        );
+        FsmtpTest::assert(
+            !in_array('allisen@mail.example.test', $emails, true),
+            'half-written trailing address is not invented'
+        );
+    });
+
+    FsmtpTest::case('intact serialized log recipients still unserialize as an array', function () use (
+        $invoke,
+        $withoutConstructor
+    ) {
+        $logger = $withoutConstructor(Logger::class);
+        $recipients = [
+            ['email' => 'ryan@mail.example.test'],
+            ['email' => 'mackenzie@mail.example.test'],
+        ];
+
+        $row = $invoke($logger, 'maybeUnserialize', [[
+            'to' => serialize($recipients),
+        ]]);
+
+        FsmtpTest::assertSame($recipients, $row['to'], 'complete serialized to column');
     });
 };

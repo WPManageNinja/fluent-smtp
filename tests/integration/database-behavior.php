@@ -197,4 +197,97 @@ return function () {
             FsmtpFactory::dropTable($table);
         }
     });
+
+    FsmtpTest::case('VARCHAR to column is widened to TEXT so serialized recipients survive', function () {
+        global $wpdb;
+        $table = FsmtpFactory::emailLogTable(false, true);
+        $recipients = serialize([
+            ['email' => 'ryan@example.test'],
+            ['email' => 'mackenzie@example.test'],
+            ['email' => 'summar@example.test'],
+            ['email' => 'madeline@example.test'],
+            ['email' => 'allisen@example.test'],
+            ['email' => 'jordan@example.test'],
+            ['email' => 'info@example.test'],
+        ]);
+
+        try {
+            FsmtpTest::assert(strlen($recipients) > 255, 'fixture exceeds the old VARCHAR(255) limit');
+
+            $before = $wpdb->get_row("SHOW COLUMNS FROM `{$table}` LIKE 'to'", ARRAY_A);
+            FsmtpTest::assert(
+                $before && stripos((string)$before['Type'], 'varchar') !== false,
+                'factory table still ships the VARCHAR(255) to column'
+            );
+
+            $widened = EmailLogs::maybeWidenToColumn($table);
+            $after = $wpdb->get_row("SHOW COLUMNS FROM `{$table}` LIKE 'to'", ARRAY_A);
+
+            FsmtpTest::assertSame(true, $widened, 'widening reported success');
+            FsmtpTest::assert(
+                $after && stripos((string)$after['Type'], 'text') !== false,
+                'to column is TEXT after widening'
+            );
+
+            $id = FsmtpFactory::insertLog($table, ['to' => $recipients]);
+            $stored = $wpdb->get_var($wpdb->prepare("SELECT `to` FROM `{$table}` WHERE id = %d", $id));
+
+            FsmtpTest::assertSame($recipients, $stored, 'serialized recipient list round-tripped');
+            FsmtpTest::assertSame('', (string)$wpdb->last_error, 'widened insert database error');
+        } finally {
+            FsmtpFactory::dropTable($table);
+        }
+    });
+
+    FsmtpTest::case('widening an already-TEXT to column is a no-op', function () {
+        global $wpdb;
+        $table = FsmtpFactory::emailLogTable(false, true);
+        $alters = 0;
+        $observer = function ($query) use (&$alters, $table) {
+            if (stripos($query, 'ALTER TABLE') !== false && strpos($query, $table) !== false) {
+                $alters++;
+            }
+            return $query;
+        };
+
+        add_filter('query', $observer, PHP_INT_MAX);
+        try {
+            EmailLogs::maybeWidenToColumn($table);
+            $alters = 0;
+            EmailLogs::maybeWidenToColumn($table);
+            EmailLogs::maybeWidenToColumn($table);
+
+            FsmtpTest::assertSame(0, $alters, 'already-TEXT column emitted no ALTER TABLE statements');
+            FsmtpTest::assertSame('', (string)$wpdb->last_error, 'idempotent widen database error');
+        } finally {
+            remove_filter('query', $observer, PHP_INT_MAX);
+            FsmtpFactory::dropTable($table);
+        }
+    });
+
+    FsmtpTest::case('deleting all logs widens an old VARCHAR to column', function () {
+        global $wpdb;
+        $table = FsmtpFactory::emailLogTable(false, true);
+
+        try {
+            FsmtpFactory::insertLog($table, ['to' => serialize([['email' => 'to1@example.test']])]);
+
+            $before = $wpdb->get_row("SHOW COLUMNS FROM `{$table}` LIKE 'to'", ARRAY_A);
+            FsmtpTest::assert(
+                $before && stripos((string)$before['Type'], 'varchar') !== false,
+                'factory table still ships the VARCHAR(255) to column'
+            );
+
+            FsmtpFactory::loggerForTable($table)->delete(['all']);
+
+            $after = $wpdb->get_row("SHOW COLUMNS FROM `{$table}` LIKE 'to'", ARRAY_A);
+            FsmtpTest::assertSame(0, (int)$wpdb->get_var("SELECT COUNT(*) FROM `{$table}`"), 'logs deleted');
+            FsmtpTest::assert(
+                $after && stripos((string)$after['Type'], 'text') !== false,
+                'to column is TEXT after deleting all logs'
+            );
+        } finally {
+            FsmtpFactory::dropTable($table);
+        }
+    });
 };
