@@ -202,7 +202,7 @@ class ActionsRegistrar
             ),
         ]);
 
-        wp_die($output, esc_html__('Access Code', 'fluent-smtp'));
+        wp_die($output, esc_html__('Access Code', 'fluent-smtp'), ['response' => 200]);
     }
 
     /**
