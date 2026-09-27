@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, wp mail smtp, amazon ses, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1
-Stable tag: 2.4.0
+Stable tag: 2.4.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -348,6 +348,15 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 
 
 == Changelog ==
+
+= 2.4.1 (Date: Sep 27, 2026) =
+- Fixed Outlook / Office 365 connections failing to authorize on servers where Microsoft returned an HTML error page instead of a token
+- Fixed resending or retrying a logged email dropping every Cc, Bcc and Reply-To address when there were two or more
+- Fixed the email log's To column showing serialized text for emails sent to many recipients. On existing sites, deleting all logs once widens the column
+- Fixed plain-text emails losing their line breaks, and anything in angle brackets, in the email log viewer
+- Fixed SparkPost sending plain-text emails as HTML, which collapsed their line breaks
+- Added the Amazon SES regions Asia Pacific (Hyderabad, Jakarta, Malaysia), Europe (Zurich), Middle East (UAE), Israel (Tel Aviv) and AWS GovCloud (US-East)
+- Improved translation of the test message sent by the Slack, Discord and Pushover alert channels
 
 = 2.4.0 (Date: Sep 08, 2026) =
 - Redesigned the whole admin on the shared Fluent design system and rebuilt it on Vue 3, Element Plus and Vite
