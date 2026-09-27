@@ -182,13 +182,13 @@ return function () {
     ) {
         $logger = $withoutConstructor(Logger::class);
         $full = serialize([
-            ['email' => 'ryan@biiltgroup.com'],
-            ['email' => 'mackenzie@biiltgroup.com'],
-            ['email' => 'summar@biiltgroup.com'],
-            ['email' => 'madeline@biiltgroup.com'],
-            ['email' => 'allisen@biiltgroup.com'],
-            ['email' => 'jordan@biiltgroup.com'],
-            ['email' => 'info@biiltgroup.com'],
+            ['email' => 'ryan@mail.example.test'],
+            ['email' => 'mackenzie@mail.example.test'],
+            ['email' => 'summar@mail.example.test'],
+            ['email' => 'madeline@mail.example.test'],
+            ['email' => 'allisen@mail.example.test'],
+            ['email' => 'jordan@mail.example.test'],
+            ['email' => 'info@mail.example.test'],
         ]);
         $truncated = substr($full, 0, 255);
 
@@ -204,16 +204,16 @@ return function () {
 
         FsmtpTest::assertSame(
             [
-                'ryan@biiltgroup.com',
-                'mackenzie@biiltgroup.com',
-                'summar@biiltgroup.com',
-                'madeline@biiltgroup.com',
+                'ryan@mail.example.test',
+                'mackenzie@mail.example.test',
+                'summar@mail.example.test',
+                'madeline@mail.example.test',
             ],
             $emails,
             'complete addresses recovered from a clipped serialize blob'
         );
         FsmtpTest::assert(
-            !in_array('allisen@biiltgroup.com', $emails, true),
+            !in_array('allisen@mail.example.test', $emails, true),
             'half-written trailing address is not invented'
         );
     });
@@ -224,8 +224,8 @@ return function () {
     ) {
         $logger = $withoutConstructor(Logger::class);
         $recipients = [
-            ['email' => 'ryan@biiltgroup.com'],
-            ['email' => 'mackenzie@biiltgroup.com'],
+            ['email' => 'ryan@mail.example.test'],
+            ['email' => 'mackenzie@mail.example.test'],
         ];
 
         $row = $invoke($logger, 'maybeUnserialize', [[

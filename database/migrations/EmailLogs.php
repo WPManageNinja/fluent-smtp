@@ -42,7 +42,6 @@ class EmailLogs
             dbDelta($sql);
         } else {
             self::maybeUpgradeIndexes($table);
-            self::maybeWidenToColumn($table);
         }
     }
 
@@ -90,8 +89,11 @@ class EmailLogs
      * the truncated `a:7:{i:0;a:1:{s:5:"email";...` string. Sending is
      * unaffected because the provider reads the in-memory list.
      *
-     * Idempotent: a TEXT/BLOB column is left alone, so this is safe to call
-     * from migrate() and from the one-shot app-load upgrade.
+     * Existing sites are widened only when "delete all logs" has just emptied
+     * the table (Logger::delete()), where the ALTER is instant. Changing a
+     * column type rebuilds the table and blocks writes while it runs, so it
+     * must never run on a page load or on activation against a table that can
+     * hold millions of rows. Idempotent: a TEXT/BLOB column is left alone.
      *
      * @param string $table
      * @return bool True when `to` can hold a serialized recipient list.

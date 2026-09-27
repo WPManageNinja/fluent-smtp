@@ -202,13 +202,13 @@ return function () {
         global $wpdb;
         $table = FsmtpFactory::emailLogTable(false, true);
         $recipients = serialize([
-            ['email' => 'ryan@biiltgroup.com'],
-            ['email' => 'mackenzie@biiltgroup.com'],
-            ['email' => 'summar@biiltgroup.com'],
-            ['email' => 'madeline@biiltgroup.com'],
-            ['email' => 'allisen@biiltgroup.com'],
-            ['email' => 'jordan@biiltgroup.com'],
-            ['email' => 'info@biiltgroup.com'],
+            ['email' => 'ryan@example.test'],
+            ['email' => 'mackenzie@example.test'],
+            ['email' => 'summar@example.test'],
+            ['email' => 'madeline@example.test'],
+            ['email' => 'allisen@example.test'],
+            ['email' => 'jordan@example.test'],
+            ['email' => 'info@example.test'],
         ]);
 
         try {
@@ -261,6 +261,32 @@ return function () {
             FsmtpTest::assertSame('', (string)$wpdb->last_error, 'idempotent widen database error');
         } finally {
             remove_filter('query', $observer, PHP_INT_MAX);
+            FsmtpFactory::dropTable($table);
+        }
+    });
+
+    FsmtpTest::case('deleting all logs widens an old VARCHAR to column', function () {
+        global $wpdb;
+        $table = FsmtpFactory::emailLogTable(false, true);
+
+        try {
+            FsmtpFactory::insertLog($table, ['to' => serialize([['email' => 'to1@example.test']])]);
+
+            $before = $wpdb->get_row("SHOW COLUMNS FROM `{$table}` LIKE 'to'", ARRAY_A);
+            FsmtpTest::assert(
+                $before && stripos((string)$before['Type'], 'varchar') !== false,
+                'factory table still ships the VARCHAR(255) to column'
+            );
+
+            FsmtpFactory::loggerForTable($table)->delete(['all']);
+
+            $after = $wpdb->get_row("SHOW COLUMNS FROM `{$table}` LIKE 'to'", ARRAY_A);
+            FsmtpTest::assertSame(0, (int)$wpdb->get_var("SELECT COUNT(*) FROM `{$table}`"), 'logs deleted');
+            FsmtpTest::assert(
+                $after && stripos((string)$after['Type'], 'text') !== false,
+                'to column is TEXT after deleting all logs'
+            );
+        } finally {
             FsmtpFactory::dropTable($table);
         }
     });

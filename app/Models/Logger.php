@@ -384,7 +384,15 @@ class Logger extends Model
         if ($id && $id[0] == 'all') {
             // TRUNCATE doesn't support parameterization
             // Table name is safe - constructed from constants in __construct()
-            return $this->db->query("TRUNCATE TABLE {$this->table}");
+            $result = $this->db->query("TRUNCATE TABLE {$this->table}");
+
+            // The table is empty now, so widening an old VARCHAR `to` column is instant.
+            if ($result !== false) {
+                require_once FLUENTMAIL_PLUGIN_PATH . 'database/migrations/EmailLogs.php';
+                \FluentMailMigrations\EmailLogs::maybeWidenToColumn($this->table);
+            }
+
+            return $result;
         }
 
         $ids = array_filter($id, 'intval');
