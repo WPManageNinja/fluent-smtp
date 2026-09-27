@@ -43,7 +43,7 @@
 <script>
 export default {
     name: 'EmailbodyContainer',
-    props: ['content'],
+    props: ['content', 'plainText'],
     data() {
         return {
             // ...
@@ -76,7 +76,15 @@ export default {
                     doc.documentElement.style.colorScheme = 'light';
                     doc.body.style.backgroundColor = '#FFFFFF';
                     doc.body.style.color = '#1D2327';
-                    doc.body.innerHTML = body;
+
+                    // Plain text is written as text, so line breaks survive and <...> is not parsed as a tag.
+                    doc.body.style.whiteSpace = this.plainText ? 'pre-wrap' : '';
+                    doc.body.style.fontFamily = this.plainText ? 'monospace' : '';
+                    if (this.plainText) {
+                        doc.body.textContent = body;
+                    } else {
+                        doc.body.innerHTML = body;
+                    }
                 }
             });
         },
@@ -105,6 +113,9 @@ export default {
         content: {
             immediate: true,
             handler: 'setBody'
+        },
+        plainText() {
+            this.setBody(this.content);
         }
     }
 };
