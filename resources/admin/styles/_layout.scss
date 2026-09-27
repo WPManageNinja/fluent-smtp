@@ -1309,7 +1309,10 @@ a.fsm_tile:hover {
 }
 
 .fsm_conn_main {
-    @apply flex flex-col min-w-0 flex-1;
+    @apply flex flex-col flex-1;
+
+    /* Enough for an address to stay readable when the marks beside it are long. */
+    min-width: 160px;
 }
 
 /* The address is what you click to open the connection, so it is a button that reads as
@@ -1330,8 +1333,21 @@ a.fsm_tile:hover {
     margin-top: 2px;
 }
 
+/* The marks give way before the address and the actions do, so a long health message
+ * is cut short rather than pushing Edit out of the row. */
 .fsm_conn_marks {
-    @apply flex flex-none items-center gap-2;
+    @apply flex items-center gap-2;
+
+    flex: 0 1 auto;
+    min-width: 0;
+}
+
+.fsm_conn_health {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .fsm_conn_actions {
@@ -1361,9 +1377,13 @@ a.fsm_tile:hover {
 
         padding: 14px 16px;
 
-        /* Sized by the logo now rather than holding a column open for the ones below. */
+        /*
+         * Narrower than the desktop column, since nothing below has to line up with it,
+         * but still a set width: the logos are SVGs with no size of their own, and in a
+         * box sized by its content they collapsed to nothing.
+         */
         .fsm_conn_provider {
-            width: auto;
+            width: 110px;
         }
 
         .fsm_conn_main {

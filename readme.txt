@@ -356,6 +356,7 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 - Fixed plain-text emails losing their line breaks, and anything in angle brackets, in the email log viewer
 - Fixed SparkPost sending plain-text emails as HTML, which collapsed their line breaks
 - Fixed emails failing on Postmark, and names being cut short on Mailgun, SMTP2GO and SparkPost, when a recipient's or sender's name contains a comma (for example "Shah, Jewel")
+- Fixed a long connection error on the Settings screen hiding that connection's Edit button and address, and the provider logos not showing on phones
 - Added the Amazon SES regions Asia Pacific (Hyderabad, Jakarta, Malaysia), Europe (Zurich), Middle East (UAE), Israel (Tel Aviv) and AWS GovCloud (US-East)
 - Improved translation of the test message sent by the Slack, Discord and Pushover alert channels
 
