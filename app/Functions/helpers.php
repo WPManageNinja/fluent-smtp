@@ -365,7 +365,8 @@ if (!function_exists('fluentMailSend')) {
         }
 
         if (!is_array($to)) {
-            $to = explode(',', $to);
+            // Quote-aware, so a quoted display name holding a comma stays one recipient.
+            $to = \FluentMail\App\Services\Mailer\BaseHandler::splitAddressList($to);
         }
 
         if (isset($atts['subject'])) {
@@ -500,13 +501,13 @@ if (!function_exists('fluentMailSend')) {
                             }
                             break;
                         case 'cc':
-                            $cc = array_merge((array)$cc, explode(',', $content));
+                            $cc = array_merge((array)$cc, \FluentMail\App\Services\Mailer\BaseHandler::splitAddressList($content));
                             break;
                         case 'bcc':
-                            $bcc = array_merge((array)$bcc, explode(',', $content));
+                            $bcc = array_merge((array)$bcc, \FluentMail\App\Services\Mailer\BaseHandler::splitAddressList($content));
                             break;
                         case 'reply-to':
-                            $reply_to = array_merge((array)$reply_to, explode(',', $content));
+                            $reply_to = array_merge((array)$reply_to, \FluentMail\App\Services\Mailer\BaseHandler::splitAddressList($content));
                             break;
                         default:
                             // Add it to our grand headers array.
@@ -637,7 +638,8 @@ if (!function_exists('fluentMailSend')) {
 
                     if (preg_match('/(.*)<(.+)>/', $address, $matches)) {
                         if (count($matches) == 3) {
-                            $recipient_name = $matches[1];
+                            // PHPMailer quotes the name itself, so drop the caller's quotes.
+                            $recipient_name = \FluentMail\App\Services\Mailer\BaseHandler::unquoteName($matches[1]);
                             $address = $matches[2];
                         }
                     }

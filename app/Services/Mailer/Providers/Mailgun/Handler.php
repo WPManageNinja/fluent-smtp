@@ -127,7 +127,7 @@ class Handler extends BaseHandler
 
     protected function getFrom()
     {
-        return $this->getParam('from');
+        return $this->getFormattedFrom();
     }
 
     protected function getReplyTo()
@@ -156,7 +156,7 @@ class Handler extends BaseHandler
     {
         $array = array_map(function ($recipient) {
             return isset($recipient['name'])
-                ? $recipient['name'] . ' <' . $recipient['email'] . '>'
+                ? self::formatAddress($recipient['email'], $recipient['name'])
                 : $recipient['email'];
         }, $recipients);
 

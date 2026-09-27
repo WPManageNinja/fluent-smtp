@@ -206,6 +206,145 @@ class BaseHandler
         ]);
     }
 
+    /**
+     * Split a comma-separated address list, keeping a comma that sits inside a
+     * quoted display name: `"Jewel, Shah" <jewel@example.com>` is one mailbox.
+     *
+     * A quote only opens a quoted name at the start of an entry, so a stray
+     * `"` (an inch mark, a comment) never joins two entries. A list without a
+     * double quote, or with an unclosed quoted name, is split on every comma
+     * exactly as wp_mail() does.
+     *
+     * @param string $list
+     * @return array
+     */
+    public static function splitAddressList($list)
+    {
+        $list = (string)$list;
+
+        if (strpos($list, '"') === false) {
+            return explode(',', $list);
+        }
+
+        $parts = [];
+        $current = '';
+        $inQuote = false;
+        $length = strlen($list);
+
+        for ($i = 0; $i < $length; $i++) {
+            $char = $list[$i];
+
+            if ($inQuote) {
+                if ($char === '\\' && $i + 1 < $length) {
+                    $current .= $char . $list[++$i];
+                    continue;
+                }
+                if ($char === '"') {
+                    $inQuote = false;
+                }
+            } elseif ($char === '"' && trim($current) === '') {
+                $inQuote = true;
+            } elseif ($char === ',') {
+                $parts[] = $current;
+                $current = '';
+                continue;
+            }
+
+            $current .= $char;
+        }
+
+        if ($inQuote) {
+            return explode(',', $list);
+        }
+
+        $parts[] = $current;
+
+        return $parts;
+    }
+
+    /**
+     * Strip the quotes from a quoted display name that holds a comma:
+     * `"Jewel, Shah"` → `Jewel, Shah`. PHPMailer quotes it again when it
+     * writes the header.
+     *
+     * Any other name, quoted or not, is returned unchanged.
+     *
+     * @param string $name
+     * @return string
+     */
+    public static function unquoteName($name)
+    {
+        $trimmed = trim((string)$name);
+
+        if (!self::isQuotedString($trimmed) || strpos($trimmed, ',') === false) {
+            return $name;
+        }
+
+        return preg_replace('/\\\\(.)/s', '$1', substr($trimmed, 1, -1));
+    }
+
+    /**
+     * Build `name <email>`, quoting a name that holds a comma so a provider
+     * that takes a comma-separated list reads it as one mailbox.
+     *
+     * A name without a comma, or one that is already quoted, is written
+     * exactly as before.
+     *
+     * @param string $email
+     * @param string $name
+     * @return string
+     */
+    public static function formatAddress($email, $name = '')
+    {
+        $name = (string)$name;
+
+        if ($name === '') {
+            return $email;
+        }
+
+        if (strpos($name, ',') !== false && !self::isQuotedString(trim($name))) {
+            $name = '"' . addcslashes($name, '"\\') . '"';
+        }
+
+        return $name . ' <' . $email . '>';
+    }
+
+    /**
+     * Whether a value is one RFC 5322 quoted string: `"..."` with every inner
+     * quote escaped.
+     *
+     * @param string $value
+     * @return bool
+     */
+    private static function isQuotedString($value)
+    {
+        if (strlen($value) < 2 || $value[0] !== '"' || substr($value, -1) !== '"') {
+            return false;
+        }
+
+        $inner = preg_replace('/\\\\./s', '', substr($value, 1, -1));
+
+        return strpos($inner, '"') === false && substr($inner, -1) !== '\\';
+    }
+
+    /**
+     * The `from` param for a provider that sends it as one `name <email>`
+     * string. A sender name with a comma is quoted; any other From is the
+     * logged `from` value, unchanged.
+     *
+     * @return string
+     */
+    protected function getFormattedFrom()
+    {
+        $name = (string)$this->getParam('sender_name');
+
+        if (strpos($name, ',') === false) {
+            return $this->getParam('from');
+        }
+
+        return self::formatAddress($this->getParam('sender_email'), $name);
+    }
+
     protected function setFrom()
     {
         $name = $this->getSetting('sender_name');

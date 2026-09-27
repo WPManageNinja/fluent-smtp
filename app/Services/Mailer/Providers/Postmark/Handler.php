@@ -25,7 +25,7 @@ class Handler extends BaseHandler
     public function postSend()
     {
         $body = [
-            'From'          => $this->getParam('from'),
+            'From'          => $this->getFormattedFrom(),
             'To'            => $this->getTo(),
             'Subject'       => $this->getSubject(),
             'MessageStream' => $this->getSetting('message_stream', 'outbound')
@@ -150,7 +150,7 @@ class Handler extends BaseHandler
     {
         $array = array_map(function ($recipient) {
             return isset($recipient['name'])
-                ? $recipient['name'] . ' <' . $recipient['email'] . '>'
+                ? self::formatAddress($recipient['email'], $recipient['name'])
                 : $recipient['email'];
         }, $recipients);
 
