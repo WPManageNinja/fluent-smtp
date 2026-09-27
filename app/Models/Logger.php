@@ -483,7 +483,10 @@ class Logger extends Model
                     $values[] = $v;
                 }
                 if ($values) {
-                    $headers[] = "{$key}: " . implode(';', $values);
+                    // wp_mail() splits Cc, Bcc and Reply-To on commas only; any
+                    // other separator turns the list into one invalid address,
+                    // which is silently dropped.
+                    $headers[] = "{$key}: " . implode(', ', $values);
                 }
             } else {
                 if ($value) {
