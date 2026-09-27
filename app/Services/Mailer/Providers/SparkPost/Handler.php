@@ -104,7 +104,7 @@ class Handler extends BaseHandler
         $email = $this->getParam('sender_email');
 
         if ($name = $this->getParam('sender_name')) {
-            $from = $name . ' <' . $email . '>';
+            $from = self::formatAddress($email, $name);
         } else {
             $from = $email;
         }

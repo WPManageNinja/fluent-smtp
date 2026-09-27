@@ -83,7 +83,7 @@ class Handler extends BaseHandler {
         $from = $this->getParam('sender_email');
 
         if ($name = $this->getParam('sender_name')) {
-            $from = $name . ' <' . $from . '>';
+            $from = self::formatAddress($from, $name);
         }
 
         return $from;
@@ -100,7 +100,7 @@ class Handler extends BaseHandler {
     protected function getRecipients($recipients) {
         return array_map(function ($recipient) {
             return isset($recipient['name'])
-                ? $recipient['name'] . ' <' . $recipient['email'] . '>'
+                ? self::formatAddress($recipient['email'], $recipient['name'])
                 : $recipient['email'];
         }, $recipients);
     }
