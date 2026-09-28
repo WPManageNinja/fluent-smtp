@@ -197,31 +197,17 @@ class Handler extends BaseHandler
         $attachments = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
-            $file = false;
-
             try {
-                if (is_file($attachment[0]) && is_readable($attachment[0])) {
-                    $fileName = $this->getAttachmentName($attachment);
-                    $file = file_get_contents($attachment[0]);
-                    $mimeType = mime_content_type($attachment[0]);
-                    $filetype = str_replace(';', '', trim($mimeType));
-                }
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
-                $file = false;
-            }
-
-            if ($file === false) {
+                $this->logAttachmentFailure('ToSend', $e);
                 continue;
             }
 
-            $chunkSize = 76;
-            $file = base64_encode($file);
-            $file = trim(chunk_split($file, $chunkSize, "\n"));
-
             $attachments[] = [
-                'type'    => $filetype,
-                'name'    => $fileName,
-                'content' => $file
+                'type'    => self::attachmentType($attachment),
+                'name'    => self::getAttachmentName($attachment),
+                'content' => trim(chunk_split(base64_encode($file), 76, "\n"))
             ];
         }
 

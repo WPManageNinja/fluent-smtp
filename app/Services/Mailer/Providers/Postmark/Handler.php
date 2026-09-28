@@ -162,27 +162,17 @@ class Handler extends BaseHandler
         $data = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
-            $file = false;
-            $fileName = null;
-
             try {
-                // Use secure file reading with path traversal protection
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = $this->getAttachmentName($attachment);
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
-                // Log error and skip this attachment
                 $this->logAttachmentFailure('Postmark', $e);
-                $file = false;
-            }
-
-            if ($file === false) {
                 continue;
             }
 
             $data[] = [
-                'Name'        => $fileName,
+                'Name'        => self::getAttachmentName($attachment),
                 'Content'     => base64_encode($file),
-                'ContentType' => $this->determineMimeContentRype($attachment[0])
+                'ContentType' => self::attachmentType($attachment)
             ];
         }
 
@@ -196,19 +186,5 @@ class Handler extends BaseHandler
             'Content-Type'            => 'application/json',
             'X-Postmark-Server-Token' => $this->getSetting('api_key'),
         ];
-    }
-
-    protected function determineMimeContentRype($filename)
-    {
-        if (function_exists('mime_content_type')) {
-            return mime_content_type($filename);
-        } elseif (function_exists('finfo_open')) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mime_type = finfo_file($finfo, $filename);
-            finfo_close($finfo);
-            return $mime_type;
-        } else {
-            return 'application/octet-stream';
-        }
     }
 }
