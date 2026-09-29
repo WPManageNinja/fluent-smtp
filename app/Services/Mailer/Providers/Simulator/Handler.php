@@ -28,7 +28,7 @@ class Handler extends BaseHandler
                 'body' => $this->phpMailer->Body,
                 'attachments' => maybe_serialize($this->phpMailer->getAttachments()),
                 'status'   => 'sent',
-                'response' => maybe_serialize(['status' => __('Email sending was simulated, No Email was sent originally', 'fluent-smtp')]),
+                'response' => maybe_serialize(['status' => __('Sending was simulated. No email was actually sent.', 'fluent-smtp')]),
                 'headers'  => maybe_serialize($headers),
                 'extra'    => maybe_serialize(['provider' => 'Simulator'])
             ];

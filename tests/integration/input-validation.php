@@ -71,6 +71,168 @@ return function () {
         }
     });
 
+    /** Capture the navigation SELECTs issued against one isolated fixture table. */
+    $captureSelects = function ($table, callable $act) {
+        $queries = [];
+        $observer = function ($query) use (&$queries, $table) {
+            if (stripos(ltrim($query), 'SELECT') === 0 && strpos($query, $table) !== false) {
+                $queries[] = $query;
+            }
+            return $query;
+        };
+
+        add_filter('query', $observer, PHP_INT_MAX);
+        try {
+            $result = $act();
+        } finally {
+            remove_filter('query', $observer, PHP_INT_MAX);
+        }
+
+        return [$result, $queries];
+    };
+
+    FsmtpTest::case('log navigation drops a filter column outside its whitelist', function () use ($captureSelects) {
+        global $wpdb;
+
+        $table = FsmtpFactory::emailLogTable();
+        $firstId = FsmtpFactory::insertLog($table, ['subject' => 'whitelist first']);
+        $secondId = FsmtpFactory::insertLog($table, ['subject' => 'whitelist second']);
+
+        // Closes the identifier backtick and appends an always-false predicate,
+        // so a column reaching the query unfiltered changes the returned row.
+        $payload = 'subject` = \'no-such-subject\' AND `subject';
+
+        try {
+            list($result, $queries) = $captureSelects($table, function () use ($table, $firstId, $payload) {
+                return FsmtpFactory::loggerForTable($table)->navigate([
+                    'filter_by'       => $payload,
+                    'filter_by_value' => 'whitelist',
+                    'id'              => $firstId,
+                    'dir'             => 'next',
+                ]);
+            });
+
+            FsmtpTest::assertSame('', (string) $wpdb->last_error, 'unlisted filter database error');
+            FsmtpTest::assertSame(1, count($queries), 'navigation SELECT count');
+            FsmtpTest::assert(
+                strpos($queries[0], 'no-such-subject') === false,
+                'unlisted filter column reached the navigation SELECT'
+            );
+            FsmtpTest::assertSame(
+                $secondId,
+                isset($result['log']['id']) ? $result['log']['id'] : null,
+                'navigation result with an unlisted filter'
+            );
+        } finally {
+            FsmtpFactory::dropTable($table);
+        }
+    });
+
+    FsmtpTest::case('log navigation still filters on a whitelisted column', function () use ($captureSelects) {
+        global $wpdb;
+
+        $table = FsmtpFactory::emailLogTable();
+        $originId = FsmtpFactory::insertLog($table, ['status' => 'sent']);
+        FsmtpFactory::insertLog($table, ['status' => 'sent']);
+        $failedId = FsmtpFactory::insertLog($table, ['status' => 'failed']);
+
+        try {
+            list($result, $queries) = $captureSelects($table, function () use ($table, $originId) {
+                return FsmtpFactory::loggerForTable($table)->navigate([
+                    'filter_by'       => 'status',
+                    'filter_by_value' => 'failed',
+                    'id'              => $originId,
+                    'dir'             => 'next',
+                ]);
+            });
+
+            FsmtpTest::assertSame('', (string) $wpdb->last_error, 'whitelisted filter database error');
+            FsmtpTest::assert(
+                strpos($queries[0], '`status` = ') !== false,
+                'whitelisted filter column did not reach the navigation SELECT'
+            );
+            FsmtpTest::assertSame(
+                $failedId,
+                isset($result['log']['id']) ? $result['log']['id'] : null,
+                'navigation result with a whitelisted filter'
+            );
+        } finally {
+            FsmtpFactory::dropTable($table);
+        }
+    });
+
+    FsmtpTest::case('log navigation survives array-shaped filter and search values', function () {
+        global $wpdb;
+
+        $table = FsmtpFactory::emailLogTable();
+        $firstId = FsmtpFactory::insertLog($table, ['subject' => 'array shaped first']);
+        $secondId = FsmtpFactory::insertLog($table, ['subject' => 'array shaped second']);
+
+        try {
+            // `subject` takes a single value, so an array must be discarded
+            // rather than reaching the string operations in buildWhere().
+            $result = FsmtpFactory::loggerForTable($table)->navigate([
+                'filter_by'       => 'subject',
+                'filter_by_value' => ['array shaped', 'array shaped'],
+                'query'           => ['array shaped'],
+                'id'              => $firstId,
+                'dir'             => 'next',
+            ]);
+
+            FsmtpTest::assertSame('', (string) $wpdb->last_error, 'array-shaped filter database error');
+            FsmtpTest::assertSame(
+                $secondId,
+                isset($result['log']['id']) ? $result['log']['id'] : null,
+                'navigation result with array-shaped values'
+            );
+        } finally {
+            FsmtpFactory::dropTable($table);
+        }
+    });
+
+    FsmtpTest::case('log navigation narrows an array-shaped cursor id before binding', function () use ($captureSelects) {
+        global $wpdb;
+
+        $table = FsmtpFactory::emailLogTable();
+        $firstId = FsmtpFactory::insertLog($table, ['subject' => 'cursor first']);
+        $secondId = FsmtpFactory::insertLog($table, ['subject' => 'cursor second']);
+
+        // prepare() rejects an array argument through _doing_it_wrong(), which
+        // prints a notice into the AJAX response body on a debug site.
+        $notices = [];
+        $noticeObserver = function ($function) use (&$notices) {
+            $notices[] = $function;
+        };
+        add_action('doing_it_wrong_run', $noticeObserver);
+
+        try {
+            list($result, $queries) = $captureSelects($table, function () use ($table, $firstId) {
+                return FsmtpFactory::loggerForTable($table)->navigate([
+                    'id'  => [$firstId, $firstId],
+                    'dir' => 'next',
+                ]);
+            });
+
+            FsmtpTest::assertSame('', (string) $wpdb->last_error, 'array-shaped cursor database error');
+            FsmtpTest::assertSame([], $notices, 'array-shaped cursor raised a _doing_it_wrong notice');
+            FsmtpTest::assertSame(1, count($queries), 'array-shaped cursor navigation SELECT count');
+            FsmtpTest::assert(
+                strpos($queries[0], "`id` > '0'") !== false,
+                'array-shaped cursor did not bind as an integer'
+            );
+            FsmtpTest::assertSame(
+                $firstId,
+                isset($result['log']['id']) ? $result['log']['id'] : null,
+                'navigation result with an array-shaped cursor'
+            );
+            FsmtpTest::assertSame(true, $result['next'], 'array-shaped cursor next flag');
+            FsmtpTest::assert($secondId > $firstId, 'fixture ordering');
+        } finally {
+            remove_action('doing_it_wrong_run', $noticeObserver);
+            FsmtpFactory::dropTable($table);
+        }
+    });
+
     FsmtpTest::case('day-time statistics clamp the requested lookback to 365 days', function () {
         global $wpdb;
 

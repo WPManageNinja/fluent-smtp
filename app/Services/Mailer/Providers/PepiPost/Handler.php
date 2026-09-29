@@ -23,7 +23,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong.', 'fluent-smtp'), []));
     }
 
     public function postSend()
@@ -70,7 +70,7 @@ class Handler extends BaseHandler
                     'message' => Arr::get($responseBody, 'message_id')
                 ];
             } else {
-                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'error', 'Unknown Error'), $responseBody);
+                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'error', __('Unknown Error', 'fluent-smtp')), $responseBody);
             }
         }
 
@@ -178,7 +178,7 @@ class Handler extends BaseHandler
             try {
                 // Use secure file reading with path traversal protection
                 $file = $this->secureFileRead($attachment[0]);
-                $fileName = basename($attachment[0]);
+                $fileName = $this->getAttachmentName($attachment);
             } catch (\Exception $e) {
                 // Log error and skip this attachment
                 $this->logAttachmentFailure('PepiPost', $e);

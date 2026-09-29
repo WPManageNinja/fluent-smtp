@@ -206,6 +206,145 @@ class BaseHandler
         ]);
     }
 
+    /**
+     * Split a comma-separated address list, keeping a comma that sits inside a
+     * quoted display name: `"Jewel, Shah" <jewel@example.com>` is one mailbox.
+     *
+     * A quote only opens a quoted name at the start of an entry, so a stray
+     * `"` (an inch mark, a comment) never joins two entries. A list without a
+     * double quote, or with an unclosed quoted name, is split on every comma
+     * exactly as wp_mail() does.
+     *
+     * @param string $list
+     * @return array
+     */
+    public static function splitAddressList($list)
+    {
+        $list = (string)$list;
+
+        if (strpos($list, '"') === false) {
+            return explode(',', $list);
+        }
+
+        $parts = [];
+        $current = '';
+        $inQuote = false;
+        $length = strlen($list);
+
+        for ($i = 0; $i < $length; $i++) {
+            $char = $list[$i];
+
+            if ($inQuote) {
+                if ($char === '\\' && $i + 1 < $length) {
+                    $current .= $char . $list[++$i];
+                    continue;
+                }
+                if ($char === '"') {
+                    $inQuote = false;
+                }
+            } elseif ($char === '"' && trim($current) === '') {
+                $inQuote = true;
+            } elseif ($char === ',') {
+                $parts[] = $current;
+                $current = '';
+                continue;
+            }
+
+            $current .= $char;
+        }
+
+        if ($inQuote) {
+            return explode(',', $list);
+        }
+
+        $parts[] = $current;
+
+        return $parts;
+    }
+
+    /**
+     * Strip the quotes from a quoted display name that holds a comma:
+     * `"Jewel, Shah"` → `Jewel, Shah`. PHPMailer quotes it again when it
+     * writes the header.
+     *
+     * Any other name, quoted or not, is returned unchanged.
+     *
+     * @param string $name
+     * @return string
+     */
+    public static function unquoteName($name)
+    {
+        $trimmed = trim((string)$name);
+
+        if (!self::isQuotedString($trimmed) || strpos($trimmed, ',') === false) {
+            return $name;
+        }
+
+        return preg_replace('/\\\\(.)/s', '$1', substr($trimmed, 1, -1));
+    }
+
+    /**
+     * Build `name <email>`, quoting a name that holds a comma so a provider
+     * that takes a comma-separated list reads it as one mailbox.
+     *
+     * A name without a comma, or one that is already quoted, is written
+     * exactly as before.
+     *
+     * @param string $email
+     * @param string $name
+     * @return string
+     */
+    public static function formatAddress($email, $name = '')
+    {
+        $name = (string)$name;
+
+        if ($name === '') {
+            return $email;
+        }
+
+        if (strpos($name, ',') !== false && !self::isQuotedString(trim($name))) {
+            $name = '"' . addcslashes($name, '"\\') . '"';
+        }
+
+        return $name . ' <' . $email . '>';
+    }
+
+    /**
+     * Whether a value is one RFC 5322 quoted string: `"..."` with every inner
+     * quote escaped.
+     *
+     * @param string $value
+     * @return bool
+     */
+    private static function isQuotedString($value)
+    {
+        if (strlen($value) < 2 || $value[0] !== '"' || substr($value, -1) !== '"') {
+            return false;
+        }
+
+        $inner = preg_replace('/\\\\./s', '', substr($value, 1, -1));
+
+        return strpos($inner, '"') === false && substr($inner, -1) !== '\\';
+    }
+
+    /**
+     * The `from` param for a provider that sends it as one `name <email>`
+     * string. A sender name with a comma is quoted; any other From is the
+     * logged `from` value, unchanged.
+     *
+     * @return string
+     */
+    protected function getFormattedFrom()
+    {
+        $name = (string)$this->getParam('sender_name');
+
+        if (strpos($name, ',') === false) {
+            return $this->getParam('from');
+        }
+
+        return self::formatAddress($this->getParam('sender_email'), $name);
+    }
+
     protected function setFrom()
     {
         $name = $this->getSetting('sender_name');
@@ -602,14 +741,14 @@ class BaseHandler
 
             if (is_object($item) || is_resource($item)) {
                 throw new InvalidArgumentException(
-                    "Invalid Data: Array cannot contain an object or resource."
+                    esc_html__('Invalid Data: Array cannot contain an object or resource.', 'fluent-smtp')
                 );
             }
 
             if (is_string($item)) {
                 if (is_serialized($item)) {
                     throw new InvalidArgumentException(
-                        "Invalid Data: Array cannot contain serialized data."
+                        esc_html__('Invalid Data: Array cannot contain serialized data.', 'fluent-smtp')
                     );
                 }
 
@@ -679,6 +818,44 @@ class BaseHandler
             $provider,
             $e->getMessage()
         ));
+    }
+
+    /**
+     * Resolve the file name an attachment should be delivered under.
+     *
+     * PHPMailer keeps the caller supplied name at index 2 — wp_mail() puts the
+     * attachments array key there — and the file's own base name at index 1, so
+     * a site that stores uploads under randomised names can still send a
+     * readable one. The name is caller controlled, so it is reduced to a bare
+     * file name before it reaches a Content-Disposition header or a provider
+     * payload.
+     *
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @return string Empty only when the row carries neither a name nor a path.
+     */
+    protected function getAttachmentName($attachment)
+    {
+        $candidates = [
+            isset($attachment[2]) ? $attachment[2] : '',
+            isset($attachment[0]) ? $attachment[0] : ''
+        ];
+
+        foreach ($candidates as $candidate) {
+            if (!is_string($candidate) || $candidate === '') {
+                continue;
+            }
+
+            // wp_basename() drops any directory part for both separators;
+            // the rest cannot be allowed to break out of a quoted header.
+            $name = str_replace(["\r", "\n", "\0", '"'], '', wp_basename($candidate));
+            $name = trim($name);
+
+            if ($name !== '') {
+                return $name;
+            }
+        }
+
+        return '';
     }
 
     /**

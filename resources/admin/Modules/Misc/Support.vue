@@ -3,7 +3,7 @@
         <el-row :gutter="20">
             <el-col :sm="24" :md="12">
                 <div class="fss_about">
-                    <div class="fss_header">About</div>
+                    <div class="fss_header">{{ $t('About') }}</div>
                     <div class="fss_content">
                         <p>
                             <a :href="appVars.plugin_url" target="_blank" rel="noopener">FluentSMTP</a> <span> </span>{{ $t('__ABOUT_INTRO') }}
@@ -12,10 +12,10 @@
                             {{ $t('__ABOUT_BY') }}
                         </p>
                         <div>
-                            <p>{{ $t('FluentSMTP is built using the following open-source libraries and software') }}</p>
+                            <p>{{ $t('FluentSMTP is built with these open-source libraries:') }}</p>
                             <ul style="list-style: disc;margin-left: 30px;">
                                 <li>VueJS</li>
-                                <li>ChartJS</li>
+                                <li>Apache ECharts</li>
                                 <li>Lodash</li>
                                 <li>WordPress API</li>
                             </ul>
@@ -27,7 +27,7 @@
                                 <br/>
                                 <p v-html="$t('__GIT_CONTRIBUTE')"></p>
                             </p>
-                            <p>{{ $t('Please ') }}<a target="_blank" rel="noopener" href="http://fluentsmtp.com/docs">{{ $t('read the documentation here') }}</a></p>
+                            <p><a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs">{{ $t('Read the documentation') }}</a></p>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                         </ul>
                         <div v-else-if="!contributorsLoading && !contributors.length" style="text-align: center;">
                             <a target="_blank" rel="noopener noreferrer" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
-                                <img title="Contributors" :src="appVars.images_url + 'contributors.png'"/>
+                                <img :title="$t('Contributors')" :src="appVars.images_url + 'contributors.png'"/>
                             </a>
                         </div>
 
@@ -72,7 +72,7 @@
             </el-col>
             <el-col :sm="24" :md="12">
                 <div v-if="plugin || installed_info">
-                    <div v-loading="installing" :element-loading-text="$t('Installing... Please wait')" class="fss_about">
+                    <div v-loading="installing" :element-loading-text="$t('Installing...')" class="fss_about">
                         <div class="fss_header">{{ $t('Recommended Plugin') }}</div>
                         <div class="fss_content">
                             <div v-if="installed_info" class="install_success">
@@ -89,11 +89,11 @@
                                     <div v-html="plugin.description"></div>
                                     <div class="fss_install_btn">
                                         <el-button v-if="!appVars.disable_installation" @click="installPlugin(plugin.slug)"
-                                                   :class="plugin.btn_class" type="success">{{ plugin.btn_text }}
+                                                   :class="plugin.btn_class" type="primary">{{ plugin.btn_text }}
                                         </el-button>
                                         <a v-else :href="plugin.plugin_url" target="_blank" rel="noopener"
                                            class="el-button el-button--success fss_ninjatables_btn">
-                                            <span>View {{ plugin.title }}</span>
+                                            <span>{{ $t('View') }} {{ plugin.title }}</span>
                                         </a>
                                     </div>
                                 </div>
@@ -115,10 +115,10 @@
                             </li>
                             <li>
                                 <a target="_blank" rel="nofollow"
-                                   href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5">{{ $t('Write a review (really appreciated 😊)') }}</a>
+                                   href="https://wordpress.org/support/plugin/fluent-smtp/reviews/?filter=5">{{ $t('Leave a review on WordPress.org') }}</a>
                             </li>
                             <li>
-                                <a target="_blank" rel="noopener" href="http://fluentsmtp.com/docs">{{ $t('Read the documentation') }}</a>
+                                <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs">{{ $t('Read the documentation') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -157,8 +157,8 @@ export default {
                 ninja_tables: {
                     slug: 'ninja-tables',
                     title: 'Ninja Tables',
-                    subtitle: this.$t('Best WP DataTables Plugin for WordPress'),
-                    description: `<p>${ this.$t('__NT_DESC')}</p><p>${ this.$t('Meet ')}<a href="https://wordpress.org/plugins/ninja-tables/" target="_blank" rel="nofollow">Ninja Tables</a>,${ this.$t('__NT_DESC_EXT')}</p>`,
+                    subtitle: this.$t('The Best Data Table Plugin for WordPress'),
+                    description: `<p>${ this.$t('__NT_DESC')}</p><p>${ this.$t('Meet ')}<a href="https://wordpress.org/plugins/ninja-tables/" target="_blank" rel="nofollow">Ninja Tables</a>, ${ this.$t('__NT_DESC_EXT')}</p>`,
                     btn_text: this.$t('Install Ninja Tables (Free)'),
                     btn_class: 'fss_ninjatables_btn',
                     plugin_url: 'https://wordpress.org/plugins/ninja-tables/'
@@ -206,8 +206,7 @@ export default {
                     this.installed_message = response.message;
                 })
                 .fail((error) => {
-                    this.$notify.error(error.responseJSON.data.message);
-                    alert(error.responseJSON.data.message);
+                    this.$notify.error(this.$errorMessage(error));
                 })
                 .always(() => {
                     this.installing = false;
@@ -257,13 +256,13 @@ export default {
         display: block;
         text-align: center;
         text-decoration: none;
-        color: #5a5a5a;
+        color: var(--fsm-text-light);
 
         &:hover {
-            color: #1a7efb;
+            color: var(--fsm-link);
 
             img {
-                border-color: #1a7efb;
+                border-color: var(--fsm-link);
             }
         }
     }

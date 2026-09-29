@@ -9,9 +9,9 @@
             </div>
         </el-alert>
 
-        <el-radio-group size="mini" v-model="connection.key_store">
-            <el-radio-button label="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
-            <el-radio-button label="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
+        <el-radio-group size="small" v-model="connection.key_store">
+            <el-radio-button value="db">{{ $t('Store API Keys in DB') }}</el-radio-button>
+            <el-radio-button value="wp_config">{{ $t('Store API Keys in Config File') }}</el-radio-button>
         </el-radio-group>
 
         <template v-if="connection.key_store == 'db'">
@@ -25,7 +25,7 @@
                 <error :error="errors.get('api_key')"/>
             </el-form-item>
             <el-form-item>
-                <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                     {{ $t('Disable Encryption for API Key (Not Recommended)') }}
                 </el-checkbox>
             </el-form-item>
@@ -44,8 +44,8 @@
 
         <el-form-item :label="$t('Submission mode')">
             <el-radio-group v-model="connection.send_mode">
-                <el-radio label="direct">{{ $t('Direct — wait for per-message acceptance results') }}</el-radio>
-                <el-radio label="queued">{{ $t('Queued — return after MailChannels accepts the request') }}</el-radio>
+                <el-radio value="direct">{{ $t('Direct — wait for per-message acceptance results') }}</el-radio>
+                <el-radio value="queued">{{ $t('Queued — return after MailChannels accepts the request') }}</el-radio>
             </el-radio-group>
             <p class="small-help-text">
                 {{ $t('Both modes use HTTPS only. FluentSMTP does not automatically retry a failed submission.') }}
@@ -68,7 +68,7 @@ export default {
     },
     created() {
         if (!this.connection.send_mode) {
-            this.$set(this.connection, 'send_mode', 'direct');
+            this.connection.send_mode = 'direct';
         }
     },
     watch: {

@@ -558,6 +558,23 @@ class FsmtpTest
         return true;
     }
 
+    /**
+     * Load WordPress's own PHPMailer on demand. Provider handlers take a real
+     * PHPMailer rather than a stub so header, address, and content-type
+     * handling stay faithful, but WordPress only loads the class when it first
+     * sends mail, which a test process never does.
+     */
+    public static function requirePhpMailer()
+    {
+        if (!class_exists('PHPMailer\\PHPMailer\\PHPMailer')) {
+            require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
+            require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+            require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+        }
+
+        return true;
+    }
+
     /** Clear only FluentSMTP-owned transient/object-cache entries. */
     public static function clearCaches()
     {

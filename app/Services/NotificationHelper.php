@@ -43,12 +43,23 @@ class NotificationHelper
         return self::sendTeleRequest('send-test', [], 'POST', $token);
     }
 
+    /**
+     * The alert channels' test message: one sentence with a placeholder, so translators can place the URL and punctuation.
+     *
+     * @return string
+     */
+    public static function getTestMessage()
+    {
+        return sprintf(
+            /* translators: %s: the site URL */
+            __('Test message from %s. If you can read this, the connection is working.', 'fluent-smtp'),
+            site_url()
+        );
+    }
+
     public static function sendTestPushoverMessage($apiToken, $userKey)
     {
-        $message = __('This is a test message for ', 'fluent-smtp') . site_url() . '. ' .
-            __('If you get this message, then your site is connected successfully.', 'fluent-smtp');
-
-        return self::sendPushoverMessage($message, $apiToken, $userKey, true, 1);
+        return self::sendPushoverMessage(self::getTestMessage(), $apiToken, $userKey, true, 1);
     }
 
     public static function disconnectTelegram($token)
@@ -108,7 +119,7 @@ class NotificationHelper
             'blocking'  => false,
             'body'      => $data,
             'cookies'   => false,
-            'sslverify' => false,
+            'sslverify' => true,
         ));
 
         return true;
@@ -125,12 +136,12 @@ class NotificationHelper
         if ($method == 'POST') {
             $response = wp_remote_post($url, [
                 'body'      => $data,
-                'sslverify' => false,
+                'sslverify' => true,
                 'timeout'   => 50
             ]);
         } else {
             $response = wp_remote_get($url, [
-                'sslverify' => false,
+                'sslverify' => true,
                 'timeout'   => 50
             ]);
         }
@@ -145,7 +156,7 @@ class NotificationHelper
         $responseData = json_decode($body, true);
 
         if (!$responseData || empty($responseData['success']) || $responseCode !== 200) {
-            return new \WP_Error('invalid_data', 'Something went wrong', $responseData);
+            return new \WP_Error('invalid_data', __('Something went wrong', 'fluent-smtp'), $responseData);
         }
 
         return $responseData;
@@ -162,12 +173,12 @@ class NotificationHelper
         if ($method == 'POST') {
             $response = wp_remote_post($url, [
                 'body'      => $data,
-                'sslverify' => false,
+                'sslverify' => true,
                 'timeout'   => 50
             ]);
         } else {
             $response = wp_remote_get($url, [
-                'sslverify' => false,
+                'sslverify' => true,
                 'timeout'   => 50
             ]);
         }
@@ -183,7 +194,7 @@ class NotificationHelper
         $responseData = json_decode($body, true);
 
         if (!$responseData || empty($responseData['success']) || $responseCode !== 200) {
-            return new \WP_Error('invalid_data', 'Something went wrong', $responseData);
+            return new \WP_Error('invalid_data', __('Something went wrong', 'fluent-smtp'), $responseData);
         }
 
         return $responseData;
@@ -208,7 +219,7 @@ class NotificationHelper
             'redirection' => 5,
             'blocking'    => true,
             'httpversion' => '1.0',
-            'sslverify'   => false,
+            'sslverify'   => true,
             'data_format' => 'body',
         );
 
@@ -250,7 +261,7 @@ class NotificationHelper
             'redirection' => 5,
             'blocking'    => true,
             'httpversion' => '1.0',
-            'sslverify'   => false,
+            'sslverify'   => true,
             'data_format' => 'body',
         );
 
@@ -353,19 +364,19 @@ class NotificationHelper
                     'fields' => [
                         [
                             'type' => "mrkdwn",
-                            'text' => "*Website URL:*\n " . site_url()
+                            'text' => '*' . __('Website URL:', 'fluent-smtp') . "*\n " . site_url()
                         ],
                         [
                             'type' => "mrkdwn",
-                            'text' => "*Sending Driver:*\n " . strtoupper($handler->getSetting('provider'))
+                            'text' => '*' . __('Email Service:', 'fluent-smtp') . "*\n " . strtoupper($handler->getSetting('provider'))
                         ],
                         [
                             'type' => "mrkdwn",
-                            'text' => "*To Email Address:*\n " . $sendingTo
+                            'text' => '*' . __('To Email Address:', 'fluent-smtp') . "*\n " . $sendingTo
                         ],
                         [
                             'type' => "mrkdwn",
-                            'text' => "*Email Subject:*\n " . Arr::get($logData, 'subject')
+                            'text' => '*' . __('Email Subject:', 'fluent-smtp') . "*\n " . Arr::get($logData, 'subject')
                         ]
                     ]
                 ],
@@ -373,14 +384,14 @@ class NotificationHelper
                     'type' => 'section',
                     'text' => [
                         'type' => "mrkdwn",
-                        'text' => "*Error Message:*\n ```" . self::getErrorMessageFromResponse(self::unserialize(Arr::get($logData, 'response'))) . "```"
+                        'text' => '*' . __('Error Message:', 'fluent-smtp') . "*\n ```" . self::getErrorMessageFromResponse(self::unserialize(Arr::get($logData, 'response'))) . "```"
                     ]
                 ],
                 [
                     'type' => 'section',
                     'text' => [
                         'type' => "mrkdwn",
-                        'text' => "<" . admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=') . "|View Failed Email(s)>"
+                        'text' => "<" . admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=') . '|' . __('View Failed Email(s)', 'fluent-smtp') . '>'
                     ]
                 ]
             ]
@@ -403,7 +414,7 @@ class NotificationHelper
 
         $content = '## ' . $heading . "\n";
         $content .= __('**Website URL:** ', 'fluent-smtp') . site_url() . "\n";
-        $content .= __('**Sending Driver:** ', 'fluent-smtp') . strtoupper($handler->getSetting('provider')) . "\n";
+        $content .= __('**Email Service:** ', 'fluent-smtp') . strtoupper($handler->getSetting('provider')) . "\n";
         $content .= __('**To Email Address:** ', 'fluent-smtp') . $sendingTo . "\n";
         $content .= __('**Email Subject:** ', 'fluent-smtp') . Arr::get($logData, 'subject') . "\n";
         $content .= __('**Error Message:** ```', 'fluent-smtp') . self::getErrorMessageFromResponse(self::unserialize(Arr::get($logData, 'response'))) . "```\n";
@@ -428,7 +439,7 @@ class NotificationHelper
         $subject = Arr::get($logData, 'subject');
 
         $message = '<b>' . __('Website URL:', 'fluent-smtp') . '</b> ' . esc_html(site_url()) . "<br>";
-        $message .= '<b>' . __('Sending Driver:', 'fluent-smtp') . '</b> ' . esc_html($provider) . "<br>";
+        $message .= '<b>' . __('Email Service:', 'fluent-smtp') . '</b> ' . esc_html($provider) . "<br>";
         $message .= '<b>' . __('To Email Address:', 'fluent-smtp') . '</b> ' . esc_html($sendingTo) . "<br>";
         $message .= '<b>' . __('Email Subject:', 'fluent-smtp') . '</b> ' . esc_html($subject) . "<br>";
         $message .= '<b>' . __('Error Message:', 'fluent-smtp') . '</b><br>';

@@ -2,6 +2,8 @@
 
 namespace FluentMail\Includes;
 
+use FluentMail\App\Services\MicrosoftTokenTransport;
+
 class OAuth2Provider
 {
     private $options;
@@ -177,6 +179,8 @@ class OAuth2Provider
 
         $requestData = $this->getAccessTokenRequestDetails($params);
 
+        MicrosoftTokenTransport::register();
+
         $response = wp_remote_request($requestData['url'], $requestData['params']);
 
         if (is_wp_error($response)) {
@@ -189,7 +193,7 @@ class OAuth2Provider
 
         if (!is_array($responseBody)) {
             throw new \Exception(
-                'Invalid response received from Authorization Server. Expected JSON.'
+                esc_html__('Invalid response received from Authorization Server. Expected JSON.', 'fluent-smtp')
             );
         }
 
@@ -211,13 +215,17 @@ class OAuth2Provider
             }
 
             throw new \Exception(
-                wp_kses_post('Authorization Server rejected the request: ' . $description)
+                wp_kses_post(sprintf(
+                    /* translators: %s: error description returned by the OAuth authorization server */
+                    __('Authorization Server rejected the request: %s', 'fluent-smtp'),
+                    $description
+                ))
             );
         }
 
         if (empty($responseBody['access_token'])) {
             throw new \Exception(
-                'Invalid response received from Authorization Server. No access token was returned.'
+                esc_html__('Invalid response received from Authorization Server. No access token was returned.', 'fluent-smtp')
             );
         }
 
@@ -240,8 +248,9 @@ class OAuth2Provider
         return [
             'url' => $url,
             'params' => [
-                'method' => $method,
-                'body' => $options,
+                'method'      => $method,
+                'httpversion' => '1.1',
+                'body'        => $options,
                 'headers' => [
                     'content-type' => 'application/x-www-form-urlencoded'
                 ]

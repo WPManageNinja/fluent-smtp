@@ -7,12 +7,12 @@
                     <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-telegram/">{{ $t('Read the documentation') }}</a>.
                 </p>
 
-                <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
+                <el-form class="fss_compact_form fss_alert_settings__form" :model="newForm" label-position="top">
                     <el-form-item :label="$t('Your Email Address')">
-                        <el-input size="small" v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
+                        <el-input v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
                     </el-form-item>
                     <el-form-item>
-                        <el-checkbox v-model="newForm.terms" true-label="yes" false-label="no">
+                        <el-checkbox v-model="newForm.terms" true-value="yes" false-value="no">
                             <div v-html="$t('__TELE_TERMS')"></div>
                         </el-checkbox>
                     </el-form-item>
@@ -24,17 +24,17 @@
                         </el-button>
                     </el-form-item>
                 </el-form>
-                <p class="fss_alert_settings__privacy-note">{{ $t('FluentSMTP does not store your email notifications data.') }}</p>
+                <p class="fss_alert_settings__privacy-note">{{ $t('FluentSMTP does not store your notification data.') }}</p>
             </div>
             <div v-else-if="configure_state == 'pin'">
-                <h3 class="fss_alert_settings__section-title">{{ $t('Last step!') }}</h3>
+                <h3 class="fss_alert_settings__section-title">{{ $t('Last Step') }}</h3>
                 <p class="fss_alert_settings__intro" v-html="$t('__TELE_LAST_STEP')"></p>
                 <h3 class="fss_alert_settings__section-title">{{ $t('Activation Pin') }}</h3>
                 <p class="fss_alert_settings__pin-container">
                     {{ $t('activate ') }} {{ newForm.site_pin }}
                     <span @click="copyPin()" class="fss_alert_settings__pin-container__copy-button">{{ $t('copy') }}</span>
                 </p>
-                <el-button :disabled="processing" v-loading="processing" @click="confirmConnection()" size="medium" type="success">{{ $t('I have sent the code') }}</el-button>
+                <el-button :disabled="processing" v-loading="processing" @click="confirmConnection()" type="primary">{{ $t('I have sent the code') }}</el-button>
             </div>
         </div>
         <div v-else>
@@ -89,7 +89,7 @@ export default {
                     this.configure_state = 'pin';
                 })
                 .catch((errors) => {
-                    this.$notify.error(errors.responseJSON.data.message);
+                    this.$notify.error(this.$errorMessage(errors));
                 })
                 .always(() => {
                     this.processing = false;
@@ -106,7 +106,7 @@ export default {
                     window.location.reload();
                 })
                 .catch((errors) => {
-                    this.$notify.error(errors.responseJSON.data.message);
+                    this.$notify.error(this.$errorMessage(errors));
                 })
                 .always(() => {
                     this.processing = false;

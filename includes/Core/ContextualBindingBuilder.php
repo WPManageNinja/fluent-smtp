@@ -21,6 +21,13 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract
     protected $concrete;
 
     /**
+     * The abstract dependency name for the contextual binding.
+     *
+     * @var string
+     */
+    protected $needs;
+
+    /**
      * Create a new contextual binding builder.
      *
      * @param  FluentMail\Includes\Core\Container  $container

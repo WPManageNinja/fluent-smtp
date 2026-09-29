@@ -6,8 +6,21 @@
  * dependency: it runs through the browser-control surface used by the suite.
  */
 
+/*
+ * Markers are substrings of the shell's rendered innerText, so they have to be
+ * strings the screen actually prints - not route titles, not class names.
+ *
+ * The dashboard has two branches. With no connection configured it renders the
+ * setup wizard, and none of these markers appear; the site under test must have
+ * at least one connection saved. That is also true of the connections list, so
+ * the precondition is the suite's, not this screen's alone.
+ *
+ * Keep every marker anchored to an unconditional element. `Sending Stats` and
+ * `Welcome to` both sit directly in the configured branch rather than behind the
+ * `!loading` guard the stat tiles use, so neither races the dashboard fetch.
+ */
 export const adminScreens = [
-    { name: 'dashboard', hash: '/', markers: ['Sending Stats', 'Quick Overview'] },
+    { name: 'dashboard', hash: '/', markers: ['Sending Stats', 'Welcome to'] },
     { name: 'connections', hash: '/connections', markers: ['Active Email Connections', 'General Settings'] },
     { name: 'new connection', hash: '/connection', markers: ['Add Connection', 'Connection Provider'] },
     { name: 'email test', hash: '/test', markers: ['Send Test Email', 'Send To'] },

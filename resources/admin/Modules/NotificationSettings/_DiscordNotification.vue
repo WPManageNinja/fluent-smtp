@@ -5,20 +5,20 @@
                 <p class="fss_alert_settings__intro">
                     {{ $t('__DISCORD_INTRO') }} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-discord/">{{ $t('Read the documentation') }}</a>.
                 </p>
-                <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
-                    <el-form-item :label="$t('Your Discord Channel Name (For Internal Use)')">
-                        <el-input size="small" v-model="newForm.channel_name"/>
+                <el-form class="fss_compact_form fss_alert_settings__form" :model="newForm" label-position="top">
+                    <el-form-item :label="$t('Channel Name (for your own reference)')">
+                        <el-input v-model="newForm.channel_name"/>
                     </el-form-item>
 
-                    <el-form-item :label="$t('Your Discord Channel Webhook URL')">
-                        <el-input size="small" v-model="newForm.webhook_url" :placeholder="$t('Discord Webhook URL')"/>
+                    <el-form-item :label="$t('Channel Webhook URL')">
+                        <el-input v-model="newForm.webhook_url" :placeholder="$t('Discord Webhook URL')"/>
                     </el-form-item>
 
                     <el-form-item>
                         <el-button @click="registerSite()" v-loading="processing"
                                    :disabled="!newForm.webhook_url || !newForm.channel_name"
                                    type="primary">
-                            {{ $t('Configure Discord Notification') }}
+                            {{ $t('Connect Discord') }}
                         </el-button>
                     </el-form-item>
                 </el-form>
@@ -78,7 +78,7 @@ export default {
                     window.location.reload();
                 })
                 .catch((errors) => {
-                    this.$notify.error(errors.responseJSON.data.message);
+                    this.$notify.error(this.$errorMessage(errors));
                 })
                 .always(() => {
                     this.processing = false;

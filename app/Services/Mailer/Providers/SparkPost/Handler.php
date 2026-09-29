@@ -23,7 +23,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []) );
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong.', 'fluent-smtp'), []) );
     }
 
     public function postSend()
@@ -43,6 +43,11 @@ class Handler extends BaseHandler
             'cc' => $this->getCarbonCopy(),
             'bcc' => $this->getBlindCarbonCopy()
         ];
+
+        if ($this->getParam('headers.content-type') == 'text/plain') {
+            $body['content']['text'] = $this->phpMailer->Body;
+            unset($body['content']['html']);
+        }
 
         if ($replyTo = $this->getReplyTo()) {
             $body['content']['reply_to'] = $replyTo;
@@ -99,7 +104,7 @@ class Handler extends BaseHandler
         $email = $this->getParam('sender_email');
 
         if ($name = $this->getParam('sender_name')) {
-            $from = $name . ' <' . $email . '>';
+            $from = self::formatAddress($email, $name);
         } else {
             $from = $email;
         }
@@ -173,7 +178,7 @@ class Handler extends BaseHandler
             try {
                 // Use secure file reading with path traversal protection
                 $file = $this->secureFileRead($attachment[0]);
-                $fileName = basename($attachment[0]);
+                $fileName = $this->getAttachmentName($attachment);
 
                 // Get MIME type from the validated real path
                 $realPath = realpath($attachment[0]);

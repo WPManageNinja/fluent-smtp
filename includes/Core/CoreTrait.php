@@ -31,7 +31,7 @@ trait CoreTrait
                     return $method();
                 }
 
-                throw new ForbiddenException('Forbidden!', 401);
+                throw new ForbiddenException(esc_html__('Forbidden!', 'fluent-smtp'), 401);
                 
             } catch (ForbiddenException $e) {
                 return $this->docustomAction('handle_exception', $e);

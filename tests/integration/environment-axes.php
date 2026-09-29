@@ -152,7 +152,7 @@ return function () {
             $rows = $widgetRows($html);
 
             FsmtpTest::assertSame([1, 1], isset($rows['Today']) ? $rows['Today'] : null, 'site-local Today counters');
-            FsmtpTest::assertSame([2, 1], isset($rows['All']) ? $rows['All'] : null, 'isolated all-time counters');
+            FsmtpTest::assertSame([2, 1], isset($rows['All Time']) ? $rows['All Time'] : null, 'isolated all-time counters');
         } finally {
             FsmtpFactory::dropTable($table);
         }
@@ -178,8 +178,8 @@ return function () {
                 );
             });
 
-            FsmtpTest::assertSame(1, isset($stats[$previous->format('Y-m-d')]) ? $stats[$previous->format('Y-m-d')] : null, 'previous-day chart bucket');
-            FsmtpTest::assertSame(2, isset($stats[$today->format('Y-m-d')]) ? $stats[$today->format('Y-m-d')] : null, 'today chart bucket');
+            FsmtpTest::assertSame(['sent' => 1, 'failed' => 0], isset($stats[$previous->format('Y-m-d')]) ? $stats[$previous->format('Y-m-d')] : null, 'previous-day chart bucket');
+            FsmtpTest::assertSame(['sent' => 2, 'failed' => 0], isset($stats[$today->format('Y-m-d')]) ? $stats[$today->format('Y-m-d')] : null, 'today chart bucket');
         } finally {
             FsmtpFactory::dropTable($table);
         }
@@ -198,7 +198,35 @@ return function () {
 
             FsmtpTest::assert(!isset($stats['2025-01-05']), 'row immediately before the report range contributed a bucket');
             FsmtpTest::assert(!isset($stats['2025-01-11']), 'row immediately after the report range contributed a bucket');
-            FsmtpTest::assertSame(1, array_sum($stats), 'out-of-range rows contributed to the report count');
+            FsmtpTest::assertSame(1, array_sum(array_column($stats, 'sent')), 'out-of-range rows contributed to the report count');
+        } finally {
+            FsmtpFactory::dropTable($table);
+        }
+    });
+
+    FsmtpTest::case('report chart counts sent and failed apart and leaves pending out of both', function () use ($redirectFixture) {
+        $table = FsmtpFactory::emailLogTable(false, true);
+        FsmtpFactory::insertLog($table, ['status' => 'sent', 'created_at' => '2025-01-06 09:00:00']);
+        FsmtpFactory::insertLog($table, ['status' => 'sent', 'created_at' => '2025-01-06 10:00:00']);
+        FsmtpFactory::insertLog($table, ['status' => 'failed', 'created_at' => '2025-01-06 11:00:00']);
+        FsmtpFactory::insertLog($table, ['status' => 'pending', 'created_at' => '2025-01-06 12:00:00']);
+        FsmtpFactory::insertLog($table, ['status' => 'failed', 'created_at' => '2025-01-07 09:00:00']);
+
+        try {
+            $stats = $redirectFixture($table, function () {
+                return (new Reporting())->getSendingStats('2025-01-06', '2025-01-07');
+            });
+
+            FsmtpTest::assertSame(
+                ['sent' => 2, 'failed' => 1],
+                isset($stats['2025-01-06']) ? $stats['2025-01-06'] : null,
+                'per-status bucket with a pending row in it'
+            );
+            FsmtpTest::assertSame(
+                ['sent' => 0, 'failed' => 1],
+                isset($stats['2025-01-07']) ? $stats['2025-01-07'] : null,
+                'per-status bucket with only a failure in it'
+            );
         } finally {
             FsmtpFactory::dropTable($table);
         }
@@ -268,8 +296,8 @@ return function () {
             });
 
             FsmtpTest::assertSame('', (string)$wpdb->last_error, 'daily report strict database error');
-            FsmtpTest::assertSame(1, isset($stats['2025-01-06']) ? $stats['2025-01-06'] : null, 'strict daily report first bucket');
-            FsmtpTest::assertSame(1, isset($stats['2025-01-07']) ? $stats['2025-01-07'] : null, 'strict daily report second bucket');
+            FsmtpTest::assertSame(['sent' => 1, 'failed' => 0], isset($stats['2025-01-06']) ? $stats['2025-01-06'] : null, 'strict daily report first bucket');
+            FsmtpTest::assertSame(['sent' => 1, 'failed' => 0], isset($stats['2025-01-07']) ? $stats['2025-01-07'] : null, 'strict daily report second bucket');
         });
     });
 
@@ -296,7 +324,7 @@ return function () {
                 'Reporting weekly SELECT is rejected by ONLY_FULL_GROUP_BY (app/Services/Reporting.php:40,58).'
             )) {
                 FsmtpTest::assertSame('', $error, 'weekly report strict database error');
-                FsmtpTest::assertSame(2, isset($stats['2025-01-06']) ? $stats['2025-01-06'] : null, 'strict weekly report bucket');
+                FsmtpTest::assertSame(['sent' => 2, 'failed' => 0], isset($stats['2025-01-06']) ? $stats['2025-01-06'] : null, 'strict weekly report bucket');
             }
         });
     });
@@ -324,7 +352,7 @@ return function () {
                 'Reporting monthly SELECT is rejected by ONLY_FULL_GROUP_BY (app/Services/Reporting.php:45,58).'
             )) {
                 FsmtpTest::assertSame('', $error, 'monthly report strict database error');
-                FsmtpTest::assertSame(2, isset($stats['Jan 2025']) ? $stats['Jan 2025'] : null, 'strict monthly report bucket');
+                FsmtpTest::assertSame(['sent' => 2, 'failed' => 0], isset($stats['Jan 2025']) ? $stats['Jan 2025'] : null, 'strict monthly report bucket');
             }
         });
     });

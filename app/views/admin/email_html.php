@@ -35,11 +35,18 @@
                             </p>
                             <p style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; margin: 0 0 15px 0; Margin: 0 0 15px 0;">
                                 Shahjahan Jewel<br>
-                                CEO, WPManageNinja LLC
+                                <?php esc_html_e('CEO, WPManageNinja LLC', 'fluent-smtp'); ?>
                             </p>
 
                             <p style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; margin: 20px 0 15px 0; Margin: 20px 0 15px 0;">
-                                <?php esc_html_e('This email was sent from ', 'fluent-smtp') ?><b><?php echo esc_html(fluentMailSiteTitle()); ?> at <?php echo esc_html(current_time('mysql')); ?></b>
+                                <?php
+                                echo wp_kses(sprintf(
+                                    /* translators: 1: site title, 2: date and time the email was sent */
+                                    __('This email was sent from %1$s at %2$s', 'fluent-smtp'),
+                                    '<b>' . esc_html(fluentMailSiteTitle()) . '</b>',
+                                    '<b>' . esc_html(current_time('mysql')) . '</b>'
+                                ), ['b' => []]);
+                                ?>
                             </p>
                         </div>
                     </td>

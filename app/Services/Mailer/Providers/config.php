@@ -6,7 +6,7 @@ return [
     'providers'   => [
         'smtp'        => [
             'key'      => 'smtp',
-            'title'    => __('SMTP server', 'fluent-smtp'),
+            'title'    => __('SMTP Server', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/provider-smtp.svg'),
             'provider' => 'Smtp',
             'need_pro' => 'no',
@@ -33,6 +33,15 @@ return [
             'title'    => 'toSend',
             'image'    => fluentMailAssetUrl('images/provider-tosend.svg'),
             'provider' => 'tosend',
+            /*
+             * toSend and SES let one connection send as several From addresses, so the
+             * Connections list offers to manage them from the row. The flag is static
+             * because that list draws every row on load and must not call a provider's
+             * API to find out whether a button belongs there; whether the account has a
+             * verified domain to add senders on is still checked, but only once the
+             * manager is opened for one connection.
+             */
+            'supports_additional_senders' => true,
             'options'  => [
                 'sender_name'       => '',
                 'sender_email'      => '',
@@ -67,6 +76,7 @@ return [
             'title'    => __('Amazon SES', 'fluent-smtp'),
             'image'    => fluentMailAssetUrl('images/provider-aws-ses.svg'),
             'provider' => 'AmazonSes',
+            'supports_additional_senders' => true,
             'options'  => [
                 'sender_name'      => '',
                 'sender_email'     => '',
@@ -84,14 +94,19 @@ return [
                 'us-west-1'      => __('US West (N. California)', 'fluent-smtp'),
                 'us-west-2'      => __('US West (Oregon)', 'fluent-smtp'),
                 'ca-central-1'   => __('Canada (Central)', 'fluent-smtp'),
+                'ca-west-1'      => __('Canada West (Calgary)', 'fluent-smtp'),
                 'eu-west-1'      => __('EU (Ireland)', 'fluent-smtp'),
                 'eu-west-2'      => __('EU (London)', 'fluent-smtp'),
                 'eu-west-3'      => __('Europe (Paris)', 'fluent-smtp'),
                 'eu-central-1'   => __('EU (Frankfurt)', 'fluent-smtp'),
                 'eu-south-1'     => __('Europe (Milan)', 'fluent-smtp'),
                 'eu-north-1'     => __('Europe (Stockholm)', 'fluent-smtp'),
+                'eu-central-2'   => __('Europe (Zurich)', 'fluent-smtp'),
                 'eusc-de-east-1' => __('EU Sovereign Cloud (Germany, Brandenburg)', 'fluent-smtp'),
                 'ap-south-1'     => __('Asia Pacific (Mumbai)', 'fluent-smtp'),
+                'ap-south-2'     => __('Asia Pacific (Hyderabad)', 'fluent-smtp'),
+                'ap-southeast-3' => __('Asia Pacific (Jakarta)', 'fluent-smtp'),
+                'ap-southeast-5' => __('Asia Pacific (Malaysia)', 'fluent-smtp'),
                 'ap-northeast-2' => __('Asia Pacific (Seoul)', 'fluent-smtp'),
                 'ap-southeast-1' => __('Asia Pacific (Singapore)', 'fluent-smtp'),
                 'ap-southeast-2' => __('Asia Pacific (Sydney)', 'fluent-smtp'),
@@ -99,7 +114,10 @@ return [
                 'ap-northeast-3' => __('Asia Pacific (Osaka)', 'fluent-smtp'),
                 'sa-east-1'      => __('South America (São Paulo)', 'fluent-smtp'),
                 'me-south-1'     => __('Middle East (Bahrain)', 'fluent-smtp'),
-                'us-gov-west-1'  => __('AWS GovCloud (US)', 'fluent-smtp'),
+                'me-central-1'   => __('Middle East (UAE)', 'fluent-smtp'),
+                'il-central-1'   => __('Israel (Tel Aviv)', 'fluent-smtp'),
+                'us-gov-west-1'  => __('AWS GovCloud (US-West)', 'fluent-smtp'),
+                'us-gov-east-1'  => __('AWS GovCloud (US-East)', 'fluent-smtp'),
                 'af-south-1'     => __('Africa (Cape Town)', 'fluent-smtp'),
                 'cn-northwest-1' => __('China (Ningxia)', 'fluent-smtp')
             ],
@@ -220,7 +238,8 @@ return [
                 'sender_email'    => '',
                 'force_from_name' => 'no',
                 'api_key'         => '',
-                'key_store'       => 'db'
+                'key_store'       => 'db',
+                'region'          => 'global'
             ]
         ],
         'gmail'       => [
@@ -290,13 +309,22 @@ return [
                 'return_path'      => 'yes',
                 'key_store'        => 'db'
             ],
-            'note'     => __('The Default option does not use SMTP or any Email Service Providers so it will not improve email delivery on your site.', 'fluent-smtp')
+            'note'     => __('The Default option does not use SMTP or an email service, so it will not improve email delivery on your site.', 'fluent-smtp')
         ],
     ],
+    /*
+     * Every key the General Settings form binds a control to has to be here, whether or
+     * not it has ever been saved. The form's switches are 'yes'/'no' switches, and an
+     * absent key reaches them as undefined, which Element Plus rejects at render time
+     * ("model-value must be active-value or inactive-value") and which the form then
+     * writes back over the setting.
+     */
     'misc'        => [
         'log_emails'              => 'yes',
         'log_saved_interval_days' => '14',
         'disable_fluentcrm_logs'  => 'no',
+        'simulate_emails'         => 'no',
+        'send_as_text'            => 'no',
         'default_connection'      => '',
         'fallback_connection'     => ''
     ]

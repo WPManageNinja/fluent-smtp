@@ -24,7 +24,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong.', 'fluent-smtp'), []));
     }
 
     protected function setUrl()
@@ -127,7 +127,7 @@ class Handler extends BaseHandler
 
     protected function getFrom()
     {
-        return $this->getParam('from');
+        return $this->getFormattedFrom();
     }
 
     protected function getReplyTo()
@@ -156,7 +156,7 @@ class Handler extends BaseHandler
     {
         $array = array_map(function ($recipient) {
             return isset($recipient['name'])
-                ? $recipient['name'] . ' <' . $recipient['email'] . '>'
+                ? self::formatAddress($recipient['email'], $recipient['name'])
                 : $recipient['email'];
         }, $recipients);
 
@@ -181,7 +181,7 @@ class Handler extends BaseHandler
             try {
                 // Use secure file reading with path traversal protection
                 $file = $this->secureFileRead($attachment[0]);
-                $fileName = basename($attachment[0]);
+                $fileName = $this->getAttachmentName($attachment);
             } catch (\Exception $e) {
                 // Log error and skip this attachment
                 $this->logAttachmentFailure('Mailgun', $e);

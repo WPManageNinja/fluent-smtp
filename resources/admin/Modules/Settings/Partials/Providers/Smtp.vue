@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h3 class="fs_config_title">{{ $t('SMTP Server Settings') }}</h3>
         <el-row :gutter="20">
             <el-col :md="12" :sm="24">
                 <el-form-item>
@@ -24,19 +25,17 @@
 
         <el-row :gutter="20">
             <el-col :span="24">
-                <el-form-item style="margin: 20px 0">
+                <el-form-item style="margin: 20px 0" role="radiogroup" :aria-label="$t('Encryption')">
                     <label>
                         {{ $t('Encryption') }}
                     </label>
 
-                    <div class="small-help-text" style="display:inline-block;">
-                        Select <strong>ssl</strong> on port <strong>465</strong>, or <strong>tls</strong> on port <strong>25</strong> or <strong>587</strong>
-                    </div>
+                    <div class="small-help-text" style="display:inline-block;" v-html="$t('__SMTP_PORT_HELP')"></div>
 
                     <div style="display:inline-block;margin-left: 20px;">
-                        <el-radio v-model="connection.encryption" label="none">{{ $t('None') }}</el-radio>
-                        <el-radio v-model="connection.encryption" label="ssl">{{ $t('SSL') }}</el-radio>
-                        <el-radio v-model="connection.encryption" label="tls">{{ $t('TLS') }}</el-radio>
+                        <el-radio v-model="connection.encryption" value="none">{{ $t('None') }}</el-radio>
+                        <el-radio v-model="connection.encryption" value="ssl">{{ $t('SSL') }}</el-radio>
+                        <el-radio v-model="connection.encryption" value="tls">{{ $t('TLS') }}</el-radio>
                     </div>
                 </el-form-item>
             </el-col>
@@ -45,12 +44,20 @@
         <el-row :gutter="20">
             <el-col :span="24">
                 <el-form-item>
-                    <label for="auth">
+                    <!--
+                        `aria-label` rather than a `for`, because el-switch renders its
+                        own input with an id this template does not control. Both
+                        switches on this screen carried `for="auth"` - the same id,
+                        matching neither of them - so clicking either label did nothing
+                        and a screen reader announced two unnamed switches.
+                    -->
+                    <label>
                         {{ $t('Use Auto TLS') }}
                     </label>
 
                     <el-switch
                         v-model="connection.auto_tls"
+                        :aria-label="$t('Use Auto TLS')"
                         active-value="yes"
                         inactive-value="no">
                     </el-switch>
@@ -65,12 +72,13 @@
         <el-row :gutter="20">
             <el-col :span="24">
                 <el-form-item>
-                    <label for="auth">
+                    <label>
                         {{ $t('Authentication') }}
                     </label>
 
                     <el-switch
                         v-model="connection.auth"
+                        :aria-label="$t('Authentication')"
                         active-value="yes"
                         inactive-value="no">
                     </el-switch>
@@ -83,9 +91,9 @@
         </el-row>
 
         <template v-if="connection.auth == 'yes'">
-            <el-radio-group size="mini" v-model="connection.key_store">
-                <el-radio-button value="db" label="db">{{ $t('Store Access Keys in DB') }}</el-radio-button>
-                <el-radio-button value="wp_config" label="wp_config">{{ $t('Access Keys in Config File') }}</el-radio-button>
+            <el-radio-group size="small" v-model="connection.key_store">
+                <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>
+                <el-radio-button value="wp_config">{{ $t('Store in wp-config.php') }}</el-radio-button>
             </el-radio-group>
 
             <el-row :gutter="20" v-if="connection.key_store == 'db'" :class="{ disabled: connection.auth==='no' }">
@@ -124,12 +132,12 @@
 
                 <el-col :span="24">
                     <el-form-item>
-                        <el-checkbox true-label="yes" false-label="no" v-model="connection.disable_encryption">
+                        <el-checkbox true-value="yes" false-value="no" v-model="connection.disable_encryption">
                             {{ $t('Disable Encryption for SMTP Password (Not Recommended)') }}
                         </el-checkbox>
-                        <p style="color: red; margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
+                        <p style="color: var(--fsm-danger-fg); margin-top: 0;" v-if="connection.disable_encryption === 'yes'">
                             {{
-                                $t('By disabling encryption, your API key will be stored in plain text in the database. This is not recommended for security reasons. Enable only if your security plugin rotate WP SALTS frequently.')
+                                $t('Your SMTP password will be stored as readable text in the database. Only turn this on if a security plugin on this site rotates the WordPress SALT keys, which would otherwise invalidate the encrypted value.')
                             }}
                         </p>
                     </el-form-item>
@@ -185,7 +193,7 @@ export default {
     },
     mounted() {
         if (!this.connection.key_store) {
-            this.$set(this.connection, 'key_store', 'db');
+            this.connection.key_store = 'db';
         }
     }
 };

@@ -23,7 +23,7 @@ The integration tier also launches fresh child processes for the real
 bootstrap independently proves Simulator resolution and fuses logging, HTTP,
 cron scheduling, and health-report option writes.
 
-The admin application uses admin-AJAX. Its 42-route manifest (11 GET and 31
+The admin application uses admin-AJAX. Its 41-route manifest (11 GET and 30
 POST) lives at `tests/smoke/routes.manifest.php`; only the Outlook callback is a
 REST route.
 

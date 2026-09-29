@@ -42,7 +42,7 @@ class CliHandler
         $to = Arr::get($assocArgs, 'to', get_option('admin_email'));
 
         if (!is_email($to)) {
-            \WP_CLI::error(sprintf('%s is not a valid email address.', $to));
+            \WP_CLI::error(sprintf(/* translators: %s: email address */ __('%s is not a valid email address.', 'fluent-smtp'), $to));
         }
 
         $data = [
@@ -77,16 +77,16 @@ class CliHandler
         $seconds = round(microtime(true) - $startedAt, 3);
 
         if ($error) {
-            \WP_CLI::error(sprintf('Sending failed after %ss: %s', $seconds, $error));
+            \WP_CLI::error(sprintf(/* translators: 1: seconds elapsed, 2: error message */ __('Sending failed after %1$ss: %2$s', 'fluent-smtp'), $seconds, $error));
             return;
         }
 
         if (!$result) {
-            \WP_CLI::error(sprintf('Sending failed after %ss for an unreported reason.', $seconds));
+            \WP_CLI::error(sprintf(/* translators: %s: seconds elapsed */ __('Sending failed after %ss for an unreported reason.', 'fluent-smtp'), $seconds));
             return;
         }
 
-        \WP_CLI::success(sprintf('Test email handed to the provider for %s in %ss.', $to, $seconds));
+        \WP_CLI::success(sprintf(/* translators: 1: recipient email address, 2: seconds elapsed */ __('Test email handed to the provider for %1$s in %2$ss.', 'fluent-smtp'), $to, $seconds));
     }
 
     /**
@@ -112,7 +112,7 @@ class CliHandler
         $report = (new ConnectionHealth())->checkAll();
 
         if (!$report) {
-            \WP_CLI::warning('No connections are configured.');
+            \WP_CLI::warning(__('No connections are configured.', 'fluent-smtp'));
             return;
         }
 
@@ -139,10 +139,10 @@ class CliHandler
 
         if ($failed) {
             // A non-zero exit lets a deploy or monitoring script gate on this.
-            \WP_CLI::error(sprintf('%d of %d connection(s) need attention.', $failed, count($rows)));
+            \WP_CLI::error(sprintf(/* translators: 1: number of failing connections, 2: total number of connections */ __('%1$d of %2$d connection(s) need attention.', 'fluent-smtp'), $failed, count($rows)));
         }
 
-        \WP_CLI::success(sprintf('All %d connection(s) are healthy.', count($rows)));
+        \WP_CLI::success(sprintf(/* translators: %d: number of connections */ __('All %d connection(s) are healthy.', 'fluent-smtp'), count($rows)));
     }
 
     /**
@@ -199,17 +199,17 @@ class CliHandler
         $days = (int)$days;
 
         if ($days < 1) {
-            \WP_CLI::error('Provide a positive --days value, or configure a log retention period first.');
+            \WP_CLI::error(__('Provide a positive --days value, or configure a log retention period first.', 'fluent-smtp'));
             return;
         }
 
         \WP_CLI::confirm(
-            sprintf('Permanently delete every logged email older than %d day(s)?', $days),
+            sprintf(/* translators: %d: number of days */ __('Permanently delete every logged email older than %d day(s)?', 'fluent-smtp'), $days),
             $assocArgs
         );
 
         $deleted = (new Logger())->deleteLogsOlderThan($days);
 
-        \WP_CLI::success(sprintf('Deleted %d log entr%s.', (int)$deleted, $deleted == 1 ? 'y' : 'ies'));
+        \WP_CLI::success(sprintf(/* translators: %d: number of deleted log entries */ _n('Deleted %d log entry.', 'Deleted %d log entries.', (int)$deleted, 'fluent-smtp'), (int)$deleted));
     }
 }

@@ -35,6 +35,13 @@ function phpQuote(value) {
         .replace(/'/g, "\\'");
 }
 
+/*
+ * Vendored third-party code. Its minified source contains sequences the $t() matcher
+ * reads as dynamic calls, which buried the warnings that matter under ten that never
+ * did: every "not a literal string" line came from purify.min.js.
+ */
+const skipDirs = ['libs'];
+
 // Function to read directory contents recursively
 function readDirRecursively(dir, allFiles = []) {
     const files = fs.readdirSync(dir);
@@ -42,6 +49,10 @@ function readDirRecursively(dir, allFiles = []) {
     files.forEach(file => {
         const filepath = path.join(dir, file);
         if (fs.statSync(filepath).isDirectory()) {
+            if (skipDirs.includes(file)) {
+                return;
+            }
+
             readDirRecursively(filepath, allFiles);
         } else if (path.extname(file) === '.vue' || path.extname(file) === '.js') { // Check for .vue and .js files
             allFiles.push(filepath);
@@ -82,7 +93,7 @@ function extractStrings(files) {
 
         while ((match = dynamicCall.exec(content)) !== null) {
             // `$t(string) {` is the helper's own definition, not a call site.
-            if (/^\$t\(\s*[A-Za-z_$][\w$]*\s*\)\s*\{/.test(content.slice(match.index))) {
+            if (/^\$t\(\s*[A-Za-z_$][\w$]*(\s*,\s*\.\.\.[A-Za-z_$][\w$]*)?\s*\)\s*\{/.test(content.slice(match.index))) {
                 continue;
             }
 

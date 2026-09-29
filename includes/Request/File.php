@@ -3,7 +3,7 @@
 namespace FluentMail\Includes\Request;
 
 use SplFileInfo;
-use FluentMail\includes\Support\Contracts\FileInterface;
+use FluentMail\Includes\Support\Contracts\FileInterface;
 
 class File extends SplFileInfo implements FileInterface
 {

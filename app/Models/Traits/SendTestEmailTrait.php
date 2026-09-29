@@ -15,11 +15,11 @@ trait SendTestEmailTrait
         if ($data['isHtml'] == 'true') {
             $headers[] = 'Content-Type: text/html; charset=UTF-8';
             $body = (string)fluentMail('view')->make('admin.email_html');
-            $subject .= ' - HTML Version';
+            $subject .= ' - ' . __('HTML Version', 'fluent-smtp');
         } else {
             $headers[] = 'Content-Type: text/plain; charset=UTF-8';
             $body = (string)fluentMail('view')->make('admin.email_text');
-            $subject .= ' - Text Version';
+            $subject .= ' - ' . __('Text Version', 'fluent-smtp');
         }
 
         if (!empty($data['from'])) {

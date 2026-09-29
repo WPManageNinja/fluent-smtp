@@ -1,5 +1,8 @@
-Hi There,
-Are you seeing this email? You are? Well awesome - that means you're all set to start sending emails from your site.
-Thank you for using FluentSMTP 🎉
+<?php echo esc_html__('Hi There,', 'fluent-smtp'); ?>
 
-This Email sent at (server time): <?php echo esc_html(date('Y-m-d H:i:s')); ?>
+<?php echo esc_html__("Are you seeing this email? You are? Well awesome - that means you're all set to start sending emails from your site.", 'fluent-smtp'); ?>
+
+<?php echo esc_html__('Thank you for using FluentSMTP 🎉', 'fluent-smtp'); ?>
+
+
+<?php echo esc_html__('This Email sent at (server time):', 'fluent-smtp'); ?> <?php echo esc_html(date('Y-m-d H:i:s')); ?>

@@ -63,7 +63,7 @@ If the test cannot be made to fail, delete it.
 
 ## AJAX rules
 
-All 42 admin routes are declared in `app/Http/routes.php`. The SPA calls them
+All 41 admin routes are declared in `app/Http/routes.php`. The SPA calls them
 through WordPress admin-AJAX, not REST.
 
 - Keep every route in `tests/smoke/routes.manifest.php`.
@@ -72,12 +72,12 @@ through WordPress admin-AJAX, not REST.
 - Derive action names only by calling
   `Application::getAjaxAction($route, $method, $isAdmin)`. Never reconstruct an
   action string in a test.
-- GET smoke is read-only (11 routes). Mutating happy paths for the 31 POST
+- GET smoke is read-only (11 routes). Mutating happy paths for the 30 POST
   routes belong in integration fixtures.
 - Permission smoke must prove every POST is unavailable anonymously and rejects
   a logged-in low-privilege user. Its option-write and HTTP fuses must stay on.
 
-The sole REST route, `fluent-smtp/outlook_callback`, is outside the 42-route
+The sole REST route, `fluent-smtp/outlook_callback`, is outside the 41-route
 admin-AJAX manifest and should be tested separately if its behavior changes.
 
 ## Test shape

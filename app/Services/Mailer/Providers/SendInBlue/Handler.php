@@ -31,7 +31,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong.', 'fluent-smtp'), []));
     }
 
     public function postSend()
@@ -87,7 +87,7 @@ class Handler extends BaseHandler
                     'messageId' => Arr::get($responseBody, 'messageId')
                 ];
             } else {
-                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'message', __('SendInBlueError API Error', 'fluent-smtp')), $responseBody);
+                $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'message', __('Sendinblue API Error', 'fluent-smtp')), $responseBody);
             }
         }
 
@@ -175,7 +175,7 @@ class Handler extends BaseHandler
 
                 if (in_array($ext, $this->allowedAttachmentExts, true)) {
                     $files[] = [
-                        'name'    => basename($attachment[0]),
+                        'name'    => $this->getAttachmentName($attachment),
                         'content' => base64_encode($file)
                     ];
                 }

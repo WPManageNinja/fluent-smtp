@@ -59,6 +59,21 @@ run_static() {
     record "lint: browser-route-coverage" $?
   fi
 
+  if [ -f "$PLUGIN_DIR/tests/lint/tls-verification.php" ]; then
+    php "$PLUGIN_DIR/tests/lint/tls-verification.php"
+    record "lint: tls-verification" $?
+  fi
+
+  if [ -f "$PLUGIN_DIR/tests/lint/iframe-sandbox.php" ]; then
+    php "$PLUGIN_DIR/tests/lint/iframe-sandbox.php"
+    record "lint: iframe-sandbox" $?
+  fi
+
+  if [ -f "$PLUGIN_DIR/tests/lint/vendored-library-version.php" ]; then
+    php "$PLUGIN_DIR/tests/lint/vendored-library-version.php"
+    record "lint: vendored-library-version" $?
+  fi
+
   php "$PLUGIN_DIR/tests/lint/raw-sql-prefix.php" "$PLUGIN_DIR/tests/lint/fixtures" >/dev/null 2>&1
   if [ $? -eq 1 ]; then
     echo "lint self-test: raw-sql-prefix still fires on fixtures"
@@ -66,6 +81,27 @@ run_static() {
   else
     echo "${RED}lint self-test FAILED — raw-sql-prefix no longer catches its fixture${OFF}"
     record "lint self-test" 1
+  fi
+
+  tls_fixture_hits=$(php "$PLUGIN_DIR/tests/lint/tls-verification.php" "$PLUGIN_DIR/tests/lint/fixtures" 2>/dev/null \
+    | grep -c 'verification disabled\|sslverify disabled' || true)
+  if [ "$tls_fixture_hits" -eq 4 ]; then
+    echo "lint self-test: tls-verification still fires on all 4 fixture forms"
+    record "lint self-test: tls" 0
+  else
+    echo "${RED}lint self-test FAILED — tls-verification caught ${tls_fixture_hits}/4 fixture forms${OFF}"
+    record "lint self-test: tls" 1
+  fi
+
+  # Two unsafe fixture iframes must fire; the two safe ones must not.
+  iframe_fixture_hits=$(php "$PLUGIN_DIR/tests/lint/iframe-sandbox.php" "$PLUGIN_DIR/tests/lint/fixtures" 2>/dev/null \
+    | grep -c 'no sandbox attribute\|allow-scripts and allow-same-origin' || true)
+  if [ "$iframe_fixture_hits" -eq 2 ]; then
+    echo "lint self-test: iframe-sandbox still fires on both unsafe fixture forms"
+    record "lint self-test: iframe" 0
+  else
+    echo "${RED}lint self-test FAILED — iframe-sandbox caught ${iframe_fixture_hits}/2 fixture forms${OFF}"
+    record "lint self-test: iframe" 1
   fi
   echo
 }
@@ -132,6 +168,16 @@ case "$SUITE" in
     else
       echo "${YELLOW}S2/S3 — integration: phase not built yet, skipping${OFF}"; echo
     fi
+    # S5 is deliberately not run here. It drives a real browser through the
+    # developer's authenticated admin session, and this runner never stores or
+    # synthesizes login credentials - see tests/browser/README.md.
+    #
+    # It is named anyway. `all` previously finished green without mentioning the
+    # one phase that actually mounts the Vue screens, so a green run read as
+    # "the admin app works" when nothing had loaded it. Saying so is the point:
+    # browser-route-coverage only compares path strings and cannot tell whether
+    # a route mounts.
+    BROWSER_MANUAL=1
     ;;
   *)
     echo "Unknown suite: $SUITE (use: static|smoke|permissions|integration|js|all)"
@@ -151,6 +197,13 @@ fi
 hr
 echo "${BOLD}SUMMARY${OFF}"
 for result in "${RESULTS[@]}"; do echo "  $result"; done
+
+if [ "${BROWSER_MANUAL:-0}" -eq 1 ]; then
+  echo "  ${YELLOW}MANUAL${OFF}  S5 — browser screens (not run; see tests/browser/README.md)"
+  echo
+  echo "  ${YELLOW}A green run above does not mean the admin screens mount.${OFF}"
+  echo "  Run S5 by hand before tagging a release."
+fi
 hr
 
 exit "$FAILED"

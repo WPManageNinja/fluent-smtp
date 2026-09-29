@@ -128,17 +128,51 @@ class API
     }
 
     /**
-     * @return array | \WP_Error
+     * Send a message as raw MIME.
+     *
+     * Graph parses the recipients out of the header block, so this path keeps
+     * every header PHPMailer built. It cannot carry Bcc: Graph does not route
+     * delivery off a Bcc header found in MIME content; see sendMail() for that.
+     *
+     * @param string $mime base64-encoded MIME message
+     * @param string $accessToken
+     * @return array | \WP_Error Response headers on success.
      */
     public function sendMime($mime, $accessToken)
+    {
+        return $this->postSendMail($mime, 'text/plain', $accessToken);
+    }
+
+    /**
+     * Send a message as a structured Graph payload.
+     *
+     * The only send path on which Graph honours Bcc recipients, because they
+     * arrive as their own bccRecipients field instead of as a header.
+     *
+     * @param array $payload The sendMail request body: ['message' => [...]]
+     * @param string $accessToken
+     * @return array | \WP_Error Response headers on success.
+     */
+    public function sendMail(array $payload, $accessToken)
+    {
+        return $this->postSendMail(wp_json_encode($payload), 'application/json', $accessToken);
+    }
+
+    /**
+     * @param string $body
+     * @param string $contentType text/plain for MIME, application/json for a message payload
+     * @param string $accessToken
+     * @return array | \WP_Error
+     */
+    private function postSendMail($body, $contentType, $accessToken)
     {
         $response = wp_remote_request('https://graph.microsoft.com/v1.0/me/sendMail', [
             'method'  => 'POST',
             'headers' => [
                 'Authorization' => 'Bearer ' . $accessToken,
-                'Content-Type'  => 'text/plain'
+                'Content-Type'  => $contentType
             ],
-            'body'    => $mime
+            'body'    => $body
         ]);
 
         if (is_wp_error($response)) {
@@ -190,7 +224,16 @@ class API
             'urlAuthorize'            => 'https://login.microsoftonline.com/' . $this->tenantId . '/oauth2/v2.0/authorize',
             'urlAccessToken'          => 'https://login.microsoftonline.com/' . $this->tenantId . '/oauth2/v2.0/token',
             'urlResourceOwnerDetails' => '',
-            'scopes'                  => 'https://graph.microsoft.com/user.read https://graph.microsoft.com/mail.readwrite https://graph.microsoft.com/mail.send https://graph.microsoft.com/mail.send.shared offline_access'
+            /*
+             * Send-only. The one Graph call this plugin makes is
+             * POST /me/sendMail, so a leaked refresh token should be able to
+             * do no more than that. Mail.Send.Shared stays because the From
+             * address comes from the connection and from wp_mail() headers,
+             * which may name a shared mailbox; Graph refuses that under
+             * Mail.Send alone. Tokens granted under the older, wider scope set
+             * keep working - a refresh returns whatever was consented to.
+             */
+            'scopes'                  => 'https://graph.microsoft.com/mail.send https://graph.microsoft.com/mail.send.shared offline_access'
         ];
     }
 

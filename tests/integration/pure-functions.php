@@ -1,7 +1,9 @@
 <?php
 
 use FluentMail\App\Http\Controllers\SettingsController;
+use FluentMail\App\Models\Logger;
 use FluentMail\App\Services\ConnectionHealth;
+use FluentMail\App\Services\Mailer\Providers\Simulator\Handler as SimulatorHandler;
 use FluentMail\App\Services\Reporting;
 use FluentMail\Includes\Support\ValidationException;
 
@@ -80,6 +82,28 @@ return function () {
         );
     });
 
+    FsmtpTest::case('test send throughput is the ceiling one round trip implies', function () use (
+        $invoke,
+        $withoutConstructor
+    ) {
+        $controller = $withoutConstructor(SettingsController::class);
+
+        // 1.21 s round trip: under one a second, so the decimal is kept.
+        $slow = $invoke($controller, 'throughputFromDuration', [1.21]);
+        FsmtpTest::assertSame(number_format_i18n(1 / 1.21, 1), $slow['per_second'], 'slow per second keeps a decimal');
+        FsmtpTest::assertSame(number_format_i18n(49), $slow['per_minute'], 'slow per minute floors');
+        FsmtpTest::assertSame(number_format_i18n(2975), $slow['per_hour'], 'slow per hour floors');
+
+        // 50 ms round trip: twenty a second, so the decimal is dropped.
+        $fast = $invoke($controller, 'throughputFromDuration', [0.05]);
+        FsmtpTest::assertSame(number_format_i18n(20), $fast['per_second'], 'fast per second is whole');
+        FsmtpTest::assertSame(number_format_i18n(1200), $fast['per_minute'], 'fast per minute');
+
+        // A zero reading must not divide by zero; it is clamped to a millisecond.
+        $zero = $invoke($controller, 'throughputFromDuration', [0]);
+        FsmtpTest::assertSame(number_format_i18n(1000), $zero['per_second'], 'zero clamps to one millisecond');
+    });
+
     FsmtpTest::case('connection health preserves the message from an ordinary exception', function () use ($invoke) {
         $message = 'provider unavailable ' . FsmtpTest::uniq();
 
@@ -87,6 +111,52 @@ return function () {
             $message,
             $invoke(new ConnectionHealth(), 'flattenMessage', [new Exception($message)]),
             'ordinary health exception message'
+        );
+    });
+
+    FsmtpTest::case('attachment names prefer the caller supplied name and stay a bare file name', function () use ($invoke, $withoutConstructor) {
+        // getAttachmentName() lives on BaseHandler; every provider reads it, so
+        // any concrete handler proves the shared behavior.
+        $handler = $withoutConstructor(SimulatorHandler::class);
+
+        $nameFor = function ($path, $name) use ($invoke, $handler) {
+            // The shape PHPMailer::getAttachments() returns.
+            return $invoke($handler, 'getAttachmentName', [[
+                0 => $path,
+                1 => basename($path),
+                2 => $name,
+                3 => 'base64',
+                4 => 'application/pdf',
+                5 => false,
+                6 => 'attachment',
+                7 => $name
+            ]]);
+        };
+
+        FsmtpTest::assertSame(
+            'January Invoice.pdf',
+            $nameFor('/var/uploads/9f2c1ab7e4.pdf', 'January Invoice.pdf'),
+            'custom wp_mail() attachment name'
+        );
+        FsmtpTest::assertSame(
+            '9f2c1ab7e4.pdf',
+            $nameFor('/var/uploads/9f2c1ab7e4.pdf', ''),
+            'fallback to the stored file name'
+        );
+        FsmtpTest::assertSame(
+            'passwd',
+            $nameFor('/var/uploads/9f2c1ab7e4.pdf', '../../../etc/passwd'),
+            'directory part stripped from the supplied name'
+        );
+        FsmtpTest::assertSame(
+            'invoice.pdf',
+            $nameFor('/var/uploads/9f2c1ab7e4.pdf', "in\r\nvoice.pdf"),
+            'header break stripped from the supplied name'
+        );
+        FsmtpTest::assertSame(
+            'invoice.pdf',
+            $nameFor('/var/uploads/9f2c1ab7e4.pdf', 'in"voice.pdf'),
+            'quote stripped from the supplied name'
         );
     });
 
@@ -104,5 +174,64 @@ return function () {
             $invoke(new ConnectionHealth(), 'flattenMessage', [$exception]),
             'flattened health validation message'
         );
+    });
+
+    FsmtpTest::case('truncated serialized log recipients are recovered as addresses', function () use (
+        $invoke,
+        $withoutConstructor
+    ) {
+        $logger = $withoutConstructor(Logger::class);
+        $full = serialize([
+            ['email' => 'ryan@mail.example.test'],
+            ['email' => 'mackenzie@mail.example.test'],
+            ['email' => 'summar@mail.example.test'],
+            ['email' => 'madeline@mail.example.test'],
+            ['email' => 'allisen@mail.example.test'],
+            ['email' => 'jordan@mail.example.test'],
+            ['email' => 'info@mail.example.test'],
+        ]);
+        $truncated = substr($full, 0, 255);
+
+        FsmtpTest::assert(strlen($full) > 255, 'fixture exceeds VARCHAR(255)');
+        FsmtpTest::assert(!is_serialized($truncated), 'clipped blob is not valid serialized PHP');
+
+        $row = $invoke($logger, 'maybeUnserialize', [[
+            'to' => $truncated,
+            'subject' => 'Contact Form submission',
+        ]]);
+
+        $emails = array_column($row['to'], 'email');
+
+        FsmtpTest::assertSame(
+            [
+                'ryan@mail.example.test',
+                'mackenzie@mail.example.test',
+                'summar@mail.example.test',
+                'madeline@mail.example.test',
+            ],
+            $emails,
+            'complete addresses recovered from a clipped serialize blob'
+        );
+        FsmtpTest::assert(
+            !in_array('allisen@mail.example.test', $emails, true),
+            'half-written trailing address is not invented'
+        );
+    });
+
+    FsmtpTest::case('intact serialized log recipients still unserialize as an array', function () use (
+        $invoke,
+        $withoutConstructor
+    ) {
+        $logger = $withoutConstructor(Logger::class);
+        $recipients = [
+            ['email' => 'ryan@mail.example.test'],
+            ['email' => 'mackenzie@mail.example.test'],
+        ];
+
+        $row = $invoke($logger, 'maybeUnserialize', [[
+            'to' => serialize($recipients),
+        ]]);
+
+        FsmtpTest::assertSame($recipients, $row['to'], 'complete serialized to column');
     });
 };

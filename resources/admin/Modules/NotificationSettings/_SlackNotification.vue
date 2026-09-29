@@ -6,12 +6,12 @@
                     {{ $t('__SLACK_INTRO') }} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.
                 </p>
 
-                <el-form class="fss_compact_form fss_alert_settings__form" :data="newForm" label-position="top">
-                    <el-form-item label="Your Email Address">
-                        <el-input size="small" v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
+                <el-form class="fss_compact_form fss_alert_settings__form" :model="newForm" label-position="top">
+                    <el-form-item :label="$t('Your Email Address')">
+                        <el-input v-model="newForm.user_email" :placeholder="$t('Email Address')"/>
                     </el-form-item>
                     <el-form-item>
-                        <el-checkbox v-model="newForm.terms" true-label="yes" false-label="no">
+                        <el-checkbox v-model="newForm.terms" true-value="yes" false-value="no">
                             <div v-html="$t('__SLACK_TERMS')"></div>
                         </el-checkbox>
                     </el-form-item>
@@ -23,7 +23,7 @@
                         </el-button>
                     </el-form-item>
                 </el-form>
-                <p class="fss_alert_settings__privacy-note">{{ $t('FluentSMTP does not store your email notifications data. ')}} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.</p>
+                <p class="fss_alert_settings__privacy-note">{{ $t('FluentSMTP does not store your notification data. ')}} <a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs/email-sending-error-notification-slack/">{{ $t('Read the documentation') }}</a>.</p>
             </div>
         </div>
         <div v-else>
@@ -83,7 +83,7 @@ export default {
                     window.location.href = response.data.redirect_url;
                 })
                 .catch((errors) => {
-                    this.$notify.error(errors.responseJSON.data.message);
+                    this.$notify.error(this.$errorMessage(errors));
                 })
                 .always(() => {
                     this.processing = false;

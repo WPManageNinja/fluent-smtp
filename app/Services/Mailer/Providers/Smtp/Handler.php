@@ -22,7 +22,7 @@ class Handler extends BaseHandler
             return $this->postSend();
         }
 
-        return $this->handleResponse(new \WP_Error(422, __('Something went wrong!', 'fluent-smtp'), []));
+        return $this->handleResponse(new \WP_Error(422, __('Something went wrong.', 'fluent-smtp'), []));
     }
 
     protected function postSend()
@@ -123,7 +123,7 @@ class Handler extends BaseHandler
 
             if ($attachments = $this->getParam('attachments')) {
                 foreach ($attachments as $attachment) {
-                    $this->phpMailer->addAttachment($attachment[0], $attachment[7]);
+                    $this->phpMailer->addAttachment($attachment[0], $this->getAttachmentName($attachment));
                 }
             }
 
