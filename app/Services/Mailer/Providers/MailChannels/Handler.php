@@ -320,8 +320,7 @@ class Handler extends BaseHandler
         foreach ($attachments as $attachment) {
             $path = isset($attachment[0]) ? $attachment[0] : '';
             try {
-                // PHPMailer stores the data itself at index 0 for string attachments.
-                $content = !empty($attachment[5]) ? $path : $this->secureFileRead($path);
+                $content = $this->attachmentContent($attachment);
             } catch (\Exception $e) {
                 $this->logAttachmentFailure('MailChannels', $e);
                 return new \WP_Error(422, __('MailChannels could not read an attachment; the email was not submitted.', 'fluent-smtp'));
