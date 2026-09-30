@@ -888,10 +888,11 @@ class BaseHandler
      * The MIME type an attachment should be delivered with.
      *
      * PHPMailer records a type for every attachment, from the caller or from
-     * the path's extension, and uses it in the messages it builds, so API
-     * providers send the same type as SMTP. Where it could only record the
-     * generic type (a path with no extension), the delivered name's extension
-     * decides. Needs no fileinfo extension.
+     * the path's extension, and uses it in the messages it builds; API
+     * providers send the same type. Where the record holds only the generic
+     * type (a path with no extension, or declared by the caller), the
+     * delivered name's extension decides, so such an attachment can arrive
+     * with a more specific type than over SMTP. Needs no fileinfo extension.
      *
      * @param array $attachment One row of PHPMailer::getAttachments()
      * @return string

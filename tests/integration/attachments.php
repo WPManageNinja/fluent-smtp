@@ -522,8 +522,10 @@ return function () {
         });
 
         FsmtpTest::case('SMTP: a listener that clears and re-adds attachments decides what is sent', function () use ($smtpSend, $summary, $pdfPath, $otherPath, $binary) {
-            // A phpmailer_init listener may clear the list and add its own. The
-            // handler must send exactly the object's final list.
+            // A phpmailer_init listener may clear the list and add its own; the
+            // object's final list is what is sent. This does not catch the old
+            // re-adding loop: PHPMailer drops a re-added record identical to one
+            // it already has.
             $sent = $smtpSend(function ($mailer) use ($pdfPath, $otherPath) {
                 $mailer->addAttachment($pdfPath);
                 $mailer->clearAttachments();
@@ -662,7 +664,7 @@ return function () {
                 ]);
                 $requests = FsmtpTest::httpRequests();
             } finally {
-                FsmtpTest::releaseHttpInterceptor();
+                FsmtpTest::interceptHttp();
             }
 
             FsmtpTest::assert(!is_wp_error($result), 'Outlook send failed');
@@ -1050,15 +1052,25 @@ return function () {
             });
         }
 
-        FsmtpTest::case('SendInBlue: unnamed in-memory data with no known extension is skipped, not read as a path', function () use ($apiSend, $providers) {
+        FsmtpTest::case('SendInBlue: unnamed in-memory data with no known extension is skipped, not read as a path', function () use ($apiSend, $providers, $binary) {
             // Delivered as "attachment", which has no extension. The path fallback
-            // is for files only: here the data would supply its own ".pdf".
+            // is for files only: here the data would supply its own ".pdf". The
+            // named file after it shows the skip is not an empty request.
             $bytes = "%PDF-1.4\n\x00\x01\x02 see invoice.pdf";
-            $sent = $apiSend($providers['SendInBlue'], function ($mailer) use ($bytes) {
+            $sent = $apiSend($providers['SendInBlue'], function ($mailer) use ($bytes, $binary) {
                 $mailer->addStringAttachment($bytes, '', 'base64', 'application/octet-stream');
+                $mailer->addStringAttachment($binary, 'invoice.pdf', 'base64', 'application/pdf');
             });
             FsmtpTest::assertSame(null, $sent['failure'], 'send failure');
-            FsmtpTest::assertSame([], $sent['rows'], 'attachments in the request');
+            FsmtpTest::assertSame([['invoice.pdf', null, md5($binary)]], $sent['rows'], 'attachments in the request');
+        });
+
+        FsmtpTest::case('SendInBlue: an upper-case extension passes its allow-list', function () use ($apiSend, $providers, $pdfPath, $binary) {
+            $sent = $apiSend($providers['SendInBlue'], function ($mailer) use ($pdfPath) {
+                $mailer->addAttachment($pdfPath, 'Invoice.PDF');
+            });
+            FsmtpTest::assertSame(null, $sent['failure'], 'send failure');
+            FsmtpTest::assertSame([['Invoice.PDF', null, md5($binary)]], $sent['rows'], 'attachments in the request');
         });
 
         FsmtpTest::case('wp_mail() hands the handler the attachment records the tests build', function () use ($pdfPath, $binary) {
