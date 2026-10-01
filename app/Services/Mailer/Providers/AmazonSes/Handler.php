@@ -105,32 +105,16 @@ class Handler extends BaseHandler
         $attachments = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
-            $file = false;
-            $fileName = null;
-            $filetype = null;
-
             try {
-                // Use secure file reading with path traversal protection
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = $this->getAttachmentName($attachment);
-
-                // Get MIME type from the validated real path
-                $realPath = realpath($attachment[0]);
-                $mimeType = mime_content_type($realPath);
-                $filetype = str_replace(';', '', trim($mimeType));
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
-                // Log error and skip this attachment
                 $this->logAttachmentFailure('AmazonSes', $e);
-                $file = false;
-            }
-
-            if ($file === false) {
                 continue;
             }
 
             $attachments[] = [
-                'type'    => $filetype,
-                'name'    => $fileName,
+                'type'    => self::attachmentType($attachment),
+                'name'    => self::getAttachmentName($attachment),
                 'content' => $file
             ];
         }
