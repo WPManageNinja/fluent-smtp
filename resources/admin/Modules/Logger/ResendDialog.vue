@@ -146,23 +146,6 @@ export default {
 
             const payload = { target: this.form.target };
 
-            if (this.form.target === 'self') {
-                const userEmail = this.appVars && this.appVars.user_email
-                    ? this.appVars.user_email.trim()
-                    : '';
-
-                if (!userEmail) {
-                    this.$notify.error({
-                        offset: 19,
-                        title: this.$t('Error'),
-                        message: this.$t('No account email is available for the current user.')
-                    });
-                    return;
-                }
-
-                payload.recipients = [userEmail];
-            }
-
             if (this.form.target === 'custom') {
                 const parsed = this.parseEmails(this.form.customEmail);
 
