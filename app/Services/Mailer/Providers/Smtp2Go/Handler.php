@@ -44,7 +44,13 @@ class Handler extends BaseHandler {
             'bcc'       => $this->getBlindCarbonCopy(),
             'subject'   => $this->getSubject(),
             'html_body' => $this->getBody(),
-            'text_body' => $this->phpMailer->AltBody
+            'text_body' => $this->phpMailer->AltBody,
+            /*
+             * Without fastaccept SMTP2GO holds the request open until the email is
+             * sent, which can outlast the HTTP timeout: the email is delivered but
+             * logged as failed. With it the email is queued and accepted at once.
+             */
+            'fastaccept' => (bool) apply_filters('fluentsmtp_smtp2go_fastaccept', true)
         ];
 
         if ($replyTo = $this->getReplyTo()) {
