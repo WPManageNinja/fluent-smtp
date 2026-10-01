@@ -283,25 +283,17 @@ class Handler extends BaseHandler
         $data = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
-            $file = false;
-            $fileName = null;
-
             try {
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = $this->getAttachmentName($attachment);
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
                 $this->logAttachmentFailure('Cloudflare', $e);
-                $file = false;
-            }
-
-            if ($file === false) {
                 continue;
             }
 
             $data[] = [
-                'filename'    => $fileName,
+                'filename'    => self::getAttachmentName($attachment),
                 'content'     => base64_encode($file),
-                'type'        => $this->determineMimeContentType($attachment[0]),
+                'type'        => self::attachmentType($attachment),
                 'disposition' => 'attachment',
             ];
         }
@@ -316,19 +308,5 @@ class Handler extends BaseHandler
             'Content-Type'  => 'application/json',
             'Authorization' => 'Bearer ' . $this->getSetting('api_key'),
         ];
-    }
-
-    protected function determineMimeContentType($filename)
-    {
-        if (function_exists('mime_content_type')) {
-            return mime_content_type($filename);
-        } elseif (function_exists('finfo_open')) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_file($finfo, $filename);
-            finfo_close($finfo);
-            return $mimeType;
-        }
-
-        return 'application/octet-stream';
     }
 }

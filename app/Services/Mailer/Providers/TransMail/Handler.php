@@ -180,26 +180,16 @@ class Handler extends BaseHandler
         $attachments = $this->attributes['attachments'];
 
         foreach ($attachments as $attachment) {
-            $file = false;
-            $fileName = null;
-
             try {
-                // Use secure file reading with path traversal protection
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = $this->getAttachmentName($attachment);
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
-                // Log error and skip this attachment
                 $this->logAttachmentFailure('TransMail', $e);
-                $file = false;
-            }
-
-            if ($file === false) {
                 continue;
             }
 
             $data[] = [
                 'content' => $file,
-                'name'    => $fileName,
+                'name'    => self::getAttachmentName($attachment),
             ];
         }
 

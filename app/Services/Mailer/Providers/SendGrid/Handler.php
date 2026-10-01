@@ -165,36 +165,18 @@ class Handler extends BaseHandler
         $data = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
-            $file = false;
-            $fileName = null;
-            $filetype = null;
-            $contentId = null;
-
             try {
-                // Use secure file reading with path traversal protection
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = $this->getAttachmentName($attachment);
-                $contentId = wp_hash($attachment[0]);
-
-                // Get MIME type from the validated real path
-                $realPath = realpath($attachment[0]);
-                $mimeType = mime_content_type($realPath);
-                $filetype = str_replace(';', '', trim($mimeType));
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
-                // Log error and skip this attachment
                 $this->logAttachmentFailure('SendGrid', $e);
-                $file = false;
-            }
-
-            if ($file === false) {
                 continue;
             }
 
             $data[] = [
-                'type'        => $filetype,
-                'filename'    => $fileName,
+                'type'        => self::attachmentType($attachment),
+                'filename'    => self::getAttachmentName($attachment),
                 'disposition' => 'attachment',
-                'content_id'  => $contentId,
+                'content_id'  => wp_hash($attachment[0]),
                 'content'     => base64_encode($file)
             ];
         }
