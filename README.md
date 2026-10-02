@@ -30,6 +30,7 @@ Connect as many email Service Providers as you want, and FluentSMTP will route y
 - SparkPost
 - SMTP2GO
 - Elastic Email
+- Mailtrap
 - Zoho via SMTP
 - Any SMTP email provider
 - More native integrations coming soon
