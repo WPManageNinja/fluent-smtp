@@ -13,7 +13,7 @@ Free WP Mail SMTP plugin. Fix WordPress email deliverability with Gmail, Amazon 
 == Description ==
 
 ### WP Mail SMTP Plugin for Any Email Service Provider
-Are your WordPress emails not sending, landing in spam, or failing silently? FluentSMTP is a free **WordPress SMTP plugin** that fixes email deliverability by routing every `wp_mail()` call through the email service you choose: **Gmail, Google Workspace, Amazon SES, SendGrid, Mailgun, Cloudflare Email, toSend, Postmark, Brevo (Sendinblue), SparkPost, Netcore, Elastic Email, SMTP2GO, Outlook / Office 365, Zoho**, or any SMTP host.
+Are your WordPress emails not sending, landing in spam, or failing silently? FluentSMTP is a free **WordPress SMTP plugin** that fixes email deliverability by routing every `wp_mail()` call through the email service you choose: **Gmail, Google Workspace, Amazon SES, SendGrid, Mailgun, Cloudflare Email, toSend, Postmark, Brevo (Sendinblue), SparkPost, Netcore, Elastic Email, SMTP2GO, Sweego, Outlook / Office 365, Zoho**, or any SMTP host.
 
 FluentSMTP talks to each provider's own API rather than only SMTP, so your transactional and marketing email goes out quickly and lands in the inbox. Set your From name and email, turn on email logging, add failure alerts, and route different senders to different providers, all from one screen.
 
@@ -42,6 +42,7 @@ Our parent company <a title="WP Manage Ninja" href="https://wpmanageninja.com">W
 * Postmark (API)
 * SparkPost (API)
 * SMTP2GO (API)
+* Sweego (API)
 * Elastic Email (API)
 * Zoho Mail (SMTP)
 * PHP mail()
@@ -129,6 +130,9 @@ Read the documentation for <a href="https://fluentsmtp.com/docs/setup-outlook-wi
 
 == 🎉 SMTP2GO Email API Connection ==
 SMTP2GO handles both transactional and marketing mail, with per-message statistics in its dashboard. FluentSMTP uses their official API.
+
+== 🎉 Sweego Email API Connection ==
+**Sweego** is a European email and SMS provider, hosted in the EU, with per-message tracking in its dashboard. Paste the API key from your Sweego portal and FluentSMTP sends through their native API, attachments, Cc/Bcc, Reply-To and custom headers included.
 
 == 🎉 Cloudflare Email API Connection ==
 Send WordPress emails through **Cloudflare Email Sending** using their native REST API. If your domain is already on Cloudflare, you can send transactional email directly from Cloudflare's edge network, fast, reliable, and with built-in SPF/DKIM/DMARC. FluentSMTP handles the full request shape, including attachments, CC/BCC, Reply-To, and custom headers. The API token is checked when you save it and again on the connection screen, so a bad token is reported before an email needs it.

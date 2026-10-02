@@ -115,6 +115,8 @@ class ComposerStaticInit9b719a7d374be78de74c2068943692fe
         'FluentMail\\App\\Services\\Mailer\\Providers\\Smtp\\ValidatorTrait' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/Smtp/ValidatorTrait.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\SparkPost\\Handler' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/SparkPost/Handler.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\SparkPost\\ValidatorTrait' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/SparkPost/ValidatorTrait.php',
+        'FluentMail\\App\\Services\\Mailer\\Providers\\Sweego\\Handler' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/Sweego/Handler.php',
+        'FluentMail\\App\\Services\\Mailer\\Providers\\Sweego\\ValidatorTrait' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/Sweego/ValidatorTrait.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\ToSend\\Handler' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/ToSend/Handler.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\ToSend\\ValidatorTrait' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/ToSend/ValidatorTrait.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\TransMail\\Handler' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/TransMail/Handler.php',
