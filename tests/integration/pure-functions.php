@@ -49,16 +49,21 @@ return function () {
         );
     });
 
-    FsmtpTest::case('reporting month formatter produces a stable abbreviated month and year', function () use ($invoke) {
+    FsmtpTest::case('reporting month formatter produces a stable sortable month and year', function () use ($invoke) {
         $reporting = new Reporting();
 
+        /*
+         * Machine-readable on purpose: the dashboard chart formats the key into the
+         * admin's own language, and an English 'Aug 2026' key would have been handed
+         * to a German reader unchanged.
+         */
         FsmtpTest::assertSame(
-            'Aug 2026',
+            '2026-08',
             $invoke($reporting, 'monYearFormatter', ['2026-08-04']),
             'month-year formatter string input'
         );
         FsmtpTest::assertSame(
-            'Jan 2027',
+            '2027-01',
             $invoke($reporting, 'monYearFormatter', [new DateTime('2027-01-31', new DateTimeZone('UTC'))]),
             'month-year formatter DateTime input'
         );

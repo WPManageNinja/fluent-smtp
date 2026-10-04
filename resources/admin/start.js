@@ -5,6 +5,7 @@ import * as VueRouter from 'vue-router';
 import { ElLoading, ElNotification, ElMessageBox, notificationTypes, provideGlobalConfig } from 'element-plus';
 
 import * as icons from './Bits/icons';
+import { applyLocale } from './Bits/appLocale';
 import routes from './routes';
 import Application from './Application.vue';
 
@@ -56,7 +57,19 @@ app.use(ElLoading);
  * one base again. The third argument makes it the global default, which is what the
  * imperative services pick up when they render outside the component tree.
  */
-provideGlobalConfig({ zIndex: 100000 }, app, true);
+/*
+ * The admin's own language, into the two libraries that have their own copy of one.
+ *
+ * These dates and the date pickers were English on every site, including the ones
+ * whose admin is not: dayjs defaults to English month and weekday names, and so does
+ * Element Plus until it is handed a locale. site_locale is what WordPress is already
+ * translating the strings around them with, so both sides of a screen now agree.
+ *
+ * applyLocale() returns null for English and for a language the bundle does not carry,
+ * and `locale: null` is exactly what Element Plus does on its own - so this is a no-op
+ * for those sites rather than a switch to something else.
+ */
+provideGlobalConfig({ zIndex: 100000, locale: applyLocale(window.FluentMailAdmin.site_locale) }, app, true);
 
 /*
  * The message box and the notification are rendered outside the component tree, so

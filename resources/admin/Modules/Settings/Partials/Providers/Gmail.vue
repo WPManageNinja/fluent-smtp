@@ -76,7 +76,7 @@ define( 'FLUENTMAIL_GMAIL_CLIENT_SECRET', '********************' );</textarea>
         </div>
         <el-form-item :label="$t('Authorized Redirect URI')">
             <el-input :readonly="true" v-model="AuthorizedRedirectURI" />
-            <p>{{ $t('Add ') }}<b>https://fluentsmtp.com/gapi/</b>{{ $t(' to the ') }}<b>{{ $t('Authorized Redirect URIs') }}</b>{{ $t(' list in your Google Cloud project, or authentication will be refused.') }}</p>
+            <p v-html="$t('__GMAIL_REDIRECT_URI')"></p>
         </el-form-item>
 
         <!--

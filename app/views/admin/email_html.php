@@ -27,7 +27,21 @@
                                 <?php esc_html_e('Congrats, test email was sent successfully!', 'fluent-smtp') ?>
                             </p>
                             <p class="text-large" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; mso-line-height-rule: exactly; line-height: 140%; margin: 0 0 15px 0; Margin: 0 0 15px 0; font-size: 16px;">
-                                <?php esc_html_e('Thank you for using Fluent SMTP Plugin. The ultimate SMTP plugin you need for making sure your emails are delivered.', 'fluent-smtp') ?><br /><br /><?php esc_html_e('FluentSMTP is a free opensource plugin and it will be always free ', 'fluent-smtp') ?>(<a href="https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/"><?php esc_html_e('Learn why it\'s free', 'fluent-smtp') ?></a>).
+                                <?php esc_html_e('Thank you for using Fluent SMTP Plugin. The ultimate SMTP plugin you need for making sure your emails are delivered.', 'fluent-smtp') ?><br /><br /><?php
+                                /*
+                                 * The link is a placeholder rather than three pieces of
+                                 * sentence glued back together, so a translation can put
+                                 * it where its own grammar wants it.
+                                 */
+                                echo wp_kses(
+                                    sprintf(
+                                        /* translators: %s: link to the article explaining why FluentSMTP is free */
+                                        esc_html__('FluentSMTP is a free opensource plugin and it will be always free (%s).', 'fluent-smtp'),
+                                        '<a href="' . esc_url('https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/') . '">' . esc_html__('learn why it\'s free', 'fluent-smtp') . '</a>'
+                                    ),
+                                    ['a' => ['href' => []]]
+                                );
+                                ?>
                             </p>
 
                             <p class="signature" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; text-align: left; margin: 20px 0 0 0; Margin: 20px 0 0 0;">

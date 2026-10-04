@@ -31,7 +31,14 @@
                 <p class="fss_alert_settings__intro" v-html="$t('__TELE_LAST_STEP')"></p>
                 <h3 class="fss_alert_settings__section-title">{{ $t('Activation Pin') }}</h3>
                 <p class="fss_alert_settings__pin-container">
-                    {{ $t('activate ') }} {{ newForm.site_pin }}
+                    <!--
+                        The command itself, not a translated string. This is the exact
+                        text the user types to @fluentsmtp_bot, and the bot reads it in
+                        English - a translation of "activate" here would produce a pin
+                        the bot ignores. It sits outside $t() so it never reaches the
+                        catalogue at all, and copyPin() below copies the same literal.
+                    -->
+                    activate {{ newForm.site_pin }}
                     <span @click="copyPin()" class="fss_alert_settings__pin-container__copy-button">{{ $t('copy') }}</span>
                 </p>
                 <el-button :disabled="processing" v-loading="processing" @click="confirmConnection()" type="primary">{{ $t('I have sent the code') }}</el-button>

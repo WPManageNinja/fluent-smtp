@@ -81,10 +81,10 @@
                         <div class="item_content">
                             <div v-for="(record, index) in resendHistory" :key="index" style="margin-bottom:2px;">
                                 <span>{{ record.to }}</span>
-                                <span style="color:var(--fsm-text-light);"> — {{ record.at }}</span>
+                                <span style="color:var(--fsm-text-light);"> — {{ $dateFormat(record.at, 'DD MMM YYYY LT') }}</span>
                                 <span v-if="record.by" style="color:var(--fsm-text-light);"> ({{ record.by }})</span>
                                 <span v-if="record.ms" style="color:var(--fsm-text-light);"> · {{ record.ms }}</span>
-                                <span v-if="!record.sent" style="color:var(--fsm-danger-fg);"> — {{ $t('failed') }}</span>
+                                <span v-if="!record.sent" style="color:var(--fsm-danger-fg);"> — {{ $t('Failed') }}</span>
                             </div>
                         </div>
                     </li>

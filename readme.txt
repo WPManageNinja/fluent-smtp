@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, wp mail smtp, amazon ses, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1
-Stable tag: 2.4.1
+Stable tag: 2.4.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -348,6 +348,16 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 
 
 == Changelog ==
+
+= 2.4.2 (Date: Oct 04, 2026) =
+- Fixed the admin showing English dates, month names and date-picker panels on sites running in another language. The dashboard, email log, log details and sending chart now follow the language the admin is reading the site in
+- Fixed Element Plus controls showing English text, including the email log's pagination totals and the date range picker's weekday and month names
+- Fixed the Telegram activation command being sent to translators. It has to stay the literal text the bot understands
+- Improved the toSend, Gmail and email simulation instructions so translators get whole sentences with placeholders instead of fragments to reorder by hand
+- Improved the "This site already has FluentSMTP installed" notice and the test email footer, which were assembled from sentence fragments around their links
+- Fixed the same "failed" status being stored and translated under two spellings, and "learn why it's free" being translatable under two
+- Fixed the dashboard sending chart's month labels staying English when a monthly range was selected, and the resend history times not following the site's language
+- Note for developers: a monthly sending-stats bucket is now keyed "2026-09" instead of "Sep 2026"
 
 = 2.4.1 (Date: Sep 27, 2026) =
 - Fixed Outlook / Office 365 connections failing to authorize on servers where Microsoft returned an HTML error page instead of a token
