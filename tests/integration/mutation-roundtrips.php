@@ -1,6 +1,7 @@
 <?php
 
 use FluentMail\App\Models\Settings;
+use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\NotificationHelper;
 use FluentMail\App\Services\SecretMasker;
 use FluentMail\Includes\Support\Arr;
@@ -17,6 +18,7 @@ return function () {
         $optionNames = [
             'fluentmail-settings',
             '_fluent_smtp_notify_settings',
+            ConnectionHealth::OPTION_KEY,
         ];
         $fingerprints = function () use ($wpdb, $optionNames) {
             $result = [];
@@ -260,6 +262,96 @@ return function () {
             $deleted = $model->getSettings();
             FsmtpTest::assert(!isset($deleted['connections'][$connectionKey]), 'updateConnection fixture was not deleted');
             FsmtpTest::assert(!isset($deleted['mappings'][$sender]), 'updateConnection fixture mapping was not deleted');
+        });
+    });
+
+    FsmtpTest::case('saving a connection drops its stale health result, under the old and the new key', function () use (
+        $withOptionTransaction,
+        $baseMisc
+    ) {
+        $withOptionTransaction(function () use ($baseMisc) {
+            $sender = 'health-save-' . FsmtpTest::uniq() . '@example.test';
+            $renamed = 'health-renamed-' . FsmtpTest::uniq() . '@example.test';
+            $other = 'health-other-' . FsmtpTest::uniq() . '@example.test';
+            $key = md5($sender);
+            $renamedKey = md5($renamed);
+            $otherKey = md5($other);
+
+            $smtp = function ($email) {
+                return [
+                    'provider'           => 'smtp',
+                    'sender_name'        => 'Suite Health',
+                    'sender_email'       => $email,
+                    'force_from_name'    => 'no',
+                    'force_from_email'   => 'yes',
+                    'host'               => 'smtp.example.test',
+                    'port'               => '2525',
+                    'auth'               => 'no',
+                    'username'           => '',
+                    'password'           => '',
+                    'encryption'         => 'none',
+                    'key_store'          => 'db',
+                    'disable_encryption' => 'yes',
+                ];
+            };
+
+            $model = new Settings();
+            $model->saveGlobalSettings([
+                'connections' => [
+                    $key      => ['title' => 'SMTP', 'provider_settings' => $smtp($sender)],
+                    $otherKey => ['title' => 'SMTP', 'provider_settings' => $smtp($other)],
+                ],
+                'mappings' => [$sender => $key, $other => $otherKey],
+                'misc'     => $baseMisc($key),
+            ]);
+
+            $errorRow = function ($email) {
+                return [
+                    'sender_email' => $email,
+                    'provider'     => 'smtp',
+                    'status'       => ConnectionHealth::STATUS_ERROR,
+                    'message'      => 'Secret key is required.',
+                    'checked_at'   => gmdate('Y-m-d H:i:s'),
+                ];
+            };
+            $readHealth = function () {
+                wp_cache_delete(ConnectionHealth::OPTION_KEY, 'options');
+                return (array) get_option(ConnectionHealth::OPTION_KEY, []);
+            };
+
+            update_option(ConnectionHealth::OPTION_KEY, [
+                $key      => $errorRow($sender),
+                $otherKey => $errorRow($other),
+            ], false);
+
+            $model->store([
+                'connection_key' => $key,
+                'connection'     => $smtp($sender),
+                'valid_senders'  => [$sender],
+            ]);
+
+            $health = $readHealth();
+            FsmtpTest::assert(!isset($health[$key]), 'saved connection kept its old health result');
+            FsmtpTest::assertSame($errorRow($other)['status'], $health[$otherKey]['status'], 'other connection health result kept');
+
+            // A changed sender email moves the connection to a new key. A row
+            // left under either key would show the old error again.
+            update_option(ConnectionHealth::OPTION_KEY, [
+                $key        => $errorRow($sender),
+                $renamedKey => $errorRow($renamed),
+                $otherKey   => $errorRow($other),
+            ], false);
+
+            $model->store([
+                'connection_key' => $key,
+                'connection'     => $smtp($renamed),
+                'valid_senders'  => [$renamed],
+            ]);
+
+            $health = $readHealth();
+            FsmtpTest::assert(!isset($health[$key]), 'old key health result kept after sender change');
+            FsmtpTest::assert(!isset($health[$renamedKey]), 'new key health result kept after sender change');
+            FsmtpTest::assert(isset($health[$otherKey]), 'other connection health result dropped after sender change');
         });
     });
 

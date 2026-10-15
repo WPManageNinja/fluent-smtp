@@ -90,6 +90,19 @@ class Settings
 
         fluentMailSetSettings($settings);
 
+        /*
+         * The connection was validated just before this save, so the last daily
+         * result says nothing about it any more. Leaving an old error in place
+         * keeps the badge red until the next run. The key changes with the
+         * sender email, so the row under the old key goes too.
+         */
+        $health = new ConnectionHealth();
+        $health->forget($key);
+
+        if ($uniqueKey !== $key) {
+            $health->forget($uniqueKey);
+        }
+
         return $settings;
     }
 
