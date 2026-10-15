@@ -17,6 +17,7 @@ return function () {
         $optionNames = [
             'fluentmail-settings',
             '_fluent_smtp_notify_settings',
+            'fluentmail_encryption_key',
         ];
         $fingerprints = function () use ($wpdb, $optionNames) {
             $result = [];
@@ -548,6 +549,38 @@ return function () {
             FsmtpTest::assertSame('1//suite-legacy-refresh', Arr::get($reread, 'connections.' . $key . '.provider_settings.refresh_token'), 'refresh token after rewrite');
             FsmtpTest::assertSame('suite-client-secret', Arr::get($reread, 'connections.' . $key . '.provider_settings.client_secret'), 'client secret after rewrite');
 
+        });
+    });
+    FsmtpTest::case('stored secrets do not depend on the WordPress salts, and old salt-encrypted values still read', function () use (
+        $withOptionTransaction
+    ) {
+        if (defined('FLUENTMAIL_ENCRYPT_KEY') || defined('FLUENTMAIL_ENCRYPT_SALT')) {
+            FsmtpTest::skip('FLUENTMAIL_ENCRYPT_* constants are defined, so the stored key is not used');
+            return;
+        }
+
+        $withOptionTransaction(function () {
+            $method = 'aes-256-ctr';
+            $ivLength = openssl_cipher_iv_length($method);
+            $decryptWith = function ($cipher, $key, $salt) use ($method, $ivLength) {
+                $raw = base64_decode($cipher, true);
+                $plain = openssl_decrypt(substr($raw, $ivLength), $method, $key, 0, substr($raw, 0, $ivLength));
+                return ($plain && substr($plain, -strlen($salt)) === $salt) ? substr($plain, 0, -strlen($salt)) : false;
+            };
+
+            delete_option('fluentmail_encryption_key');
+
+            $cipher = fluentMailEncryptDecrypt('suite-smtp-password', 'e');
+            $stored = get_option('fluentmail_encryption_key');
+            FsmtpTest::assert(!empty($stored['key']) && !empty($stored['salt']), 'encryption key not created on first encrypt');
+            FsmtpTest::assertSame('suite-smtp-password', $decryptWith($cipher, $stored['key'], $stored['salt']), 'new value not encrypted with the stored key');
+            FsmtpTest::assertSame(false, $decryptWith($cipher, LOGGED_IN_KEY, LOGGED_IN_SALT), 'new value still depends on the WordPress salts');
+            FsmtpTest::assertSame('suite-smtp-password', fluentMailEncryptDecrypt($cipher, 'd'), 'new value round trip');
+
+            // What releases before the stored key wrote: encrypted with LOGGED_IN_KEY and LOGGED_IN_SALT.
+            $iv = openssl_random_pseudo_bytes($ivLength);
+            $legacyCipher = base64_encode($iv . openssl_encrypt('suite-legacy-password' . LOGGED_IN_SALT, $method, LOGGED_IN_KEY, 0, $iv));
+            FsmtpTest::assertSame('suite-legacy-password', fluentMailEncryptDecrypt($legacyCipher, 'd'), 'legacy salt-encrypted value not readable');
         });
     });
 };
