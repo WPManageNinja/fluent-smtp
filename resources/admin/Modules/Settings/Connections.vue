@@ -55,12 +55,12 @@
                 -->
                 <div class="fsm_card">
                     <div class="fsm_card_head">
-                        <h2>{{ $t('Active Email Connections') }}</h2>
+                        <h2>{{ $t('Email Connections') }}</h2>
                     </div>
                     <div class="fsm_card_body fsm_card_flush">
                         <ul class="fsm_conn_list">
                             <li v-for="connection in connections" :key="connection.unique_key"
-                                class="fsm_conn">
+                                class="fsm_conn" :class="{is_inactive: !isActive(connection)}">
                                 <!--
                                     The provider's logo, in a fixed column so the
                                     addresses beside them still line up.
@@ -99,6 +99,9 @@
                                     in the same chips Default and Fallback use.
                                 -->
                                 <div class="fsm_conn_marks">
+                                    <span v-if="!isActive(connection)" class="fsm_tag is_inactive">
+                                        {{ $t('Inactive') }}
+                                    </span>
                                     <!--
                                         A health message can be a sentence or two (a missing
                                         wp-config constant, a provider's own error), so the
@@ -176,6 +179,11 @@
                                                 <el-dropdown-item v-if="isFallback(connection)" command="clear_fallback"
                                                                   :disabled="routing">
                                                     {{ $t('Clear Fallback') }}
+                                                </el-dropdown-item>
+                                                <el-dropdown-item :command="isActive(connection) ? 'deactivate' : 'activate'"
+                                                                  :disabled="toggling_connections.includes(connection.unique_key)"
+                                                                  divided>
+                                                    {{ isActive(connection) ? $t('Deactivate') : $t('Activate') }}
                                                 </el-dropdown-item>
                                                 <el-dropdown-item command="view" divided>
                                                     {{ $t('View') }}
@@ -266,6 +274,8 @@
                 health_report: {},
                 /* A routing write is in flight; see setRouting(). */
                 routing: false,
+                /* Keys whose active state is currently being saved. */
+                toggling_connections: [],
                 /* The connection whose extra senders the manager dialog is open on. */
                 managing_senders: false,
                 managing_connection: ''
@@ -378,12 +388,48 @@
                 return this.settings.misc.fallback_connection === connection.unique_key;
             },
 
+            isActive(connection) {
+                return connection.is_active !== false;
+            },
+
+            async setConnectionActive(connection, isActive) {
+                if (this.toggling_connections.includes(connection.unique_key)) {
+                    return;
+                }
+
+                this.toggling_connections.push(connection.unique_key);
+
+                try {
+                    const result = await this.$post('settings/connection-status', {
+                        key: connection.unique_key,
+                        is_active: isActive
+                    });
+
+                    this.settings.connections = result.data.connections;
+                    if (!isActive) {
+                        delete this.health_report[connection.unique_key];
+                    }
+                    this.$notify.success(this.$t('Connection status updated.'));
+                } catch (error) {
+                    this.$notify.error(this.$errorMessage(error));
+                    this.$notify.error(this.$t('Could not save. Please try again.'));
+                } finally {
+                    this.toggling_connections = this.toggling_connections.filter(key => {
+                        return key !== connection.unique_key;
+                    });
+                }
+            },
+
             /*
              * The second line of a row. A connection's own address always routes to it,
              * which is the part of the rule that applies to this row specifically; the
              * host or region is what tells two connections on the same provider apart.
              */
             noteFor(connection) {
+                if (!this.isActive(connection)) {
+                    return this.$t('Not used for sending while inactive');
+                }
+
                 /*
                  * PHP mail() has neither a host nor a region - it is whatever the server
                  * is - but a connection saved through the form carries `region: us` from
@@ -443,6 +489,10 @@
                         {fallback_connection: ''},
                         this.$t('Fallback connection cleared.')
                     );
+                }
+
+                if (command === 'deactivate' || command === 'activate') {
+                    return this.setConnectionActive(connection, command === 'activate');
                 }
             },
 
@@ -565,7 +615,8 @@
                     data.push({
                         unique_key: key,
                         title: connection.title,
-                        ...connection.provider_settings
+                        ...connection.provider_settings,
+                        is_active: connection.is_active !== false
                     });
                 });
 

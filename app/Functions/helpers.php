@@ -162,15 +162,21 @@ if (!function_exists('fluentMailDefaultConnection')) {
 
         if (
             isset($settings['misc']['default_connection']) &&
-            isset($settings['connections'][$settings['misc']['default_connection']])
+            isset($settings['connections'][$settings['misc']['default_connection']]) &&
+            \FluentMail\App\Models\Settings::isActiveConnection(
+                $settings['connections'][$settings['misc']['default_connection']]
+            )
         ) {
             $default = $settings['misc']['default_connection'];
             $defaultConnection = $settings['connections'][$default]['provider_settings'];
-        } else if (count($settings['connections'])) {
-            $connection = reset($settings['connections']);
-            $defaultConnection = $connection['provider_settings'];
         } else {
             $defaultConnection = [];
+            foreach (($settings['connections'] ?? []) as $connection) {
+                if (\FluentMail\App\Models\Settings::isActiveConnection($connection)) {
+                    $defaultConnection = $connection['provider_settings'] ?? [];
+                    break;
+                }
+            }
         }
 
         return $defaultConnection;
@@ -227,7 +233,10 @@ if (!function_exists('fluentMailGetProvider')) {
         if (isset($mappings[$fromEmail])) {
             $connectionId = $mappings[$fromEmail];
             $connections = $manager->getSettings('connections');
-            if (isset($connections[$connectionId])) {
+            if (
+                isset($connections[$connectionId]) &&
+                \FluentMail\App\Models\Settings::isActiveConnection($connections[$connectionId])
+            ) {
                 $connection = $connections[$connectionId]['provider_settings'];
             }
         }

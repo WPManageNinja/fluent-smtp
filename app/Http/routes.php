@@ -8,6 +8,7 @@ $app->get('/settings', 'SettingsController@index');
 $app->post('/settings/validate', 'SettingsController@validate');
 $app->post('/settings', 'SettingsController@store');
 $app->post('/misc-settings', 'SettingsController@storeMiscSettings');
+$app->post('/settings/connection-status', 'SettingsController@setConnectionStatus');
 $app->post('/settings/delete', 'SettingsController@delete');
 $app->post('/settings/test', 'SettingsController@sendTestEmail');
 $app->post('/settings/subscribe', 'SettingsController@subscribe');
