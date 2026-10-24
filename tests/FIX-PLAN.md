@@ -7,6 +7,22 @@
 > that a future strict-SQL regression is recognised as a repeat rather than
 > investigated from scratch. Add new findings at the top.
 
+## RESOLVED — Brevo message IDs were erased by log sanitization
+
+- Production: `app/Services/Mailer/Providers/SendInBlue/Handler.php`
+- Symptom: a successful Brevo response such as
+  `<202609031856.15147286983@smtp-relay.mailin.fr>` was stored with an empty
+  `messageId` in the FluentSMTP email log.
+- Mechanism: `BaseHandler::recursiveSanitize()` sends non-email response values
+  through `sanitize_text_field()`, which treats the angle-bracketed ID as HTML
+  and strips it completely.
+- Owning tests: `tests/integration/brevo-message-id.php` verifies bracketed IDs
+  are normalized before logging and unbracketed IDs remain unchanged.
+- Resolution: Brevo now removes only the enclosing angle brackets before the
+  response enters the generic logging sanitizer.
+- Tracking: AuthLab task 22862 —
+  https://lounge.authlab.io/projects#/boards/9/tasks/22862-Fluent-SMTP-with-Brevo
+
 ## RESOLVED — weekly reporting failed with `ONLY_FULL_GROUP_BY`
 
 - Production: `app/Services/Reporting.php:40,58`

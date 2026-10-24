@@ -84,7 +84,7 @@ class Handler extends BaseHandler
 
             if ($isOKCode) {
                 $returnResponse = [
-                    'messageId' => Arr::get($responseBody, 'messageId')
+                    'messageId' => $this->normalizeMessageId(Arr::get($responseBody, 'messageId'))
                 ];
             } else {
                 $returnResponse = new \WP_Error($responseCode, Arr::get($responseBody, 'message', __('Sendinblue API Error', 'fluent-smtp')), $responseBody);
@@ -94,6 +94,27 @@ class Handler extends BaseHandler
         $this->response = $returnResponse;
 
         return $this->handleResponse($this->response);
+    }
+
+    /**
+     * Brevo returns SMTP message IDs in RFC 5322-style angle brackets. The
+     * generic log sanitizer treats those brackets as HTML and removes the
+     * entire value, so strip only the enclosing pair before logging.
+     *
+     * @param mixed $messageId
+     * @return mixed
+     */
+    private function normalizeMessageId($messageId)
+    {
+        if (!is_string($messageId) || strlen($messageId) < 2) {
+            return $messageId;
+        }
+
+        if ($messageId[0] === '<' && substr($messageId, -1) === '>') {
+            return substr($messageId, 1, -1);
+        }
+
+        return $messageId;
     }
 
     public function setSettings($settings)
