@@ -111,6 +111,15 @@ class Handler extends BaseHandler
                     'id'     => $messageId,
                     'status' => Arr::get($responseBody, 'status', '')
                 ];
+
+                /*
+                 * Recipients the API skipped (invalid address, no mail server,
+                 * recent hard bounce) while sending to the rest. Kept in the log
+                 * row so a skipped recipient is visible rather than silent.
+                 */
+                if ($heldBack = Arr::get($responseBody, 'held_back')) {
+                    $returnResponse['held_back'] = $heldBack;
+                }
             } else {
                 $errorMessage = Arr::get($responseBody, 'error.message', __('Unknown Error', 'fluent-smtp'));
                 $returnResponse = new \WP_Error($responseCode ?: 400, $errorMessage, $responseBody);
