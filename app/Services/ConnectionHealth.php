@@ -84,6 +84,44 @@ class ConnectionHealth
     }
 
     /**
+     * Record the successful health result produced by an admin connection save.
+     *
+     * Saving a connection already passed the provider's validation and connection
+     * check, so leaving the previous failed report in place makes the settings
+     * screen contradict the save response and a successful test send. The old key
+     * is removed as well because the key is derived from the sender email.
+     *
+     * @param string|null $previousKey
+     * @param string $currentKey
+     * @param array $providerSettings
+     * @return array
+     */
+    public function markHealthy($previousKey, $currentKey, $providerSettings)
+    {
+        $report = get_option(self::OPTION_KEY, []);
+
+        if (!is_array($report)) {
+            $report = [];
+        }
+
+        if ($previousKey && $previousKey !== $currentKey) {
+            unset($report[$previousKey]);
+        }
+
+        $report[$currentKey] = [
+            'sender_email' => Arr::get($providerSettings, 'sender_email'),
+            'provider'     => Arr::get($providerSettings, 'provider'),
+            'status'       => self::STATUS_HEALTHY,
+            'message'      => '',
+            'checked_at'   => gmdate('Y-m-d H:i:s')
+        ];
+
+        update_option(self::OPTION_KEY, $report, false);
+
+        return $this->getReport();
+    }
+
+    /**
      * Drop a single connection's stored result.
      *
      * Called when a connection is deleted so the option does not accumulate
