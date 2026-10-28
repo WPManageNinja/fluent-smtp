@@ -240,7 +240,19 @@ class Handler extends BaseHandler
     {
         if ($replyTo = $this->getParam('headers.reply-to')) {
             $replyTo = reset($replyTo);
-            return isset($replyTo['email']) ? $replyTo['email'] : null;
+
+            if (!isset($replyTo['email'])) {
+                return null;
+            }
+
+            if (isset($replyTo['name'])) {
+                return [
+                    'address' => $replyTo['email'],
+                    'name'    => $replyTo['name'],
+                ];
+            }
+
+            return $replyTo['email'];
         }
 
         return null;
