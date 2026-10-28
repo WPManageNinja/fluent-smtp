@@ -42,6 +42,7 @@ class FluentPHPMailer
     {
         $driver = fluentMailGetProvider($this->phpMailer->From);
         if($driver) {
+            $driver = clone $driver;
             $driver->setRowId($rowId);
             return $driver->setPhpMailer($this->phpMailer)->send();
         }
