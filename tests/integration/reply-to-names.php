@@ -128,4 +128,45 @@ return function () {
             'Cloudflare'
         );
     });
+
+    FsmtpTest::case('a Reply-To name with any other special is quoted for the string formats', function () use ($send) {
+        // A bare `Acme; Support <help@…>` parses as a different mailbox, or as a group for `:`.
+        $quoted = [
+            'Acme; Support'       => '"Acme; Support" <help@example.test>',
+            'Acme: Home Services' => '"Acme: Home Services" <help@example.test>',
+            'support@acme'        => '"support@acme" <help@example.test>',
+            'Acme (Support)'      => '"Acme (Support)" <help@example.test>',
+            'Dr. Jane <Doe>'      => '"Dr. Jane <Doe>" <help@example.test>',
+            'Joe\'s "Best" Pizza' => '"Joe\'s \"Best\" Pizza" <help@example.test>',
+            'Back\\slash'         => '"Back\\\\slash" <help@example.test>',
+        ];
+
+        foreach ($quoted as $name => $expected) {
+            FsmtpTest::assertSame([$expected], $send['SMTP2GO']($name), 'SMTP2GO ' . $name);
+            FsmtpTest::assertSame($expected, $send['Postmark']($name), 'Postmark ' . $name);
+            FsmtpTest::assertSame($expected, $send['SparkPost']($name), 'SparkPost ' . $name);
+        }
+
+        FsmtpTest::assertSame(
+            ['address' => 'help@example.test', 'name' => 'Acme; Support'],
+            $send['Cloudflare']('Acme; Support'),
+            'Cloudflare keeps the raw name in its object'
+        );
+    });
+
+    FsmtpTest::case('a Reply-To name that needs no quoting is sent as typed', function () use ($send) {
+        $unchanged = [
+            'Help Desk'     => 'Help Desk <help@example.test>',
+            "O'Brien & Co"  => "O'Brien & Co <help@example.test>",
+            'Jöwel Shah'    => 'Jöwel Shah <help@example.test>',
+            '"Help Desk"'   => '"Help Desk" <help@example.test>',
+            '"Help, Desk"'  => '"Help, Desk" <help@example.test>',
+        ];
+
+        foreach ($unchanged as $name => $expected) {
+            FsmtpTest::assertSame([$expected], $send['SMTP2GO']($name), 'SMTP2GO ' . $name);
+            FsmtpTest::assertSame($expected, $send['Postmark']($name), 'Postmark ' . $name);
+            FsmtpTest::assertSame($expected, $send['SparkPost']($name), 'SparkPost ' . $name);
+        }
+    });
 };

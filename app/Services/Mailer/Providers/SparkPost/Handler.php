@@ -133,7 +133,7 @@ class Handler extends BaseHandler
             $replyTo = reset($replyTo);
         
             return isset($replyTo['name'])
-                ? self::formatAddress($replyTo['email'], $replyTo['name'])
+                ? self::formatQuotedAddress($replyTo['email'], $replyTo['name'])
                 : $replyTo['email'];
         }
     }

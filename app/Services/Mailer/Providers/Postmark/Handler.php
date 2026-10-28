@@ -128,7 +128,7 @@ class Handler extends BaseHandler
         if ($replyTo = $this->getParam('headers.reply-to')) {
             $replyTo = reset($replyTo);
             return isset($replyTo['name'])
-                ? self::formatAddress($replyTo['email'], $replyTo['name'])
+                ? self::formatQuotedAddress($replyTo['email'], $replyTo['name'])
                 : $replyTo['email'];
         }
     }
