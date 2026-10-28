@@ -43,6 +43,7 @@ Our parent company <a title="WP Manage Ninja" href="https://wpmanageninja.com">W
 * SparkPost (API)
 * SMTP2GO (API)
 * Elastic Email (API)
+* Groundmail (API)
 * Zoho Mail (SMTP)
 * PHP mail()
 * Any SMTP server: your web host, Gmail SMTP, Yahoo, Outlook.com, Yandex and more
@@ -137,6 +138,9 @@ Send WordPress emails through **Cloudflare Email Sending** using their native RE
 **toSend** is a modern transactional email service with a simple API, per-domain analytics, and fast delivery. FluentSMTP ships a native toSend integration: paste your API key, set a verified From address, and you're sending in under a minute. Failed sends are logged with full payloads so you can resend or debug without leaving WordPress.
 
 Read the <a href="https://tosend.com/docs/guide/wordpress/">toSend WordPress setup guide</a>
+
+== 🎉 Groundmail Email API Connection ==
+**Groundmail** is a transactional email API that sends from your own verified domain. FluentSMTP connects to the Groundmail API directly: paste an API key (or define it in wp-config.php), and attachments, CC/BCC, Reply-To and custom headers are carried across. The API key is checked when you save the connection.
 
 == 🎉 Any SMTP Server ==
 FluentSMTP works with any service that offers an SMTP connection, including your web host's mail server, Gmail SMTP, Yahoo, Outlook.com, Zoho Mail and Yandex Mail.

@@ -278,6 +278,20 @@ return [
             ],
             'note'     => __('Cloudflare Email Sending requires a verified domain in your Cloudflare account and an API token with Email Sending permissions.', 'fluent-smtp')
         ],
+        'groundmail'  => [
+            'key'      => 'groundmail',
+            'title'    => __('Groundmail', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-groundmail.svg'),
+            'provider' => 'Groundmail',
+            'options'  => [
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'api_key'         => '',
+                'key_store'       => 'db'
+            ],
+            'note'     => __('Groundmail sends only from a domain verified in your Groundmail account.', 'fluent-smtp')
+        ],
         'default'     => [
             'key'      => 'default',
             'title'    => __('PHP mail()', 'fluent-smtp'),
