@@ -241,7 +241,7 @@ if (!function_exists('fluentMailGetProvider')) {
 
         if ($connection) {
             $factory = fluentMail(Factory::class);
-            $driver = $factory->make($connection['provider']);
+            $driver = clone $factory->make($connection['provider']);
             $driver->setSettings($connection);
             $providers[$fromEmail] = $driver;
         } else {
