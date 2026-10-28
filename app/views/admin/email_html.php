@@ -16,7 +16,7 @@
                 <!-- Header -->
                 <tr style="padding: 0; vertical-align: top; text-align: left;">
                     <td align="center" valign="middle" class="header" style="word-wrap: break-word; -webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto; border-collapse: collapse !important; vertical-align: top; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; margin: 0; Margin: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; text-align: center; padding: 30px 30px 22px 30px;">
-                        <img src="<?php echo esc_url( fluentMailMix('images/fluentsmtp.png')); ?>" width="164px" alt="Fluent SMTP Logo" style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 164px;">
+                        <img src="<?php echo esc_url( fluentMailMix('images/fluentsmtp.png')); ?>" width="164" alt="Fluent SMTP Logo" style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 164px;">
                     </td>
                 </tr>
                 <!-- Content -->
@@ -31,7 +31,7 @@
                             </p>
 
                             <p class="signature" style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; text-align: left; margin: 20px 0 0 0; Margin: 20px 0 0 0;">
-                                <img src="<?php echo esc_url( fluentMailMix('images/mail_signature.png')); ?>" width="250" alt="Fluent SMTP Logo" style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 150px;">
+                                <img src="<?php echo esc_url( fluentMailMix('images/mail_signature.png')); ?>" width="150" alt="Fluent SMTP Logo" style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 150px;">
                             </p>
                             <p style="-ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; color: #444; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight: normal; padding: 0; text-align: left; font-size: 14px; mso-line-height-rule: exactly; line-height: 140%; margin: 0 0 15px 0; Margin: 0 0 15px 0;">
                                 Shahjahan Jewel<br>

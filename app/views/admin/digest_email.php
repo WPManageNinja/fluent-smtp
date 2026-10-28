@@ -84,7 +84,7 @@
                                 </td>
                                 <td style="text-align: right;">
                                     <img src="<?php echo esc_url(fluentMailMix('images/fluentsmtp-white.png')); ?>"
-                                         width="164px" alt="Fluent SMTP Logo"
+                                         width="164" alt="Fluent SMTP Logo"
                                          style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 164px;">
                                 </td>
                             </tr>
@@ -201,8 +201,8 @@
                                 </td>
                                 <td style="text-align: right;width: 100px; padding-left: 15px;">
                                     <img src="<?php echo esc_url(fluentMailMix('images/fluentsmtp-white.png')); ?>"
-                                         width="164px" alt="Fluent SMTP Logo"
-                                         style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 164px;">
+                                         width="100" alt="Fluent SMTP Logo"
+                                         style="outline: none; text-decoration: none; max-width: 100%; clear: both; -ms-interpolation-mode: bicubic; display: inline-block !important; width: 100px;">
                                 </td>
                             </tr>
                         </table>
