@@ -32,7 +32,11 @@ return function () {
         return $bodies;
     };
 
-    /** Assert every img dimension attribute is unitless and return the logo tags. */
+    /**
+     * Assert every img dimension attribute is unitless and matches the inline
+     * CSS width, and return the logo tags. Classic Outlook sizes the image by
+     * the attribute alone, so a mismatch renders differently there.
+     */
     $assertImageDimensions = function ($html, $label) {
         preg_match_all('/<img\b[^>]*>/i', $html, $images);
         FsmtpTest::assert(count($images[0]) > 0, $label . ': no img tags rendered');
@@ -43,6 +47,16 @@ return function () {
                 FsmtpTest::assert(
                     (bool) preg_match('/^\d+$/', $attr[2]),
                     $label . ': img ' . $attr[1] . '="' . $attr[2] . '" is not a unitless integer'
+                );
+            }
+
+            if (preg_match('/\swidth\s*=\s*"(\d+)"/i', $tag, $widthAttr)
+                && preg_match('/\sstyle\s*=\s*"([^"]*)"/i', $tag, $style)
+                && preg_match('/(?:^|;)\s*width\s*:\s*(\d+)px/i', $style[1], $cssWidth)) {
+                FsmtpTest::assertSame(
+                    $cssWidth[1],
+                    $widthAttr[1],
+                    $label . ': img width attribute matches its inline CSS width'
                 );
             }
         }
@@ -86,10 +100,9 @@ return function () {
 
         $logos = $assertImageDimensions($bodies[0], 'digest');
         FsmtpTest::assertSame(2, count($logos), 'digest logo count');
-        foreach ($logos as $logo) {
-            FsmtpTest::assert(strpos($logo, ' width="164"') !== false, 'digest logo width attribute is 164');
-            FsmtpTest::assert(strpos($logo, 'width: 164px;') !== false, 'digest logo inline width is 164px');
-        }
+        // The header logo is 164px; the footer logo fits its 100px cell.
+        FsmtpTest::assert(strpos($logos[0], ' width="164"') !== false, 'digest header logo width attribute is 164');
+        FsmtpTest::assert(strpos($logos[1], ' width="100"') !== false, 'digest footer logo width attribute is 100');
     });
 
     FsmtpTest::case('HTML test email logo carries a unitless width attribute', function () use ($captureMail, $assertImageDimensions) {
