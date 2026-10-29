@@ -1019,19 +1019,10 @@ if (!function_exists('fluentMailEncryptDecrypt')) {
             return $value;
         }
 
-        if (defined('FLUENTMAIL_ENCRYPT_SALT')) {
-            $salt = FLUENTMAIL_ENCRYPT_SALT;
-        } else {
-            $salt = (defined('LOGGED_IN_SALT') && '' !== LOGGED_IN_SALT) ? LOGGED_IN_SALT : 'this-is-a-fallback-salt-but-not-secure';
-        }
-
-        if (defined('FLUENTMAIL_ENCRYPT_KEY')) {
-            $key = FLUENTMAIL_ENCRYPT_KEY;
-        } else {
-            $key = (defined('LOGGED_IN_KEY') && '' !== LOGGED_IN_KEY) ? LOGGED_IN_KEY : 'this-is-a-fallback-key-but-not-secure';
-        }
+        $keyPairs = fluentMailEncryptionKeyPairs($type == 'e');
 
         if ($type == 'e') {
+            list($key, $salt) = $keyPairs[0];
             $method = 'aes-256-ctr';
             $ivlen = openssl_cipher_iv_length($method);
             $iv = openssl_random_pseudo_bytes($ivlen);
@@ -1055,12 +1046,69 @@ if (!function_exists('fluentMailEncryptDecrypt')) {
 
         $raw_value = substr($raw_value, $ivlen);
 
-        $newValue = openssl_decrypt($raw_value, $method, $key, 0, $iv);
-        if (!$newValue || substr($newValue, -strlen($salt)) !== $salt) {
-            return false;
+        foreach ($keyPairs as $keyPair) {
+            list($key, $salt) = $keyPair;
+            $newValue = openssl_decrypt($raw_value, $method, $key, 0, $iv);
+            if ($newValue && substr($newValue, -strlen($salt)) === $salt) {
+                return substr($newValue, 0, -strlen($salt));
+            }
         }
 
-        return substr($newValue, 0, -strlen($salt));
+        return false;
+    }
+}
+
+if (!function_exists('fluentMailEncryptionKeyPairs')) {
+    /**
+     * The key and salt pairs used to encrypt and decrypt stored credentials.
+     *
+     * The first pair is used to encrypt. It comes from a random key the plugin
+     * stores itself, so it stays the same when the site rotates its WordPress
+     * salts. Before this key existed, the credentials were encrypted with
+     * LOGGED_IN_KEY and LOGGED_IN_SALT, so that pair is kept as a fallback for
+     * decrypting old values. The next save writes them with the stored key.
+     *
+     * FLUENTMAIL_ENCRYPT_KEY and FLUENTMAIL_ENCRYPT_SALT, when defined, win over both.
+     *
+     * @param bool $create Create the stored key if it does not exist yet.
+     * @return array List of [key, salt] pairs, the one to encrypt with first.
+     */
+    function fluentMailEncryptionKeyPairs($create = false)
+    {
+        $legacyKey = (defined('LOGGED_IN_KEY') && '' !== LOGGED_IN_KEY) ? LOGGED_IN_KEY : 'this-is-a-fallback-key-but-not-secure';
+        $legacySalt = (defined('LOGGED_IN_SALT') && '' !== LOGGED_IN_SALT) ? LOGGED_IN_SALT : 'this-is-a-fallback-salt-but-not-secure';
+
+        $stored = get_option('fluentmail_encryption_key');
+
+        if ((empty($stored['key']) || empty($stored['salt'])) && $create) {
+            $newKey = [
+                'key'  => bin2hex(random_bytes(32)),
+                'salt' => bin2hex(random_bytes(32)),
+            ];
+
+            // Another request may have created it first, so read it back if add fails.
+            $stored = add_option('fluentmail_encryption_key', $newKey, '', false) ? $newKey : get_option('fluentmail_encryption_key');
+        }
+
+        $pairs = [];
+
+        if (!empty($stored['key']) && !empty($stored['salt'])) {
+            $pairs[] = [
+                defined('FLUENTMAIL_ENCRYPT_KEY') ? FLUENTMAIL_ENCRYPT_KEY : $stored['key'],
+                defined('FLUENTMAIL_ENCRYPT_SALT') ? FLUENTMAIL_ENCRYPT_SALT : $stored['salt']
+            ];
+        }
+
+        $legacyPair = [
+            defined('FLUENTMAIL_ENCRYPT_KEY') ? FLUENTMAIL_ENCRYPT_KEY : $legacyKey,
+            defined('FLUENTMAIL_ENCRYPT_SALT') ? FLUENTMAIL_ENCRYPT_SALT : $legacySalt
+        ];
+
+        if (!in_array($legacyPair, $pairs, true)) {
+            $pairs[] = $legacyPair;
+        }
+
+        return $pairs;
     }
 }
 
