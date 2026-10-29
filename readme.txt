@@ -350,6 +350,7 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 == Changelog ==
 
 = 2.4.1 (Date: Sep 27, 2026) =
+- Improved Amazon SES connection settings validation
 - Fixed Outlook / Office 365 connections failing to authorize on servers where Microsoft returned an HTML error page instead of a token
 - Fixed resending or retrying a logged email dropping every Cc, Bcc and Reply-To address when there were two or more
 - Fixed the email log's To column showing serialized text for emails sent to many recipients. On existing sites, deleting all logs once widens the column
