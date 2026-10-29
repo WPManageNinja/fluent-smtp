@@ -18,7 +18,8 @@ trait SendTestEmailTrait
             $subject .= ' - ' . __('HTML Version', 'fluent-smtp');
         } else {
             $headers[] = 'Content-Type: text/plain; charset=UTF-8';
-            $body = (string)fluentMail('view')->make('admin.email_text');
+            // Plain text body is not rendered as HTML, so decode the entities added by esc_html
+            $body = wp_specialchars_decode((string)fluentMail('view')->make('admin.email_text'), ENT_QUOTES);
             $subject .= ' - ' . __('Text Version', 'fluent-smtp');
         }
 
