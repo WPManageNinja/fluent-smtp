@@ -89,6 +89,8 @@ class SettingsController extends Controller
 
             if (
                 Arr::get($data, 'connection.password') === SecretMasker::MASK
+                && Arr::get($data, 'connection.auth') === 'yes'
+                && Arr::get($data, 'connection.key_store', 'db') !== 'wp_config'
                 && SecretMasker::endpointChanged($data['connection'], $storedConnection)
             ) {
                 return $this->sendError([

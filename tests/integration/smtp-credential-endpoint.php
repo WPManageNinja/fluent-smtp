@@ -130,6 +130,33 @@ return function () {
         }
     });
 
+    FsmtpTest::case('an SMTP endpoint change without authentication saves without asking for the password', function () use ($withSmtpConnection, $save) {
+        FsmtpTest::assertMailSimulationActive();
+
+        $withSmtpConnection(function ($key, $sender, $connection) use ($save) {
+            $submitted = array_merge($connection, ['auth' => 'no', 'host' => 'smtp.changed.example.test', 'password' => SecretMasker::MASK]);
+            list($result, $stored) = $save($key, $sender, $submitted);
+
+            FsmtpTest::assertSame(200, $result['status'], 'auth off: HTTP status');
+            FsmtpTest::assertSame('smtp.changed.example.test', $stored['host'], 'auth off: stored host');
+            FsmtpTest::assert($stored['password'] !== 'suite-saved-secret', 'auth off: saved password not carried to the new host');
+        });
+    });
+
+    FsmtpTest::case('an SMTP endpoint change on wp-config storage is not answered with the re-enter message', function () use ($withSmtpConnection, $save) {
+        FsmtpTest::assertMailSimulationActive();
+
+        $withSmtpConnection(function ($key, $sender, $connection) use ($save) {
+            $submitted = array_merge($connection, ['key_store' => 'wp_config', 'host' => 'smtp.changed.example.test', 'password' => SecretMasker::MASK]);
+            list($result) = $save($key, $sender, $submitted);
+
+            FsmtpTest::assert(
+                strpos((string) wp_json_encode($result['data']), 'reenter') === false,
+                'wp-config storage: no re-enter error'
+            );
+        });
+    });
+
     FsmtpTest::case('masked secrets of providers without an editable endpoint still resolve', function () {
         $stored = ['provider' => 'sendgrid', 'api_key' => 'suite-sendgrid-key'];
         $resolved = SecretMasker::resolve(['provider' => 'sendgrid', 'api_key' => SecretMasker::MASK, 'sender_name' => 'Other'], $stored);
