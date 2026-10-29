@@ -134,6 +134,39 @@ class SecretMasker
         'cloudflare'  => ['api_key' => 1],
     ];
 
+    const ENDPOINT_FIELDS = [
+        'smtp' => ['host', 'port', 'username'],
+    ];
+
+    public static function endpointChanged($values, $stored)
+    {
+        if (!is_array($values) || !is_array($stored) || !$stored) {
+            return false;
+        }
+
+        $provider = isset($values['provider']) ? $values['provider'] : '';
+
+        if (!isset(static::ENDPOINT_FIELDS[$provider])) {
+            return false;
+        }
+
+        foreach (static::ENDPOINT_FIELDS[$provider] as $field) {
+            $submitted = isset($values[$field]) && is_scalar($values[$field]) ? trim((string)$values[$field]) : '';
+            $saved = isset($stored[$field]) && is_scalar($stored[$field]) ? trim((string)$stored[$field]) : '';
+
+            if ($field === 'host') {
+                $submitted = strtolower($submitted);
+                $saved = strtolower($saved);
+            }
+
+            if ($submitted !== $saved) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Replace every stored credential in a settings array with the mask.
      *
@@ -274,13 +307,14 @@ class SecretMasker
 
         $fields = is_null($fields) ? static::SECRET_FIELDS : $fields;
         $stored = is_array($stored) ? $stored : [];
+        $endpointChanged = static::endpointChanged($values, $stored);
 
         foreach ($fields as $field) {
             if (!isset($values[$field]) || $values[$field] !== static::MASK) {
                 continue;
             }
 
-            $values[$field] = isset($stored[$field]) && is_string($stored[$field])
+            $values[$field] = !$endpointChanged && isset($stored[$field]) && is_string($stored[$field])
                 ? $stored[$field]
                 : '';
         }
