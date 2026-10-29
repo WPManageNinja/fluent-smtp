@@ -42,6 +42,17 @@
             </el-form-item>
         </div>
 
+        <el-form-item>
+            <label for="sendgrid-region">{{ $t('API Region') }}</label>
+            <el-select id="sendgrid-region" v-model="connection.region">
+                <el-option value="global" :label="$t('Global (api.sendgrid.com)')" />
+                <el-option value="eu" :label="$t('EU (api.eu.sendgrid.com)')" />
+            </el-select>
+            <span class="small-help-text">
+                {{ $t('__SENDGRID_REGION_TIP') }}
+            </span>
+        </el-form-item>
+
         <span class="small-help-text" style="display:block;margin-top:-10px">
             {{ $t('Get an API key from SendGrid:') }}
             <a target="_blank" href="https://app.sendgrid.com/settings/api_keys">{{ $t('Create API Key.') }}</a>
@@ -77,6 +88,11 @@
             return {
                 // ...
             };
+        },
+        created() {
+            if (!this.connection.region) {
+                this.connection.region = 'global';
+            }
         }
     };
 </script>
