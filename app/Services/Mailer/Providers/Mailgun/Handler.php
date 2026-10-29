@@ -40,19 +40,20 @@ class Handler extends BaseHandler
     {
         $content_type = $this->getHeader('content-type');
         $body = [
-            'from'           => $this->getFrom(),
-            'subject'        => $this->getSubject(),
-            'h:X-Mailer'     => 'FluentMail - Mailgun',
-            'h:Content-Type' => $content_type
+            'from'       => $this->getFrom(),
+            'subject'    => $this->getSubject(),
+            'h:X-Mailer' => 'FluentMail - Mailgun'
         ];
 
-        if (stripos($content_type, 'html') === false) {
-            $body['text'] = $this->getBody();
-        } else if ($content_type == 'multipart/alternative') {
+        if (strtolower($content_type) == 'multipart/alternative') {
             $body['html'] = $this->getBody();
-            $body['text'] = $this->phpMailer->AltBody;
+            if ((string)$this->phpMailer->AltBody !== '') {
+                $body['text'] = $this->phpMailer->AltBody;
+            }
+        } else if (stripos($content_type, 'html') !== false) {
+            $body['html'] = $this->getBody();
         } else {
-            $body['html'] = $this->getBody();
+            $body['text'] = $this->getBody();
         }
 
         if ($replyTo = $this->getReplyTo()) {
@@ -232,8 +233,6 @@ class Handler extends BaseHandler
             $params['body'] = $payload;
 
             $params['headers']['Content-Type'] = 'multipart/form-data; boundary=' . $boundary;
-
-            $this->attributes['headers']['content-type'] = 'multipart/form-data';
         }
 
         return $params;
