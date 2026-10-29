@@ -82,13 +82,23 @@ class SettingsController extends Controller
              * of a mask is the dashboard's offer to import another SMTP plugin's
              * settings, which arrive masked too; those resolve from the Converter.
              */
-            $data['connection'] = SecretMasker::resolve(
-                $data['connection'],
-                $this->getStoredConnection(
-                    Arr::get($data, 'connection_key'),
-                    Arr::get($data, 'connection.provider')
-                ) ?: $this->getSuggestedConnection(Arr::get($data, 'connection.provider'))
-            );
+            $storedConnection = $this->getStoredConnection(
+                Arr::get($data, 'connection_key'),
+                Arr::get($data, 'connection.provider')
+            ) ?: $this->getSuggestedConnection(Arr::get($data, 'connection.provider'));
+
+            if (
+                Arr::get($data, 'connection.password') === SecretMasker::MASK
+                && SecretMasker::endpointChanged($data['connection'], $storedConnection)
+            ) {
+                return $this->sendError([
+                    'password' => [
+                        'reenter' => __('Enter the SMTP password again. The host, port or username changed, so the saved password is not reused.', 'fluent-smtp')
+                    ]
+                ], 422);
+            }
+
+            $data['connection'] = SecretMasker::resolve($data['connection'], $storedConnection);
 
             $provider = $factory->make($data['connection']['provider']);
 

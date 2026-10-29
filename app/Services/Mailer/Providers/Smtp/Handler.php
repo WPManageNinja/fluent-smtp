@@ -248,12 +248,39 @@ class Handler extends BaseHandler
     public function setSettings($settings)
     {
         if (Arr::get($settings, 'key_store') == 'wp_config') {
-            $settings['username'] = defined('FLUENTMAIL_SMTP_USERNAME') ? FLUENTMAIL_SMTP_USERNAME : '';
-            $settings['password'] = defined('FLUENTMAIL_SMTP_PASSWORD') ? FLUENTMAIL_SMTP_PASSWORD : '';
+            $bound = static::matchesWpConfigEndpoint($settings);
+            $settings['username'] = $bound && defined('FLUENTMAIL_SMTP_USERNAME') ? FLUENTMAIL_SMTP_USERNAME : '';
+            $settings['password'] = $bound && defined('FLUENTMAIL_SMTP_PASSWORD') ? FLUENTMAIL_SMTP_PASSWORD : '';
         }
 
         $this->settings = $settings;
 
         return $this;
+    }
+
+    public static function wpConfigEndpointMismatches($settings)
+    {
+        $mismatches = [];
+
+        if (defined('FLUENTMAIL_SMTP_HOST')) {
+            $host = strtolower(trim((string)Arr::get($settings, 'host')));
+
+            if ($host !== strtolower(trim((string)FLUENTMAIL_SMTP_HOST))) {
+                $mismatches[] = 'host';
+            }
+        }
+
+        if (defined('FLUENTMAIL_SMTP_PORT')) {
+            if (trim((string)Arr::get($settings, 'port')) !== trim((string)FLUENTMAIL_SMTP_PORT)) {
+                $mismatches[] = 'port';
+            }
+        }
+
+        return $mismatches;
+    }
+
+    public static function matchesWpConfigEndpoint($settings)
+    {
+        return !static::wpConfigEndpointMismatches($settings);
     }
 }

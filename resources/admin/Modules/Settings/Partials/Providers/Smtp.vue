@@ -149,7 +149,10 @@
                     <label>{{ $t('__WP_CONFIG_INSTRUCTION') }}</label>
                     <div class="code_snippet">
                         <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_SMTP_USERNAME', '********************' );
-define( 'FLUENTMAIL_SMTP_PASSWORD', '********************' );</textarea>
+define( 'FLUENTMAIL_SMTP_PASSWORD', '********************' );
+// Optional: use these credentials only with this host and port
+define( 'FLUENTMAIL_SMTP_HOST', 'smtp.example.com' );
+define( 'FLUENTMAIL_SMTP_PORT', '587' );</textarea>
                     </div>
                     <error :error="errors.get('username')"/>
                     <error :error="errors.get('password')"/>
