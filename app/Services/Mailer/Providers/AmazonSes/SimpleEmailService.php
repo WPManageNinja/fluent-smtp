@@ -69,6 +69,10 @@ class SimpleEmailService
      */
     public static function regionToHost($region)
     {
+        if (!self::isValidRegion($region)) {
+            return '';
+        }
+
         if (strpos($region, 'eusc-') === 0) {
             // AWS European Sovereign Cloud partition (aws-eusc)
             $domain = 'amazonaws.eu';
@@ -80,6 +84,32 @@ class SimpleEmailService
         }
 
         return 'email.' . $region . '.' . $domain;
+    }
+
+    private static function getRegions()
+    {
+        static $regions;
+        if ($regions === null) {
+            $config = require dirname(__DIR__) . '/config.php';
+            $regions = $config['providers']['ses']['regions'];
+        }
+
+        return $regions;
+    }
+
+    public static function isValidRegion($region)
+    {
+        return is_string($region) && isset(self::getRegions()[$region]);
+    }
+
+    public static function isValidHost($host)
+    {
+        static $hosts;
+        if ($hosts === null) {
+            $hosts = array_fill_keys(array_map([self::class, 'regionToHost'], array_keys(self::getRegions())), true);
+        }
+
+        return is_string($host) && isset($hosts[$host]);
     }
 
     /**
@@ -658,7 +688,7 @@ class SimpleEmailService
     {
         if ($error == false) {
             return sprintf("SimpleEmailService::%s(): Encountered an error, but no description given", $functionname);
-        } else if (isset($error['curl']) && $error['curl']) {
+        } else if ((isset($error['curl']) && $error['curl']) || isset($error['code'], $error['message'])) {
             return sprintf("SimpleEmailService::%s(): %s %s", $functionname, $error['code'], $error['message']);
         } else if (isset($error['Error'])) {
             $e = $error['Error'];
