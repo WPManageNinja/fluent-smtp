@@ -69,16 +69,29 @@ class ActionsRegistrar
      *
      * Done on app load rather than on activation or a scheduled pass: a plugin
      * update does not reliably run the activation hook, and a stale secret
-     * should not sit in the database for up to a day waiting on cron. The
-     * lookup is served from the options cache, so the common case where the
-     * option is already gone costs no query.
+     * should not sit in the database for up to a day waiting on cron.
+     *
+     * The check reads the autoloaded options WordPress has already loaded
+     * instead of calling get_option(). For an option that does not exist,
+     * get_option() runs a query on every request unless a persistent object
+     * cache is installed: the "not found" note lives only for the current
+     * request. The old code wrote this option with update_option() and no
+     * autoload argument, which stores it autoloaded ('yes' before WordPress
+     * 6.6, 'auto' since), so an install that still holds it has it in that
+     * list. In wp-admin the full lookup stays as a fallback for a row whose
+     * autoload flag was changed by hand.
      *
      * @return void
      */
     protected function purgeLegacyOutlookSecret()
     {
-        if (get_option('_fluentsmtp_intended_outlook_info') !== false) {
-            delete_option('_fluentsmtp_intended_outlook_info');
+        $option = '_fluentsmtp_intended_outlook_info';
+
+        $exists = array_key_exists($option, wp_load_alloptions())
+            || (is_admin() && get_option($option) !== false);
+
+        if ($exists) {
+            delete_option($option);
         }
     }
 

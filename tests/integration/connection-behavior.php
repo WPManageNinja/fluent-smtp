@@ -483,11 +483,11 @@ return function () {
         );
 
         $existing = get_option('_fluentsmtp_intended_outlook_info');
-        add_option(
+        // Stored the way the old code wrote it: update_option() without an
+        // autoload argument, which keeps the row autoloaded.
+        update_option(
             '_fluentsmtp_intended_outlook_info',
-            ['client_secret' => FsmtpTest::uniq('legacy-secret')],
-            '',
-            'no'
+            ['client_secret' => FsmtpTest::uniq('legacy-secret')]
         );
 
         try {
@@ -503,6 +503,30 @@ return function () {
             );
         } finally {
             delete_option('_fluentsmtp_intended_outlook_info');
+            if ($existing !== false) {
+                update_option('_fluentsmtp_intended_outlook_info', $existing);
+            }
+        }
+    });
+
+    FsmtpTest::case('app-load Outlook purge runs no query once the option is gone', function () {
+        global $wpdb;
+
+        $existing = get_option('_fluentsmtp_intended_outlook_info');
+        delete_option('_fluentsmtp_intended_outlook_info');
+
+        try {
+            // A fresh request has no "not found" note for this option yet.
+            wp_cache_delete('notoptions', 'options');
+            wp_load_alloptions();
+
+            $purge = new ReflectionMethod(ActionsRegistrar::class, 'purgeLegacyOutlookSecret');
+            $purge->setAccessible(true);
+
+            $before = $wpdb->num_queries;
+            $purge->invoke(new ActionsRegistrar(fluentMail()));
+            FsmtpTest::assertSame(0, $wpdb->num_queries - $before, 'queries run by the purge when the option is absent');
+        } finally {
             if ($existing !== false) {
                 update_option('_fluentsmtp_intended_outlook_info', $existing);
             }
