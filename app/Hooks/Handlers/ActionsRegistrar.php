@@ -58,7 +58,18 @@ class ActionsRegistrar
 
         $this->registerCliCommands();
 
-        $this->purgeLegacyOutlookSecret();
+        if ($this->shouldPurgeLegacyOutlookSecret()) {
+            $this->purgeLegacyOutlookSecret();
+        }
+    }
+
+    protected function shouldPurgeLegacyOutlookSecret()
+    {
+        if (is_admin() || wp_doing_cron()) {
+            return true;
+        }
+
+        return array_key_exists('_fluentsmtp_intended_outlook_info', wp_load_alloptions());
     }
 
     /**
