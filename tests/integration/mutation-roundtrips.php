@@ -1,6 +1,7 @@
 <?php
 
 use FluentMail\App\Models\Settings;
+use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\NotificationHelper;
 use FluentMail\App\Services\SecretMasker;
 use FluentMail\Includes\Support\Arr;
@@ -17,6 +18,7 @@ return function () {
         $optionNames = [
             'fluentmail-settings',
             '_fluent_smtp_notify_settings',
+            ConnectionHealth::OPTION_KEY,
         ];
         $fingerprints = function () use ($wpdb, $optionNames) {
             $result = [];
@@ -107,6 +109,154 @@ return function () {
             'send_as_text'            => 'no',
         ];
     };
+
+    /** A no-auth SMTP fixture reaches the real save path without opening a socket. */
+    $smtpConnection = function ($sender, $host = 'smtp.example.test') {
+        return [
+            'provider'         => 'smtp',
+            'sender_name'      => 'Suite SMTP Sender',
+            'sender_email'     => $sender,
+            'force_from_name'  => 'no',
+            'force_from_email' => 'yes',
+            'return_path'      => 'yes',
+            'host'             => $host,
+            'port'             => 2525,
+            'auth'             => 'no',
+            'username'         => '',
+            'password'         => '',
+            'auto_tls'         => 'yes',
+            'encryption'       => 'none',
+            'key_store'        => 'db',
+        ];
+    };
+
+    $failedHealth = function ($sender, $provider = 'smtp') {
+        return [
+            'sender_email' => $sender,
+            'provider'     => $provider,
+            'status'       => ConnectionHealth::STATUS_ERROR,
+            'message'      => 'Connection needs attention.',
+            'checked_at'   => '2026-01-01 00:00:00',
+        ];
+    };
+
+    FsmtpTest::case('saving a valid connection clears its stale health error', function () use (
+        $withOptionTransaction,
+        $baseMisc,
+        $smtpConnection,
+        $failedHealth
+    ) {
+        $withOptionTransaction(function () use ($baseMisc, $smtpConnection, $failedHealth) {
+            $sender = 'smtp-health-' . FsmtpTest::uniq() . '@example.test';
+            $connectionKey = md5($sender);
+            $initial = [
+                'connections' => [
+                    $connectionKey => [
+                        'title'             => 'Suite SMTP',
+                        'provider_settings' => $smtpConnection($sender),
+                    ],
+                ],
+                'mappings' => [$sender => $connectionKey],
+                'misc'     => $baseMisc($connectionKey),
+            ];
+
+            fluentMailSetSettings($initial);
+            update_option(ConnectionHealth::OPTION_KEY, [
+                $connectionKey => $failedHealth($sender),
+            ], false);
+
+            $save = FsmtpTest::ajax('POST', '/settings', [
+                'connection_key' => $connectionKey,
+                'connection'     => $smtpConnection($sender),
+            ]);
+            FsmtpTest::assertAjaxHealthy($save, 'save valid SMTP connection');
+
+            $health = Arr::get($save, 'data.data.health.' . $connectionKey, []);
+            FsmtpTest::assertSame(ConnectionHealth::STATUS_HEALTHY, Arr::get($health, 'status'), 'saved connection health status');
+            FsmtpTest::assertSame('', Arr::get($health, 'message'), 'saved connection health message');
+            FsmtpTest::assertSame($sender, Arr::get($health, 'sender_email'), 'saved connection health sender');
+            FsmtpTest::assert(!empty(Arr::get($health, 'checked_at')), 'saved connection health timestamp');
+        });
+    });
+
+    FsmtpTest::case('saving a connection with a new sender email moves its health report key', function () use (
+        $withOptionTransaction,
+        $baseMisc,
+        $smtpConnection,
+        $failedHealth
+    ) {
+        $withOptionTransaction(function () use ($baseMisc, $smtpConnection, $failedHealth) {
+            $oldSender = 'smtp-old-' . FsmtpTest::uniq() . '@example.test';
+            $newSender = 'smtp-new-' . FsmtpTest::uniq() . '@example.test';
+            $oldKey = md5($oldSender);
+            $newKey = md5($newSender);
+            $initial = [
+                'connections' => [
+                    $oldKey => [
+                        'title'             => 'Suite SMTP',
+                        'provider_settings' => $smtpConnection($oldSender),
+                    ],
+                ],
+                'mappings' => [$oldSender => $oldKey],
+                'misc'     => $baseMisc($oldKey),
+            ];
+
+            fluentMailSetSettings($initial);
+            update_option(ConnectionHealth::OPTION_KEY, [
+                $oldKey => $failedHealth($oldSender),
+            ], false);
+
+            $save = FsmtpTest::ajax('POST', '/settings', [
+                'connection_key' => $oldKey,
+                'connection'     => $smtpConnection($newSender),
+            ]);
+            FsmtpTest::assertAjaxHealthy($save, 'save SMTP connection with new sender');
+
+            $health = Arr::get($save, 'data.data.health', []);
+            FsmtpTest::assert(!isset($health[$oldKey]), 'old sender health report was removed');
+            FsmtpTest::assertSame(ConnectionHealth::STATUS_HEALTHY, Arr::get($health, $newKey . '.status'), 'new sender health status');
+            FsmtpTest::assertSame($newSender, Arr::get($health, $newKey . '.sender_email'), 'new sender health identity');
+
+            $settings = fluentMailGetSettings([], false);
+            FsmtpTest::assert(!isset($settings['connections'][$oldKey]), 'old sender connection was removed');
+            FsmtpTest::assert(isset($settings['connections'][$newKey]), 'new sender connection was stored');
+        });
+    });
+
+    FsmtpTest::case('failed connection save keeps the previous health error', function () use (
+        $withOptionTransaction,
+        $baseMisc,
+        $smtpConnection,
+        $failedHealth
+    ) {
+        $withOptionTransaction(function () use ($baseMisc, $smtpConnection, $failedHealth) {
+            $sender = 'smtp-invalid-' . FsmtpTest::uniq() . '@example.test';
+            $connectionKey = md5($sender);
+            $initial = [
+                'connections' => [
+                    $connectionKey => [
+                        'title'             => 'Suite SMTP',
+                        'provider_settings' => $smtpConnection($sender),
+                    ],
+                ],
+                'mappings' => [$sender => $connectionKey],
+                'misc'     => $baseMisc($connectionKey),
+            ];
+
+            fluentMailSetSettings($initial);
+            $before = $failedHealth($sender);
+            update_option(ConnectionHealth::OPTION_KEY, [$connectionKey => $before], false);
+
+            $invalid = $smtpConnection($sender, '');
+            $save = FsmtpTest::ajax('POST', '/settings', [
+                'connection_key' => $connectionKey,
+                'connection'     => $invalid,
+            ]);
+
+            FsmtpTest::assert(isset($save['data']['success']) && $save['data']['success'] === false, 'invalid connection save was rejected');
+            FsmtpTest::assertSame($before, Arr::get(get_option(ConnectionHealth::OPTION_KEY), $connectionKey), 'failed save preserved health report');
+        });
+    });
 
     FsmtpTest::case('global settings round-trip preserves OAuth tokens during an unrelated misc save', function () use (
         $withOptionTransaction,

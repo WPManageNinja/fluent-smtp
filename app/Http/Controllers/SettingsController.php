@@ -132,11 +132,21 @@ class SettingsController extends Controller
 
             $settings->store($data);
 
+            $currentConnectionKey = $settings->generateUniqueKey(
+                Arr::get($data, 'connection.sender_email')
+            );
+            $health = (new ConnectionHealth())->markHealthy(
+                Arr::get($data, 'connection_key'),
+                $currentConnectionKey,
+                Arr::get($data, 'connection', [])
+            );
+
             return $this->sendSuccess([
                 'message'     => __('Settings saved.', 'fluent-smtp'),
                 'connections' => SecretMasker::maskConnections($settings->getConnections()),
                 'mappings'    => $settings->getMappings(),
-                'misc'        => $settings->getMisc()
+                'misc'        => $settings->getMisc(),
+                'health'      => $health
             ]);
         } catch (ValidationException $e) {
             return $this->sendError($e->errors(), 422);
