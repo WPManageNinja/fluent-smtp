@@ -17,6 +17,11 @@ class Handler extends BaseHandler
 
     protected $url = 'https://api.sendgrid.com/v3/mail/send';
 
+    protected $regionHosts = [
+        'global' => 'api.sendgrid.com',
+        'eu'     => 'api.eu.sendgrid.com',
+    ];
+
     public function send()
     {
         if ($this->preSend()) {
@@ -51,7 +56,7 @@ class Handler extends BaseHandler
 
         $params = array_merge($params, $this->getDefaultParams());
 
-        $response = wp_safe_remote_post($this->url, $params);
+        $response = wp_safe_remote_post($this->getApiUrl(), $params);
 
         if (is_wp_error($response)) {
             $returnResponse = new \WP_Error($response->get_error_code(), $response->get_error_message(), $response->get_error_messages());
@@ -74,6 +79,15 @@ class Handler extends BaseHandler
         $this->response = $returnResponse;
 
         return $this->handleResponse($this->response);
+    }
+
+    protected function getApiUrl()
+    {
+        $region = $this->getSetting('region');
+
+        return is_string($region) && isset($this->regionHosts[$region])
+            ? 'https://' . $this->regionHosts[$region] . '/v3/mail/send'
+            : $this->url;
     }
 
     protected function getFrom()

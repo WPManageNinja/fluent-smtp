@@ -132,7 +132,8 @@ return [
                 'sender_email'    => '',
                 'force_from_name' => 'no',
                 'api_key'         => '',
-                'key_store'       => 'db'
+                'key_store'       => 'db',
+                'region'          => 'global'
             ],
             'note'     => '<a href="https://fluentsmtp.com/docs/set-up-the-sendgrid-driver-in-fluent-smtp/" target="_blank" rel="noopener">' . __('Read the documentation', 'fluent-smtp') . '</a>' . __(' for how to configure SendGrid with FluentSMTP.', 'fluent-smtp')
         ],
