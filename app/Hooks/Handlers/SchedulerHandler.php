@@ -215,6 +215,11 @@ class SchedulerHandler
             return false;
         }
 
+        if (!\FluentMail\App\Models\Settings::isActiveConnection($fallbackConnection)) {
+            do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
+            return false;
+        }
+
         $phpMailer = $handler->getPhpMailer();
 
         $fallbackSettings = $fallbackConnection['provider_settings'];
@@ -236,6 +241,10 @@ class SchedulerHandler
         $connections = Arr::get($settings, 'connections', []);
 
         foreach ($connections as $connection) {
+            if (!\FluentMail\App\Models\Settings::isActiveConnection($connection)) {
+                continue;
+            }
+
             if (Arr::get($connection, 'provider_settings.provider') != 'gmail') {
                 continue;
             }
@@ -327,6 +336,10 @@ class SchedulerHandler
         $connections = Arr::get($settings, 'connections', []);
 
         foreach ($connections as $connection) {
+            if (!\FluentMail\App\Models\Settings::isActiveConnection($connection)) {
+                continue;
+            }
+
             $providerSettings = Arr::get($connection, 'provider_settings', []);
 
             if (Arr::get($providerSettings, 'provider') != 'outlook') {

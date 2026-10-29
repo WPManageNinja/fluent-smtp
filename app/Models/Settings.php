@@ -31,6 +31,7 @@ class Settings
         $email = Arr::get($inputs, 'connection.sender_email');
 
         $key = $inputs['connection_key'];
+        $isActive = isset($connections[$key]) ? self::isActiveConnection($connections[$key]) : true;
 
         if (isset($connections[$key])) {
             $mappings = array_filter($mappings, function ($mappingKey) use ($key) {
@@ -66,6 +67,7 @@ class Settings
 
         $connections[$uniqueKey] = [
             'title'             => $title,
+            'is_active'         => $isActive,
             'provider_settings' => $inputs['connection']
         ];
 
@@ -216,7 +218,10 @@ class Settings
 
         if (isset($mappings[$email])) {
             if (isset($connections[$mappings[$email]])) {
-                return $connections[$mappings[$email]];
+                $connection = $connections[$mappings[$email]];
+                if (self::isActiveConnection($connection)) {
+                    return $connection;
+                }
             }
         }
 
@@ -257,6 +262,41 @@ class Settings
         $this->saveGlobalSettings($settings);
 
         return true;
+    }
+
+    /**
+     * Whether a saved connection is enabled for routing and health checks.
+     * Connections created before this setting existed remain active by default.
+     *
+     * @param array $connection
+     * @return bool
+     */
+    public static function isActiveConnection($connection)
+    {
+        $active = Arr::get($connection, 'is_active', true);
+
+        return !in_array($active, [false, 0, '0', 'no', 'inactive'], true);
+    }
+
+    /**
+     * Update a saved connection's active state without changing its credentials.
+     *
+     * @param string $key
+     * @param bool $isActive
+     * @return array|false Updated settings, or false if the connection is missing.
+     */
+    public function setConnectionActive($key, $isActive)
+    {
+        $settings = $this->getSettings();
+
+        if (!isset($settings['connections'][$key])) {
+            return false;
+        }
+
+        $settings['connections'][$key]['is_active'] = (bool) $isActive;
+        $this->saveGlobalSettings($settings);
+
+        return $settings;
     }
 
     public function notificationSettings()

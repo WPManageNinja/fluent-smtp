@@ -230,6 +230,32 @@ class SettingsController extends Controller
         return $this->sendSuccess(SecretMasker::mask($settings));
     }
 
+    public function setConnectionStatus(Request $request, Settings $settings)
+    {
+        $this->verify();
+
+        $key = sanitize_text_field((string) $request->get('key'));
+        $isActive = filter_var($request->get('is_active'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+        if (!$key || !$request->exists('is_active') || $isActive === null) {
+            return $this->sendError([
+                'message' => __('A connection and valid status are required.', 'fluent-smtp')
+            ], 422);
+        }
+
+        $updated = $settings->setConnectionActive($key, $isActive);
+        if (!$updated) {
+            return $this->sendError([
+                'message' => __('The connection could not be found.', 'fluent-smtp')
+            ], 404);
+        }
+
+        return $this->sendSuccess([
+            'message'     => __('Connection status updated.', 'fluent-smtp'),
+            'connections' => SecretMasker::maskConnections($updated['connections'])
+        ]);
+    }
+
     public function sendTestEmail(Request $request, Settings $settings)
     {
         $this->verify();

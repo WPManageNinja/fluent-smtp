@@ -34,6 +34,10 @@ class ConnectionHealth
         $report = [];
 
         foreach ($connections as $key => $connection) {
+            if (!\FluentMail\App\Models\Settings::isActiveConnection($connection)) {
+                continue;
+            }
+
             $providerSettings = Arr::get($connection, 'provider_settings', []);
 
             if (!$providerSettings) {
@@ -80,7 +84,11 @@ class ConnectionHealth
 
         $connections = Arr::get(fluentMailGetSettings(), 'connections', []);
 
-        return array_intersect_key($report, $connections);
+        $activeConnections = array_filter($connections, function ($connection) {
+            return \FluentMail\App\Models\Settings::isActiveConnection($connection);
+        });
+
+        return array_intersect_key($report, $activeConnections);
     }
 
     /**

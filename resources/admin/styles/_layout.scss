@@ -1236,6 +1236,15 @@ a.fsm_tile:hover {
         padding: 0 7px;
     }
 
+    &.is_inactive {
+        @apply border border-solid;
+
+        background: transparent;
+        color: var(--fsm-text-light);
+        border-color: var(--fsm-border);
+        padding: 0 7px;
+    }
+
     /*
      * The extra-senders mark is the one tag you can press, so it is the one tag drawn
      * dashed: a solid outline would have read as a second Fallback sitting beside the
@@ -1284,6 +1293,13 @@ a.fsm_tile:hover {
 
     &:hover {
         @apply bg-surface-sunk;
+    }
+
+    &.is_inactive {
+        .fsm_conn_provider,
+        .fsm_conn_main {
+            opacity: .58;
+        }
     }
 }
 
