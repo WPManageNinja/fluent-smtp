@@ -254,7 +254,6 @@ class TransStrings
             'New email address, e.g. sender@' => __('New email address, e.g. sender@', 'fluent-smtp'),
             'Next' => __('Next', 'fluent-smtp'),
             'No' => __('No', 'fluent-smtp'),
-            'No account email is available for the current user.' => __('No account email is available for the current user.', 'fluent-smtp'),
             'No documentation matched that.' => __('No documentation matched that.', 'fluent-smtp'),
             'No emails in this range.' => __('No emails in this range.', 'fluent-smtp'),
             'No emails were sent in this date range.' => __('No emails were sent in this date range.', 'fluent-smtp'),

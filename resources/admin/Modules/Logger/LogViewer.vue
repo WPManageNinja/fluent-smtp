@@ -290,7 +290,7 @@ export default {
             name = name[0].replace(/\\/g, '/');
             return name.split('/').pop();
         },
-        handleRetry(log, type, recipients = null) {
+        handleRetry(log, type, recipients = null, target = null) {
             this.retrying = true;
 
             const payload = {
@@ -300,6 +300,10 @@ export default {
 
             if (recipients && recipients.length) {
                 payload.recipients = recipients;
+            }
+
+            if (target) {
+                payload.target = target;
             }
 
             return this.$post('logs/retry', payload).then(res => {
@@ -335,10 +339,10 @@ export default {
                 return;
             }
 
-            const recipients = payload.target === 'original' ? null : payload.recipients;
+            const recipients = payload.target === 'custom' ? payload.recipients : null;
 
             this.resendDialog.resending = true;
-            this.handleRetry(log, 'resend', recipients).always(() => {
+            this.handleRetry(log, 'resend', recipients, payload.target).always(() => {
                 this.resendDialog.resending = false;
                 this.resendDialog.visible = false;
             });
