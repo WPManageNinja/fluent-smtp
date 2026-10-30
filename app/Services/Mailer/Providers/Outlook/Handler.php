@@ -231,23 +231,17 @@ class Handler extends BaseHandler
         $attachments = [];
 
         foreach ((array)$this->getParam('attachments') as $attachment) {
-            $isString = !empty($attachment[5]);
-
-            if ($isString) {
-                $content = (string)$attachment[0];
-            } else {
-                try {
-                    $content = $this->secureFileRead($attachment[0]);
-                } catch (\Exception $e) {
-                    $this->logAttachmentFailure('Outlook', $e);
-                    continue;
-                }
+            try {
+                $content = self::attachmentContent($attachment);
+            } catch (\Exception $e) {
+                $this->logAttachmentFailure('Outlook', $e);
+                continue;
             }
 
             $row = [
                 '@odata.type'  => '#microsoft.graph.fileAttachment',
-                'name'         => $this->getAttachmentName($attachment),
-                'contentType'  => $this->attachmentContentType($attachment, $isString),
+                'name'         => self::getAttachmentName($attachment),
+                'contentType'  => self::attachmentType($attachment),
                 'contentBytes' => base64_encode($content)
             ];
 
@@ -260,28 +254,6 @@ class Handler extends BaseHandler
         }
 
         return $attachments;
-    }
-
-    /**
-     * @param array $attachment One row of PHPMailer::getAttachments()
-     * @param bool $isString Whether index 0 is the content rather than a path
-     * @return string
-     */
-    private function attachmentContentType($attachment, $isString)
-    {
-        if (!empty($attachment[4])) {
-            return $attachment[4];
-        }
-
-        if (!$isString && function_exists('mime_content_type')) {
-            $type = @mime_content_type($attachment[0]);
-
-            if ($type) {
-                return $type;
-            }
-        }
-
-        return 'application/octet-stream';
     }
 
     public function validateProviderInformation($connection)
