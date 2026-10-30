@@ -83,6 +83,8 @@ return array(
     'FluentMail\\App\\Services\\Mailer\\Providers\\Smtp\\ValidatorTrait' => $baseDir . '/app/Services/Mailer/Providers/Smtp/ValidatorTrait.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\SparkPost\\Handler' => $baseDir . '/app/Services/Mailer/Providers/SparkPost/Handler.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\SparkPost\\ValidatorTrait' => $baseDir . '/app/Services/Mailer/Providers/SparkPost/ValidatorTrait.php',
+    'FluentMail\\App\\Services\\Mailer\\Providers\\Sweego\\Handler' => $baseDir . '/app/Services/Mailer/Providers/Sweego/Handler.php',
+    'FluentMail\\App\\Services\\Mailer\\Providers\\Sweego\\ValidatorTrait' => $baseDir . '/app/Services/Mailer/Providers/Sweego/ValidatorTrait.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\ToSend\\Handler' => $baseDir . '/app/Services/Mailer/Providers/ToSend/Handler.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\ToSend\\ValidatorTrait' => $baseDir . '/app/Services/Mailer/Providers/ToSend/ValidatorTrait.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\TransMail\\Handler' => $baseDir . '/app/Services/Mailer/Providers/TransMail/Handler.php',

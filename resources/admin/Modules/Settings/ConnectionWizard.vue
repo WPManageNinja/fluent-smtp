@@ -176,6 +176,7 @@ import each from 'lodash/each';
 import ConnectionProvider from './Partials/_ConnectionSelector';
 import Tosend from "./Partials/Providers/Tosend.vue";
 import cloudflare from './Partials/Providers/Cloudflare';
+import sweego from './Partials/Providers/Sweego';
 
 export default {
     name: 'ConnectionWizard',
@@ -196,7 +197,8 @@ export default {
         Error,
         ConnectionProvider,
         Tosend,
-        cloudflare
+        cloudflare,
+        sweego
     },
     data() {
         return {

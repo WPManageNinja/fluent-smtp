@@ -29,6 +29,7 @@ Connect as many email Service Providers as you want, and FluentSMTP will route y
 - Postmark
 - SparkPost
 - SMTP2GO
+- Sweego
 - Elastic Email
 - Zoho via SMTP
 - Any SMTP email provider

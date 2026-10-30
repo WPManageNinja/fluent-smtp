@@ -132,6 +132,7 @@ class SecretMasker
         'outlook'     => ['client_secret' => 1, 'access_token' => 2, 'refresh_token' => 2],
         'tosend'      => ['api_key' => 1],
         'cloudflare'  => ['api_key' => 1],
+        'sweego'      => ['api_key' => 1],
     ];
 
     /**

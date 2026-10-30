@@ -224,6 +224,19 @@ return [
                 'region'          => 'global'
             ]
         ],
+        'sweego'      => [
+            'key'      => 'sweego',
+            'title'    => __('Sweego', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-sweego.svg'),
+            'provider' => 'Sweego',
+            'options'  => [
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'api_key'         => '',
+                'key_store'       => 'db'
+            ]
+        ],
         'gmail'       => [
             'key'      => 'gmail',
             'title'    => __('Gmail or Google Workspace', 'fluent-smtp'),
