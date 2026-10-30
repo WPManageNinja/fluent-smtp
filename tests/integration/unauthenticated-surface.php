@@ -179,10 +179,12 @@ return function () {
 
             $died = false;
             $body = '';
-            $handlerProvider = function () use (&$died, &$body) {
-                return function ($message = '', $title = '', $args = []) use (&$died, &$body) {
+            $args = [];
+            $handlerProvider = function () use (&$died, &$body, &$args) {
+                return function ($message = '', $title = '', $dieArgs = []) use (&$died, &$body, &$args) {
                     $died = true;
                     $body = is_scalar($message) ? (string)$message : '';
+                    $args = is_array($dieArgs) ? $dieArgs : [];
                     throw new FsmtpAjaxExit('REST callback completed through wp_die.');
                 };
             };
@@ -208,6 +210,8 @@ return function () {
             }
 
             FsmtpTest::assert($died, 'matching-state callback did not complete through wp_die');
+            // wp_die() defaults to 500, which a proxy with custom error pages replaces.
+            FsmtpTest::assertSame(200, isset($args['response']) ? $args['response'] : null, 'access code callback HTTP status');
         });
     });
 
