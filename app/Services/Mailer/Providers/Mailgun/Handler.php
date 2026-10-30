@@ -46,13 +46,13 @@ class Handler extends BaseHandler
             'h:Content-Type' => $content_type
         ];
 
-        if (stripos($content_type, 'html') === false) {
-            $body['text'] = $this->getBody();
+        if ($content_type == 'text/html') {
+            $body['html'] = $this->getBody();
         } else if ($content_type == 'multipart/alternative') {
             $body['html'] = $this->getBody();
             $body['text'] = $this->phpMailer->AltBody;
         } else {
-            $body['html'] = $this->getBody();
+            $body['text'] = $this->getBody();
         }
 
         if ($replyTo = $this->getReplyTo()) {
