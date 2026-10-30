@@ -1,11 +1,29 @@
 # FIX-PLAN.md — bug and test-gap record
 
-> Findings from test-writing runs. There are currently no open
-> `KNOWN-FAILURE` items; resolved entries remain below as regression history.
+> Findings from test-writing runs. One `KNOWN-FAILURE` item is open (PepiPost,
+> below); resolved entries remain below as regression history.
 >
 > Everything below shipped in 2.3.0. Entries are kept rather than deleted so
 > that a future strict-SQL regression is recognised as a repeat rather than
 > investigated from scratch. Add new findings at the top.
+
+## OPEN — PepiPost `getBody()` reads a property PHPMailer does not have
+
+- Production: `app/Services/Mailer/Providers/PepiPost/Handler.php:160`
+- Symptom: every PepiPost send raises "Undefined property:
+  PHPMailer\PHPMailer\PHPMailer::$contentType" (a warning on PHP 8, a notice
+  on 7.4).
+- Mechanism: `getBody()` tests `$this->phpMailer->contentType`; PHPMailer's
+  property is `ContentType`. The comparison is never true, so the branch that
+  adds a second body part never runs. Present since `3f8e15fb` (2024-07-02,
+  "Added Plain Text Version").
+- Why not a one-word fix: correcting the name activates that branch, which
+  sends `AltBody` as a part of type `amp`. A plain-text alternative is not AMP,
+  so the branch needs its own check against Netcore's (PepiPost's) API first.
+- Owning tests: the seven `PepiPost: ...` cases in
+  `tests/integration/attachments.php`. They take only this warning out of the
+  notice fuse and report it through `FsmtpTest::knownFailure()`; their
+  attachment assertions still run. `FSMTP_STRICT_KNOWN_FAILURES=1` fails them.
 
 ## RESOLVED — weekly reporting failed with `ONLY_FULL_GROUP_BY`
 

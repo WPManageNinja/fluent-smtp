@@ -830,14 +830,20 @@ class BaseHandler
      * file name before it reaches a Content-Disposition header or a provider
      * payload.
      *
+     * An in-memory attachment (addStringAttachment()) holds its data at index 0,
+     * so the path fallback never applies to it; without a name it is called
+     * "attachment", with an extension that matches its type where one is known.
+     *
      * @param array $attachment One row of PHPMailer::getAttachments()
-     * @return string Empty only when the row carries neither a name nor a path.
+     * @return string Empty only when a file row carries neither a name nor a path.
      */
-    protected function getAttachmentName($attachment)
+    public static function getAttachmentName($attachment)
     {
+        $isInMemory = !empty($attachment[5]);
+
         $candidates = [
             isset($attachment[2]) ? $attachment[2] : '',
-            isset($attachment[0]) ? $attachment[0] : ''
+            !$isInMemory && isset($attachment[0]) ? $attachment[0] : ''
         ];
 
         foreach ($candidates as $candidate) {
@@ -855,6 +861,76 @@ class BaseHandler
             }
         }
 
+        if ($isInMemory) {
+            return 'attachment' . self::extensionForType(isset($attachment[4]) ? $attachment[4] : '');
+        }
+
+        return '';
+    }
+
+    /**
+     * The contents of an attachment, however it was added.
+     *
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @return string
+     * @throws Exception When a file row's path cannot be read safely.
+     */
+    public static function attachmentContent($attachment)
+    {
+        if (!empty($attachment[5])) {
+            return (string) $attachment[0];
+        }
+
+        return self::secureFileRead($attachment[0]);
+    }
+
+    /**
+     * The MIME type an attachment should be delivered with.
+     *
+     * PHPMailer records a type for every attachment, from the caller or from
+     * the path's extension, and uses it in the messages it builds; API
+     * providers send the same type. Where the record holds only the generic
+     * type (a path with no extension, or declared by the caller), the
+     * delivered name's extension decides, so such an attachment can arrive
+     * with a more specific type than over SMTP. Needs no fileinfo extension.
+     *
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @return string
+     */
+    public static function attachmentType($attachment)
+    {
+        $type = isset($attachment[4]) ? trim((string) $attachment[4]) : '';
+
+        if (($type === '' || $type === 'application/octet-stream') && class_exists('\PHPMailer\PHPMailer\PHPMailer')) {
+            $byName = \PHPMailer\PHPMailer\PHPMailer::filenameToType(self::getAttachmentName($attachment));
+
+            if ($byName !== 'application/octet-stream') {
+                return $byName;
+            }
+        }
+
+        return $type === '' ? 'application/octet-stream' : $type;
+    }
+
+    /**
+     * A file extension (with its dot) for a MIME type, from PHPMailer's own table.
+     *
+     * @param string $type
+     * @return string Empty when the type is not one of the common ones below.
+     */
+    protected static function extensionForType($type)
+    {
+        // PHPMailer answers application/octet-stream for extensions it does not know.
+        if (!$type || $type === 'application/octet-stream' || !class_exists('\PHPMailer\PHPMailer\PHPMailer')) {
+            return '';
+        }
+
+        foreach (['pdf', 'png', 'jpg', 'gif', 'webp', 'txt', 'csv', 'ics', 'html', 'xml', 'zip', 'doc', 'docx', 'xls', 'xlsx', 'rtf'] as $extension) {
+            if (\PHPMailer\PHPMailer\PHPMailer::_mime_types($extension) === $type) {
+                return '.' . $extension;
+            }
+        }
+
         return '';
     }
 
@@ -865,8 +941,14 @@ class BaseHandler
      * @return string File contents on success
      * @throws Exception If path validation fails or file cannot be read
      */
-    protected function secureFileRead($filePath)
+    public static function secureFileRead($filePath)
     {
+        // realpath() throws a ValueError (not an Exception) on a NUL byte in PHP 8,
+        // which escaped every provider's catch: a path never contains one.
+        if (!is_string($filePath) || strpos($filePath, "\0") !== false) {
+            throw new Exception(__('Invalid file path', 'fluent-smtp'));
+        }
+
         // Resolve the real path to prevent path traversal attacks
         $realPath = realpath($filePath);
 
