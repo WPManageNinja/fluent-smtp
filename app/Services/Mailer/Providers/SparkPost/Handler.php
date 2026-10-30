@@ -53,6 +53,10 @@ class Handler extends BaseHandler
             $body['content']['reply_to'] = $replyTo;
         }
 
+        if (!$this->hasListUnsubscribe()) {
+            $body['options']['transactional'] = true;
+        }
+
         if (!empty($this->getParam('attachments'))) {
             $body['content']['attachments'] = $this->getAttachments();
         }
@@ -202,6 +206,17 @@ class Handler extends BaseHandler
         }
 
         return $data;
+    }
+
+    protected function hasListUnsubscribe()
+    {
+        foreach ((array) $this->getParam('custom_headers', []) as $header) {
+            if (strtolower(trim($header['key'])) === 'list-unsubscribe') {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function getCustomEmailHeaders()
