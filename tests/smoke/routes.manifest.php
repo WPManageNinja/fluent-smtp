@@ -1,6 +1,6 @@
 <?php
 /**
- * All 41 routes from app/Http/routes.php.
+ * All 44 routes from app/Http/routes.php.
  *
  * GET variations mirror the actual values/options in resources/admin. POST
  * payloads preserve the request shapes used by the SPA and are intentionally
@@ -135,6 +135,11 @@ return [
     ]),
     $post('settings/pushover/send-test', 'PushoverController@sendTestMessage', 'resources/admin/Modules/NotificationSettings/_ChannelActions.vue:76'),
     $post('settings/pushover/disconnect', 'PushoverController@disconnect', 'resources/admin/Modules/NotificationSettings/_ChannelActions.vue:61'),
+    $post('settings/webhook/register', 'WebhookController@registerSite', 'resources/admin/Modules/NotificationSettings/_WebhookNotification.vue:129', [
+        'settings' => ['label' => '', 'webhook_url' => '', 'body_template' => ''],
+    ]),
+    $post('settings/webhook/send-test', 'WebhookController@sendTestMessage', 'resources/admin/Modules/NotificationSettings/_ChannelActions.vue:99'),
+    $post('settings/webhook/disconnect', 'WebhookController@disconnect', 'resources/admin/Modules/NotificationSettings/_ChannelActions.vue:85'),
     [
         'method' => 'GET', 'route' => '/logs', 'handler' => 'LoggerController@get',
         'source' => 'resources/admin/Modules/Logger/Logs.vue:210',

@@ -85,9 +85,10 @@ class SecretMasker
      * A Slack or Discord webhook URL belongs on this list as much as a token does -
      * it is a bearer credential, and anyone holding it can post into the channel.
      *
-     * Nothing needs resolving on the way back in: every one of these is entered into
-     * an empty form and posted to its own register endpoint, so a save always carries
-     * a freshly typed value and never a mask.
+     * Most of these are entered into an empty form and posted to their own register
+     * endpoint, so a save carries a freshly typed value, never a mask. The webhook
+     * channel is the exception: its settings can be saved again while connected, so
+     * NotificationHelper::validateWebhookSettings() passes its URL through resolve().
      */
     const NOTIFICATION_SECRET_FIELDS = ['token', 'site_token', 'webhook_url', 'api_token', 'user_key'];
 

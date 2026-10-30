@@ -59,7 +59,7 @@ FluentSMTP is built for speed, reliability and scale.
 * Resend any logged email to any recipient
 * Detailed email reporting and charts
 * Daily connection health monitoring
-* Failure alerts via Telegram, Slack, Discord and Pushover
+* Failure alerts via Telegram, Slack, Discord, Pushover or a webhook
 * WP-CLI support
 * A fast, modern admin with a dark theme
 
@@ -179,8 +179,8 @@ Manage FluentSMTP from the terminal, which matters most when the emails you need
 * <code>wp fluent-smtp stats</code> - sent and failed counts
 * <code>wp fluent-smtp prune-logs</code> - clean up old email logs
 
-== 🚀 Real-time Notifications on Email Failures via Telegram, Slack, Discord and Pushover 🚀 ==
-Connect Telegram, Slack, Discord or Pushover, as many as you want at once, and FluentSMTP messages you there the moment an email fails to send, so you find out before your customers do.
+== 🚀 Real-time Notifications on Email Failures via Telegram, Slack, Discord, Pushover and Webhooks 🚀 ==
+Connect Telegram, Slack, Discord, Pushover or a webhook (for n8n, Make, Zapier, Mattermost and other services), as many as you want at once, and FluentSMTP messages you there the moment an email fails to send, so you find out before your customers do.
 
 == 🚀 Security 🚀 ==
 FluentSMTP is built with security and scale in mind, and gives you several ways to keep your credentials and your sending safe.
@@ -320,7 +320,7 @@ Yes. FluentSMTP has a native toSend integration. Create an API key in the toSend
 
 = How do I know if one of my connections has stopped working? =
 
-FluentSMTP checks every connection once a day. If one starts failing, from an expired OAuth token or a revoked API key, it is flagged on the dashboard and sent to your configured notification channels (Telegram, Slack, Discord or Pushover). You can also run <code>wp fluent-smtp health</code> from the command line at any time.
+FluentSMTP checks every connection once a day. If one starts failing, from an expired OAuth token or a revoked API key, it is flagged on the dashboard and sent to your configured notification channels (Telegram, Slack, Discord, Pushover or a webhook). You can also run <code>wp fluent-smtp health</code> from the command line at any time.
 
 = Can I use FluentSMTP from WP-CLI? =
 

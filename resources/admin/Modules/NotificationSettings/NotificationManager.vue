@@ -18,6 +18,7 @@
                     :channel_key="selectedChannel"
                     :channel_config="channelConfig"
                     @back="goBack"
+                    @saved="reloadSettings"
                 />
             </div>
         </template>
@@ -36,6 +37,7 @@ import TelegramNotification from './_TelegramNotification.vue';
 import SlackNotification from './_SlackNotification.vue';
 import DiscordNotification from './_DiscordNotification.vue';
 import PushoverNotification from './_PushoverNotification.vue';
+import WebhookNotification from './_WebhookNotification.vue';
 import ChannelHeader from './_ChannelHeader.vue';
 
 export default {
@@ -46,6 +48,7 @@ export default {
         SlackNotification,
         DiscordNotification,
         PushoverNotification,
+        WebhookNotification,
         ChannelHeader
     },
     props: {
@@ -66,10 +69,11 @@ export default {
                 return { title: '', logo: '' };
             }
             const channel = this.channels[this.selectedChannel] || {};
-            return {
+            // The whole channel config, so a channel's form can read its own keys (the webhook's placeholders).
+            return Object.assign({}, channel, {
                 title: channel.title || this.selectedChannel,
                 logo: channel.logo || ''
-            };
+            });
         },
         isChannelConnected() {
             if (!this.selectedChannel) {
@@ -97,6 +101,8 @@ export default {
                     return !!settings.webhook_url;
                 case 'pushover':
                     return !!(settings.api_token && settings.user_key);
+                case 'webhook':
+                    return !!settings.webhook_url;
                 default:
                     return false;
             }
@@ -114,7 +120,8 @@ export default {
                 'telegram': 'telegram-notification',
                 'slack': 'slack-notification',
                 'discord': 'discord-notification',
-                'pushover': 'pushover-notification'
+                'pushover': 'pushover-notification',
+                'webhook': 'webhook-notification'
             };
             return componentMap[channelKey] || null;
         },

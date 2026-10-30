@@ -435,6 +435,90 @@ return function () {
             );
         });
     });
+    FsmtpTest::case('saving the webhook again through its form keeps the Alerts toggle as the admin set it', function () use ($withOptionTransaction) {
+        // The path an admin hits: the webhook is the one channel whose form can be saved while connected.
+        $withOptionTransaction(function () {
+            delete_option('_fluent_smtp_notify_settings');
+            wp_cache_delete('_fluent_smtp_notify_settings', 'options');
+
+            $stored = function () {
+                wp_cache_delete('_fluent_smtp_notify_settings', 'options');
+                return (new Settings())->notificationSettings();
+            };
+            $isOn = function () use ($stored) {
+                return in_array('webhook', (array) Arr::get($stored(), 'active_channel', []), true);
+            };
+            $save = function ($label, $url) {
+                return FsmtpTest::ajax('POST', 'settings/webhook/register', [
+                    'settings' => ['label' => $label, 'webhook_url' => $url, 'body_template' => ''],
+                ]);
+            };
+
+            FsmtpTest::assertAjaxHealthy($save('first', 'https://hooks.example.test/suite'), 'first save');
+            FsmtpTest::assert($isOn(), 'setting the webhook up switches it on');
+
+            FsmtpTest::assertAjaxHealthy($save('first', ''), 'save while switched on');
+            FsmtpTest::assert($isOn(), 'saving the form while switched on keeps it on');
+
+            $toggle = FsmtpTest::ajax('POST', 'settings/notification-channels/toggle', ['channel_keys' => []]);
+            FsmtpTest::assertAjaxHealthy($toggle, 'switch every channel off');
+            FsmtpTest::assert(!$isOn(), 'the toggle switched the webhook off');
+
+            // A blank URL keeps the saved one, as the form sends it.
+            FsmtpTest::assertAjaxHealthy($save('renamed', ''), 'second save');
+            FsmtpTest::assert(!$isOn(), 'saving the form again must not switch the webhook back on');
+            FsmtpTest::assertSame('renamed', Arr::get($stored(), 'webhook.label'), 'the second save was stored');
+            FsmtpTest::assertSame('https://hooks.example.test/suite', Arr::get($stored(), 'webhook.webhook_url'), 'the URL was kept');
+
+            delete_option('_fluent_smtp_notify_settings');
+            wp_cache_delete('_fluent_smtp_notify_settings', 'options');
+        });
+    });
+
+    FsmtpTest::case('saving a configured channel leaves the Alerts toggle as the admin set it', function () use ($withOptionTransaction) {
+        $withOptionTransaction(function () {
+            delete_option('_fluent_smtp_notify_settings');
+            wp_cache_delete('_fluent_smtp_notify_settings', 'options');
+
+            $slack = [
+                'status'      => 'yes',
+                'token'       => 'suite-slack-token',
+                'webhook_url' => 'https://hooks.example.test/suite',
+            ];
+            $isOn = function () {
+                wp_cache_delete('_fluent_smtp_notify_settings', 'options');
+                $stored = (new Settings())->notificationSettings();
+                return in_array('slack', (array) Arr::get($stored, 'active_channel', []), true);
+            };
+
+            NotificationHelper::updateChannelSettings('slack', $slack);
+            FsmtpTest::assert($isOn(), 'connecting a channel switches it on');
+
+            NotificationHelper::updateChannelSettings('slack', $slack);
+            FsmtpTest::assert($isOn(), 'saving a channel that is on keeps it on');
+
+            $toggle = FsmtpTest::ajax('POST', 'settings/notification-channels/toggle', ['channel_keys' => []]);
+            FsmtpTest::assertAjaxHealthy($toggle, 'switch every channel off');
+            FsmtpTest::assert(!$isOn(), 'the toggle switched the channel off');
+
+            // The regression: this used to put the channel back in active_channel.
+            NotificationHelper::updateChannelSettings('slack', $slack);
+            FsmtpTest::assert(!$isOn(), 'saving a configured channel must not switch it back on');
+
+            // Switch it back on first, so the disconnect has something to switch off.
+            FsmtpTest::assertAjaxHealthy(FsmtpTest::ajax('POST', 'settings/notification-channels/toggle', ['channel_keys' => ['slack']]), 'switch Slack back on');
+            FsmtpTest::assert($isOn(), 'the toggle switched the channel back on');
+            NotificationHelper::updateChannelSettings('slack', ['status' => 'no', 'token' => '', 'webhook_url' => '']);
+            FsmtpTest::assert(!$isOn(), 'disconnecting switches the channel off');
+
+            NotificationHelper::updateChannelSettings('slack', $slack);
+            FsmtpTest::assert($isOn(), 'reconnecting after a disconnect switches it on again');
+
+            delete_option('_fluent_smtp_notify_settings');
+            wp_cache_delete('_fluent_smtp_notify_settings', 'options');
+        });
+    });
+
     FsmtpTest::case('OAuth tokens and the SES access key are ciphertext at rest and plaintext on read', function () use (
         $withOptionTransaction,
         $baseMisc

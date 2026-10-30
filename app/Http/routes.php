@@ -54,6 +54,13 @@ $app->post('settings/pushover/register', 'PushoverController@registerSite');
 $app->post('settings/pushover/send-test', 'PushoverController@sendTestMessage');
 $app->post('settings/pushover/disconnect', 'PushoverController@disconnect');
 
+/*
+ * Webhook Routes
+ */
+$app->post('settings/webhook/register', 'WebhookController@registerSite');
+$app->post('settings/webhook/send-test', 'WebhookController@sendTestMessage');
+$app->post('settings/webhook/disconnect', 'WebhookController@disconnect');
+
 
 
 $app->get('/logs', 'LoggerController@get');

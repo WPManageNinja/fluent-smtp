@@ -5,6 +5,7 @@ namespace FluentMail\App\Models;
 use FluentMail\Includes\Support\Arr;
 use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\Mailer\Manager;
+use FluentMail\App\Services\NotificationHelper;
 use FluentMail\App\Models\Traits\SendTestEmailTrait;
 
 class Settings
@@ -279,6 +280,13 @@ class Settings
                 'status'       => 'no',
                 'channel_name' => '',
                 'webhook_url'  => ''
+            ],
+            // The one copy of the default template; the admin form prefills from this.
+            'webhook'        => [
+                'status'        => 'no',
+                'label'         => '',
+                'webhook_url'   => '',
+                'body_template' => NotificationHelper::defaultWebhookTemplate()
             ],
         ];
 
