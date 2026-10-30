@@ -112,6 +112,7 @@ zip -r $ZIP_NAME . \
     -x "composer.lock" \
     -x "README.md" \
     -x "CLAUDE.md" \
+    -x "TESTING_INSTRUCTIONS.md" \
     -x "research/*" \
     -x "internal_docs/*" \
     -x "_docs/*"
@@ -125,8 +126,14 @@ composer install
 # 5. Verify the archive
 # The exclusion list is a denylist, so anything new is included by default and
 # is only caught by someone reading the zip. This fails the build instead.
+#
+# The second pattern is the same idea for a class rather than a list: every
+# markdown file that lives beside the plugin's own root files is repository
+# documentation, never something WordPress loads, and a new one used to ship
+# until somebody read the archive. Naming them one at a time is how
+# TESTING_INSTRUCTIONS.md went out.
 echo "🔍 Verifying $ZIP_NAME..."
-LEAKED=$(unzip -Z1 "$ZIP_NAME" | grep -E '^(\.|node_modules/|tests/|resources/|research/|internal_docs/|_docs/|svn/)' || true)
+LEAKED=$(unzip -Z1 "$ZIP_NAME" | grep -E '^(\.|node_modules/|tests/|resources/|research/|internal_docs/|_docs/|svn/)|^[^/]+\.md$' || true)
 
 if [ -n "$LEAKED" ]; then
     echo "❌ Development files found in $ZIP_NAME:"

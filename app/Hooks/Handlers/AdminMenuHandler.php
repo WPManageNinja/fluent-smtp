@@ -117,9 +117,21 @@ class AdminMenuHandler
                 style="background-color: #fff;border: 1px solid #dcdcde;box-sizing: border-box;padding: 20px;margin: 15px 0;"
                 class="fluent_smtp_box">
                 <h3 style="margin: 0;"><?php esc_html_e('You already have an SMTP plugin: FluentSMTP', 'fluent-smtp'); ?></h3>
-                <p><?php esc_html_e('This site already has FluentSMTP installed, so there is no need for a second SMTP plugin. FluentSMTP is free and open source, with every feature included and nothing to upgrade to', 'fluent-smtp'); ?>
-                    (<a href="https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/"><?php esc_html_e('learn why it\'s free', 'fluent-smtp'); ?></a>)<?php esc_html_e('. It sends through Amazon SES, SendGrid, Mailgun, Elastic Email, Brevo, Gmail, Outlook and a dozen other services, or through any plain SMTP server.', 'fluent-smtp'); ?>
-                </p><a href="<?php echo esc_url(admin_url('options-general.php?page=fluent-mail#/')); ?>"
+                <p><?php
+                    /*
+                     * One sentence with the link as a placeholder. Split around the
+                     * anchor, a translator has three fragments to reorder by hand and
+                     * the full stop ends up outside the sentence it belongs to.
+                     */
+                    echo wp_kses(
+                        sprintf(
+                            /* translators: %s: link to the article explaining why FluentSMTP is free */
+                            esc_html__('This site already has FluentSMTP installed, so there is no need for a second SMTP plugin. FluentSMTP is free and open source, with every feature included and nothing to upgrade to (%s). It sends through Amazon SES, SendGrid, Mailgun, Elastic Email, Brevo, Gmail, Outlook and a dozen other services, or through any plain SMTP server.', 'fluent-smtp'),
+                            '<a href="' . esc_url('https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/') . '">' . esc_html__('learn why it\'s free', 'fluent-smtp') . '</a>'
+                        ),
+                        ['a' => ['href' => []]]
+                    );
+                ?></p><a href="<?php echo esc_url(admin_url('options-general.php?page=fluent-mail#/')); ?>"
                        class="wp-core-ui button button-primary"><?php esc_html_e('Go To FluentSMTP Settings', 'fluent-smtp'); ?></a>
                 <p style="font-size: 80%; margin: 15px 0 0;"><?php esc_html_e('FluentSMTP shows this notice so you do not end up running two SMTP plugins against each other.', 'fluent-smtp'); ?></p>
             </div>
@@ -338,6 +350,14 @@ class AdminMenuHandler
              * right across a daylight-saving change on a page nobody has reloaded.
              */
             'site_timezone'          => wp_timezone_string(),
+            /*
+             * The language this admin is reading the screen in. The app formats dates
+             * and its date pickers in English without it, whatever language the rest of
+             * the page is in, because the PHP translations never reach the JavaScript
+             * date library. determine_locale() is what __() itself resolves against, so
+             * the dates match the strings beside them.
+             */
+            'site_locale'            => determine_locale(),
             'require_optin'          => $this->isRequireOptin(),
             'has_ninja_tables'       => defined('NINJA_TABLES_VERSION'),
             'disable_recommendation' => apply_filters('fluentmail_disable_recommendation', false),

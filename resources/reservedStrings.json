@@ -33,6 +33,7 @@
   "__TELEGRAM_NOTIFICATION_ENABLED": "FluentSMTP is connected to Telegram. When an email fails to send, @fluentsmtp_bot will message you there.",
   "__TLS_HELP": "TLS is used automatically when the server supports it. A few servers do not handle it well and need this turned off.",
   "__SMTP_CRED_HELP": "Turn this on to send a username and password to the SMTP server. Most servers require it.",
+  "__SMTP2GO_REGION_TIP": "Sends through the SMTP2GO API servers in this region. Pick the one closest to your web server; your API key works with every region.",
   "__ANOTHER_CONNECTION_NOTICE": "Another connection already uses this address. Saving will replace it.",
   "__EMAIL_LOGGING_OFF": "Email logging is off. Only failed and resent emails appear here.",
   "__EMAIL_SUMMARY_INTRO": "A regular email with how much this site sent, and how much of it failed.",

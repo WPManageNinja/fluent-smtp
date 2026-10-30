@@ -18,6 +18,11 @@ jobs:
     #   github.event.pull_request.user.login == 'new-developer' ||
     #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
 
+    # Fork pull_requests get no repo secrets and no OIDC token, so the
+    # claude-code-action step cannot authenticate there. Only run this job
+    # when the PR head is in this repository.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+
     runs-on: ubuntu-latest
     permissions:
       contents: read

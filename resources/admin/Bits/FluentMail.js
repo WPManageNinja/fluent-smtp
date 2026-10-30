@@ -41,6 +41,12 @@ dayjs.extend(timezone);
  * Importing it in this file would put a second copy in boot.js - a duplicate
  * that is 150 kB of payload and, worse, a second reactivity system sitting on
  * the public API under the name of the first.
+ *
+ * `.dayjs` is here for a narrower reason: the app is built as two sealed bundles
+ * (this one plus the admin app), each carrying its own dayjs, and the date
+ * helpers the components reach for through `$dateFormat` live on this copy. The
+ * app is the only place that knows the admin's language, so it hands this copy
+ * its locale data through this reference; see Bits/appLocale.js.
  */
 export default class FluentMail {
     constructor() {
@@ -50,6 +56,7 @@ export default class FluentMail {
         this.applyFilters = applyFilters;
         this.removeAllActions = removeAllActions;
         this.appVars = window.FluentMailAdmin;
+        this.dayjs = dayjs;
     }
 
     /**

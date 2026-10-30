@@ -63,10 +63,7 @@
                 <p class="fsm_row_warning" v-if="settings.misc.simulate_emails == 'yes'">
                     {{ $t('__Email_Simulation_Yes') }}
                 </p>
-                <p class="fsm_row_warning" v-if="appVars.is_disabled_defined">
-                    {{ $t('Simulation is turned on by ') }}
-                    <b>FLUENTMAIL_SIMULATE_EMAILS</b>{{ $t(' in your PHP code, so this switch has no effect.') }}
-                </p>
+                <p class="fsm_row_warning" v-if="appVars.is_disabled_defined" v-html="$t('__SIMULATE_DEFINED')"></p>
             </div>
         </div>
 

@@ -29,18 +29,35 @@ echarts.use([
 
 /*
  * The reporting endpoint keys its buckets either by day - 'Y-m-d', which is also
- * how it keys a weekly bucket, using the Monday - or by month, already formatted
- * as 'Sep 2026'. So a key that parses as a date gets shortened for the axis and
- * spelled out in the tooltip, and anything else is already in the shape both want.
+ * how it keys a weekly bucket, using the Monday - or by month, as 'Y-m'. Both
+ * parse as dates, so the bucket is shortened for the axis and spelled out in the
+ * tooltip via dayjs, which is running in the site's language.
  */
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const ISO_MONTH = /^\d{4}-\d{2}$/;
 
 function axisLabel(key) {
-    return ISO_DATE.test(key) ? dayjs(key).format('MMM D') : key;
+    if (ISO_DATE.test(key)) {
+        return dayjs(key).format('MMM D');
+    }
+
+    if (ISO_MONTH.test(key)) {
+        return dayjs(key + '-01').format('MMM YYYY');
+    }
+
+    return key;
 }
 
 function tooltipLabel(key) {
-    return ISO_DATE.test(key) ? dayjs(key).format('MMMM D, YYYY') : key;
+    if (ISO_DATE.test(key)) {
+        return dayjs(key).format('MMMM D, YYYY');
+    }
+
+    if (ISO_MONTH.test(key)) {
+        return dayjs(key + '-01').format('MMMM YYYY');
+    }
+
+    return key;
 }
 
 /*

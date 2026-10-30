@@ -15,9 +15,10 @@ class Reporting
      *
      *     ['2026-09-04' => ['sent' => 12, 'failed' => 1], '2026-09-05' => [...]]
      *
-     * A monthly report keys its buckets 'Sep 2026' instead. The two counts are what the
-     * dashboard chart plots against each other, which is why they are counted here
-     * rather than being one total the caller has to split.
+     * A monthly report keys its buckets '2026-09' instead, which the app formats for
+     * the reader's own language. The two counts are what the dashboard chart plots
+     * against each other, which is why they are counted here rather than being one
+     * total the caller has to split.
      *
      * A log is 'sent', 'failed' or 'pending', and a resend writes 'sent' back over the
      * row it retried. Only a delivery that was actually reported as failing counts as
@@ -291,13 +292,21 @@ class Reporting
         return $date->format('Y-m-d');
     }
 
+    /*
+     * A monthly bucket is keyed '2026-09', not 'Sep 2026'.
+     *
+     * The month name used to be formatted here, in English, and the chart drew it
+     * as-is - so a German dashboard had German labels on the daily buckets and
+     * English ones on the monthly. A key in the same sortable shape the daily one
+     * uses lets the app format every bucket with the locale it already knows.
+     */
     protected function monYearFormatter($date)
     {
         if (is_string($date)) {
             $date = new \DateTime($date);
         }
 
-        return $date->format('M Y');
+        return $date->format('Y-m');
     }
 
     protected function isMonthly($period)

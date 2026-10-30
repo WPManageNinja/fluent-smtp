@@ -352,7 +352,7 @@ return function () {
                 'Reporting monthly SELECT is rejected by ONLY_FULL_GROUP_BY (app/Services/Reporting.php:45,58).'
             )) {
                 FsmtpTest::assertSame('', $error, 'monthly report strict database error');
-                FsmtpTest::assertSame(['sent' => 2, 'failed' => 0], isset($stats['Jan 2025']) ? $stats['Jan 2025'] : null, 'strict monthly report bucket');
+                FsmtpTest::assertSame(['sent' => 2, 'failed' => 0], isset($stats['2025-01']) ? $stats['2025-01'] : null, 'strict monthly report bucket');
             }
         });
     });

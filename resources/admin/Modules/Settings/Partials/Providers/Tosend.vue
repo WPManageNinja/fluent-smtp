@@ -15,9 +15,7 @@
                 <strong>{{ $t('How to connect toSend:') }}</strong>
                 <ol style="margin: 6px 0 0 18px; padding: 0;">
                     <li>
-                        {{ $t('Sign in to') }}
-                        <a target="_blank" rel="noopener" href="https://dash.tosend.com/">{{ $t('your toSend dashboard') }}</a>
-                        {{ $t('and add your sending domain.') }}
+                        <span v-html="$t('__TOSEND_SIGNIN')"></span>
                     </li>
                     <li>{{ $t('Publish the SPF, DKIM, and DMARC DNS records toSend shows for that domain and wait for verification.') }}</li>
                     <li>
