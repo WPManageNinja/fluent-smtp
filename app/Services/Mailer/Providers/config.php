@@ -278,6 +278,21 @@ return [
             ],
             'note'     => __('Cloudflare Email Sending requires a verified domain in your Cloudflare account and an API token with Email Sending permissions.', 'fluent-smtp')
         ],
+        'mailtrap'    => [
+            'key'      => 'mailtrap',
+            'title'    => __('Mailtrap', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-mailtrap.svg'),
+            'provider' => 'Mailtrap',
+            'options'  => [
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'api_key'         => '',
+                'message_stream'  => 'transactional',
+                'key_store'       => 'db'
+            ],
+            'note'     => __('Mailtrap sends only from a verified sending domain. The API token needs admin access to that domain.', 'fluent-smtp')
+        ],
         'default'     => [
             'key'      => 'default',
             'title'    => __('PHP mail()', 'fluent-smtp'),
