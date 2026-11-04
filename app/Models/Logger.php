@@ -599,34 +599,60 @@ class Logger extends Model
 
         /*
          * Put the logged name, type, disposition and cid back on the records
-         * wp_mail() created from these paths. Records are edited in place, never
-         * cleared and re-added, so attachments other plugins add (including
-         * in-memory embedded images) keep exactly what they had. Each logged
-         * file is paired with one record carrying its path, in order; records
-         * without a match are left alone. Any email that carries the paths gets
-         * the names, so a nested email cannot use up the restore.
+         * wp_mail() created from these paths, and note which logged files the
+         * email really carries.
+         *
+         * - Only the resend's own email is touched. It carries a one-time
+         *   X-FluentSMTP-Resend token header, which is taken off again here so
+         *   it never goes out. Nested emails (a notification sent from a wp_mail
+         *   filter, a failure alert) do not carry it.
+         * - It runs after the usual phpmailer_init listeners, so what it sees is
+         *   what will be sent, including files a listener removed or re-added.
+         * - Records are edited in place, never cleared and re-added, so
+         *   attachments other plugins add keep exactly what they had. Each logged
+         *   file is paired with one record carrying its path, in order.
+         * - When the resend's email never reached phpmailer_init (a pre_wp_mail
+         *   transport took over), nothing is known, so nothing extra is reported.
          */
-        /*
-         * What reached the resend's own email decides what is reported as not
-         * included. That email is told apart by its subject; when a filter
-         * changed the subject, any email carrying the files stands in for it.
-         * When no email reached phpmailer_init at all (a pre_wp_mail transport
-         * took over), nothing is known, so nothing extra is reported.
-         */
-        $resendSubject = (string) $email['subject'];
-        $seen = ['subject' => false, 'any' => false, 'bySubject' => [], 'byAny' => []];
-        $restoreAttachments = function ($phpmailer) use ($resendable, $resendSubject, &$seen) {
+        $resendToken = wp_generate_password(24, false, false);
+        $resendSeen = false;
+        $onResendEmail = [];
+        $restoreAttachments = function ($phpmailer) use ($resendable, $resendToken, &$resendSeen, &$onResendEmail) {
+            $isResend = false;
+            $otherHeaders = [];
+
+            foreach ($phpmailer->getCustomHeaders() as $header) {
+                if (strcasecmp((string) $header[0], 'X-FluentSMTP-Resend') === 0 && trim((string) $header[1]) === $resendToken) {
+                    $isResend = true;
+                    continue;
+                }
+                $otherHeaders[] = $header;
+            }
+
+            if (!$isResend) {
+                return;
+            }
+
+            $phpmailer->clearCustomHeaders();
+            foreach ($otherHeaders as $header) {
+                $phpmailer->addCustomHeader($header[0], $header[1]);
+            }
+
+            $resendSeen = true;
+            $onResendEmail = [];
+
             if (!$resendable) {
                 return;
             }
 
-            $isResend = (string) $phpmailer->Subject === $resendSubject;
-
             try {
                 $property = new \ReflectionProperty($phpmailer, 'attachment');
-                $property->setAccessible(true);
+                if (PHP_VERSION_ID < 80100) {
+                    $property->setAccessible(true); // a no-op from PHP 8.1 on
+                }
                 $records = $property->getValue($phpmailer);
             } catch (\ReflectionException $e) {
+                $onResendEmail = array_fill_keys(array_keys($resendable), true);
                 return; // Files still go out, under the names wp_mail() gave them.
             }
 
@@ -634,17 +660,17 @@ class Logger extends Model
                 return;
             }
 
-            $used = [];
             foreach ($records as $index => $record) {
                 if (!empty($record[5])) {
                     continue;
                 }
                 foreach ($resendable as $key => $item) {
-                    if (isset($used[$key]) || $record[0] !== $item['record'][0]) {
+                    if (isset($onResendEmail[$key]) || $record[0] !== $item['record'][0]) {
                         continue;
                     }
-                    $used[$key] = true;
+                    $onResendEmail[$key] = true;
                     $logged = $item['record'];
+                    $cid = isset($logged[7]) ? (string) $logged[7] : '';
 
                     $records[$index][2] = $item['name'];
                     if (!empty($logged[3])) {
@@ -653,10 +679,10 @@ class Logger extends Model
                     if (!empty($logged[4])) {
                         $records[$index][4] = $logged[4];
                     }
-                    if (isset($logged[7]) && $logged[7] !== '' && $logged[7] !== 0) {
+                    if ($cid !== '') {
                         $records[$index][7] = $logged[7];
                     }
-                    if ($item['inline'] && !empty($logged[7])) {
+                    if ($item['inline'] && $cid !== '') {
                         $records[$index][6] = 'inline';
                     }
                     break;
@@ -664,13 +690,6 @@ class Logger extends Model
             }
 
             $property->setValue($phpmailer, $records);
-
-            $seen['any'] = true;
-            $seen['byAny'] += $used;
-            if ($isResend) {
-                $seen['subject'] = true;
-                $seen['bySubject'] += $used;
-            }
         };
 
         // When custom recipients are provided, drop cc/bcc headers so the email
@@ -713,7 +732,8 @@ class Logger extends Model
         }
 
         $headers = array_merge($headers, [
-            'From: ' . $email['from']
+            'From: ' . $email['from'],
+            'X-FluentSMTP-Resend: ' . $resendToken
         ]);
 
         if ($hasCustomRecipients) {
@@ -745,7 +765,7 @@ class Logger extends Model
 
             $startedAt = microtime(true);
 
-            add_action('phpmailer_init', $restoreAttachments, 1);
+            add_action('phpmailer_init', $restoreAttachments, PHP_INT_MAX - 10);
 
             try {
                 $result = wp_mail(
@@ -756,15 +776,14 @@ class Logger extends Model
                     $wpMailAttachments
                 );
             } finally {
-                remove_action('phpmailer_init', $restoreAttachments, 1);
+                remove_action('phpmailer_init', $restoreAttachments, PHP_INT_MAX - 10);
             }
 
             // A logged file wp_mail() could not attach (it vanished meanwhile) or a
             // filter removed is not on the email either: say so.
-            if ($seen['subject'] || $seen['any']) {
-                $onEmail = $seen['subject'] ? $seen['bySubject'] : $seen['byAny'];
+            if ($resendSeen) {
                 foreach ($resendable as $key => $item) {
-                    if (empty($onEmail[$key])) {
+                    if (empty($onResendEmail[$key])) {
                         $skippedAttachments[] = ['name' => $item['name'], 'status' => 'missing'];
                     }
                 }

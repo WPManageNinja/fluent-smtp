@@ -41,9 +41,11 @@ return function () {
     /* Resend a log row from an isolated table; return what PHPMailer was given and the result. */
     $resend = function (array $attachments, $type = 'resend') {
         $table = FsmtpFactory::emailLogTable();
+        $GLOBALS['fsmtp_resend_subject'] = FsmtpTest::uniq('resend');
         $id = FsmtpFactory::insertLog($table, [
             'to'          => serialize([['email' => 'to@example.test']]),
             'from'        => 'Suite Sender <sender@example.test>',
+            'subject'     => $GLOBALS['fsmtp_resend_subject'],
             'body'        => '<p>body <img src="cid:logo-cid"></p>',
             'headers'     => serialize(['content-type' => 'text/html']),
             'attachments' => serialize(BaseHandler::attachmentsForLog($attachments)),
@@ -51,24 +53,35 @@ return function () {
         ]);
 
         $seen = null;
-        $listener = function ($phpmailer) use (&$seen) {
+        $extra = null;
+        $listener = function ($phpmailer) use (&$seen, &$extra) {
+            if ($phpmailer->Subject !== $GLOBALS['fsmtp_resend_subject']) {
+                return;
+            }
             $seen = array_map(function ($a) {
                 return ['path' => $a[0], 'name' => $a[2], 'type' => $a[4], 'disposition' => $a[6], 'cid' => $a[7]];
             }, $phpmailer->getAttachments());
+            $copy = clone $phpmailer;
+            $copy->preSend();
+            $extra = [
+                'headers' => array_column($phpmailer->getCustomHeaders(), 0),
+                'mime'    => $copy->getSentMIMEMessage(),
+            ];
         };
         $redirect = FsmtpFactory::productionLogTableRedirect($table);
 
-        add_action('phpmailer_init', $listener, 20);
+        // The resend restores attachments late on phpmailer_init; read after it.
+        add_action('phpmailer_init', $listener, PHP_INT_MAX);
         add_filter('query', $redirect, PHP_INT_MAX);
         try {
             $result = FsmtpFactory::loggerForTable($table)->resendEmailFromLog($id, $type);
         } finally {
             remove_filter('query', $redirect, PHP_INT_MAX);
-            remove_action('phpmailer_init', $listener, 20);
+            remove_action('phpmailer_init', $listener, PHP_INT_MAX);
         }
 
         FsmtpTest::assert($seen !== null, 'phpmailer_init did not fire during the resend');
-        return ['seen' => $seen, 'result' => $result];
+        return ['seen' => $seen, 'result' => $result, 'headers' => $extra ? $extra['headers'] : null, 'mime' => $extra ? $extra['mime'] : null];
     };
 
     try {
@@ -414,6 +427,112 @@ return function () {
                 remove_filter('wp_mail', $copyAndDrop);
             }
             FsmtpTest::assert(in_array('logo.png', array_column($sent['result']['skipped_attachments'], 'name'), true), 'the logo the resend lost is reported');
+        });
+
+        FsmtpTest::case('the resend\'s internal marker header never goes out, and the built message embeds the logo', function () use ($resend, $records, $allKinds) {
+            FsmtpTest::assertMailSimulationActive();
+            $sent = $resend($records($allKinds));
+
+            FsmtpTest::assert(!in_array('X-FluentSMTP-Resend', (array) $sent['headers'], true), 'marker header removed: ' . implode(',', (array) $sent['headers']));
+            FsmtpTest::assert(stripos($sent['mime'], 'X-FluentSMTP-Resend') === false, 'marker not in the MIME');
+            FsmtpTest::assert(stripos($sent['mime'], 'multipart/related') !== false, 'message is multipart/related');
+            FsmtpTest::assert(strpos($sent['mime'], 'Content-ID: <logo-cid>') !== false, 'logo part carries its Content-ID');
+            FsmtpTest::assert(strpos($sent['mime'], 'filename="Quarterly Report.pdf"') !== false, 'report keeps its name in the MIME');
+        });
+
+        FsmtpTest::case('a file a later phpmailer_init listener removes is reported', function () use ($resend, $records, $allKinds, $pngPath) {
+            FsmtpTest::assertMailSimulationActive();
+            // e.g. a size limiter that strips images; it runs after wp_mail() added the files.
+            $stripLogo = function ($phpmailer) use ($pngPath) {
+                $keep = array_filter($phpmailer->getAttachments(), function ($a) use ($pngPath) {
+                    return $a[0] !== $pngPath;
+                });
+                $phpmailer->clearAttachments();
+                foreach ($keep as $a) {
+                    $phpmailer->addAttachment($a[0], $a[2], $a[3], $a[4], $a[6]);
+                }
+            };
+            add_action('phpmailer_init', $stripLogo, 10);
+            try {
+                $sent = $resend($records($allKinds));
+            } finally {
+                remove_action('phpmailer_init', $stripLogo, 10);
+            }
+            FsmtpTest::assert(in_array('logo.png', array_column($sent['result']['skipped_attachments'], 'name'), true), 'the stripped logo is reported');
+            FsmtpTest::assertSame(['Quarterly Report.pdf'], array_column($sent['seen'], 'name'), 'the report is still restored');
+        });
+
+        FsmtpTest::case('a nested copy with the same subject and files cannot hide a file the resend lost', function () use ($resend, $records, $allKinds, $pdfPath, $pngPath) {
+            FsmtpTest::assertMailSimulationActive();
+            $once = false;
+            $copyAndDrop = function ($atts) use (&$once, $pdfPath, $pngPath) {
+                if (!$once) {
+                    $once = true;
+                    // Same subject and both files, to an admin.
+                    wp_mail('admin-copy@example.test', $atts['subject'], 'copy body', '', [$pdfPath, $pngPath]);
+                    $atts['attachments'] = array_values(array_diff((array) $atts['attachments'], [$pngPath]));
+                }
+                return $atts;
+            };
+            add_filter('wp_mail', $copyAndDrop);
+            try {
+                $sent = $resend($records($allKinds));
+            } finally {
+                remove_filter('wp_mail', $copyAndDrop);
+            }
+            FsmtpTest::assert(in_array('logo.png', array_column($sent['result']['skipped_attachments'], 'name'), true), 'the logo the resend lost is reported');
+        });
+
+        FsmtpTest::case('an inline image whose content id is "0" is restored inline', function () use ($resend, $records, $pngPath) {
+            FsmtpTest::assertMailSimulationActive();
+            $sent = $resend($records(function ($m) use ($pngPath) {
+                $m->addEmbeddedImage($pngPath, '0', 'logo.png');
+            }));
+            FsmtpTest::assertSame([['inline', '0']], array_map(function ($a) {
+                return [$a['disposition'], (string) $a['cid']];
+            }, $sent['seen']), 'inline with cid 0');
+        });
+
+        FsmtpTest::case('a nested notification is never mistaken for the resend when a queue plugin takes the resend over', function () use ($records, $pdfPath) {
+            $table = FsmtpFactory::emailLogTable();
+            $subject = FsmtpTest::uniq('queued');
+            $id = FsmtpFactory::insertLog($table, [
+                'to'          => serialize([['email' => 'to@example.test']]),
+                'from'        => 'Suite Sender <sender@example.test>',
+                'subject'     => $subject,
+                'body'        => 'body',
+                'headers'     => serialize(['content-type' => 'text/plain']),
+                'attachments' => serialize(BaseHandler::attachmentsForLog($records(function ($m) use ($pdfPath) {
+                    $m->addAttachment($pdfPath);
+                }))),
+                'extra'       => serialize([]),
+            ]);
+            $once = false;
+            // A filter sends a notification (it reaches phpmailer_init) ...
+            $notify = function ($atts) use (&$once, $subject) {
+                if (!$once && $atts['subject'] === $subject) {
+                    $once = true;
+                    wp_mail('admin@example.test', 'notice', 'a resend happened');
+                }
+                return $atts;
+            };
+            // ... and a queue plugin takes the resend itself, so it never does.
+            $queue = function ($return, $atts) use ($subject) {
+                return $atts['subject'] === $subject ? true : $return;
+            };
+            $redirect = FsmtpFactory::productionLogTableRedirect($table);
+            add_filter('wp_mail', $notify);
+            add_filter('pre_wp_mail', $queue, 10, 2);
+            add_filter('query', $redirect, PHP_INT_MAX);
+            try {
+                $result = FsmtpFactory::loggerForTable($table)->resendEmailFromLog($id, 'resend');
+            } finally {
+                remove_filter('query', $redirect, PHP_INT_MAX);
+                remove_filter('pre_wp_mail', $queue, 10);
+                remove_filter('wp_mail', $notify);
+            }
+            FsmtpTest::assert($once, 'the notification was sent');
+            FsmtpTest::assertSame([], $result['skipped_attachments'], 'no false missing-file warning');
         });
 
         FsmtpTest::case('formatting a stored row again keeps the size of an in-memory attachment', function () use ($records, $inMemory) {
