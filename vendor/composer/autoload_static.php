@@ -96,6 +96,8 @@ class ComposerStaticInit9b719a7d374be78de74c2068943692fe
         'FluentMail\\App\\Services\\Mailer\\Providers\\Gmail\\Handler' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/Gmail/Handler.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\Mailgun\\Handler' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/Mailgun/Handler.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\Mailgun\\ValidatorTrait' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php',
+        'FluentMail\\App\\Services\\Mailer\\Providers\\Mailtrap\\Handler' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/Mailtrap/Handler.php',
+        'FluentMail\\App\\Services\\Mailer\\Providers\\Mailtrap\\ValidatorTrait' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/Mailtrap/ValidatorTrait.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\Outlook\\API' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/Outlook/API.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\Outlook\\Handler' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/Outlook/Handler.php',
         'FluentMail\\App\\Services\\Mailer\\Providers\\PepiPost\\Handler' => __DIR__ . '/../..' . '/app/Services/Mailer/Providers/PepiPost/Handler.php',

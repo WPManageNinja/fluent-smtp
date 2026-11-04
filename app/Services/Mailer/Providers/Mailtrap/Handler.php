@@ -32,19 +32,19 @@ class Handler extends BaseHandler
             'subject' => $this->getSubject(),
         ];
 
-        $contentType = $this->getHeader('content-type');
+        $contentType = strtolower((string)$this->getHeader('content-type'));
 
         /*
          * The API rejects an empty `text` or `html` string, so the plain-text
          * part of a multipart message is sent only when PHPMailer has one.
          */
-        if ($contentType == 'text/html') {
-            $body['html'] = $this->getParam('message');
-        } elseif ($contentType == 'multipart/alternative') {
+        if ($contentType == 'multipart/alternative') {
             $body['html'] = $this->getParam('message');
             if ($this->phpMailer->AltBody) {
                 $body['text'] = $this->phpMailer->AltBody;
             }
+        } elseif (strpos($contentType, 'html') !== false) {
+            $body['html'] = $this->getParam('message');
         } else {
             $body['text'] = $this->getParam('message');
         }
@@ -215,27 +215,30 @@ class Handler extends BaseHandler
         $data = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
-            $file = false;
-            $fileName = null;
-
             try {
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = $this->getAttachmentName($attachment);
+                // Reads a file through secureFileRead(), or takes in-memory data
+                // (addStringAttachment()) as it is.
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
                 $this->logAttachmentFailure('Mailtrap', $e);
-                $file = false;
-            }
-
-            if ($file === false) {
                 continue;
             }
 
-            $data[] = [
-                'filename'    => $fileName,
+            $item = [
+                'filename'    => self::getAttachmentName($attachment),
                 'content'     => base64_encode($file),
-                'type'        => $this->determineMimeContentType($attachment[0]),
+                'type'        => self::attachmentType($attachment),
                 'disposition' => 'attachment',
             ];
+
+            // An image embedded with addEmbeddedImage() is referenced from the
+            // HTML as cid:<id>; Mailtrap needs it inline with that content_id.
+            if (Arr::get($attachment, 6) === 'inline' && (string)Arr::get($attachment, 7) !== '') {
+                $item['disposition'] = 'inline';
+                $item['content_id'] = (string)$attachment[7];
+            }
+
+            $data[] = $item;
         }
 
         return $data;
@@ -248,19 +251,5 @@ class Handler extends BaseHandler
             'Content-Type'  => 'application/json',
             'Authorization' => 'Bearer ' . $this->getSetting('api_key'),
         ];
-    }
-
-    protected function determineMimeContentType($filename)
-    {
-        if (function_exists('mime_content_type')) {
-            return mime_content_type($filename);
-        } elseif (function_exists('finfo_open')) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_file($finfo, $filename);
-            finfo_close($finfo);
-            return $mimeType;
-        }
-
-        return 'application/octet-stream';
     }
 }
