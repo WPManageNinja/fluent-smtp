@@ -26,27 +26,41 @@ class Handler extends BaseHandler
 
     public function postSend()
     {
+        $subject = (string)$this->getSubject();
+
         $body = [
             'from'    => $this->getFrom(),
             'to'      => $this->getTo(),
-            'subject' => $this->getSubject(),
+            // The API requires a non-empty subject (minLength 1); mail clients
+            // show an empty one as "(no subject)" anyway.
+            'subject' => $subject !== '' ? $subject : __('(no subject)', 'fluent-smtp'),
         ];
 
-        $contentType = strtolower((string)$this->getHeader('content-type'));
-
         /*
-         * The API rejects an empty `text` or `html` string, so the plain-text
-         * part of a multipart message is sent only when PHPMailer has one.
+         * Pick the parts from what PHPMailer holds after its preSend(), not from
+         * the content type captured before it: a phpmailer_init listener may add
+         * a plain-text AltBody to an HTML message late. The API rejects an empty
+         * `text` or `html` string, so an empty part is left out, and a message
+         * with no body at all (an attachment-only notification) sends one space.
          */
-        if ($contentType == 'multipart/alternative') {
-            $body['html'] = $this->getParam('message');
-            if ($this->phpMailer->AltBody) {
-                $body['text'] = $this->phpMailer->AltBody;
+        $message = (string)$this->getParam('message');
+        $altBody = (string)$this->phpMailer->AltBody;
+        $contentType = strtolower((string)$this->phpMailer->ContentType . ' ' . (string)$this->getHeader('content-type'));
+        $isHtml = strpos($contentType, 'html') !== false || strpos($contentType, 'multipart/alternative') !== false || $altBody !== '';
+
+        if ($isHtml) {
+            if ($message !== '') {
+                $body['html'] = $message;
             }
-        } elseif (strpos($contentType, 'html') !== false) {
-            $body['html'] = $this->getParam('message');
-        } else {
-            $body['text'] = $this->getParam('message');
+            if ($altBody !== '') {
+                $body['text'] = $altBody;
+            }
+        } elseif ($message !== '') {
+            $body['text'] = $message;
+        }
+
+        if (!isset($body['html']) && !isset($body['text'])) {
+            $body['text'] = ' ';
         }
 
         if ($replyTo = $this->getReplyTo()) {
@@ -100,7 +114,9 @@ class Handler extends BaseHandler
                 ];
             } else {
                 $errors = array_filter((array)Arr::get($responseBody, 'errors', []), 'is_string');
-                $errorMessage = $errors ? implode(' ', $errors) : __('Unknown Error', 'fluent-smtp');
+                $errorMessage = $errors
+                    ? implode(' ', $errors)
+                    : sprintf(__('Mailtrap API error (HTTP %s)', 'fluent-smtp'), $responseCode ?: '?');
                 $returnResponse = new \WP_Error($responseCode ?: 400, $errorMessage, $responseBody);
             }
         }

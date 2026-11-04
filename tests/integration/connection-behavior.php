@@ -846,6 +846,110 @@ return function () {
         FsmtpTest::assert(!array_key_exists('html', $payload), 'a plain-text Mailtrap message carried an html body');
     });
 
+    FsmtpTest::case('Mailtrap sends only non-empty body parts, chosen after PHPMailer prepared the message', function () use ($mailtrapRequestFor) {
+        $parts = function (callable $configure) use ($mailtrapRequestFor) {
+            $payload = json_decode($mailtrapRequestFor($configure)['args']['body'], true);
+            return [
+                'html' => array_key_exists('html', $payload) ? $payload['html'] : null,
+                'text' => array_key_exists('text', $payload) ? $payload['text'] : null,
+            ];
+        };
+
+        FsmtpTest::assertSame(['html' => null, 'text' => 'plain body'], $parts(function ($m) {
+            $m->addAddress('to@example.test');
+            $m->Body = 'plain body';
+        }), 'plain text');
+
+        FsmtpTest::assertSame(['html' => '<b>hi</b>', 'text' => null], $parts(function ($m) {
+            $m->addAddress('to@example.test');
+            $m->isHTML(true);
+            $m->Body = '<b>hi</b>';
+        }), 'html only');
+
+        // A phpmailer_init listener can add AltBody after the content type was read.
+        FsmtpTest::assertSame(['html' => '<b>hi</b>', 'text' => 'hi'], $parts(function ($m) {
+            $m->addAddress('to@example.test');
+            $m->isHTML(true);
+            $m->Body = '<b>hi</b>';
+            $m->AltBody = 'hi';
+        }), 'html with a late plain-text alternative');
+
+        // An attachment-only notification has no body; the API needs one part.
+        FsmtpTest::assertSame(['html' => null, 'text' => ' '], $parts(function ($m) {
+            $m->addAddress('to@example.test');
+            $m->AllowEmpty = true;
+            $m->Body = '';
+        }), 'empty body');
+    });
+
+    FsmtpTest::case('Mailtrap sends a placeholder subject when the email has none', function () use ($mailtrapRequestFor) {
+        $payload = json_decode($mailtrapRequestFor(function ($m) {
+            $m->addAddress('to@example.test');
+            $m->Subject = '';
+        })['args']['body'], true);
+        FsmtpTest::assertSame('(no subject)', $payload['subject'], 'subject');
+    });
+
+    FsmtpTest::case('Mailtrap sends an embedded image inline with its content id', function () use ($mailtrapRequestFor) {
+        $file = trailingslashit(wp_upload_dir()['basedir']) . 'fsmtp-suite-mailtrap-logo.png';
+        file_put_contents($file, base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='));
+        try {
+            $payload = json_decode($mailtrapRequestFor(function ($m) use ($file) {
+                $m->addAddress('to@example.test');
+                $m->isHTML(true);
+                $m->Body = '<img src="cid:suite-logo">';
+                $m->addEmbeddedImage($file, 'suite-logo', 'logo.png');
+                $m->addAttachment($file, 'plain.png');
+            })['args']['body'], true);
+        } finally {
+            unlink($file);
+        }
+
+        $rows = array_map(function ($a) {
+            return [$a['filename'], $a['type'], $a['disposition'], isset($a['content_id']) ? $a['content_id'] : null];
+        }, $payload['attachments']);
+        FsmtpTest::assertSame([
+            ['logo.png', 'image/png', 'inline', 'suite-logo'],
+            ['plain.png', 'image/png', 'attachment', null],
+        ], $rows, 'attachments');
+    });
+
+    FsmtpTest::case('Mailtrap reports the API error message, or the HTTP status when there is none', function () {
+        FsmtpTest::requirePhpMailer();
+        $send = function ($code, $body) {
+            $m = new \PHPMailer\PHPMailer\PHPMailer(true);
+            $m->setFrom('sender@example.test');
+            $m->addAddress('to@example.test');
+            $m->Subject = 's';
+            $m->Body = 'b';
+            FsmtpTest::interceptHttp(function ($url) use ($code, $body) {
+                if (strpos($url, 'https://send.api.mailtrap.io/') !== 0) {
+                    return null;
+                }
+                return ['headers' => [], 'body' => $body, 'response' => ['code' => $code, 'message' => 'x'], 'cookies' => []];
+            });
+            try {
+                return (new FsmtpSuiteMailtrapProbe())->runPostSend($m, [
+                    'provider' => 'mailtrap', 'sender_email' => 'sender@example.test', 'sender_name' => '',
+                    'key_store' => 'db', 'api_key' => 'suite-token', 'message_stream' => 'transactional',
+                ]);
+            } finally {
+                FsmtpTest::releaseHttpInterceptor();
+            }
+        };
+
+        $error = $send(400, json_encode(['success' => false, 'errors' => ["'from' address domain is not verified"]]));
+        FsmtpTest::assert(is_wp_error($error), '400 is an error');
+        FsmtpTest::assertSame("'from' address domain is not verified", $error->get_error_message(), 'API message');
+
+        $error = $send(413, '<html>Request Entity Too Large</html>');
+        FsmtpTest::assert(is_wp_error($error), '413 is an error');
+        FsmtpTest::assertSame('Mailtrap API error (HTTP 413)', $error->get_error_message(), 'HTTP status message');
+
+        $error = $send(200, json_encode(['success' => false, 'errors' => ['rejected']]));
+        FsmtpTest::assert(is_wp_error($error), 'a 200 without success is an error');
+    });
+
     FsmtpTest::case('Mailtrap token check rejects only a 401', function () {
         $status = null;
         FsmtpTest::interceptHttp(function ($url) use (&$status) {
