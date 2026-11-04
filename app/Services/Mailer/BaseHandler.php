@@ -309,6 +309,21 @@ class BaseHandler
         return $name . ' <' . $email . '>';
     }
 
+    protected static function formatQuotedAddress($email, $name = '')
+    {
+        $name = (string)$name;
+
+        if ($name === '') {
+            return $email;
+        }
+
+        if (preg_match('/[^A-Za-z0-9!#$%&\'*+\/=?^_`{|}~ \x80-\xFF-]/', $name) && !self::isQuotedString(trim($name))) {
+            $name = '"' . addcslashes($name, '"\\') . '"';
+        }
+
+        return $name . ' <' . $email . '>';
+    }
+
     /**
      * Whether a value is one RFC 5322 quoted string: `"..."` with every inner
      * quote escaped.
