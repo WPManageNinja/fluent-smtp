@@ -67,14 +67,20 @@ return function () {
         FsmtpTest::assertSame([], $deprecations, 'deprecations from CurlFactory::__destruct()');
     });
 
-    FsmtpTest::case('bundled vendor code guards every curl_close() call', function () {
+    FsmtpTest::case('bundled vendor and plugin code guard every curl_close() call', function () {
         // Covers the paths a runtime test cannot reach cheaply (the multi
         // handler's cancel() and Monolog's Curl\Util).
-        $root = FLUENTMAIL_PLUGIN_PATH . 'includes/libs/google-api-client/build/vendor';
+        // The plugin's own app/ code is scanned too (ToSend, Amazon SES).
         $unguarded = [];
-        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS));
+        $files = [];
+        foreach (['includes/libs/google-api-client/build/vendor', 'app'] as $dir) {
+            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(FLUENTMAIL_PLUGIN_PATH . $dir, FilesystemIterator::SKIP_DOTS));
+            foreach ($iterator as $file) {
+                $files[] = $file;
+            }
+        }
 
-        foreach ($iterator as $file) {
+        foreach ($files as $file) {
             if ($file->getExtension() !== 'php') {
                 continue;
             }
@@ -88,11 +94,11 @@ return function () {
                 // The guard must sit on the same line or within the 3 lines above.
                 $window = implode('', array_slice($lines, max(0, $i - 3), 4));
                 if (strpos($window, 'PHP_VERSION_ID < 80000') === false) {
-                    $unguarded[] = substr($file->getPathname(), strlen($root) + 1) . ':' . ($i + 1);
+                    $unguarded[] = substr($file->getPathname(), strlen(FLUENTMAIL_PLUGIN_PATH)) . ':' . ($i + 1);
                 }
             }
         }
 
-        FsmtpTest::assertSame([], $unguarded, 'unguarded curl_close() calls in bundled vendor code');
+        FsmtpTest::assertSame([], $unguarded, 'unguarded curl_close() calls');
     });
 };
