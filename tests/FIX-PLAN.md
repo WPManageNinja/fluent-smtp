@@ -21,9 +21,10 @@
 - Resolution: the v5 API accepts only `html` and `amp` content parts (the
   official SDK's `TypeEnum`), so there is no plain-text part to send and
   AltBody is not AMP; the branch is gone. A plain-text email is sent as HTML,
-  escaped, with its line breaks kept.
+  escaped exactly, with its line breaks kept; a body declared plain that
+  carries HTML tags is sent unescaped, as before.
 - Owning tests: `PepiPost: ...` cases in `tests/integration/attachments.php`
-  (no warning any more) and `tests/integration/connection-behavior.php`
+  (no warning any more) and `tests/integration/pepipost-content.php`
   (the content parts).
 
 ## RESOLVED — bracketed provider message IDs were erased by log sanitization

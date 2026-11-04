@@ -75,11 +75,39 @@ return function () {
     FsmtpTest::case('PepiPost sends a plain-text email as escaped HTML that keeps its line breaks', function () use ($send) {
         $content = $send(function ($m) {
             $m->isHTML(false);
-            $m->Body = "Order #12 <ready>\nTotal: 5 & 6\n\nThanks";
+            $m->Body = "Order #12 is \"ready\" &amp;\nTotal: 5 & 6 > 4\n\nThanks";
         });
         FsmtpTest::assertSame([[
             'type'  => 'html',
-            'value' => "Order #12 &lt;ready&gt;<br>\nTotal: 5 &amp; 6<br>\n<br>\nThanks",
+            'value' => "Order #12 is &quot;ready&quot; &amp;amp;<br>\nTotal: 5 &amp; 6 &gt; 4<br>\n<br>\nThanks",
         ]], $content, 'content');
+    });
+
+    FsmtpTest::case('PepiPost keeps the HTML of a multipart email the plugin built', function () use ($send) {
+        foreach (['multipart/alternative', 'Multipart/Alternative'] as $type) {
+            $content = $send(function ($m) use ($type) {
+                // What the plugin's plain-text-alternative option sets (app/Functions/helpers.php).
+                $m->Body = '<p>Hello <b>there</b></p>';
+                $m->AltBody = 'Hello there';
+                $m->ContentType = $type;
+            });
+            FsmtpTest::assertSame([['type' => 'html', 'value' => '<p>Hello <b>there</b></p>']], $content, $type);
+        }
+
+        // Tag-free HTML (an entity only) must not be escaped again because the type is multipart.
+        $content = $send(function ($m) {
+            $m->Body = 'Fish &amp; chips';
+            $m->AltBody = 'Fish & chips';
+            $m->ContentType = 'multipart/alternative';
+        });
+        FsmtpTest::assertSame('Fish &amp; chips', $content[0]['value'], 'tag-free multipart HTML');
+    });
+
+    FsmtpTest::case('PepiPost leaves HTML sent without an HTML content type unescaped, as before', function () use ($send) {
+        $content = $send(function ($m) {
+            $m->isHTML(false);
+            $m->Body = '<p>Order <a href="https://example.test/o/12">#12</a> is ready</p>';
+        });
+        FsmtpTest::assertSame('<p>Order <a href="https://example.test/o/12">#12</a> is ready</p>', $content[0]['value'], 'unescaped');
     });
 };
