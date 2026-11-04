@@ -273,14 +273,6 @@ class SimpleEmailServiceRequest
     }
 
 	/**
-	* Destroy any leftover handlers
-	*/
-	public function __destruct() {
-		if (!empty($this->curl_handler))
-			@curl_close($this->curl_handler);
-	}
-
-	/**
 	* CURL write callback
 	*
 	* @param resource $curl CURL resource
