@@ -121,11 +121,8 @@ class Handler extends BaseHandler
                 }
             }
 
-            if ($attachments = $this->getParam('attachments')) {
-                foreach ($attachments as $attachment) {
-                    $this->phpMailer->addAttachment($attachment[0], $this->getAttachmentName($attachment));
-                }
-            }
+            // Attachments are already on this shared PHPMailer. Adding them again
+            // treated in-memory data as a file path and duplicated inline images.
 
             if ($this->getParam('headers.content-type') == 'text/html' || $this->getParam('headers.content-type') == 'multipart/alternative') {
                 $this->phpMailer->isHTML(true);

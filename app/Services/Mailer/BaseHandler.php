@@ -931,14 +931,20 @@ class BaseHandler
      * file name before it reaches a Content-Disposition header or a provider
      * payload.
      *
+     * An in-memory attachment (addStringAttachment()) holds its data at index 0,
+     * so the path fallback never applies to it; without a name it is called
+     * "attachment", with an extension that matches its type where one is known.
+     *
      * @param array $attachment One row of PHPMailer::getAttachments()
-     * @return string Empty only when the row carries neither a name nor a path.
+     * @return string Empty only when a file row carries neither a name nor a path.
      */
-    protected function getAttachmentName($attachment)
+    public static function getAttachmentName($attachment)
     {
+        $isInMemory = !empty($attachment[5]);
+
         $candidates = [
             isset($attachment[2]) ? $attachment[2] : '',
-            isset($attachment[0]) ? $attachment[0] : ''
+            !$isInMemory && isset($attachment[0]) ? $attachment[0] : ''
         ];
 
         foreach ($candidates as $candidate) {
@@ -956,18 +962,151 @@ class BaseHandler
             }
         }
 
+        if ($isInMemory) {
+            return 'attachment' . self::extensionForType(isset($attachment[4]) ? $attachment[4] : '');
+        }
+
         return '';
     }
 
     /**
-     * Securely read file contents with path traversal protection
+     * The contents of an attachment, however it was added.
      *
-     * @param string $filePath The file path to read
-     * @return string File contents on success
-     * @throws Exception If path validation fails or file cannot be read
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @return string
+     * @throws Exception When a file row's path cannot be read safely.
      */
-    protected function secureFileRead($filePath)
+    public static function attachmentContent($attachment)
     {
+        if (!empty($attachment[5])) {
+            return (string) $attachment[0];
+        }
+
+        return self::secureFileRead($attachment[0]);
+    }
+
+    /**
+     * The MIME type an attachment should be delivered with.
+     *
+     * PHPMailer records a type for every attachment, from the caller or from
+     * the path's extension, and uses it in the messages it builds; API
+     * providers send the same type. Where the record holds only the generic
+     * type (a path with no extension, or declared by the caller), the
+     * delivered name's extension decides, so such an attachment can arrive
+     * with a more specific type than over SMTP. Needs no fileinfo extension.
+     *
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @return string
+     */
+    public static function attachmentType($attachment)
+    {
+        $type = isset($attachment[4]) ? trim((string) $attachment[4]) : '';
+
+        if (($type === '' || $type === 'application/octet-stream') && class_exists('\PHPMailer\PHPMailer\PHPMailer')) {
+            $byName = \PHPMailer\PHPMailer\PHPMailer::filenameToType(self::getAttachmentName($attachment));
+
+            if ($byName !== 'application/octet-stream') {
+                return $byName;
+            }
+        }
+
+        // A file on disk whose name gives no type (data.json, logo.svg, README):
+        // detect it from the content, as the providers did before this helper.
+        if (($type === '' || $type === 'application/octet-stream') && empty($attachment[5]) && isset($attachment[0]) && is_string($attachment[0])) {
+            $detected = self::detectFileType($attachment[0]);
+
+            if ($detected !== '') {
+                return $detected;
+            }
+        }
+
+        return $type === '' ? 'application/octet-stream' : $type;
+    }
+
+    /**
+     * The MIME type of a file on disk from its content, or '' when it cannot be told.
+     *
+     * Runs only for a path that passes secureFileRead()'s checks, and only reports a
+     * type: it never returns file content.
+     *
+     * @param string $filePath
+     * @return string
+     */
+    protected static function detectFileType($filePath)
+    {
+        try {
+            self::assertReadableAttachmentPath($filePath);
+        } catch (\Exception $e) {
+            return '';
+        }
+
+        $realPath = realpath($filePath);
+        $type = '';
+
+        if (function_exists('mime_content_type')) {
+            $type = (string) @mime_content_type($realPath);
+        } elseif (function_exists('finfo_open')) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            if ($finfo) {
+                $type = (string) finfo_file($finfo, $realPath);
+                finfo_close($finfo);
+            }
+        }
+
+        $type = strtolower(trim(str_replace(';', '', $type)));
+
+        /*
+         * Content detection is trusted only where it is reliable: text formats the
+         * name table does not know (JSON, SVG, XML, extensionless text) and formats
+         * with a clear signature. For other bytes libmagic guesses (random binary
+         * reads as image/x-tga), so those stay application/octet-stream.
+         */
+        $reliable = ['application/json', 'image/svg+xml', 'application/xml', 'text/xml', 'application/pdf', 'image/png', 'image/jpeg', 'image/gif', 'image/webp', 'application/zip'];
+
+        if (strpos($type, 'text/') === 0 || in_array($type, $reliable, true)) {
+            return $type;
+        }
+
+        return '';
+    }
+
+    /**
+     * A file extension (with its dot) for a MIME type, from PHPMailer's own table.
+     *
+     * @param string $type
+     * @return string Empty when the type is not one of the common ones below.
+     */
+    protected static function extensionForType($type)
+    {
+        // PHPMailer answers application/octet-stream for extensions it does not know.
+        if (!$type || $type === 'application/octet-stream' || !class_exists('\PHPMailer\PHPMailer\PHPMailer')) {
+            return '';
+        }
+
+        foreach (['pdf', 'png', 'jpg', 'gif', 'webp', 'txt', 'csv', 'ics', 'html', 'xml', 'zip', 'doc', 'docx', 'xls', 'xlsx', 'rtf'] as $extension) {
+            if (\PHPMailer\PHPMailer\PHPMailer::_mime_types($extension) === $type) {
+                return '.' . $extension;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Throws unless the path is a readable file outside the blocked locations.
+     *
+     * @param mixed $filePath
+     * @return void
+     * @throws Exception
+     */
+    protected static function assertReadableAttachmentPath($filePath)
+    {
+        // realpath() throws a ValueError (not an Exception) on a NUL byte in PHP 8,
+        // which escaped every provider's catch: a path never contains one.
+        if (!is_string($filePath) || strpos($filePath, "\0") !== false) {
+            throw new Exception(__('Invalid file path', 'fluent-smtp'));
+        }
+
         // Resolve the real path to prevent path traversal attacks
         $realPath = realpath($filePath);
 
@@ -1018,12 +1157,28 @@ class BaseHandler
 
         foreach ($blockedPaths as $blockedPath) {
             $blockedRealPath = realpath($blockedPath);
-            if ($blockedRealPath && strpos($realPath, $blockedRealPath) === 0) {
+            // Match the location itself or anything under it, so /etc does not
+            // also block /etcetera/ or /dev block /devel/.
+            if ($blockedRealPath && ($realPath === $blockedRealPath || strpos($realPath, rtrim($blockedRealPath, '/') . '/') === 0)) {
                 throw new Exception(
                     __('Access to this file location is restricted for security reasons', 'fluent-smtp')
                 );
             }
         }
+    }
+
+    /**
+     * Securely read file contents with path traversal protection
+     *
+     * @param string $filePath The file path to read
+     * @return string File contents on success
+     * @throws Exception If path validation fails or file cannot be read
+     */
+    public static function secureFileRead($filePath)
+    {
+        self::assertReadableAttachmentPath($filePath);
+
+        $realPath = realpath($filePath);
 
         // Read and return file contents
         $contents = file_get_contents($realPath);
