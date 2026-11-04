@@ -584,7 +584,9 @@ class Logger extends Model
         // images then go out as ordinary attachments rather than being dropped.
         $acceptsEmbeds = true;
         try {
-            $acceptsEmbeds = (new \ReflectionFunction('wp_mail'))->getNumberOfParameters() >= 6;
+            $wpMail = new \ReflectionFunction('wp_mail');
+            // A variadic wrapper (wp_mail(...$args)) forwards whatever it is given.
+            $acceptsEmbeds = $wpMail->isVariadic() || $wpMail->getNumberOfParameters() >= 6;
         } catch (\ReflectionException $e) {
             $acceptsEmbeds = true;
         }
