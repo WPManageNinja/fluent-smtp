@@ -275,11 +275,18 @@ class Logger extends Model
      * - `in_memory`: data the sending plugin built in memory (addStringAttachment(),
      *   e.g. an invoice PDF). The log does not keep the data, so it cannot be resent.
      * - `missing`: a file that has been deleted, moved or can no longer be read.
+     * - `unchecked`: a file whose state was not looked up ($checkFiles false).
+     *
+     * The log list and viewer do not check files: that is a few filesystem calls
+     * per attachment on every page load, slow on network storage, for a state
+     * that only matters when a resend is about to run. The resend actions ask
+     * for it through attachmentStatus() instead.
      *
      * @param mixed $attachments The unserialized `attachments` column.
+     * @param bool  $checkFiles  Look up whether each file can still be read.
      * @return array[] [['name' => string, 'status' => string, 'inline' => bool, 'size' => int|null], ...]
      */
-    public static function describeAttachments($attachments)
+    public static function describeAttachments($attachments, $checkFiles = false)
     {
         if (!is_array($attachments)) {
             return [];
@@ -288,7 +295,7 @@ class Logger extends Model
         $list = [];
 
         foreach ($attachments as $attachment) {
-            $described = static::describeAttachment($attachment);
+            $described = static::describeAttachment($attachment, $checkFiles);
 
             if ($described) {
                 unset($described['record']);
@@ -303,9 +310,10 @@ class Logger extends Model
      * One logged attachment, normalized: its PHPMailer record and how it stands.
      *
      * @param mixed $attachment A PHPMailer record, or a bare path from very old rows.
+     * @param bool  $checkFiles Look up whether a file can still be read; otherwise its status is `unchecked`.
      * @return array|null ['name', 'status', 'inline', 'size', 'record'], or null when the entry is not an attachment.
      */
-    protected static function describeAttachment($attachment)
+    protected static function describeAttachment($attachment, $checkFiles = true)
     {
         if (is_string($attachment) && $attachment !== '') {
             $attachment = [$attachment, basename($attachment), basename($attachment)];
@@ -317,17 +325,19 @@ class Logger extends Model
 
         $inMemory = !empty($attachment[5]);
         $path = isset($attachment[0]) && is_string($attachment[0]) ? $attachment[0] : '';
-        $readable = !$inMemory && BaseHandler::isReadableAttachmentPath($path);
+        $readable = !$inMemory && $checkFiles && BaseHandler::isReadableAttachmentPath($path);
 
         if ($inMemory) {
             $size = isset($attachment[8]) ? (int) $attachment[8] : (is_string($path) ? strlen($path) : null);
+            $status = 'in_memory';
         } else {
             $size = $readable ? (int) @filesize($path) : null;
+            $status = !$checkFiles ? 'unchecked' : ($readable ? 'ok' : 'missing');
         }
 
         return [
             'name'   => (string) BaseHandler::attachmentName($attachment),
-            'status' => $inMemory ? 'in_memory' : ($readable ? 'ok' : 'missing'),
+            'status' => $status,
             'inline' => isset($attachment[6]) && $attachment[6] === 'inline',
             'size'   => $size,
             'record' => $attachment,
@@ -542,6 +552,38 @@ class Logger extends Model
             'next' => $next,
             'prev' => $prev
         ];
+    }
+
+    /**
+     * Whether a resend of each log can still include its attachments.
+     *
+     * Called by the resend actions just before they run, for the logs that have
+     * attachments, so the log list itself never touches the filesystem.
+     *
+     * @param int[] $ids At most 50 log ids; the rest are ignored.
+     * @return array Log id => describeAttachments() list, with files checked.
+     */
+    public function attachmentStatus(array $ids)
+    {
+        $ids = array_slice(array_values(array_unique(array_filter(array_map('intval', $ids)))), 0, 50);
+
+        if (!$ids) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '%d'));
+        $rows = $this->db->get_results($this->db->prepare(
+            "SELECT `id`, `attachments` FROM {$this->table} WHERE `id` IN ({$placeholders})",
+            $ids
+        ));
+
+        $statuses = [];
+
+        foreach ((array) $rows as $row) {
+            $statuses[(int) $row->id] = static::describeAttachments($this->unserialize($row->attachments), true);
+        }
+
+        return $statuses;
     }
 
     public function find($id)

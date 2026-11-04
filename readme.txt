@@ -354,7 +354,7 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 - Added an API region choice (Global, EU, US, AU) for SMTP2GO connections, and SMTP2GO emails are now sent with fastaccept
 - Added support for attachments that plugins create in memory, such as generated PDF invoices, on every API provider
 - Added inline (embedded) images on SendGrid, Mailgun, Postmark, SparkPost, SMTP2GO, Cloudflare and Outlook, so cid: images show in the email instead of arriving as attachments
-- Added a warning when a resent or retried email cannot include some of its original attachments; the email log shows which attachments a resend can still send
+- Added a check before resending or retrying a logged email: if some of its original attachments can't be included, you are told which before it goes out, and warned again after
 - Improved SMTP connection settings: changing the host, port or username, or lowering the encryption, now asks for the password again, and wp-config.php credentials can be limited to one host with the optional FLUENTMAIL_SMTP_HOST and FLUENTMAIL_SMTP_PORT constants
 - Improved Amazon SES connection settings validation
 - Improved performance: the legacy Outlook check no longer runs on front-end page loads
@@ -370,7 +370,7 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 - Fixed the logo appearing at the wrong size in the test email and the health digest email in some email clients
 - Fixed PHP 8.5 curl_close() deprecation notices
 - Removed the unused TransMail provider code
-- Developer: BaseHandler::getAttachmentName() and secureFileRead() remain available; new static forms are BaseHandler::attachmentName() and readAttachmentFile()
+- Developer: custom providers that extend BaseHandler can still call or override the protected getAttachmentName() and secureFileRead() methods; the built-in providers now use the new static BaseHandler::attachmentName() and readAttachmentFile()
 
 = 2.4.1 (Date: Sep 27, 2026) =
 - Fixed Outlook / Office 365 connections failing to authorize on servers where Microsoft returned an HTML error page instead of a token

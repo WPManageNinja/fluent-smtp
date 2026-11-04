@@ -35,6 +35,34 @@ if (!class_exists('FsmtpSuiteLegacyAttachmentProvider')) {
     }
 }
 
+if (!class_exists('PHPMailer\\PHPMailer\\PHPMailer')) {
+    require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
+    require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+    require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+}
+
+if (!class_exists('FsmtpSuiteSecureCapture')) {
+    // Records the connection security a send was made with, without a network call.
+    class FsmtpSuiteSecureCapture extends \PHPMailer\PHPMailer\PHPMailer
+    {
+        public $sentWith = null;
+
+        public function send()
+        {
+            $this->sentWith = $this->SMTPSecure;
+            return true;
+        }
+    }
+
+    class FsmtpSuiteSmtpResultHandler extends SmtpHandler
+    {
+        public function handleResponse($response)
+        {
+            return $response;
+        }
+    }
+}
+
 return function () {
     if (!class_exists('PHPMailer\\PHPMailer\\PHPMailer')) {
         require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
@@ -49,7 +77,7 @@ return function () {
      * Send one HTML email with one embedded image (cid "suite-logo") and one
      * normal attachment through a provider; return the captured request args.
      */
-    $send = function ($class, $urlPrefix, $status, array $settings = []) use ($png, $pdf) {
+    $send = function ($class, $urlPrefix, $status, array $settings = [], ?callable $build = null) use ($png, $pdf) {
         $mailer = new \PHPMailer\PHPMailer\PHPMailer(true);
         $mailer->CharSet = 'UTF-8';
         $mailer->setFrom('sender@example.test', 'Suite');
@@ -57,8 +85,12 @@ return function () {
         $mailer->Subject = 'inline suite';
         $mailer->isHTML(true);
         $mailer->Body = '<p><img src="cid:suite-logo"></p>';
-        $mailer->addStringEmbeddedImage($png, 'suite-logo', 'logo.png', 'base64', 'image/png');
-        $mailer->addStringAttachment($pdf, 'invoice.pdf', 'base64', 'application/pdf');
+        if ($build) {
+            $build($mailer);
+        } else {
+            $mailer->addStringEmbeddedImage($png, 'suite-logo', 'logo.png', 'base64', 'image/png');
+            $mailer->addStringAttachment($pdf, 'invoice.pdf', 'base64', 'application/pdf');
+        }
 
         $table = FsmtpFactory::emailLogTable();
         $redirect = FsmtpFactory::productionLogTableRedirect($table);
@@ -147,11 +179,45 @@ return function () {
         $request = $send(\FluentMail\App\Services\Mailer\Providers\Mailgun\Handler::class, 'https://api.mailgun.net/', 200, ['domain_name' => 'mg.example.test', 'region' => 'us']);
         $body = (string) $request['body'];
 
-        FsmtpTest::assert(strpos($body, 'name="inline[0]"; filename="suite-logo"' . "\r\n\r\n" . $png . "\r\n") !== false, 'inline part');
-        FsmtpTest::assert(strpos($body, 'name="attachment[1]"; filename="invoice.pdf"' . "\r\n\r\n" . $pdf . "\r\n") !== false, 'attachment part');
+        FsmtpTest::assert(strpos($body, 'name="inline"; filename="suite-logo"' . "\r\nContent-Type: image/png\r\n\r\n" . $png . "\r\n") !== false, 'inline part');
+        FsmtpTest::assert(strpos($body, 'name="attachment[1]"; filename="invoice.pdf"' . "\r\nContent-Type: application/pdf\r\n\r\n" . $pdf . "\r\n") !== false, 'attachment part');
     });
 
-    FsmtpTest::case('inline images: an email with only an inline image sends no empty attachment list', function () use ($png) {
+    FsmtpTest::case('inline images: an email with only an inline image sends no empty attachment list', function () use ($send, $json, $png) {
+        $onlyInline = function ($m) use ($png) {
+            $m->addStringEmbeddedImage($png, 'only', 'only.png', 'base64', 'image/png');
+        };
+
+        $spark = $json($send(\FluentMail\App\Services\Mailer\Providers\SparkPost\Handler::class, 'https://api.sparkpost.com/', 200, [], $onlyInline))['content'];
+        FsmtpTest::assert(!array_key_exists('attachments', $spark), 'SparkPost: no attachments key');
+        FsmtpTest::assertSame(['only'], array_column($spark['inline_images'], 'name'), 'SparkPost inline_images');
+
+        $smtp2go = $json($send(\FluentMail\App\Services\Mailer\Providers\Smtp2Go\Handler::class, 'https://api.smtp2go.com/', 200, [], $onlyInline));
+        FsmtpTest::assert(!array_key_exists('attachments', $smtp2go), 'SMTP2GO: no attachments key');
+        FsmtpTest::assertSame(['only'], array_column($smtp2go['inlines'], 'filename'), 'SMTP2GO inlines');
+    });
+
+    FsmtpTest::case('inline images: a repeated cid goes out once inline and then as a normal attachment', function () use ($send, $json, $png, $pdf) {
+        // PHPMailer stores cid 0 for an inline attachment added without one.
+        $twoZeros = function ($m) use ($png, $pdf) {
+            $m->addStringEmbeddedImage($png, '0', 'logo.png', 'base64', 'image/png');
+            $m->addStringAttachment($pdf, 'notes.pdf', 'base64', 'application/pdf', 'inline');
+        };
+
+        $spark = $json($send(\FluentMail\App\Services\Mailer\Providers\SparkPost\Handler::class, 'https://api.sparkpost.com/', 200, [], $twoZeros))['content'];
+        FsmtpTest::assertSame(['0'], array_column($spark['inline_images'], 'name'), 'SparkPost: one inline image named 0');
+        FsmtpTest::assertSame(['notes.pdf'], array_column($spark['attachments'], 'name'), 'SparkPost: the repeat is a normal attachment');
+
+        $smtp2go = $json($send(\FluentMail\App\Services\Mailer\Providers\Smtp2Go\Handler::class, 'https://api.smtp2go.com/', 200, [], $twoZeros));
+        FsmtpTest::assertSame(['0'], array_column($smtp2go['inlines'], 'filename'), 'SMTP2GO: one inline');
+        FsmtpTest::assertSame(['notes.pdf'], array_column($smtp2go['attachments'], 'filename'), 'SMTP2GO: the repeat is a normal attachment');
+
+        $mailgun = (string) $send(\FluentMail\App\Services\Mailer\Providers\Mailgun\Handler::class, 'https://api.mailgun.net/', 200, ['domain_name' => 'mg.example.test', 'region' => 'us'], $twoZeros)['body'];
+        FsmtpTest::assertSame(1, substr_count($mailgun, 'name="inline"'), 'Mailgun: one inline part');
+        FsmtpTest::assert(strpos($mailgun, 'name="attachment[1]"; filename="notes.pdf"') !== false, 'Mailgun: the repeat is a normal attachment');
+    });
+
+    FsmtpTest::case('inlineContentId reads only inline rows and strips header characters', function () use ($png) {
         $mailer = new \PHPMailer\PHPMailer\PHPMailer(true);
         $mailer->addStringEmbeddedImage($png, 'only', 'only.png', 'base64', 'image/png');
         $rows = $mailer->getAttachments();
@@ -160,6 +226,9 @@ return function () {
         FsmtpTest::assertSame('', BaseHandler::inlineContentId([0 => 'x', 6 => 'attachment', 7 => 'x']), 'normal attachment');
         FsmtpTest::assertSame('ab', BaseHandler::inlineContentId([6 => 'inline', 7 => "a\r\n<\"b>"]), 'header characters removed');
         FsmtpTest::assertSame('0', BaseHandler::inlineContentId([6 => 'inline', 7 => 0]), 'cid "0" kept');
+        FsmtpTest::assertSame(['a' => '0', 'b' => '', 'c' => 'x'], BaseHandler::inlineContentIds([
+            'a' => [6 => 'inline', 7 => 0], 'b' => [6 => 'inline', 7 => '0'], 'c' => [6 => 'inline', 7 => 'x'],
+        ]), 'a repeated cid is cleared');
     });
 
     FsmtpTest::case('SMTP encryption: any case of ssl/tls is sent encrypted, anything else as none', function () {
@@ -172,6 +241,25 @@ return function () {
         $stored = ['provider' => 'smtp', 'host' => 'smtp.example.test', 'port' => '587', 'username' => 'u', 'encryption' => 'tls', 'auto_tls' => 'no'];
         FsmtpTest::assertSame(false, SecretMasker::endpointChanged(array_merge($stored, ['encryption' => 'TLS']), $stored), 'TLS is not a downgrade');
         FsmtpTest::assertSame(true, SecretMasker::endpointChanged(array_merge($stored, ['encryption' => 'starttls']), $stored), 'an unknown value is a downgrade');
+
+        // The SMTP handler hands PHPMailer the normalized value.
+        foreach (['TLS' => 'tls', 'Ssl' => 'ssl', 'none' => '', 'starttls' => ''] as $in => $out) {
+            $mailer = new FsmtpSuiteSecureCapture(true);
+            $mailer->setFrom('sender@example.test');
+            $mailer->addAddress('to@example.test');
+            $mailer->Subject = 's';
+            $mailer->Body = 'b';
+            try {
+                (new FsmtpSuiteSmtpResultHandler())
+                    ->setSettings(['provider' => 'smtp', 'sender_email' => 'sender@example.test', 'sender_name' => '', 'host' => 'smtp.invalid', 'port' => 587, 'auth' => 'no', 'encryption' => $in, 'auto_tls' => 'no', 'force_from_name' => 'no', 'force_from_email' => 'no', 'return_path' => 'no'])
+                    ->setPhpMailer($mailer)
+                    ->send();
+            } finally {
+                BaseHandler::forgetSmtpTransportClaim();
+                \FluentMail\App\Hooks\Handlers\BulkSendSessionHandler::closeConnection();
+            }
+            FsmtpTest::assertSame($out, $mailer->sentWith, 'SMTPSecure for ' . $in);
+        }
     });
 
     FsmtpTest::case('attachment path checks raise no warning under open_basedir', function () use ($pdf) {
@@ -216,7 +304,9 @@ return function () {
     });
 
     FsmtpTest::case('a provider written against 2.4.1 that overrides the attachment helpers still loads', function () use ($pdf) {
+        // Loading the class above is the check (a static parent method would be a
+        // fatal); the call shows its own calls to the 2.4.1 method still work.
         $provider = new FsmtpSuiteLegacyAttachmentProvider();
-        FsmtpTest::assertSame('legacy-report.pdf', $provider->nameFor([0 => '/tmp/x.pdf', 1 => 'x.pdf', 2 => 'report.pdf', 5 => false]), 'override used');
+        FsmtpTest::assertSame('legacy-report.pdf', $provider->nameFor([0 => '/tmp/x.pdf', 1 => 'x.pdf', 2 => 'report.pdf', 5 => false]), 'its own call');
     });
 };

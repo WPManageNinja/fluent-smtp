@@ -60,7 +60,7 @@ class Handler extends BaseHandler
 
             // SparkPost puts an inline image's name in its Content-ID header,
             // so embedded images go in inline_images under their cid.
-            if ($inlineImages = $this->getAttachments(true)) {
+            if ($inlineImages = $this->attachmentRows(true)) {
                 $body['content']['inline_images'] = $inlineImages;
             }
         }
@@ -177,15 +177,28 @@ class Handler extends BaseHandler
     }
 
     /**
+     * The normal attachments; embedded images are sent separately (attachmentRows(true)).
+     *
+     * @return array
+     */
+    protected function getAttachments()
+    {
+        return $this->attachmentRows(false);
+    }
+
+    /**
      * @param bool $inline True for the embedded images, false for normal attachments.
      * @return array
      */
-    protected function getAttachments($inline = false)
+    protected function attachmentRows($inline)
     {
         $data = [];
 
-        foreach ($this->getParam('attachments') as $attachment) {
-            $contentId = self::inlineContentId($attachment);
+        $attachments = $this->getParam('attachments');
+        $contentIds = self::inlineContentIds($attachments);
+
+        foreach ($attachments as $key => $attachment) {
+            $contentId = $contentIds[$key];
 
             if (($contentId !== '') !== $inline) {
                 continue;

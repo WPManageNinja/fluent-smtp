@@ -68,7 +68,7 @@ class Handler extends BaseHandler {
 
             // SMTP2GO uses an inline image's filename as its cid, so embedded
             // images go in "inlines" under their cid.
-            if ($inlines = $this->getAttachments(true)) {
+            if ($inlines = $this->attachmentRows(true)) {
                 $body['inlines'] = $inlines;
             }
         }
@@ -160,14 +160,26 @@ class Handler extends BaseHandler {
     }
 
     /**
+     * The normal attachments; embedded images are sent separately (attachmentRows(true)).
+     *
+     * @return array
+     */
+    protected function getAttachments() {
+        return $this->attachmentRows(false);
+    }
+
+    /**
      * @param bool $inline True for the embedded images, false for normal attachments.
      * @return array
      */
-    protected function getAttachments($inline = false) {
+    protected function attachmentRows($inline) {
         $data = [];
 
-        foreach ($this->getParam('attachments') as $attachment) {
-            $contentId = self::inlineContentId($attachment);
+        $attachments = $this->getParam('attachments');
+        $contentIds = self::inlineContentIds($attachments);
+
+        foreach ($attachments as $key => $attachment) {
+            $contentId = $contentIds[$key];
 
             if (($contentId !== '') !== $inline) {
                 continue;

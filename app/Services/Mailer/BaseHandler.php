@@ -1070,6 +1070,41 @@ class BaseHandler
     }
 
     /**
+     * inlineContentId() for every attachment of one email, with each cid used once.
+     *
+     * Providers that turn the cid into the inline part's name (SparkPost, SMTP2GO,
+     * Mailgun) need it unique: SparkPost refuses a transmission with two inline
+     * images of the same name. PHPMailer stores 0 when an inline attachment has
+     * no cid, and WordPress's list-keyed $embeds use 0, 1, ... as well, so a
+     * repeat is possible. A later attachment that repeats a cid gets '' and goes
+     * out as a normal attachment, so it is never lost.
+     *
+     * @param array $attachments PHPMailer::getAttachments() rows
+     * @return array The same keys, each mapped to its cid or ''.
+     */
+    public static function inlineContentIds($attachments)
+    {
+        $ids = [];
+        $seen = [];
+
+        foreach ((array) $attachments as $key => $attachment) {
+            $contentId = self::inlineContentId($attachment);
+
+            if ($contentId !== '' && isset($seen[$contentId])) {
+                $contentId = '';
+            }
+
+            if ($contentId !== '') {
+                $seen[$contentId] = true;
+            }
+
+            $ids[$key] = $contentId;
+        }
+
+        return $ids;
+    }
+
+    /**
      * The MIME type of a file on disk from its content, or '' when it cannot be told.
      *
      * Runs only for a path that passes readAttachmentFile()'s checks, and only reports a

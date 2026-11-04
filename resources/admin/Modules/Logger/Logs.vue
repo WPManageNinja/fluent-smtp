@@ -205,7 +205,7 @@ import LogFilter from './LogFilter';
 import LogViewer from './LogViewer';
 import LogBulkAction from './BulkAction';
 import ResendDialog from './ResendDialog';
-import {confirmResendWithoutAttachments, confirmBulkResendWithoutAttachments, notifyResendResult} from './attachmentStatus';
+import {confirmResendWithoutAttachments, confirmBulkResendWithoutAttachments, notifyResendResult, loadAttachmentStatus} from './attachmentStatus';
 import isEmpty from 'lodash/isEmpty'
 
 export default {
@@ -430,9 +430,13 @@ export default {
                 .catch(() => {});
         },
         handleResendClick(row) {
-            this.resendDialog.log = row;
-            this.resendDialog.resending = false;
-            this.resendDialog.visible = true;
+            // The dialog lists the attachments a resend can't include; ask the
+            // server now, since the log list does not check files.
+            loadAttachmentStatus(this, [row]).then(() => {
+                this.resendDialog.log = row;
+                this.resendDialog.resending = false;
+                this.resendDialog.visible = true;
+            });
         },
         handleResendConfirm(payload) {
             const row = this.resendDialog.log;

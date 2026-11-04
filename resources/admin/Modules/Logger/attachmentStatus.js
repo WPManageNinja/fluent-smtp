@@ -6,6 +6,8 @@
  * - in_memory: built in memory by the sending plugin (e.g. an invoice PDF);
  *              the log does not keep the data, so it can't be resent
  * - missing:   the file was deleted, moved or can't be read, so it can't be resent
+ * - unchecked: a file the log list did not look up; loadAttachmentStatus()
+ *              asks the server just before a resend
  */
 
 /** The logged attachments, or a best-effort list for rows from older responses. */
@@ -23,6 +25,33 @@ export function attachmentList(log) {
     return raw.map(attachment => {
         const path = Array.isArray(attachment) ? String(attachment[0] || '') : String(attachment || '');
         return {name: path.replace(/\\/g, '/').split('/').pop(), status: 'unknown', inline: false, size: null};
+    });
+}
+
+/**
+ * Ask the server whether the files of these logs can still be resent, and store
+ * the answer on each log's attachment_list. Only logs with a file attachment not
+ * yet checked are sent; the log list itself never checks files. Always resolves:
+ * if the check fails, the resend goes ahead and reports what it left out.
+ */
+export function loadAttachmentStatus(vm, logs) {
+    const pending = (logs || []).filter(log => log && attachmentList(log).some(item => item.status === 'unchecked'));
+
+    if (!pending.length) {
+        return Promise.resolve();
+    }
+
+    return new Promise(resolve => {
+        vm.$get('logs/attachment-status', {ids: pending.map(log => log.id)})
+            .then(res => {
+                const statuses = (res && res.data && res.data.attachments) || {};
+                pending.forEach(log => {
+                    if (Array.isArray(statuses[log.id])) {
+                        log.attachment_list = statuses[log.id];
+                    }
+                });
+            })
+            .always(() => resolve());
     });
 }
 
@@ -59,6 +88,10 @@ export function attachmentStatusReason(item, vm) {
  * when they cancel.
  */
 export function confirmResendWithoutAttachments(vm, log) {
+    return loadAttachmentStatus(vm, [log]).then(() => askResendWithoutAttachments(vm, log));
+}
+
+function askResendWithoutAttachments(vm, log) {
     const missing = unresendableAttachments(log);
 
     if (!missing.length) {
@@ -105,6 +138,10 @@ export function notifyResendResult(vm, res) {
  * admin confirms; rejects when they cancel.
  */
 export function confirmBulkResendWithoutAttachments(vm, rows) {
+    return loadAttachmentStatus(vm, rows).then(() => askBulkResendWithoutAttachments(vm, rows));
+}
+
+function askBulkResendWithoutAttachments(vm, rows) {
     const affected = (rows || []).filter(row => unresendableAttachments(row).length);
 
     if (!affected.length) {

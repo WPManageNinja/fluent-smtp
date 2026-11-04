@@ -14,13 +14,21 @@ import {
     attachmentStatusReason,
     confirmResendWithoutAttachments,
     confirmBulkResendWithoutAttachments,
-    notifyResendResult
+    notifyResendResult,
+    loadAttachmentStatus
 } from '../../resources/admin/Modules/Logger/attachmentStatus';
 
-const vm = () => ({
+// A jqXHR-like result for vm.$get: then() and always() run synchronously.
+const ajax = (response, fail = false) => ({
+    then(cb) { if (!fail) { cb(response); } return this; },
+    always(cb) { cb(); return this; }
+});
+
+const vm = (statuses = {}, fail = false) => ({
     $t: (s, ...args) => args.reduce((out, arg) => out.replace('%s', arg), s),
     $confirm: vi.fn(() => Promise.resolve()),
-    $notify: { success: vi.fn(), warning: vi.fn() }
+    $notify: { success: vi.fn(), warning: vi.fn() },
+    $get: vi.fn(() => ajax({ data: { attachments: statuses } }, fail))
 });
 
 const log = {
@@ -59,6 +67,39 @@ describe('attachment status', () => {
         await confirmResendWithoutAttachments(v, log);
         expect(v.$confirm).toHaveBeenCalledTimes(1);
         expect(v.$confirm.mock.calls[0][0]).toContain('invoice.pdf, old.pdf');
+    });
+
+    it('asks the server about unchecked files only, and only for logs that have them', async () => {
+        const unchecked = { id: 7, attachment_list: [{ name: 'report.pdf', status: 'unchecked', inline: false, size: null }] };
+        const v = vm({ 7: [{ name: 'report.pdf', status: 'missing', inline: false, size: null }] });
+
+        await confirmResendWithoutAttachments(v, unchecked);
+        expect(v.$get).toHaveBeenCalledWith('logs/attachment-status', { ids: [7] });
+        expect(unchecked.attachment_list[0].status).toBe('missing');
+        expect(v.$confirm).toHaveBeenCalledTimes(1);
+        expect(v.$confirm.mock.calls[0][0]).toContain('report.pdf');
+
+        // No attachments, or only checked / in-memory ones: no request.
+        const quiet = vm();
+        await loadAttachmentStatus(quiet, [{ id: 1, attachment_list: [] }, { id: 2, attachment_list: [log.attachment_list[1]] }]);
+        expect(quiet.$get).not.toHaveBeenCalled();
+    });
+
+    it('sends one request for a bulk resend, and goes ahead when the check fails', async () => {
+        const rows = [
+            { id: 3, attachment_list: [{ name: 'a.pdf', status: 'unchecked' }] },
+            { id: 4, attachment_list: [] },
+            { id: 5, attachment_list: [{ name: 'b.pdf', status: 'unchecked' }] }
+        ];
+        const v = vm({ 3: [{ name: 'a.pdf', status: 'ok' }], 5: [{ name: 'b.pdf', status: 'missing' }] });
+        await confirmBulkResendWithoutAttachments(v, rows);
+        expect(v.$get).toHaveBeenCalledTimes(1);
+        expect(v.$get.mock.calls[0][1]).toEqual({ ids: [3, 5] });
+        expect(v.$confirm.mock.calls[0][0]).toContain('One of the selected emails has');
+
+        const failing = vm({}, true);
+        await confirmResendWithoutAttachments(failing, { id: 9, attachment_list: [{ name: 'c.pdf', status: 'unchecked' }] });
+        expect(failing.$confirm).not.toHaveBeenCalled();
     });
 
     it('warns after a resend that left attachments out, and confirms one that did not', () => {
