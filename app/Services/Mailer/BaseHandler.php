@@ -752,7 +752,7 @@ class BaseHandler
             'from' => $this->attributes['from'],
             'subject' => sanitize_text_field($this->attributes['subject']),
             'body' => $this->attributes['message'],
-            'attachments' => $this->serialize($this->attributes['attachments']),
+            'attachments' => $this->serialize(self::attachmentsForLog($this->attributes['attachments'])),
             'status'   => $status ? 'sent' : 'failed',
             'response' => $this->serialize($response),
             'headers'  => $this->serialize($this->getParam('headers')),
@@ -1090,6 +1090,56 @@ class BaseHandler
         }
 
         return '';
+    }
+
+    /**
+     * The attachment records as the email log stores them.
+     *
+     * An attachment added in memory (addStringAttachment()) carries its data at
+     * index 0. That data is not kept: the log has no use for it (it cannot be
+     * resent from a sanitized copy) and it would bloat the log table. Index 0 is
+     * emptied and the size is kept at index 8 so the log can still describe it.
+     * File attachments keep their path, which is what a resend reads.
+     *
+     * @param mixed $attachments PHPMailer::getAttachments() records.
+     * @return array
+     */
+    public static function attachmentsForLog($attachments)
+    {
+        if (!is_array($attachments)) {
+            return [];
+        }
+
+        foreach ($attachments as $key => $attachment) {
+            if (is_array($attachment) && !empty($attachment[5])) {
+                $data = isset($attachment[0]) && is_string($attachment[0]) ? $attachment[0] : '';
+                // Already stripped (a stored row formatted again): keep the stored size.
+                if ($data !== '' || !isset($attachment[8])) {
+                    $attachment[8] = strlen($data);
+                }
+                $attachment[0] = '';
+                $attachments[$key] = $attachment;
+            }
+        }
+
+        return $attachments;
+    }
+
+    /**
+     * Whether a file path can be attached again: a readable file outside the
+     * blocked locations, judged by the same checks as secureFileRead().
+     *
+     * @param mixed $filePath
+     * @return bool
+     */
+    public static function isReadableAttachmentPath($filePath)
+    {
+        try {
+            self::assertReadableAttachmentPath($filePath);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**

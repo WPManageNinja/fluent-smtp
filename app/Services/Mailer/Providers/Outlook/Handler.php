@@ -245,7 +245,7 @@ class Handler extends BaseHandler
                 'contentBytes' => base64_encode($content)
             ];
 
-            if (isset($attachment[6]) && $attachment[6] === 'inline' && !empty($attachment[7])) {
+            if (isset($attachment[6]) && $attachment[6] === 'inline' && isset($attachment[7]) && (string) $attachment[7] !== '') {
                 $row['isInline'] = true;
                 $row['contentId'] = $attachment[7];
             }
