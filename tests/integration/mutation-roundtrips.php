@@ -355,6 +355,65 @@ return function () {
         });
     });
 
+    FsmtpTest::case('the settings route clears a stale health result on save and keeps it when the save fails', function () use (
+        $withOptionTransaction,
+        $baseMisc
+    ) {
+        $withOptionTransaction(function () use ($baseMisc) {
+            $sender = 'health-route-' . FsmtpTest::uniq() . '@example.test';
+            $key = md5($sender);
+
+            // A no-auth SMTP fixture reaches the real save path without opening a socket.
+            $smtp = function ($host = 'smtp.example.test') use ($sender) {
+                return [
+                    'provider'         => 'smtp',
+                    'sender_name'      => 'Suite Health',
+                    'sender_email'     => $sender,
+                    'force_from_name'  => 'no',
+                    'force_from_email' => 'yes',
+                    'return_path'      => 'yes',
+                    'host'             => $host,
+                    'port'             => '2525',
+                    'auth'             => 'no',
+                    'username'         => '',
+                    'password'         => '',
+                    'auto_tls'         => 'yes',
+                    'encryption'       => 'none',
+                    'key_store'        => 'db',
+                ];
+            };
+
+            (new Settings())->saveGlobalSettings([
+                'connections' => [$key => ['title' => 'SMTP', 'provider_settings' => $smtp()]],
+                'mappings'    => [$sender => $key],
+                'misc'        => $baseMisc($key),
+            ]);
+
+            $errorRow = [
+                'sender_email' => $sender,
+                'provider'     => 'smtp',
+                'status'       => ConnectionHealth::STATUS_ERROR,
+                'message'      => 'Connection needs attention.',
+                'checked_at'   => '2026-01-01 00:00:00',
+            ];
+            $readHealth = function () {
+                wp_cache_delete(ConnectionHealth::OPTION_KEY, 'options');
+                return (array) get_option(ConnectionHealth::OPTION_KEY, []);
+            };
+
+            // A save the validator rejects never reaches store(), so the old error stays.
+            update_option(ConnectionHealth::OPTION_KEY, [$key => $errorRow], false);
+            $failed = FsmtpTest::ajax('POST', '/settings', ['connection_key' => $key, 'connection' => $smtp('')]);
+            FsmtpTest::assert(isset($failed['data']['success']) && $failed['data']['success'] === false, 'invalid connection save was rejected');
+            FsmtpTest::assertSame($errorRow, Arr::get($readHealth(), $key), 'failed save kept the health result');
+
+            // A save that passes validation drops it.
+            $saved = FsmtpTest::ajax('POST', '/settings', ['connection_key' => $key, 'connection' => $smtp()]);
+            FsmtpTest::assertAjaxHealthy($saved, 'save valid SMTP connection');
+            FsmtpTest::assert(!isset($readHealth()[$key]), 'saved connection kept its old health result');
+        });
+    });
+
     FsmtpTest::case('sender alias round-trip adds and removes one mapping and its alias without touching other connection data', function () use (
         $withOptionTransaction,
         $readSettings,
