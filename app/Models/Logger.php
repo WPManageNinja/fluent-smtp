@@ -568,19 +568,16 @@ class Logger extends Model
         $email['extra']       = $this->unserialize($email['extra']);
 
         /*
-         * Files still on disk go out again with their original name, type and
-         * inline cid. In-memory attachments and files that are gone cannot be
-         * included; they are reported back so the admin is told.
-         *
-         * The paths go to wp_mail() as usual, so pre_wp_mail transports and
-         * wp_mail filters see them. wp_mail() takes paths only, so the original
-         * metadata is put back on phpmailer_init, and only on the email that
-         * carries exactly these files: a nested email (a notification sent from
-         * a wp_mail filter) is left alone.
+         * Files still on disk go out again under their original name, and inline
+         * images with their original cid, through wp_mail()'s own arguments: an
+         * attachment keyed by its file name, and embeds keyed by cid. No hook is
+         * needed, so filters, pre_wp_mail transports and queue plugins see the
+         * same files the resend sends. In-memory attachments and files that are
+         * gone cannot be included; they are reported back so the admin is told.
          */
-        $resendable = [];
         $skippedAttachments = [];
         $wpMailAttachments = [];
+        $wpMailEmbeds = [];
 
         foreach ((is_array($email['attachments']) ? $email['attachments'] : []) as $attachment) {
             $described = static::describeAttachment($attachment);
@@ -589,149 +586,28 @@ class Logger extends Model
                 continue;
             }
 
-            if ($described['status'] === 'ok') {
-                $resendable[] = $described;
-                $wpMailAttachments[] = $described['record'][0];
-            } else {
+            if ($described['status'] !== 'ok') {
                 $skippedAttachments[] = ['name' => $described['name'], 'status' => $described['status']];
+                continue;
+            }
+
+            $path = $described['record'][0];
+            $cid = isset($described['record'][7]) ? (string) $described['record'][7] : '';
+
+            if ($described['inline'] && $cid !== '' && !isset($wpMailEmbeds[$cid])) {
+                $wpMailEmbeds[$cid] = $path;
+                continue;
+            }
+
+            // A name that is already used, or one PHP would turn into an integer key,
+            // cannot be a key; that file goes out under its own file name instead.
+            $name = $described['name'];
+            if ($name === '' || isset($wpMailAttachments[$name]) || (string) (int) $name === $name) {
+                $wpMailAttachments[] = $path;
+            } else {
+                $wpMailAttachments[$name] = $path;
             }
         }
-
-        /*
-         * Put the logged name, type, disposition and cid back on the records
-         * wp_mail() created from these paths, and note which logged files the
-         * email really carries.
-         *
-         * - Only the resend's own email is touched. The resend's wp_mail() call
-         *   carries a one-time token header. A wp_mail filter that runs after
-         *   all others takes the token off again, before pre_wp_mail transports,
-         *   queue plugins or wp_mail_succeeded/wp_mail_failed listeners can see
-         *   it, and notes the final subject and recipients. The email reaching
-         *   phpmailer_init with exactly those is the resend; nested emails (a
-         *   notification sent from a wp_mail filter, a failure alert) are not.
-         * - It runs after the usual phpmailer_init listeners, so what it sees is
-         *   what will be sent, including files a listener removed or re-added.
-         *   A listener that rewrites attachments after it can still undo names.
-         * - Records are edited in place, never cleared and re-added, so
-         *   attachments other plugins add keep exactly what they had. Each logged
-         *   file is paired with one record carrying its path, in order.
-         * - When the resend's email never reached phpmailer_init (a pre_wp_mail
-         *   transport took over), nothing is known, so nothing extra is reported.
-         */
-        // Not wp_generate_password(): its random_password filter could change the value.
-        $resendToken = bin2hex(random_bytes(12));
-        $resendSeen = false;
-        $onResendEmail = [];
-        $armed = null;
-
-        $emailsOf = function ($value) {
-            $text = is_array($value) ? implode(',', array_map('strval', $value)) : (string) $value;
-            preg_match_all('/[^\s<>,;"\']+@[^\s<>,;"\']+/', $text, $matches);
-            $emails = array_unique(array_map('strtolower', $matches[0]));
-            sort($emails);
-            return $emails;
-        };
-
-        $takeToken = function ($atts) use ($resendToken, &$armed, $emailsOf) {
-            if ($armed !== null || !is_array($atts) || !isset($atts['headers'])) {
-                return $atts;
-            }
-
-            $marker = 'X-FluentSMTP-Resend: ' . $resendToken;
-            $headers = $atts['headers'];
-            $found = false;
-
-            if (is_array($headers)) {
-                foreach ($headers as $key => $line) {
-                    if (is_string($line) && trim($line) === $marker) {
-                        unset($headers[$key]);
-                        $found = true;
-                    }
-                }
-                $headers = array_values($headers);
-            } elseif (is_string($headers) && strpos($headers, $marker) !== false) {
-                $headers = trim(preg_replace('/^' . preg_quote($marker, '/') . '\s*$\R?/m', '', $headers));
-                $found = true;
-            }
-
-            if ($found) {
-                $atts['headers'] = $headers;
-                $armed = [
-                    'subject' => isset($atts['subject']) ? (string) $atts['subject'] : '',
-                    'to'      => $emailsOf(isset($atts['to']) ? $atts['to'] : ''),
-                ];
-            }
-
-            return $atts;
-        };
-
-        $restoreAttachments = function ($phpmailer) use ($resendable, &$armed, &$resendSeen, &$onResendEmail, $emailsOf) {
-            if (!is_array($armed) || !empty($armed['done'])) {
-                return;
-            }
-
-            $to = $emailsOf(array_map(function ($address) {
-                return $address[0];
-            }, $phpmailer->getToAddresses()));
-
-            if ((string) $phpmailer->Subject !== $armed['subject'] || $to !== $armed['to']) {
-                return;
-            }
-
-            $armed['done'] = true;
-            $resendSeen = true;
-            $onResendEmail = [];
-
-            if (!$resendable) {
-                return;
-            }
-
-            try {
-                $property = new \ReflectionProperty($phpmailer, 'attachment');
-                if (PHP_VERSION_ID < 80100) {
-                    $property->setAccessible(true); // a no-op from PHP 8.1 on
-                }
-                $records = $property->getValue($phpmailer);
-            } catch (\ReflectionException $e) {
-                $onResendEmail = array_fill_keys(array_keys($resendable), true);
-                return; // Files still go out, under the names wp_mail() gave them.
-            }
-
-            if (!is_array($records)) {
-                return;
-            }
-
-            foreach ($records as $index => $record) {
-                if (!empty($record[5])) {
-                    continue;
-                }
-                foreach ($resendable as $key => $item) {
-                    if (isset($onResendEmail[$key]) || $record[0] !== $item['record'][0]) {
-                        continue;
-                    }
-                    $onResendEmail[$key] = true;
-                    $logged = $item['record'];
-                    $cid = isset($logged[7]) ? (string) $logged[7] : '';
-
-                    $records[$index][2] = $item['name'];
-                    if (!empty($logged[3])) {
-                        $records[$index][3] = $logged[3];
-                    }
-                    if (!empty($logged[4])) {
-                        $records[$index][4] = $logged[4];
-                    }
-                    if ($cid !== '') {
-                        $records[$index][7] = $logged[7];
-                    }
-                    if ($item['inline'] && $cid !== '') {
-                        $records[$index][6] = 'inline';
-                    }
-                    break;
-                }
-            }
-
-            $property->setValue($phpmailer, $records);
-        };
 
         // When custom recipients are provided, drop cc/bcc headers so the email
         // is only delivered to the requested address(es).
@@ -773,8 +649,7 @@ class Logger extends Model
         }
 
         $headers = array_merge($headers, [
-            'From: ' . $email['from'],
-            'X-FluentSMTP-Resend: ' . $resendToken
+            'From: ' . $email['from']
         ]);
 
         if ($hasCustomRecipients) {
@@ -806,31 +681,14 @@ class Logger extends Model
 
             $startedAt = microtime(true);
 
-            add_filter('wp_mail', $takeToken, PHP_INT_MAX);
-            add_action('phpmailer_init', $restoreAttachments, PHP_INT_MAX - 10);
-
-            try {
-                $result = wp_mail(
-                    $to,
-                    $email['subject'],
-                    $email['body'],
-                    $headers,
-                    $wpMailAttachments
-                );
-            } finally {
-                remove_action('phpmailer_init', $restoreAttachments, PHP_INT_MAX - 10);
-                remove_filter('wp_mail', $takeToken, PHP_INT_MAX);
-            }
-
-            // A logged file wp_mail() could not attach (it vanished meanwhile) or a
-            // filter removed is not on the email either: say so.
-            if ($resendSeen) {
-                foreach ($resendable as $key => $item) {
-                    if (empty($onResendEmail[$key])) {
-                        $skippedAttachments[] = ['name' => $item['name'], 'status' => 'missing'];
-                    }
-                }
-            }
+            $result = wp_mail(
+                $to,
+                $email['subject'],
+                $email['body'],
+                $headers,
+                $wpMailAttachments,
+                $wpMailEmbeds
+            );
 
             $durationMs = round((microtime(true) - $startedAt) * 1000, 1);
 
