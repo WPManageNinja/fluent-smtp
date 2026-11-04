@@ -22,8 +22,10 @@
   `<local@domain>` value keeps its content, and other angle-bracket values
   (`Name <email>`, HTML, two IDs in one string) are sanitized exactly as before.
 - Resolution: the sanitizer removes only an enclosing `<...>` pair around a
-  single `local@domain` token (no whitespace, no inner brackets) before the
-  usual email / URL / text sanitizing. This matches the form Brevo's webhooks
+  single `local@domain` token (no whitespace, no inner brackets) and runs the
+  inner value through `sanitize_text_field()`. It skips `sanitize_email()`,
+  because a message ID is not a mailbox and valid IDs such as `<x@a.b>` would
+  be mangled. This matches the form Brevo's webhooks
   use (`message-id` without brackets).
 - Tracking: AuthLab task 22862 —
   https://lounge.authlab.io/projects#/boards/9/tasks/22862-Fluent-SMTP-with-Brevo

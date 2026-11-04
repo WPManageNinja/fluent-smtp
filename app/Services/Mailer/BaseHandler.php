@@ -773,10 +773,13 @@ class BaseHandler
                  * sanitize_text_field() reads `<...>` as an HTML tag and erases
                  * the whole value, so drop only the enclosing pair. The pattern
                  * allows no whitespace or inner brackets, so `Name <email>`
-                 * values are not touched.
+                 * values are not touched. A message ID is not a mailbox, so it
+                 * skips sanitize_email(), which would mangle valid IDs such
+                 * as `<x@a.b>`.
                  */
-                if (preg_match('/^<([^<>\s]+@[^<>\s]+)>$/', $item, $matches)) {
-                    $item = $matches[1];
+                if (preg_match('/^<([^<>\s]+@[^<>\s]+)>\z/', $item, $matches)) {
+                    $data[$key] = sanitize_text_field($matches[1]);
+                    continue;
                 }
 
                 if (filter_var($item, FILTER_VALIDATE_EMAIL)) {

@@ -93,12 +93,20 @@ return function () {
         $result = $sanitize->invoke($handler, [
             'mailgun' => '<20111114174239.25659.5817@samples.mailgun.org>',
             'nested'  => ['id' => '<abc.123@relay.example.test>'],
-            'bare'    => 'abc123',
+            'short'   => '<x@a.b>',
+            'no_dot'  => '<abc@localhost>',
+            'mailto'  => '<mailto:unsub@example.test>',
+            'newline' => "<a@b.test>\n",
         ]);
 
         FsmtpTest::assertSame('20111114174239.25659.5817@samples.mailgun.org', $result['mailgun'], 'Mailgun-style id');
         FsmtpTest::assertSame('abc.123@relay.example.test', $result['nested']['id'], 'nested id');
-        FsmtpTest::assertSame('abc123', $result['bare'], 'id without brackets');
+        // These are valid message IDs that sanitize_email() would mangle or erase.
+        FsmtpTest::assertSame('x@a.b', $result['short'], 'short id is kept, not run through sanitize_email');
+        FsmtpTest::assertSame('abc@localhost', $result['no_dot'], 'id without a dot in the domain');
+        FsmtpTest::assertSame('mailto:unsub@example.test', $result['mailto'], 'bracketed mailto value');
+        // A trailing newline means the value is not one bracketed token.
+        FsmtpTest::assertSame(sanitize_text_field("<a@b.test>\n"), $result['newline'], 'trailing newline is not treated as an id');
     });
 
     FsmtpTest::case('the log sanitizer still treats other angle-bracket values as before', function () {
@@ -115,6 +123,8 @@ return function () {
         ];
         $result = $sanitize->invoke($handler, $inputs);
 
+        // None of these pass email or URL validation, so the old code sent each
+        // one through sanitize_text_field(); that is the baseline to match.
         foreach ($inputs as $key => $value) {
             FsmtpTest::assertSame(sanitize_text_field($value), $result[$key], $key . ' unchanged from sanitize_text_field');
         }
