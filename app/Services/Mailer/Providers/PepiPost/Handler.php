@@ -168,7 +168,7 @@ class Handler extends BaseHandler
         // A body declared as plain text that carries HTML tags (a plugin that sends
         // HTML without setting the content type) goes out as before, unescaped.
         if (!$isHtml && $message === strip_tags($message)) {
-            $message = nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8', true), false);
+            $message = nl2br(htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', true), false);
         }
 
         return [

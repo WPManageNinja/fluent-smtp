@@ -110,4 +110,27 @@ return function () {
         });
         FsmtpTest::assertSame('<p>Order <a href="https://example.test/o/12">#12</a> is ready</p>', $content[0]['value'], 'unescaped');
     });
+    FsmtpTest::case('PepiPost escapes text with a lone "<" and leaves tag-like text as it was', function () use ($send) {
+        $plain = $send(function ($m) {
+            $m->isHTML(false);
+            $m->Body = "Price a < b\nok";
+        });
+        FsmtpTest::assertSame("Price a &lt; b<br>\nok", $plain[0]['value'], 'a lone < is escaped');
+
+        // Looks like a tag to strip_tags(): sent raw, exactly as before this change.
+        $tagLike = $send(function ($m) {
+            $m->isHTML(false);
+            $m->Body = 'Hi <john@example.test>';
+        });
+        FsmtpTest::assertSame('Hi <john@example.test>', $tagLike[0]['value'], 'tag-like text unchanged');
+    });
+
+    FsmtpTest::case('PepiPost still sends a plain-text body with invalid UTF-8 instead of an empty one', function () use ($send) {
+        $content = $send(function ($m) {
+            $m->isHTML(false);
+            $m->CharSet = 'UTF-8';
+            $m->Body = "Total: 5 \xC3 euros";
+        });
+        FsmtpTest::assert(strpos($content[0]['value'], 'Total: 5') === 0, 'body kept: ' . json_encode($content[0]['value']));
+    });
 };
