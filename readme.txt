@@ -358,6 +358,10 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 - Improved SMTP connection settings: changing the host, port or username, or lowering the encryption, now asks for the password again, and wp-config.php credentials can be limited to one host with the optional FLUENTMAIL_SMTP_HOST and FLUENTMAIL_SMTP_PORT constants
 - Improved Amazon SES connection settings validation
 - Improved performance: the legacy Outlook check no longer runs on front-end page loads
+- Improved the dashboard's sending-by-time-of-day heatmap: it now fills its card, and in dark mode the busiest hours are the brightest
+- Improved the email log: simulated emails are marked with a badge, and the total count uses thousands separators, as do the dashboard counters
+- Improved contrast in dark mode for links and the admin footer, and for the "Email Simulated" admin bar label
+- Improved the About page layout and the heading structure of the connection settings screens
 - Fixed the Reply-To name being dropped on SMTP2GO, Postmark, SparkPost and Cloudflare, and names with special characters breaking the Reply-To header
 - Fixed additional sender addresses being replaced by the connection's main sender on Amazon SES and toSend, and sender addresses being matched case-sensitively
 - Fixed an email being sent with another connection's settings when one request sends through two connections of the same provider type
