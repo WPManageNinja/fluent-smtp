@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3 class="fs_config_title">{{ $t('Mailgun API Settings') }}</h3>
+        <h2 class="fs_config_title">{{ $t('Mailgun API Settings') }}</h2>
         <el-radio-group size="small" v-model="connection.key_store">
             <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>
             <el-radio-button value="wp_config">{{ $t('Store in wp-config.php') }}</el-radio-button>

@@ -2,7 +2,7 @@
     <div>
         <div v-if="connection_key && !connection.version" v-html="$t('__GCP_INTRO')" class="ff_smtp_warn">
         </div>
-        <h3 class="fs_config_title">{{ $t('Gmail / Google Workspace API Settings') }}</h3>
+        <h2 class="fs_config_title">{{ $t('Gmail / Google Workspace API Settings') }}</h2>
         <p v-html="$t('__GCP_API_INST')"></p>
         
         <el-radio-group size="small" v-model="connection.key_store">

@@ -1,7 +1,12 @@
 <template>
+    <!--
+        `slot` rather than Element Plus's own `total`, which prints the raw number
+        ("Total 13761") in its own locale. This one is grouped like every other count
+        in the app and goes through the plugin's translations.
+    -->
     <el-pagination class="fluentcrm-pagination"
                    :background="false"
-                   layout="total, sizes, prev, pager, next"
+                   layout="slot, sizes, prev, pager, next"
                    @current-change="changePage"
                    @size-change="changeSize"
                    :hide-on-single-page="false"
@@ -9,7 +14,9 @@
                    :page-sizes="page_sizes"
                    :page-size="pagination.per_page"
                    :total="pagination.total"
-    />
+    >
+        <span class="el-pagination__total">{{ $t('Total %s', formatCount(pagination.total)) }}</span>
+    </el-pagination>
 </template>
 
 <script>

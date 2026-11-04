@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3 class="fs_config_title">{{ $t('toSend API Settings') }}</h3>
+        <h2 class="fs_config_title">{{ $t('toSend API Settings') }}</h2>
 
         <div v-if="is_new" class="tosend_signup_hint" style="padding: 10px 14px; margin-bottom: 15px; background: var(--fsm-accent-wash); border: 1px solid var(--fsm-border); border-radius: 4px; font-size: 13px; line-height: 1.55; color: var(--fsm-text);">
             {{ $t("Don't have a toSend account yet?") }}

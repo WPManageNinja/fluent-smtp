@@ -24,49 +24,10 @@
                                 <a target="_blank" rel="nofollow" href="https://github.com/WPManageNinja/fluent-smtp/issues">
                                     {{ $t('open an issue on GitHub') }}
                                 </a>.
-                                <br/>
-                                <p v-html="$t('__GIT_CONTRIBUTE')"></p>
                             </p>
+                            <p v-html="$t('__GIT_CONTRIBUTE')"></p>
                             <p><a target="_blank" rel="noopener" href="https://fluentsmtp.com/docs">{{ $t('Read the documentation') }}</a></p>
                         </div>
-                    </div>
-                </div>
-                <div class="fss_about">
-                    <div class="fss_header">{{ $t('Contributors') }}</div>
-                    <div class="fss_content">
-                        <p>{{ $t('__ABOUT_POWERED') }}</p>
-
-                        <el-skeleton :rows="4" :animated="true" v-if="contributorsLoading" />
-
-                        <ul v-if="contributors.length > 0" v-loading="contributorsLoading" class="fss_contributors">
-                            <li v-for="contributor in contributors" :key="contributor.id">
-                                <a
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    :href="contributor.html_url"
-                                    :title="contributor.login"
-                                >
-                                    <img
-                                        :src="contributor.avatar_url"
-                                        :alt="contributor.login"
-                                        loading="lazy"
-                                    />
-                                    <span>{{ contributor.login }}</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div v-else-if="!contributorsLoading && !contributors.length" style="text-align: center;">
-                            <a target="_blank" rel="noopener noreferrer" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
-                                <img :title="$t('Contributors')" :src="appVars.images_url + 'contributors.png'"/>
-                            </a>
-                        </div>
-
-                        <p v-if="contributors.length > 0" class="fss_contributors_all">
-                            <a target="_blank" rel="noopener noreferrer" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
-                                {{ $t('View all contributors on GitHub') }}
-                            </a>
-                        </p>
-
                     </div>
                 </div>
             </el-col>
@@ -125,6 +86,50 @@
                 </div>
             </el-col>
         </el-row>
+        <!--
+            Its own row, the full width of the page. Inside the left column it
+            ran the page about twice as tall as the right one, with the right
+            column empty beside it. Full width also fits about twice as many
+            avatars on a line.
+        -->
+        <div class="fss_about">
+            <div class="fss_header">{{ $t('Contributors') }}</div>
+            <div class="fss_content">
+                <p>{{ $t('__ABOUT_POWERED') }}</p>
+
+                <el-skeleton :rows="4" :animated="true" v-if="contributorsLoading" />
+
+                <ul v-if="contributors.length > 0" v-loading="contributorsLoading" class="fss_contributors">
+                    <li v-for="contributor in contributors" :key="contributor.id">
+                        <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            :href="contributor.html_url"
+                            :title="contributor.login"
+                        >
+                            <img
+                                :src="contributor.avatar_url"
+                                :alt="contributor.login"
+                                loading="lazy"
+                            />
+                            <span>{{ contributor.login }}</span>
+                        </a>
+                    </li>
+                </ul>
+                <div v-else-if="!contributorsLoading && !contributors.length" style="text-align: center;">
+                    <a target="_blank" rel="noopener noreferrer" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
+                        <img :title="$t('Contributors')" :src="appVars.images_url + 'contributors.png'"/>
+                    </a>
+                </div>
+
+                <p v-if="contributors.length > 0" class="fss_contributors_all">
+                    <a target="_blank" rel="noopener noreferrer" href="https://github.com/WPManageNinja/fluent-smtp/graphs/contributors">
+                        {{ $t('View all contributors on GitHub') }}
+                    </a>
+                </p>
+
+            </div>
+        </div>
     </div>
 </template>
 
