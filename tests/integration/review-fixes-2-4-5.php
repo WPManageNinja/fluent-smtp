@@ -5,7 +5,7 @@ use FluentMail\App\Services\Mailer\Providers\Smtp\Handler as SmtpHandler;
 use FluentMail\App\Services\SecretMasker;
 
 /*
- * Fixes from the pre-release review of 2.5.0:
+ * Fixes from the pre-release review of 2.4.5:
  * - embedded images go out inline on the API providers that support it;
  * - the SMTP connection security is read the way PHPMailer and SecretMasker agree on;
  * - attachment path checks do not warn under open_basedir;

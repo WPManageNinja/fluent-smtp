@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, wp mail smtp, amazon ses, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1
-Stable tag: 2.5.0
+Stable tag: 2.4.5
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -349,7 +349,7 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 
 == Changelog ==
 
-= 2.5.0 (Date: Nov 04, 2026) =
+= 2.4.5 (Date: Nov 04, 2026) =
 - Added the SendGrid EU region, for accounts on SendGrid's EU data residency
 - Added an API region choice (Global, EU, US, AU) for SMTP2GO connections, and SMTP2GO emails are now sent with fastaccept
 - Added support for attachments that plugins create in memory, such as generated PDF invoices, on every API provider
