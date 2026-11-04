@@ -114,7 +114,7 @@ class Handler extends BaseHandler
 
             $attachments[] = [
                 'type'    => self::attachmentType($attachment),
-                'name'    => self::getAttachmentName($attachment),
+                'name'    => self::attachmentName($attachment),
                 'content' => $file
             ];
         }

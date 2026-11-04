@@ -240,14 +240,16 @@ class Handler extends BaseHandler
 
             $row = [
                 '@odata.type'  => '#microsoft.graph.fileAttachment',
-                'name'         => self::getAttachmentName($attachment),
+                'name'         => self::attachmentName($attachment),
                 'contentType'  => self::attachmentType($attachment),
                 'contentBytes' => base64_encode($content)
             ];
 
-            if (isset($attachment[6]) && $attachment[6] === 'inline' && isset($attachment[7]) && (string) $attachment[7] !== '') {
+            $contentId = self::inlineContentId($attachment);
+
+            if ($contentId !== '') {
                 $row['isInline'] = true;
-                $row['contentId'] = $attachment[7];
+                $row['contentId'] = $contentId;
             }
 
             $attachments[] = $row;

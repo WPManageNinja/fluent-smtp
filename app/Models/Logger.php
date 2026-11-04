@@ -326,7 +326,7 @@ class Logger extends Model
         }
 
         return [
-            'name'   => (string) BaseHandler::getAttachmentName($attachment),
+            'name'   => (string) BaseHandler::attachmentName($attachment),
             'status' => $inMemory ? 'in_memory' : ($readable ? 'ok' : 'missing'),
             'inline' => isset($attachment[6]) && $attachment[6] === 'inline',
             'size'   => $size,

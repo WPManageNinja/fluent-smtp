@@ -54,7 +54,15 @@ class Handler extends BaseHandler
         }
 
         if (!empty($this->getParam('attachments'))) {
-            $body['content']['attachments'] = $this->getAttachments();
+            if ($attachments = $this->getAttachments()) {
+                $body['content']['attachments'] = $attachments;
+            }
+
+            // SparkPost puts an inline image's name in its Content-ID header,
+            // so embedded images go in inline_images under their cid.
+            if ($inlineImages = $this->getAttachments(true)) {
+                $body['content']['inline_images'] = $inlineImages;
+            }
         }
 
         $params = [
@@ -168,11 +176,21 @@ class Handler extends BaseHandler
         return $address;
     }
 
-    protected function getAttachments()
+    /**
+     * @param bool $inline True for the embedded images, false for normal attachments.
+     * @return array
+     */
+    protected function getAttachments($inline = false)
     {
         $data = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
+            $contentId = self::inlineContentId($attachment);
+
+            if (($contentId !== '') !== $inline) {
+                continue;
+            }
+
             try {
                 $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
@@ -182,7 +200,7 @@ class Handler extends BaseHandler
 
             // SparkPost's attachment object is name, type and data (all required).
             $data[] = [
-                'name' => self::getAttachmentName($attachment),
+                'name' => $inline ? $contentId : self::attachmentName($attachment),
                 'type' => self::attachmentType($attachment),
                 'data' => base64_encode($file)
             ];

@@ -167,7 +167,10 @@ class Handler extends BaseHandler
 
         // A body declared as plain text that carries HTML tags (a plugin that sends
         // HTML without setting the content type) goes out as before, unescaped.
-        if (!$isHtml && $message === strip_tags($message)) {
+        // Only a real tag counts: a tag name followed by a space, "/" or ">", or a
+        // comment or doctype. strip_tags() also treats "Name <john@example.com>"
+        // and "<https://...>" as tags, which sent such text raw and lost it.
+        if (!$isHtml && !preg_match('~<(?:/?[a-z][a-z0-9-]*(?:[\s/][^<>]*)?>|!--|!doctype\b)~i', $message)) {
             $message = nl2br(htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', true), false);
         }
 
@@ -192,7 +195,7 @@ class Handler extends BaseHandler
             }
 
             $data[] = [
-                'name'    => self::getAttachmentName($attachment),
+                'name'    => self::attachmentName($attachment),
                 'content' => base64_encode($file)
             ];
         }

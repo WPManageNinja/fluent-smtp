@@ -65,7 +65,7 @@ class Handler extends BaseHandler
                 $this->phpMailer->Password = '';
             }
 
-            $encryption = $this->getSetting('encryption');
+            $encryption = self::normalizeEncryption($this->getSetting('encryption'));
             $this->phpMailer->SMTPSecure = $encryption != 'none' ? $encryption : '';
 
             $fromEmail = $this->phpMailer->From;
@@ -253,6 +253,25 @@ class Handler extends BaseHandler
         $this->settings = $settings;
 
         return $this;
+    }
+
+    /**
+     * The connection security as PHPMailer understands it: "ssl", "tls" or "none".
+     *
+     * PHPMailer acts only on the exact lower-case strings "ssl" and "tls". A stored
+     * "TLS" would otherwise send the login in clear text, while
+     * SecretMasker::smtpSecurityLevel(), which reads it case-insensitively, rates
+     * it as encrypted and lets the saved password be reused. Reading it here the
+     * same way keeps both in step; any other value means no encryption.
+     *
+     * @param mixed $encryption
+     * @return string
+     */
+    public static function normalizeEncryption($encryption)
+    {
+        $encryption = is_scalar($encryption) ? strtolower(trim((string) $encryption)) : '';
+
+        return in_array($encryption, ['ssl', 'tls'], true) ? $encryption : 'none';
     }
 
     public static function wpConfigEndpointMismatches($settings)

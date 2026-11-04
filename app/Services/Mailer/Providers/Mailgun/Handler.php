@@ -183,9 +183,14 @@ class Handler extends BaseHandler
                 continue;
             }
 
+            // Mailgun uses an "inline" part's filename as its Content-ID, so an
+            // embedded image goes out under its cid and the HTML's cid: reference shows it.
+            $contentId = self::inlineContentId($attachment);
+
             $data[] = [
                 'content' => $file,
-                'name'    => self::getAttachmentName($attachment),
+                'name'    => $contentId !== '' ? $contentId : self::attachmentName($attachment),
+                'field'   => $contentId !== '' ? 'inline' : 'attachment',
             ];
         }
 
@@ -213,7 +218,7 @@ class Handler extends BaseHandler
             foreach ($data as $key => $attachment) {
                 $payload .= '--' . $boundary;
                 $payload .= "\r\n";
-                $payload .= 'Content-Disposition: form-data; name="attachment[' . $key . ']"; filename="' . $attachment['name'] . '"' . "\r\n\r\n";
+                $payload .= 'Content-Disposition: form-data; name="' . $attachment['field'] . '[' . $key . ']"; filename="' . $attachment['name'] . '"' . "\r\n\r\n";
                 $payload .= $attachment['content'];
                 $payload .= "\r\n";
             }

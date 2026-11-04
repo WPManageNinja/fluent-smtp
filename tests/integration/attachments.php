@@ -708,7 +708,7 @@ return function () {
 
         FsmtpTest::case('helper: attachment names for files and in-memory data', function () use ($rowFor, $pdfPath, $binary) {
             $name = function (callable $add) use ($rowFor) {
-                return BaseHandler::getAttachmentName($rowFor($add));
+                return BaseHandler::attachmentName($rowFor($add));
             };
 
             FsmtpTest::assertSame('suite-document.pdf', $name(function ($m) use ($pdfPath) {
@@ -1123,9 +1123,9 @@ return function () {
             add_filter('fluentsmtp_attachment_blocked_paths', $filter);
             try {
                 FsmtpTest::assert(null !== $thrown(function () use ($blocked) {
-                    BaseHandler::secureFileRead($blocked);
+                    BaseHandler::readAttachmentFile($blocked);
                 }), 'the blocked file itself is refused');
-                FsmtpTest::assertSame('%PDF-1.4 copy', BaseHandler::secureFileRead($sibling), 'a sibling that only shares the prefix is read');
+                FsmtpTest::assertSame('%PDF-1.4 copy', BaseHandler::readAttachmentFile($sibling), 'a sibling that only shares the prefix is read');
             } finally {
                 remove_filter('fluentsmtp_attachment_blocked_paths', $filter);
             }
