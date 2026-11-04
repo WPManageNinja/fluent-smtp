@@ -692,6 +692,20 @@ return function () {
             FsmtpTest::assertSame([['invoice.pdf', 'application/pdf', md5($binary)]], $rows, 'Graph attachments');
         });
 
+        FsmtpTest::case('Outlook: an inline image whose content id is "0" stays inline in its Graph payload', function () use ($outlookRequest, $pngPath) {
+            $request = $outlookRequest(function ($mailer) use ($pngPath) {
+                $mailer->addBCC('hidden@example.test'); // the Graph JSON path
+                $mailer->isHTML(true);
+                $mailer->Body = '<img src="cid:0">';
+                $mailer->addEmbeddedImage($pngPath, '0', 'logo.png');
+            });
+            $payload = json_decode($request['args']['body'], true);
+            $rows = array_map(function ($a) {
+                return [isset($a['isInline']) ? $a['isInline'] : null, isset($a['contentId']) ? (string) $a['contentId'] : null];
+            }, isset($payload['message']['attachments']) ? $payload['message']['attachments'] : []);
+            FsmtpTest::assertSame([[true, '0']], $rows, 'inline with content id 0');
+        });
+
         FsmtpTest::case('helper: attachment names for files and in-memory data', function () use ($rowFor, $pdfPath, $binary) {
             $name = function (callable $add) use ($rowFor) {
                 return BaseHandler::getAttachmentName($rowFor($add));

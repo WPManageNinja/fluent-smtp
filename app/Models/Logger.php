@@ -602,42 +602,83 @@ class Logger extends Model
          * wp_mail() created from these paths, and note which logged files the
          * email really carries.
          *
-         * - Only the resend's own email is touched. It carries a one-time
-         *   X-FluentSMTP-Resend token header, which is taken off again here so
-         *   it never goes out. Nested emails (a notification sent from a wp_mail
-         *   filter, a failure alert) do not carry it.
+         * - Only the resend's own email is touched. The resend's wp_mail() call
+         *   carries a one-time token header. A wp_mail filter that runs after
+         *   all others takes the token off again, before pre_wp_mail transports,
+         *   queue plugins or wp_mail_succeeded/wp_mail_failed listeners can see
+         *   it, and notes the final subject and recipients. The email reaching
+         *   phpmailer_init with exactly those is the resend; nested emails (a
+         *   notification sent from a wp_mail filter, a failure alert) are not.
          * - It runs after the usual phpmailer_init listeners, so what it sees is
          *   what will be sent, including files a listener removed or re-added.
+         *   A listener that rewrites attachments after it can still undo names.
          * - Records are edited in place, never cleared and re-added, so
          *   attachments other plugins add keep exactly what they had. Each logged
          *   file is paired with one record carrying its path, in order.
          * - When the resend's email never reached phpmailer_init (a pre_wp_mail
          *   transport took over), nothing is known, so nothing extra is reported.
          */
-        $resendToken = wp_generate_password(24, false, false);
+        // Not wp_generate_password(): its random_password filter could change the value.
+        $resendToken = bin2hex(random_bytes(12));
         $resendSeen = false;
         $onResendEmail = [];
-        $restoreAttachments = function ($phpmailer) use ($resendable, $resendToken, &$resendSeen, &$onResendEmail) {
-            $isResend = false;
-            $otherHeaders = [];
+        $armed = null;
 
-            foreach ($phpmailer->getCustomHeaders() as $header) {
-                if (strcasecmp((string) $header[0], 'X-FluentSMTP-Resend') === 0 && trim((string) $header[1]) === $resendToken) {
-                    $isResend = true;
-                    continue;
-                }
-                $otherHeaders[] = $header;
+        $emailsOf = function ($value) {
+            $text = is_array($value) ? implode(',', array_map('strval', $value)) : (string) $value;
+            preg_match_all('/[^\s<>,;"\']+@[^\s<>,;"\']+/', $text, $matches);
+            $emails = array_unique(array_map('strtolower', $matches[0]));
+            sort($emails);
+            return $emails;
+        };
+
+        $takeToken = function ($atts) use ($resendToken, &$armed, $emailsOf) {
+            if ($armed !== null || !is_array($atts) || !isset($atts['headers'])) {
+                return $atts;
             }
 
-            if (!$isResend) {
+            $marker = 'X-FluentSMTP-Resend: ' . $resendToken;
+            $headers = $atts['headers'];
+            $found = false;
+
+            if (is_array($headers)) {
+                foreach ($headers as $key => $line) {
+                    if (is_string($line) && trim($line) === $marker) {
+                        unset($headers[$key]);
+                        $found = true;
+                    }
+                }
+                $headers = array_values($headers);
+            } elseif (is_string($headers) && strpos($headers, $marker) !== false) {
+                $headers = trim(preg_replace('/^' . preg_quote($marker, '/') . '\s*$\R?/m', '', $headers));
+                $found = true;
+            }
+
+            if ($found) {
+                $atts['headers'] = $headers;
+                $armed = [
+                    'subject' => isset($atts['subject']) ? (string) $atts['subject'] : '',
+                    'to'      => $emailsOf(isset($atts['to']) ? $atts['to'] : ''),
+                ];
+            }
+
+            return $atts;
+        };
+
+        $restoreAttachments = function ($phpmailer) use ($resendable, &$armed, &$resendSeen, &$onResendEmail, $emailsOf) {
+            if (!is_array($armed) || !empty($armed['done'])) {
                 return;
             }
 
-            $phpmailer->clearCustomHeaders();
-            foreach ($otherHeaders as $header) {
-                $phpmailer->addCustomHeader($header[0], $header[1]);
+            $to = $emailsOf(array_map(function ($address) {
+                return $address[0];
+            }, $phpmailer->getToAddresses()));
+
+            if ((string) $phpmailer->Subject !== $armed['subject'] || $to !== $armed['to']) {
+                return;
             }
 
+            $armed['done'] = true;
             $resendSeen = true;
             $onResendEmail = [];
 
@@ -765,6 +806,7 @@ class Logger extends Model
 
             $startedAt = microtime(true);
 
+            add_filter('wp_mail', $takeToken, PHP_INT_MAX);
             add_action('phpmailer_init', $restoreAttachments, PHP_INT_MAX - 10);
 
             try {
@@ -777,6 +819,7 @@ class Logger extends Model
                 );
             } finally {
                 remove_action('phpmailer_init', $restoreAttachments, PHP_INT_MAX - 10);
+                remove_filter('wp_mail', $takeToken, PHP_INT_MAX);
             }
 
             // A logged file wp_mail() could not attach (it vanished meanwhile) or a

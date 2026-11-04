@@ -535,6 +535,58 @@ return function () {
             FsmtpTest::assertSame([], $result['skipped_attachments'], 'no false missing-file warning');
         });
 
+        FsmtpTest::case('queue plugins and mail listeners never see the resend\'s internal token', function () use ($resend, $records, $pdfPath) {
+            FsmtpTest::assertMailSimulationActive();
+            $preHeaders = null;
+            $doneHeaders = null;
+            $pre = function ($return, $atts) use (&$preHeaders) {
+                $preHeaders = $atts['headers'];
+                return $return;
+            };
+            $done = function ($mailData) use (&$doneHeaders) {
+                $doneHeaders = $mailData['headers'];
+            };
+            add_filter('pre_wp_mail', $pre, 10, 2);
+            add_action('wp_mail_succeeded', $done);
+            try {
+                $sent = $resend($records(function ($m) use ($pdfPath) {
+                    $m->addAttachment($pdfPath, 'Invoice.pdf');
+                }));
+            } finally {
+                remove_filter('pre_wp_mail', $pre, 10);
+                remove_action('wp_mail_succeeded', $done);
+            }
+            FsmtpTest::assert($preHeaders !== null, 'pre_wp_mail ran');
+            FsmtpTest::assert(stripos(json_encode($preHeaders), 'X-FluentSMTP-Resend') === false, 'pre_wp_mail headers carry no token');
+            if ($doneHeaders !== null) {
+                FsmtpTest::assert(stripos(json_encode($doneHeaders), 'X-FluentSMTP-Resend') === false, 'wp_mail_succeeded headers carry no token');
+            }
+            FsmtpTest::assertSame(['Invoice.pdf'], array_column($sent['seen'], 'name'), 'the resend is still identified and restored');
+        });
+
+        FsmtpTest::case('a notification sent from pre_wp_mail during the resend is not taken for the resend', function () use ($resend, $records, $pdfPath) {
+            FsmtpTest::assertMailSimulationActive();
+            $once = false;
+            // Runs after the wp_mail filters, before the resend reaches phpmailer_init, and lets it continue.
+            $notifyFirst = function ($return, $atts) use (&$once) {
+                if (!$once && $atts['subject'] === $GLOBALS['fsmtp_resend_subject']) {
+                    $once = true;
+                    wp_mail('audit@example.test', 'audit notice', 'about to resend');
+                }
+                return $return;
+            };
+            add_filter('pre_wp_mail', $notifyFirst, 10, 2);
+            try {
+                $sent = $resend($records(function ($m) use ($pdfPath) {
+                    $m->addAttachment($pdfPath, 'Invoice.pdf');
+                }));
+            } finally {
+                remove_filter('pre_wp_mail', $notifyFirst, 10);
+            }
+            FsmtpTest::assert($once, 'the notification was sent');
+            FsmtpTest::assertSame(['Invoice.pdf'], array_column($sent['seen'], 'name'), 'the resend is still restored');
+        });
+
         FsmtpTest::case('formatting a stored row again keeps the size of an in-memory attachment', function () use ($records, $inMemory) {
             $once = BaseHandler::attachmentsForLog($records(function ($m) use ($inMemory) {
                 $m->addStringAttachment($inMemory, 'invoice.pdf');
