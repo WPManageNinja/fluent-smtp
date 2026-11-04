@@ -171,14 +171,15 @@ class Handler extends BaseHandler
             $name = self::getAttachmentName($attachment);
 
             // The allow-list is applied to the delivered name, the only file name
-            // Brevo receives; an in-memory attachment has no path. A file named
-            // without an extension falls back to its path's, as before.
-            $ext = pathinfo($name, PATHINFO_EXTENSION);
-            if ('' === $ext && empty($attachment[5])) {
-                $ext = pathinfo($attachment[0], PATHINFO_EXTENSION);
+            // Brevo receives; an in-memory attachment has no path. A file on disk
+            // also passes on its path's extension, as before, so a name such as
+            // "Rechnung Nr. 2024-001" for /uploads/r.pdf is still sent.
+            $allowed = in_array(strtolower(pathinfo($name, PATHINFO_EXTENSION)), $this->allowedAttachmentExts, true);
+            if (!$allowed && empty($attachment[5])) {
+                $allowed = in_array(strtolower(pathinfo((string) $attachment[0], PATHINFO_EXTENSION)), $this->allowedAttachmentExts, true);
             }
 
-            if (!in_array(strtolower($ext), $this->allowedAttachmentExts, true)) {
+            if (!$allowed) {
                 continue;
             }
 

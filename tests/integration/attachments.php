@@ -1073,6 +1073,52 @@ return function () {
             FsmtpTest::assertSame([['Invoice.PDF', null, md5($binary)]], $sent['rows'], 'attachments in the request');
         });
 
+        FsmtpTest::case('helper: a file whose name gives no type is typed from its content when that is reliable', function () use ($rowFor, $fixture, $binary) {
+            $type = function ($path) use ($rowFor) {
+                return BaseHandler::attachmentType($rowFor(function ($m) use ($path) {
+                    $m->addAttachment($path);
+                }));
+            };
+
+            // PHPMailer's table has no json or svg, and a bare name has no extension.
+            FsmtpTest::assertSame('application/json', $type($fixture('suite-data.json', '{"a":1}')), 'json file');
+            FsmtpTest::assertSame('image/svg+xml', $type($fixture('suite-logo.svg', '<svg xmlns="http://www.w3.org/2000/svg"/>')), 'svg file');
+            FsmtpTest::assertSame('text/plain', $type($fixture('SUITE-README', "plain text\n")), 'extensionless text file');
+            // Random bytes are not trusted to libmagic, which guesses image/x-tga for them.
+            FsmtpTest::assertSame('application/octet-stream', $type($fixture('suite-blob', $binary)), 'extensionless binary');
+            // A recorded type is never overridden by the content.
+            FsmtpTest::assertSame('text/csv', BaseHandler::attachmentType($rowFor(function ($m) use ($fixture) {
+                $m->addAttachment($fixture('suite-rows.txt', "a,b\n"), 'rows.csv', 'base64', 'text/csv');
+            })), 'recorded type wins');
+        });
+
+        FsmtpTest::case('SendInBlue: a delivered name without a known extension still sends a file whose path has one', function () use ($apiSend, $providers, $pdfPath, $binary) {
+            $sent = $apiSend($providers['SendInBlue'], function ($mailer) use ($pdfPath) {
+                $mailer->addAttachment($pdfPath, 'Rechnung Nr. 2024-001');
+            });
+            FsmtpTest::assertSame(null, $sent['failure'], 'send failure');
+            FsmtpTest::assertSame([['Rechnung Nr. 2024-001', null, md5($binary)]], $sent['rows'], 'attachments in the request');
+        });
+
+        FsmtpTest::case('a blocked path blocks only itself and what is under it, not a sibling with the same prefix', function () use ($fixture, $thrown) {
+            $blocked = $fixture('suite-locked.pdf', '%PDF-1.4');
+            $sibling = $fixture('suite-locked.pdf.copy', '%PDF-1.4 copy');
+            $filter = function ($paths) use ($blocked) {
+                $paths[] = $blocked;
+                return $paths;
+            };
+
+            add_filter('fluentsmtp_attachment_blocked_paths', $filter);
+            try {
+                FsmtpTest::assert(null !== $thrown(function () use ($blocked) {
+                    BaseHandler::secureFileRead($blocked);
+                }), 'the blocked file itself is refused');
+                FsmtpTest::assertSame('%PDF-1.4 copy', BaseHandler::secureFileRead($sibling), 'a sibling that only shares the prefix is read');
+            } finally {
+                remove_filter('fluentsmtp_attachment_blocked_paths', $filter);
+            }
+        });
+
         FsmtpTest::case('wp_mail() hands the handler the attachment records the tests build', function () use ($pdfPath, $binary) {
             FsmtpTest::assertMailSimulationActive();
 
