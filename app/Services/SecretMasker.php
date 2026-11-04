@@ -164,7 +164,39 @@ class SecretMasker
             }
         }
 
+        if ($provider === 'smtp' && static::smtpSecurityLevel($values) < static::smtpSecurityLevel($stored)) {
+            return true;
+        }
+
         return false;
+    }
+
+    /**
+     * How well an SMTP connection protects the password in transit:
+     * 2 = SSL or TLS required, 1 = opportunistic STARTTLS (auto TLS), 0 = none.
+     * A save that lowers this level counts as an endpoint change, so a stored
+     * password is never reused over a weaker connection than it was saved for.
+     * Switching between SSL and TLS keeps the level and keeps the password.
+     *
+     * @param array $settings
+     * @return int
+     */
+    protected static function smtpSecurityLevel($settings)
+    {
+        $encryption = isset($settings['encryption']) && is_scalar($settings['encryption'])
+            ? strtolower(trim((string)$settings['encryption']))
+            : '';
+
+        if (in_array($encryption, ['ssl', 'tls'], true)) {
+            return 2;
+        }
+
+        $autoTls = isset($settings['auto_tls']) && is_scalar($settings['auto_tls'])
+            ? (string)$settings['auto_tls']
+            : '';
+
+        // Matches Smtp\Handler: auto TLS is on unless it is set to 'no'.
+        return $autoTls !== 'no' ? 1 : 0;
     }
 
     /**

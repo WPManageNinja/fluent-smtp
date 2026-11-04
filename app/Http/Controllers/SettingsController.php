@@ -95,7 +95,7 @@ class SettingsController extends Controller
             ) {
                 return $this->sendError([
                     'password' => [
-                        'reenter' => __('Enter the SMTP password again. The host, port or username changed, so the saved password is not reused.', 'fluent-smtp')
+                        'reenter' => __('Enter the SMTP password again. The host, port or username changed, or the connection security was lowered, so the saved password is not reused.', 'fluent-smtp')
                     ]
                 ], 422);
             }

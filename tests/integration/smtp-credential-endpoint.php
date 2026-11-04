@@ -111,12 +111,47 @@ return function () {
         });
     });
 
+    FsmtpTest::case('a masked SMTP password is refused when the connection security is lowered', function () use ($withSmtpConnection, $save, $savedPassword) {
+        FsmtpTest::assertMailSimulationActive();
+
+        $downgrades = [
+            'TLS to none'          => ['encryption' => 'none'],
+            'TLS to none, no auto' => ['encryption' => 'none', 'auto_tls' => 'no'],
+        ];
+        foreach ($downgrades as $label => $edit) {
+            $withSmtpConnection(function ($key, $sender, $connection) use ($save, $label, $edit, $savedPassword) {
+                $submitted = array_merge($connection, $edit, ['password' => SecretMasker::MASK]);
+                list($result, $stored) = $save($key, $sender, $submitted);
+
+                FsmtpTest::assertSame(422, $result['status'], $label . ': HTTP status');
+                FsmtpTest::assertSame('tls', $stored['encryption'], $label . ': stored encryption unchanged');
+                FsmtpTest::assert($stored['password'] === $savedPassword, $label . ': stored password unchanged');
+            });
+        }
+
+        // Turning auto TLS off when no encryption is set is a downgrade too.
+        $withSmtpConnection(function ($key, $sender, $connection) use ($save) {
+            $connection['encryption'] = 'none';
+            (new Settings())->saveGlobalSettings(array_replace_recursive(fluentMailGetSettings([], false), [
+                'connections' => [$key => ['provider_settings' => $connection]],
+            ]));
+            fluentMailGetSettings([], false);
+
+            $submitted = array_merge($connection, ['auto_tls' => 'no', 'password' => SecretMasker::MASK]);
+            list($result, $stored) = $save($key, $sender, $submitted);
+
+            FsmtpTest::assertSame(422, $result['status'], 'auto TLS off without encryption: HTTP status');
+            FsmtpTest::assertSame('yes', $stored['auto_tls'], 'auto TLS off without encryption: stored auto_tls unchanged');
+        });
+    });
+
     FsmtpTest::case('a masked SMTP password is kept when the endpoint is unchanged', function () use ($withSmtpConnection, $save, $savedPassword) {
         FsmtpTest::assertMailSimulationActive();
 
         $edits = [
             'sender name'           => ['sender_name' => 'Renamed'],
             'encryption'            => ['encryption' => 'ssl'],
+            'auto TLS off with TLS' => ['auto_tls' => 'no'],
             'host case and spacing' => ['host' => ' SMTP.Saved.Example.Test '],
         ];
         foreach ($edits as $label => $edit) {
