@@ -14,7 +14,6 @@ $providerHandlers = [
     'app/Services/Mailer/Providers/SendInBlue/Handler.php' => 'Brevo/SendInBlue',
     'app/Services/Mailer/Providers/Smtp2Go/Handler.php' => 'SMTP2GO',
     'app/Services/Mailer/Providers/SparkPost/Handler.php' => 'SparkPost',
-    'app/Services/Mailer/Providers/TransMail/Handler.php' => 'TransMail',
 ];
 
 foreach ($providerHandlers as $path => $provider) {

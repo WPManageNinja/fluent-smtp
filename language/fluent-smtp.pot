@@ -340,7 +340,6 @@ msgstr ""
 #: app/Services/Mailer/Providers/Smtp2Go/Handler.php:24
 #: app/Services/Mailer/Providers/SparkPost/Handler.php:26
 #: app/Services/Mailer/Providers/ToSend/Handler.php:24
-#: app/Services/Mailer/Providers/TransMail/Handler.php:23
 msgid "Something went wrong."
 msgstr ""
 
@@ -718,10 +717,6 @@ msgstr ""
 msgid "Unexpected HTTP status"
 msgstr ""
 
-#: app/Services/Mailer/Providers/AmazonSes/Validator.php:50
-msgid "The from email is not verified"
-msgstr ""
-
 #: app/Services/Mailer/Providers/AmazonSes/ValidatorTrait.php:20
 msgid "Access key is required."
 msgstr ""
@@ -1059,7 +1054,6 @@ msgstr ""
 #: app/Services/Mailer/Providers/Smtp2Go/ValidatorTrait.php:20
 #: app/Services/Mailer/Providers/SparkPost/ValidatorTrait.php:20
 #: app/Services/Mailer/Providers/ToSend/ValidatorTrait.php:23
-#: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:19
 msgid "Api key is required."
 msgstr ""
 
@@ -1121,22 +1115,18 @@ msgid "Invalid. Please authenticate again."
 msgstr ""
 
 #: app/Services/Mailer/Providers/Mailgun/Handler.php:108
-#: app/Services/Mailer/Providers/TransMail/Handler.php:113
 msgid "Mailgun API Error"
 msgstr ""
 
 #: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:23
-#: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:23
 msgid "Domain name is required."
 msgstr ""
 
 #: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:27
-#: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:27
 msgid "Please define FLUENTMAIL_MAILGUN_API_KEY in wp-config.php file."
 msgstr ""
 
 #: app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php:31
-#: app/Services/Mailer/Providers/TransMail/ValidatorTrait.php:31
 msgid "Please define FLUENTMAIL_MAILGUN_DOMAIN in wp-config.php file."
 msgstr ""
 
