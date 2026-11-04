@@ -80,9 +80,12 @@ class ActionsRegistrar
      *
      * Done on app load rather than on activation or a scheduled pass: a plugin
      * update does not reliably run the activation hook, and a stale secret
-     * should not sit in the database for up to a day waiting on cron. The
-     * lookup is served from the options cache, so the common case where the
-     * option is already gone costs no query.
+     * should not sit in the database for up to a day waiting on cron.
+     *
+     * registerHooks() calls this only on admin and cron requests, or when the
+     * row is in the autoloaded options WordPress has already loaded. Front-end
+     * loads therefore cost no query once the option is gone. A row stored
+     * without autoload is removed on the next admin or cron request.
      *
      * @return void
      */
