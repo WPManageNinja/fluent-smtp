@@ -130,7 +130,7 @@ class SimpleEmailServiceRequest
 		curl_setopt($curl, CURLOPT_HEADER, false);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, false);
 		curl_setopt($curl, CURLOPT_WRITEFUNCTION, array(&$this, '__responseWriteCallback'));
-		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, false);
 
 		// Bounded timeouts: this handle previously had NONE, so a single hung
 		// request could stall the whole sending pipeline indefinitely (WP-CLI
@@ -154,11 +154,27 @@ class SimpleEmailServiceRequest
 	*/
 	public function getResponse() {
 
+        if (!SimpleEmailService::isValidHost($this->ses->getHost())) {
+            $this->parameters = array();
+            $this->response = (object) array('body' => '', 'code' => 0, 'error' => false);
+
+            return (object) array('body' => '', 'code' => 422, 'error' => array(
+                'Error' => array(
+                    'Type' => 'Sender',
+                    'Code' => 'InvalidRegion',
+                    'Message' => __('Please select a valid Amazon SES region.', 'fluent-smtp')
+                ),
+                'RequestId' => ''
+            ));
+        }
+
         $url = 'https://'.$this->ses->getHost().'/';
         $query = implode('&', $this->getParametersEncoded());
         $headers = $this->getHeaders($query);
 
 		$curl_handler = $this->getCurlHandler();
+		// Apply after custom options, including when reusing an existing handle.
+		curl_setopt($curl_handler, CURLOPT_FOLLOWLOCATION, false);
 		curl_setopt($curl_handler, CURLOPT_CUSTOMREQUEST, $this->verb);
 
 		// Request types

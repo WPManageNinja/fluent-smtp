@@ -33,6 +33,12 @@ trait ValidatorTrait
             }
         }
 
+        if (!SimpleEmailService::isValidRegion(Arr::get($connection, 'region'))) {
+            $errors['region']['invalid'] = __('Please select a valid Amazon SES region.', 'fluent-smtp');
+            // The existing SES form renders connection errors in this slot.
+            $errors['api_error'] = $errors['region']['invalid'];
+        }
+
         if ($errors) {
             $this->throwValidationException($errors);
         }
