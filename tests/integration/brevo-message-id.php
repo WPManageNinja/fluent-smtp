@@ -57,7 +57,11 @@ return function () {
         $logId = (int)$wpdb->get_var("SELECT id FROM `{$table}` ORDER BY id DESC LIMIT 1");
         FsmtpTest::assert($logId > 0, 'Brevo send created an isolated log row');
 
-        return FsmtpFactory::loggerForTable($table)->find($logId);
+        // Read the isolated table directly: Logger::find() always queries the
+        // production table, and the redirect filter is already removed here.
+        $row = $wpdb->get_row($wpdb->prepare("SELECT response FROM `{$table}` WHERE id = %d", $logId), ARRAY_A);
+
+        return ['response' => unserialize($row['response'], ['allowed_classes' => false])];
     };
 
     FsmtpTest::case('Brevo angle-bracketed message IDs survive email-log sanitization', function () use ($send) {
@@ -80,5 +84,39 @@ return function () {
             $row['response'],
             'already-normalized Brevo response'
         );
+    });
+    FsmtpTest::case('the log sanitizer keeps bracketed message IDs from any provider', function () {
+        $handler = new \FluentMail\App\Services\Mailer\BaseHandler();
+        $sanitize = new ReflectionMethod($handler, 'recursiveSanitize');
+        $sanitize->setAccessible(true);
+
+        $result = $sanitize->invoke($handler, [
+            'mailgun' => '<20111114174239.25659.5817@samples.mailgun.org>',
+            'nested'  => ['id' => '<abc.123@relay.example.test>'],
+            'bare'    => 'abc123',
+        ]);
+
+        FsmtpTest::assertSame('20111114174239.25659.5817@samples.mailgun.org', $result['mailgun'], 'Mailgun-style id');
+        FsmtpTest::assertSame('abc.123@relay.example.test', $result['nested']['id'], 'nested id');
+        FsmtpTest::assertSame('abc123', $result['bare'], 'id without brackets');
+    });
+
+    FsmtpTest::case('the log sanitizer still treats other angle-bracket values as before', function () {
+        $handler = new \FluentMail\App\Services\Mailer\BaseHandler();
+        $sanitize = new ReflectionMethod($handler, 'recursiveSanitize');
+        $sanitize->setAccessible(true);
+
+        $inputs = [
+            'name_address' => 'Help Desk <help@example.test>',
+            'html'         => '<b>bold</b> text',
+            'script'       => '<script>alert(1)</script>',
+            'tag_like'     => '<img src=x onerror=alert(1)>',
+            'two_ids'      => '<a@x.test><b@y.test>',
+        ];
+        $result = $sanitize->invoke($handler, $inputs);
+
+        foreach ($inputs as $key => $value) {
+            FsmtpTest::assertSame(sanitize_text_field($value), $result[$key], $key . ' unchanged from sanitize_text_field');
+        }
     });
 };
