@@ -767,6 +767,21 @@ class BaseHandler
                     );
                 }
 
+                /*
+                 * Provider message IDs come in RFC 5322 angle brackets, for
+                 * example Brevo's `<2026...@smtp-relay.mailin.fr>`.
+                 * sanitize_text_field() reads `<...>` as an HTML tag and erases
+                 * the whole value, so drop only the enclosing pair. The pattern
+                 * allows no whitespace or inner brackets, so `Name <email>`
+                 * values are not touched. A message ID is not a mailbox, so it
+                 * skips sanitize_email(), which would mangle valid IDs such
+                 * as `<x@a.b>`.
+                 */
+                if (preg_match('/^<([^<>\s]+@[^<>\s]+)>\z/', $item, $matches)) {
+                    $data[$key] = sanitize_text_field($matches[1]);
+                    continue;
+                }
+
                 if (filter_var($item, FILTER_VALIDATE_EMAIL)) {
                     $data[$key] = sanitize_email($item);
                 } elseif (filter_var($item, FILTER_VALIDATE_URL)) {

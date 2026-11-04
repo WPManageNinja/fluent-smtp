@@ -7,6 +7,29 @@
 > that a future strict-SQL regression is recognised as a repeat rather than
 > investigated from scratch. Add new findings at the top.
 
+## RESOLVED — bracketed provider message IDs were erased by log sanitization
+
+- Production: `app/Services/Mailer/BaseHandler.php` (`recursiveSanitize()`)
+- Symptom: a successful Brevo response such as
+  `<202609031856.15147286983@smtp-relay.mailin.fr>` was stored with an empty
+  `messageId` in the FluentSMTP email log. Mailgun-style `<...@domain>` ids
+  were erased the same way.
+- Mechanism: `BaseHandler::recursiveSanitize()` sends non-email response values
+  through `sanitize_text_field()`, which treats the angle-bracketed ID as HTML
+  and strips it completely.
+- Owning tests: `tests/integration/brevo-message-id.php` verifies a Brevo send
+  logs the ID without brackets, an unbracketed ID is unchanged, any provider's
+  `<local@domain>` value keeps its content, and other angle-bracket values
+  (`Name <email>`, HTML, two IDs in one string) are sanitized exactly as before.
+- Resolution: the sanitizer removes only an enclosing `<...>` pair around a
+  single `local@domain` token (no whitespace, no inner brackets) and runs the
+  inner value through `sanitize_text_field()`. It skips `sanitize_email()`,
+  because a message ID is not a mailbox and valid IDs such as `<x@a.b>` would
+  be mangled. This matches the form Brevo's webhooks
+  use (`message-id` without brackets).
+- Tracking: AuthLab task 22862 —
+  https://lounge.authlab.io/projects#/boards/9/tasks/22862-Fluent-SMTP-with-Brevo
+
 ## RESOLVED — weekly reporting failed with `ONLY_FULL_GROUP_BY`
 
 - Production: `app/Services/Reporting.php:40,58`
