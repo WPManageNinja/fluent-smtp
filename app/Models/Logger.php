@@ -578,6 +578,16 @@ class Logger extends Model
         $skippedAttachments = [];
         $wpMailAttachments = [];
         $wpMailEmbeds = [];
+        $embedMeta = [];
+
+        // Another plugin's wp_mail() may not take $embeds (the sixth argument). Inline
+        // images then go out as ordinary attachments rather than being dropped.
+        $acceptsEmbeds = true;
+        try {
+            $acceptsEmbeds = (new \ReflectionFunction('wp_mail'))->getNumberOfParameters() >= 6;
+        } catch (\ReflectionException $e) {
+            $acceptsEmbeds = true;
+        }
 
         foreach ((is_array($email['attachments']) ? $email['attachments'] : []) as $attachment) {
             $described = static::describeAttachment($attachment);
@@ -594,8 +604,13 @@ class Logger extends Model
             $path = $described['record'][0];
             $cid = isset($described['record'][7]) ? (string) $described['record'][7] : '';
 
-            if ($described['inline'] && $cid !== '' && !isset($wpMailEmbeds[$cid])) {
+            if ($acceptsEmbeds && $described['inline'] && $cid !== '' && !isset($wpMailEmbeds[$cid])) {
                 $wpMailEmbeds[$cid] = $path;
+                $embedMeta[$cid] = [
+                    'path' => $path,
+                    'name' => $described['name'],
+                    'type' => isset($described['record'][4]) ? (string) $described['record'][4] : '',
+                ];
                 continue;
             }
 
@@ -681,14 +696,33 @@ class Logger extends Model
 
             $startedAt = microtime(true);
 
-            $result = wp_mail(
-                $to,
-                $email['subject'],
-                $email['body'],
-                $headers,
-                $wpMailAttachments,
-                $wpMailEmbeds
-            );
+            // wp_mail() names an embed after its path and detects its type; give the
+            // resend's own embeds (same path and cid) their logged name and type.
+            $embedArgs = function ($args) use ($embedMeta) {
+                $cid = isset($args['cid']) ? (string) $args['cid'] : '';
+                if (isset($embedMeta[$cid]) && isset($args['path']) && $args['path'] === $embedMeta[$cid]['path']) {
+                    $args['name'] = $embedMeta[$cid]['name'];
+                    if ($embedMeta[$cid]['type'] !== '') {
+                        $args['type'] = $embedMeta[$cid]['type'];
+                    }
+                }
+                return $args;
+            };
+
+            add_filter('wp_mail_embed_args', $embedArgs);
+
+            try {
+                $result = wp_mail(
+                    $to,
+                    $email['subject'],
+                    $email['body'],
+                    $headers,
+                    $wpMailAttachments,
+                    $wpMailEmbeds
+                );
+            } finally {
+                remove_filter('wp_mail_embed_args', $embedArgs);
+            }
 
             $durationMs = round((microtime(true) - $startedAt) * 1000, 1);
 
