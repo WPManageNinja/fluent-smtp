@@ -32,6 +32,16 @@ trait ValidatorTrait
                 if (!defined('FLUENTMAIL_SMTP_PASSWORD') || !FLUENTMAIL_SMTP_PASSWORD) {
                     $errors['password']['required'] = __('Please define FLUENTMAIL_SMTP_PASSWORD in wp-config.php file.', 'fluent-smtp');
                 }
+
+                foreach (Handler::wpConfigEndpointMismatches($connection) as $field) {
+                    if (isset($errors[$field])) {
+                        continue;
+                    }
+
+                    $errors[$field]['wp_config'] = $field === 'host'
+                        ? __('SMTP host must match FLUENTMAIL_SMTP_HOST in wp-config.php.', 'fluent-smtp')
+                        : __('SMTP port must match FLUENTMAIL_SMTP_PORT in wp-config.php.', 'fluent-smtp');
+                }
             } else {
                 if (!Arr::get($connection, 'username')) {
                     $errors['username']['required'] = __('SMTP username is required.', 'fluent-smtp');
