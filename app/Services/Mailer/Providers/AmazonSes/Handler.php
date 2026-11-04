@@ -179,7 +179,8 @@ class Handler extends BaseHandler
         if (is_wp_error($validSenders)) {
             return [
                 'emails'          => [$config['sender_email']],
-                'verified_domain' => ''
+                'verified_domain' => '',
+                'lookup_failed'   => true
             ];
         }
 
@@ -193,14 +194,17 @@ class Handler extends BaseHandler
 
         if (apply_filters('fluent_mail_ses_primary_domain_only', true)) {
             $addresses = array_filter($addresses, function ($email) use ($domainName) {
-                return !!strpos($email, $domainName);
+                return !!stripos($email, $domainName);
             });
             $addresses = array_values($addresses);
         }
 
+        // SES identities are case-insensitive, and are listed as they were created.
+        $verifiedDomains = array_map('strtolower', (array)Arr::get($validSenders, 'domains', []));
+
         return [
             'emails'          => apply_filters('fluentsmtp_ses_valid_senders', $addresses, $config),
-            'verified_domain' => in_array($domainName, $validSenders['domains']) ? $domainName : ''
+            'verified_domain' => in_array(strtolower($domainName), $verifiedDomains, true) ? $domainName : ''
         ];
     }
 
@@ -240,17 +244,14 @@ class Handler extends BaseHandler
         $connection = $this->filterConnectionVars($connection);
         $validSenders = $this->getValidSendingIdentities($connection);
 
-        $emailDomain = explode('@', $email);
-        $emailDomain = $emailDomain[1];
-
-        if ($emailDomain != $validSenders['verified_domain']) {
+        if (!$this->isOnVerifiedDomain($email, $validSenders['verified_domain'])) {
             return new \WP_Error(422, __('Use an email address on a domain you have verified.', 'fluent-smtp'));
         }
 
         $settings = fluentMailGetSettings();
         $mappings = Arr::get($settings, 'mappings', []);
 
-        if (isset($mappings[$email])) {
+        if (Settings::findMappingKey($mappings, $email)) {
             return new \WP_Error(422, __('Email address already exists with another connection. Please choose a different email.', 'fluent-smtp'));
         }
 
@@ -268,10 +269,7 @@ class Handler extends BaseHandler
         $connection = $this->filterConnectionVars($connection);
         $validSenders = $this->getValidSendingIdentities($connection);
 
-        $emailDomain = explode('@', $email);
-        $emailDomain = $emailDomain[1];
-
-        if ($emailDomain != $validSenders['verified_domain']) {
+        if (!$this->isOnVerifiedDomain($email, $validSenders['verified_domain'])) {
             return new \WP_Error(422, __('Use an email address on a domain you have verified.', 'fluent-smtp'));
         }
 
@@ -301,6 +299,13 @@ class Handler extends BaseHandler
     }
 
 
+    private function isOnVerifiedDomain($email, $verifiedDomain)
+    {
+        $emailDomain = substr((string)strrchr($email, '@'), 1);
+
+        return $verifiedDomain && $emailDomain && strcasecmp($emailDomain, $verifiedDomain) === 0;
+    }
+
     private function getStats($config)
     {
         $region = SimpleEmailService::regionToHost($config['region']);
@@ -329,7 +334,15 @@ class Handler extends BaseHandler
     {
         $validSenders = $this->getValidSendingIdentities($connection);
         $verifiedDomain = Arr::get($validSenders, 'verified_domain', '');
-        if ($verifiedDomain) {
+
+        /*
+         * Saving the connection replaces its mappings with this list, so the
+         * additional senders have to be in it. They were checked against a
+         * verified domain when they were added; a failed identity lookup is no
+         * evidence that they stopped being valid, and dropping them here would
+         * quietly send their mail from the primary address after the next save.
+         */
+        if ($verifiedDomain || Arr::get($validSenders, 'lookup_failed')) {
             $settings = fluentMailGetSettings();
             $mappings = Arr::get($settings, 'mappings', []);
 

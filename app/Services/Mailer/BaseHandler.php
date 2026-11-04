@@ -5,6 +5,7 @@ namespace FluentMail\App\Services\Mailer;
 use Exception;
 use InvalidArgumentException;
 use FluentMail\App\Models\Logger;
+use FluentMail\App\Models\Settings;
 use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Core\Application;
 use FluentMail\App\Services\Mailer\Manager;
@@ -145,6 +146,54 @@ class BaseHandler
     public function isForcedEmail()
     {
         return $this->getSetting("force_from_email") != 'no';
+    }
+
+    /**
+     * Whether an address sends as itself through this connection: the
+     * connection's own sender, or one of the additional senders mapped to it
+     * (Amazon SES and toSend verify a whole domain, so one connection can send
+     * as several addresses). Forcing the sender applies to every other address.
+     *
+     * @param string $email
+     * @return bool
+     */
+    public function isOwnSender($email)
+    {
+        $senderEmail = (string)$this->getSetting('sender_email');
+
+        if (!$email || !$senderEmail) {
+            return false;
+        }
+
+        if (strcasecmp($email, $senderEmail) === 0) {
+            return true;
+        }
+
+        $connection = (new Settings)->getConnection($email);
+
+        return strcasecmp((string)Arr::get($connection, 'provider_settings.sender_email'), $senderEmail) === 0;
+    }
+
+    /**
+     * The address this connection sends from.
+     *
+     * Forcing the sender email means: a From that is not one of this
+     * connection's senders goes out as the connection's sender. A listed From
+     * - the primary or an additional sender - is always kept, and with forcing
+     * off so is any other From. The same answer feeds the provider request,
+     * the log, and so a resend from the log.
+     *
+     * @return string
+     */
+    protected function getSenderEmail()
+    {
+        $fromEmail = $this->phpMailer ? $this->phpMailer->From : '';
+
+        if ($fromEmail && ($this->isOwnSender($fromEmail) || !$this->isForcedEmail())) {
+            return $fromEmail;
+        }
+
+        return $this->getSetting('sender_email');
     }
 
     public function isActive()
@@ -363,7 +412,7 @@ class BaseHandler
     protected function setFrom()
     {
         $name = $this->getSetting('sender_name');
-        $email = $this->getSetting('sender_email');
+        $email = $this->getSenderEmail();
         $overrideName = $this->getSetting('force_from_name');
 
         if ($name && ($overrideName == 'yes' || $this->phpMailer->FromName == 'WordPress')) {

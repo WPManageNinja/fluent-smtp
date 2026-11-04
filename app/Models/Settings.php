@@ -224,16 +224,47 @@ class Settings
     public function getConnection($email)
     {
         $settings = $this->getSettings();
-        $mappings = $this->getMappings($settings);
         $connections = $this->getConnections($settings);
+        $key = static::findMappingKey($this->getMappings($settings), $email);
 
-        if (isset($mappings[$email])) {
-            if (isset($connections[$mappings[$email]])) {
-                return $connections[$mappings[$email]];
-            }
+        if ($key && isset($connections[$key])) {
+            return $connections[$key];
         }
 
         return [];
+    }
+
+    /**
+     * The connection key an address is mapped to, or null.
+     *
+     * Mappings are keyed by the address exactly as it was saved, but the local
+     * part and domain a plugin hands wp_mail() may differ from it in case
+     * (`Support@example.com`). Missing the mapping is not harmless: the mail
+     * goes out through the default connection and, when that forces its sender,
+     * from the wrong address. The exact key wins; otherwise the first mapping
+     * that matches ignoring case.
+     *
+     * @param array $mappings
+     * @param string $email
+     * @return string|null
+     */
+    public static function findMappingKey($mappings, $email)
+    {
+        if (!$mappings || !is_string($email) || $email === '') {
+            return null;
+        }
+
+        if (isset($mappings[$email])) {
+            return $mappings[$email];
+        }
+
+        foreach ($mappings as $mappedEmail => $key) {
+            if (strcasecmp((string)$mappedEmail, $email) === 0) {
+                return $key;
+            }
+        }
+
+        return null;
     }
 
     public function updateMiscSettings($misc)

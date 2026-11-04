@@ -367,38 +367,57 @@ class SimpleEmailService
      */
     public function listVerifiedEmailAddresses()
     {
-        $ses_request = $this->getRequestHandler('GET');
-        $ses_request->setParameter('Action', 'ListIdentities');
-
-        $ses_response = $ses_request->getResponse();
-
-        if ($ses_response->error === false && $ses_response->code !== 200) {
-            $ses_response->error = array('code' => $ses_response->code, 'message' => __('Unexpected HTTP status', 'fluent-smtp'));
-        }
-        if ($ses_response->error !== false) {
-            return new \WP_Error($ses_response->code, $this->getErrorMessage('ListIdentities', $ses_response->error), $ses_response->error);
-        }
-
-        $response = array();
-        if (!isset($ses_response->body)) {
-            return $response;
-        }
-
         $domains = array();
         $addresses = array();
-        foreach ($ses_response->body->ListIdentitiesResult->Identities->member as $address) {
-            if (is_email($address)) {
-                $addresses[] = (string)$address;
-            } else {
-                $domains[] = (string)$address;
+        $requestId = '';
+        $nextToken = '';
+
+        /*
+         * ListIdentities is paged. An account with more identities than one page
+         * holds would otherwise miss the sender's domain whenever it sorts past
+         * the first page, and every additional sender on that domain with it.
+         * The request clears its parameters after every call, so each page sets
+         * them again.
+         */
+        do {
+            $ses_request = $this->getRequestHandler('GET');
+            $ses_request->setParameter('Action', 'ListIdentities');
+            $ses_request->setParameter('MaxItems', 1000);
+
+            if ($nextToken) {
+                $ses_request->setParameter('NextToken', $nextToken);
             }
-        }
 
-        $response['Addresses'] = $addresses;
-        $response['domains'] = $domains;
-        $response['RequestId'] = (string)$ses_response->body->ResponseMetadata->RequestId;
+            $ses_response = $ses_request->getResponse();
 
-        return $response;
+            if ($ses_response->error === false && $ses_response->code !== 200) {
+                $ses_response->error = array('code' => $ses_response->code, 'message' => __('Unexpected HTTP status', 'fluent-smtp'));
+            }
+            if ($ses_response->error !== false) {
+                return new \WP_Error($ses_response->code, $this->getErrorMessage('ListIdentities', $ses_response->error), $ses_response->error);
+            }
+
+            if (!isset($ses_response->body)) {
+                break;
+            }
+
+            foreach ($ses_response->body->ListIdentitiesResult->Identities->member as $address) {
+                if (is_email($address)) {
+                    $addresses[] = (string)$address;
+                } else {
+                    $domains[] = (string)$address;
+                }
+            }
+
+            $requestId = (string)$ses_response->body->ResponseMetadata->RequestId;
+            $nextToken = (string)$ses_response->body->ListIdentitiesResult->NextToken;
+        } while ($nextToken);
+
+        return array(
+            'Addresses' => $addresses,
+            'domains'   => $domains,
+            'RequestId' => $requestId,
+        );
     }
 
     /**

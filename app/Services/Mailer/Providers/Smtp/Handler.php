@@ -70,7 +70,7 @@ class Handler extends BaseHandler
 
             $fromEmail = $this->phpMailer->From;
 
-            if ($this->isForcedEmail() && !fluentMailIsListedSenderEmail($fromEmail)) {
+            if ($this->isForcedEmail() && !$this->isOwnSender($fromEmail)) {
                 $fromEmail = $this->getSetting('sender_email');
             }
 
