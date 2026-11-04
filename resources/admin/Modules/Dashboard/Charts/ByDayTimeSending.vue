@@ -15,55 +15,56 @@
                 <p>{{ load_error }}</p>
                 <el-button size="small" @click="fetchStats()">{{ $t('Retry') }}</el-button>
             </el-alert>
+            <!--
+                One grid: a label column, then twenty-four hours. The day labels used
+                to be a column of their own beside the cells, spaced to line up with
+                them, which only held while every cell was a fixed 22px. In one grid
+                a label shares its row with its own cells, so the cells can grow to
+                fill the card instead of leaving 40% of it empty.
+            -->
             <div v-else-if="appReady" class="fcraft_time_widget">
-                <div class="fcraft_time_widget_header">
-                    <div class="fcraft_time_day"></div>
-                    <div v-for="day in days" :key="day" class="fcraft_time_day">{{ dayLabel(day) }}</div>
+                <div class="fcraft_time_corner"></div>
+                <div v-for="tipIndex in tipIndexes" :key="tipIndex" class="fss_wid_sub_header">
+                    {{ tipIndex }}
                 </div>
-                <div class="fcraft_time_widget_body">
-                    <div class="fss_wid_sub_headers">
-                        <div v-for="tipIndex in tipIndexes" :key="tipIndex" class="fss_wid_sub_header">
-                            {{ tipIndex }}
-                        </div>
-                    </div>
-                    <div v-for="(day, dayIndex) in days" :key="day" class="fcraft_time_day">
-                        <div v-for="(keyItem, slotIndex) in filledSlots" :key="keyItem"
-                             :class="'fss_wid_' + getLevel(dataItems[day][keyItem])"
-                             class="fcraft_time_hour">
+                <template v-for="(day, dayIndex) in days" :key="day">
+                    <div class="fcraft_time_day">{{ dayLabel(day) }}</div>
+                    <div v-for="(keyItem, slotIndex) in filledSlots" :key="day + keyItem"
+                         :class="'fss_wid_' + getLevel(dataItems[day][keyItem])"
+                         class="fcraft_time_hour">
 
-                            <!--
-                                The count is the only thing this grid holds, and there
-                                used to be exactly one way to get it: hover a <div> that
-                                could not be focused, holding a number drawn at zero
-                                opacity. That is nothing at all for a keyboard and
-                                nothing for a touch screen. The cell is a button now,
-                                named with its day, its hour and its count, and the
-                                tooltip opens on focus as well as on hover so a keyboard
-                                is shown what a mouse is shown. Nothing is drawn
-                                differently.
+                        <!--
+                            The count is the only thing this grid holds, and there
+                            used to be exactly one way to get it: hover a <div> that
+                            could not be focused, holding a number drawn at zero
+                            opacity. That is nothing at all for a keyboard and
+                            nothing for a touch screen. The cell is a button now,
+                            named with its day, its hour and its count, and the
+                            tooltip opens on focus as well as on hover so a keyboard
+                            is shown what a mouse is shown. Nothing is drawn
+                            differently.
 
-                                One tab stop, not 168. Seven days by twenty-four hours is
-                                a grid, and a grid is entered once and then walked with
-                                the arrow keys; making every cell a tab stop would put
-                                the whole widget between the keyboard and the rest of the
-                                dashboard.
-                            -->
-                            <el-tooltip :content="countLabel(dataItems[day][keyItem])"
-                                        :disabled="!dataItems[day][keyItem]"
-                                        :trigger="['hover', 'focus']"
-                                        placement="top">
-                                <button type="button" class="fcraft_time_hour_value"
-                                        :ref="setCellRef(dayIndex, slotIndex)"
-                                        :tabindex="isCursor(dayIndex, slotIndex) ? 0 : -1"
-                                        :aria-label="cellLabel(day, keyItem, dataItems[day][keyItem])"
-                                        @focus="moveCursor(dayIndex, slotIndex)"
-                                        @keydown="onCellKeydown($event, dayIndex, slotIndex)">
-                                    <span>{{ dataItems[day][keyItem] }}</span>
-                                </button>
-                            </el-tooltip>
-                        </div>
+                            One tab stop, not 168. Seven days by twenty-four hours is
+                            a grid, and a grid is entered once and then walked with
+                            the arrow keys; making every cell a tab stop would put
+                            the whole widget between the keyboard and the rest of the
+                            dashboard.
+                        -->
+                        <el-tooltip :content="countLabel(dataItems[day][keyItem])"
+                                    :disabled="!dataItems[day][keyItem]"
+                                    :trigger="['hover', 'focus']"
+                                    placement="top">
+                            <button type="button" class="fcraft_time_hour_value"
+                                    :ref="setCellRef(dayIndex, slotIndex)"
+                                    :tabindex="isCursor(dayIndex, slotIndex) ? 0 : -1"
+                                    :aria-label="cellLabel(day, keyItem, dataItems[day][keyItem])"
+                                    @focus="moveCursor(dayIndex, slotIndex)"
+                                    @keydown="onCellKeydown($event, dayIndex, slotIndex)">
+                                <span>{{ dataItems[day][keyItem] }}</span>
+                            </button>
+                        </el-tooltip>
                     </div>
-                </div>
+                </template>
             </div>
             <el-skeleton v-else :rows="5"></el-skeleton>
             <div class="fss_wid_label_info">
@@ -156,7 +157,7 @@ export default {
         onCellKeydown(event, dayIndex, slotIndex) {
             /*
              * A row per day, an hour per column: the day labels stack down the left and
-             * each day's twenty-four hours run across (see flex-direction below). So the
+             * each day's twenty-four hours run across (see the grid below). So the
              * horizontal keys walk the hours and the vertical ones walk the days, and
              * Home and End go to the ends of the day the cursor is already in.
              *
@@ -284,10 +285,6 @@ export default {
         width: 210px;
     }
 
-    .fss_wid_widget_body {
-        min-width: 750px;
-    }
-
     .fss_wid_label_info {
         margin-top: 20px;
         padding-bottom: 16px;
@@ -303,35 +300,22 @@ export default {
     }
 
     /*
-     * The hour labels, on the same twenty-four tracks as the cells under them.
-     *
-     * They used to be eight blocks floated at 12.5% each, which is an eighth of the
-     * row rather than three of its twenty-four columns - so "1am" sat over midnight
-     * and every label after it drifted further from the hour it named. This row and
-     * the day rows below it are both children of the same flex column, so both are
-     * exactly as wide as the widest of them: one `1fr` here is one cell there, at
-     * whatever width the cells have ended up, and a label spanning three of them
-     * starts on the hour it names.
+     * Every third hour, each label spanning the three columns it starts, so it
+     * sits over the hour it names.
      */
-    .fss_wid_sub_headers {
-        display: grid;
-        grid-template-columns: repeat(24, minmax(0, 1fr));
-        margin-bottom: 5px;
-
-        .fss_wid_sub_header {
-            grid-column: span 3;
-            font-size: 11px;
-            /* Three 22px columns hold "12am" with room to spare; nothing may wrap. */
-            white-space: nowrap;
-        }
+    .fss_wid_sub_header {
+        grid-column: span 3;
+        font-size: 11px;
+        line-height: 1;
+        padding-bottom: 2px;
+        /* Three of the narrowest columns hold "12am" with room to spare; nothing may wrap. */
+        white-space: nowrap;
     }
 
 
     /*
-     * The five filled levels are a data ramp - the same colours in both themes,
-     * because a count of emails does not mean something different in the dark.
-     * Level 0 is not data, it is the empty cell behind it, so it is chrome and
-     * flips with the theme. Both are declared in styles/_theme.scss.
+     * Level 0 is the empty cell; 1-5 are the data ramp. Both themes declare all six
+     * in styles/_theme.scss, the dark one running lighter as the count goes up.
      */
     .fss_wid_level_5 { background: var(--fsm-heat-5); }
     .fss_wid_level_4 { background: var(--fsm-heat-4); }
@@ -342,75 +326,62 @@ export default {
 }
 
 .fcraft_time_widget {
-    display: flex;
-    flex-direction: row;
+    /*
+     * A label column and twenty-four hour columns. Each hour grows to 40px and
+     * no further: at a normal desktop width that fills the card, and on a very
+     * wide screen the grid stops getting taller than the chart beside it. The
+     * 14px floor is where the card starts to scroll sideways instead of
+     * squeezing the cells (the card has overflow-x: auto).
+     */
+    display: grid;
+    grid-template-columns: max-content repeat(24, minmax(14px, 40px));
+    gap: 3px;
+    align-items: center;
 
-    .fcraft_time_widget_header {
-        display: flex;
-        flex-direction: column;
-        padding: 0px 10px;
-        justify-content: space-between;
-
-        > div {
-            height: 20px;
-            border: 2px solid var(--fsm-surface);
-        }
+    .fcraft_time_day {
+        padding-right: 10px;
+        line-height: 1;
     }
 
-    .fcraft_time_widget_body {
+    .fcraft_time_hour {
         display: flex;
-        flex-direction: column;
+        aspect-ratio: 1;
+        opacity: 0.9;
 
-        .fcraft_time_day {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
+        /*
+         * A button rather than a div, so the count can be reached and read out.
+         * Everything a button brings with it is taken straight back off: the
+         * cell's colour is on the parent and this fills it, so the whole square
+         * is the target it has always looked like.
+         */
+        .fcraft_time_hour_value {
+            display: block;
+            flex: 1;
+            width: 100%;
+            padding: 0;
+            border: 0;
+            background: none;
+            color: inherit;
+            font-size: 10px;
+            font-weight: 300;
+            line-height: 1;
+            cursor: pointer;
 
-            .fcraft_time_hour {
-                display: flex;
-                flex-direction: column;
-                height: 22px;
-                width: 22px;
-                text-align: center;
-                border: 3px solid var(--fsm-surface);
-                opacity: 0.9;
+            /*
+             * The number stays hidden - it is here for the tooltip and for the
+             * accessible name, not to be read off the square. The opacity is on
+             * the text rather than on the button, because an outline drawn on a
+             * fully transparent element is transparent too, and the keyboard
+             * ring is the reason the button exists.
+             */
+            span {
+                opacity: 0;
+            }
 
-                /*
-                 * A button rather than a div, so the count can be reached and read out.
-                 * Everything a button brings with it is taken straight back off: the
-                 * cell's colour is on the parent and this fills it, so the whole square
-                 * is the target it has always looked like.
-                 */
-                .fcraft_time_hour_value {
-                    display: block;
-                    flex: 1;
-                    width: 100%;
-                    padding: 0;
-                    border: 0;
-                    background: none;
-                    color: inherit;
-                    font-size: 10px;
-                    font-weight: 300;
-                    line-height: 1;
-                    cursor: pointer;
-
-                    /*
-                     * The number stays hidden - it is here for the tooltip and for the
-                     * accessible name, not to be read off a 22px square. The opacity is
-                     * on the text rather than on the button, because an outline drawn on
-                     * a fully transparent element is transparent too, and the keyboard
-                     * ring is the reason the button exists.
-                     */
-                    span {
-                        opacity: 0;
-                    }
-
-                    /* Sits in the 3px gutter between cells, so nothing shifts to fit it. */
-                    &:focus-visible {
-                        outline: 2px solid var(--fsm-accent);
-                        outline-offset: 1px;
-                    }
-                }
+            /* Sits in the 3px gap between cells, so nothing shifts to fit it. */
+            &:focus-visible {
+                outline: 2px solid var(--fsm-accent);
+                outline-offset: 1px;
             }
         }
     }

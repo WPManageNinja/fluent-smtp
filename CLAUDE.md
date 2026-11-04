@@ -88,7 +88,7 @@ The build script:
 - Vue.js 3
 - Vue Router 4
 - Element Plus component library
-- Chart.js 4 via vue-chartjs for analytics
+- Apache ECharts (imported per module in `Modules/Dashboard/Charts/_chart.js`) for analytics
 - Tailwind (utilities only, scoped to `#fluent_mail_app`) alongside the SCSS design system
 
 **Entry Points:**
@@ -174,7 +174,7 @@ Currently no automated test suite. PHPStan configured at level 0 for static anal
 
 **JavaScript:**
 - Element Plus for components
-- Chart.js for analytics
+- Apache ECharts for analytics
 - Day.js for date handling
 - Lodash for utilities
 

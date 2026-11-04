@@ -8,7 +8,6 @@ class TransStrings
     public static function getStrings()
     {
         return [
-            ' - Simulated' => __(' - Simulated', 'fluent-smtp'),
             ' before you start, to create the API keys at Microsoft.' => __(' before you start, to create the API keys at Microsoft.', 'fluent-smtp'),
             ' in your PHP code, so this switch has no effect.' => __(' in your PHP code, so this switch has no effect.', 'fluent-smtp'),
             ' list in your Google Cloud project, or authentication will be refused.' => __(' list in your Google Cloud project, or authentication will be refused.', 'fluent-smtp'),
@@ -358,6 +357,7 @@ class TransStrings
             'Set the return-path to match the From Email' => __('Set the return-path to match the From Email', 'fluent-smtp'),
             'Settings' => __('Settings', 'fluent-smtp'),
             'Sign in to' => __('Sign in to', 'fluent-smtp'),
+            'Simulated' => __('Simulated', 'fluent-smtp'),
             'Simulation is turned on by ' => __('Simulation is turned on by ', 'fluent-smtp'),
             'Skip' => __('Skip', 'fluent-smtp'),
             'Slack channel: ' => __('Slack channel: ', 'fluent-smtp'),
@@ -395,6 +395,7 @@ class TransStrings
             'Times Resent' => __('Times Resent', 'fluent-smtp'),
             'To' => __('To', 'fluent-smtp'),
             'Today' => __('Today', 'fluent-smtp'),
+            'Total %s' => __('Total %s', 'fluent-smtp'),
             'Track Links' => __('Track Links', 'fluent-smtp'),
             'Track Opens' => __('Track Opens', 'fluent-smtp'),
             'Track link clicks in Postmark (HTML emails only).' => __('Track link clicks in Postmark (HTML emails only).', 'fluent-smtp'),

@@ -80,7 +80,7 @@
                         <div v-if="settings_stat.log_enabled == 'yes'" class="fsm_tile is_sent">
                             <span class="fsm_tile_icon"><el-icon><FsmIconSPromotion/></el-icon></span>
                             <span class="fsm_tile_label">{{ $t('Emails sent') }}</span>
-                            <span class="fsm_tile_value">{{ stats.sent }}</span>
+                            <span class="fsm_tile_value">{{ formatCount(stats.sent) }}</span>
                         </div>
 
                         <!--
@@ -95,19 +95,19 @@
                             :to="{ name: 'logs', query: { status: 'failed' } }">
                             <span class="fsm_tile_icon"><el-icon><FsmIconWarning/></el-icon></span>
                             <span class="fsm_tile_label">{{ $t('Emails failed') }}</span>
-                            <span class="fsm_tile_value">{{ stats.failed || 0 }}</span>
+                            <span class="fsm_tile_value">{{ formatCount(stats.failed) }}</span>
                         </router-link>
 
                         <div class="fsm_tile is_connections">
                             <span class="fsm_tile_icon"><el-icon><FsmIconLink/></el-icon></span>
                             <span class="fsm_tile_label">{{ $t('Active connections') }}</span>
-                            <span class="fsm_tile_value">{{ settings_stat.connection_counts }}</span>
+                            <span class="fsm_tile_value">{{ formatCount(settings_stat.connection_counts) }}</span>
                         </div>
 
                         <div class="fsm_tile is_senders">
                             <span class="fsm_tile_icon"><el-icon><FsmIconUser/></el-icon></span>
                             <span class="fsm_tile_label">{{ $t('Active senders') }}</span>
-                            <span class="fsm_tile_value">{{ settings_stat.active_senders }}</span>
+                            <span class="fsm_tile_value">{{ formatCount(settings_stat.active_senders) }}</span>
                         </div>
                     </div>
 

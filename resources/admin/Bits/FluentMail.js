@@ -201,6 +201,16 @@ export default class FluentMail {
                         /%s/g,
                         () => (index < args.length ? args[index++] : '%s')
                     );
+                },
+                /*
+                 * A count, grouped in the browser's locale: "13,758" rather than
+                 * "13758", so the dashboard tiles, the log total and the chart axis
+                 * all print a number the same way. A value that is not a number yet
+                 * (still loading, or missing) shows as 0.
+                 */
+                formatCount(value) {
+                    const count = Number(value);
+                    return Number.isFinite(count) ? count.toLocaleString() : '0';
                 }
             }
         };

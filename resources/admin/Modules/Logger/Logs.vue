@@ -74,10 +74,17 @@
                             -->
                             <el-table-column :label="$t('Subject')" min-width="280"
                                              show-overflow-tooltip>
+                                <!--
+                                    Simulated is a chip in front of the subject, not red
+                                    text after it. Nothing failed, so it is the caution
+                                    tint rather than danger. And it leads because the
+                                    cell truncates: after a long subject the ellipsis
+                                    used to cut it off.
+                                -->
                                 <template #default="scope">
-                                    <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
                                     <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
-                                          class="fsm_log_simulated">{{ $t(' - Simulated') }}</span>
+                                          class="fsm_tag is_pending fsm_log_simulated">{{ $t('Simulated') }}</span>
+                                    <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
                                 </template>
                             </el-table-column>
 

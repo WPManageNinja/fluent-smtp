@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3 class="fs_config_title">{{ $t('Outlook / Office365 API Settings') }}</h3>
+        <h2 class="fs_config_title">{{ $t('Outlook / Office365 API Settings') }}</h2>
         <p><a target="_blank" rel="nofollow" href="https://fluentsmtp.com/docs/setup-outlook-with-fluentsmtp/">{{ $t('Read the documentation') }}</a>{{ $t(' before you start, to create the API keys at Microsoft.') }}</p>
         <el-radio-group size="small" v-model="connection.key_store">
             <el-radio-button value="db">{{ $t('Store in Database') }}</el-radio-button>

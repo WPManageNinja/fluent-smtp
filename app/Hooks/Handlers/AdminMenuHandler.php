@@ -459,7 +459,11 @@ class AdminMenuHandler
                 'meta'   => false
             ];
 
-            echo '<style>li#wp-admin-bar-fluentsmtp_simulated a {background: red; color: white;}</style>';
+            /*
+             * wp-admin's own error red rather than pure #f00: white on #f00 is 4.0:1,
+             * under the 4.5:1 a label needs; white on #b32d2e is 6.1:1.
+             */
+            echo '<style>li#wp-admin-bar-fluentsmtp_simulated a {background: #b32d2e; color: #fff;}</style>';
 
             $adminBar->add_node($args);
         }
