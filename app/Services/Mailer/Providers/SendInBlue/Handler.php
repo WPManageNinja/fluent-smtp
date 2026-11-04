@@ -168,22 +168,31 @@ class Handler extends BaseHandler
         $files = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
-            try {
-                // Use secure file reading with path traversal protection
-                $file = $this->secureFileRead($attachment[0]);
-                $ext = pathinfo($attachment[0], PATHINFO_EXTENSION);
+            $name = self::getAttachmentName($attachment);
 
-                if (in_array($ext, $this->allowedAttachmentExts, true)) {
-                    $files[] = [
-                        'name'    => $this->getAttachmentName($attachment),
-                        'content' => base64_encode($file)
-                    ];
-                }
+            // The allow-list is applied to the delivered name, the only file name
+            // Brevo receives; an in-memory attachment has no path. A file named
+            // without an extension falls back to its path's, as before.
+            $ext = pathinfo($name, PATHINFO_EXTENSION);
+            if ('' === $ext && empty($attachment[5])) {
+                $ext = pathinfo($attachment[0], PATHINFO_EXTENSION);
+            }
+
+            if (!in_array(strtolower($ext), $this->allowedAttachmentExts, true)) {
+                continue;
+            }
+
+            try {
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
-                // Log error and skip this attachment
                 $this->logAttachmentFailure('SendInBlue', $e);
                 continue;
             }
+
+            $files[] = [
+                'name'    => $name,
+                'content' => base64_encode($file)
+            ];
         }
 
         return $files;
