@@ -17,6 +17,11 @@ class Handler extends BaseHandler
 
     protected $url = 'https://api.sendgrid.com/v3/mail/send';
 
+    protected $regionHosts = [
+        'global' => 'api.sendgrid.com',
+        'eu'     => 'api.eu.sendgrid.com',
+    ];
+
     public function send()
     {
         if ($this->preSend()) {
@@ -51,7 +56,7 @@ class Handler extends BaseHandler
 
         $params = array_merge($params, $this->getDefaultParams());
 
-        $response = wp_safe_remote_post($this->url, $params);
+        $response = wp_safe_remote_post($this->getApiUrl(), $params);
 
         if (is_wp_error($response)) {
             $returnResponse = new \WP_Error($response->get_error_code(), $response->get_error_message(), $response->get_error_messages());
@@ -74,6 +79,15 @@ class Handler extends BaseHandler
         $this->response = $returnResponse;
 
         return $this->handleResponse($this->response);
+    }
+
+    protected function getApiUrl()
+    {
+        $region = $this->getSetting('region');
+
+        return is_string($region) && isset($this->regionHosts[$region])
+            ? 'https://' . $this->regionHosts[$region] . '/v3/mail/send'
+            : $this->url;
     }
 
     protected function getFrom()
@@ -165,36 +179,18 @@ class Handler extends BaseHandler
         $data = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
-            $file = false;
-            $fileName = null;
-            $filetype = null;
-            $contentId = null;
-
             try {
-                // Use secure file reading with path traversal protection
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = $this->getAttachmentName($attachment);
-                $contentId = wp_hash($attachment[0]);
-
-                // Get MIME type from the validated real path
-                $realPath = realpath($attachment[0]);
-                $mimeType = mime_content_type($realPath);
-                $filetype = str_replace(';', '', trim($mimeType));
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
-                // Log error and skip this attachment
                 $this->logAttachmentFailure('SendGrid', $e);
-                $file = false;
-            }
-
-            if ($file === false) {
                 continue;
             }
 
             $data[] = [
-                'type'        => $filetype,
-                'filename'    => $fileName,
+                'type'        => self::attachmentType($attachment),
+                'filename'    => self::getAttachmentName($attachment),
                 'disposition' => 'attachment',
-                'content_id'  => $contentId,
+                'content_id'  => wp_hash($attachment[0]),
                 'content'     => base64_encode($file)
             ];
         }

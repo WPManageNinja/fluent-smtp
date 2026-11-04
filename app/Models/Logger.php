@@ -269,6 +269,10 @@ class Logger extends Model
                 $data[$key] = $this->unserialize($value);
             }
         }
+
+        if (array_key_exists('to', $data)) {
+            $data['to'] = $this->normalizeLoggedRecipients($data['to']);
+        }
         
         return $data;
     }
@@ -296,6 +300,53 @@ class Logger extends Model
         }
 
         return $data;
+    }
+
+    /**
+     * Turn a stored `to` value into the `[{email, name?}, ...]` shape the log
+     * UI and resend path expect.
+     *
+     * Rows written while `to` was VARCHAR(255) can hold a clipped serialize
+     * blob that `is_serialized()` rejects. Pull complete addresses out of
+     * that fragment so the viewer does not print `a:7:{i:0;a:1:{s:5:"email"`
+     * and resend does not foreach a string. A trailing half-written address
+     * is dropped because it is not a valid mailbox.
+     *
+     * @param mixed $to
+     * @return array|mixed
+     */
+    protected function normalizeLoggedRecipients($to)
+    {
+        if (is_array($to)) {
+            return $to;
+        }
+
+        if (!is_string($to) || $to === '') {
+            return $to;
+        }
+
+        $recipients = [];
+
+        if (strpos(ltrim($to), 'a:') === 0) {
+            if (preg_match_all('/s:\d+:"([^"]+)"/', $to, $matches)) {
+                foreach ($matches[1] as $value) {
+                    if (is_email($value)) {
+                        $recipients[] = ['email' => $value];
+                    }
+                }
+            }
+
+            return $recipients;
+        }
+
+        foreach (preg_split('/[\s,;]+/', $to) as $address) {
+            $address = trim($address, " \t\n\r\0\x0B<>");
+            if (is_email($address)) {
+                $recipients[] = ['email' => $address];
+            }
+        }
+
+        return $recipients ?: $to;
     }
 
     protected function formatHeaders($headers)
@@ -333,7 +384,15 @@ class Logger extends Model
         if ($id && $id[0] == 'all') {
             // TRUNCATE doesn't support parameterization
             // Table name is safe - constructed from constants in __construct()
-            return $this->db->query("TRUNCATE TABLE {$this->table}");
+            $result = $this->db->query("TRUNCATE TABLE {$this->table}");
+
+            // The table is empty now, so widening an old VARCHAR `to` column is instant.
+            if ($result !== false) {
+                require_once FLUENTMAIL_PLUGIN_PATH . 'database/migrations/EmailLogs.php';
+                \FluentMailMigrations\EmailLogs::maybeWidenToColumn($this->table);
+            }
+
+            return $result;
         }
 
         $ids = array_filter($id, 'intval');
@@ -431,7 +490,7 @@ class Logger extends Model
     {
         $email = $this->find($id);
 
-        $email['to']          = $this->unserialize($email['to']);
+        $email['to']          = $this->normalizeLoggedRecipients($this->unserialize($email['to']));
         $email['headers']     = $this->unserialize($email['headers']);
         $email['attachments'] = $this->unserialize($email['attachments']);
         $email['extra']       = $this->unserialize($email['extra']);
@@ -483,7 +542,10 @@ class Logger extends Model
                     $values[] = $v;
                 }
                 if ($values) {
-                    $headers[] = "{$key}: " . implode(';', $values);
+                    // wp_mail() splits Cc, Bcc and Reply-To on commas only; any
+                    // other separator turns the list into one invalid address,
+                    // which is silently dropped.
+                    $headers[] = "{$key}: " . implode(', ', $values);
                 }
             } else {
                 if ($value) {
@@ -500,8 +562,17 @@ class Logger extends Model
             $to = array_values($recipients);
         } else {
             $to = [];
-            foreach ($email['to'] as $recipient) {
-                if (isset($recipient['name'])) {
+            foreach ((array)$email['to'] as $recipient) {
+                if (!is_array($recipient)) {
+                    if (is_string($recipient) && is_email($recipient)) {
+                        $to[] = $recipient;
+                    }
+                    continue;
+                }
+                if (empty($recipient['email'])) {
+                    continue;
+                }
+                if (!empty($recipient['name'])) {
                     $to[] = $recipient['name'] . ' <' . $recipient['email'] . '>';
                 } else {
                     $to[] = $recipient['email'];
@@ -546,7 +617,7 @@ class Logger extends Model
 
             if ($this->updateLog($updateData, ['id' => $id])) {
                 $email                = $this->find($id);
-                $email['to']          = $this->unserialize($email['to']);
+                $email['to']          = $this->normalizeLoggedRecipients($this->unserialize($email['to']));
                 $email['headers']     = $this->unserialize($email['headers']);
                 $email['attachments'] = $this->unserialize($email['attachments']);
                 $email['extra']       = $this->unserialize($email['extra']);

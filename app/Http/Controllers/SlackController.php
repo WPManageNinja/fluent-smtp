@@ -68,7 +68,7 @@ class SlackController extends Controller
             ], 422);
         }
 
-        $message = __('Test message from ', 'fluent-smtp') . site_url() . '. ' . __('If you can read this, the connection is working.', 'fluent-smtp');
+        $message = NotificationHelper::getTestMessage();
 
         $result = NotificationHelper::sendSlackMessage($message, Arr::get($settings, 'slack.webhook_url'));
 

@@ -3,6 +3,7 @@
 namespace FluentMail\App\Services\Mailer\Providers\ToSend;
 
 use FluentMail\Includes\Support\Arr;
+use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\Mailer\BaseHandler;
 
 class Handler extends BaseHandler
@@ -108,7 +109,7 @@ class Handler extends BaseHandler
     public function getFrom()
     {
         $fromEmail = $this->phpMailer->From;
-        if ($this->isForcedEmail() && !fluentMailIsListedSenderEmail($fromEmail)) {
+        if ($this->isForcedEmail() && !$this->isOwnSender($fromEmail)) {
             $fromEmail = $this->getSetting('sender_email');
         }
 
@@ -197,31 +198,17 @@ class Handler extends BaseHandler
         $attachments = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
-            $file = false;
-
             try {
-                if (is_file($attachment[0]) && is_readable($attachment[0])) {
-                    $fileName = $this->getAttachmentName($attachment);
-                    $file = file_get_contents($attachment[0]);
-                    $mimeType = mime_content_type($attachment[0]);
-                    $filetype = str_replace(';', '', trim($mimeType));
-                }
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
-                $file = false;
-            }
-
-            if ($file === false) {
+                $this->logAttachmentFailure('ToSend', $e);
                 continue;
             }
 
-            $chunkSize = 76;
-            $file = base64_encode($file);
-            $file = trim(chunk_split($file, $chunkSize, "\n"));
-
             $attachments[] = [
-                'type'    => $filetype,
-                'name'    => $fileName,
-                'content' => $file
+                'type'    => self::attachmentType($attachment),
+                'name'    => self::getAttachmentName($attachment),
+                'content' => trim(chunk_split(base64_encode($file), 76, "\n"))
             ];
         }
 
@@ -296,7 +283,8 @@ class Handler extends BaseHandler
             $errno = curl_errno(self::$curlHandle);
             $error = curl_error(self::$curlHandle);
 
-            curl_close(self::$curlHandle);
+            // Dropping the only reference frees the handle (curl_close() is
+            // deprecated in PHP 8.5).
             self::$curlHandle = null;
 
             return new \WP_Error('curl_' . $errno, $error ?: __('cURL request failed', 'fluent-smtp'), [$error]);
@@ -400,18 +388,17 @@ class Handler extends BaseHandler
         if (is_wp_error($stats)) {
             return new \WP_Error(422, __('Unable to verify the connection details. Please check the API Key.', 'fluent-smtp'));
         }
-        $verifiedDomains = (array) Arr::get($stats, 'verified_domains', []);
-        $emailDomain = explode('@', $email);
-        $emailDomain = $emailDomain[1];
+        $verifiedDomains = array_map('strtolower', (array) Arr::get($stats, 'verified_domains', []));
+        $emailDomain = substr((string) strrchr($email, '@'), 1);
 
-        if (!in_array($emailDomain, $verifiedDomains)) {
+        if (!$emailDomain || !in_array(strtolower($emailDomain), $verifiedDomains, true)) {
             return new \WP_Error(422, __('Use an email address on a domain you have verified.', 'fluent-smtp'));
         }
 
         $settings = fluentMailGetSettings();
         $mappings = Arr::get($settings, 'mappings', []);
 
-        if (isset($mappings[$email])) {
+        if (Settings::findMappingKey($mappings, $email)) {
             return new \WP_Error(422, __('Email address already exists with another connection. Please choose a different email.', 'fluent-smtp'));
         }
 

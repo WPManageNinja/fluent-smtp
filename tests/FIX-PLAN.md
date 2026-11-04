@@ -1,11 +1,51 @@
 # FIX-PLAN.md — bug and test-gap record
 
-> Findings from test-writing runs. There are currently no open
-> `KNOWN-FAILURE` items; resolved entries remain below as regression history.
+> Findings from test-writing runs. One `KNOWN-FAILURE` item is open (PepiPost,
+> below); resolved entries remain below as regression history.
 >
 > Everything below shipped in 2.3.0. Entries are kept rather than deleted so
 > that a future strict-SQL regression is recognised as a repeat rather than
 > investigated from scratch. Add new findings at the top.
+
+## OPEN — PepiPost `getBody()` reads a property PHPMailer does not have
+
+- Production: `app/Services/Mailer/Providers/PepiPost/Handler.php:160`
+- Symptom: every PepiPost send raises "Undefined property:
+  PHPMailer\PHPMailer\PHPMailer::$contentType" (a warning on PHP 8, a notice
+  on 7.4).
+- Mechanism: `getBody()` tests `$this->phpMailer->contentType`; PHPMailer's
+  property is `ContentType`. The comparison is never true, so the branch that
+  adds a second body part never runs. Present since `3f8e15fb` (2024-07-02,
+  "Added Plain Text Version").
+- Why not a one-word fix: correcting the name activates that branch, which
+  sends `AltBody` as a part of type `amp`. A plain-text alternative is not AMP,
+  so the branch needs its own check against Netcore's (PepiPost's) API first.
+- Owning tests: the seven `PepiPost: ...` cases in
+  `tests/integration/attachments.php`. They take only this warning out of the
+  notice fuse and report it through `FsmtpTest::knownFailure()`; their
+  attachment assertions still run. `FSMTP_STRICT_KNOWN_FAILURES=1` fails them.
+## RESOLVED — bracketed provider message IDs were erased by log sanitization
+
+- Production: `app/Services/Mailer/BaseHandler.php` (`recursiveSanitize()`)
+- Symptom: a successful Brevo response such as
+  `<202609031856.15147286983@smtp-relay.mailin.fr>` was stored with an empty
+  `messageId` in the FluentSMTP email log. Mailgun-style `<...@domain>` ids
+  were erased the same way.
+- Mechanism: `BaseHandler::recursiveSanitize()` sends non-email response values
+  through `sanitize_text_field()`, which treats the angle-bracketed ID as HTML
+  and strips it completely.
+- Owning tests: `tests/integration/brevo-message-id.php` verifies a Brevo send
+  logs the ID without brackets, an unbracketed ID is unchanged, any provider's
+  `<local@domain>` value keeps its content, and other angle-bracket values
+  (`Name <email>`, HTML, two IDs in one string) are sanitized exactly as before.
+- Resolution: the sanitizer removes only an enclosing `<...>` pair around a
+  single `local@domain` token (no whitespace, no inner brackets) and runs the
+  inner value through `sanitize_text_field()`. It skips `sanitize_email()`,
+  because a message ID is not a mailbox and valid IDs such as `<x@a.b>` would
+  be mangled. This matches the form Brevo's webhooks
+  use (`message-id` without brackets).
+- Tracking: AuthLab task 22862 —
+  https://lounge.authlab.io/projects#/boards/9/tasks/22862-Fluent-SMTP-with-Brevo
 
 ## RESOLVED — weekly reporting failed with `ONLY_FULL_GROUP_BY`
 

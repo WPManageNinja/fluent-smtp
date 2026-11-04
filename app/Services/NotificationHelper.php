@@ -43,12 +43,23 @@ class NotificationHelper
         return self::sendTeleRequest('send-test', [], 'POST', $token);
     }
 
+    /**
+     * The alert channels' test message: one sentence with a placeholder, so translators can place the URL and punctuation.
+     *
+     * @return string
+     */
+    public static function getTestMessage()
+    {
+        return sprintf(
+            /* translators: %s: the site URL */
+            __('Test message from %s. If you can read this, the connection is working.', 'fluent-smtp'),
+            site_url()
+        );
+    }
+
     public static function sendTestPushoverMessage($apiToken, $userKey)
     {
-        $message = __('Test message from ', 'fluent-smtp') . site_url() . '. ' .
-            __('If you can read this, the connection is working.', 'fluent-smtp');
-
-        return self::sendPushoverMessage($message, $apiToken, $userKey, true, 1);
+        return self::sendPushoverMessage(self::getTestMessage(), $apiToken, $userKey, true, 1);
     }
 
     public static function disconnectTelegram($token)

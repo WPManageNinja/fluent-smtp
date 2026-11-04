@@ -44,6 +44,11 @@ class Handler extends BaseHandler
             'bcc' => $this->getBlindCarbonCopy()
         ];
 
+        if ($this->getParam('headers.content-type') == 'text/plain') {
+            $body['content']['text'] = $this->phpMailer->Body;
+            unset($body['content']['html']);
+        }
+
         if ($replyTo = $this->getReplyTo()) {
             $body['content']['reply_to'] = $replyTo;
         }
@@ -99,7 +104,7 @@ class Handler extends BaseHandler
         $email = $this->getParam('sender_email');
 
         if ($name = $this->getParam('sender_name')) {
-            $from = $name . ' <' . $email . '>';
+            $from = self::formatAddress($email, $name);
         } else {
             $from = $email;
         }
@@ -127,7 +132,9 @@ class Handler extends BaseHandler
         if ($replyTo = $this->getParam('headers.reply-to')) {
             $replyTo = reset($replyTo);
         
-            return $replyTo['email'];
+            return isset($replyTo['name'])
+                ? self::formatQuotedAddress($replyTo['email'], $replyTo['name'])
+                : $replyTo['email'];
         }
     }
 
@@ -166,33 +173,18 @@ class Handler extends BaseHandler
         $data = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
-            $file = false;
-            $fileName = null;
-            $filetype = null;
-
             try {
-                // Use secure file reading with path traversal protection
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = $this->getAttachmentName($attachment);
-
-                // Get MIME type from the validated real path
-                $realPath = realpath($attachment[0]);
-                $mimeType = mime_content_type($realPath);
-                $filetype = str_replace(';', '', trim($mimeType));
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
-                // Log error and skip this attachment
                 $this->logAttachmentFailure('SparkPost', $e);
-                $file = false;
-            }
-
-            if ($file === false) {
                 continue;
             }
 
+            // SparkPost's attachment object is name, type and data (all required).
             $data[] = [
-                'name' => $fileName,
-                'type' => $filetype,
-                'content' => base64_encode($file)
+                'name' => self::getAttachmentName($attachment),
+                'type' => self::attachmentType($attachment),
+                'data' => base64_encode($file)
             ];
         }
 

@@ -40,6 +40,19 @@
             </el-form-item>
         </div>
 
+        <el-form-item>
+            <label for="smtp2go-region">{{ $t('API Region') }}</label>
+            <el-select id="smtp2go-region" v-model="connection.region">
+                <el-option value="global" :label="$t('Global (api.smtp2go.com)')" />
+                <el-option value="eu" :label="$t('EU (eu-api.smtp2go.com)')" />
+                <el-option value="us" :label="$t('US (us-api.smtp2go.com)')" />
+                <el-option value="au" :label="$t('AU (au-api.smtp2go.com)')" />
+            </el-select>
+            <span class="small-help-text">
+                {{ $t('__SMTP2GO_REGION_TIP') }}
+            </span>
+        </el-form-item>
+
         <span class="small-help-text" style="display:block;margin-top:-10px">
             {{ $t('Get an API key from SMTP2GO:') }}
             <a target="_blank" href="https://app-eu.smtp2go.com/sending/apikeys/">{{ $t('Create API Key.') }}</a>
@@ -74,6 +87,12 @@
             return {
                 // ...
             };
+        },
+        created() {
+            // Connections saved before the region setting existed send through the global host.
+            if (!this.connection.region) {
+                this.connection.region = 'global';
+            }
         }
     };
 </script>

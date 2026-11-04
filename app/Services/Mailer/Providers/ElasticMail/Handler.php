@@ -229,49 +229,24 @@ class Handler extends BaseHandler
             return false;
         }
 
-        foreach ($rawAttachments as $i => $attpath) {
-            if (empty($attpath) === true) {
+        foreach ($rawAttachments as $i => $attachment) {
+            if (empty($attachment) === true) {
                 continue;
             }
 
-            if (!is_readable($attpath[0]) || !is_file($attpath[0])) {
+            try {
+                $fileContent = self::attachmentContent($attachment);
+            } catch (\Exception $e) {
+                $this->logAttachmentFailure('ElasticMail', $e);
                 continue;
-            }
-
-            //Extracting the file name
-            $fname = $this->getAttachmentName($attpath);
-
-            $mimeType = 'application/octet-stream'; // Default
-            if (function_exists('mime_content_type')) {
-                $detectedMime = mime_content_type($attpath[0]);
-                if ($detectedMime !== false) {
-                    $mimeType = $detectedMime;
-                }
-            } elseif (function_exists('finfo_file')) {
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $detectedMime = finfo_file($finfo, $attpath[0]);
-                finfo_close($finfo);
-                if ($detectedMime !== false) {
-                    $mimeType = $detectedMime;
-                }
             }
 
             // Add boundary and headers for attachment
             $this->postbody[] = '--' . $this->boundary . "\r\n";
-            $this->postbody[] = 'Content-Disposition: form-data; name="attachments' . ($i + 1) . '"; filename="' . $fname . '"' . "\r\n";
-            $this->postbody[] = 'Content-Type: ' . $mimeType . "\r\n";
+            $this->postbody[] = 'Content-Disposition: form-data; name="attachments' . ($i + 1) . '"; filename="' . self::getAttachmentName($attachment) . '"' . "\r\n";
+            $this->postbody[] = 'Content-Type: ' . self::attachmentType($attachment) . "\r\n";
             $this->postbody[] = "\r\n";
-
-            $handle = fopen($attpath[0], "rb");
-            if ($handle) {
-                $fileContent = '';
-                while (($buffer = fread($handle, 8192)) !== false && $buffer !== '') {
-                    $fileContent .= $buffer;
-                }
-                fclose($handle);
-
-                $this->postbody[] = $fileContent . "\r\n";
-            }
+            $this->postbody[] = $fileContent . "\r\n";
         }
     }
 

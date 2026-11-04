@@ -48,15 +48,28 @@ class Settings
 
         $extraMappings = $inputs['valid_senders'];
 
-        foreach ($extraMappings as $emailIndex => $email) {
-            if (in_array($email, $primaryEmails)) {
+        // Addresses match ignoring case (see findMappingKey()), so an additional
+        // sender that is another connection's primary in different case is
+        // dropped too; two mappings differing only in case would route by
+        // whichever came first.
+        $primaryEmailsLower = array_map('strtolower', array_map('strval', $primaryEmails));
+        foreach ($extraMappings as $emailIndex => $extraEmail) {
+            if (in_array(strtolower((string)$extraEmail), $primaryEmailsLower, true)) {
                 unset($extraMappings[$emailIndex]);
             }
         }
 
         $extraMappings[] = $email;
-        $extraMappings = array_unique($extraMappings);
-        $extraMappings = array_fill_keys($extraMappings, $uniqueKey);
+
+        // Keep the first spelling of each address.
+        $uniqueSenders = [];
+        foreach ($extraMappings as $extraEmail) {
+            $lower = strtolower((string)$extraEmail);
+            if (!isset($uniqueSenders[$lower])) {
+                $uniqueSenders[$lower] = $extraEmail;
+            }
+        }
+        $extraMappings = array_fill_keys(array_values($uniqueSenders), $uniqueKey);
 
         $mappings = array_merge($mappings, $extraMappings);
 
@@ -89,6 +102,19 @@ class Settings
         }
 
         fluentMailSetSettings($settings);
+
+        /*
+         * The connection was validated just before this save, so the last daily
+         * result says nothing about it any more. Leaving an old error in place
+         * keeps the badge red until the next run. The key changes with the
+         * sender email, so the row under the old key goes too.
+         */
+        $health = new ConnectionHealth();
+        $health->forget($key);
+
+        if ($uniqueKey !== $key) {
+            $health->forget($uniqueKey);
+        }
 
         return $settings;
     }
@@ -211,16 +237,47 @@ class Settings
     public function getConnection($email)
     {
         $settings = $this->getSettings();
-        $mappings = $this->getMappings($settings);
         $connections = $this->getConnections($settings);
+        $key = static::findMappingKey($this->getMappings($settings), $email);
 
-        if (isset($mappings[$email])) {
-            if (isset($connections[$mappings[$email]])) {
-                return $connections[$mappings[$email]];
-            }
+        if ($key && isset($connections[$key])) {
+            return $connections[$key];
         }
 
         return [];
+    }
+
+    /**
+     * The connection key an address is mapped to, or null.
+     *
+     * Mappings are keyed by the address exactly as it was saved, but the local
+     * part and domain a plugin hands wp_mail() may differ from it in case
+     * (`Support@example.com`). Missing the mapping is not harmless: the mail
+     * goes out through the default connection and, when that forces its sender,
+     * from the wrong address. The exact key wins; otherwise the first mapping
+     * that matches ignoring case.
+     *
+     * @param array $mappings
+     * @param string $email
+     * @return string|null
+     */
+    public static function findMappingKey($mappings, $email)
+    {
+        if (!$mappings || !is_string($email) || $email === '') {
+            return null;
+        }
+
+        if (isset($mappings[$email])) {
+            return $mappings[$email];
+        }
+
+        foreach ($mappings as $mappedEmail => $key) {
+            if (strcasecmp((string)$mappedEmail, $email) === 0) {
+                return $key;
+            }
+        }
+
+        return null;
     }
 
     public function updateMiscSettings($misc)

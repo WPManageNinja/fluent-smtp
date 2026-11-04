@@ -136,7 +136,7 @@ if (!function_exists('fluentMailIsListedSenderEmail')) {
         if (!$settings) {
             return false;
         }
-        return !empty($settings['mappings'][$email]);
+        return !!\FluentMail\App\Models\Settings::findMappingKey(\FluentMail\Includes\Support\Arr::get($settings, 'mappings', []), $email);
     }
 }
 
@@ -224,8 +224,9 @@ if (!function_exists('fluentMailGetProvider')) {
 
         $connection = false;
 
-        if (isset($mappings[$fromEmail])) {
-            $connectionId = $mappings[$fromEmail];
+        $connectionId = \FluentMail\App\Models\Settings::findMappingKey($mappings, $fromEmail);
+
+        if ($connectionId) {
             $connections = $manager->getSettings('connections');
             if (isset($connections[$connectionId])) {
                 $connection = $connections[$connectionId]['provider_settings'];
@@ -241,7 +242,7 @@ if (!function_exists('fluentMailGetProvider')) {
 
         if ($connection) {
             $factory = fluentMail(Factory::class);
-            $driver = $factory->make($connection['provider']);
+            $driver = clone $factory->make($connection['provider']);
             $driver->setSettings($connection);
             $providers[$fromEmail] = $driver;
         } else {
@@ -263,11 +264,11 @@ if (!function_exists('fluentMailSesConnection')) {
     {
         static $drivers = [];
 
-        if (isset($drivers[$connection['sender_email']])) {
+        $region = SimpleEmailService::regionToHost($connection['region'] ?? null);
+
+        if ($region !== '' && isset($drivers[$connection['sender_email']])) {
             return $drivers[$connection['sender_email']];
         }
-
-        $region = SimpleEmailService::regionToHost($connection['region']);
 
         $ses = new SimpleEmailService(
             $connection['access_key'],
@@ -275,6 +276,10 @@ if (!function_exists('fluentMailSesConnection')) {
             $region,
             false
         );
+
+        if ($region === '') {
+            return $ses;
+        }
 
         $drivers[$connection['sender_email']] = $ses;
 
@@ -365,7 +370,8 @@ if (!function_exists('fluentMailSend')) {
         }
 
         if (!is_array($to)) {
-            $to = explode(',', $to);
+            // Quote-aware, so a quoted display name holding a comma stays one recipient.
+            $to = \FluentMail\App\Services\Mailer\BaseHandler::splitAddressList($to);
         }
 
         if (isset($atts['subject'])) {
@@ -500,13 +506,13 @@ if (!function_exists('fluentMailSend')) {
                             }
                             break;
                         case 'cc':
-                            $cc = array_merge((array)$cc, explode(',', $content));
+                            $cc = array_merge((array)$cc, \FluentMail\App\Services\Mailer\BaseHandler::splitAddressList($content));
                             break;
                         case 'bcc':
-                            $bcc = array_merge((array)$bcc, explode(',', $content));
+                            $bcc = array_merge((array)$bcc, \FluentMail\App\Services\Mailer\BaseHandler::splitAddressList($content));
                             break;
                         case 'reply-to':
-                            $reply_to = array_merge((array)$reply_to, explode(',', $content));
+                            $reply_to = array_merge((array)$reply_to, \FluentMail\App\Services\Mailer\BaseHandler::splitAddressList($content));
                             break;
                         default:
                             // Add it to our grand headers array.
@@ -637,7 +643,8 @@ if (!function_exists('fluentMailSend')) {
 
                     if (preg_match('/(.*)<(.+)>/', $address, $matches)) {
                         if (count($matches) == 3) {
-                            $recipient_name = $matches[1];
+                            // PHPMailer quotes the name itself, so drop the caller's quotes.
+                            $recipient_name = \FluentMail\App\Services\Mailer\BaseHandler::unquoteName($matches[1]);
                             $address = $matches[2];
                         }
                     }

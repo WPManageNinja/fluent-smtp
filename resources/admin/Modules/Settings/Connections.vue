@@ -99,8 +99,16 @@
                                     in the same chips Default and Fallback use.
                                 -->
                                 <div class="fsm_conn_marks">
+                                    <!--
+                                        A health message can be a sentence or two (a missing
+                                        wp-config constant, a provider's own error), so the
+                                        chip is cut to fit and the whole message is on hover.
+                                        Left at full width it pushed the address and the
+                                        Edit button out of the row.
+                                    -->
                                     <span v-if="health(connection).status === 'error'"
-                                          class="fsm_tag is_failed">
+                                          class="fsm_tag is_failed fsm_conn_health"
+                                          :title="health(connection).message">
                                         {{ health(connection).message }}
                                     </span>
                                     <span v-if="isDefault(connection)" class="fsm_tag is_default">

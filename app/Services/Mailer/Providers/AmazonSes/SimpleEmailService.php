@@ -69,6 +69,10 @@ class SimpleEmailService
      */
     public static function regionToHost($region)
     {
+        if (!self::isValidRegion($region)) {
+            return '';
+        }
+
         if (strpos($region, 'eusc-') === 0) {
             // AWS European Sovereign Cloud partition (aws-eusc)
             $domain = 'amazonaws.eu';
@@ -80,6 +84,32 @@ class SimpleEmailService
         }
 
         return 'email.' . $region . '.' . $domain;
+    }
+
+    private static function getRegions()
+    {
+        static $regions;
+        if ($regions === null) {
+            $config = require dirname(__DIR__) . '/config.php';
+            $regions = $config['providers']['ses']['regions'];
+        }
+
+        return $regions;
+    }
+
+    public static function isValidRegion($region)
+    {
+        return is_string($region) && isset(self::getRegions()[$region]);
+    }
+
+    public static function isValidHost($host)
+    {
+        static $hosts;
+        if ($hosts === null) {
+            $hosts = array_fill_keys(array_map([self::class, 'regionToHost'], array_keys(self::getRegions())), true);
+        }
+
+        return is_string($host) && isset($hosts[$host]);
     }
 
     /**
@@ -337,38 +367,66 @@ class SimpleEmailService
      */
     public function listVerifiedEmailAddresses()
     {
-        $ses_request = $this->getRequestHandler('GET');
-        $ses_request->setParameter('Action', 'ListIdentities');
-
-        $ses_response = $ses_request->getResponse();
-
-        if ($ses_response->error === false && $ses_response->code !== 200) {
-            $ses_response->error = array('code' => $ses_response->code, 'message' => __('Unexpected HTTP status', 'fluent-smtp'));
-        }
-        if ($ses_response->error !== false) {
-            return new \WP_Error($ses_response->code, $this->getErrorMessage('ListIdentities', $ses_response->error), $ses_response->error);
-        }
-
-        $response = array();
-        if (!isset($ses_response->body)) {
-            return $response;
-        }
-
         $domains = array();
         $addresses = array();
-        foreach ($ses_response->body->ListIdentitiesResult->Identities->member as $address) {
-            if (is_email($address)) {
-                $addresses[] = (string)$address;
-            } else {
-                $domains[] = (string)$address;
+        $requestId = '';
+        $nextToken = '';
+        $seenTokens = array();
+        $pages = 0;
+
+        /*
+         * ListIdentities is paged. An account with more identities than one page
+         * holds would otherwise miss the sender's domain whenever it sorts past
+         * the first page, and every additional sender on that domain with it.
+         * The request clears its parameters after every call, so each page sets
+         * them again.
+         */
+        do {
+            $ses_request = $this->getRequestHandler('GET');
+            $ses_request->setParameter('Action', 'ListIdentities');
+            $ses_request->setParameter('MaxItems', 1000);
+
+            if ($nextToken) {
+                $ses_request->setParameter('NextToken', $nextToken);
             }
-        }
 
-        $response['Addresses'] = $addresses;
-        $response['domains'] = $domains;
-        $response['RequestId'] = (string)$ses_response->body->ResponseMetadata->RequestId;
+            $ses_response = $ses_request->getResponse();
 
-        return $response;
+            if ($ses_response->error === false && $ses_response->code !== 200) {
+                $ses_response->error = array('code' => $ses_response->code, 'message' => __('Unexpected HTTP status', 'fluent-smtp'));
+            }
+            if ($ses_response->error !== false) {
+                return new \WP_Error($ses_response->code, $this->getErrorMessage('ListIdentities', $ses_response->error), $ses_response->error);
+            }
+
+            if (!isset($ses_response->body)) {
+                break;
+            }
+
+            foreach ($ses_response->body->ListIdentitiesResult->Identities->member as $address) {
+                if (is_email($address)) {
+                    $addresses[] = (string)$address;
+                } else {
+                    $domains[] = (string)$address;
+                }
+            }
+
+            $requestId = (string)$ses_response->body->ResponseMetadata->RequestId;
+            $nextToken = (string)$ses_response->body->ListIdentitiesResult->NextToken;
+
+            // Stop on a repeated token, and after 50 pages (50,000 identities),
+            // so a misbehaving endpoint cannot keep a save request looping.
+            if ($nextToken && isset($seenTokens[$nextToken])) {
+                break;
+            }
+            $seenTokens[$nextToken] = true;
+        } while ($nextToken && ++$pages < 50);
+
+        return array(
+            'Addresses' => $addresses,
+            'domains'   => $domains,
+            'RequestId' => $requestId,
+        );
     }
 
     /**
@@ -658,7 +716,7 @@ class SimpleEmailService
     {
         if ($error == false) {
             return sprintf("SimpleEmailService::%s(): Encountered an error, but no description given", $functionname);
-        } else if (isset($error['curl']) && $error['curl']) {
+        } else if ((isset($error['curl']) && $error['curl']) || isset($error['code'], $error['message'])) {
             return sprintf("SimpleEmailService::%s(): %s %s", $functionname, $error['code'], $error['message']);
         } else if (isset($error['Error'])) {
             $e = $error['Error'];
