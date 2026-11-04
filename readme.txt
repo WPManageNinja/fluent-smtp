@@ -350,31 +350,13 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 == Changelog ==
 
 = 2.4.5 (Date: Nov 04, 2026) =
-- Added the SendGrid EU region, for accounts on SendGrid's EU data residency
-- Added an API region choice (Global, EU, US, AU) for SMTP2GO connections, and SMTP2GO emails are now sent with fastaccept
-- Added support for attachments that plugins create in memory, such as generated PDF invoices, on every API provider
-- Added inline (embedded) images on SendGrid, Mailgun, Postmark, SparkPost, SMTP2GO, Cloudflare and Outlook, so cid: images show in the email instead of arriving as attachments
-- Added a check before resending or retrying a logged email: if some of its original attachments can't be included, you are told which before it goes out, and warned again after
-- Improved SMTP connection settings: changing the host, port or username, or lowering the encryption, now asks for the password again, and wp-config.php credentials can be limited to one host with the optional FLUENTMAIL_SMTP_HOST and FLUENTMAIL_SMTP_PORT constants
-- Improved Amazon SES connection settings validation
-- Improved performance: the legacy Outlook check no longer runs on front-end page loads
-- Improved the dashboard's sending-by-time-of-day heatmap: it now fills its card, and in dark mode the busiest hours are the brightest
-- Improved the email log: simulated emails are marked with a badge, and the total count uses thousands separators, as do the dashboard counters
-- Improved contrast in dark mode for links and the admin footer, and for the "Email Simulated" admin bar label
-- Improved the About page layout and the heading structure of the connection settings screens
-- Fixed the Reply-To name being dropped on SMTP2GO, Postmark, SparkPost and Cloudflare, and names with special characters breaking the Reply-To header
-- Fixed additional sender addresses being replaced by the connection's main sender on Amazon SES and toSend, and sender addresses being matched case-sensitively
-- Fixed an email being sent with another connection's settings when one request sends through two connections of the same provider type
-- Fixed HTML and multipart emails arriving broken through the Mailgun API
-- Fixed PepiPost sending plain-text emails without their line breaks, and showing a PHP warning on every send
-- Fixed the message ID of Brevo, Mailgun and other providers being saved empty in the email log
-- Fixed the Other SMTP connection failing on attachments created in memory, and sending inline images twice
-- Fixed the connection health result staying on screen after the settings were saved
-- Fixed HTML entities such as &amp; showing in the plain-text test email
-- Fixed the logo appearing at the wrong size in the test email and the health digest email in some email clients
-- Fixed PHP 8.5 curl_close() deprecation notices
-- Removed the unused TransMail provider code
-- Developer: custom providers that extend BaseHandler can still call or override the protected getAttachmentName() and secureFileRead() methods; the built-in providers now use the new static BaseHandler::attachmentName() and readAttachmentFile()
+- Added the SendGrid EU region and an API region choice for SMTP2GO
+- Added support for in-memory attachments (such as generated PDF invoices) and inline images on API providers
+- Added a warning before resending a logged email whose attachments can't be included
+- Improved SMTP and Amazon SES connection settings: safer credential changes and better validation
+- Improved the admin UI: a clearer dashboard heatmap, better dark mode contrast, a badge for simulated emails, and formatted counts
+- Fixed Reply-To and sender address issues on several providers, and broken emails on Mailgun and PepiPost
+- Fixed empty message IDs in the email log, PHP 8.5 deprecation notices, and other minor issues
 
 = 2.4.1 (Date: Sep 27, 2026) =
 - Fixed Outlook / Office 365 connections failing to authorize on servers where Microsoft returned an HTML error page instead of a token
