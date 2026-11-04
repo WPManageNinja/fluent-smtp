@@ -448,7 +448,7 @@ class AdminMenuHandler
             return;
         }
 
-        $misc = $this->app->make(Manager::class)->getConfig('misc');
+        $misc = Arr::get(fluentMailGetSettings(), 'misc', []);
 
         if ((!empty($misc['simulate_emails']) && $misc['simulate_emails'] == 'yes') || (defined('FLUENTMAIL_SIMULATE_EMAILS') && FLUENTMAIL_SIMULATE_EMAILS)) {
             $args = [

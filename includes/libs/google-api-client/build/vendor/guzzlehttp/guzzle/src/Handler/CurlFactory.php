@@ -99,7 +99,11 @@ class CurlFactory implements \FluentSmtpLib\GuzzleHttp\Handler\CurlFactoryInterf
         $resource = $easy->handle;
         unset($easy->handle);
         if (\count($this->handles) >= $this->maxHandles) {
-            \curl_close($resource);
+            // curl_close() has been a no-op since PHP 8.0 and is deprecated in
+            // PHP 8.5; the handle is freed when it goes out of scope.
+            if (\PHP_VERSION_ID < 80000) {
+                \curl_close($resource);
+            }
         } else {
             // Remove all callback functions as they can hold onto references
             // and are not cleaned up by curl_reset. Using curl_setopt_array
@@ -556,7 +560,9 @@ class CurlFactory implements \FluentSmtpLib\GuzzleHttp\Handler\CurlFactoryInterf
     public function __destruct()
     {
         foreach ($this->handles as $id => $handle) {
-            \curl_close($handle);
+            if (\PHP_VERSION_ID < 80000) {
+                \curl_close($handle);
+            }
             unset($this->handles[$id]);
         }
     }

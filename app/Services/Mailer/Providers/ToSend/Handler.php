@@ -296,7 +296,8 @@ class Handler extends BaseHandler
             $errno = curl_errno(self::$curlHandle);
             $error = curl_error(self::$curlHandle);
 
-            curl_close(self::$curlHandle);
+            // Dropping the only reference frees the handle (curl_close() is
+            // deprecated in PHP 8.5).
             self::$curlHandle = null;
 
             return new \WP_Error('curl_' . $errno, $error ?: __('cURL request failed', 'fluent-smtp'), [$error]);

@@ -943,7 +943,10 @@ return function () {
                 'Microsoft token request ALPN result'
             );
         } finally {
-            curl_close($handle);
+            // curl_close() is a no-op since PHP 8.0 and deprecated in 8.5.
+            if (PHP_VERSION_ID < 80000) {
+                curl_close($handle);
+            }
         }
     });
 

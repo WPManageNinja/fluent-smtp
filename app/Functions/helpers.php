@@ -241,7 +241,7 @@ if (!function_exists('fluentMailGetProvider')) {
 
         if ($connection) {
             $factory = fluentMail(Factory::class);
-            $driver = $factory->make($connection['provider']);
+            $driver = clone $factory->make($connection['provider']);
             $driver->setSettings($connection);
             $providers[$fromEmail] = $driver;
         } else {
@@ -263,11 +263,11 @@ if (!function_exists('fluentMailSesConnection')) {
     {
         static $drivers = [];
 
-        if (isset($drivers[$connection['sender_email']])) {
+        $region = SimpleEmailService::regionToHost($connection['region'] ?? null);
+
+        if ($region !== '' && isset($drivers[$connection['sender_email']])) {
             return $drivers[$connection['sender_email']];
         }
-
-        $region = SimpleEmailService::regionToHost($connection['region']);
 
         $ses = new SimpleEmailService(
             $connection['access_key'],
@@ -275,6 +275,10 @@ if (!function_exists('fluentMailSesConnection')) {
             $region,
             false
         );
+
+        if ($region === '') {
+            return $ses;
+        }
 
         $drivers[$connection['sender_email']] = $ses;
 
