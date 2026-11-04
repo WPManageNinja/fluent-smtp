@@ -48,15 +48,28 @@ class Settings
 
         $extraMappings = $inputs['valid_senders'];
 
-        foreach ($extraMappings as $emailIndex => $email) {
-            if (in_array($email, $primaryEmails)) {
+        // Addresses match ignoring case (see findMappingKey()), so an additional
+        // sender that is another connection's primary in different case is
+        // dropped too; two mappings differing only in case would route by
+        // whichever came first.
+        $primaryEmailsLower = array_map('strtolower', array_map('strval', $primaryEmails));
+        foreach ($extraMappings as $emailIndex => $extraEmail) {
+            if (in_array(strtolower((string)$extraEmail), $primaryEmailsLower, true)) {
                 unset($extraMappings[$emailIndex]);
             }
         }
 
         $extraMappings[] = $email;
-        $extraMappings = array_unique($extraMappings);
-        $extraMappings = array_fill_keys($extraMappings, $uniqueKey);
+
+        // Keep the first spelling of each address.
+        $uniqueSenders = [];
+        foreach ($extraMappings as $extraEmail) {
+            $lower = strtolower((string)$extraEmail);
+            if (!isset($uniqueSenders[$lower])) {
+                $uniqueSenders[$lower] = $extraEmail;
+            }
+        }
+        $extraMappings = array_fill_keys(array_values($uniqueSenders), $uniqueKey);
 
         $mappings = array_merge($mappings, $extraMappings);
 

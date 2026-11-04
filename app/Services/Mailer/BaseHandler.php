@@ -189,11 +189,33 @@ class BaseHandler
     {
         $fromEmail = $this->phpMailer ? $this->phpMailer->From : '';
 
-        if ($fromEmail && ($this->isOwnSender($fromEmail) || !$this->isForcedEmail())) {
+        if ($fromEmail && ($this->isOwnSender($fromEmail) || $this->allowsAnyFrom())) {
             return $fromEmail;
         }
 
         return $this->getSetting('sender_email');
+    }
+
+    /**
+     * Whether this connection may send any From address it is given.
+     *
+     * Only providers that offer the "force sender email" option (SMTP, SES,
+     * toSend, PHP mail) can turn forcing off. Every other provider always sends
+     * from its own sender, even when a stale `force_from_email = no` is left in
+     * its settings from a provider it was switched from.
+     *
+     * @return bool
+     */
+    protected function allowsAnyFrom()
+    {
+        if ($this->isForcedEmail()) {
+            return false;
+        }
+
+        $providers = (array)fluentMail(Manager::class)->getConfig('providers');
+        $options = (array)Arr::get($providers, $this->getSetting('provider') . '.options', []);
+
+        return array_key_exists('force_from_email', $options);
     }
 
     public function isActive()

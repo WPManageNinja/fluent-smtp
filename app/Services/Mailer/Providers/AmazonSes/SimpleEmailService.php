@@ -371,6 +371,8 @@ class SimpleEmailService
         $addresses = array();
         $requestId = '';
         $nextToken = '';
+        $seenTokens = array();
+        $pages = 0;
 
         /*
          * ListIdentities is paged. An account with more identities than one page
@@ -411,7 +413,14 @@ class SimpleEmailService
 
             $requestId = (string)$ses_response->body->ResponseMetadata->RequestId;
             $nextToken = (string)$ses_response->body->ListIdentitiesResult->NextToken;
-        } while ($nextToken);
+
+            // Stop on a repeated token, and after 50 pages (50,000 identities),
+            // so a misbehaving endpoint cannot keep a save request looping.
+            if ($nextToken && isset($seenTokens[$nextToken])) {
+                break;
+            }
+            $seenTokens[$nextToken] = true;
+        } while ($nextToken && ++$pages < 50);
 
         return array(
             'Addresses' => $addresses,

@@ -414,6 +414,63 @@ return function () {
         });
     });
 
+    FsmtpTest::case('saving a connection maps its own sender and drops case-only duplicates', function () use (
+        $withOptionTransaction,
+        $baseMisc
+    ) {
+        $withOptionTransaction(function () use ($baseMisc) {
+            $uniq = FsmtpTest::uniq();
+            $primary = 'primary-' . $uniq . '@example.test';
+            $other = 'other-' . $uniq . '@example.test';
+            $extra = 'extra-' . $uniq . '@example.test';
+            $otherKey = md5($other);
+
+            $smtp = function ($email) {
+                return [
+                    'provider'           => 'smtp',
+                    'sender_name'        => 'Suite',
+                    'sender_email'       => $email,
+                    'force_from_name'    => 'no',
+                    'force_from_email'   => 'yes',
+                    'host'               => 'smtp.example.test',
+                    'port'               => '2525',
+                    'auth'               => 'no',
+                    'username'           => '',
+                    'password'           => '',
+                    'encryption'         => 'none',
+                    'key_store'          => 'db',
+                    'disable_encryption' => 'yes',
+                ];
+            };
+
+            $model = new Settings();
+            $model->saveGlobalSettings([
+                'connections' => [$otherKey => ['title' => 'SMTP', 'provider_settings' => $smtp($other)]],
+                'mappings'    => [$other => $otherKey],
+                'misc'        => $baseMisc($otherKey),
+            ]);
+
+            // The additional senders list leaves out the primary, repeats one
+            // address in two spellings, and names the other connection's
+            // primary in upper case.
+            $settings = $model->store([
+                'connection_key' => md5($primary),
+                'connection'     => $smtp($primary),
+                'valid_senders'  => [$extra, strtoupper($extra), strtoupper($other)],
+            ]);
+
+            $mappings = $settings['mappings'];
+            $key = md5($primary);
+
+            // Read keys directly: Arr::get() treats the dots in an address as a path.
+            FsmtpTest::assertSame($key, isset($mappings[$primary]) ? $mappings[$primary] : null, 'own sender is mapped');
+            FsmtpTest::assertSame($key, isset($mappings[$extra]) ? $mappings[$extra] : null, 'additional sender is mapped');
+            FsmtpTest::assert(!isset($mappings[strtoupper($extra)]), 'case-only duplicate of an additional sender dropped');
+            FsmtpTest::assert(!isset($mappings[strtoupper($other)]), 'other connection primary in another case dropped');
+            FsmtpTest::assertSame($otherKey, isset($mappings[$other]) ? $mappings[$other] : null, 'other connection mapping kept');
+        });
+    });
+
     FsmtpTest::case('sender alias round-trip adds and removes one mapping and its alias without touching other connection data', function () use (
         $withOptionTransaction,
         $readSettings,

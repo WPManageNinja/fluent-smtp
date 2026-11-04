@@ -157,6 +157,25 @@ return function () {
         });
     });
 
+    FsmtpTest::case('a provider without the force option always sends from its own sender', function () use ($withSettings, $prepared, $sesKey) {
+        // A connection switched from SMTP keeps a stale force_from_email = no,
+        // but SendGrid has no such option and must send from its sender as before.
+        $withSettings(function () use ($prepared, $sesKey) {
+            $params = $prepared(new SendGridHandler(), $sesKey, 'stranger@elsewhere.example', [
+                'provider'         => 'sendgrid',
+                'force_from_email' => 'no',
+            ]);
+            FsmtpTest::assertSame('primary@ses-suite.example', $params['sender_email'], 'stale force off is ignored');
+        });
+    });
+
+    FsmtpTest::case('an SES connection with forcing off keeps any From', function () use ($withSettings, $prepared, $sesKey) {
+        $withSettings(function () use ($prepared, $sesKey) {
+            $params = $prepared(new SesHandler(), $sesKey, 'stranger@elsewhere.example', ['force_from_email' => 'no']);
+            FsmtpTest::assertSame('stranger@elsewhere.example', $params['sender_email'], 'force off on a provider that offers it');
+        });
+    });
+
     FsmtpTest::case('toSend forces only addresses that are not its own senders', function () use ($withSettings, $prepared, $toSendKey) {
         $withSettings(function () use ($prepared, $toSendKey) {
             $handler = new ToSendHandler();
@@ -241,5 +260,41 @@ return function () {
         FsmtpTest::assertSame(['first@ses-suite.example', 'last@ses-suite.example'], $result['Addresses'], 'addresses from both pages');
         FsmtpTest::assertSame(['ses-suite.example'], $result['domains'], 'a domain listed on the second page');
         FsmtpTest::assertSame('page-2', $request->sent[1]['NextToken'] ?? null, 'the second request asks for the next page');
+    });
+    FsmtpTest::case('SES stops paging when the endpoint repeats its page token', function () {
+        // Every page hands back the same token; without a guard this loops forever.
+        $request = new class extends SimpleEmailServiceRequest {
+            public $calls = 0;
+
+            public function setParameter($key, $value, $replace = true)
+            {
+                return $this;
+            }
+
+            public function getResponse()
+            {
+                $this->calls++;
+
+                if ($this->calls > 60) {
+                    throw new \RuntimeException('paging did not stop');
+                }
+
+                return (object)[
+                    'code'  => 200,
+                    'error' => false,
+                    'body'  => simplexml_load_string(
+                        '<ListIdentitiesResponse><ListIdentitiesResult><Identities><member>loop@ses-suite.example</member></Identities>'
+                        . '<NextToken>same-token</NextToken></ListIdentitiesResult><ResponseMetadata><RequestId>r</RequestId></ResponseMetadata></ListIdentitiesResponse>'
+                    ),
+                ];
+            }
+        };
+
+        $ses = new SimpleEmailService('suite-access', 'suite-secret', SimpleEmailService::AWS_US_EAST_1, false);
+        $ses->setRequestHandler($request);
+        $result = $ses->listVerifiedEmailAddresses();
+
+        FsmtpTest::assert(!is_wp_error($result), 'repeated token returned an error');
+        FsmtpTest::assertSame(2, $request->calls, 'stops on the second answer that repeats the token');
     });
 };
