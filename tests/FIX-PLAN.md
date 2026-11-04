@@ -1,29 +1,32 @@
 # FIX-PLAN.md — bug and test-gap record
 
-> Findings from test-writing runs. One `KNOWN-FAILURE` item is open (PepiPost,
-> below); resolved entries remain below as regression history.
+> Findings from test-writing runs. There are currently no open
+> `KNOWN-FAILURE` items; resolved entries remain below as regression history.
 >
 > Everything below shipped in 2.3.0. Entries are kept rather than deleted so
 > that a future strict-SQL regression is recognised as a repeat rather than
 > investigated from scratch. Add new findings at the top.
 
-## OPEN — PepiPost `getBody()` reads a property PHPMailer does not have
+## RESOLVED — PepiPost `getBody()` read a property PHPMailer does not have
 
-- Production: `app/Services/Mailer/Providers/PepiPost/Handler.php:160`
-- Symptom: every PepiPost send raises "Undefined property:
+- Production: `app/Services/Mailer/Providers/PepiPost/Handler.php` (`getBody()`)
+- Symptom: every PepiPost send raised "Undefined property:
   PHPMailer\PHPMailer\PHPMailer::$contentType" (a warning on PHP 8, a notice
-  on 7.4).
-- Mechanism: `getBody()` tests `$this->phpMailer->contentType`; PHPMailer's
-  property is `ContentType`. The comparison is never true, so the branch that
-  adds a second body part never runs. Present since `3f8e15fb` (2024-07-02,
-  "Added Plain Text Version").
-- Why not a one-word fix: correcting the name activates that branch, which
-  sends `AltBody` as a part of type `amp`. A plain-text alternative is not AMP,
-  so the branch needs its own check against Netcore's (PepiPost's) API first.
-- Owning tests: the seven `PepiPost: ...` cases in
-  `tests/integration/attachments.php`. They take only this warning out of the
-  notice fuse and report it through `FsmtpTest::knownFailure()`; their
-  attachment assertions still run. `FSMTP_STRICT_KNOWN_FAILURES=1` fails them.
+  on 7.4), and a plain-text email went out as raw text in an `html` part, so
+  its line breaks collapsed.
+- Mechanism: `getBody()` tested `$this->phpMailer->contentType`; PHPMailer's
+  property is `ContentType`. The branch it guarded (from `3f8e15fb`,
+  2024-07-02, "Added Plain Text Version") would have sent `AltBody` as an
+  `amp` part.
+- Resolution: the v5 API accepts only `html` and `amp` content parts (the
+  official SDK's `TypeEnum`), so there is no plain-text part to send and
+  AltBody is not AMP; the branch is gone. A plain-text email is sent as HTML,
+  escaped exactly, with its line breaks kept; a body declared plain that
+  carries HTML tags is sent unescaped, as before.
+- Owning tests: `PepiPost: ...` cases in `tests/integration/attachments.php`
+  (no warning any more) and `tests/integration/pepipost-content.php`
+  (the content parts).
+
 ## RESOLVED — bracketed provider message IDs were erased by log sanitization
 
 - Production: `app/Services/Mailer/BaseHandler.php` (`recursiveSanitize()`)
