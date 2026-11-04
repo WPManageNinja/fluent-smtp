@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, wp mail smtp, amazon ses, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1
-Stable tag: 2.4.1
+Stable tag: 2.5.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -349,9 +349,30 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 
 == Changelog ==
 
-= 2.4.1 (Date: Sep 27, 2026) =
+= 2.5.0 (Date: Nov 04, 2026) =
+- Added the SendGrid EU region, for accounts on SendGrid's EU data residency
+- Added an API region choice (Global, EU, US, AU) for SMTP2GO connections, and SMTP2GO emails are now sent with fastaccept
+- Added support for attachments that plugins create in memory, such as generated PDF invoices, on every API provider
+- Added inline (embedded) images on SendGrid, Mailgun, Postmark, SparkPost, SMTP2GO, Cloudflare and Outlook, so cid: images show in the email instead of arriving as attachments
+- Added a warning when a resent or retried email cannot include some of its original attachments; the email log shows which attachments a resend can still send
 - Improved SMTP connection settings: changing the host, port or username, or lowering the encryption, now asks for the password again, and wp-config.php credentials can be limited to one host with the optional FLUENTMAIL_SMTP_HOST and FLUENTMAIL_SMTP_PORT constants
 - Improved Amazon SES connection settings validation
+- Improved performance: the legacy Outlook check no longer runs on front-end page loads
+- Fixed the Reply-To name being dropped on SMTP2GO, Postmark, SparkPost and Cloudflare, and names with special characters breaking the Reply-To header
+- Fixed additional sender addresses being replaced by the connection's main sender on Amazon SES and toSend, and sender addresses being matched case-sensitively
+- Fixed an email being sent with another connection's settings when one request sends through two connections of the same provider type
+- Fixed HTML and multipart emails arriving broken through the Mailgun API
+- Fixed PepiPost sending plain-text emails without their line breaks, and showing a PHP warning on every send
+- Fixed the message ID of Brevo, Mailgun and other providers being saved empty in the email log
+- Fixed the Other SMTP connection failing on attachments created in memory, and sending inline images twice
+- Fixed the connection health result staying on screen after the settings were saved
+- Fixed HTML entities such as &amp; showing in the plain-text test email
+- Fixed the logo appearing at the wrong size in the test email and the health digest email in some email clients
+- Fixed PHP 8.5 curl_close() deprecation notices
+- Removed the unused TransMail provider code
+- Developer: BaseHandler::getAttachmentName() and secureFileRead() remain available; new static forms are BaseHandler::attachmentName() and readAttachmentFile()
+
+= 2.4.1 (Date: Sep 27, 2026) =
 - Fixed Outlook / Office 365 connections failing to authorize on servers where Microsoft returned an HTML error page instead of a token
 - Fixed resending or retrying a logged email dropping every Cc, Bcc and Reply-To address when there were two or more
 - Fixed the email log's To column showing serialized text for emails sent to many recipients. On existing sites, deleting all logs once widens the column
