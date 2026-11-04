@@ -136,7 +136,7 @@ if (!function_exists('fluentMailIsListedSenderEmail')) {
         if (!$settings) {
             return false;
         }
-        return !empty($settings['mappings'][$email]);
+        return !!\FluentMail\App\Models\Settings::findMappingKey(\FluentMail\Includes\Support\Arr::get($settings, 'mappings', []), $email);
     }
 }
 
@@ -224,8 +224,9 @@ if (!function_exists('fluentMailGetProvider')) {
 
         $connection = false;
 
-        if (isset($mappings[$fromEmail])) {
-            $connectionId = $mappings[$fromEmail];
+        $connectionId = \FluentMail\App\Models\Settings::findMappingKey($mappings, $fromEmail);
+
+        if ($connectionId) {
             $connections = $manager->getSettings('connections');
             if (isset($connections[$connectionId])) {
                 $connection = $connections[$connectionId]['provider_settings'];

@@ -3,6 +3,7 @@
 namespace FluentMail\App\Services\Mailer\Providers\ToSend;
 
 use FluentMail\Includes\Support\Arr;
+use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\Mailer\BaseHandler;
 
 class Handler extends BaseHandler
@@ -108,7 +109,7 @@ class Handler extends BaseHandler
     public function getFrom()
     {
         $fromEmail = $this->phpMailer->From;
-        if ($this->isForcedEmail() && !fluentMailIsListedSenderEmail($fromEmail)) {
+        if ($this->isForcedEmail() && !$this->isOwnSender($fromEmail)) {
             $fromEmail = $this->getSetting('sender_email');
         }
 
@@ -401,18 +402,17 @@ class Handler extends BaseHandler
         if (is_wp_error($stats)) {
             return new \WP_Error(422, __('Unable to verify the connection details. Please check the API Key.', 'fluent-smtp'));
         }
-        $verifiedDomains = (array) Arr::get($stats, 'verified_domains', []);
-        $emailDomain = explode('@', $email);
-        $emailDomain = $emailDomain[1];
+        $verifiedDomains = array_map('strtolower', (array) Arr::get($stats, 'verified_domains', []));
+        $emailDomain = substr((string) strrchr($email, '@'), 1);
 
-        if (!in_array($emailDomain, $verifiedDomains)) {
+        if (!$emailDomain || !in_array(strtolower($emailDomain), $verifiedDomains, true)) {
             return new \WP_Error(422, __('Use an email address on a domain you have verified.', 'fluent-smtp'));
         }
 
         $settings = fluentMailGetSettings();
         $mappings = Arr::get($settings, 'mappings', []);
 
-        if (isset($mappings[$email])) {
+        if (Settings::findMappingKey($mappings, $email)) {
             return new \WP_Error(422, __('Email address already exists with another connection. Please choose a different email.', 'fluent-smtp'));
         }
 

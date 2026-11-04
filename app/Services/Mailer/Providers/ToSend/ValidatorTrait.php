@@ -45,6 +45,9 @@ trait ValidatorTrait
                         $errors['api_key']['required'] = __('No verified domains found for this toSend API key.', 'fluent-smtp');
                     } else {
                         $verifiedDomains = $accountInfo['verified_domains'];
+                        // Domains are case-insensitive, and toSend lowercases the
+                        // sender domain when it sends, so compare the same way here.
+                        $verifiedLower = array_map('strtolower', $verifiedDomains);
                         $domainListMsg = sprintf(
                             __('Verified domains on this API key: %s.', 'fluent-smtp'),
                             implode(', ', $verifiedDomains)
@@ -52,7 +55,7 @@ trait ValidatorTrait
 
                         if ($senderEmail) {
                             $emailDomain = substr(strrchr($senderEmail, '@'), 1);
-                            if (!$emailDomain || !in_array($emailDomain, $verifiedDomains)) {
+                            if (!$emailDomain || !in_array(strtolower($emailDomain), $verifiedLower, true)) {
                                 $errors['sender_email']['required'] = __('Sender email domain is not verified in toSend. ', 'fluent-smtp') . $domainListMsg;
                             }
                         }
@@ -64,7 +67,7 @@ trait ValidatorTrait
                                 continue;
                             }
                             $extraDomain = substr(strrchr($extra, '@'), 1);
-                            if (!$extraDomain || !in_array($extraDomain, $verifiedDomains)) {
+                            if (!$extraDomain || !in_array(strtolower($extraDomain), $verifiedLower, true)) {
                                 $invalidAdditional[] = $extra;
                             }
                         }

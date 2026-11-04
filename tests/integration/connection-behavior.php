@@ -1332,4 +1332,58 @@ return function () {
 
         FsmtpTest::assertSame(false, $changed, 'a non-Outlook connection was treated as a tenant change');
     });
+
+    /**
+     * Run the toSend save-time validation against a canned account-info reply
+     * listing one verified domain, and return the validation errors (or []).
+     */
+    $toSendValidationErrors = function (array $connection) {
+        FsmtpTest::interceptHttp(function ($url) {
+            if (strpos($url, '/info') === false) {
+                return null;
+            }
+
+            return [
+                'headers'  => [],
+                'body'     => json_encode(['domains' => [
+                    ['domain_name' => 'verified-suite.example', 'verification_status' => 'verified'],
+                ]]),
+                'response' => ['code' => 200, 'message' => 'OK'],
+                'cookies'  => [],
+            ];
+        });
+
+        try {
+            (new ToSendHandler())->validateProviderInformation(array_merge([
+                'provider'  => 'tosend',
+                'key_store' => 'db',
+                'api_key'   => 'suite-api-key',
+            ], $connection));
+
+            return [];
+        } catch (\FluentMail\Includes\Support\ValidationException $e) {
+            return $e->errors();
+        } finally {
+            FsmtpTest::releaseHttpInterceptor();
+        }
+    };
+
+    FsmtpTest::case('toSend accepts a sender whose domain differs from the verified one only in case', function () use ($toSendValidationErrors) {
+        $errors = $toSendValidationErrors([
+            'sender_email'       => 'Contact@Verified-Suite.Example',
+            'additional_senders' => ['Billing@VERIFIED-SUITE.example'],
+        ]);
+
+        FsmtpTest::assertSame([], $errors, 'mixed-case sender on a verified toSend domain');
+    });
+
+    FsmtpTest::case('toSend still rejects a sender on an unverified domain', function () use ($toSendValidationErrors) {
+        $errors = $toSendValidationErrors([
+            'sender_email'       => 'contact@other-suite.example',
+            'additional_senders' => ['billing@other-suite.example'],
+        ]);
+
+        FsmtpTest::assert(isset($errors['sender_email']), 'an unverified sender domain saved without complaint');
+        FsmtpTest::assert(isset($errors['additional_senders']), 'an unverified additional sender saved without complaint');
+    });
 };
