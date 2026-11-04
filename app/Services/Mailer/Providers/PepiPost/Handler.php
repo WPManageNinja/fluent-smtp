@@ -148,23 +148,32 @@ class Handler extends BaseHandler
         }, $this->getParam('headers.bcc'));
     }
 
+    /**
+     * The `content` parts of the v5 request.
+     *
+     * The v5 API accepts only `html` and `amp` parts (the official SDK's TypeEnum),
+     * so a plain-text alternative cannot be sent, and AltBody is not AMP. HTML and
+     * multipart email goes out as its HTML body. A plain-text email goes out as
+     * HTML too, escaped and with its line breaks kept, so it reads as written.
+     *
+     * @return array[]
+     */
     protected function getBody()
     {
-        $return = [
-            [
-                'type'  => 'html',
-                'value' => $this->getParam('message')
-            ]
-        ];
+        $message = (string) $this->getParam('message');
+        $contentType = strtolower((string) $this->phpMailer->ContentType . ' ' . (string) $this->getHeader('content-type'));
+        $isHtml = strpos($contentType, 'html') !== false || strpos($contentType, 'multipart/alternative') !== false;
 
-        if ($this->phpMailer->contentType == 'multipart/alternative') {
-            $return[] = [
-                'type'  => 'amp',
-                'value' => $this->phpMailer->AltBody
-            ];
+        if (!$isHtml) {
+            $message = nl2br(esc_html($message), false);
         }
 
-        return $return;
+        return [
+            [
+                'type'  => 'html',
+                'value' => $message
+            ]
+        ];
     }
 
     protected function getAttachments()

@@ -877,8 +877,7 @@ return function () {
             'Postmark'   => ['class' => \FluentMail\App\Services\Mailer\Providers\Postmark\Handler::class, 'typed' => true, 'url' => 'https://api.postmarkapp.com/', 'status' => 200, 'settings' => [], 'rows' => $jsonRows(['Attachments'], 'Name', 'ContentType', 'Content')],
             'SparkPost'  => ['class' => \FluentMail\App\Services\Mailer\Providers\SparkPost\Handler::class, 'typed' => true, 'url' => 'https://api.sparkpost.com/', 'status' => 200, 'settings' => [], 'rows' => $jsonRows(['content', 'attachments'], 'name', 'type', 'data')],
             'Smtp2Go'    => ['class' => \FluentMail\App\Services\Mailer\Providers\Smtp2Go\Handler::class, 'typed' => true, 'url' => 'https://api.smtp2go.com/', 'status' => 200, 'settings' => [], 'rows' => $jsonRows(['attachments'], 'filename', 'mimetype', 'fileblob')],
-            // PepiPost's getBody() raises its own warning on every send (tests/FIX-PLAN.md).
-            'PepiPost'   => ['knownWarning' => 'Undefined property: PHPMailer\\PHPMailer\\PHPMailer::$contentType', 'class' => \FluentMail\App\Services\Mailer\Providers\PepiPost\Handler::class, 'typed' => false, 'url' => 'https://api.pepipost.com/', 'status' => 202, 'settings' => [], 'rows' => $jsonRows(['attachments'], 'name', null, 'content')],
+            'PepiPost'   => ['class' => \FluentMail\App\Services\Mailer\Providers\PepiPost\Handler::class, 'typed' => false, 'url' => 'https://api.pepipost.com/', 'status' => 202, 'settings' => [], 'rows' => $jsonRows(['attachments'], 'name', null, 'content')],
             'Cloudflare' => ['class' => \FluentMail\App\Services\Mailer\Providers\Cloudflare\Handler::class, 'typed' => true, 'url' => 'https://api.cloudflare.com/', 'status' => 200, 'settings' => ['account_id' => 'suite-account'], 'rows' => $jsonRows(['attachments'], 'filename', 'type', 'content')],
             'SendInBlue' => ['class' => \FluentMail\App\Services\Mailer\Providers\SendInBlue\Handler::class, 'typed' => false, 'url' => 'https://api.brevo.com/', 'status' => 201, 'settings' => [], 'rows' => $jsonRows(['attachment'], 'name', null, 'content')],
             'Mailgun'    => ['class' => \FluentMail\App\Services\Mailer\Providers\Mailgun\Handler::class, 'typed' => false, 'url' => 'https://api.mailgun.net/', 'status' => 200, 'settings' => ['domain_name' => 'mg.example.test', 'region' => 'us'], 'rows' => $formRows('attachment')],
@@ -964,10 +963,9 @@ return function () {
                 }
             }
 
-            FsmtpTest::knownFailure(
-                $knownSeen,
-                'PepiPost getBody() reads PHPMailer::$contentType, which does not exist (app/Services/Mailer/Providers/PepiPost/Handler.php:160); see tests/FIX-PLAN.md.'
-            );
+            if (!empty($spec['knownWarning'])) {
+                FsmtpTest::knownFailure($knownSeen, $spec['knownWarning'] . ' (' . $spec['class'] . '); see tests/FIX-PLAN.md.');
+            }
 
             if ($handler instanceof FsmtpSuiteToSendAttachmentProbe && $handler->capturedBody !== null) {
                 $request = ['body' => $handler->capturedBody, 'headers' => []];
