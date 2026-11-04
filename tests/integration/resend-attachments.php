@@ -72,6 +72,48 @@ return function () {
     };
 
     try {
+        // Runs first: every resend defines FLUENTMAIL_LOG_OFF for the rest of the request.
+        FsmtpTest::case('a real send logs an in-memory attachment without its data', function () use ($pdfPath, $inMemory) {
+            if (defined('FLUENTMAIL_LOG_OFF')) {
+                FsmtpTest::skip('an earlier resend in this process turned logging off (FLUENTMAIL_LOG_OFF)');
+                return;
+            }
+            global $wpdb;
+            $table = FsmtpFactory::emailLogTable();
+            $redirect = FsmtpFactory::productionLogTableRedirect($table);
+            $mailer = new \PHPMailer\PHPMailer\PHPMailer(true);
+            $mailer->setFrom('sender@example.test');
+            $mailer->addAddress('to@example.test');
+            $mailer->Subject = 'logged';
+            $mailer->Body = 'body';
+            $mailer->addAttachment($pdfPath);
+            $mailer->addStringAttachment($inMemory, 'invoice.pdf', 'base64', 'application/pdf');
+
+            FsmtpTest::interceptHttp(function ($url) {
+                if (strpos($url, 'https://api.sendgrid.com/') !== 0) {
+                    return null;
+                }
+                return ['headers' => [], 'body' => '', 'response' => ['code' => 202, 'message' => 'Accepted'], 'cookies' => [], 'filename' => null];
+            });
+            add_filter('query', $redirect, PHP_INT_MAX);
+            add_filter('fluentmail_will_log_email', '__return_true', PHP_INT_MAX);
+            try {
+                (new \FluentMail\App\Services\Mailer\Providers\SendGrid\Handler())
+                    ->setSettings(['key_store' => 'db', 'api_key' => 'k', 'sender_email' => 'sender@example.test', 'sender_name' => '', 'force_from_name' => 'no', 'provider' => 'sendgrid'])
+                    ->setPhpMailer($mailer)
+                    ->send();
+            } finally {
+                remove_filter('query', $redirect, PHP_INT_MAX);
+                remove_filter('fluentmail_will_log_email', '__return_true', PHP_INT_MAX);
+                FsmtpTest::interceptHttp();
+            }
+
+            $stored = unserialize($wpdb->get_var("SELECT attachments FROM `{$table}` ORDER BY id DESC LIMIT 1"), ['allowed_classes' => false]);
+            FsmtpTest::assertSame($pdfPath, $stored[0][0], 'file path stored');
+            FsmtpTest::assertSame('', $stored[1][0], 'in-memory data not stored');
+            FsmtpTest::assertSame(strlen($inMemory), (int) $stored[1][8], 'in-memory size stored');
+        });
+
         FsmtpTest::case('the log keeps file paths but not the data of in-memory attachments', function () use ($records, $allKinds, $inMemory, $pdfPath) {
             $logged = BaseHandler::attachmentsForLog($records($allKinds));
 
@@ -165,11 +207,89 @@ return function () {
             FsmtpTest::assertAjaxHealthy($single, 'single resend');
             $message = $single['data']['data']['message'];
             FsmtpTest::assert(strpos($message, 'invoice.pdf (created in memory by the sending plugin, not stored)') !== false, 'message names the in-memory file: ' . $message);
-            FsmtpTest::assert(strpos($message, 'deleted-later.pdf (file no longer exists)') !== false, 'message names the missing file: ' . $message);
+            FsmtpTest::assert(strpos($message, 'deleted-later.pdf (file no longer exists or can\'t be read)') !== false, 'message names the missing file: ' . $message);
             FsmtpTest::assertSame(2, count($single['data']['data']['skipped_attachments']), 'skipped list in the response');
 
             FsmtpTest::assertAjaxHealthy($bulk, 'bulk resend');
             FsmtpTest::assert(strpos($bulk['data']['data']['message'], '1 was sent without one or more attachments') !== false, 'bulk message: ' . $bulk['data']['data']['message']);
+        });
+
+        FsmtpTest::case('each status stays with its own record, so an unchecked path is never attached', function () use ($resend, $pdfPath) {
+            FsmtpTest::assertMailSimulationActive();
+            // A tampered or very old row: a non-attachment entry first, then a blocked system file.
+            $sent = $resend([null, '/etc/hosts', [$pdfPath, 'report.pdf', 'report.pdf', 'base64', 'application/pdf', false, 'attachment', 'report.pdf']]);
+
+            FsmtpTest::assertSame([$pdfPath], array_column($sent['seen'], 'path'), 'only the readable upload is attached');
+            FsmtpTest::assertSame([['name' => 'hosts', 'status' => 'missing']], $sent['result']['skipped_attachments'], 'the blocked file is reported, not attached');
+        });
+
+        FsmtpTest::case('wp_mail() still receives the resend\'s file paths, so pre_wp_mail transports see them', function () use ($resend, $records, $allKinds, $pdfPath, $pngPath) {
+            FsmtpTest::assertMailSimulationActive();
+            $given = null;
+            $listener = function ($return, $atts) use (&$given) {
+                $given = $atts['attachments'];
+                return $return; // let the send continue
+            };
+            add_filter('pre_wp_mail', $listener, 10, 2);
+            try {
+                $resend($records($allKinds));
+            } finally {
+                remove_filter('pre_wp_mail', $listener, 10);
+            }
+            FsmtpTest::assertSame([$pdfPath, $pngPath], $given, 'attachments argument');
+        });
+
+        FsmtpTest::case('a notification sent from a wp_mail filter during a resend does not get its attachments', function () use ($resend, $records, $allKinds) {
+            FsmtpTest::assertMailSimulationActive();
+            $nested = null;
+            $once = false;
+            $sendNested = function ($atts) use (&$once) {
+                if (!$once) {
+                    $once = true;
+                    wp_mail('nested@example.test', 'nested', 'nested body');
+                }
+                return $atts;
+            };
+            $watch = function ($phpmailer) use (&$nested) {
+                if ($phpmailer->Subject === 'nested') {
+                    $nested = count($phpmailer->getAttachments());
+                }
+            };
+            add_filter('wp_mail', $sendNested);
+            add_action('phpmailer_init', $watch, 20);
+            try {
+                $sent = $resend($records($allKinds));
+            } finally {
+                remove_filter('wp_mail', $sendNested);
+                remove_action('phpmailer_init', $watch, 20);
+            }
+            FsmtpTest::assertSame(0, $nested, 'the nested email carries no attachments');
+            FsmtpTest::assertSame(2, count($sent['seen']), 'the resend still carries its two files');
+            FsmtpTest::assertSame(['Quarterly Report.pdf', 'logo.png'], array_column($sent['seen'], 'name'), 'with their original names');
+        });
+
+        FsmtpTest::case('an attachment another plugin adds during the resend is kept as it was', function () use ($resend, $records, $pdfPath) {
+            FsmtpTest::assertMailSimulationActive();
+            $addTerms = function ($phpmailer) {
+                $phpmailer->addStringAttachment('terms', 'terms.txt', 'base64', 'text/plain');
+            };
+            add_action('phpmailer_init', $addTerms, 5);
+            try {
+                $sent = $resend($records(function ($m) use ($pdfPath) {
+                    $m->addAttachment($pdfPath, 'Invoice.pdf');
+                }));
+            } finally {
+                remove_action('phpmailer_init', $addTerms, 5);
+            }
+            FsmtpTest::assertSame(['Invoice.pdf', 'terms.txt'], array_column($sent['seen'], 'name'), 'both attachments');
+        });
+
+        FsmtpTest::case('formatting a stored row again keeps the size of an in-memory attachment', function () use ($records, $inMemory) {
+            $once = BaseHandler::attachmentsForLog($records(function ($m) use ($inMemory) {
+                $m->addStringAttachment($inMemory, 'invoice.pdf');
+            }));
+            $twice = BaseHandler::attachmentsForLog($once);
+            FsmtpTest::assertSame(strlen($inMemory), $twice[0][8], 'size kept');
         });
 
         FsmtpTest::case('log rows sent to the admin UI carry their attachment list and no in-memory data', function () use ($records, $allKinds) {

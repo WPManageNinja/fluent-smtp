@@ -288,33 +288,50 @@ class Logger extends Model
         $list = [];
 
         foreach ($attachments as $attachment) {
-            if (is_string($attachment) && $attachment !== '') {
-                $attachment = [$attachment, basename($attachment), basename($attachment)];
+            $described = static::describeAttachment($attachment);
+
+            if ($described) {
+                unset($described['record']);
+                $list[] = $described;
             }
-
-            if (!is_array($attachment)) {
-                continue;
-            }
-
-            $inMemory = !empty($attachment[5]);
-            $path = isset($attachment[0]) && is_string($attachment[0]) ? $attachment[0] : '';
-            $readable = !$inMemory && BaseHandler::isReadableAttachmentPath($path);
-
-            if ($inMemory) {
-                $size = isset($attachment[8]) ? (int) $attachment[8] : null;
-            } else {
-                $size = $readable ? (int) @filesize($path) : null;
-            }
-
-            $list[] = [
-                'name'   => (string) BaseHandler::getAttachmentName($attachment),
-                'status' => $inMemory ? 'in_memory' : ($readable ? 'ok' : 'missing'),
-                'inline' => isset($attachment[6]) && $attachment[6] === 'inline',
-                'size'   => $size,
-            ];
         }
 
         return $list;
+    }
+
+    /**
+     * One logged attachment, normalized: its PHPMailer record and how it stands.
+     *
+     * @param mixed $attachment A PHPMailer record, or a bare path from very old rows.
+     * @return array|null ['name', 'status', 'inline', 'size', 'record'], or null when the entry is not an attachment.
+     */
+    protected static function describeAttachment($attachment)
+    {
+        if (is_string($attachment) && $attachment !== '') {
+            $attachment = [$attachment, basename($attachment), basename($attachment)];
+        }
+
+        if (!is_array($attachment)) {
+            return null;
+        }
+
+        $inMemory = !empty($attachment[5]);
+        $path = isset($attachment[0]) && is_string($attachment[0]) ? $attachment[0] : '';
+        $readable = !$inMemory && BaseHandler::isReadableAttachmentPath($path);
+
+        if ($inMemory) {
+            $size = isset($attachment[8]) ? (int) $attachment[8] : (is_string($path) ? strlen($path) : null);
+        } else {
+            $size = $readable ? (int) @filesize($path) : null;
+        }
+
+        return [
+            'name'   => (string) BaseHandler::getAttachmentName($attachment),
+            'status' => $inMemory ? 'in_memory' : ($readable ? 'ok' : 'missing'),
+            'inline' => isset($attachment[6]) && $attachment[6] === 'inline',
+            'size'   => $size,
+            'record' => $attachment,
+        ];
     }
 
     protected function maybeUnserialize(array $data)
@@ -552,46 +569,84 @@ class Logger extends Model
 
         /*
          * Files still on disk go out again with their original name, type and
-         * inline disposition. wp_mail() takes paths only, so they are added on
-         * phpmailer_init below. In-memory attachments and files that are gone
-         * cannot be included; they are reported back so the admin is told.
+         * inline cid. In-memory attachments and files that are gone cannot be
+         * included; they are reported back so the admin is told.
+         *
+         * The paths go to wp_mail() as usual, so pre_wp_mail transports and
+         * wp_mail filters see them. wp_mail() takes paths only, so the original
+         * metadata is put back on phpmailer_init, and only on the email that
+         * carries exactly these files: a nested email (a notification sent from
+         * a wp_mail filter) is left alone.
          */
         $resendable = [];
         $skippedAttachments = [];
-        $records = is_array($email['attachments']) ? array_values($email['attachments']) : [];
+        $wpMailAttachments = [];
 
-        foreach (static::describeAttachments($records) as $index => $described) {
-            $record = $records[$index];
+        foreach ((is_array($email['attachments']) ? $email['attachments'] : []) as $attachment) {
+            $described = static::describeAttachment($attachment);
 
-            if (is_string($record)) {
-                $record = [$record, basename($record), basename($record)];
+            if (!$described) {
+                continue;
             }
 
             if ($described['status'] === 'ok') {
-                $resendable[] = ['record' => $record, 'name' => $described['name'], 'inline' => $described['inline']];
+                $resendable[] = $described;
+                $wpMailAttachments[] = $described['record'][0];
             } else {
                 $skippedAttachments[] = ['name' => $described['name'], 'status' => $described['status']];
             }
         }
 
-        $attachResendable = function ($phpmailer) use (&$resendable, &$skippedAttachments) {
-            foreach ($resendable as $item) {
-                $record = $item['record'];
-                $encoding = !empty($record[3]) ? $record[3] : 'base64';
-                $type = isset($record[4]) ? (string) $record[4] : '';
+        $restored = false;
+        $restoreAttachments = function ($phpmailer) use ($resendable, &$restored) {
+            if ($restored || !$resendable) {
+                return;
+            }
 
-                try {
-                    if ($item['inline'] && !empty($record[7])) {
-                        $phpmailer->addEmbeddedImage($record[0], $record[7], $item['name'], $encoding, $type);
-                    } else {
-                        $phpmailer->addAttachment($record[0], $item['name'], $encoding, $type);
+            $current = $phpmailer->getAttachments();
+            $pending = $resendable;
+            $matched = [];
+
+            // Pair every file this resend passed in with one record on the message.
+            foreach ($current as $index => $record) {
+                if (!empty($record[5])) {
+                    continue;
+                }
+                foreach ($pending as $key => $item) {
+                    if ($record[0] === $item['record'][0]) {
+                        $matched[$index] = $item;
+                        unset($pending[$key]);
+                        break;
                     }
-                } catch (\Exception $e) {
-                    $skippedAttachments[] = ['name' => $item['name'], 'status' => 'missing'];
                 }
             }
 
-            $resendable = [];
+            if ($pending) {
+                return; // Not this resend's email, or a filter removed its files.
+            }
+
+            $restored = true;
+            $phpmailer->clearAttachments();
+
+            foreach ($current as $index => $record) {
+                $source = isset($matched[$index]) ? $matched[$index]['record'] : $record;
+                $name = isset($matched[$index]) ? $matched[$index]['name'] : (isset($record[2]) ? $record[2] : '');
+                $encoding = !empty($source[3]) ? $source[3] : 'base64';
+                $type = isset($source[4]) ? (string) $source[4] : '';
+                $disposition = !empty($source[6]) ? $source[6] : 'attachment';
+
+                try {
+                    if (!empty($record[5])) {
+                        $phpmailer->addStringAttachment($record[0], $record[1], $encoding, $type, $disposition);
+                    } elseif ($disposition === 'inline' && !empty($source[7])) {
+                        $phpmailer->addEmbeddedImage($record[0], $source[7], $name, $encoding, $type);
+                    } else {
+                        $phpmailer->addAttachment($record[0], $name, $encoding, $type, $disposition);
+                    }
+                } catch (\Exception $e) {
+                    continue;
+                }
+            }
         };
 
         // When custom recipients are provided, drop cc/bcc headers so the email
@@ -666,7 +721,7 @@ class Logger extends Model
 
             $startedAt = microtime(true);
 
-            add_action('phpmailer_init', $attachResendable, 1);
+            add_action('phpmailer_init', $restoreAttachments, 1);
 
             try {
                 $result = wp_mail(
@@ -674,10 +729,10 @@ class Logger extends Model
                     $email['subject'],
                     $email['body'],
                     $headers,
-                    []
+                    $wpMailAttachments
                 );
             } finally {
-                remove_action('phpmailer_init', $attachResendable, 1);
+                remove_action('phpmailer_init', $restoreAttachments, 1);
             }
 
             $durationMs = round((microtime(true) - $startedAt) * 1000, 1);

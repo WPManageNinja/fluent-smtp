@@ -199,7 +199,7 @@ class LoggerController extends Controller
             try {
                 $email = $logger->resendEmailFromLog($logId, 'check_realtime');
                 $successCount++;
-                if (!empty($email['skipped_attachments'])) {
+                if (!empty($email['skipped_attachments']) && isset($email['status']) && $email['status'] === 'sent') {
                     $withoutAttachments++;
                 }
             } catch (\Exception $exception) {
@@ -230,7 +230,8 @@ class LoggerController extends Controller
         }
 
         return $this->sendSuccess([
-            'message' => $message
+            'message'             => $message,
+            'without_attachments' => $withoutAttachments
         ]);
 
     }
@@ -248,7 +249,7 @@ class LoggerController extends Controller
         foreach ($skipped as $item) {
             $reason = $item['status'] === 'in_memory'
                 ? __('created in memory by the sending plugin, not stored', 'fluent-smtp')
-                : __('file no longer exists', 'fluent-smtp');
+                : __('file no longer exists or can\'t be read', 'fluent-smtp');
 
             $parts[] = sprintf('%s (%s)', $item['name'], $reason);
         }

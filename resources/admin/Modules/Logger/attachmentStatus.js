@@ -5,7 +5,7 @@
  * - ok:        the file is still on disk, so a resend includes it
  * - in_memory: built in memory by the sending plugin (e.g. an invoice PDF);
  *              the log does not keep the data, so it can't be resent
- * - missing:   the file was deleted or moved, so it can't be resent
+ * - missing:   the file was deleted, moved or can't be read, so it can't be resent
  */
 
 /** The logged attachments, or a best-effort list for rows from older responses. */
@@ -37,7 +37,7 @@ export function attachmentStatusLabel(item, vm) {
         return vm.$t('Not stored');
     }
     if (item.status === 'missing') {
-        return vm.$t('File missing');
+        return vm.$t('File unavailable');
     }
     return '';
 }
@@ -48,7 +48,7 @@ export function attachmentStatusReason(item, vm) {
         return vm.$t('Created in memory by the sending plugin. It was not stored, so it can\'t be resent.');
     }
     if (item.status === 'missing') {
-        return vm.$t('The file no longer exists on the server, so it can\'t be resent.');
+        return vm.$t('The file no longer exists on the server or can\'t be read, so it can\'t be resent.');
     }
     return '';
 }
@@ -97,4 +97,31 @@ export function notifyResendResult(vm, res) {
         title: vm.$t('Done'),
         message: res.data.message
     });
+}
+
+/**
+ * Ask before a bulk resend when some of the selected emails have attachments
+ * that can't be included. Resolves when there is nothing to warn about or the
+ * admin confirms; rejects when they cancel.
+ */
+export function confirmBulkResendWithoutAttachments(vm, rows) {
+    const affected = (rows || []).filter(row => unresendableAttachments(row).length);
+
+    if (!affected.length) {
+        return Promise.resolve();
+    }
+
+    const message = affected.length === 1
+        ? vm.$t('One of the selected emails has attachments that can\'t be included. It will be resent without them.')
+        : vm.$t('%s of the selected emails have attachments that can\'t be included. They will be resent without them.', String(affected.length));
+
+    return vm.$confirm(
+        message,
+        vm.$t('Resend without some attachments?'),
+        {
+            type: 'warning',
+            confirmButtonText: vm.$t('Resend without them'),
+            cancelButtonText: vm.$t('Cancel')
+        }
+    );
 }

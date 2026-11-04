@@ -205,7 +205,7 @@ import LogFilter from './LogFilter';
 import LogViewer from './LogViewer';
 import LogBulkAction from './BulkAction';
 import ResendDialog from './ResendDialog';
-import {confirmResendWithoutAttachments, notifyResendResult} from './attachmentStatus';
+import {confirmResendWithoutAttachments, confirmBulkResendWithoutAttachments, notifyResendResult} from './attachmentStatus';
 import isEmpty from 'lodash/isEmpty'
 
 export default {
@@ -536,15 +536,31 @@ export default {
                 return false;
             }
 
+            const rows = (this.logs || []).filter(row => selectedIds.includes(row.id));
+
+            return confirmBulkResendWithoutAttachments(this, rows)
+                .then(() => this.sendResendBulk(selectedIds))
+                .catch(() => {});
+        },
+        sendResendBulk(selectedIds) {
             this.loading = true;
             this.$post('logs/retry-bulk', {
                 log_ids: selectedIds
             }).then(res => {
-                this.$notify.success({
-                    offset: 19,
-                    title: this.$t('Done'),
-                    message: res.data.message
-                });
+                if (res.data.without_attachments) {
+                    this.$notify.warning({
+                        offset: 19,
+                        title: this.$t('Sent without some attachments'),
+                        message: res.data.message,
+                        duration: 8000
+                    });
+                } else {
+                    this.$notify.success({
+                        offset: 19,
+                        title: this.$t('Done'),
+                        message: res.data.message
+                    });
+                }
                 this.selectedLogs = [];
                 this.fetch();
             })

@@ -1112,7 +1112,11 @@ class BaseHandler
 
         foreach ($attachments as $key => $attachment) {
             if (is_array($attachment) && !empty($attachment[5])) {
-                $attachment[8] = isset($attachment[0]) && is_string($attachment[0]) ? strlen($attachment[0]) : 0;
+                $data = isset($attachment[0]) && is_string($attachment[0]) ? $attachment[0] : '';
+                // Already stripped (a stored row formatted again): keep the stored size.
+                if ($data !== '' || !isset($attachment[8])) {
+                    $attachment[8] = strlen($data);
+                }
                 $attachment[0] = '';
                 $attachments[$key] = $attachment;
             }

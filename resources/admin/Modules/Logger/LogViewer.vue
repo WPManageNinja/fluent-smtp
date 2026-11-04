@@ -443,11 +443,11 @@ export default {
                 this.logViewerProps.log = log;
             }
         },
-        // Newest first. Rendered as text, never v-html: the original
-        // recipients carry a display name that whoever sent the email chose.
         attachments() {
             return attachmentList(this.log);
         },
+        // Newest first. Rendered as text, never v-html: the original
+        // recipients carry a display name that whoever sent the email chose.
         resendHistory() {
             const records = this.log && this.log.extra ? this.log.extra.resends : null;
 
