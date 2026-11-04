@@ -82,10 +82,17 @@ class LoggerController extends Controller
                     );
                 }
 
+                $skipped = isset($resentEmail['skipped_attachments']) ? $resentEmail['skipped_attachments'] : [];
+
+                if ($skipped) {
+                    $message .= ' ' . static::skippedAttachmentsMessage($skipped);
+                }
+
                 return $this->sendSuccess([
-                    'email'      => $resentEmail,
-                    'recipients' => $recipients,
-                    'message'    => $message
+                    'email'               => $resentEmail,
+                    'recipients'          => $recipients,
+                    'message'             => $message,
+                    'skipped_attachments' => $skipped
                 ]);
             }
 
@@ -187,15 +194,32 @@ class LoggerController extends Controller
 
         $failedInitiated = 0;
         $successCount = 0;
+        $withoutAttachments = 0;
         foreach ($logIds as $logId) {
             try {
                 $email = $logger->resendEmailFromLog($logId, 'check_realtime');
                 $successCount++;
+                if (!empty($email['skipped_attachments'])) {
+                    $withoutAttachments++;
+                }
             } catch (\Exception $exception) {
                 $failedInitiated++;
             }
         }
         $message = __('The selected emails have been resent.', 'fluent-smtp');
+
+        if ($withoutAttachments) {
+            $message .= sprintf(
+                /* translators: %d: number of emails */
+                _n(
+                    ' %d was sent without one or more attachments that could not be included again.',
+                    ' %d were sent without one or more attachments that could not be included again.',
+                    $withoutAttachments,
+                    'fluent-smtp'
+                ),
+                $withoutAttachments
+            );
+        }
 
         if ($failedCount) {
             $message .= sprintf(__(' %d of them failed to send.', 'fluent-smtp'), $failedCount);
@@ -209,5 +233,35 @@ class LoggerController extends Controller
             'message' => $message
         ]);
 
+    }
+
+    /**
+     * One sentence naming the attachments a resend could not include, and why.
+     *
+     * @param array $skipped [['name' => string, 'status' => 'in_memory'|'missing'], ...]
+     * @return string
+     */
+    protected static function skippedAttachmentsMessage(array $skipped)
+    {
+        $parts = [];
+
+        foreach ($skipped as $item) {
+            $reason = $item['status'] === 'in_memory'
+                ? __('created in memory by the sending plugin, not stored', 'fluent-smtp')
+                : __('file no longer exists', 'fluent-smtp');
+
+            $parts[] = sprintf('%s (%s)', $item['name'], $reason);
+        }
+
+        return sprintf(
+            /* translators: %s: list of attachment names with the reason each was left out */
+            _n(
+                'This attachment could not be included: %s.',
+                'These attachments could not be included: %s.',
+                count($skipped),
+                'fluent-smtp'
+            ),
+            implode(', ', $parts)
+        );
     }
 }

@@ -129,7 +129,7 @@
                                         <el-button
                                             size="small"
                                             icon="FsmIconRefresh"
-                                            @click="handleRetry(scope.row, 'retry')"
+                                            @click="handleRetryClick(scope.row)"
                                             v-if="scope.row.status == 'failed'"
                                         >{{ $t('Retry') }}
                                         </el-button>
@@ -205,6 +205,7 @@ import LogFilter from './LogFilter';
 import LogViewer from './LogViewer';
 import LogBulkAction from './BulkAction';
 import ResendDialog from './ResendDialog';
+import {confirmResendWithoutAttachments, notifyResendResult} from './attachmentStatus';
 import isEmpty from 'lodash/isEmpty'
 
 export default {
@@ -407,11 +408,10 @@ export default {
                 row.resent_count = res.data.email.resent_count;
                 row.updated_at = res.data.email.updated_at;
                 row.extra = res.data.email.extra;
-                this.$notify.success({
-                    offset: 19,
-                    title: this.$t('Done'),
-                    message: res.data.message
-                });
+                if (res.data.email.attachment_list) {
+                    row.attachment_list = res.data.email.attachment_list;
+                }
+                notifyResendResult(this, res);
                 return true;
             }).fail(error => {
                 this.$notify.error({
@@ -423,6 +423,11 @@ export default {
             }).always(() => {
                 this.loading = false;
             });
+        },
+        handleRetryClick(row) {
+            confirmResendWithoutAttachments(this, row)
+                .then(() => this.handleRetry(row, 'retry'))
+                .catch(() => {});
         },
         handleResendClick(row) {
             this.resendDialog.log = row;
