@@ -54,7 +54,15 @@ class Handler extends BaseHandler
         }
 
         if (!empty($this->getParam('attachments'))) {
-            $body['content']['attachments'] = $this->getAttachments();
+            if ($attachments = $this->getAttachments()) {
+                $body['content']['attachments'] = $attachments;
+            }
+
+            // SparkPost puts an inline image's name in its Content-ID header,
+            // so embedded images go in inline_images under their cid.
+            if ($inlineImages = $this->attachmentRows(true)) {
+                $body['content']['inline_images'] = $inlineImages;
+            }
         }
 
         $params = [
@@ -168,11 +176,34 @@ class Handler extends BaseHandler
         return $address;
     }
 
+    /**
+     * The normal attachments; embedded images are sent separately (attachmentRows(true)).
+     *
+     * @return array
+     */
     protected function getAttachments()
+    {
+        return $this->attachmentRows(false);
+    }
+
+    /**
+     * @param bool $inline True for the embedded images, false for normal attachments.
+     * @return array
+     */
+    protected function attachmentRows($inline)
     {
         $data = [];
 
-        foreach ($this->getParam('attachments') as $attachment) {
+        $attachments = $this->getParam('attachments');
+        $contentIds = self::inlineContentIds($attachments);
+
+        foreach ($attachments as $key => $attachment) {
+            $contentId = $contentIds[$key];
+
+            if (($contentId !== '') !== $inline) {
+                continue;
+            }
+
             try {
                 $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
@@ -182,7 +213,7 @@ class Handler extends BaseHandler
 
             // SparkPost's attachment object is name, type and data (all required).
             $data[] = [
-                'name' => self::getAttachmentName($attachment),
+                'name' => $inline ? $contentId : self::attachmentName($attachment),
                 'type' => self::attachmentType($attachment),
                 'data' => base64_encode($file)
             ];

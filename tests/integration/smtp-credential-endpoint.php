@@ -165,6 +165,21 @@ return function () {
         }
     });
 
+    FsmtpTest::case('saving an SMTP connection stores the encryption in lower case, and an unknown value as none', function () use ($withSmtpConnection, $save, $savedPassword) {
+        FsmtpTest::assertMailSimulationActive();
+
+        foreach (['TLS' => 'tls', ' Ssl ' => 'ssl', 'starttls' => 'none'] as $submittedValue => $storedValue) {
+            $withSmtpConnection(function ($key, $sender, $connection) use ($save, $submittedValue, $storedValue) {
+                // The password is typed again, so even a downgrade saves.
+                $submitted = array_merge($connection, ['encryption' => $submittedValue, 'password' => 'typed-again']);
+                list($result, $stored) = $save($key, $sender, $submitted);
+
+                FsmtpTest::assertSame(200, $result['status'], $submittedValue . ': HTTP status');
+                FsmtpTest::assertSame($storedValue, $stored['encryption'], $submittedValue . ': stored');
+            });
+        }
+    });
+
     FsmtpTest::case('an SMTP endpoint change without authentication saves without asking for the password', function () use ($withSmtpConnection, $save) {
         FsmtpTest::assertMailSimulationActive();
 

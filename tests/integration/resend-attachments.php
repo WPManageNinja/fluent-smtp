@@ -138,7 +138,7 @@ return function () {
         });
 
         FsmtpTest::case('each logged attachment is described with whether a resend can include it', function () use ($records, $allKinds) {
-            $list = Logger::describeAttachments(BaseHandler::attachmentsForLog($records($allKinds)));
+            $list = Logger::describeAttachments(BaseHandler::attachmentsForLog($records($allKinds)), true);
             $summary = array_map(function ($item) {
                 return [$item['name'], $item['status'], $item['inline']];
             }, $list);
@@ -159,7 +159,7 @@ return function () {
             ];
             $summary = array_map(function ($item) {
                 return [$item['name'], $item['status']];
-            }, Logger::describeAttachments($legacy));
+            }, Logger::describeAttachments($legacy, true));
             FsmtpTest::assertSame([['report.pdf', 'ok'], ['invoice.pdf', 'in_memory']], $summary, 'legacy list');
             FsmtpTest::assertSame('', BaseHandler::attachmentsForLog($legacy)[1][0], 'legacy in-memory data stripped for display');
         });
@@ -473,6 +473,32 @@ return function () {
             FsmtpTest::assertSame(4, count($log['attachment_list']), 'attachment list');
             FsmtpTest::assertSame('in_memory', $log['attachment_list'][2]['status'], 'in-memory status');
             FsmtpTest::assertSame('', $log['attachments'][2][0], 'no in-memory data in the response');
+
+            // The list and viewer do not look at the disk: a readable file and a
+            // deleted one are both left unchecked until a resend asks.
+            FsmtpTest::assertSame(['unchecked', 'unchecked', 'in_memory', 'unchecked'], array_column($log['attachment_list'], 'status'), 'files not checked');
+            FsmtpTest::assertSame([null, null, null], [$log['attachment_list'][0]['size'], $log['attachment_list'][1]['size'], $log['attachment_list'][3]['size']], 'no file sizes read');
+        });
+
+        FsmtpTest::case('the attachment-status check reports each requested log with its files checked', function () use ($records, $allKinds, $pdfPath) {
+            $table = FsmtpFactory::emailLogTable();
+            $withFiles = FsmtpFactory::insertLog($table, ['attachments' => serialize(BaseHandler::attachmentsForLog($records($allKinds)))]);
+            $without = FsmtpFactory::insertLog($table, ['attachments' => serialize([])]);
+            $redirect = FsmtpFactory::productionLogTableRedirect($table);
+
+            add_filter('query', $redirect, PHP_INT_MAX);
+            try {
+                $statuses = (new Logger())->attachmentStatus([$withFiles, (string) $without, 'x', 999999999]);
+                $capped = (new Logger())->attachmentStatus(array_merge(range(1000000, 1000059), [$withFiles]));
+            } finally {
+                remove_filter('query', $redirect, PHP_INT_MAX);
+            }
+
+            FsmtpTest::assertSame([$withFiles, $without], array_keys($statuses), 'only existing requested logs');
+            FsmtpTest::assertSame(['ok', 'ok', 'in_memory', 'missing'], array_column($statuses[$withFiles], 'status'), 'files checked');
+            FsmtpTest::assertSame(filesize($pdfPath), $statuses[$withFiles][0]['size'], 'size read');
+            FsmtpTest::assertSame([], $statuses[$without], 'no attachments');
+            FsmtpTest::assertSame([], $capped, 'at most 50 ids are looked up');
         });
     } finally {
         foreach ((array) glob($dir . '/*') as $file) {

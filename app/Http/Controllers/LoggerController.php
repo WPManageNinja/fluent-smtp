@@ -27,6 +27,21 @@ class LoggerController extends Controller
         return $this->sendSuccess($result);
     }
 
+    /**
+     * Attachment states for the logs a resend is about to send, checked on disk.
+     */
+    public function attachmentStatus(Request $request, Logger $logger)
+    {
+        $this->verify();
+
+        $ids = $request->get('ids', []);
+        $ids = is_array($ids) ? $ids : [$ids];
+
+        return $this->sendSuccess([
+            'attachments' => (object) $logger->attachmentStatus(array_filter($ids, 'is_scalar'))
+        ]);
+    }
+
     public function delete(Request $request, Logger $logger)
     {
         $this->verify();

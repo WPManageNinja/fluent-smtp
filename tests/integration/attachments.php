@@ -708,7 +708,7 @@ return function () {
 
         FsmtpTest::case('helper: attachment names for files and in-memory data', function () use ($rowFor, $pdfPath, $binary) {
             $name = function (callable $add) use ($rowFor) {
-                return BaseHandler::getAttachmentName($rowFor($add));
+                return BaseHandler::attachmentName($rowFor($add));
             };
 
             FsmtpTest::assertSame('suite-document.pdf', $name(function ($m) use ($pdfPath) {
@@ -880,7 +880,7 @@ return function () {
             'PepiPost'   => ['class' => \FluentMail\App\Services\Mailer\Providers\PepiPost\Handler::class, 'typed' => false, 'url' => 'https://api.pepipost.com/', 'status' => 202, 'settings' => [], 'rows' => $jsonRows(['attachments'], 'name', null, 'content')],
             'Cloudflare' => ['class' => \FluentMail\App\Services\Mailer\Providers\Cloudflare\Handler::class, 'typed' => true, 'url' => 'https://api.cloudflare.com/', 'status' => 200, 'settings' => ['account_id' => 'suite-account'], 'rows' => $jsonRows(['attachments'], 'filename', 'type', 'content')],
             'SendInBlue' => ['class' => \FluentMail\App\Services\Mailer\Providers\SendInBlue\Handler::class, 'typed' => false, 'url' => 'https://api.brevo.com/', 'status' => 201, 'settings' => [], 'rows' => $jsonRows(['attachment'], 'name', null, 'content')],
-            'Mailgun'    => ['class' => \FluentMail\App\Services\Mailer\Providers\Mailgun\Handler::class, 'typed' => false, 'url' => 'https://api.mailgun.net/', 'status' => 200, 'settings' => ['domain_name' => 'mg.example.test', 'region' => 'us'], 'rows' => $formRows('attachment')],
+            'Mailgun'    => ['class' => \FluentMail\App\Services\Mailer\Providers\Mailgun\Handler::class, 'typed' => true, 'url' => 'https://api.mailgun.net/', 'status' => 200, 'settings' => ['domain_name' => 'mg.example.test', 'region' => 'us'], 'rows' => $formRows('attachment')],
             'ElasticMail' => ['class' => \FluentMail\App\Services\Mailer\Providers\ElasticMail\Handler::class, 'typed' => true, 'url' => 'https://api.elasticemail.com/', 'status' => 200, 'settings' => ['mail_type' => 'transactional'], 'rows' => $formRows('attachments')],
             'ToSend'     => ['class' => FsmtpSuiteToSendAttachmentProbe::class, 'typed' => true, 'url' => null, 'status' => 200, 'settings' => [], 'rows' => $jsonRows(['attachments'], 'name', 'type', 'content')],
         ];
@@ -1123,9 +1123,9 @@ return function () {
             add_filter('fluentsmtp_attachment_blocked_paths', $filter);
             try {
                 FsmtpTest::assert(null !== $thrown(function () use ($blocked) {
-                    BaseHandler::secureFileRead($blocked);
+                    BaseHandler::readAttachmentFile($blocked);
                 }), 'the blocked file itself is refused');
-                FsmtpTest::assertSame('%PDF-1.4 copy', BaseHandler::secureFileRead($sibling), 'a sibling that only shares the prefix is read');
+                FsmtpTest::assertSame('%PDF-1.4 copy', BaseHandler::readAttachmentFile($sibling), 'a sibling that only shares the prefix is read');
             } finally {
                 remove_filter('fluentsmtp_attachment_blocked_paths', $filter);
             }

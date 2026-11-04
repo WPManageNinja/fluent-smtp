@@ -62,7 +62,15 @@ class Handler extends BaseHandler {
 
 
         if (!empty($this->getParam('attachments'))) {
-            $body['attachments'] = $this->getAttachments();
+            if ($attachments = $this->getAttachments()) {
+                $body['attachments'] = $attachments;
+            }
+
+            // SMTP2GO uses an inline image's filename as its cid, so embedded
+            // images go in "inlines" under their cid.
+            if ($inlines = $this->attachmentRows(true)) {
+                $body['inlines'] = $inlines;
+            }
         }
 
         $params = [
@@ -151,10 +159,32 @@ class Handler extends BaseHandler {
         return $this->getParam('message');
     }
 
+    /**
+     * The normal attachments; embedded images are sent separately (attachmentRows(true)).
+     *
+     * @return array
+     */
     protected function getAttachments() {
+        return $this->attachmentRows(false);
+    }
+
+    /**
+     * @param bool $inline True for the embedded images, false for normal attachments.
+     * @return array
+     */
+    protected function attachmentRows($inline) {
         $data = [];
 
-        foreach ($this->getParam('attachments') as $attachment) {
+        $attachments = $this->getParam('attachments');
+        $contentIds = self::inlineContentIds($attachments);
+
+        foreach ($attachments as $key => $attachment) {
+            $contentId = $contentIds[$key];
+
+            if (($contentId !== '') !== $inline) {
+                continue;
+            }
+
             try {
                 $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
@@ -164,7 +194,7 @@ class Handler extends BaseHandler {
 
             $data[] = [
                 'mimetype' => self::attachmentType($attachment),
-                'filename' => self::getAttachmentName($attachment),
+                'filename' => $inline ? $contentId : self::attachmentName($attachment),
                 'fileblob' => base64_encode($file)
             ];
         }

@@ -243,7 +243,7 @@ class Handler extends BaseHandler
 
             // Add boundary and headers for attachment
             $this->postbody[] = '--' . $this->boundary . "\r\n";
-            $this->postbody[] = 'Content-Disposition: form-data; name="attachments' . ($i + 1) . '"; filename="' . self::getAttachmentName($attachment) . '"' . "\r\n";
+            $this->postbody[] = 'Content-Disposition: form-data; name="attachments' . ($i + 1) . '"; filename="' . self::attachmentName($attachment) . '"' . "\r\n";
             $this->postbody[] = 'Content-Type: ' . self::attachmentType($attachment) . "\r\n";
             $this->postbody[] = "\r\n";
             $this->postbody[] = $fileContent . "\r\n";

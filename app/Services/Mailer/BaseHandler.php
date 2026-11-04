@@ -906,10 +906,35 @@ class BaseHandler
     }
 
     /**
+     * The 2.4.1 instance form of attachmentName(), kept so a custom provider that
+     * extends this class and overrides or calls it keeps working.
+     *
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @return string
+     */
+    protected function getAttachmentName($attachment)
+    {
+        return self::attachmentName($attachment);
+    }
+
+    /**
+     * The 2.4.1 instance form of readAttachmentFile(), kept so a custom provider
+     * that extends this class and overrides or calls it keeps working.
+     *
+     * @param string $filePath
+     * @return string
+     * @throws Exception
+     */
+    protected function secureFileRead($filePath)
+    {
+        return self::readAttachmentFile($filePath);
+    }
+
+    /**
      * Record an attachment that could not be read, then let the send continue.
      *
      * @param string     $provider Provider label used in the log line.
-     * @param \Exception $e        The failure from secureFileRead().
+     * @param \Exception $e        The failure from readAttachmentFile().
      * @return void
      */
     protected function logAttachmentFailure($provider, $e)
@@ -938,7 +963,7 @@ class BaseHandler
      * @param array $attachment One row of PHPMailer::getAttachments()
      * @return string Empty only when a file row carries neither a name nor a path.
      */
-    public static function getAttachmentName($attachment)
+    public static function attachmentName($attachment)
     {
         $isInMemory = !empty($attachment[5]);
 
@@ -982,7 +1007,7 @@ class BaseHandler
             return (string) $attachment[0];
         }
 
-        return self::secureFileRead($attachment[0]);
+        return self::readAttachmentFile($attachment[0]);
     }
 
     /**
@@ -1003,7 +1028,7 @@ class BaseHandler
         $type = isset($attachment[4]) ? trim((string) $attachment[4]) : '';
 
         if (($type === '' || $type === 'application/octet-stream') && class_exists('\PHPMailer\PHPMailer\PHPMailer')) {
-            $byName = \PHPMailer\PHPMailer\PHPMailer::filenameToType(self::getAttachmentName($attachment));
+            $byName = \PHPMailer\PHPMailer\PHPMailer::filenameToType(self::attachmentName($attachment));
 
             if ($byName !== 'application/octet-stream') {
                 return $byName;
@@ -1024,9 +1049,65 @@ class BaseHandler
     }
 
     /**
+     * The Content-ID of an inline (embedded) attachment, or '' for a normal one.
+     *
+     * PHPMailer marks an embedded image (addEmbeddedImage(), addStringEmbeddedImage(),
+     * wp_mail()'s $embeds) with disposition "inline" at index 6 and its cid at
+     * index 7. The HTML refers to it as "cid:<value>", so the value is returned
+     * as is, without the "cid:" prefix. Line breaks, NUL bytes, quotes and angle
+     * brackets are removed so it cannot break out of a header or payload field.
+     *
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @return string
+     */
+    public static function inlineContentId($attachment)
+    {
+        if (!isset($attachment[6]) || $attachment[6] !== 'inline' || !isset($attachment[7]) || !is_scalar($attachment[7])) {
+            return '';
+        }
+
+        return trim(str_replace(["\r", "\n", "\0", '"', '<', '>'], '', (string) $attachment[7]));
+    }
+
+    /**
+     * inlineContentId() for every attachment of one email, with each cid used once.
+     *
+     * Providers that turn the cid into the inline part's name (SparkPost, SMTP2GO,
+     * Mailgun) need it unique: SparkPost refuses a transmission with two inline
+     * images of the same name. PHPMailer stores 0 when an inline attachment has
+     * no cid, and WordPress's list-keyed $embeds use 0, 1, ... as well, so a
+     * repeat is possible. A later attachment that repeats a cid gets '' and goes
+     * out as a normal attachment, so it is never lost.
+     *
+     * @param array $attachments PHPMailer::getAttachments() rows
+     * @return array The same keys, each mapped to its cid or ''.
+     */
+    public static function inlineContentIds($attachments)
+    {
+        $ids = [];
+        $seen = [];
+
+        foreach ((array) $attachments as $key => $attachment) {
+            $contentId = self::inlineContentId($attachment);
+
+            if ($contentId !== '' && isset($seen[$contentId])) {
+                $contentId = '';
+            }
+
+            if ($contentId !== '') {
+                $seen[$contentId] = true;
+            }
+
+            $ids[$key] = $contentId;
+        }
+
+        return $ids;
+    }
+
+    /**
      * The MIME type of a file on disk from its content, or '' when it cannot be told.
      *
-     * Runs only for a path that passes secureFileRead()'s checks, and only reports a
+     * Runs only for a path that passes readAttachmentFile()'s checks, and only reports a
      * type: it never returns file content.
      *
      * @param string $filePath
@@ -1040,7 +1121,7 @@ class BaseHandler
             return '';
         }
 
-        $realPath = realpath($filePath);
+        $realPath = @realpath($filePath);
         $type = '';
 
         if (function_exists('mime_content_type')) {
@@ -1083,7 +1164,14 @@ class BaseHandler
             return '';
         }
 
-        foreach (['pdf', 'png', 'jpg', 'gif', 'webp', 'txt', 'csv', 'ics', 'html', 'xml', 'zip', 'doc', 'docx', 'xls', 'xlsx', 'rtf'] as $extension) {
+        // Covers the file types API providers allow-list (Brevo's included), so an
+        // unnamed attachment of one of them is named with an extension they accept.
+        $extensions = [
+            'pdf', 'png', 'jpg', 'gif', 'webp', 'txt', 'csv', 'ics', 'html', 'xml', 'zip', 'doc', 'docx', 'xls', 'xlsx', 'rtf',
+            'tif', 'bmp', 'css', 'ppt', 'pptx', 'tar', 'eps', 'mp3', 'm4a', 'wav', 'aif', 'mp4', 'mov', 'avi', 'mpeg', 'wmv', 'mkv'
+        ];
+
+        foreach ($extensions as $extension) {
             if (\PHPMailer\PHPMailer\PHPMailer::_mime_types($extension) === $type) {
                 return '.' . $extension;
             }
@@ -1127,7 +1215,7 @@ class BaseHandler
 
     /**
      * Whether a file path can be attached again: a readable file outside the
-     * blocked locations, judged by the same checks as secureFileRead().
+     * blocked locations, judged by the same checks as readAttachmentFile().
      *
      * @param mixed $filePath
      * @return bool
@@ -1157,8 +1245,11 @@ class BaseHandler
             throw new Exception(__('Invalid file path', 'fluent-smtp'));
         }
 
-        // Resolve the real path to prevent path traversal attacks
-        $realPath = realpath($filePath);
+        // Resolve the real path to prevent path traversal attacks. A path outside
+        // open_basedir (an old log row after a host move) makes realpath() warn
+        // and return false; the false is handled below, and the warning would
+        // otherwise reach the Logs page's AJAX response when errors are displayed.
+        $realPath = @realpath($filePath);
 
         // Validate that realpath returned a valid path
         if ($realPath === false) {
@@ -1206,7 +1297,10 @@ class BaseHandler
         }
 
         foreach ($blockedPaths as $blockedPath) {
-            $blockedRealPath = realpath($blockedPath);
+            // Under open_basedir the blocked system folders usually lie outside the
+            // allowed paths: realpath() warns and returns false, and the folder is
+            // already unreadable, so the check is skipped without the warning.
+            $blockedRealPath = @realpath($blockedPath);
             // Match the location itself or anything under it, so /etc does not
             // also block /etcetera/ or /dev block /devel/.
             if ($blockedRealPath && ($realPath === $blockedRealPath || strpos($realPath, rtrim($blockedRealPath, '/') . '/') === 0)) {
@@ -1224,7 +1318,7 @@ class BaseHandler
      * @return string File contents on success
      * @throws Exception If path validation fails or file cannot be read
      */
-    public static function secureFileRead($filePath)
+    public static function readAttachmentFile($filePath)
     {
         self::assertReadableAttachmentPath($filePath);
 

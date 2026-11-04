@@ -220,6 +220,7 @@ import {
     attachmentStatusLabel,
     attachmentStatusReason,
     confirmResendWithoutAttachments,
+    loadAttachmentStatus,
     notifyResendResult
 } from './attachmentStatus';
 
@@ -337,9 +338,14 @@ export default {
             return attachmentStatusReason(attachment, this);
         },
         handleResendClick() {
-            this.resendDialog.log = this.log;
-            this.resendDialog.resending = false;
-            this.resendDialog.visible = true;
+            const log = this.log;
+            // The dialog lists the attachments a resend can't include; ask the
+            // server now, since the log list does not check files.
+            loadAttachmentStatus(this, [log]).then(() => {
+                this.resendDialog.log = log;
+                this.resendDialog.resending = false;
+                this.resendDialog.visible = true;
+            });
         },
         handleResendConfirm(payload) {
             const log = this.resendDialog.log;

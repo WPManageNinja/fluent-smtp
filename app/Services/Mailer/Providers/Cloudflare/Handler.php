@@ -302,12 +302,21 @@ class Handler extends BaseHandler
                 continue;
             }
 
-            $data[] = [
-                'filename'    => self::getAttachmentName($attachment),
+            $row = [
+                'filename'    => self::attachmentName($attachment),
                 'content'     => base64_encode($file),
                 'type'        => self::attachmentType($attachment),
                 'disposition' => 'attachment',
             ];
+
+            // An embedded image goes out inline, so the HTML's cid: reference shows it.
+            $contentId = self::inlineContentId($attachment);
+            if ($contentId !== '') {
+                $row['disposition'] = 'inline';
+                $row['content_id'] = $contentId;
+            }
+
+            $data[] = $row;
         }
 
         return $data;

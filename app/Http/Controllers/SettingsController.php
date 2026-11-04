@@ -12,6 +12,7 @@ use FluentMail\App\Services\Mailer\Providers\Factory;
 use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\Converter;
 use FluentMail\App\Services\SecretMasker;
+use FluentMail\App\Services\Mailer\Providers\Smtp\Handler as SmtpHandler;
 
 class SettingsController extends Controller
 {
@@ -130,6 +131,11 @@ class SettingsController extends Controller
                         $connection[$index] = wp_specialchars_decode($connection[$index], ENT_QUOTES);
                     }
                 }
+            }
+
+            // Store the connection security in the one form the SMTP handler sends with.
+            if ($connection['provider'] === 'smtp' && array_key_exists('encryption', $connection)) {
+                $connection['encryption'] = SmtpHandler::normalizeEncryption($connection['encryption']);
             }
 
             $data['connection'] = $connection;

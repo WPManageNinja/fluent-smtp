@@ -171,11 +171,20 @@ class Handler extends BaseHandler
                 continue;
             }
 
-            $data[] = [
-                'Name'        => self::getAttachmentName($attachment),
+            $row = [
+                'Name'        => self::attachmentName($attachment),
                 'Content'     => base64_encode($file),
                 'ContentType' => self::attachmentType($attachment)
             ];
+
+            // Postmark embeds an attachment whose ContentID matches the HTML's
+            // cid: reference; its documented form carries the "cid:" prefix.
+            $contentId = self::inlineContentId($attachment);
+            if ($contentId !== '') {
+                $row['ContentID'] = 'cid:' . $contentId;
+            }
+
+            $data[] = $row;
         }
 
         return $data;

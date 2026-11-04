@@ -186,13 +186,22 @@ class Handler extends BaseHandler
                 continue;
             }
 
-            $data[] = [
+            $row = [
                 'type'        => self::attachmentType($attachment),
-                'filename'    => self::getAttachmentName($attachment),
+                'filename'    => self::attachmentName($attachment),
                 'disposition' => 'attachment',
                 'content_id'  => wp_hash($attachment[0]),
                 'content'     => base64_encode($file)
             ];
+
+            // An embedded image goes out inline under its own cid, so the HTML shows it.
+            $contentId = self::inlineContentId($attachment);
+            if ($contentId !== '') {
+                $row['disposition'] = 'inline';
+                $row['content_id'] = $contentId;
+            }
+
+            $data[] = $row;
         }
 
         return $data;

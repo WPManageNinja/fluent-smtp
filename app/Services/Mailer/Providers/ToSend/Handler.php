@@ -207,7 +207,7 @@ class Handler extends BaseHandler
 
             $attachments[] = [
                 'type'    => self::attachmentType($attachment),
-                'name'    => self::getAttachmentName($attachment),
+                'name'    => self::attachmentName($attachment),
                 'content' => trim(chunk_split(base64_encode($file), 76, "\n"))
             ];
         }

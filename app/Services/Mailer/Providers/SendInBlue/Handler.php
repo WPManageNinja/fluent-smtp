@@ -168,7 +168,7 @@ class Handler extends BaseHandler
         $files = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
-            $name = self::getAttachmentName($attachment);
+            $name = self::attachmentName($attachment);
 
             // The allow-list is applied to the delivered name, the only file name
             // Brevo receives; an in-memory attachment has no path. A file on disk
@@ -180,6 +180,10 @@ class Handler extends BaseHandler
             }
 
             if (!$allowed) {
+                fluentMailDebugLog(sprintf(
+                    'SendInBlue: Skipped attachment %s - Brevo does not accept this file type',
+                    $name
+                ));
                 continue;
             }
 

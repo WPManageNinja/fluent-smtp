@@ -174,8 +174,9 @@ class Handler extends BaseHandler
         $data = [];
         $payload = '';
         $attachments = $this->attributes['attachments'];
+        $contentIds = self::inlineContentIds($attachments);
 
-        foreach ($attachments as $attachment) {
+        foreach ($attachments as $index => $attachment) {
             try {
                 $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
@@ -183,9 +184,15 @@ class Handler extends BaseHandler
                 continue;
             }
 
+            // Mailgun uses an "inline" part's filename as its Content-ID, so an
+            // embedded image goes out under its cid and the HTML's cid: reference shows it.
+            $contentId = $contentIds[$index];
+
             $data[] = [
                 'content' => $file,
-                'name'    => self::getAttachmentName($attachment),
+                'name'    => $contentId !== '' ? $contentId : self::attachmentName($attachment),
+                'type'    => self::attachmentType($attachment),
+                'inline'  => $contentId !== '',
             ];
         }
 
@@ -213,7 +220,11 @@ class Handler extends BaseHandler
             foreach ($data as $key => $attachment) {
                 $payload .= '--' . $boundary;
                 $payload .= "\r\n";
-                $payload .= 'Content-Disposition: form-data; name="attachment[' . $key . ']"; filename="' . $attachment['name'] . '"' . "\r\n\r\n";
+                // Inline parts use Mailgun's documented "inline" field; the type is
+                // sent because a cid such as "logo" or "0" has no extension to go by.
+                $field = $attachment['inline'] ? 'inline' : 'attachment[' . $key . ']';
+                $payload .= 'Content-Disposition: form-data; name="' . $field . '"; filename="' . $attachment['name'] . '"' . "\r\n";
+                $payload .= 'Content-Type: ' . $attachment['type'] . "\r\n\r\n";
                 $payload .= $attachment['content'];
                 $payload .= "\r\n";
             }

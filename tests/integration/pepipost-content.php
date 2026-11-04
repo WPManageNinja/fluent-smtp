@@ -110,19 +110,33 @@ return function () {
         });
         FsmtpTest::assertSame('<p>Order <a href="https://example.test/o/12">#12</a> is ready</p>', $content[0]['value'], 'unescaped');
     });
-    FsmtpTest::case('PepiPost escapes text with a lone "<" and leaves tag-like text as it was', function () use ($send) {
+    FsmtpTest::case('PepiPost escapes text with a lone "<" or a bracketed address, and keeps real tags', function () use ($send) {
         $plain = $send(function ($m) {
             $m->isHTML(false);
             $m->Body = "Price a < b\nok";
         });
         FsmtpTest::assertSame("Price a &lt; b<br>\nok", $plain[0]['value'], 'a lone < is escaped');
 
-        // Looks like a tag to strip_tags(): sent raw, exactly as before this change.
-        $tagLike = $send(function ($m) {
-            $m->isHTML(false);
-            $m->Body = 'Hi <john@example.test>';
-        });
-        FsmtpTest::assertSame('Hi <john@example.test>', $tagLike[0]['value'], 'tag-like text unchanged');
+        // An address or a link in angle brackets is text, not a tag: escaped, so it shows.
+        foreach ([
+            'Hi <john@example.test>'      => 'Hi &lt;john@example.test&gt;',
+            "See <https://example.test/a>\nok" => "See &lt;https://example.test/a&gt;<br>\nok",
+        ] as $body => $expected) {
+            $tagLike = $send(function ($m) use ($body) {
+                $m->isHTML(false);
+                $m->Body = $body;
+            });
+            FsmtpTest::assertSame($expected, $tagLike[0]['value'], 'escaped: ' . $body);
+        }
+
+        // Real tags, comments and a doctype still mark the body as HTML.
+        foreach (['Line<br>next', 'a <br/> b', '<!-- x --> hi', '<!DOCTYPE html><title>x</title>', '<div class="a">x</div>'] as $html) {
+            $raw = $send(function ($m) use ($html) {
+                $m->isHTML(false);
+                $m->Body = $html;
+            });
+            FsmtpTest::assertSame($html, $raw[0]['value'], 'unescaped: ' . $html);
+        }
     });
 
     FsmtpTest::case('PepiPost still sends a plain-text body with invalid UTF-8 instead of an empty one', function () use ($send) {

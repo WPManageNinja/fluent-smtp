@@ -303,9 +303,10 @@ if (!function_exists('fluentMailSend')) {
      * `<img src="cid:0" alt="Logo">`
      * `<img src="cid:my-image" alt="Image">`
      *
-     * Note: embedded images are applied to the PHPMailer instance, so they work on
-     * SMTP connections. Providers that send over their own HTTP API build their
-     * payload separately and currently ignore embeds.
+     * Note: embedded images go out inline on SMTP, Amazon SES, Gmail, Outlook,
+     * SendGrid, Mailgun, Postmark, SparkPost, SMTP2GO and Cloudflare. The other
+     * API providers (Brevo, Elastic Email, PepiPost, toSend) have no inline field
+     * in their API, so they deliver an embedded image as a normal attachment.
      *
      * @since 6.9.0 The `$embeds` parameter was added, matching WP core.
      *
