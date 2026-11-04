@@ -284,6 +284,138 @@ return function () {
             FsmtpTest::assertSame(['Invoice.pdf', 'terms.txt'], array_column($sent['seen'], 'name'), 'both attachments');
         });
 
+        FsmtpTest::case('an embedded image another plugin adds before the resend runs keeps its content id', function () use ($resend, $records, $pdfPath) {
+            FsmtpTest::assertMailSimulationActive();
+            $addLogo = function ($phpmailer) {
+                $phpmailer->addStringEmbeddedImage('logo-bytes', 'plugin-logo', 'logo.png', 'base64', 'image/png');
+            };
+            add_action('phpmailer_init', $addLogo, 0);
+            try {
+                $sent = $resend($records(function ($m) use ($pdfPath) {
+                    $m->addAttachment($pdfPath, 'Invoice.pdf');
+                }));
+            } finally {
+                remove_action('phpmailer_init', $addLogo, 0);
+            }
+            $byName = array_column($sent['seen'], null, 'name');
+            FsmtpTest::assertSame('inline', $byName['logo.png']['disposition'], 'plugin logo still inline');
+            FsmtpTest::assertSame('plugin-logo', $byName['logo.png']['cid'], 'plugin logo keeps its cid');
+            FsmtpTest::assertSame('attachment', $byName['Invoice.pdf']['disposition'], 'resent file restored');
+        });
+
+        FsmtpTest::case('a file a wp_mail filter removes is reported, and the rest are still restored', function () use ($resend, $records, $allKinds, $pngPath) {
+            FsmtpTest::assertMailSimulationActive();
+            $dropLogo = function ($atts) use ($pngPath) {
+                $atts['attachments'] = array_values(array_filter((array) $atts['attachments'], function ($path) use ($pngPath) {
+                    return $path !== $pngPath;
+                }));
+                return $atts;
+            };
+            add_filter('wp_mail', $dropLogo);
+            try {
+                $sent = $resend($records($allKinds));
+            } finally {
+                remove_filter('wp_mail', $dropLogo);
+            }
+            FsmtpTest::assertSame(['Quarterly Report.pdf'], array_column($sent['seen'], 'name'), 'the remaining file keeps its logged name');
+            FsmtpTest::assertSame(
+                ['invoice.pdf', 'deleted-later.pdf', 'logo.png'],
+                array_column($sent['result']['skipped_attachments'], 'name'),
+                'the removed file is reported with the others'
+            );
+        });
+
+        FsmtpTest::case('a nested email carrying the same files does not take the restore from the resend', function () use ($resend, $records, $pdfPath) {
+            FsmtpTest::assertMailSimulationActive();
+            $once = false;
+            $nestedNames = null;
+            $sendNested = function ($atts) use (&$once, $pdfPath) {
+                if (!$once) {
+                    $once = true;
+                    wp_mail('nested@example.test', 'nested', 'nested body', '', [$pdfPath]);
+                }
+                return $atts;
+            };
+            $watch = function ($phpmailer) use (&$nestedNames) {
+                if ($phpmailer->Subject === 'nested') {
+                    $nestedNames = array_column($phpmailer->getAttachments(), 2);
+                }
+            };
+            add_filter('wp_mail', $sendNested);
+            add_action('phpmailer_init', $watch, 20);
+            try {
+                $sent = $resend($records(function ($m) use ($pdfPath) {
+                    $m->addAttachment($pdfPath, 'Quarterly Report.pdf');
+                }));
+            } finally {
+                remove_filter('wp_mail', $sendNested);
+                remove_action('phpmailer_init', $watch, 20);
+            }
+            FsmtpTest::assert($nestedNames !== null, 'the nested email was sent');
+            FsmtpTest::assertSame(['Quarterly Report.pdf'], array_column($sent['seen'], 'name'), 'the resend still has its logged name');
+            FsmtpTest::assertSame([], $sent['result']['skipped_attachments'], 'nothing reported as skipped');
+        });
+
+        FsmtpTest::case('the same file attached twice under two names is resent with both names', function () use ($resend, $records, $pdfPath) {
+            FsmtpTest::assertMailSimulationActive();
+            $sent = $resend($records(function ($m) use ($pdfPath) {
+                $m->addAttachment($pdfPath, 'Copy A.pdf');
+                $m->addAttachment($pdfPath, 'Copy B.pdf');
+            }));
+            FsmtpTest::assertSame(['Copy A.pdf', 'Copy B.pdf'], array_column($sent['seen'], 'name'), 'both names in order');
+            FsmtpTest::assertSame(true, $sent['result']['resend_succeeded'], 'the send result is returned');
+        });
+
+        FsmtpTest::case('a pre_wp_mail transport that takes over the send gets no false missing-file warning', function () use ($records, $pdfPath) {
+            $table = FsmtpFactory::emailLogTable();
+            $id = FsmtpFactory::insertLog($table, [
+                'to'          => serialize([['email' => 'to@example.test']]),
+                'from'        => 'Suite Sender <sender@example.test>',
+                'body'        => 'body',
+                'headers'     => serialize(['content-type' => 'text/plain']),
+                'attachments' => serialize(BaseHandler::attachmentsForLog($records(function ($m) use ($pdfPath) {
+                    $m->addAttachment($pdfPath);
+                }))),
+                'extra'       => serialize([]),
+            ]);
+            $queue = function () {
+                return true; // a queue plugin accepted the email; phpmailer_init never runs
+            };
+            $redirect = FsmtpFactory::productionLogTableRedirect($table);
+            add_filter('pre_wp_mail', $queue);
+            add_filter('query', $redirect, PHP_INT_MAX);
+            try {
+                $result = FsmtpFactory::loggerForTable($table)->resendEmailFromLog($id, 'resend');
+            } finally {
+                remove_filter('query', $redirect, PHP_INT_MAX);
+                remove_filter('pre_wp_mail', $queue);
+            }
+            FsmtpTest::assertSame([], $result['skipped_attachments'], 'no false warning');
+        });
+
+        FsmtpTest::case('a nested copy with the same files cannot hide a file the resend itself lost', function () use ($resend, $records, $allKinds, $pngPath, $pdfPath) {
+            FsmtpTest::assertMailSimulationActive();
+            $once = false;
+            // A "copy to admin" filter sends both files in a nested email, and drops the logo from the resend.
+            $copyAndDrop = function ($atts) use (&$once, $pdfPath, $pngPath) {
+                if (!$once) {
+                    $once = true;
+                    wp_mail('copy@example.test', 'copy', 'copy body', '', [$pdfPath, $pngPath]);
+                }
+                if ($atts['subject'] !== 'copy') {
+                    $atts['attachments'] = array_values(array_diff((array) $atts['attachments'], [$pngPath]));
+                }
+                return $atts;
+            };
+            add_filter('wp_mail', $copyAndDrop);
+            try {
+                $sent = $resend($records($allKinds));
+            } finally {
+                remove_filter('wp_mail', $copyAndDrop);
+            }
+            FsmtpTest::assert(in_array('logo.png', array_column($sent['result']['skipped_attachments'], 'name'), true), 'the logo the resend lost is reported');
+        });
+
         FsmtpTest::case('formatting a stored row again keeps the size of an in-memory attachment', function () use ($records, $inMemory) {
             $once = BaseHandler::attachmentsForLog($records(function ($m) use ($inMemory) {
                 $m->addStringAttachment($inMemory, 'invoice.pdf');

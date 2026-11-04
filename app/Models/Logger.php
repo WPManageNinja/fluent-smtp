@@ -597,55 +597,79 @@ class Logger extends Model
             }
         }
 
-        $restored = false;
-        $restoreAttachments = function ($phpmailer) use ($resendable, &$restored) {
-            if ($restored || !$resendable) {
+        /*
+         * Put the logged name, type, disposition and cid back on the records
+         * wp_mail() created from these paths. Records are edited in place, never
+         * cleared and re-added, so attachments other plugins add (including
+         * in-memory embedded images) keep exactly what they had. Each logged
+         * file is paired with one record carrying its path, in order; records
+         * without a match are left alone. Any email that carries the paths gets
+         * the names, so a nested email cannot use up the restore.
+         */
+        /*
+         * What reached the resend's own email decides what is reported as not
+         * included. That email is told apart by its subject; when a filter
+         * changed the subject, any email carrying the files stands in for it.
+         * When no email reached phpmailer_init at all (a pre_wp_mail transport
+         * took over), nothing is known, so nothing extra is reported.
+         */
+        $resendSubject = (string) $email['subject'];
+        $seen = ['subject' => false, 'any' => false, 'bySubject' => [], 'byAny' => []];
+        $restoreAttachments = function ($phpmailer) use ($resendable, $resendSubject, &$seen) {
+            if (!$resendable) {
                 return;
             }
 
-            $current = $phpmailer->getAttachments();
-            $pending = $resendable;
-            $matched = [];
+            $isResend = (string) $phpmailer->Subject === $resendSubject;
 
-            // Pair every file this resend passed in with one record on the message.
-            foreach ($current as $index => $record) {
+            try {
+                $property = new \ReflectionProperty($phpmailer, 'attachment');
+                $property->setAccessible(true);
+                $records = $property->getValue($phpmailer);
+            } catch (\ReflectionException $e) {
+                return; // Files still go out, under the names wp_mail() gave them.
+            }
+
+            if (!is_array($records)) {
+                return;
+            }
+
+            $used = [];
+            foreach ($records as $index => $record) {
                 if (!empty($record[5])) {
                     continue;
                 }
-                foreach ($pending as $key => $item) {
-                    if ($record[0] === $item['record'][0]) {
-                        $matched[$index] = $item;
-                        unset($pending[$key]);
-                        break;
+                foreach ($resendable as $key => $item) {
+                    if (isset($used[$key]) || $record[0] !== $item['record'][0]) {
+                        continue;
                     }
+                    $used[$key] = true;
+                    $logged = $item['record'];
+
+                    $records[$index][2] = $item['name'];
+                    if (!empty($logged[3])) {
+                        $records[$index][3] = $logged[3];
+                    }
+                    if (!empty($logged[4])) {
+                        $records[$index][4] = $logged[4];
+                    }
+                    if (isset($logged[7]) && $logged[7] !== '' && $logged[7] !== 0) {
+                        $records[$index][7] = $logged[7];
+                    }
+                    if ($item['inline'] && !empty($logged[7])) {
+                        $records[$index][6] = 'inline';
+                    }
+                    break;
                 }
             }
 
-            if ($pending) {
-                return; // Not this resend's email, or a filter removed its files.
-            }
+            $property->setValue($phpmailer, $records);
 
-            $restored = true;
-            $phpmailer->clearAttachments();
-
-            foreach ($current as $index => $record) {
-                $source = isset($matched[$index]) ? $matched[$index]['record'] : $record;
-                $name = isset($matched[$index]) ? $matched[$index]['name'] : (isset($record[2]) ? $record[2] : '');
-                $encoding = !empty($source[3]) ? $source[3] : 'base64';
-                $type = isset($source[4]) ? (string) $source[4] : '';
-                $disposition = !empty($source[6]) ? $source[6] : 'attachment';
-
-                try {
-                    if (!empty($record[5])) {
-                        $phpmailer->addStringAttachment($record[0], $record[1], $encoding, $type, $disposition);
-                    } elseif ($disposition === 'inline' && !empty($source[7])) {
-                        $phpmailer->addEmbeddedImage($record[0], $source[7], $name, $encoding, $type);
-                    } else {
-                        $phpmailer->addAttachment($record[0], $name, $encoding, $type, $disposition);
-                    }
-                } catch (\Exception $e) {
-                    continue;
-                }
+            $seen['any'] = true;
+            $seen['byAny'] += $used;
+            if ($isResend) {
+                $seen['subject'] = true;
+                $seen['bySubject'] += $used;
             }
         };
 
@@ -735,6 +759,17 @@ class Logger extends Model
                 remove_action('phpmailer_init', $restoreAttachments, 1);
             }
 
+            // A logged file wp_mail() could not attach (it vanished meanwhile) or a
+            // filter removed is not on the email either: say so.
+            if ($seen['subject'] || $seen['any']) {
+                $onEmail = $seen['subject'] ? $seen['bySubject'] : $seen['byAny'];
+                foreach ($resendable as $key => $item) {
+                    if (empty($onEmail[$key])) {
+                        $skippedAttachments[] = ['name' => $item['name'], 'status' => 'missing'];
+                    }
+                }
+            }
+
             $durationMs = round((microtime(true) - $startedAt) * 1000, 1);
 
             $updateData = [
@@ -764,6 +799,7 @@ class Logger extends Model
                 $email['attachment_list']     = static::describeAttachments($email['attachments']);
                 $email['attachments']         = BaseHandler::attachmentsForLog($email['attachments']);
                 $email['skipped_attachments'] = $skippedAttachments;
+                $email['resend_succeeded']    = (bool) $result;
                 return $email;
             }
         } catch (\PHPMailer\PHPMailer\Exception $e) {

@@ -199,7 +199,7 @@ class LoggerController extends Controller
             try {
                 $email = $logger->resendEmailFromLog($logId, 'check_realtime');
                 $successCount++;
-                if (!empty($email['skipped_attachments']) && isset($email['status']) && $email['status'] === 'sent') {
+                if (!empty($email['skipped_attachments']) && !empty($email['resend_succeeded'])) {
                     $withoutAttachments++;
                 }
             } catch (\Exception $exception) {
