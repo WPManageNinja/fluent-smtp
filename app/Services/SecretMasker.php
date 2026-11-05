@@ -131,6 +131,7 @@ class SecretMasker
         'gmail'       => ['client_secret' => 1, 'access_token' => 2, 'refresh_token' => 2],
         'outlook'     => ['client_secret' => 1, 'access_token' => 2, 'refresh_token' => 2],
         'tosend'      => ['api_key' => 1],
+        'mailchannels' => ['api_key' => 1],
         'cloudflare'  => ['api_key' => 1],
     ];
 
