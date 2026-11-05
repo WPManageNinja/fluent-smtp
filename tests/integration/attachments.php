@@ -882,6 +882,7 @@ return function () {
             'SendInBlue' => ['class' => \FluentMail\App\Services\Mailer\Providers\SendInBlue\Handler::class, 'typed' => false, 'url' => 'https://api.brevo.com/', 'status' => 201, 'settings' => [], 'rows' => $jsonRows(['attachment'], 'name', null, 'content')],
             'Mailgun'    => ['class' => \FluentMail\App\Services\Mailer\Providers\Mailgun\Handler::class, 'typed' => true, 'url' => 'https://api.mailgun.net/', 'status' => 200, 'settings' => ['domain_name' => 'mg.example.test', 'region' => 'us'], 'rows' => $formRows('attachment')],
             'ElasticMail' => ['class' => \FluentMail\App\Services\Mailer\Providers\ElasticMail\Handler::class, 'typed' => true, 'url' => 'https://api.elasticemail.com/', 'status' => 200, 'settings' => ['mail_type' => 'transactional'], 'rows' => $formRows('attachments')],
+            'Mailtrap'   => ['class' => \FluentMail\App\Services\Mailer\Providers\Mailtrap\Handler::class, 'typed' => true, 'url' => 'https://send.api.mailtrap.io/', 'status' => 200, 'settings' => [], 'rows' => $jsonRows(['attachments'], 'filename', 'type', 'content')],
             'ToSend'     => ['class' => FsmtpSuiteToSendAttachmentProbe::class, 'typed' => true, 'url' => null, 'status' => 200, 'settings' => [], 'rows' => $jsonRows(['attachments'], 'name', 'type', 'content')],
         ];
 

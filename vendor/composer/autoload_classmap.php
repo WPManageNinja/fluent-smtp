@@ -64,6 +64,8 @@ return array(
     'FluentMail\\App\\Services\\Mailer\\Providers\\Gmail\\Handler' => $baseDir . '/app/Services/Mailer/Providers/Gmail/Handler.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\Mailgun\\Handler' => $baseDir . '/app/Services/Mailer/Providers/Mailgun/Handler.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\Mailgun\\ValidatorTrait' => $baseDir . '/app/Services/Mailer/Providers/Mailgun/ValidatorTrait.php',
+    'FluentMail\\App\\Services\\Mailer\\Providers\\Mailtrap\\Handler' => $baseDir . '/app/Services/Mailer/Providers/Mailtrap/Handler.php',
+    'FluentMail\\App\\Services\\Mailer\\Providers\\Mailtrap\\ValidatorTrait' => $baseDir . '/app/Services/Mailer/Providers/Mailtrap/ValidatorTrait.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\Outlook\\API' => $baseDir . '/app/Services/Mailer/Providers/Outlook/API.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\Outlook\\Handler' => $baseDir . '/app/Services/Mailer/Providers/Outlook/Handler.php',
     'FluentMail\\App\\Services\\Mailer\\Providers\\PepiPost\\Handler' => $baseDir . '/app/Services/Mailer/Providers/PepiPost/Handler.php',

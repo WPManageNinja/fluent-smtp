@@ -7,6 +7,7 @@ use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\Mailer\Providers\Factory;
 use FluentMail\App\Services\Mailer\Providers\Gmail\Handler as GmailHandler;
+use FluentMail\App\Services\Mailer\Providers\Mailtrap\Handler as MailtrapHandler;
 use FluentMail\App\Services\Mailer\Providers\Outlook\API as OutlookApi;
 use FluentMail\App\Services\Mailer\Providers\Outlook\Handler as OutlookHandler;
 use FluentMail\App\Services\Mailer\Providers\ToSend\Handler as ToSendHandler;
@@ -174,6 +175,29 @@ class FsmtpSuiteToSendProbe extends \FluentMail\App\Services\Mailer\Providers\To
  * shape left the handler and what it carried.
  */
 class FsmtpSuiteOutlookProbe extends \FluentMail\App\Services\Mailer\Providers\Outlook\Handler
+{
+    public function runPostSend($phpMailer, $settings)
+    {
+        $this->phpMailer = $phpMailer;
+        $this->setSettings($settings);
+        $this->attributes = $this->setAttributes();
+        $phpMailer->preSend();
+
+        return $this->postSend();
+    }
+
+    public function handleResponse($response)
+    {
+        return $response;
+    }
+}
+
+/**
+ * Runs the real Mailtrap postSend() against the harness HTTP interceptor with
+ * the logging tail replaced, so the assertions are about which endpoint the
+ * handler chose and the JSON payload it sent.
+ */
+class FsmtpSuiteMailtrapProbe extends \FluentMail\App\Services\Mailer\Providers\Mailtrap\Handler
 {
     public function runPostSend($phpMailer, $settings)
     {
@@ -718,6 +742,253 @@ return function () {
         FsmtpTest::assert(is_string($mime) && strpos($mime, 'To: to@example.test') !== false, 'MIME message carries the To header');
         FsmtpTest::assert(strpos($mime, 'Cc: cc@example.test') !== false, 'MIME message carries the Cc header');
         FsmtpTest::assert(strpos($mime, 'List-Unsubscribe: <https://example.test/unsubscribe>') !== false, 'MIME message keeps the List-Unsubscribe header');
+    });
+
+    /**
+     * Send one message through the Mailtrap probe and return the single API
+     * request it produced. The harness answers only the two send hosts, with
+     * the body the Email API returns for an accepted message.
+     */
+    $mailtrapRequestFor = function (callable $configure, array $settings = []) {
+        FsmtpTest::requirePhpMailer();
+
+        $phpMailer = new \PHPMailer\PHPMailer\PHPMailer(true);
+        $phpMailer->CharSet = 'UTF-8';
+        $phpMailer->setFrom('sender@example.test', 'Suite Sender');
+        $phpMailer->Subject = 'Suite Mailtrap message';
+        $phpMailer->Body = 'Suite Mailtrap body';
+        $configure($phpMailer);
+
+        FsmtpTest::interceptHttp(function ($url) {
+            if (!in_array($url, ['https://send.api.mailtrap.io/api/send', 'https://bulk.api.mailtrap.io/api/send'], true)) {
+                return null;
+            }
+
+            return [
+                'headers'  => [],
+                'body'     => json_encode(['success' => true, 'message_ids' => ['suite-message-id']]),
+                'response' => ['code' => 200, 'message' => 'OK'],
+                'cookies'  => [],
+            ];
+        });
+
+        try {
+            $probe = new FsmtpSuiteMailtrapProbe();
+            $result = $probe->runPostSend($phpMailer, array_merge([
+                'provider'       => 'mailtrap',
+                'sender_email'   => 'sender@example.test',
+                'sender_name'    => 'Suite Sender',
+                'key_store'      => 'db',
+                'api_key'        => 'suite-mailtrap-token',
+                'message_stream' => 'transactional',
+            ], $settings));
+
+            $requests = FsmtpTest::httpRequests();
+        } finally {
+            FsmtpTest::releaseHttpInterceptor();
+        }
+
+        FsmtpTest::assert(!is_wp_error($result), 'Mailtrap probe send failed: ' . (is_wp_error($result) ? $result->get_error_message() : ''));
+        FsmtpTest::assertSame(1, count($requests), 'API requests made by one Mailtrap send');
+        FsmtpTest::assertSame(['suite-message-id'], isset($result['message_ids']) ? $result['message_ids'] : null, 'Mailtrap send result message ids');
+
+        return $requests[0];
+    };
+
+    FsmtpTest::case('Mailtrap sends a transactional message as one Email API payload', function () use ($mailtrapRequestFor) {
+        $request = $mailtrapRequestFor(function ($phpMailer) {
+            $phpMailer->addAddress('to@example.test', 'To Person');
+            $phpMailer->addCC('cc@example.test');
+            $phpMailer->addBCC('hidden@example.test', 'Hidden');
+            $phpMailer->addReplyTo('replies@example.test', 'Replies');
+            $phpMailer->addCustomHeader('X-Suite-Tag', 'suite');
+            $phpMailer->addCustomHeader('List-Unsubscribe', '<https://example.test/unsubscribe>');
+            // The shape the plain-text option in helpers.php hands over.
+            $phpMailer->ContentType = 'multipart/alternative';
+            $phpMailer->Body = '<p>Suite Mailtrap body</p>';
+            $phpMailer->AltBody = 'Suite Mailtrap body';
+        });
+
+        FsmtpTest::assertSame('https://send.api.mailtrap.io/api/send', $request['url'], 'Mailtrap transactional endpoint');
+        FsmtpTest::assert(
+            isset($request['args']['headers']['Authorization']) && $request['args']['headers']['Authorization'] === 'Bearer suite-mailtrap-token',
+            'Mailtrap request does not carry the API token as a Bearer credential'
+        );
+        FsmtpTest::assertSame(true, isset($request['args']['sslverify']) ? $request['args']['sslverify'] : null, 'TLS verification for the Mailtrap send');
+
+        $payload = json_decode($request['args']['body'], true);
+
+        FsmtpTest::assertSame(['email' => 'sender@example.test', 'name' => 'Suite Sender'], $payload['from'], 'Mailtrap from address');
+        FsmtpTest::assertSame([['email' => 'to@example.test', 'name' => 'To Person']], $payload['to'], 'Mailtrap to recipients');
+        FsmtpTest::assertSame([['email' => 'cc@example.test']], isset($payload['cc']) ? $payload['cc'] : null, 'Mailtrap cc recipients');
+        FsmtpTest::assertSame([['email' => 'hidden@example.test', 'name' => 'Hidden']], isset($payload['bcc']) ? $payload['bcc'] : null, 'Mailtrap bcc recipients');
+        FsmtpTest::assertSame(['email' => 'replies@example.test', 'name' => 'Replies'], isset($payload['reply_to']) ? $payload['reply_to'] : null, 'Mailtrap reply_to as one address object');
+        FsmtpTest::assertSame('Suite Mailtrap message', $payload['subject'], 'Mailtrap subject');
+        FsmtpTest::assertSame('<p>Suite Mailtrap body</p>', isset($payload['html']) ? $payload['html'] : null, 'Mailtrap html body');
+        FsmtpTest::assertSame('Suite Mailtrap body', isset($payload['text']) ? $payload['text'] : null, 'Mailtrap text body');
+        FsmtpTest::assertSame(
+            ['X-Suite-Tag' => 'suite', 'List-Unsubscribe' => '<https://example.test/unsubscribe>'],
+            isset($payload['headers']) ? $payload['headers'] : null,
+            'Mailtrap custom headers as an object map'
+        );
+    });
+
+    FsmtpTest::case('Mailtrap sends on the bulk stream when the connection selects it', function () use ($mailtrapRequestFor) {
+        $request = $mailtrapRequestFor(function ($phpMailer) {
+            $phpMailer->addAddress('to@example.test');
+        }, ['message_stream' => 'bulk']);
+
+        FsmtpTest::assertSame('https://bulk.api.mailtrap.io/api/send', $request['url'], 'Mailtrap bulk endpoint');
+
+        $payload = json_decode($request['args']['body'], true);
+
+        FsmtpTest::assertSame('Suite Mailtrap body', isset($payload['text']) ? $payload['text'] : null, 'Mailtrap plain-text body');
+        FsmtpTest::assert(!array_key_exists('html', $payload), 'a plain-text Mailtrap message carried an html body');
+    });
+
+    FsmtpTest::case('Mailtrap sends only non-empty body parts, chosen after PHPMailer prepared the message', function () use ($mailtrapRequestFor) {
+        $parts = function (callable $configure) use ($mailtrapRequestFor) {
+            $payload = json_decode($mailtrapRequestFor($configure)['args']['body'], true);
+            return [
+                'html' => array_key_exists('html', $payload) ? $payload['html'] : null,
+                'text' => array_key_exists('text', $payload) ? $payload['text'] : null,
+            ];
+        };
+
+        FsmtpTest::assertSame(['html' => null, 'text' => 'plain body'], $parts(function ($m) {
+            $m->addAddress('to@example.test');
+            $m->Body = 'plain body';
+        }), 'plain text');
+
+        FsmtpTest::assertSame(['html' => '<b>hi</b>', 'text' => null], $parts(function ($m) {
+            $m->addAddress('to@example.test');
+            $m->isHTML(true);
+            $m->Body = '<b>hi</b>';
+        }), 'html only');
+
+        // A phpmailer_init listener can add AltBody after the content type was read.
+        FsmtpTest::assertSame(['html' => '<b>hi</b>', 'text' => 'hi'], $parts(function ($m) {
+            $m->addAddress('to@example.test');
+            $m->isHTML(true);
+            $m->Body = '<b>hi</b>';
+            $m->AltBody = 'hi';
+        }), 'html with a late plain-text alternative');
+
+        // An attachment-only notification has no body; the API needs one part.
+        FsmtpTest::assertSame(['html' => null, 'text' => ' '], $parts(function ($m) {
+            $m->addAddress('to@example.test');
+            $m->AllowEmpty = true;
+            $m->Body = '';
+        }), 'empty body');
+    });
+
+    FsmtpTest::case('Mailtrap sends a placeholder subject when the email has none', function () use ($mailtrapRequestFor) {
+        $payload = json_decode($mailtrapRequestFor(function ($m) {
+            $m->addAddress('to@example.test');
+            $m->Subject = '';
+        })['args']['body'], true);
+        FsmtpTest::assertSame('(no subject)', $payload['subject'], 'subject');
+    });
+
+    FsmtpTest::case('Mailtrap sends an embedded image inline with its content id', function () use ($mailtrapRequestFor) {
+        $file = trailingslashit(wp_upload_dir()['basedir']) . 'fsmtp-suite-mailtrap-logo.png';
+        file_put_contents($file, base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='));
+        try {
+            $payload = json_decode($mailtrapRequestFor(function ($m) use ($file) {
+                $m->addAddress('to@example.test');
+                $m->isHTML(true);
+                $m->Body = '<img src="cid:suite-logo">';
+                $m->addEmbeddedImage($file, 'suite-logo', 'logo.png');
+                $m->addAttachment($file, 'plain.png');
+            })['args']['body'], true);
+        } finally {
+            unlink($file);
+        }
+
+        $rows = array_map(function ($a) {
+            return [$a['filename'], $a['type'], $a['disposition'], isset($a['content_id']) ? $a['content_id'] : null];
+        }, $payload['attachments']);
+        FsmtpTest::assertSame([
+            ['logo.png', 'image/png', 'inline', 'suite-logo'],
+            ['plain.png', 'image/png', 'attachment', null],
+        ], $rows, 'attachments');
+    });
+
+    FsmtpTest::case('Mailtrap reports the API error message, or the HTTP status when there is none', function () {
+        FsmtpTest::requirePhpMailer();
+        $send = function ($code, $body) {
+            $m = new \PHPMailer\PHPMailer\PHPMailer(true);
+            $m->setFrom('sender@example.test');
+            $m->addAddress('to@example.test');
+            $m->Subject = 's';
+            $m->Body = 'b';
+            FsmtpTest::interceptHttp(function ($url) use ($code, $body) {
+                if (strpos($url, 'https://send.api.mailtrap.io/') !== 0) {
+                    return null;
+                }
+                return ['headers' => [], 'body' => $body, 'response' => ['code' => $code, 'message' => 'x'], 'cookies' => []];
+            });
+            try {
+                return (new FsmtpSuiteMailtrapProbe())->runPostSend($m, [
+                    'provider' => 'mailtrap', 'sender_email' => 'sender@example.test', 'sender_name' => '',
+                    'key_store' => 'db', 'api_key' => 'suite-token', 'message_stream' => 'transactional',
+                ]);
+            } finally {
+                FsmtpTest::releaseHttpInterceptor();
+            }
+        };
+
+        $error = $send(400, json_encode(['success' => false, 'errors' => ["'from' address domain is not verified"]]));
+        FsmtpTest::assert(is_wp_error($error), '400 is an error');
+        FsmtpTest::assertSame("'from' address domain is not verified", $error->get_error_message(), 'API message');
+
+        $error = $send(413, '<html>Request Entity Too Large</html>');
+        FsmtpTest::assert(is_wp_error($error), '413 is an error');
+        FsmtpTest::assertSame('Mailtrap API error (HTTP 413)', $error->get_error_message(), 'HTTP status message');
+
+        $error = $send(200, json_encode(['success' => false, 'errors' => ['rejected']]));
+        FsmtpTest::assert(is_wp_error($error), 'a 200 without success is an error');
+    });
+
+    FsmtpTest::case('Mailtrap token check rejects only a 401', function () {
+        $status = null;
+        FsmtpTest::interceptHttp(function ($url) use (&$status) {
+            if ($url !== 'https://mailtrap.io/api/accounts') {
+                return null;
+            }
+
+            return [
+                'headers'  => [],
+                'body'     => $status === 401 ? json_encode(['error' => 'Incorrect API token']) : '[]',
+                'response' => ['code' => $status, 'message' => ''],
+                'cookies'  => [],
+            ];
+        });
+
+        $connection = [
+            'provider'  => 'mailtrap',
+            'key_store' => 'db',
+            'api_key'   => 'suite-mailtrap-token',
+        ];
+
+        try {
+            // Only a 401 proves the token wrong. Any other answer says nothing
+            // about the token, so a 403 must not block the save.
+            foreach ([401 => true, 403 => false, 200 => false] as $status => $expectRejected) {
+                $errors = null;
+                try {
+                    (new MailtrapHandler())->checkConnection($connection);
+                } catch (\FluentMail\Includes\Support\ValidationException $e) {
+                    $errors = $e->errors();
+                }
+
+                FsmtpTest::assertSame($expectRejected, isset($errors['api_key']), 'Mailtrap token rejected on a ' . $status . ' answer');
+            }
+
+            FsmtpTest::assertSame(3, count(FsmtpTest::httpRequests()), 'account API requests made by three token checks');
+        } finally {
+            FsmtpTest::releaseHttpInterceptor();
+        }
     });
 
     $outlookSettings = function ($sender) {
