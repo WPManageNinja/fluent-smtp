@@ -78,6 +78,23 @@ echo "🧹 Optimizing Composer for Production..."
 # Using --classmap-authoritative for maximum performance as discussed
 composer install --no-dev --optimize-autoloader --classmap-authoritative
 
+# 2b. Directory guards for the generated folders
+#
+# Every source folder carries an index.php so a server that lists directories
+# shows nothing. assets/ and vendor/ are generated (and gitignored), so theirs
+# have to be written here: each build empties them, and 2.4.5 was the release
+# where they had to be put back by hand in SVN.
+#
+# Empty folders go first. `composer --no-dev` leaves an empty vendor/bin behind,
+# which would otherwise ship holding nothing but its guard.
+echo "🛡️ Adding index.php guards to assets/ and vendor/..."
+find assets vendor -type d -empty -delete
+find assets vendor -type d | while read -r dir; do
+    if [ ! -f "$dir/index.php" ]; then
+        echo "<?php // silence is golden" > "$dir/index.php"
+    fi
+done
+
 # 3. Create Zip
 ZIP_NAME="fluent-smtp.zip"
 echo "🤐 Creating $ZIP_NAME..."
@@ -151,6 +168,20 @@ if [ -n "$DEV_DEPS" ]; then
     echo "❌ Development PHP dependencies found in $ZIP_NAME:"
     echo "$DEV_DEPS" | sed 's/^/     /'
     echo "   Step 2 did not strip them. Check the composer install output above."
+    exit 1
+fi
+
+
+# Step 2b writes a guard into every generated folder. A folder in the zip under
+# assets/ or vendor/ without one means that step was skipped or broke.
+UNGUARDED=$(unzip -Z1 "$ZIP_NAME" | grep -E '^(assets|vendor)/(.*/)?$' | while read -r dir; do
+    unzip -Z1 "$ZIP_NAME" | grep -qxF "${dir}index.php" || echo "$dir"
+done)
+
+if [ -n "$UNGUARDED" ]; then
+    echo "❌ Folders without an index.php guard in $ZIP_NAME:"
+    echo "$UNGUARDED" | sed 's/^/     /'
+    echo "   Step 2b did not write them. Check its output above."
     exit 1
 fi
 
