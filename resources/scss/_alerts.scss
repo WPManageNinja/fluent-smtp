@@ -15,6 +15,26 @@
       margin-bottom: 15px;
     }
 
+    // .el-form-item__content is a flex row, so hints need full width to stack.
+    &__hint {
+      width: 100%;
+      margin: 6px 0 0;
+      color: var(--fsm-text-light);
+      font-size: 13px;
+      line-height: 1.5;
+
+      code {
+        word-break: break-word;
+      }
+    }
+
+    // The body template is JSON, so it reads as code rather than prose.
+    &__template textarea {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
     // Privacy/disclaimer text
     &__privacy-note {
       margin-top: 15px;

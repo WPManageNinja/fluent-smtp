@@ -3,7 +3,7 @@
 use FluentMail\App\Services\NotificationHelper;
 
 /**
- * The test message the Discord, Slack and Pushover channels send.
+ * The test message the Discord, Slack, Pushover and Webhook channels send.
  *
  * Driven through each channel's real send-test route. The stored settings come
  * from a pre_option filter and the endpoints from the HTTP interceptor, so
@@ -14,6 +14,7 @@ return function () {
         'discord'  => ['status' => 'yes', 'channel_name' => 'suite', 'webhook_url' => 'https://discord.example.test/hook'],
         'slack'    => ['status' => 'yes', 'token' => 'suite-token', 'webhook_url' => 'https://slack.example.test/hook'],
         'pushover' => ['status' => 'yes', 'api_token' => 'suite-api-token', 'user_key' => 'suite-user-key'],
+        'webhook'  => ['status' => 'yes', 'label' => 'suite', 'webhook_url' => 'https://webhook.example.test/hook', 'body_template' => '{"text": "{{message}}"}'],
     ];
 
     /** Send one channel's test through its route and return the message text it posted. */
@@ -40,7 +41,7 @@ return function () {
         FsmtpTest::assertSame(1, count($requests), $channel . ' test requests made');
         $body = $requests[0]['args']['body'];
 
-        // Pushover posts a form array; Discord and Slack post JSON.
+        // Pushover posts a form array; Discord, Slack and the webhook template here post JSON.
         if (is_array($body)) {
             return (string) $body['message'];
         }

@@ -8,10 +8,11 @@
                 letter of the label. The prop renders the icon as a real child with the
                 6px Element Plus puts there.
             -->
-            <el-button @click="sendTest()" :disabled="sending_test" v-loading="sending_test"
+            <el-button @click="sendTest()" :disabled="sending_test || !!test_blocked_reason" v-loading="sending_test"
                        type="primary" icon="FsmIconMessage">
                 {{ $t('Send Test Message') }}
             </el-button>
+            <p v-if="test_blocked_reason" class="fss_alert_settings__hint">{{ test_blocked_reason }}</p>
         </div>
         <div class="fss_alert_info__actions__disconnect">
             <el-button v-loading="disconnecting" @click="disconnect()" type="danger"
@@ -41,6 +42,11 @@ export default {
         show_test_button: {
             type: Boolean,
             default: true
+        },
+        // Why the test cannot run now, shown under the disabled button. Empty means it can.
+        test_blocked_reason: {
+            type: String,
+            default: ''
         }
     },
     data() {
