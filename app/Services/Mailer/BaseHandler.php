@@ -5,6 +5,7 @@ namespace FluentMail\App\Services\Mailer;
 use Exception;
 use InvalidArgumentException;
 use FluentMail\App\Models\Logger;
+use FluentMail\App\Models\Settings;
 use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Core\Application;
 use FluentMail\App\Services\Mailer\Manager;
@@ -145,6 +146,76 @@ class BaseHandler
     public function isForcedEmail()
     {
         return $this->getSetting("force_from_email") != 'no';
+    }
+
+    /**
+     * Whether an address sends as itself through this connection: the
+     * connection's own sender, or one of the additional senders mapped to it
+     * (Amazon SES and toSend verify a whole domain, so one connection can send
+     * as several addresses). Forcing the sender applies to every other address.
+     *
+     * @param string $email
+     * @return bool
+     */
+    public function isOwnSender($email)
+    {
+        $senderEmail = (string)$this->getSetting('sender_email');
+
+        if (!$email || !$senderEmail) {
+            return false;
+        }
+
+        if (strcasecmp($email, $senderEmail) === 0) {
+            return true;
+        }
+
+        $connection = (new Settings)->getConnection($email);
+
+        return strcasecmp((string)Arr::get($connection, 'provider_settings.sender_email'), $senderEmail) === 0;
+    }
+
+    /**
+     * The address this connection sends from.
+     *
+     * Forcing the sender email means: a From that is not one of this
+     * connection's senders goes out as the connection's sender. A listed From
+     * - the primary or an additional sender - is always kept, and with forcing
+     * off so is any other From. The same answer feeds the provider request,
+     * the log, and so a resend from the log.
+     *
+     * @return string
+     */
+    protected function getSenderEmail()
+    {
+        $fromEmail = $this->phpMailer ? $this->phpMailer->From : '';
+
+        if ($fromEmail && ($this->isOwnSender($fromEmail) || $this->allowsAnyFrom())) {
+            return $fromEmail;
+        }
+
+        return $this->getSetting('sender_email');
+    }
+
+    /**
+     * Whether this connection may send any From address it is given.
+     *
+     * Only providers that offer the "force sender email" option (SMTP, SES,
+     * toSend, PHP mail) can turn forcing off. Every other provider always sends
+     * from its own sender, even when a stale `force_from_email = no` is left in
+     * its settings from a provider it was switched from.
+     *
+     * @return bool
+     */
+    protected function allowsAnyFrom()
+    {
+        if ($this->isForcedEmail()) {
+            return false;
+        }
+
+        $providers = (array)fluentMail(Manager::class)->getConfig('providers');
+        $options = (array)Arr::get($providers, $this->getSetting('provider') . '.options', []);
+
+        return array_key_exists('force_from_email', $options);
     }
 
     public function isActive()
@@ -309,6 +380,21 @@ class BaseHandler
         return $name . ' <' . $email . '>';
     }
 
+    protected static function formatQuotedAddress($email, $name = '')
+    {
+        $name = (string)$name;
+
+        if ($name === '') {
+            return $email;
+        }
+
+        if (preg_match('/[^A-Za-z0-9!#$%&\'*+\/=?^_`{|}~ \x80-\xFF-]/', $name) && !self::isQuotedString(trim($name))) {
+            $name = '"' . addcslashes($name, '"\\') . '"';
+        }
+
+        return $name . ' <' . $email . '>';
+    }
+
     /**
      * Whether a value is one RFC 5322 quoted string: `"..."` with every inner
      * quote escaped.
@@ -348,7 +434,7 @@ class BaseHandler
     protected function setFrom()
     {
         $name = $this->getSetting('sender_name');
-        $email = $this->getSetting('sender_email');
+        $email = $this->getSenderEmail();
         $overrideName = $this->getSetting('force_from_name');
 
         if ($name && ($overrideName == 'yes' || $this->phpMailer->FromName == 'WordPress')) {
@@ -666,7 +752,7 @@ class BaseHandler
             'from' => $this->attributes['from'],
             'subject' => sanitize_text_field($this->attributes['subject']),
             'body' => $this->attributes['message'],
-            'attachments' => $this->serialize($this->attributes['attachments']),
+            'attachments' => $this->serialize(self::attachmentsForLog($this->attributes['attachments'])),
             'status'   => $status ? 'sent' : 'failed',
             'response' => $this->serialize($response),
             'headers'  => $this->serialize($this->getParam('headers')),
@@ -752,6 +838,21 @@ class BaseHandler
                     );
                 }
 
+                /*
+                 * Provider message IDs come in RFC 5322 angle brackets, for
+                 * example Brevo's `<2026...@smtp-relay.mailin.fr>`.
+                 * sanitize_text_field() reads `<...>` as an HTML tag and erases
+                 * the whole value, so drop only the enclosing pair. The pattern
+                 * allows no whitespace or inner brackets, so `Name <email>`
+                 * values are not touched. A message ID is not a mailbox, so it
+                 * skips sanitize_email(), which would mangle valid IDs such
+                 * as `<x@a.b>`.
+                 */
+                if (preg_match('/^<([^<>\s]+@[^<>\s]+)>\z/', $item, $matches)) {
+                    $data[$key] = sanitize_text_field($matches[1]);
+                    continue;
+                }
+
                 if (filter_var($item, FILTER_VALIDATE_EMAIL)) {
                     $data[$key] = sanitize_email($item);
                 } elseif (filter_var($item, FILTER_VALIDATE_URL)) {
@@ -805,10 +906,35 @@ class BaseHandler
     }
 
     /**
+     * The 2.4.1 instance form of attachmentName(), kept so a custom provider that
+     * extends this class and overrides or calls it keeps working.
+     *
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @return string
+     */
+    protected function getAttachmentName($attachment)
+    {
+        return self::attachmentName($attachment);
+    }
+
+    /**
+     * The 2.4.1 instance form of readAttachmentFile(), kept so a custom provider
+     * that extends this class and overrides or calls it keeps working.
+     *
+     * @param string $filePath
+     * @return string
+     * @throws Exception
+     */
+    protected function secureFileRead($filePath)
+    {
+        return self::readAttachmentFile($filePath);
+    }
+
+    /**
      * Record an attachment that could not be read, then let the send continue.
      *
      * @param string     $provider Provider label used in the log line.
-     * @param \Exception $e        The failure from secureFileRead().
+     * @param \Exception $e        The failure from readAttachmentFile().
      * @return void
      */
     protected function logAttachmentFailure($provider, $e)
@@ -830,14 +956,20 @@ class BaseHandler
      * file name before it reaches a Content-Disposition header or a provider
      * payload.
      *
+     * An in-memory attachment (addStringAttachment()) holds its data at index 0,
+     * so the path fallback never applies to it; without a name it is called
+     * "attachment", with an extension that matches its type where one is known.
+     *
      * @param array $attachment One row of PHPMailer::getAttachments()
-     * @return string Empty only when the row carries neither a name nor a path.
+     * @return string Empty only when a file row carries neither a name nor a path.
      */
-    protected function getAttachmentName($attachment)
+    public static function attachmentName($attachment)
     {
+        $isInMemory = !empty($attachment[5]);
+
         $candidates = [
             isset($attachment[2]) ? $attachment[2] : '',
-            isset($attachment[0]) ? $attachment[0] : ''
+            !$isInMemory && isset($attachment[0]) ? $attachment[0] : ''
         ];
 
         foreach ($candidates as $candidate) {
@@ -855,20 +987,269 @@ class BaseHandler
             }
         }
 
+        if ($isInMemory) {
+            return 'attachment' . self::extensionForType(isset($attachment[4]) ? $attachment[4] : '');
+        }
+
         return '';
     }
 
     /**
-     * Securely read file contents with path traversal protection
+     * The contents of an attachment, however it was added.
      *
-     * @param string $filePath The file path to read
-     * @return string File contents on success
-     * @throws Exception If path validation fails or file cannot be read
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @return string
+     * @throws Exception When a file row's path cannot be read safely.
      */
-    protected function secureFileRead($filePath)
+    public static function attachmentContent($attachment)
     {
-        // Resolve the real path to prevent path traversal attacks
-        $realPath = realpath($filePath);
+        if (!empty($attachment[5])) {
+            return (string) $attachment[0];
+        }
+
+        return self::readAttachmentFile($attachment[0]);
+    }
+
+    /**
+     * The MIME type an attachment should be delivered with.
+     *
+     * PHPMailer records a type for every attachment, from the caller or from
+     * the path's extension, and uses it in the messages it builds; API
+     * providers send the same type. Where the record holds only the generic
+     * type (a path with no extension, or declared by the caller), the
+     * delivered name's extension decides, so such an attachment can arrive
+     * with a more specific type than over SMTP. Needs no fileinfo extension.
+     *
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @return string
+     */
+    public static function attachmentType($attachment)
+    {
+        $type = isset($attachment[4]) ? trim((string) $attachment[4]) : '';
+
+        if (($type === '' || $type === 'application/octet-stream') && class_exists('\PHPMailer\PHPMailer\PHPMailer')) {
+            $byName = \PHPMailer\PHPMailer\PHPMailer::filenameToType(self::attachmentName($attachment));
+
+            if ($byName !== 'application/octet-stream') {
+                return $byName;
+            }
+        }
+
+        // A file on disk whose name gives no type (data.json, logo.svg, README):
+        // detect it from the content, as the providers did before this helper.
+        if (($type === '' || $type === 'application/octet-stream') && empty($attachment[5]) && isset($attachment[0]) && is_string($attachment[0])) {
+            $detected = self::detectFileType($attachment[0]);
+
+            if ($detected !== '') {
+                return $detected;
+            }
+        }
+
+        return $type === '' ? 'application/octet-stream' : $type;
+    }
+
+    /**
+     * The Content-ID of an inline (embedded) attachment, or '' for a normal one.
+     *
+     * PHPMailer marks an embedded image (addEmbeddedImage(), addStringEmbeddedImage(),
+     * wp_mail()'s $embeds) with disposition "inline" at index 6 and its cid at
+     * index 7. The HTML refers to it as "cid:<value>", so the value is returned
+     * as is, without the "cid:" prefix. Line breaks, NUL bytes, quotes and angle
+     * brackets are removed so it cannot break out of a header or payload field.
+     *
+     * @param array $attachment One row of PHPMailer::getAttachments()
+     * @return string
+     */
+    public static function inlineContentId($attachment)
+    {
+        if (!isset($attachment[6]) || $attachment[6] !== 'inline' || !isset($attachment[7]) || !is_scalar($attachment[7])) {
+            return '';
+        }
+
+        return trim(str_replace(["\r", "\n", "\0", '"', '<', '>'], '', (string) $attachment[7]));
+    }
+
+    /**
+     * inlineContentId() for every attachment of one email, with each cid used once.
+     *
+     * Providers that turn the cid into the inline part's name (SparkPost, SMTP2GO,
+     * Mailgun) need it unique: SparkPost refuses a transmission with two inline
+     * images of the same name. PHPMailer stores 0 when an inline attachment has
+     * no cid, and WordPress's list-keyed $embeds use 0, 1, ... as well, so a
+     * repeat is possible. A later attachment that repeats a cid gets '' and goes
+     * out as a normal attachment, so it is never lost.
+     *
+     * @param array $attachments PHPMailer::getAttachments() rows
+     * @return array The same keys, each mapped to its cid or ''.
+     */
+    public static function inlineContentIds($attachments)
+    {
+        $ids = [];
+        $seen = [];
+
+        foreach ((array) $attachments as $key => $attachment) {
+            $contentId = self::inlineContentId($attachment);
+
+            if ($contentId !== '' && isset($seen[$contentId])) {
+                $contentId = '';
+            }
+
+            if ($contentId !== '') {
+                $seen[$contentId] = true;
+            }
+
+            $ids[$key] = $contentId;
+        }
+
+        return $ids;
+    }
+
+    /**
+     * The MIME type of a file on disk from its content, or '' when it cannot be told.
+     *
+     * Runs only for a path that passes readAttachmentFile()'s checks, and only reports a
+     * type: it never returns file content.
+     *
+     * @param string $filePath
+     * @return string
+     */
+    protected static function detectFileType($filePath)
+    {
+        try {
+            self::assertReadableAttachmentPath($filePath);
+        } catch (\Exception $e) {
+            return '';
+        }
+
+        $realPath = @realpath($filePath);
+        $type = '';
+
+        if (function_exists('mime_content_type')) {
+            $type = (string) @mime_content_type($realPath);
+        } elseif (function_exists('finfo_open')) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            if ($finfo) {
+                $type = (string) finfo_file($finfo, $realPath);
+                finfo_close($finfo);
+            }
+        }
+
+        $type = strtolower(trim(str_replace(';', '', $type)));
+
+        /*
+         * Content detection is trusted only where it is reliable: text formats the
+         * name table does not know (JSON, SVG, XML, extensionless text) and formats
+         * with a clear signature. For other bytes libmagic guesses (random binary
+         * reads as image/x-tga), so those stay application/octet-stream.
+         */
+        $reliable = ['application/json', 'image/svg+xml', 'application/xml', 'text/xml', 'application/pdf', 'image/png', 'image/jpeg', 'image/gif', 'image/webp', 'application/zip'];
+
+        if (strpos($type, 'text/') === 0 || in_array($type, $reliable, true)) {
+            return $type;
+        }
+
+        return '';
+    }
+
+    /**
+     * A file extension (with its dot) for a MIME type, from PHPMailer's own table.
+     *
+     * @param string $type
+     * @return string Empty when the type is not one of the common ones below.
+     */
+    protected static function extensionForType($type)
+    {
+        // PHPMailer answers application/octet-stream for extensions it does not know.
+        if (!$type || $type === 'application/octet-stream' || !class_exists('\PHPMailer\PHPMailer\PHPMailer')) {
+            return '';
+        }
+
+        // Covers the file types API providers allow-list (Brevo's included), so an
+        // unnamed attachment of one of them is named with an extension they accept.
+        $extensions = [
+            'pdf', 'png', 'jpg', 'gif', 'webp', 'txt', 'csv', 'ics', 'html', 'xml', 'zip', 'doc', 'docx', 'xls', 'xlsx', 'rtf',
+            'tif', 'bmp', 'css', 'ppt', 'pptx', 'tar', 'eps', 'mp3', 'm4a', 'wav', 'aif', 'mp4', 'mov', 'avi', 'mpeg', 'wmv', 'mkv'
+        ];
+
+        foreach ($extensions as $extension) {
+            if (\PHPMailer\PHPMailer\PHPMailer::_mime_types($extension) === $type) {
+                return '.' . $extension;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * The attachment records as the email log stores them.
+     *
+     * An attachment added in memory (addStringAttachment()) carries its data at
+     * index 0. That data is not kept: the log has no use for it (it cannot be
+     * resent from a sanitized copy) and it would bloat the log table. Index 0 is
+     * emptied and the size is kept at index 8 so the log can still describe it.
+     * File attachments keep their path, which is what a resend reads.
+     *
+     * @param mixed $attachments PHPMailer::getAttachments() records.
+     * @return array
+     */
+    public static function attachmentsForLog($attachments)
+    {
+        if (!is_array($attachments)) {
+            return [];
+        }
+
+        foreach ($attachments as $key => $attachment) {
+            if (is_array($attachment) && !empty($attachment[5])) {
+                $data = isset($attachment[0]) && is_string($attachment[0]) ? $attachment[0] : '';
+                // Already stripped (a stored row formatted again): keep the stored size.
+                if ($data !== '' || !isset($attachment[8])) {
+                    $attachment[8] = strlen($data);
+                }
+                $attachment[0] = '';
+                $attachments[$key] = $attachment;
+            }
+        }
+
+        return $attachments;
+    }
+
+    /**
+     * Whether a file path can be attached again: a readable file outside the
+     * blocked locations, judged by the same checks as readAttachmentFile().
+     *
+     * @param mixed $filePath
+     * @return bool
+     */
+    public static function isReadableAttachmentPath($filePath)
+    {
+        try {
+            self::assertReadableAttachmentPath($filePath);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Throws unless the path is a readable file outside the blocked locations.
+     *
+     * @param mixed $filePath
+     * @return void
+     * @throws Exception
+     */
+    protected static function assertReadableAttachmentPath($filePath)
+    {
+        // realpath() throws a ValueError (not an Exception) on a NUL byte in PHP 8,
+        // which escaped every provider's catch: a path never contains one.
+        if (!is_string($filePath) || strpos($filePath, "\0") !== false) {
+            throw new Exception(__('Invalid file path', 'fluent-smtp'));
+        }
+
+        // Resolve the real path to prevent path traversal attacks. A path outside
+        // open_basedir (an old log row after a host move) makes realpath() warn
+        // and return false; the false is handled below, and the warning would
+        // otherwise reach the Logs page's AJAX response when errors are displayed.
+        $realPath = @realpath($filePath);
 
         // Validate that realpath returned a valid path
         if ($realPath === false) {
@@ -916,13 +1297,32 @@ class BaseHandler
         }
 
         foreach ($blockedPaths as $blockedPath) {
-            $blockedRealPath = realpath($blockedPath);
-            if ($blockedRealPath && strpos($realPath, $blockedRealPath) === 0) {
+            // Under open_basedir the blocked system folders usually lie outside the
+            // allowed paths: realpath() warns and returns false, and the folder is
+            // already unreadable, so the check is skipped without the warning.
+            $blockedRealPath = @realpath($blockedPath);
+            // Match the location itself or anything under it, so /etc does not
+            // also block /etcetera/ or /dev block /devel/.
+            if ($blockedRealPath && ($realPath === $blockedRealPath || strpos($realPath, rtrim($blockedRealPath, '/') . '/') === 0)) {
                 throw new Exception(
                     __('Access to this file location is restricted for security reasons', 'fluent-smtp')
                 );
             }
         }
+    }
+
+    /**
+     * Securely read file contents with path traversal protection
+     *
+     * @param string $filePath The file path to read
+     * @return string File contents on success
+     * @throws Exception If path validation fails or file cannot be read
+     */
+    public static function readAttachmentFile($filePath)
+    {
+        self::assertReadableAttachmentPath($filePath);
+
+        $realPath = realpath($filePath);
 
         // Read and return file contents
         $contents = file_get_contents($realPath);

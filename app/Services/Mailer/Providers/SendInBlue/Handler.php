@@ -168,22 +168,36 @@ class Handler extends BaseHandler
         $files = [];
 
         foreach ($this->getParam('attachments') as $attachment) {
-            try {
-                // Use secure file reading with path traversal protection
-                $file = $this->secureFileRead($attachment[0]);
-                $ext = pathinfo($attachment[0], PATHINFO_EXTENSION);
+            $name = self::attachmentName($attachment);
 
-                if (in_array($ext, $this->allowedAttachmentExts, true)) {
-                    $files[] = [
-                        'name'    => $this->getAttachmentName($attachment),
-                        'content' => base64_encode($file)
-                    ];
-                }
+            // The allow-list is applied to the delivered name, the only file name
+            // Brevo receives; an in-memory attachment has no path. A file on disk
+            // also passes on its path's extension, as before, so a name such as
+            // "Rechnung Nr. 2024-001" for /uploads/r.pdf is still sent.
+            $allowed = in_array(strtolower(pathinfo($name, PATHINFO_EXTENSION)), $this->allowedAttachmentExts, true);
+            if (!$allowed && empty($attachment[5])) {
+                $allowed = in_array(strtolower(pathinfo((string) $attachment[0], PATHINFO_EXTENSION)), $this->allowedAttachmentExts, true);
+            }
+
+            if (!$allowed) {
+                fluentMailDebugLog(sprintf(
+                    'SendInBlue: Skipped attachment %s - Brevo does not accept this file type',
+                    $name
+                ));
+                continue;
+            }
+
+            try {
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
-                // Log error and skip this attachment
                 $this->logAttachmentFailure('SendInBlue', $e);
                 continue;
             }
+
+            $files[] = [
+                'name'    => $name,
+                'content' => base64_encode($file)
+            ];
         }
 
         return $files;

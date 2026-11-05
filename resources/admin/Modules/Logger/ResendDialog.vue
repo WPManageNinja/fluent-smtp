@@ -17,6 +17,23 @@
                 {{ formatOriginalRecipients(log.to) }}
             </p>
 
+            <el-alert
+                v-if="unresendable.length"
+                type="warning"
+                :closable="false"
+                show-icon
+                class="fss_resend_attachment_warning"
+                style="margin-bottom:14px;"
+                :title="$t('Some attachments can\'t be included')"
+            >
+                <ul style="margin:4px 0 6px 0;padding-left:18px;">
+                    <li v-for="(item, index) in unresendable" :key="index">
+                        <strong>{{ item.name }}</strong>: {{ reason(item) }}
+                    </li>
+                </ul>
+                <div>{{ $t('The email will be resent without them.') }}</div>
+            </el-alert>
+
             <el-form
                 ref="form"
                 label-position="top"
@@ -83,6 +100,8 @@
 </template>
 
 <script>
+import {unresendableAttachments, attachmentStatusReason} from './attachmentStatus';
+
 export default {
     name: 'ResendDialog',
     props: {
@@ -109,6 +128,9 @@ export default {
         };
     },
     computed: {
+        unresendable() {
+            return unresendableAttachments(this.log);
+        },
         visible: {
             get() {
                 return this.modelValue;
@@ -136,6 +158,9 @@ export default {
         }
     },
     methods: {
+        reason(item) {
+            return attachmentStatusReason(item, this);
+        },
         handleClosed() {
             this.$emit('closed');
         },

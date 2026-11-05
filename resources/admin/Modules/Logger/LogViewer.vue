@@ -31,7 +31,7 @@
                                     size="small"
                                     type="primary"
                                     icon="FsmIconRefresh"
-                                    @click="handleRetry(log, 'retry')"
+                                    @click="handleRetryClick(log)"
                                     :plain="true"
                                     :loading="retrying"
                                     v-if="log.status == 'failed'"
@@ -149,16 +149,29 @@
                     <el-collapse-item name="attachments">
                         <template #title>
                             <strong style="color:var(--fsm-text-mid)">
-                                {{ $t('Attachments') }} ({{ getAttachments(log).length }})
+                                {{ $t('Attachments') }} ({{ attachments.length }})
                             </strong>
                         </template>
                         <hr class="log-border">
                         <div
-                            v-for="(attachment, key) in getAttachments(log)"
+                            v-for="(attachment, key) in attachments"
                             :key="key"
+                            class="fsm_log_attachment"
                             style="margin:5px 0 10px 0;"
                         >
-                            ({{ key + 1 }}) {{ getAttachmentName(attachment) }}
+                            ({{ key + 1 }}) {{ attachment.name }}
+                            <span v-if="attachment.inline" style="color:var(--fsm-text-light);">({{ $t('inline') }})</span>
+                            <el-tag
+                                v-if="attachmentStatusLabel(attachment)"
+                                size="small"
+                                type="warning"
+                                style="margin-left:6px;"
+                            >{{ attachmentStatusLabel(attachment) }}</el-tag>
+                            <div
+                                v-if="attachmentStatusReason(attachment)"
+                                class="small-help-text"
+                                style="margin:2px 0 0 22px;"
+                            >{{ attachmentStatusReason(attachment) }}</div>
                         </div>
                     </el-collapse-item>
                 </el-collapse>
@@ -202,6 +215,14 @@
 import EmailbodyContainer from './EmailbodyContainer';
 import {isPlainTextLog} from './bodyFormat';
 import ResendDialog from './ResendDialog';
+import {
+    attachmentList,
+    attachmentStatusLabel,
+    attachmentStatusReason,
+    confirmResendWithoutAttachments,
+    loadAttachmentStatus,
+    notifyResendResult
+} from './attachmentStatus';
 
 export default {
     name: 'LogViewer',
@@ -267,28 +288,10 @@ export default {
                 this.loading = false;
             });
         },
-        getAttachments(log) {
-            if (!log) return [];
-            if (!log.attachments) return [];
-            if (!Array.isArray(log.attachments)) {
-                return [log.attachments];
-            }
-            const attachments = [];
-
-            log.attachments.forEach((attachment, key) => {
-                attachments[key] = attachment;
-            });
-            return attachments;
-        },
         closed() {
             this.next = true;
             this.prev = true;
             this.activeName = 'email_body'
-        },
-        getAttachmentName(name) {
-            if (!name || !name[0]) return;
-            name = name[0].replace(/\\/g, '/');
-            return name.split('/').pop();
         },
         handleRetry(log, type, recipients = null) {
             this.retrying = true;
@@ -309,11 +312,10 @@ export default {
                 this.logViewerProps.log.resent_count = res.data.email.resent_count;
                 // Carries the resend trail, so the history renders without a reload.
                 this.logViewerProps.log.extra = res.data.email.extra;
-                this.$notify.success({
-                    offset: 19,
-                    title: this.$t('Done'),
-                    message: res.data.message
-                });
+                if (res.data.email.attachment_list) {
+                    this.logViewerProps.log.attachment_list = res.data.email.attachment_list;
+                }
+                notifyResendResult(this, res);
             }).fail(error => {
                 this.$notify.error({
                     offset: 19,
@@ -324,10 +326,26 @@ export default {
                 this.retrying = false;
             });
         },
+        handleRetryClick(log) {
+            confirmResendWithoutAttachments(this, log)
+                .then(() => this.handleRetry(log, 'retry'))
+                .catch(() => {});
+        },
+        attachmentStatusLabel(attachment) {
+            return attachmentStatusLabel(attachment, this);
+        },
+        attachmentStatusReason(attachment) {
+            return attachmentStatusReason(attachment, this);
+        },
         handleResendClick() {
-            this.resendDialog.log = this.log;
-            this.resendDialog.resending = false;
-            this.resendDialog.visible = true;
+            const log = this.log;
+            // The dialog lists the attachments a resend can't include; ask the
+            // server now, since the log list does not check files.
+            loadAttachmentStatus(this, [log]).then(() => {
+                this.resendDialog.log = log;
+                this.resendDialog.resending = false;
+                this.resendDialog.visible = true;
+            });
         },
         handleResendConfirm(payload) {
             const log = this.resendDialog.log;
@@ -430,6 +448,9 @@ export default {
             set(log) {
                 this.logViewerProps.log = log;
             }
+        },
+        attachments() {
+            return attachmentList(this.log);
         },
         // Newest first. Rendered as text, never v-html: the original
         // recipients carry a display name that whoever sent the email chose.

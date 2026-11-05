@@ -12,7 +12,7 @@
                 the plate here.
             -->
             <div v-if="pickerOpen" class="fss_config_section">
-                <h3 class="fs_config_title">{{ $t('Email Service') }}</h3>
+                <h2 class="fs_config_title">{{ $t('Email Service') }}</h2>
                 <connection-provider :providers="providers" :connection="connection"
                                      @picked="picker_open = false"/>
                 <p v-if="!connection.provider" class="fsm_form_hint">
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="fss_config_section">
-                    <h3 class="fs_config_title">{{ $t('Sender Settings') }}</h3>
+                    <h2 class="fs_config_title">{{ $t('Sender Settings') }}</h2>
                     <el-row :gutter="20">
                         <el-col :md="12" :sm="24">
                             <el-form-item :label="$t('From Email')">

@@ -171,6 +171,14 @@ return [
             ['label' => 'viewer previous', 'needs_log' => true, 'params' => ['id' => '{log_id}', 'dir' => 'prev', 'query' => null, 'filter_by' => null, 'filter_by_value' => null]],
         ],
     ],
+    [
+        'method' => 'GET', 'route' => '/logs/attachment-status', 'handler' => 'LoggerController@attachmentStatus',
+        'source' => 'resources/admin/Modules/Logger/attachmentStatus.js',
+        'cases' => [
+            ['label' => 'one log', 'needs_log' => true, 'params' => ['ids' => ['{log_id}']]],
+            ['label' => 'no ids', 'params' => ['ids' => []]],
+        ],
+    ],
     $post('/logs/retry', 'LoggerController@retry', 'resources/admin/Modules/Logger/Logs.vue:282', [
         'id' => 2147483647, 'type' => 'retry',
     ]),

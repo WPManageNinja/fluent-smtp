@@ -74,10 +74,17 @@
                             -->
                             <el-table-column :label="$t('Subject')" min-width="280"
                                              show-overflow-tooltip>
+                                <!--
+                                    Simulated is a chip in front of the subject, not red
+                                    text after it. Nothing failed, so it is the caution
+                                    tint rather than danger. And it leads because the
+                                    cell truncates: after a long subject the ellipsis
+                                    used to cut it off.
+                                -->
                                 <template #default="scope">
-                                    <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
                                     <span v-if="scope.row.extra && scope.row.extra.provider == 'Simulator'"
-                                          class="fsm_log_simulated">{{ $t(' - Simulated') }}</span>
+                                          class="fsm_tag is_pending fsm_log_simulated">{{ $t('Simulated') }}</span>
+                                    <span style="cursor: pointer" @click="handleView(scope.row)">{{ scope.row.subject }}</span>
                                 </template>
                             </el-table-column>
 
@@ -129,7 +136,7 @@
                                         <el-button
                                             size="small"
                                             icon="FsmIconRefresh"
-                                            @click="handleRetry(scope.row, 'retry')"
+                                            @click="handleRetryClick(scope.row)"
                                             v-if="scope.row.status == 'failed'"
                                         >{{ $t('Retry') }}
                                         </el-button>
@@ -205,6 +212,7 @@ import LogFilter from './LogFilter';
 import LogViewer from './LogViewer';
 import LogBulkAction from './BulkAction';
 import ResendDialog from './ResendDialog';
+import {confirmResendWithoutAttachments, confirmBulkResendWithoutAttachments, notifyResendResult, loadAttachmentStatus} from './attachmentStatus';
 import isEmpty from 'lodash/isEmpty'
 
 export default {
@@ -407,11 +415,10 @@ export default {
                 row.resent_count = res.data.email.resent_count;
                 row.updated_at = res.data.email.updated_at;
                 row.extra = res.data.email.extra;
-                this.$notify.success({
-                    offset: 19,
-                    title: this.$t('Done'),
-                    message: res.data.message
-                });
+                if (res.data.email.attachment_list) {
+                    row.attachment_list = res.data.email.attachment_list;
+                }
+                notifyResendResult(this, res);
                 return true;
             }).fail(error => {
                 this.$notify.error({
@@ -424,10 +431,19 @@ export default {
                 this.loading = false;
             });
         },
+        handleRetryClick(row) {
+            confirmResendWithoutAttachments(this, row)
+                .then(() => this.handleRetry(row, 'retry'))
+                .catch(() => {});
+        },
         handleResendClick(row) {
-            this.resendDialog.log = row;
-            this.resendDialog.resending = false;
-            this.resendDialog.visible = true;
+            // The dialog lists the attachments a resend can't include; ask the
+            // server now, since the log list does not check files.
+            loadAttachmentStatus(this, [row]).then(() => {
+                this.resendDialog.log = row;
+                this.resendDialog.resending = false;
+                this.resendDialog.visible = true;
+            });
         },
         handleResendConfirm(payload) {
             const row = this.resendDialog.log;
@@ -531,15 +547,31 @@ export default {
                 return false;
             }
 
+            const rows = (this.logs || []).filter(row => selectedIds.includes(row.id));
+
+            return confirmBulkResendWithoutAttachments(this, rows)
+                .then(() => this.sendResendBulk(selectedIds))
+                .catch(() => {});
+        },
+        sendResendBulk(selectedIds) {
             this.loading = true;
             this.$post('logs/retry-bulk', {
                 log_ids: selectedIds
             }).then(res => {
-                this.$notify.success({
-                    offset: 19,
-                    title: this.$t('Done'),
-                    message: res.data.message
-                });
+                if (res.data.without_attachments) {
+                    this.$notify.warning({
+                        offset: 19,
+                        title: this.$t('Sent without some attachments'),
+                        message: res.data.message,
+                        duration: 8000
+                    });
+                } else {
+                    this.$notify.success({
+                        offset: 19,
+                        title: this.$t('Done'),
+                        message: res.data.message
+                    });
+                }
                 this.selectedLogs = [];
                 this.fetch();
             })

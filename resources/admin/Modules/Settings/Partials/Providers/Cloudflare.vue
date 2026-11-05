@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3 class="fs_config_title">{{ $t('Cloudflare Email API Settings') }}</h3>
+        <h2 class="fs_config_title">{{ $t('Cloudflare Email API Settings') }}</h2>
 
         <el-alert type="info" :closable="false" style="margin-bottom: 15px;">
             <div style="line-height: 1.6;">

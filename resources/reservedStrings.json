@@ -75,5 +75,7 @@
   "__SMTP_PORT_HELP": "Select <strong>ssl</strong> on port <strong>465</strong>, or <strong>tls</strong> on port <strong>25</strong> or <strong>587</strong>",
   "__WEBHOOK_INTRO": "Send a JSON payload to any endpoint when an email fails to send or a connection becomes unhealthy. Works with automation platforms such as n8n, Make and Zapier, with chat apps that accept an incoming webhook, and with anything you host yourself. The URL is the credential, so keep it private.",
   "__WEBHOOK_NOTIFICATION_ENABLED": "Webhook channel is enabled",
-  "__WEBHOOK_TEMPLATE_HELP": "The body sent to your endpoint. Placeholders are replaced and safely escaped, so a quote or a line break in an error message cannot break the JSON. Keep every placeholder inside quotes."
+  "__WEBHOOK_TEMPLATE_HELP": "The body sent to your endpoint. Placeholders are replaced and safely escaped, so a quote or a line break in an error message cannot break the JSON. Keep every placeholder inside quotes.",
+  "__SMTP2GO_REGION_TIP": "Sends through the SMTP2GO API servers in this region. Pick the one closest to your web server; your API key works with every region.",
+  "__SENDGRID_REGION_TIP": "Choose EU if your SendGrid account or subuser uses EU data residency. SendGrid refuses those accounts on the global API with \"not authorized to send mail based on their regional attribute\"."
 }

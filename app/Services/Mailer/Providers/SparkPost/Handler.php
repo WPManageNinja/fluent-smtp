@@ -54,7 +54,15 @@ class Handler extends BaseHandler
         }
 
         if (!empty($this->getParam('attachments'))) {
-            $body['content']['attachments'] = $this->getAttachments();
+            if ($attachments = $this->getAttachments()) {
+                $body['content']['attachments'] = $attachments;
+            }
+
+            // SparkPost puts an inline image's name in its Content-ID header,
+            // so embedded images go in inline_images under their cid.
+            if ($inlineImages = $this->attachmentRows(true)) {
+                $body['content']['inline_images'] = $inlineImages;
+            }
         }
 
         $params = [
@@ -132,7 +140,9 @@ class Handler extends BaseHandler
         if ($replyTo = $this->getParam('headers.reply-to')) {
             $replyTo = reset($replyTo);
         
-            return $replyTo['email'];
+            return isset($replyTo['name'])
+                ? self::formatQuotedAddress($replyTo['email'], $replyTo['name'])
+                : $replyTo['email'];
         }
     }
 
@@ -166,38 +176,46 @@ class Handler extends BaseHandler
         return $address;
     }
 
+    /**
+     * The normal attachments; embedded images are sent separately (attachmentRows(true)).
+     *
+     * @return array
+     */
     protected function getAttachments()
+    {
+        return $this->attachmentRows(false);
+    }
+
+    /**
+     * @param bool $inline True for the embedded images, false for normal attachments.
+     * @return array
+     */
+    protected function attachmentRows($inline)
     {
         $data = [];
 
-        foreach ($this->getParam('attachments') as $attachment) {
-            $file = false;
-            $fileName = null;
-            $filetype = null;
+        $attachments = $this->getParam('attachments');
+        $contentIds = self::inlineContentIds($attachments);
 
-            try {
-                // Use secure file reading with path traversal protection
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = $this->getAttachmentName($attachment);
+        foreach ($attachments as $key => $attachment) {
+            $contentId = $contentIds[$key];
 
-                // Get MIME type from the validated real path
-                $realPath = realpath($attachment[0]);
-                $mimeType = mime_content_type($realPath);
-                $filetype = str_replace(';', '', trim($mimeType));
-            } catch (\Exception $e) {
-                // Log error and skip this attachment
-                $this->logAttachmentFailure('SparkPost', $e);
-                $file = false;
-            }
-
-            if ($file === false) {
+            if (($contentId !== '') !== $inline) {
                 continue;
             }
 
+            try {
+                $file = self::attachmentContent($attachment);
+            } catch (\Exception $e) {
+                $this->logAttachmentFailure('SparkPost', $e);
+                continue;
+            }
+
+            // SparkPost's attachment object is name, type and data (all required).
             $data[] = [
-                'name' => $fileName,
-                'type' => $filetype,
-                'content' => base64_encode($file)
+                'name' => $inline ? $contentId : self::attachmentName($attachment),
+                'type' => self::attachmentType($attachment),
+                'data' => base64_encode($file)
             ];
         }
 

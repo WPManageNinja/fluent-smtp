@@ -41,6 +41,15 @@ body.settings_page_fluent-mail {
     *::after {
         box-sizing: border-box;
     }
+
+    /*
+     * The setting descriptions are two or three lines in a narrow column, and the
+     * last line was often one word ("sent.", "beta."). `pretty` lets the browser
+     * re-break the paragraph to avoid that. Browsers without it wrap as before.
+     */
+    p {
+        text-wrap: pretty;
+    }
 }
 
 /* ------------------------------------------------------------ theme switch */

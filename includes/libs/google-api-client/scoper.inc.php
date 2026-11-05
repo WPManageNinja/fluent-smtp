@@ -10,6 +10,12 @@
 
 use Symfony\Component\Finder\Finder;
 
+// NOTE: build/vendor carries hand patches that a rebuild (composer install /
+// update here) overwrites. Re-apply them, or bump to a release that has them:
+// - guzzlehttp/guzzle and monolog/monolog: guard every curl_close() call with
+//   PHP_VERSION_ID < 80000 (deprecated in PHP 8.5). Guzzle >= 7.10 ships this.
+// tests/integration/guzzle-curl-close.php fails if a curl_close() is unguarded.
+
 // Google API services to include classes for.
 $google_services = implode(
     '|',

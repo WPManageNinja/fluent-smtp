@@ -44,7 +44,13 @@ class Handler extends BaseHandler {
             'bcc'       => $this->getBlindCarbonCopy(),
             'subject'   => $this->getSubject(),
             'html_body' => $this->getBody(),
-            'text_body' => $this->phpMailer->AltBody
+            'text_body' => $this->phpMailer->AltBody,
+            /*
+             * Without fastaccept SMTP2GO holds the request open until the email is
+             * sent, which can outlast the HTTP timeout: the email is delivered but
+             * logged as failed. With it the email is queued and accepted at once.
+             */
+            'fastaccept' => (bool) apply_filters('fluentsmtp_smtp2go_fastaccept', true)
         ];
 
         if ($replyTo = $this->getReplyTo()) {
@@ -56,7 +62,15 @@ class Handler extends BaseHandler {
 
 
         if (!empty($this->getParam('attachments'))) {
-            $body['attachments'] = $this->getAttachments();
+            if ($attachments = $this->getAttachments()) {
+                $body['attachments'] = $attachments;
+            }
+
+            // SMTP2GO uses an inline image's filename as its cid, so embedded
+            // images go in "inlines" under their cid.
+            if ($inlines = $this->attachmentRows(true)) {
+                $body['inlines'] = $inlines;
+            }
         }
 
         $params = [
@@ -115,7 +129,9 @@ class Handler extends BaseHandler {
         if ($replyTo = $this->getParam('headers.reply-to')) {
             $replyTo = reset($replyTo);
 
-            return $replyTo['email'];
+            return isset($replyTo['name'])
+                ? self::formatQuotedAddress($replyTo['email'], $replyTo['name'])
+                : $replyTo['email'];
         }
     }
 
@@ -143,36 +159,42 @@ class Handler extends BaseHandler {
         return $this->getParam('message');
     }
 
+    /**
+     * The normal attachments; embedded images are sent separately (attachmentRows(true)).
+     *
+     * @return array
+     */
     protected function getAttachments() {
+        return $this->attachmentRows(false);
+    }
+
+    /**
+     * @param bool $inline True for the embedded images, false for normal attachments.
+     * @return array
+     */
+    protected function attachmentRows($inline) {
         $data = [];
 
-        foreach ($this->getParam('attachments') as $attachment) {
-            $file = false;
-            $fileName = null;
-            $filetype = null;
+        $attachments = $this->getParam('attachments');
+        $contentIds = self::inlineContentIds($attachments);
 
-            try {
-                // Use secure file reading with path traversal protection
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = $this->getAttachmentName($attachment);
+        foreach ($attachments as $key => $attachment) {
+            $contentId = $contentIds[$key];
 
-                // Get MIME type from the validated real path
-                $realPath = realpath($attachment[0]);
-                $mimeType = mime_content_type($realPath);
-                $filetype = str_replace(';', '', trim($mimeType));
-            } catch (\Exception $e) {
-                // Log error and skip this attachment
-                $this->logAttachmentFailure('Smtp2Go', $e);
-                $file = false;
+            if (($contentId !== '') !== $inline) {
+                continue;
             }
 
-            if ($file === false) {
+            try {
+                $file = self::attachmentContent($attachment);
+            } catch (\Exception $e) {
+                $this->logAttachmentFailure('Smtp2Go', $e);
                 continue;
             }
 
             $data[] = [
-                'mimetype' => $filetype,
-                'filename' => $fileName,
+                'mimetype' => self::attachmentType($attachment),
+                'filename' => $inline ? $contentId : self::attachmentName($attachment),
                 'fileblob' => base64_encode($file)
             ];
         }

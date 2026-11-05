@@ -151,14 +151,21 @@
     /* ------------------------------------------------------------- heat map */
 
     /*
-     * The sending-by-time-of-day grid. Levels 1-5 are a data ramp and carry the
-     * same five colours in both themes - a count of emails does not mean
-     * something different in the dark. Level 0 is the empty cell behind them,
-     * which is chrome, so it is the only one that flips.
+     * The sending-by-time-of-day grid. Level 0 is the empty cell; levels 1-5 are a
+     * data ramp, and what the ramp has to keep is its order: the busier the hour,
+     * the further the cell stands from the card. On a light card that is darker.
+     * On a dark card it is lighter, so the dark theme runs the same hue the other
+     * way - the ramp used to be shared, and in dark the quietest hour glowed while
+     * the busiest sank into the card.
      */
     --fsm-heat-0: #F0F0F0;
-    --fsm-heat-1: #DFD9FF;
-    --fsm-heat-2: #A08DFF;
+    /*
+     * Level 1 was #DFD9FF, 1.19:1 from the empty cell: an hour with one email in
+     * it barely showed. 1 and 2 are a step darker now, so every level clears the
+     * one below it by about 1.5:1 or more, as in the dark ramp.
+     */
+    --fsm-heat-1: #C4B8FF;
+    --fsm-heat-2: #9580FF;
     --fsm-heat-3: #6040FF;
     --fsm-heat-4: #2900F3;
     --fsm-heat-5: #1C00A6;
@@ -270,6 +277,17 @@ body.settings_page_fluent-mail.fluent_theme_dark {
      */
     --fsm-heat-0: #2A3948;
 
+    /*
+     * The same violet, lightest for the busiest hour. Each step clears the one below
+     * it by about 1.5:1, starting from the empty cell, so neighbouring levels stay
+     * apart and level 1 does not read as empty.
+     */
+    --fsm-heat-1: #4A3CB0;
+    --fsm-heat-2: #6A50EE;
+    --fsm-heat-3: #8C76FF;
+    --fsm-heat-4: #B5A7FF;
+    --fsm-heat-5: #E4DFFF;
+
     /* The same two series, lifted to clear 3:1 on the dark card: 6.46:1 and 5.85:1. */
     --fsm-chart-line: #4FB3E8;
     --fsm-chart-line-fill: rgba(79, 179, 232, .14);
@@ -297,6 +315,44 @@ body.settings_page_fluent-mail.fluent_theme_dark {
     h1, h2, h3, h4, h5, h6 {
         color: var(--fsm-heading);
     }
+}
+
+/*
+ * wp-admin colours every link #2271b1 with a bare `a`. That is fine on white and 2.7:1
+ * on the dark card. `:where()` takes the id's weight away, so this rule weighs the same
+ * as `.x a`: it beats wp-admin's `a` and `a:hover`, and it loses to any rule that
+ * colours a link on purpose.
+ */
+:where(#fluent_mail_app) a:not([class]) {
+    color: var(--fsm-link);
+
+    &:hover {
+        color: var(--fsm-heading);
+    }
+}
+
+/*
+ * The footer line is the app's own text (AdminMenuHandler filters it in), but wp-admin
+ * paints it: #50575e, which is 2.5:1 on the dark page.
+ */
+body.settings_page_fluent-mail #wpfooter {
+    color: var(--fsm-text-light);
+
+    a {
+        color: var(--fsm-link);
+    }
+
+    a:hover {
+        color: var(--fsm-heading);
+    }
+}
+
+/*
+ * Element Plus eases the checkbox with an overshooting curve, cubic-bezier(.71,-.46,
+ * .29,1.46), so the box bounces as it fills. The app eases out everywhere else.
+ */
+body.settings_page_fluent-mail .el-checkbox__inner {
+    transition-timing-function: cubic-bezier(.22, 1, .36, 1);
 }
 
 /* ------------------------------------------------------------- element plus */

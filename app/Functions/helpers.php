@@ -136,7 +136,7 @@ if (!function_exists('fluentMailIsListedSenderEmail')) {
         if (!$settings) {
             return false;
         }
-        return !empty($settings['mappings'][$email]);
+        return !!\FluentMail\App\Models\Settings::findMappingKey(\FluentMail\Includes\Support\Arr::get($settings, 'mappings', []), $email);
     }
 }
 
@@ -224,8 +224,9 @@ if (!function_exists('fluentMailGetProvider')) {
 
         $connection = false;
 
-        if (isset($mappings[$fromEmail])) {
-            $connectionId = $mappings[$fromEmail];
+        $connectionId = \FluentMail\App\Models\Settings::findMappingKey($mappings, $fromEmail);
+
+        if ($connectionId) {
             $connections = $manager->getSettings('connections');
             if (isset($connections[$connectionId])) {
                 $connection = $connections[$connectionId]['provider_settings'];
@@ -241,7 +242,7 @@ if (!function_exists('fluentMailGetProvider')) {
 
         if ($connection) {
             $factory = fluentMail(Factory::class);
-            $driver = $factory->make($connection['provider']);
+            $driver = clone $factory->make($connection['provider']);
             $driver->setSettings($connection);
             $providers[$fromEmail] = $driver;
         } else {
@@ -263,11 +264,11 @@ if (!function_exists('fluentMailSesConnection')) {
     {
         static $drivers = [];
 
-        if (isset($drivers[$connection['sender_email']])) {
+        $region = SimpleEmailService::regionToHost($connection['region'] ?? null);
+
+        if ($region !== '' && isset($drivers[$connection['sender_email']])) {
             return $drivers[$connection['sender_email']];
         }
-
-        $region = SimpleEmailService::regionToHost($connection['region']);
 
         $ses = new SimpleEmailService(
             $connection['access_key'],
@@ -275,6 +276,10 @@ if (!function_exists('fluentMailSesConnection')) {
             $region,
             false
         );
+
+        if ($region === '') {
+            return $ses;
+        }
 
         $drivers[$connection['sender_email']] = $ses;
 
@@ -298,9 +303,10 @@ if (!function_exists('fluentMailSend')) {
      * `<img src="cid:0" alt="Logo">`
      * `<img src="cid:my-image" alt="Image">`
      *
-     * Note: embedded images are applied to the PHPMailer instance, so they work on
-     * SMTP connections. Providers that send over their own HTTP API build their
-     * payload separately and currently ignore embeds.
+     * Note: embedded images go out inline on SMTP, Amazon SES, Gmail, Outlook,
+     * SendGrid, Mailgun, Postmark, SparkPost, SMTP2GO and Cloudflare. The other
+     * API providers (Brevo, Elastic Email, PepiPost, toSend) have no inline field
+     * in their API, so they deliver an embedded image as a normal attachment.
      *
      * @since 6.9.0 The `$embeds` parameter was added, matching WP core.
      *

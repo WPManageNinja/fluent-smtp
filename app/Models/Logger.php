@@ -5,6 +5,7 @@ namespace FluentMail\App\Models;
 use Exception;
 use InvalidArgumentException;
 use FluentMail\Includes\Support\Arr;
+use FluentMail\App\Services\Mailer\BaseHandler;
 
 class Logger extends Model
 {
@@ -257,9 +258,90 @@ class Logger extends Model
              * HTML has to escape it at that point, as digest_email.php does.
              */
             $result[$key]['subject'] = wp_unslash($result[$key]['subject']);
+
+            if (array_key_exists('attachments', $result[$key])) {
+                $result[$key]['attachment_list'] = static::describeAttachments($result[$key]['attachments']);
+                $result[$key]['attachments'] = BaseHandler::attachmentsForLog($result[$key]['attachments']);
+            }
         }
 
         return $result;
+    }
+
+    /**
+     * Each logged attachment with whether a resend can include it.
+     *
+     * - `ok`: a file that is still readable where it was attached from.
+     * - `in_memory`: data the sending plugin built in memory (addStringAttachment(),
+     *   e.g. an invoice PDF). The log does not keep the data, so it cannot be resent.
+     * - `missing`: a file that has been deleted, moved or can no longer be read.
+     * - `unchecked`: a file whose state was not looked up ($checkFiles false).
+     *
+     * The log list and viewer do not check files: that is a few filesystem calls
+     * per attachment on every page load, slow on network storage, for a state
+     * that only matters when a resend is about to run. The resend actions ask
+     * for it through attachmentStatus() instead.
+     *
+     * @param mixed $attachments The unserialized `attachments` column.
+     * @param bool  $checkFiles  Look up whether each file can still be read.
+     * @return array[] [['name' => string, 'status' => string, 'inline' => bool, 'size' => int|null], ...]
+     */
+    public static function describeAttachments($attachments, $checkFiles = false)
+    {
+        if (!is_array($attachments)) {
+            return [];
+        }
+
+        $list = [];
+
+        foreach ($attachments as $attachment) {
+            $described = static::describeAttachment($attachment, $checkFiles);
+
+            if ($described) {
+                unset($described['record']);
+                $list[] = $described;
+            }
+        }
+
+        return $list;
+    }
+
+    /**
+     * One logged attachment, normalized: its PHPMailer record and how it stands.
+     *
+     * @param mixed $attachment A PHPMailer record, or a bare path from very old rows.
+     * @param bool  $checkFiles Look up whether a file can still be read; otherwise its status is `unchecked`.
+     * @return array|null ['name', 'status', 'inline', 'size', 'record'], or null when the entry is not an attachment.
+     */
+    protected static function describeAttachment($attachment, $checkFiles = true)
+    {
+        if (is_string($attachment) && $attachment !== '') {
+            $attachment = [$attachment, basename($attachment), basename($attachment)];
+        }
+
+        if (!is_array($attachment)) {
+            return null;
+        }
+
+        $inMemory = !empty($attachment[5]);
+        $path = isset($attachment[0]) && is_string($attachment[0]) ? $attachment[0] : '';
+        $readable = !$inMemory && $checkFiles && BaseHandler::isReadableAttachmentPath($path);
+
+        if ($inMemory) {
+            $size = isset($attachment[8]) ? (int) $attachment[8] : (is_string($path) ? strlen($path) : null);
+            $status = 'in_memory';
+        } else {
+            $size = $readable ? (int) @filesize($path) : null;
+            $status = !$checkFiles ? 'unchecked' : ($readable ? 'ok' : 'missing');
+        }
+
+        return [
+            'name'   => (string) BaseHandler::attachmentName($attachment),
+            'status' => $status,
+            'inline' => isset($attachment[6]) && $attachment[6] === 'inline',
+            'size'   => $size,
+            'record' => $attachment,
+        ];
     }
 
     protected function maybeUnserialize(array $data)
@@ -472,6 +554,38 @@ class Logger extends Model
         ];
     }
 
+    /**
+     * Whether a resend of each log can still include its attachments.
+     *
+     * Called by the resend actions just before they run, for the logs that have
+     * attachments, so the log list itself never touches the filesystem.
+     *
+     * @param int[] $ids At most 50 log ids; the rest are ignored.
+     * @return array Log id => describeAttachments() list, with files checked.
+     */
+    public function attachmentStatus(array $ids)
+    {
+        $ids = array_slice(array_values(array_unique(array_filter(array_map('intval', $ids)))), 0, 50);
+
+        if (!$ids) {
+            return [];
+        }
+
+        $placeholders = implode(',', array_fill(0, count($ids), '%d'));
+        $rows = $this->db->get_results($this->db->prepare(
+            "SELECT `id`, `attachments` FROM {$this->table} WHERE `id` IN ({$placeholders})",
+            $ids
+        ));
+
+        $statuses = [];
+
+        foreach ((array) $rows as $row) {
+            $statuses[(int) $row->id] = static::describeAttachments($this->unserialize($row->attachments), true);
+        }
+
+        return $statuses;
+    }
+
     public function find($id)
     {
 
@@ -495,23 +609,62 @@ class Logger extends Model
         $email['attachments'] = $this->unserialize($email['attachments']);
         $email['extra']       = $this->unserialize($email['extra']);
 
-        // Convert PHPMailer attachment format to wp_mail format
+        /*
+         * Files still on disk go out again under their original name, and inline
+         * images with their original cid, through wp_mail()'s own arguments: an
+         * attachment keyed by its file name, and embeds keyed by cid. No hook is
+         * needed, so filters, pre_wp_mail transports and queue plugins see the
+         * same files the resend sends. In-memory attachments and files that are
+         * gone cannot be included; they are reported back so the admin is told.
+         */
+        $skippedAttachments = [];
         $wpMailAttachments = [];
-        if (!empty($email['attachments']) && is_array($email['attachments'])) {
-            foreach ($email['attachments'] as $attachment) {
-                if (is_array($attachment)) {
-                    // PHPMailer format: [path, filename, name, encoding, type, isString, disposition, cid]
-                    if (isset($attachment[0]) && is_string($attachment[0])) {
-                        $filePath = $attachment[0];
-                        if (file_exists($filePath) && is_readable($filePath)) {
-                            $wpMailAttachments[] = $filePath;
-                        }
-                    }
-                } elseif (is_string($attachment)) {
-                    if (file_exists($attachment) && is_readable($attachment)) {
-                        $wpMailAttachments[] = $attachment;
-                    }
-                }
+        $wpMailEmbeds = [];
+        $embedMeta = [];
+
+        // Another plugin's wp_mail() may not take $embeds (the sixth argument). Inline
+        // images then go out as ordinary attachments rather than being dropped.
+        $acceptsEmbeds = true;
+        try {
+            $wpMail = new \ReflectionFunction('wp_mail');
+            // A variadic wrapper (wp_mail(...$args)) forwards whatever it is given.
+            $acceptsEmbeds = $wpMail->isVariadic() || $wpMail->getNumberOfParameters() >= 6;
+        } catch (\ReflectionException $e) {
+            $acceptsEmbeds = true;
+        }
+
+        foreach ((is_array($email['attachments']) ? $email['attachments'] : []) as $attachment) {
+            $described = static::describeAttachment($attachment);
+
+            if (!$described) {
+                continue;
+            }
+
+            if ($described['status'] !== 'ok') {
+                $skippedAttachments[] = ['name' => $described['name'], 'status' => $described['status']];
+                continue;
+            }
+
+            $path = $described['record'][0];
+            $cid = isset($described['record'][7]) ? (string) $described['record'][7] : '';
+
+            if ($acceptsEmbeds && $described['inline'] && $cid !== '' && !isset($wpMailEmbeds[$cid])) {
+                $wpMailEmbeds[$cid] = $path;
+                $embedMeta[$cid] = [
+                    'path' => $path,
+                    'name' => $described['name'],
+                    'type' => isset($described['record'][4]) ? (string) $described['record'][4] : '',
+                ];
+                continue;
+            }
+
+            // A name that is already used, or one PHP would turn into an integer key,
+            // cannot be a key; that file goes out under its own file name instead.
+            $name = $described['name'];
+            if ($name === '' || isset($wpMailAttachments[$name]) || (string) (int) $name === $name) {
+                $wpMailAttachments[] = $path;
+            } else {
+                $wpMailAttachments[$name] = $path;
             }
         }
 
@@ -587,13 +740,33 @@ class Logger extends Model
 
             $startedAt = microtime(true);
 
-            $result = wp_mail(
-                $to,
-                $email['subject'],
-                $email['body'],
-                $headers,
-                $wpMailAttachments  // Use the converted attachment format
-            );
+            // wp_mail() names an embed after its path and detects its type; give the
+            // resend's own embeds (same path and cid) their logged name and type.
+            $embedArgs = function ($args) use ($embedMeta) {
+                $cid = isset($args['cid']) ? (string) $args['cid'] : '';
+                if (isset($embedMeta[$cid]) && isset($args['path']) && $args['path'] === $embedMeta[$cid]['path']) {
+                    $args['name'] = $embedMeta[$cid]['name'];
+                    if ($embedMeta[$cid]['type'] !== '') {
+                        $args['type'] = $embedMeta[$cid]['type'];
+                    }
+                }
+                return $args;
+            };
+
+            add_filter('wp_mail_embed_args', $embedArgs);
+
+            try {
+                $result = wp_mail(
+                    $to,
+                    $email['subject'],
+                    $email['body'],
+                    $headers,
+                    $wpMailAttachments,
+                    $wpMailEmbeds
+                );
+            } finally {
+                remove_filter('wp_mail_embed_args', $embedArgs);
+            }
 
             $durationMs = round((microtime(true) - $startedAt) * 1000, 1);
 
@@ -621,6 +794,10 @@ class Logger extends Model
                 $email['headers']     = $this->unserialize($email['headers']);
                 $email['attachments'] = $this->unserialize($email['attachments']);
                 $email['extra']       = $this->unserialize($email['extra']);
+                $email['attachment_list']     = static::describeAttachments($email['attachments']);
+                $email['attachments']         = BaseHandler::attachmentsForLog($email['attachments']);
+                $email['skipped_attachments'] = $skippedAttachments;
+                $email['resend_succeeded']    = (bool) $result;
                 return $email;
             }
         } catch (\PHPMailer\PHPMailer\Exception $e) {

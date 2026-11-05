@@ -3,7 +3,7 @@ Contributors: techjewel, wpmanageninja, heera, adreastrian
 Tags: smtp, wp mail smtp, amazon ses, sendgrid, mailgun
 Requires at least: 6.5
 Tested up to: 7.1
-Stable tag: 2.4.1
+Stable tag: 2.4.5
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -11,7 +11,6 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Free WP Mail SMTP plugin. Fix WordPress email deliverability with Gmail, Amazon SES, SendGrid, Mailgun, Postmark, Cloudflare, Brevo or any SMTP.
 
 == Description ==
-
 ### WP Mail SMTP Plugin for Any Email Service Provider
 Are your WordPress emails not sending, landing in spam, or failing silently? FluentSMTP is a free **WordPress SMTP plugin** that fixes email deliverability by routing every `wp_mail()` call through the email service you choose: **Gmail, Google Workspace, Amazon SES, SendGrid, Mailgun, Cloudflare Email, toSend, Postmark, Brevo (Sendinblue), SparkPost, Netcore, Elastic Email, SMTP2GO, Outlook / Office 365, Zoho**, or any SMTP host.
 
@@ -153,7 +152,6 @@ You can set the following options:
 Read the <a href="https://fluentsmtp.com/docs/set-up-fluent-smtp-with-any-host-or-mailer/">SMTP connection documentation</a>
 
 == 🚀 A Fast, Modern Admin 🚀 ==
-
 * Built with Vue 3 as a single-page application, with a light and a dark theme.
 * A lean interface that needs no learning curve.
 * A dashboard with charts and stats showing how your email is doing.
@@ -252,7 +250,6 @@ If you like this plugin, then consider checking out our other plugins:
 * [Paymattic – Simple Payment Donations & Subscriptions Plugin](https://wordpress.org/plugins/wp-payment-form/)
 
 == Installation ==
-
 1. Install FluentSMTP either via the WordPress.org plugin repository or by uploading the files to your server.
 2. Activate FluentSMTP.
 3. Go to Settings -> FluentSMTP in the WordPress admin.
@@ -339,15 +336,23 @@ Please <a href="https://wpmanageninja.com/support-tickets/">submit an issue in o
 We use Patchstack to manage security reports. <a href="https://patchstack.com/database/vdp/fluent-smtp">Please report it on our Patchstack page</a>.
 
 == Screenshots ==
-1. FluentSMTP Dashboard
-2. Setting up a connection
-3. Settings Overview
-4. Sending a test email
-5. Email Logs
-6. View Email from Log
-
+1. Dashboard: sent and failed emails, sending stats, and your busiest hours at a glance
+2. Add a connection: pick any SMTP server or one of the built-in email services
+3. Settings: all your email connections, email logging and delivery settings in one place
+4. Send a test email from any connection in seconds
+5. Email logs: search every email, spot failures, and resend or retry with one click
+6. Email details: preview the message and check how it was delivered
 
 == Changelog ==
+
+= 2.4.5 (Date: Nov 04, 2026) =
+- Added the SendGrid EU region and an API region choice for SMTP2GO
+- Added support for in-memory attachments (such as generated PDF invoices) and inline images on API providers
+- Added a warning before resending a logged email whose attachments can't be included
+- Improved SMTP and Amazon SES connection settings: safer credential changes and better validation
+- Improved the admin UI: a clearer dashboard heatmap, better dark mode contrast, a badge for simulated emails, and formatted counts
+- Fixed Reply-To and sender address issues on several providers, and broken emails on Mailgun and PepiPost
+- Fixed empty message IDs in the email log, PHP 8.5 deprecation notices, and other minor issues
 
 = 2.4.1 (Date: Sep 27, 2026) =
 - Fixed Outlook / Office 365 connections failing to authorize on servers where Microsoft returned an HTML error page instead of a token

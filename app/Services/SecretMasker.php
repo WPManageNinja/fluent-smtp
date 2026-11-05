@@ -135,6 +135,71 @@ class SecretMasker
         'cloudflare'  => ['api_key' => 1],
     ];
 
+    const ENDPOINT_FIELDS = [
+        'smtp' => ['host', 'port', 'username'],
+    ];
+
+    public static function endpointChanged($values, $stored)
+    {
+        if (!is_array($values) || !is_array($stored) || !$stored) {
+            return false;
+        }
+
+        $provider = isset($values['provider']) ? $values['provider'] : '';
+
+        if (!isset(static::ENDPOINT_FIELDS[$provider])) {
+            return false;
+        }
+
+        foreach (static::ENDPOINT_FIELDS[$provider] as $field) {
+            $submitted = isset($values[$field]) && is_scalar($values[$field]) ? trim((string)$values[$field]) : '';
+            $saved = isset($stored[$field]) && is_scalar($stored[$field]) ? trim((string)$stored[$field]) : '';
+
+            if ($field === 'host') {
+                $submitted = strtolower($submitted);
+                $saved = strtolower($saved);
+            }
+
+            if ($submitted !== $saved) {
+                return true;
+            }
+        }
+
+        if ($provider === 'smtp' && static::smtpSecurityLevel($values) < static::smtpSecurityLevel($stored)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * How well an SMTP connection protects the password in transit:
+     * 2 = SSL or TLS required, 1 = opportunistic STARTTLS (auto TLS), 0 = none.
+     * A save that lowers this level counts as an endpoint change, so a stored
+     * password is never reused over a weaker connection than it was saved for.
+     * Switching between SSL and TLS keeps the level and keeps the password.
+     *
+     * @param array $settings
+     * @return int
+     */
+    protected static function smtpSecurityLevel($settings)
+    {
+        $encryption = isset($settings['encryption']) && is_scalar($settings['encryption'])
+            ? strtolower(trim((string)$settings['encryption']))
+            : '';
+
+        if (in_array($encryption, ['ssl', 'tls'], true)) {
+            return 2;
+        }
+
+        $autoTls = isset($settings['auto_tls']) && is_scalar($settings['auto_tls'])
+            ? (string)$settings['auto_tls']
+            : '';
+
+        // Matches Smtp\Handler: auto TLS is on unless it is set to 'no'.
+        return $autoTls !== 'no' ? 1 : 0;
+    }
+
     /**
      * Replace every stored credential in a settings array with the mask.
      *
@@ -275,13 +340,14 @@ class SecretMasker
 
         $fields = is_null($fields) ? static::SECRET_FIELDS : $fields;
         $stored = is_array($stored) ? $stored : [];
+        $endpointChanged = static::endpointChanged($values, $stored);
 
         foreach ($fields as $field) {
             if (!isset($values[$field]) || $values[$field] !== static::MASK) {
                 continue;
             }
 
-            $values[$field] = isset($stored[$field]) && is_string($stored[$field])
+            $values[$field] = !$endpointChanged && isset($stored[$field]) && is_string($stored[$field])
                 ? $stored[$field]
                 : '';
         }

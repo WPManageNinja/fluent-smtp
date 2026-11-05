@@ -65,6 +65,7 @@ $app->post('settings/webhook/disconnect', 'WebhookController@disconnect');
 
 $app->get('/logs', 'LoggerController@get');
 $app->get('/logs/show', 'LoggerController@show');
+$app->get('/logs/attachment-status', 'LoggerController@attachmentStatus');
 $app->post('/logs/retry', 'LoggerController@retry');
 $app->post('/logs/retry-bulk', 'LoggerController@retryBulk');
 $app->post('/logs/delete', 'LoggerController@delete');

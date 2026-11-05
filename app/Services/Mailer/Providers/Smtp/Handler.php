@@ -65,12 +65,12 @@ class Handler extends BaseHandler
                 $this->phpMailer->Password = '';
             }
 
-            $encryption = $this->getSetting('encryption');
+            $encryption = self::normalizeEncryption($this->getSetting('encryption'));
             $this->phpMailer->SMTPSecure = $encryption != 'none' ? $encryption : '';
 
             $fromEmail = $this->phpMailer->From;
 
-            if ($this->isForcedEmail() && !fluentMailIsListedSenderEmail($fromEmail)) {
+            if ($this->isForcedEmail() && !$this->isOwnSender($fromEmail)) {
                 $fromEmail = $this->getSetting('sender_email');
             }
 
@@ -121,11 +121,8 @@ class Handler extends BaseHandler
                 }
             }
 
-            if ($attachments = $this->getParam('attachments')) {
-                foreach ($attachments as $attachment) {
-                    $this->phpMailer->addAttachment($attachment[0], $this->getAttachmentName($attachment));
-                }
-            }
+            // Attachments are already on this shared PHPMailer. Adding them again
+            // treated in-memory data as a file path and duplicated inline images.
 
             if ($this->getParam('headers.content-type') == 'text/html' || $this->getParam('headers.content-type') == 'multipart/alternative') {
                 $this->phpMailer->isHTML(true);
@@ -248,12 +245,58 @@ class Handler extends BaseHandler
     public function setSettings($settings)
     {
         if (Arr::get($settings, 'key_store') == 'wp_config') {
-            $settings['username'] = defined('FLUENTMAIL_SMTP_USERNAME') ? FLUENTMAIL_SMTP_USERNAME : '';
-            $settings['password'] = defined('FLUENTMAIL_SMTP_PASSWORD') ? FLUENTMAIL_SMTP_PASSWORD : '';
+            $bound = static::matchesWpConfigEndpoint($settings);
+            $settings['username'] = $bound && defined('FLUENTMAIL_SMTP_USERNAME') ? FLUENTMAIL_SMTP_USERNAME : '';
+            $settings['password'] = $bound && defined('FLUENTMAIL_SMTP_PASSWORD') ? FLUENTMAIL_SMTP_PASSWORD : '';
         }
 
         $this->settings = $settings;
 
         return $this;
+    }
+
+    /**
+     * The connection security as PHPMailer understands it: "ssl", "tls" or "none".
+     *
+     * PHPMailer acts only on the exact lower-case strings "ssl" and "tls". A stored
+     * "TLS" would otherwise send the login in clear text, while
+     * SecretMasker::smtpSecurityLevel(), which reads it case-insensitively, rates
+     * it as encrypted and lets the saved password be reused. Reading it here the
+     * same way keeps both in step; any other value means no encryption.
+     *
+     * @param mixed $encryption
+     * @return string
+     */
+    public static function normalizeEncryption($encryption)
+    {
+        $encryption = is_scalar($encryption) ? strtolower(trim((string) $encryption)) : '';
+
+        return in_array($encryption, ['ssl', 'tls'], true) ? $encryption : 'none';
+    }
+
+    public static function wpConfigEndpointMismatches($settings)
+    {
+        $mismatches = [];
+
+        if (defined('FLUENTMAIL_SMTP_HOST')) {
+            $host = strtolower(trim((string)Arr::get($settings, 'host')));
+
+            if ($host !== strtolower(trim((string)FLUENTMAIL_SMTP_HOST))) {
+                $mismatches[] = 'host';
+            }
+        }
+
+        if (defined('FLUENTMAIL_SMTP_PORT')) {
+            if (trim((string)Arr::get($settings, 'port')) !== trim((string)FLUENTMAIL_SMTP_PORT)) {
+                $mismatches[] = 'port';
+            }
+        }
+
+        return $mismatches;
+    }
+
+    public static function matchesWpConfigEndpoint($settings)
+    {
+        return !static::wpConfigEndpointMismatches($settings);
     }
 }

@@ -40,19 +40,20 @@ class Handler extends BaseHandler
     {
         $content_type = $this->getHeader('content-type');
         $body = [
-            'from'           => $this->getFrom(),
-            'subject'        => $this->getSubject(),
-            'h:X-Mailer'     => 'FluentMail - Mailgun',
-            'h:Content-Type' => $content_type
+            'from'       => $this->getFrom(),
+            'subject'    => $this->getSubject(),
+            'h:X-Mailer' => 'FluentMail - Mailgun'
         ];
 
-        if (stripos($content_type, 'html') === false) {
-            $body['text'] = $this->getBody();
-        } else if ($content_type == 'multipart/alternative') {
+        if (strtolower($content_type) == 'multipart/alternative') {
             $body['html'] = $this->getBody();
-            $body['text'] = $this->phpMailer->AltBody;
+            if ((string)$this->phpMailer->AltBody !== '') {
+                $body['text'] = $this->phpMailer->AltBody;
+            }
+        } else if (stripos($content_type, 'html') !== false) {
+            $body['html'] = $this->getBody();
         } else {
-            $body['html'] = $this->getBody();
+            $body['text'] = $this->getBody();
         }
 
         if ($replyTo = $this->getReplyTo()) {
@@ -173,28 +174,25 @@ class Handler extends BaseHandler
         $data = [];
         $payload = '';
         $attachments = $this->attributes['attachments'];
+        $contentIds = self::inlineContentIds($attachments);
 
-        foreach ($attachments as $attachment) {
-            $file = false;
-            $fileName = null;
-
+        foreach ($attachments as $index => $attachment) {
             try {
-                // Use secure file reading with path traversal protection
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = $this->getAttachmentName($attachment);
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
-                // Log error and skip this attachment
                 $this->logAttachmentFailure('Mailgun', $e);
-                $file = false;
-            }
-
-            if ($file === false) {
                 continue;
             }
 
+            // Mailgun uses an "inline" part's filename as its Content-ID, so an
+            // embedded image goes out under its cid and the HTML's cid: reference shows it.
+            $contentId = $contentIds[$index];
+
             $data[] = [
                 'content' => $file,
-                'name'    => $fileName,
+                'name'    => $contentId !== '' ? $contentId : self::attachmentName($attachment),
+                'type'    => self::attachmentType($attachment),
+                'inline'  => $contentId !== '',
             ];
         }
 
@@ -222,7 +220,11 @@ class Handler extends BaseHandler
             foreach ($data as $key => $attachment) {
                 $payload .= '--' . $boundary;
                 $payload .= "\r\n";
-                $payload .= 'Content-Disposition: form-data; name="attachment[' . $key . ']"; filename="' . $attachment['name'] . '"' . "\r\n\r\n";
+                // Inline parts use Mailgun's documented "inline" field; the type is
+                // sent because a cid such as "logo" or "0" has no extension to go by.
+                $field = $attachment['inline'] ? 'inline' : 'attachment[' . $key . ']';
+                $payload .= 'Content-Disposition: form-data; name="' . $field . '"; filename="' . $attachment['name'] . '"' . "\r\n";
+                $payload .= 'Content-Type: ' . $attachment['type'] . "\r\n\r\n";
                 $payload .= $attachment['content'];
                 $payload .= "\r\n";
             }
@@ -232,8 +234,6 @@ class Handler extends BaseHandler
             $params['body'] = $payload;
 
             $params['headers']['Content-Type'] = 'multipart/form-data; boundary=' . $boundary;
-
-            $this->attributes['headers']['content-type'] = 'multipart/form-data';
         }
 
         return $params;
