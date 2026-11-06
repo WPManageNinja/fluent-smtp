@@ -58,10 +58,22 @@ trait ValidatorTrait
 
         $lists = $ses->listVerifiedEmailAddresses();
 
-        if (is_wp_error($lists)) {
-            $this->throwValidationException(['api_error' => $lists->get_error_message()]);
+        return $this->validateIdentityLookupResult($lists);
+    }
+
+    protected function validateIdentityLookupResult($lists)
+    {
+        if (!is_wp_error($lists)) {
+            return true;
         }
 
-        return true;
+        $errorData = $lists->get_error_data();
+        $errorCode = isset($errorData['Error']['Code']) ? $errorData['Error']['Code'] : '';
+
+        if ($errorCode === 'AccessDenied') {
+            return true;
+        }
+
+        $this->throwValidationException(['api_error' => $lists->get_error_message()]);
     }
 }
