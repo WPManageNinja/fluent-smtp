@@ -76,6 +76,8 @@ FluentSMTP logs every email your WordPress site sends, so you can check at any t
 == 🎉 Amazon SES (Native API Connection) ==
 The Amazon SES connection sends your WordPress email through Amazon's low-cost, high-deliverability infrastructure, set up in a couple of minutes. It uses Amazon's current SES API and supports every SES region, including the EU Sovereign Cloud.
 
+For a least-privilege IAM policy, `ses:SendRawEmail` is required to send mail. The read-only actions `ses:ListIdentities` and `ses:GetSendQuota` are optional: they enable verified-identity discovery and dashboard quota diagnostics, but are not required for delivery.
+
 The SES client reuses its cURL connection across sends, so a burst of emails does not pay for a new handshake each time.
 
 == 🎉 Gmail or Google Workspace (Native API Connection) ==
