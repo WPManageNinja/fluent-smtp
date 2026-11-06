@@ -62,9 +62,15 @@ return function () {
 
                 return $this->validateIdentityLookupResult($lookup);
             }
+
+            public function identityLookupWasDeniedForTest()
+            {
+                return $this->identityLookupAccessDenied;
+            }
         };
 
         FsmtpTest::assert($handler->validateIdentityLookupForTest($lookup), 'access-denied identity lookup is optional');
+        FsmtpTest::assert($handler->identityLookupWasDeniedForTest(), 'the denied lookup is remembered for sender discovery');
     });
 
     FsmtpTest::case('SES accepts a successful identity lookup during connection validation', function () {

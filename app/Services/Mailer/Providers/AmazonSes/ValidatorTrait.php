@@ -9,6 +9,8 @@ trait ValidatorTrait
 {
     use BaseValidatorTrait;
 
+    protected $identityLookupAccessDenied = false;
+
     public function validateProviderInformation($connection)
     {
         $errors = [];
@@ -63,6 +65,8 @@ trait ValidatorTrait
 
     protected function validateIdentityLookupResult($lists)
     {
+        $this->identityLookupAccessDenied = false;
+
         if (!is_wp_error($lists)) {
             return true;
         }
@@ -71,6 +75,7 @@ trait ValidatorTrait
         $errorCode = isset($errorData['Error']['Code']) ? $errorData['Error']['Code'] : '';
 
         if ($errorCode === 'AccessDenied') {
+            $this->identityLookupAccessDenied = true;
             return true;
         }
 

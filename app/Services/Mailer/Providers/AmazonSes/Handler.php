@@ -148,6 +148,15 @@ class Handler extends BaseHandler
     public function getValidSendingIdentities($config)
     {
         $config = $this->filterConnectionVars($config);
+
+        if ($this->identityLookupAccessDenied) {
+            return [
+                'emails'          => [$config['sender_email']],
+                'verified_domain' => '',
+                'lookup_failed'   => true
+            ];
+        }
+
         $region = SimpleEmailService::regionToHost($config['region']);
 
         $ses = new SimpleEmailService(
