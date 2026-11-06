@@ -5,6 +5,24 @@ use FluentMail\App\Services\Mailer\Providers\AmazonSes\SimpleEmailService;
 use FluentMail\App\Services\Mailer\Providers\AmazonSes\SimpleEmailServiceRequest;
 
 return function () {
+    FsmtpTest::case('SES connection validation runs the identity lookup error path', function () {
+        $handler = new SesHandler();
+        $rejected = false;
+
+        try {
+            $handler->checkConnection([
+                'key_store'  => 'db',
+                'access_key' => 'suite-access',
+                'secret_key' => 'suite-secret',
+                'region'     => 'invalid-suite-region',
+            ]);
+        } catch (\FluentMail\Includes\Support\ValidationException $exception) {
+            $rejected = true;
+        }
+
+        FsmtpTest::assert($rejected, 'the live SES checkConnection path rejects a non-permission lookup error');
+    });
+
     FsmtpTest::case('SES accepts a denied optional identity lookup during connection validation', function () {
         $request = new class extends SimpleEmailServiceRequest {
             public function setParameter($key, $value, $replace = true)
