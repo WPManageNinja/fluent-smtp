@@ -149,7 +149,7 @@ class Handler extends BaseHandler
     {
         $config = $this->filterConnectionVars($config);
 
-        if ($this->identityLookupAccessDenied) {
+        if ($this->consumeIdentityLookupAccessDenied($config)) {
             return [
                 'emails'          => [$config['sender_email']],
                 'verified_domain' => '',
@@ -157,14 +157,7 @@ class Handler extends BaseHandler
             ];
         }
 
-        $region = SimpleEmailService::regionToHost($config['region']);
-
-        $ses = new SimpleEmailService(
-            $config['access_key'],
-            $config['secret_key'],
-            $region,
-            static::TRIGGER_ERROR
-        );
+        $ses = $this->makeSesClient($config, static::TRIGGER_ERROR);
 
         $validSenders = $ses->listVerifiedEmailAddresses();
         $addresses = [];
