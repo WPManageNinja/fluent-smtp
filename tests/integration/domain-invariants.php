@@ -328,6 +328,91 @@ return function () {
         }
     });
 
+    FsmtpTest::case('durable failed log insert emits the failed-send hook with its row ID', function () use (
+        $baseSettings,
+        $withSettings
+    ) {
+        global $wpdb;
+
+        $settings = $baseSettings();
+        $table = FsmtpFactory::emailLogTable();
+        $redirect = FsmtpFactory::productionLogTableRedirect($table);
+        $signals = [];
+        $observer = function ($status, $logId) use (&$signals) {
+            $signals[] = [$status, $logId];
+            return $status;
+        };
+
+        add_filter('query', $redirect);
+        add_filter('fluentmail_email_sending_failed', $observer, PHP_INT_MAX, 2);
+
+        try {
+            $result = $withSettings($settings, function () {
+                return (new FsmtpSuiteLogPersistenceHandler())->seed()->processResponse([
+                    'code'    => 550,
+                    'message' => 'Simulated provider rejection',
+                ], false);
+            });
+            $signal = isset($signals[0]) ? $signals[0] : [null, null];
+            $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM `{$table}` WHERE id = %d", $signal[1]), ARRAY_A);
+
+            FsmtpTest::assertSame(false, $result, 'durable insert send result');
+            FsmtpTest::assertSame(1, count($signals), 'durable insert hook count');
+            FsmtpTest::assert((int)$signal[1] > 0, 'durable insert hook row ID');
+            FsmtpTest::assertSame('failed', $row['status'], 'durable insert row status');
+        } finally {
+            remove_filter('fluentmail_email_sending_failed', $observer, PHP_INT_MAX);
+            remove_filter('query', $redirect);
+        }
+    });
+
+    FsmtpTest::case('durable fallback update emits the no-fallback notification action', function () use (
+        $baseSettings,
+        $withSettings
+    ) {
+        global $wpdb;
+
+        $settings = $baseSettings();
+        $table = FsmtpFactory::emailLogTable();
+        $logId = FsmtpFactory::insertLog($table, [
+            'response' => maybe_serialize(['message' => 'Primary failed']),
+            'extra'    => maybe_serialize(['provider' => 'Suite Primary']),
+            'status'   => 'failed',
+            'retries'  => 0,
+        ]);
+        $redirect = FsmtpFactory::productionLogTableRedirect($table);
+        $signals = [];
+        $observer = function ($rowId) use (&$signals) {
+            $signals[] = $rowId;
+        };
+
+        add_filter('query', $redirect);
+        add_action('fluentmail_email_sending_failed_no_fallback', $observer, PHP_INT_MAX, 1);
+
+        try {
+            $result = $withSettings($settings, function () use ($logId) {
+                return (new FsmtpSuiteLogPersistenceHandler())->seed($logId)->processResponse([
+                    'code'    => 551,
+                    'message' => 'Simulated fallback rejection',
+                ], false);
+            });
+            $row = $wpdb->get_row($wpdb->prepare("SELECT * FROM `{$table}` WHERE id = %d", $logId), ARRAY_A);
+            $response = maybe_unserialize($row['response']);
+
+            FsmtpTest::assertSame(false, $result, 'durable update send result');
+            FsmtpTest::assertSame([$logId], array_map('intval', $signals), 'durable update notification row IDs');
+            FsmtpTest::assertSame(1, (int)$row['retries'], 'durable update retry count');
+            FsmtpTest::assertSame(
+                'Simulated fallback rejection',
+                $response['fallback_response']['message'],
+                'durable update fallback response'
+            );
+        } finally {
+            remove_action('fluentmail_email_sending_failed_no_fallback', $observer, PHP_INT_MAX);
+            remove_filter('query', $redirect);
+        }
+    });
+
     FsmtpTest::case('failed log insert does not emit a failed-send hook without a durable row', function () use (
         $baseSettings,
         $withSettings
