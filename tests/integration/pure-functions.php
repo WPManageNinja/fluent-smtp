@@ -302,14 +302,14 @@ return function () {
 
         $failed = NotificationHelper::formatDiscordMessageBlock($handler, $logData);
         FsmtpTest::assert(
-            strpos($failed, '[' . fluentMailSiteTitle() . '] Failed to send email') === 0,
+            strpos($failed, '## [' . fluentMailSiteTitle() . '] Failed to send email') === 0,
             'failed discord heading'
         );
         FsmtpTest::assert(strpos($failed, 'status=failed') !== false, 'failed discord logs link keeps the failed filter');
 
         $fallback = NotificationHelper::formatDiscordMessageBlock($handler, $logData, true);
         FsmtpTest::assert(
-            strpos($fallback, '[' . fluentMailSiteTitle() . '] Email sent via fallback after primary failure') === 0,
+            strpos($fallback, '## [' . fluentMailSiteTitle() . '] Email sent via fallback after primary failure') === 0,
             'fallback discord heading'
         );
         FsmtpTest::assert(strpos($fallback, 'status=failed') === false, 'fallback discord logs link drops the failed filter');
