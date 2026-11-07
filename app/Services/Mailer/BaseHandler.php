@@ -31,6 +31,8 @@ class BaseHandler
 
     protected $existing_row_id = null;
 
+    protected $is_fallback_attempt = false;
+
     protected $sendStartedAt = null;
 
     protected $sendDurationMs = null;
@@ -773,21 +775,66 @@ class BaseHandler
 
                 $data['response'] = $this->serialize( $row['response']);
                 $data['retries'] = $row['retries'] + 1;
-                (new Logger())->updateLog($data, ['id' => $row['id']]);
+                $updated = (new Logger())->updateLog($data, ['id' => $row['id']]);
+
+                if (!$updated) {
+                    throw new \RuntimeException('Failed to update the email log.');
+                }
 
                 if(!$status) {
                     do_action('fluentmail_email_sending_failed_no_fallback', $row['id'], $this, $data);
                 }
             }
         } else {
-            $logId = (new Logger)->add($data);
+            try {
+                $logId = $this->insertLog($data);
+            } catch (\Throwable $e) {
+                if ($status || $this->is_fallback_attempt) {
+                    throw $e;
+                }
+
+                /*
+                 * The failure filter also dispatches the configured fallback,
+                 * so a log outage must not prevent a backup provider from
+                 * delivering the message. Keep the existing zero-ID contract
+                 * for that filter, but record why there is no durable row.
+                 */
+                fluentMailDebugLog('Failed to write email log - ' . $e->getMessage());
+                $logId = 0;
+            }
+
             if(!$status) {
-                // We have to fire an action for this failed job
-                $status = apply_filters('fluentmail_email_sending_failed', $status, $logId, $this, $data);
+                if ($this->is_fallback_attempt) {
+                    do_action('fluentmail_email_sending_failed_no_fallback', $logId, $this, $data);
+                } else {
+                    // We have to fire an action for this failed job
+                    $status = apply_filters('fluentmail_email_sending_failed', $status, $logId, $this, $data);
+                }
             }
         }
 
         return $status;
+    }
+
+    /**
+     * Insert a completed-send log and return its durable row ID.
+     *
+     * @param array $data
+     * @return int
+     */
+    protected function insertLog($data)
+    {
+        $logId = (new Logger)->add($data);
+
+        if ($logId instanceof \Throwable) {
+            throw $logId;
+        }
+
+        if (!is_numeric($logId) || (int) $logId < 1) {
+            throw new \RuntimeException('Failed to insert the email log.');
+        }
+
+        return (int) $logId;
     }
 
     protected function shouldBeLogged($status)
@@ -893,6 +940,7 @@ class BaseHandler
     public function setRowId($id)
     {
         $this->existing_row_id = $id;
+        $this->is_fallback_attempt = true;
     }
 
     public function addNewSenderEmail($connection, $email)

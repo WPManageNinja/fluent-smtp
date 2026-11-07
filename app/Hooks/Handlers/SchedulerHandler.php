@@ -23,6 +23,8 @@ class SchedulerHandler
 
         add_action('fluentmail_email_sending_failed_no_fallback', array($this, 'maybeSendNotification'), 10, 3);
 
+        add_action('fluentmail_email_sent_via_fallback', array($this, 'maybeSendFallbackNotification'), 10, 3);
+
         add_action('fluentmail_connection_health_failed', array($this, 'notifyUnhealthyConnections'));
     }
 
@@ -202,16 +204,21 @@ class SchedulerHandler
         $settings = (new \FluentMail\App\Models\Settings())->getSettings();
 
         $fallbackConnectionId = \FluentMail\Includes\Support\Arr::get($settings, 'misc.fallback_connection');
+        $hasDurableLog = is_numeric($logId) && (int)$logId > 0;
 
         if (!$fallbackConnectionId) {
-            do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
+            if ($hasDurableLog) {
+                do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
+            }
             return false;
         }
 
         $fallbackConnection = \FluentMail\Includes\Support\Arr::get($settings, 'connections.' . $fallbackConnectionId);
 
         if (!$fallbackConnection) {
-            do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
+            if ($hasDurableLog) {
+                do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
+            }
             return false;
         }
 
@@ -222,7 +229,15 @@ class SchedulerHandler
 
         // Trap the fluentSMTPMail mailer here
         $phpMailer = new \FluentMail\App\Services\Mailer\FluentPHPMailer($phpMailer);
-        return $phpMailer->sendViaFallback($logId);
+        $sent = $phpMailer->sendViaFallback($logId);
+
+        if ($sent) {
+            // The mail went out, so the usual failure alert never fires and the
+            // broken primary connection would stay silent. Announce it instead.
+            do_action('fluentmail_email_sent_via_fallback', $logId, $handler, $data);
+        }
+
+        return $sent;
     }
 
     public function renewGmailToken()
@@ -398,6 +413,26 @@ class SchedulerHandler
 
     public function maybeSendNotification($rowId, $handler, $logData = [])
     {
+        return $this->sendChannelNotifications($handler, $logData, false);
+    }
+
+    public function maybeSendFallbackNotification($rowId, $handler, $logData = [])
+    {
+        return $this->sendChannelNotifications($handler, $logData, true);
+    }
+
+    /**
+     * Push an email alert over every active channel. The fallback flag flips
+     * the copy to "the fallback connection delivered the mail" wording, since
+     * the primary connection is the one that broke.
+     *
+     * @param object $handler
+     * @param array $logData
+     * @param bool $viaFallback
+     * @return bool
+     */
+    private function sendChannelNotifications($handler, $logData = [], $viaFallback = false)
+    {
         $lastNotificationSent = get_option('_fsmtp_last_notification_sent');
         if ($lastNotificationSent && (time() - $lastNotificationSent) < 60) {
             return false;
@@ -417,10 +452,21 @@ class SchedulerHandler
             $channelSettings = Arr::get($channel, 'settings', []);
 
             if ($driver == 'telegram') {
+                $errorMessage = $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')));
+
+                if ($viaFallback) {
+                    // Telegram takes plain text only, so the fallback context rides on the message itself.
+                    $errorMessage = sprintf(
+                        /* translators: %s: error message from the primary connection */
+                        __('Primary connection failed but the email was delivered by the fallback connection. %s', 'fluent-smtp'),
+                        $errorMessage
+                    );
+                }
+
                 $data = [
                     'token_id'      => Arr::get($channelSettings, 'token'),
                     'provider'      => $handler->getSetting('provider'),
-                    'error_message' => $this->getErrorMessageFromResponse(maybe_unserialize(Arr::get($logData, 'response')))
+                    'error_message' => $errorMessage
                 ];
 
                 NotificationHelper::sendFailedNotificationTele($data);
@@ -428,22 +474,23 @@ class SchedulerHandler
             }
 
             if ($driver == 'slack') {
-                NotificationHelper::sendSlackMessage(NotificationHelper::formatSlackMessageBlock($handler, $logData), Arr::get($channelSettings, 'webhook_url'), false);
+                NotificationHelper::sendSlackMessage(NotificationHelper::formatSlackMessageBlock($handler, $logData, $viaFallback), Arr::get($channelSettings, 'webhook_url'), false);
                 continue;
             }
 
             if ($driver == 'discord') {
-                NotificationHelper::sendDiscordMessage(NotificationHelper::formatDiscordMessageBlock($handler, $logData), Arr::get($channelSettings, 'webhook_url'), false);
+                NotificationHelper::sendDiscordMessage(NotificationHelper::formatDiscordMessageBlock($handler, $logData, $viaFallback), Arr::get($channelSettings, 'webhook_url'), false);
                 continue;
             }
 
             if ($driver == 'pushover') {
                 NotificationHelper::sendPushoverMessage(
-                    NotificationHelper::formatPushoverMessage($handler, $logData),
+                    NotificationHelper::formatPushoverMessage($handler, $logData, $viaFallback),
                     Arr::get($channelSettings, 'api_token'),
                     Arr::get($channelSettings, 'user_key'),
                     false,
-                    1 // High priority for failed emails
+                    1, // High priority for failed emails
+                    NotificationHelper::getNotificationHeading($viaFallback)
                 );
                 continue;
             }
