@@ -773,7 +773,11 @@ class BaseHandler
 
                 $data['response'] = $this->serialize( $row['response']);
                 $data['retries'] = $row['retries'] + 1;
-                (new Logger())->updateLog($data, ['id' => $row['id']]);
+                $updated = (new Logger())->updateLog($data, ['id' => $row['id']]);
+
+                if (!$updated) {
+                    throw new \RuntimeException('Failed to update the email log.');
+                }
 
                 if(!$status) {
                     do_action('fluentmail_email_sending_failed_no_fallback', $row['id'], $this, $data);
@@ -781,6 +785,15 @@ class BaseHandler
             }
         } else {
             $logId = (new Logger)->add($data);
+
+            if ($logId instanceof \Throwable) {
+                throw $logId;
+            }
+
+            if (!is_numeric($logId) || (int) $logId < 1) {
+                throw new \RuntimeException('Failed to insert the email log.');
+            }
+
             if(!$status) {
                 // We have to fire an action for this failed job
                 $status = apply_filters('fluentmail_email_sending_failed', $status, $logId, $this, $data);
