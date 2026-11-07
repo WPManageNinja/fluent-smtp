@@ -202,16 +202,21 @@ class SchedulerHandler
         $settings = (new \FluentMail\App\Models\Settings())->getSettings();
 
         $fallbackConnectionId = \FluentMail\Includes\Support\Arr::get($settings, 'misc.fallback_connection');
+        $hasDurableLog = is_numeric($logId) && (int)$logId > 0;
 
         if (!$fallbackConnectionId) {
-            do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
+            if ($hasDurableLog) {
+                do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
+            }
             return false;
         }
 
         $fallbackConnection = \FluentMail\Includes\Support\Arr::get($settings, 'connections.' . $fallbackConnectionId);
 
         if (!$fallbackConnection) {
-            do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
+            if ($hasDurableLog) {
+                do_action('fluentmail_email_sending_failed_no_fallback', $logId, $handler, $data);
+            }
             return false;
         }
 

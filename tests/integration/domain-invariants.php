@@ -413,7 +413,7 @@ return function () {
         }
     });
 
-    FsmtpTest::case('failed log insert does not emit a failed-send hook without a durable row', function () use (
+    FsmtpTest::case('failed log insert preserves fallback routing but suppresses notification without a durable row', function () use (
         $baseSettings,
         $withSettings
     ) {
@@ -423,9 +423,13 @@ return function () {
         $table = $wpdb->prefix . FLUENT_MAIL_DB_PREFIX . 'email_logs';
         $missingTable = $wpdb->prefix . 'fsmtp_missing_' . strtolower(wp_generate_password(8, false, false));
         $signals = [];
+        $notificationSignals = [];
         $observer = function ($status, $logId) use (&$signals) {
             $signals[] = [$status, $logId];
             return $status;
+        };
+        $notificationObserver = function ($rowId) use (&$notificationSignals) {
+            $notificationSignals[] = $rowId;
         };
         $breakInsert = function ($query) use ($table, $missingTable) {
             if (stripos($query, 'INSERT INTO') !== false && stripos($query, $table) !== false) {
@@ -435,6 +439,7 @@ return function () {
         };
 
         add_filter('fluentmail_email_sending_failed', $observer, PHP_INT_MAX, 2);
+        add_action('fluentmail_email_sending_failed_no_fallback', $notificationObserver, PHP_INT_MAX, 1);
         add_filter('query', $breakInsert, PHP_INT_MAX);
         $wasSuppressing = $wpdb->suppress_errors();
         $wpdb->suppress_errors(true);
@@ -448,11 +453,137 @@ return function () {
             });
 
             FsmtpTest::assertSame(false, $result, 'failed insert send result');
-            FsmtpTest::assertSame([], $signals, 'failed insert hook signals');
+            FsmtpTest::assertSame([[false, 0]], $signals, 'failed insert fallback-routing signals');
+            FsmtpTest::assertSame([], $notificationSignals, 'failed insert notification signals');
         } finally {
             $wpdb->suppress_errors($wasSuppressing);
             remove_filter('query', $breakInsert, PHP_INT_MAX);
+            remove_action('fluentmail_email_sending_failed_no_fallback', $notificationObserver, PHP_INT_MAX);
             remove_filter('fluentmail_email_sending_failed', $observer, PHP_INT_MAX);
+        }
+    });
+
+    FsmtpTest::case('failed primary insert still delivers through a configured fallback without recursion', function () use (
+        $baseSettings,
+        $withSettings
+    ) {
+        global $wpdb;
+
+        if (!class_exists('PHPMailer\\PHPMailer\\PHPMailer')) {
+            require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
+            require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+            require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+        }
+
+        $fallbackEmail = 'fallback-no-row-' . FsmtpTest::uniq() . '@example.test';
+        $settings = $baseSettings();
+        $settings['misc']['fallback_connection'] = 'suite-fallback-no-row';
+        $settings['connections']['suite-fallback-no-row'] = [
+            'title' => 'Suite Fallback Without Row',
+            'provider_settings' => [
+                'provider'     => 'smtp',
+                'sender_email' => $fallbackEmail,
+            ],
+        ];
+
+        $table = $wpdb->prefix . FLUENT_MAIL_DB_PREFIX . 'email_logs';
+        $missingTable = $wpdb->prefix . 'fsmtp_missing_' . strtolower(wp_generate_password(8, false, false));
+        $routingSignals = [];
+        $notificationSignals = [];
+        $routingObserver = function ($status, $logId) use (&$routingSignals) {
+            $routingSignals[] = [$status, $logId];
+            return $status;
+        };
+        $notificationObserver = function ($rowId) use (&$notificationSignals) {
+            $notificationSignals[] = $rowId;
+        };
+        $breakInsert = function ($query) use ($table, $missingTable) {
+            if (stripos($query, 'INSERT INTO') !== false && stripos($query, $table) !== false) {
+                return str_replace($table, $missingTable, $query);
+            }
+            return $query;
+        };
+
+        $phpMailer = new \PHPMailer\PHPMailer\PHPMailer(true);
+        $phpMailer->CharSet = 'UTF-8';
+        $phpMailer->setFrom('primary-no-row-' . FsmtpTest::uniq() . '@example.test', 'Suite Primary');
+        $phpMailer->addAddress('recipient@example.test');
+        $phpMailer->Subject = 'Suite fallback without row';
+        $phpMailer->Body = 'Suite fallback without row body';
+        $handler = (new FsmtpSuiteLogPersistenceHandler())->seed()->setPhpMailer($phpMailer);
+
+        add_filter('fluentmail_email_sending_failed', $routingObserver, PHP_INT_MAX, 2);
+        add_action('fluentmail_email_sending_failed_no_fallback', $notificationObserver, PHP_INT_MAX, 1);
+        add_filter('query', $breakInsert, PHP_INT_MAX);
+        $wasSuppressing = $wpdb->suppress_errors();
+        $wpdb->suppress_errors(true);
+
+        try {
+            $result = $withSettings($settings, function () use ($handler) {
+                return $handler->processResponse([
+                    'code'    => 550,
+                    'message' => 'Simulated primary rejection',
+                ], false);
+            });
+
+            FsmtpTest::assertSame(true, $result, 'fallback without row send result');
+            FsmtpTest::assertSame($fallbackEmail, $phpMailer->From, 'fallback without row sender');
+            FsmtpTest::assertSame([[true, 0]], $routingSignals, 'fallback without row routing signals');
+            FsmtpTest::assertSame([], $notificationSignals, 'fallback without row notification signals');
+        } finally {
+            $wpdb->suppress_errors($wasSuppressing);
+            remove_filter('query', $breakInsert, PHP_INT_MAX);
+            remove_action('fluentmail_email_sending_failed_no_fallback', $notificationObserver, PHP_INT_MAX);
+            remove_filter('fluentmail_email_sending_failed', $routingObserver, PHP_INT_MAX);
+        }
+    });
+
+    FsmtpTest::case('fallback failure without an original row logs once and does not select fallback again', function () use (
+        $baseSettings,
+        $withSettings
+    ) {
+        global $wpdb;
+
+        $settings = $baseSettings();
+        $table = FsmtpFactory::emailLogTable();
+        $redirect = FsmtpFactory::productionLogTableRedirect($table);
+        $routingSignals = [];
+        $notificationSignals = [];
+        $routingObserver = function ($status, $logId) use (&$routingSignals) {
+            $routingSignals[] = [$status, $logId];
+            return $status;
+        };
+        $notificationObserver = function ($rowId) use (&$notificationSignals) {
+            $notificationSignals[] = $rowId;
+        };
+
+        add_filter('query', $redirect);
+        add_filter('fluentmail_email_sending_failed', $routingObserver, PHP_INT_MAX, 2);
+        add_action('fluentmail_email_sending_failed_no_fallback', $notificationObserver, PHP_INT_MAX, 1);
+
+        try {
+            $handler = (new FsmtpSuiteLogPersistenceHandler())->seed();
+            $handler->setRowId(0);
+            $result = $withSettings($settings, function () use ($handler) {
+                return $handler->processResponse([
+                    'code'    => 551,
+                    'message' => 'Simulated fallback rejection',
+                ], false);
+            });
+            $row = $wpdb->get_row("SELECT * FROM `{$table}` ORDER BY id DESC LIMIT 1", ARRAY_A);
+
+            FsmtpTest::assertSame(false, $result, 'fallback failure without row result');
+            FsmtpTest::assertSame([], $routingSignals, 'fallback failure recursive routing signals');
+            FsmtpTest::assertSame(
+                [(int)$row['id']],
+                array_map('intval', $notificationSignals),
+                'fallback failure notification row IDs'
+            );
+            FsmtpTest::assertSame('failed', $row['status'], 'fallback failure durable row status');
+        } finally {
+            remove_action('fluentmail_email_sending_failed_no_fallback', $notificationObserver, PHP_INT_MAX);
+            remove_filter('fluentmail_email_sending_failed', $routingObserver, PHP_INT_MAX);
+            remove_filter('query', $redirect);
         }
     });
 
