@@ -61,8 +61,12 @@ class Handler extends BaseHandler
             $postData['headers_' . $key] = $key . ': ' . trim($header['value']);
         }
 
+        $parts = $this->attachmentParts($postData['bodyHtml']);
+        $postData['bodyHtml'] = $parts['html'];
+
         $this->parseAllPostData($postData);
-        $this->setAttachments();
+        $this->setAttachments($parts['files']);
+        unset($parts); // the request body now holds the file contents
         $this->postbody[] = '--' . $this->boundary . '--';
 
         $actualData = implode('', $this->postbody);
@@ -221,32 +225,84 @@ class Handler extends BaseHandler
         return $this->getParam('message');
     }
 
-    protected function setAttachments()
+    /**
+     * The attachments as they go to Elastic Email, read first so the HTML is only
+     * pointed at images really sent. Elastic Email has no inline field, but embeds
+     * an attachment whose file name is a src's cid (undocumented, seen in live
+     * sends). An image whose cid can be its name keeps it; one whose cid cannot
+     * gets a generated name and the request's HTML is pointed at it; anything
+     * else keeps its real name.
+     *
+     * @param string $html The HTML being sent, '' for a plain-text email.
+     * @return array ['html' => string, 'files' => array of [name, type, content, index]]
+     */
+    protected function attachmentParts($html)
     {
-        $rawAttachments = $this->getParam('attachments');
+        $attachments = (array) $this->getParam('attachments');
+        $files = [];
 
-        if (empty($rawAttachments) === true) {
-            return false;
+        if (!$attachments) {
+            return ['html' => $html, 'files' => $files];
         }
 
-        foreach ($rawAttachments as $i => $attachment) {
+        $contentIds = self::inlineContentIds($attachments);
+        $inlineNames = self::inlineNamesForUnsafeCids($attachments, $html);
+
+        foreach ($attachments as $i => $attachment) {
             if (empty($attachment) === true) {
                 continue;
             }
 
             try {
-                $fileContent = self::attachmentContent($attachment);
+                $content = self::attachmentContent($attachment);
             } catch (\Exception $e) {
                 $this->logAttachmentFailure('ElasticMail', $e);
                 continue;
             }
 
-            // Add boundary and headers for attachment
+            $name = self::attachmentName($attachment);
+
+            if (isset($inlineNames[$i])) {
+                $name = $inlineNames[$i]['name'];
+            } elseif (self::canNameByCid($contentIds[$i], $attachment, $name) && self::isShownBySrc($contentIds[$i], $html)) {
+                $name = $contentIds[$i];
+            }
+
+            $files[] = ['name' => $name, 'type' => self::attachmentType($attachment), 'content' => $content, 'index' => $i];
+        }
+
+        if ($inlineNames) {
+            $html = self::pointHtmlAtInlineNames($html, $inlineNames, array_column($files, 'name'));
+        }
+
+        return ['html' => $html, 'files' => $files];
+    }
+
+    /**
+     * Whether a src uses this cid, quoted or not.
+     *
+     * @param string $cid
+     * @param string $html
+     * @return bool
+     */
+    protected static function isShownBySrc($cid, $html)
+    {
+        return $cid !== '' && (bool) preg_match('/\ssrc\s*=\s*["\']?cid:(?-i:' . preg_quote($cid, '/') . ')["\'\s>\/]/i', $html);
+    }
+
+    /**
+     * Writes the prepared attachment parts into the request body.
+     *
+     * @param array $files From attachmentParts().
+     */
+    protected function setAttachments($files = [])
+    {
+        foreach ($files as $file) {
             $this->postbody[] = '--' . $this->boundary . "\r\n";
-            $this->postbody[] = 'Content-Disposition: form-data; name="attachments' . ($i + 1) . '"; filename="' . self::attachmentName($attachment) . '"' . "\r\n";
-            $this->postbody[] = 'Content-Type: ' . self::attachmentType($attachment) . "\r\n";
+            $this->postbody[] = 'Content-Disposition: form-data; name="attachments' . ($file['index'] + 1) . '"; filename="' . $file['name'] . '"' . "\r\n";
+            $this->postbody[] = 'Content-Type: ' . $file['type'] . "\r\n";
             $this->postbody[] = "\r\n";
-            $this->postbody[] = $fileContent . "\r\n";
+            $this->postbody[] = $file['content'] . "\r\n";
         }
     }
 

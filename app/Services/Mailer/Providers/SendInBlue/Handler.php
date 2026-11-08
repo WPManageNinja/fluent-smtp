@@ -25,6 +25,11 @@ class Handler extends BaseHandler
         'wav', 'aif', 'aifc', 'aiff', 'mp4', 'mov', 'avi', 'mkv', 'mpeg', 'mpg', 'wmv'
     ];
 
+    /**
+     * Attachment key => ['cid' => string, 'name' => string], set for each send.
+     */
+    protected $inlineNames = [];
+
     public function send()
     {
         if ($this->preSend()) {
@@ -60,7 +65,12 @@ class Handler extends BaseHandler
         $body = array_merge($body, $recipients);
 
         if (!empty($this->getParam('attachments'))) {
+            $this->inlineNames = isset($body['htmlContent']) ? $this->inlineNames($body['htmlContent']) : [];
             $body['attachment'] = $this->getAttachments();
+
+            if ($this->inlineNames) {
+                $body['htmlContent'] = self::pointHtmlAtInlineNames($body['htmlContent'], $this->inlineNames, array_column($body['attachment'], 'name'));
+            }
         }
 
         $params = [
@@ -163,12 +173,48 @@ class Handler extends BaseHandler
         return $this->getParam('message');
     }
 
+    /**
+     * File names for the inline images this HTML shows.
+     *
+     * Brevo documents no inline images and its staff say they are unsupported,
+     * but it embeds an attachment when the HTML's cid equals its whole file
+     * name (seen in live sends). It refuses a name without an allowed extension,
+     * so most cids cannot be the name: the image gets a generated one, and
+     * pointHtmlAtInlineNames() edits the request's HTML to match.
+     *
+     * @param string $html
+     * @return array Attachment key => ['cid' => string, 'name' => string].
+     */
+    protected function inlineNames($html)
+    {
+        $attachments = $this->getParam('attachments');
+        $allowed = $this->allowedAttachmentExts;
+
+        $keep = function ($cid, $attachment, $name, $plainSrc) use ($allowed) {
+            $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+
+            if ($extension !== '' && $cid === $name && $plainSrc) {
+                return true;
+            }
+
+            if ($extension === '') {
+                $extension = ltrim(self::extensionForType(self::attachmentType($attachment)), '.');
+            }
+
+            return !in_array($extension, $allowed, true);
+        };
+
+        return self::inlineImageNames($attachments, $html, $keep, array_map(function ($attachment) {
+            return self::attachmentName($attachment);
+        }, $attachments));
+    }
+
     protected function getAttachments()
     {
         $files = [];
 
-        foreach ($this->getParam('attachments') as $attachment) {
-            $name = self::attachmentName($attachment);
+        foreach ($this->getParam('attachments') as $key => $attachment) {
+            $name = isset($this->inlineNames[$key]) ? $this->inlineNames[$key]['name'] : self::attachmentName($attachment);
 
             // The allow-list is applied to the delivered name, the only file name
             // Brevo receives; an in-memory attachment has no path. A file on disk
