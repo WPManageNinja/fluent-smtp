@@ -6,7 +6,7 @@
     <div class="fluent-mail-app fsm_app">
         <div class="fsm_app_bar" :class="{'is-scrolled': scrolled}">
             <div class="fsm_app_logo">
-                <router-link :to="{name: 'dashboard'}" :aria-label="$t('Dashboard')">
+                <router-link :to="{name: canManage ? 'dashboard' : 'logs'}" :aria-label="$t(canManage ? 'Dashboard' : 'Email Logs')">
                     <!--
                         Two files rather than a filter. The wordmark is a pink mark beside
                         near-black lettering, so flattening and inverting it the way a
@@ -39,13 +39,13 @@
                     this plugin, so it is a button in the bar rather than a screen buried
                     behind Settings, which is where it used to live.
                 -->
-                <el-button type="primary" size="small" class="fsm_app_bar_cta"
+                <el-button v-if="canManage" type="primary" size="small" class="fsm_app_bar_cta"
                            :class="{'is_current': onTestScreen}"
                            @click="$router.push({name: 'test'})">
                     {{ $t('Send Test Email') }}
                 </el-button>
 
-                <router-link :to="{name: 'docs'}" class="fsm_app_bar_help"
+                <router-link v-if="canManage" :to="{name: 'docs'}" class="fsm_app_bar_help"
                              :title="$t('Documentation')" :aria-label="$t('Documentation')">
                     <el-icon><FsmIconInfo/></el-icon>
                 </router-link>
@@ -122,7 +122,9 @@
                 ];
             },
             setMenus() {
-                this.items = this.applyFilters('fluent_mail_top_menus', this.defaultRoutes());
+                this.items = this.canManage
+                    ? this.applyFilters('fluent_mail_top_menus', this.defaultRoutes())
+                    : [{route: 'logs', title: this.$t('Email Logs'), match: 'logs'}];
             },
             /*
              * `match` is what keeps Settings lit while the add and edit screens

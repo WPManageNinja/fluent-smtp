@@ -18,10 +18,17 @@ window.FluentMail.Router = VueRouter;
 
 const router = VueRouter.createRouter({
     history: VueRouter.createWebHashHistory(),
-    routes: window.FluentMail.applyFilters('fluent_mail_global_routes', routes)
+    routes: window.FluentMail.getApplicationRoutes(routes)
 });
 
 const app = Vue.createApp(Application);
+
+// Restrict before a management component can mount or fetch its data.
+router.beforeEach(to => {
+    if (window.FluentMailAdmin.permissions?.manage === false && to.name !== 'logs') {
+        return {name: 'logs'};
+    }
+});
 
 app.use(router);
 // v-loading is a directive, so unlike the tags it cannot be auto-imported.
