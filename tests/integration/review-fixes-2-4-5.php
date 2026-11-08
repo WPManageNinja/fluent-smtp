@@ -295,7 +295,7 @@ return function () {
         FsmtpTest::assertSame('[false,true]', trim($output), 'outside rejected, inside accepted');
     });
 
-    FsmtpTest::case('Brevo: an unnamed in-memory attachment of an allow-listed type gets its extension', function () {
+    FsmtpTest::case('Brevo: an unnamed in-memory attachment of a common type gets its extension', function () {
         $mailer = new \PHPMailer\PHPMailer\PHPMailer(true);
         foreach (['image/tiff' => '.tif', 'audio/mpeg' => '.mp3', 'video/mp4' => '.mp4', 'application/vnd.openxmlformats-officedocument.presentationml.presentation' => '.pptx', 'application/pdf' => '.pdf'] as $type => $extension) {
             $row = [0 => 'data', 1 => '', 2 => '', 3 => 'base64', 4 => $type, 5 => true, 6 => 'attachment', 7 => 0];
