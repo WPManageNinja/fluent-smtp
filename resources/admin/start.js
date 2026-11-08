@@ -23,6 +23,13 @@ const router = VueRouter.createRouter({
 
 const app = Vue.createApp(Application);
 
+// Restrict before a management component can mount or fetch its data.
+router.beforeEach(to => {
+    if (window.FluentMailAdmin.permissions?.manage === false && to.name !== 'logs') {
+        return {name: 'logs'};
+    }
+});
+
 app.use(router);
 // v-loading is a directive, so unlike the tags it cannot be auto-imported.
 app.use(ElLoading);

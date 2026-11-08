@@ -69,6 +69,11 @@ export default class FluentMail {
         const self = this;
 
         return {
+            computed: {
+                canManage() {
+                    return !self.appVars.permissions || self.appVars.permissions.manage === true;
+                }
+            },
             data() {
                 return {
                     appVars: self.appVars,

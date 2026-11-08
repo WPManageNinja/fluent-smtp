@@ -143,6 +143,19 @@ class AdminMenuHandler
 
     public function addMenu()
     {
+        if (!fluentMailCurrentUserCanManage()) {
+            if (fluentMailCurrentUserCanViewLogs()) {
+                add_menu_page(
+                    __('Email Logs', 'fluent-smtp'),
+                    __('Email Logs', 'fluent-smtp'),
+                    'fluentmail_view_logs',
+                    'fluent-mail',
+                    [$this, 'renderApp'],
+                    'dashicons-email'
+                );
+            }
+            return;
+        }
         $title = $this->app->applyCustomFilters('admin-menu-title', __('FluentSMTP', 'fluent-smtp'));
 
         add_submenu_page(
@@ -159,9 +172,12 @@ class AdminMenuHandler
 
     public function renderApp()
     {
+        if (!fluentMailCurrentUserCanViewLogs()) {
+            wp_die(esc_html__('You do not have permission to do this.', 'fluent-smtp'), '', ['response' => 403]);
+        }
         $dailyTaskHookName = 'fluentmail_do_daily_scheduled_tasks';
 
-        if (!wp_next_scheduled($dailyTaskHookName)) {
+        if (fluentMailCurrentUserCanManage() && !wp_next_scheduled($dailyTaskHookName)) {
             wp_schedule_event(time(), 'daily', $dailyTaskHookName);
         }
 
@@ -208,6 +224,9 @@ class AdminMenuHandler
 
     public function enqueueAssets()
     {
+        if (!fluentMailCurrentUserCanViewLogs()) {
+            return;
+        }
         add_action('wp_print_scripts', function () {
             $isSkip = apply_filters('fluentsmtp_skip_no_conflict', false);
 
@@ -290,10 +309,14 @@ class AdminMenuHandler
         // inverse — it hides the one-click install button — so it must be negated.
         $disable_installation = !wp_is_file_mod_allowed('install_plugins');
 
-        $settings = $this->getMailerSettings();
+        $canManage = fluentMailCurrentUserCanManage();
+        $settings = $canManage ? $this->getMailerSettings() : [
+            'misc' => ['log_emails' => 'yes'],
+            'providers' => []
+        ];
 
         $recommendedSettings = false;
-        if (empty($settings['connections'])) {
+        if ($canManage && empty($settings['connections'])) {
             $recommendedSettings = (new Converter())->getSuggestedConnection();
 
             /*
@@ -314,6 +337,7 @@ class AdminMenuHandler
         }
 
         wp_localize_script('fluent_mail_admin_app_boot', 'FluentMailAdmin', [
+            'permissions'            => ['manage' => $canManage, 'view_logs' => true],
             'slug'                   => FLUENTMAIL,
             // What a saved-but-not-shown credential looks like in `settings`. The
             // password fields compare against it to render themselves as "saved".
@@ -338,7 +362,7 @@ class AdminMenuHandler
              * right across a daylight-saving change on a page nobody has reloaded.
              */
             'site_timezone'          => wp_timezone_string(),
-            'require_optin'          => $this->isRequireOptin(),
+            'require_optin'          => $canManage && $this->isRequireOptin(),
             'has_ninja_tables'       => defined('NINJA_TABLES_VERSION'),
             'disable_recommendation' => apply_filters('fluentmail_disable_recommendation', false),
             'disable_installation'   => $disable_installation,

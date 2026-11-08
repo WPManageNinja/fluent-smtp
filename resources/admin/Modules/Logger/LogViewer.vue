@@ -34,7 +34,7 @@
                                     @click="handleRetryClick(log)"
                                     :plain="true"
                                     :loading="retrying"
-                                    v-if="log.status == 'failed'"
+                                    v-if="canManage && log.status == 'failed'"
                                 >{{ $t('Retry') }}</el-button>
 
                                 <el-button
@@ -43,7 +43,7 @@
                                     icon="FsmIconRefreshRight"
                                     @click="handleResendClick"
                                     :disabled="retrying"
-                                    v-if="log.status == 'sent'"
+                                    v-if="canManage && log.status == 'sent'"
                                 >
                                     {{ $t('Resend') }}
                                 </el-button>
