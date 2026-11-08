@@ -157,6 +157,18 @@ return function () {
         }
     });
 
+    FsmtpTest::case('inline images: Groundmail sets content_id on the image only, and sends in-memory files', function () use ($send, $json, $png, $pdf) {
+        $rows = $json($send(\FluentMail\App\Services\Mailer\Providers\Groundmail\Handler::class, 'https://api.groundmail.dev/', 200))['attachments'];
+        $byName = array_column($rows, null, 'name');
+
+        FsmtpTest::assertSame(['logo.png', 'invoice.pdf'], array_column($rows, 'name'), 'both in-memory files sent');
+        FsmtpTest::assertSame('suite-logo', $byName['logo.png']['content_id'], 'image cid');
+        FsmtpTest::assertSame('image/png', $byName['logo.png']['content_type'], 'image type');
+        FsmtpTest::assertSame(base64_encode($png), $byName['logo.png']['data'], 'image bytes');
+        FsmtpTest::assert(!isset($byName['invoice.pdf']['content_id']), 'no content_id on the pdf');
+        FsmtpTest::assertSame(base64_encode($pdf), $byName['invoice.pdf']['data'], 'pdf bytes');
+    });
+
     FsmtpTest::case('inline images: Postmark sets ContentID with the cid: prefix on the image only', function () use ($send, $json) {
         $rows = $json($send(\FluentMail\App\Services\Mailer\Providers\Postmark\Handler::class, 'https://api.postmarkapp.com/', 200))['Attachments'];
         $byName = array_column($rows, null, 'Name');

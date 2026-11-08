@@ -17,6 +17,7 @@ $singletons = [
     'smtp2go'      => 'FluentMail\App\Services\Mailer\Providers\Smtp2Go\Handler',
     'tosend' => 'FluentMail\App\Services\Mailer\Providers\ToSend\Handler',
     'cloudflare'   => 'FluentMail\App\Services\Mailer\Providers\Cloudflare\Handler',
+    'groundmail'   => 'FluentMail\App\Services\Mailer\Providers\Groundmail\Handler',
 ];
 
 foreach ($singletons as $key => $className) {
