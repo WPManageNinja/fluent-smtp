@@ -52,6 +52,9 @@ return function () {
         FsmtpTest::case('log reader bootstrap and top-level menu contain no manager configuration', function () {
             global $menu, $submenu, $wp_scripts, $wp_styles;
             $saved = [$menu, $submenu, $wp_scripts, $wp_styles];
+            $extensionCalls = 0;
+            $extension = function () use (&$extensionCalls) { $extensionCalls++; };
+            add_action('fluent_mail_loading_app', $extension);
             try {
                 $menu = []; $submenu = [];
                 $wp_scripts = null; $wp_styles = null;
@@ -60,12 +63,14 @@ return function () {
                 $matches = array_values(array_filter($menu, function ($item) { return $item[2] === 'fluent-mail'; }));
                 FsmtpTest::assertSame(1, count($matches), 'reader top-level menu');
                 $handler->enqueueAssets();
+                FsmtpTest::assertSame(0, $extensionCalls, 'reader does not invoke manager app extensions');
                 $data = wp_scripts()->get_data('fluent_mail_admin_app_boot', 'data');
                 FsmtpTest::assert(strpos($data, '"manage":false') !== false, 'reader bootstrap permission');
                 foreach (['"connections"', '"mappings"', '"api_key"', '"password"', '"access_token"'] as $field) {
                     FsmtpTest::assert(strpos($data, $field) === false, 'reader bootstrap omits ' . $field);
                 }
             } finally {
+                remove_action('fluent_mail_loading_app', $extension);
                 list($menu, $submenu, $wp_scripts, $wp_styles) = $saved;
             }
         });
@@ -93,6 +98,17 @@ return function () {
             $result = FsmtpTest::ajax('GET', 'logs', ['page' => 1, 'per_page' => 10]);
             FsmtpTest::assertSame(200, $result['status'], 'manager list');
             FsmtpTest::assert(strpos(wp_json_encode($result['data'], JSON_UNESCAPED_SLASHES), '/private/local') !== false, 'manager attachment contract unchanged');
+        });
+        FsmtpTest::case('manager page still invokes existing app extensions', function () {
+            $calls = 0;
+            $extension = function () use (&$calls) { $calls++; };
+            add_action('fluent_mail_loading_app', $extension);
+            try {
+                (new AdminMenuHandler(fluentMail()))->enqueueAssets();
+                FsmtpTest::assertSame(1, $calls, 'manager app extension hook');
+            } finally {
+                remove_action('fluent_mail_loading_app', $extension);
+            }
         });
     } finally {
         wp_set_current_user($admin);

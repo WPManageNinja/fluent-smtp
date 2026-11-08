@@ -18,7 +18,7 @@ window.FluentMail.Router = VueRouter;
 
 const router = VueRouter.createRouter({
     history: VueRouter.createWebHashHistory(),
-    routes: window.FluentMail.applyFilters('fluent_mail_global_routes', routes)
+    routes: window.FluentMail.getApplicationRoutes(routes)
 });
 
 const app = Vue.createApp(Application);

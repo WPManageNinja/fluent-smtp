@@ -372,7 +372,9 @@ class AdminMenuHandler
             'is_disabled_defined'    => defined('FLUENTMAIL_SIMULATE_EMAILS') && FLUENTMAIL_SIMULATE_EMAILS
         ]);
 
-        do_action('fluent_mail_loading_app');
+        if ($canManage) {
+            do_action('fluent_mail_loading_app');
+        }
 
         wp_enqueue_script(
             'fluent_mail_admin_app',
