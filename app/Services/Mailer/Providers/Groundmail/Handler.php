@@ -237,28 +237,29 @@ class Handler extends BaseHandler
     protected function getAttachments()
     {
         $data = [];
+        $attachments = $this->getParam('attachments');
+        $contentIds = self::inlineContentIds($attachments);
 
-        foreach ($this->getParam('attachments') as $attachment) {
-            $file = false;
-            $fileName = null;
-
+        foreach ($attachments as $key => $attachment) {
             try {
-                $file = $this->secureFileRead($attachment[0]);
-                $fileName = $this->getAttachmentName($attachment);
+                $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
                 $this->logAttachmentFailure('Groundmail', $e);
-                $file = false;
-            }
-
-            if ($file === false) {
                 continue;
             }
 
-            $data[] = [
-                'name'         => $fileName,
-                'content_type' => $this->determineMimeContentType($attachment[0]),
+            $row = [
+                'name'         => self::attachmentName($attachment),
+                'content_type' => self::attachmentType($attachment),
                 'data'         => base64_encode($file),
             ];
+
+            // An embedded image goes out inline under its own cid, so the HTML shows it.
+            if (isset($contentIds[$key]) && $contentIds[$key] !== '') {
+                $row['content_id'] = $contentIds[$key];
+            }
+
+            $data[] = $row;
         }
 
         return $data;
