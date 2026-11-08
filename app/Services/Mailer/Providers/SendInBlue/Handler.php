@@ -17,14 +17,6 @@ class Handler extends BaseHandler
 
     protected $url = 'https://api.brevo.com/v3/smtp/email';
 
-    protected $allowedAttachmentExts = [
-        'xlsx', 'xls', 'ods', 'docx', 'docm', 'doc', 'csv', 'pdf', 'txt', 'gif',
-        'jpg', 'jpeg', 'png', 'tif', 'tiff', 'rtf', 'bmp', 'cgm', 'css', 'shtml',
-        'html', 'htm', 'zip', 'xml', 'ppt', 'pptx', 'tar', 'ez', 'ics', 'mobi',
-        'msg', 'pub', 'eps', 'odt', 'mp3', 'm4a', 'm4v', 'wma', 'ogg', 'flac',
-        'wav', 'aif', 'aifc', 'aiff', 'mp4', 'mov', 'avi', 'mkv', 'mpeg', 'mpg', 'wmv'
-    ];
-
     /**
      * Attachment key => ['cid' => string, 'name' => string], set for each send.
      */
@@ -188,20 +180,10 @@ class Handler extends BaseHandler
     protected function inlineNames($html)
     {
         $attachments = $this->getParam('attachments');
-        $allowed = $this->allowedAttachmentExts;
 
-        $keep = function ($cid, $attachment, $name, $plainSrc) use ($allowed) {
-            $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-
-            if ($extension !== '' && $cid === $name && $plainSrc) {
-                return true;
-            }
-
-            if ($extension === '') {
-                $extension = ltrim(self::extensionForType(self::attachmentType($attachment)), '.');
-            }
-
-            return !in_array($extension, $allowed, true);
+        // Already embeds as it stands when the cid is the whole name, written src="cid:<name>".
+        $keep = function ($cid, $attachment, $name, $plainSrc) {
+            return pathinfo($name, PATHINFO_EXTENSION) !== '' && $cid === $name && $plainSrc;
         };
 
         return self::inlineImageNames($attachments, $html, $keep, array_map(function ($attachment) {
@@ -215,23 +197,6 @@ class Handler extends BaseHandler
 
         foreach ($this->getParam('attachments') as $key => $attachment) {
             $name = isset($this->inlineNames[$key]) ? $this->inlineNames[$key]['name'] : self::attachmentName($attachment);
-
-            // The allow-list is applied to the delivered name, the only file name
-            // Brevo receives; an in-memory attachment has no path. A file on disk
-            // also passes on its path's extension, as before, so a name such as
-            // "Rechnung Nr. 2024-001" for /uploads/r.pdf is still sent.
-            $allowed = in_array(strtolower(pathinfo($name, PATHINFO_EXTENSION)), $this->allowedAttachmentExts, true);
-            if (!$allowed && empty($attachment[5])) {
-                $allowed = in_array(strtolower(pathinfo((string) $attachment[0], PATHINFO_EXTENSION)), $this->allowedAttachmentExts, true);
-            }
-
-            if (!$allowed) {
-                fluentMailDebugLog(sprintf(
-                    'SendInBlue: Skipped attachment %s - Brevo does not accept this file type',
-                    $name
-                ));
-                continue;
-            }
 
             try {
                 $file = self::attachmentContent($attachment);

@@ -1024,8 +1024,8 @@ return function () {
             });
 
             FsmtpTest::case($label . ': a file named without an extension keeps its name and the path\'s type', function () use ($apiSend, $spec, $pdf, $pdfPath) {
-                // wp_mail(..., ['Invoice' => $path]). Brevo's allow-list used to read
-                // the path's extension, so this was sent there before the fix too.
+                // wp_mail(..., ['Invoice' => $path]): the request carries the name as
+                // given, and the type from the path where a provider sends one.
                 $sent = $apiSend($spec, function ($mailer) use ($pdfPath) {
                     $mailer->addAttachment($pdfPath, 'Invoice');
                 });
@@ -1034,8 +1034,8 @@ return function () {
             });
 
             FsmtpTest::case($label . ': a blocked file is skipped and the email still goes', function () use ($apiSend, $spec, $pdf, $pdfPath, $otherPath) {
-                // wp-config.php alone would not reach the blocklist on Brevo, whose
-                // extension allow-list skips .php first; a blocked .pdf does.
+                // wp-config.php is blocked for every provider here; a blocked .pdf
+                // shows the same skip for a file type they all accept.
                 $blockOther = function ($paths) use ($otherPath) {
                     $paths[] = realpath($otherPath);
                     return $paths;
@@ -1064,25 +1064,16 @@ return function () {
             });
         }
 
-        FsmtpTest::case('SendInBlue: unnamed in-memory data with no known extension is skipped, not read as a path', function () use ($apiSend, $providers, $binary) {
-            // Delivered as "attachment", which has no extension. The path fallback
-            // is for files only: here the data would supply its own ".pdf". The
-            // named file after it shows the skip is not an empty request.
+        FsmtpTest::case('SendInBlue: a file type is for Brevo to refuse, so every attachment goes in the request', function () use ($apiSend, $providers, $binary) {
+            // Unnamed data is delivered as "attachment". It must not read a path out of its bytes.
             $bytes = "%PDF-1.4\n\x00\x01\x02 see invoice.pdf";
             $sent = $apiSend($providers['SendInBlue'], function ($mailer) use ($bytes, $binary) {
                 $mailer->addStringAttachment($bytes, '', 'base64', 'application/octet-stream');
-                $mailer->addStringAttachment($binary, 'invoice.pdf', 'base64', 'application/pdf');
+                $mailer->addStringAttachment($binary, 'report.bin', 'base64', 'application/octet-stream');
+                $mailer->addStringAttachment($binary, 'book.xlsm', 'base64', 'application/octet-stream');
             });
             FsmtpTest::assertSame(null, $sent['failure'], 'send failure');
-            FsmtpTest::assertSame([['invoice.pdf', null, md5($binary)]], $sent['rows'], 'attachments in the request');
-        });
-
-        FsmtpTest::case('SendInBlue: an upper-case extension passes its allow-list', function () use ($apiSend, $providers, $pdfPath, $binary) {
-            $sent = $apiSend($providers['SendInBlue'], function ($mailer) use ($pdfPath) {
-                $mailer->addAttachment($pdfPath, 'Invoice.PDF');
-            });
-            FsmtpTest::assertSame(null, $sent['failure'], 'send failure');
-            FsmtpTest::assertSame([['Invoice.PDF', null, md5($binary)]], $sent['rows'], 'attachments in the request');
+            FsmtpTest::assertSame([['attachment', null, md5($bytes)], ['report.bin', null, md5($binary)], ['book.xlsm', null, md5($binary)]], $sent['rows'], 'attachments in the request');
         });
 
         FsmtpTest::case('helper: a file whose name gives no type is typed from its content when that is reliable', function () use ($rowFor, $fixture, $binary) {
@@ -1104,7 +1095,7 @@ return function () {
             })), 'recorded type wins');
         });
 
-        FsmtpTest::case('SendInBlue: a delivered name without a known extension still sends a file whose path has one', function () use ($apiSend, $providers, $pdfPath, $binary) {
+        FsmtpTest::case('SendInBlue: a delivered name without a known extension still sends the file', function () use ($apiSend, $providers, $pdfPath, $binary) {
             $sent = $apiSend($providers['SendInBlue'], function ($mailer) use ($pdfPath) {
                 $mailer->addAttachment($pdfPath, 'Rechnung Nr. 2024-001');
             });

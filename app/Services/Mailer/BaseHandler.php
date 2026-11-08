@@ -1362,8 +1362,8 @@ class BaseHandler
             return '';
         }
 
-        // Covers the file types API providers allow-list (Brevo's included), so an
-        // unnamed attachment of one of them is named with an extension they accept.
+        // Covers the file types API providers commonly accept, so an
+        // unnamed attachment of one of them gets an extension they take.
         $extensions = [
             'pdf', 'png', 'jpg', 'gif', 'webp', 'txt', 'csv', 'ics', 'html', 'xml', 'zip', 'doc', 'docx', 'xls', 'xlsx', 'rtf',
             'tif', 'bmp', 'css', 'ppt', 'pptx', 'tar', 'eps', 'mp3', 'm4a', 'wav', 'aif', 'mp4', 'mov', 'avi', 'mpeg', 'wmv', 'mkv'
