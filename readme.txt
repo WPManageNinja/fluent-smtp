@@ -12,7 +12,7 @@ Free WP Mail SMTP plugin. Fix WordPress email deliverability with Gmail, Amazon 
 
 == Description ==
 ### WP Mail SMTP Plugin for Any Email Service Provider
-Are your WordPress emails not sending, landing in spam, or failing silently? FluentSMTP is a free **WordPress SMTP plugin** that fixes email deliverability by routing every `wp_mail()` call through the email service you choose: **Gmail, Google Workspace, Amazon SES, SendGrid, Mailgun, Cloudflare Email, toSend, Postmark, Brevo (Sendinblue), SparkPost, Netcore, Elastic Email, SMTP2GO, Outlook / Office 365, Zoho**, or any SMTP host.
+Are your WordPress emails not sending, landing in spam, or failing silently? FluentSMTP is a free **WordPress SMTP plugin** that fixes email deliverability by routing every `wp_mail()` call through the email service you choose: **Gmail, Google Workspace, Amazon SES, SendGrid, Mailgun, Cloudflare Email, toSend, Postmark, Brevo (Sendinblue), SparkPost, Netcore, Elastic Email, SMTP2GO, Postal, Outlook / Office 365, Zoho**, or any SMTP host.
 
 FluentSMTP talks to each provider's own API rather than only SMTP, so your transactional and marketing email goes out quickly and lands in the inbox. Set your From name and email, turn on email logging, add failure alerts, and route different senders to different providers, all from one screen.
 
@@ -42,6 +42,7 @@ Our parent company <a title="WP Manage Ninja" href="https://wpmanageninja.com">W
 * SparkPost (API)
 * SMTP2GO (API)
 * Elastic Email (API)
+* Postal (API)
 * Zoho Mail (SMTP)
 * PHP mail()
 * Any SMTP server: your web host, Gmail SMTP, Yahoo, Outlook.com, Yandex and more
@@ -123,6 +124,11 @@ Elastic Email handles both transactional and marketing mail, with per-message st
 
 == 🎉 Outlook / Office 365 / Microsoft 365 API Connection ==
 Connect your Outlook.com, Office 365 or Microsoft 365 account and send WordPress email over Microsoft's Graph API. The connection uses OAuth2, so no password is stored on your site, and single-tenant Entra app registrations are supported.
+
+== 🎉 Postal API Connection ==
+Postal is an open-source, self-hosted mail delivery platform. FluentSMTP talks to your Postal cluster over its HTTP Send API: enter the server URL and a server API key, and WordPress mail goes out through your own infrastructure, with attachments, CC/BCC, Reply-To and custom headers carried across.
+
+Read the <a href="https://docs.postalserver.io/developer/api/">Postal API documentation</a>
 
 Read the documentation for <a href="https://fluentsmtp.com/docs/setup-outlook-with-fluentsmtp/">connecting Office 365 email with WordPress</a>
 
