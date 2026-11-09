@@ -67,12 +67,12 @@ class Handler extends BaseHandler
         }
         
         // Add any custom headers
-        $customHeaders = $this->phpMailer->getCustomHeaders();
+        $customHeaders = $this->getCustomHeaderList();
         if (!empty($customHeaders)) {
             foreach ($customHeaders as $header) {
                 $body['Headers'][] = [
-                    'Name'  => $header[0],
-                    'Value' => $header[1]
+                    'Name'  => $header['key'],
+                    'Value' => $header['value']
                 ];
             }
         }

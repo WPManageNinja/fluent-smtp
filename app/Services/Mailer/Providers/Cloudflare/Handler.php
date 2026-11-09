@@ -57,11 +57,11 @@ class Handler extends BaseHandler
             $body['attachments'] = $this->getAttachments();
         }
 
-        $customHeaders = $this->phpMailer->getCustomHeaders();
+        $customHeaders = $this->getCustomHeaderList();
         if (!empty($customHeaders)) {
             $headers = [];
             foreach ($customHeaders as $header) {
-                $headers[$header[0]] = $header[1];
+                $headers[$header['key']] = $header['value'];
             }
             if (!empty($headers)) {
                 $body['headers'] = $headers;

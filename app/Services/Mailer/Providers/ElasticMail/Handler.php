@@ -56,7 +56,7 @@ class Handler extends BaseHandler
             $postData['bodyText'] = $this->getBody();
         }
 
-        foreach ($this->getParam('custom_headers') as $header) {
+        foreach ($this->getCustomHeaderList() as $header) {
             $key = trim($header['key']);
             $postData['headers_' . $key] = $key . ': ' . trim($header['value']);
         }

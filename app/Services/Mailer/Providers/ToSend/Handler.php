@@ -71,11 +71,11 @@ class Handler extends BaseHandler
          * repeated header name, so the last occurrence wins; this matches the
          * Cloudflare handler, which builds the same shape.
          */
-        $customHeaders = $this->phpMailer->getCustomHeaders();
+        $customHeaders = $this->getCustomHeaderList();
         if (!empty($customHeaders)) {
             $headers = [];
             foreach ($customHeaders as $header) {
-                $headers[$header[0]] = $header[1];
+                $headers[$header['key']] = $header['value'];
             }
             if (!empty($headers)) {
                 $body['headers'] = $headers;

@@ -294,4 +294,107 @@ return function () {
             ['key' => 'X-Probe', 'value' => 'fallback'],
         ], $storedHeaders($sent['rows'][0]), 'stored custom headers');
     });
+
+    /*
+     * The six handlers that already sent custom headers read them through
+     * getCustomHeaderList() too. Their fields are pinned to what master sends
+     * for the same email: Mailgun and Elastic Email trim and keep the last of
+     * a repeat, ToSend and Cloudflare keep a map, Postmark keeps every entry,
+     * and Outlook's Graph path keeps only non-empty x- headers.
+     */
+    FsmtpTest::case('Mailgun, Elastic Email, Postmark, ToSend, Cloudflare and Outlook send the same custom headers as before', function () use ($built, $send, $repeatAtInit) {
+        $email = function () use ($built, $repeatAtInit) {
+            return $built([
+                'List-Unsubscribe: <https://example.test/?fluentcrm=1&route=unsubscribe&secure_hash=abc123>',
+                'X-Utf8: Zoë Bücher 例え',
+                'X-Empty:',
+            ], $repeatAtInit);
+        };
+        $unsubscribe = '<https://example.test/?fluentcrm=1&route=unsubscribe&secure_hash=abc123>';
+        $ok = ['body' => wp_json_encode(['id' => 'suite', 'message' => 'Queued', 'MessageID' => 'suite', 'success' => true, 'data' => ['messageid' => 'suite'], 'result' => ['message_id' => 'suite']]), 'response' => ['code' => 200, 'message' => 'OK']];
+
+        $mailgun = $send(new MailgunHandler(), $email(), 'https://api.mailgun.net/', $ok, ['domain_name' => 'mg.example.test', 'region' => 'us']);
+        $fields = [];
+        foreach ($mailgun['request'] as $key => $value) {
+            if (strpos($key, 'h:') === 0) {
+                $fields[$key] = $value;
+            }
+        }
+        FsmtpTest::assertSame([
+            'h:X-Mailer'         => 'FluentMail - Mailgun',
+            'h:List-Unsubscribe' => $unsubscribe,
+            'h:X-Utf8'           => 'Zoë Bücher 例え',
+            'h:X-Empty'          => '',
+            'h:X-Repeat'         => 'second',
+        ], $fields, 'Mailgun h: fields');
+
+        $elastic = $send(new \FluentMail\App\Services\Mailer\Providers\ElasticMail\Handler(), $email(), 'https://api.elasticemail.com/', $ok);
+        preg_match_all('/name=(headers_[^\r\n]+)\r\n\r\n([^\r\n]*)\r\n/', $elastic['request'], $parts, PREG_SET_ORDER);
+        $fields = [];
+        foreach ($parts as $part) {
+            $fields[$part[1]] = $part[2];
+        }
+        FsmtpTest::assertSame([
+            'headers_List-Unsubscribe' => 'List-Unsubscribe: ' . $unsubscribe,
+            'headers_X-Utf8'           => 'X-Utf8: Zoë Bücher 例え',
+            'headers_X-Empty'          => 'X-Empty: ',
+            'headers_X-Repeat'         => 'X-Repeat: second',
+        ], $fields, 'Elastic Email headers_ parts');
+
+        $postmark = json_decode($send(new \FluentMail\App\Services\Mailer\Providers\Postmark\Handler(), $email(), 'https://api.postmarkapp.com/', $ok)['request'], true);
+        FsmtpTest::assertSame([
+            ['Name' => 'List-Unsubscribe', 'Value' => $unsubscribe],
+            ['Name' => 'X-Utf8', 'Value' => 'Zoë Bücher 例え'],
+            ['Name' => 'X-Empty', 'Value' => ''],
+            ['Name' => 'X-Repeat', 'Value' => 'first'],
+            ['Name' => 'X-Repeat', 'Value' => 'second'],
+        ], $postmark['Headers'], 'Postmark Headers');
+
+        $map = [
+            'List-Unsubscribe' => $unsubscribe,
+            'X-Utf8'           => 'Zoë Bücher 例え',
+            'X-Empty'          => '',
+            'X-Repeat'         => 'second',
+        ];
+
+        $cloudflare = json_decode($send(new \FluentMail\App\Services\Mailer\Providers\Cloudflare\Handler(), $email(), 'https://api.cloudflare.com/', $ok, ['account_id' => 'suiteaccount'])['request'], true);
+        FsmtpTest::assertSame($map, $cloudflare['headers'], 'Cloudflare headers');
+
+        // ToSend posts with curl, outside the WordPress HTTP API; only its transport is replaced.
+        $toSend = new class extends \FluentMail\App\Services\Mailer\Providers\ToSend\Handler {
+            public $sentBody = null;
+
+            protected function sendViaCurl($url, $jsonBody)
+            {
+                $this->sentBody = $jsonBody;
+                return ['code' => 200, 'body' => wp_json_encode(['message_id' => 'suite'])];
+            }
+        };
+        $toSend
+            ->setSettings(['key_store' => 'db', 'api_key' => 'suite-key', 'sender_email' => 'sender@example.test', 'sender_name' => '', 'force_from_name' => 'no'])
+            ->setPhpMailer($email());
+        $table = FsmtpFactory::emailLogTable();
+        $redirect = FsmtpFactory::productionLogTableRedirect($table);
+        add_filter('query', $redirect, PHP_INT_MAX);
+        try {
+            $toSend->send();
+        } finally {
+            remove_filter('query', $redirect, PHP_INT_MAX);
+        }
+        FsmtpTest::assert($toSend->sentBody !== null, 'ToSend request was not built');
+        FsmtpTest::assertSame($map, json_decode($toSend->sentBody, true)['headers'], 'ToSend headers');
+
+        $outlook = new \FluentMail\App\Services\Mailer\Providers\Outlook\Handler();
+        $outlook->setSettings(['sender_email' => 'sender@example.test', 'sender_name' => '', 'force_from_name' => 'no'])->setPhpMailer($email());
+        $preSend = new ReflectionMethod($outlook, 'preSend');
+        $preSend->setAccessible(true);
+        $preSend->invoke($outlook);
+        $graph = new ReflectionMethod($outlook, 'graphInternetMessageHeaders');
+        $graph->setAccessible(true);
+        FsmtpTest::assertSame([
+            ['name' => 'X-Utf8', 'value' => 'Zoë Bücher 例え'],
+            ['name' => 'X-Repeat', 'value' => 'first'],
+            ['name' => 'X-Repeat', 'value' => 'second'],
+        ], $graph->invoke($outlook), 'Outlook Graph internetMessageHeaders');
+    });
 };
