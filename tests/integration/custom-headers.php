@@ -92,6 +92,26 @@ return function () {
         );
     };
 
+    $brevo = function ($mailer) use ($send) {
+        $sent = $send(
+            new \FluentMail\App\Services\Mailer\Providers\SendInBlue\Handler(),
+            $mailer,
+            'https://api.brevo.com/',
+            ['body' => wp_json_encode(['messageId' => 'suite']), 'response' => ['code' => 201, 'message' => 'Created']]
+        );
+        return json_decode($sent['request'], true);
+    };
+
+    $smtp2go = function ($mailer) use ($send) {
+        $sent = $send(
+            new \FluentMail\App\Services\Mailer\Providers\Smtp2Go\Handler(),
+            $mailer,
+            'https://api.smtp2go.com/',
+            ['body' => wp_json_encode(['data' => ['succeeded' => 1, 'email_id' => 'suite']]), 'response' => ['code' => 200, 'message' => 'OK']]
+        );
+        return json_decode($sent['request'], true);
+    };
+
     $headerList = function ($handler) {
         $method = new ReflectionMethod($handler, 'getCustomHeaderList');
         $method->setAccessible(true);
@@ -127,6 +147,86 @@ return function () {
             ['key' => 'X-Repeat', 'value' => 'first'],
             ['key' => 'X-Repeat', 'value' => 'second'],
         ], $headerList($sent['handler']), 'custom header list');
+    });
+
+    $repeatAtInit = function ($phpmailer) {
+        $phpmailer->addCustomHeader('X-Repeat', 'first');
+        $phpmailer->addCustomHeader('X-Repeat', 'second');
+    };
+
+    $withHeaders = [
+        'Reply-To: Help Desk <help@example.test>',
+        'List-Unsubscribe: <https://example.test/?fluentcrm=1&route=unsubscribe&secure_hash=abc123>',
+        'List-Unsubscribe-Post: List-Unsubscribe=One-Click',
+        'X-Utf8: Zoë Bücher 例え',
+        'X-Empty:',
+    ];
+
+    FsmtpTest::case('Brevo sends every custom header in its headers object, without a second Reply-To', function () use ($built, $brevo, $withHeaders, $repeatAtInit) {
+        $body = $brevo($built($withHeaders, function ($phpmailer) use ($repeatAtInit) {
+            $repeatAtInit($phpmailer);
+            // A listener can add Reply-To as a custom header; Brevo gets it once, in replyTo.
+            // Lower case, as a listener may write it.
+            $phpmailer->addCustomHeader('reply-to', 'listener@example.test');
+        }));
+
+        FsmtpTest::assertSame([
+            'List-Unsubscribe'      => '<https://example.test/?fluentcrm=1&route=unsubscribe&secure_hash=abc123>',
+            'List-Unsubscribe-Post' => 'List-Unsubscribe=One-Click',
+            'X-Utf8'                => 'Zoë Bücher 例え',
+            'X-Empty'               => '',
+            // A map keeps one value per name: the last.
+            'X-Repeat'              => 'second',
+        ], isset($body['headers']) ? $body['headers'] : null, 'Brevo headers');
+        FsmtpTest::assertSame(['email' => 'help@example.test', 'name' => 'Help Desk'], $body['replyTo'], 'Brevo replyTo');
+    });
+
+    FsmtpTest::case('Brevo sends no headers key when there are no custom headers', function () use ($built, $brevo) {
+        $body = $brevo($built(['Reply-To: help@example.test']));
+
+        FsmtpTest::assertSame(false, array_key_exists('headers', $body), 'headers key present');
+    });
+
+    FsmtpTest::case('SMTP2GO sends Reply-To first, then every custom header with a value in order, repeats kept', function () use ($built, $smtp2go, $withHeaders, $repeatAtInit) {
+        $body = $smtp2go($built($withHeaders, function ($phpmailer) use ($repeatAtInit) {
+            $repeatAtInit($phpmailer);
+            // Lower case, as a listener may write it.
+            $phpmailer->addCustomHeader('reply-to', 'listener@example.test');
+        }));
+
+        FsmtpTest::assertSame([
+            ['header' => 'Reply-To', 'value' => 'Help Desk <help@example.test>'],
+            ['header' => 'List-Unsubscribe', 'value' => '<https://example.test/?fluentcrm=1&route=unsubscribe&secure_hash=abc123>'],
+            ['header' => 'List-Unsubscribe-Post', 'value' => 'List-Unsubscribe=One-Click'],
+            ['header' => 'X-Utf8', 'value' => 'Zoë Bücher 例え'],
+            ['header' => 'X-Repeat', 'value' => 'first'],
+            ['header' => 'X-Repeat', 'value' => 'second'],
+        ], isset($body['custom_headers']) ? $body['custom_headers'] : null, 'SMTP2GO custom_headers');
+    });
+
+    FsmtpTest::case('SMTP2GO sends only Reply-To, or no custom_headers, when there are no custom headers', function () use ($built, $smtp2go) {
+        $body = $smtp2go($built(['Reply-To: help@example.test']));
+        FsmtpTest::assertSame([['header' => 'Reply-To', 'value' => 'help@example.test']], $body['custom_headers'], 'with Reply-To');
+
+        $body = $smtp2go($built([]));
+        FsmtpTest::assertSame(false, array_key_exists('custom_headers', $body), 'custom_headers key present without Reply-To');
+    });
+
+    FsmtpTest::case('a header value that is not valid UTF-8 still reaches Brevo and SMTP2GO, as wp_json_encode() writes it', function () use ($built, $brevo, $smtp2go) {
+        // What WordPress makes of the bytes, the same way Postmark and Cloudflare already send them.
+        $expected = json_decode(wp_json_encode("Ren\xE9e caf\xE9"));
+        $mailer = $built(["X-Bad: Ren\xE9e caf\xE9", 'X-Good: plain']);
+
+        $body = $brevo(clone $mailer);
+        FsmtpTest::assert(is_array($body), 'Brevo request body is JSON');
+        FsmtpTest::assertSame(['X-Bad' => $expected, 'X-Good' => 'plain'], $body['headers'], 'Brevo headers');
+
+        $body = $smtp2go(clone $mailer);
+        FsmtpTest::assert(is_array($body), 'SMTP2GO request body is JSON');
+        FsmtpTest::assertSame([
+            ['header' => 'X-Bad', 'value' => $expected],
+            ['header' => 'X-Good', 'value' => 'plain'],
+        ], $body['custom_headers'], 'SMTP2GO custom_headers');
     });
 
     FsmtpTest::case('the log row stores real senders\' header values byte for byte', function () use ($built, $mailgun, $storedHeaders, $long) {

@@ -60,6 +60,15 @@ class Handler extends BaseHandler {
             ];
         }
 
+        // SMTP2GO refuses the whole email when a custom header has an empty value.
+        foreach ($this->getCustomHeaderList() as $header) {
+            if (strtolower($header['key']) !== 'reply-to' && '' !== (string) $header['value']) {
+                $body['custom_headers'][] = [
+                    'header' => $header['key'],
+                    'value'  => $header['value']
+                ];
+            }
+        }
 
         if (!empty($this->getParam('attachments'))) {
             if ($attachments = $this->getAttachments()) {
@@ -74,7 +83,7 @@ class Handler extends BaseHandler {
         }
 
         $params = [
-            'body'    => json_encode($body),
+            'body'    => wp_json_encode($body),
             'headers' => $this->getRequestHeaders()
         ];
 
