@@ -707,6 +707,24 @@ class Logger extends Model
             }
         }
 
+        /*
+         * Custom headers stored at send time. A resend to other recipients carries
+         * none, as with Cc and Bcc, so the original recipient's unsubscribe link
+         * does not reach them. Headers the lines above already rebuild are not
+         * repeated, and Message-ID and Date are left out: a resend is a new message.
+         */
+        $notReplayed = ['from', 'cc', 'bcc', 'reply-to', 'content-type', 'message-id', 'date'];
+        $storedHeaders = (!$hasCustomRecipients && isset($email['extra']['custom_headers']))
+            ? (array) $email['extra']['custom_headers']
+            : [];
+
+        foreach ($storedHeaders as $header) {
+            if (!isset($header['key'], $header['value']) || in_array(strtolower(trim($header['key'])), $notReplayed, true)) {
+                continue;
+            }
+            $headers[] = $header['key'] . ': ' . $header['value'];
+        }
+
         $headers = array_merge($headers, [
             'From: ' . $email['from']
         ]);

@@ -1,0 +1,197 @@
+<?php
+
+use FluentMail\App\Services\Mailer\Providers\Mailgun\Handler as MailgunHandler;
+
+return function () {
+    /*
+     * Custom headers reach handlers through BaseHandler::getCustomHeaderList()
+     * and are stored intact in the log row's extra.custom_headers, so a Resend
+     * can replay them. Each email is built by the real wp_mail(), whose header
+     * parsing is part of what is pinned, and the PHPMailer it hands to
+     * phpmailer_init is then sent through a real handler with HTTP intercepted.
+     */
+    FsmtpTest::requirePhpMailer();
+
+    // Real wp_mail() (simulated in the suite), returning a copy of the PHPMailer it built.
+    $built = function (array $headers, ?callable $atInit = null) {
+        $copy = null;
+        $capture = function ($phpmailer) use (&$copy) {
+            $copy = clone $phpmailer;
+        };
+        if ($atInit) {
+            add_action('phpmailer_init', $atInit, 10);
+        }
+        add_action('phpmailer_init', $capture, PHP_INT_MAX);
+        // The simulated send writes its own log row; the case only needs the PHPMailer.
+        add_filter('fluentmail_will_log_email', '__return_false', PHP_INT_MAX);
+        try {
+            wp_mail('to@example.test', 'custom headers suite', 'body', $headers);
+        } finally {
+            remove_action('phpmailer_init', $capture, PHP_INT_MAX);
+            remove_filter('fluentmail_will_log_email', '__return_false', PHP_INT_MAX);
+            if ($atInit) {
+                remove_action('phpmailer_init', $atInit, 10);
+            }
+        }
+        FsmtpTest::assert($copy !== null, 'phpmailer_init did not fire');
+        return $copy;
+    };
+
+    // Send through a handler with its API answered locally and the log on an isolated table.
+    $send = function ($handler, $mailer, $apiUrl, array $answer, array $settings = [], $rowId = null) {
+        global $wpdb;
+        $table = FsmtpFactory::emailLogTable();
+        $redirect = FsmtpFactory::productionLogTableRedirect($table);
+
+        if ($rowId) {
+            $rowId = FsmtpFactory::insertLog($table, $rowId);
+            $handler->setRowId($rowId);
+        }
+
+        $request = null;
+        FsmtpTest::interceptHttp(function ($url, $args) use (&$request, $apiUrl, $answer) {
+            if (strpos($url, $apiUrl) !== 0) {
+                return null;
+            }
+            $request = $args['body'];
+            return array_merge(['headers' => [], 'cookies' => [], 'filename' => null], $answer);
+        });
+        add_filter('query', $redirect, PHP_INT_MAX);
+        add_filter('fluentmail_will_log_email', '__return_true', PHP_INT_MAX);
+        try {
+            $handler
+                ->setSettings(array_merge([
+                    'key_store'       => 'db',
+                    'api_key'         => 'suite-key',
+                    'sender_email'    => 'sender@example.test',
+                    'sender_name'     => '',
+                    'force_from_name' => 'no',
+                ], $settings))
+                ->setPhpMailer($mailer)
+                ->send();
+        } finally {
+            remove_filter('query', $redirect, PHP_INT_MAX);
+            remove_filter('fluentmail_will_log_email', '__return_true', PHP_INT_MAX);
+            FsmtpTest::interceptHttp();
+        }
+
+        FsmtpTest::assert($request !== null, 'the request to ' . $apiUrl . ' was not captured');
+        $rows = $wpdb->get_results("SELECT * FROM `{$table}`", ARRAY_A);
+
+        return ['request' => $request, 'rows' => $rows, 'handler' => $handler];
+    };
+
+    $mailgun = function ($mailer, $rowId = null) use ($send) {
+        return $send(
+            new MailgunHandler(),
+            $mailer,
+            'https://api.mailgun.net/',
+            ['body' => wp_json_encode(['id' => 'suite', 'message' => 'Queued']), 'response' => ['code' => 200, 'message' => 'OK']],
+            ['domain_name' => 'mg.example.test', 'region' => 'us', 'provider' => 'mailgun'],
+            $rowId
+        );
+    };
+
+    $headerList = function ($handler) {
+        $method = new ReflectionMethod($handler, 'getCustomHeaderList');
+        $method->setAccessible(true);
+        return $method->invoke($handler);
+    };
+
+    $storedHeaders = function (array $row) {
+        $extra = unserialize($row['extra'], ['allowed_classes' => false]);
+        return is_array($extra) && array_key_exists('custom_headers', $extra) ? $extra['custom_headers'] : 'no custom_headers key';
+    };
+
+    $long = '<https://example.test/u?t=' . str_repeat('a', 1200) . '>, <mailto:u@example.test>';
+
+    FsmtpTest::case('getCustomHeaderList() gives every custom header in order, with a phpmailer_init repeat and no Return-Path', function () use ($built, $mailgun, $headerList, $long) {
+        $mailer = $built([
+            'X-First: one',
+            'Return-Path: bounce@example.test',
+            'X-Utf8: Zoë Bücher 例え',
+            'X-Empty:',
+            'X-Long: ' . $long,
+        ], function ($phpmailer) {
+            $phpmailer->addCustomHeader('X-Repeat', 'first');
+            $phpmailer->addCustomHeader('X-Repeat', 'second');
+        });
+
+        $sent = $mailgun($mailer);
+
+        FsmtpTest::assertSame([
+            ['key' => 'X-First', 'value' => 'one'],
+            ['key' => 'X-Utf8', 'value' => 'Zoë Bücher 例え'],
+            ['key' => 'X-Empty', 'value' => ''],
+            ['key' => 'X-Long', 'value' => $long],
+            ['key' => 'X-Repeat', 'value' => 'first'],
+            ['key' => 'X-Repeat', 'value' => 'second'],
+        ], $headerList($sent['handler']), 'custom header list');
+    });
+
+    FsmtpTest::case('the log row stores real senders\' header values byte for byte', function () use ($built, $mailgun, $storedHeaders, $long) {
+        $values = [
+            // FluentCRM
+            'List-Unsubscribe'      => '<https://example.test/?fluentcrm=1&route=unsubscribe&secure_hash=abc123>',
+            'List-Unsubscribe-Post' => 'List-Unsubscribe=One-Click',
+            // The Newsletter Plugin
+            'X-Suite-Newsletter'    => '<mailto:unsubscribe@example.test?subject=unsubscribe>, <https://example.test/?na=u&nk=1-abc>',
+            // Groundhogg
+            'X-Suite-Groundhogg'    => '<https://example.test/gh/unsubscribe/?a=b%20c>',
+            'References'            => '<a1@example.test> <b2@example.test>',
+            'In-Reply-To'           => '<p1@example.test>',
+            // Looks serialized: the sanitiser throws on it, which used to lose the row.
+            'X-Suite-Serialized'    => 'N;',
+            'X-Suite-Long'          => $long,
+            'X-Suite-Utf8'          => 'Zoë Bücher 例え',
+        ];
+        $lines = [];
+        $expected = [];
+        foreach ($values as $name => $value) {
+            $lines[] = $name . ': ' . $value;
+            $expected[] = ['key' => $name, 'value' => $value];
+        }
+
+        $sent = $mailgun($built($lines));
+
+        FsmtpTest::assertSame(1, count($sent['rows']), 'one log row');
+        FsmtpTest::assertSame($expected, $storedHeaders($sent['rows'][0]), 'stored custom headers');
+        $extra = unserialize($sent['rows'][0]['extra'], ['allowed_classes' => false]);
+        FsmtpTest::assertSame('mailgun', $extra['provider'], 'the rest of extra is kept');
+    });
+
+    FsmtpTest::case('a header name or value that is not valid UTF-8 is stored as valid UTF-8, and the row is kept', function () use ($built, $mailgun, $storedHeaders) {
+        $sent = $mailgun($built(["X-Suite-Bad: a\xE9b", "X-B\xE9d: v"]));
+
+        FsmtpTest::assertSame(1, count($sent['rows']), 'one log row');
+        $stored = $storedHeaders($sent['rows'][0]);
+        // WordPress 6.9 and later put U+FFFD in place of the bad byte; earlier versions store an empty string.
+        $replaced = version_compare(get_bloginfo('version'), '6.9', '>=');
+        FsmtpTest::assertSame([
+            ['key' => 'X-Suite-Bad', 'value' => $replaced ? "a\u{FFFD}b" : ''],
+            ['key' => $replaced ? "X-B\u{FFFD}d" : '', 'value' => 'v'],
+        ], $stored, 'stored headers');
+    });
+
+    FsmtpTest::case('an email without custom headers stores no custom_headers key', function () use ($built, $mailgun, $storedHeaders) {
+        $sent = $mailgun($built([]));
+
+        FsmtpTest::assertSame(1, count($sent['rows']), 'one log row');
+        FsmtpTest::assertSame('no custom_headers key', $storedHeaders($sent['rows'][0]), 'no key');
+    });
+
+    FsmtpTest::case('a fallback send updates the existing row with its custom headers intact', function () use ($built, $mailgun, $storedHeaders) {
+        $sent = $mailgun($built(['List-Unsubscribe: <https://example.test/u?h=1>', 'X-Probe: fallback']), [
+            'status'  => 'failed',
+            'extra'   => serialize(['provider' => 'smtp']),
+            'retries' => 0,
+        ]);
+
+        FsmtpTest::assertSame(1, count($sent['rows']), 'still one log row');
+        FsmtpTest::assertSame('1', (string) $sent['rows'][0]['retries'], 'the fallback branch ran');
+        FsmtpTest::assertSame([
+            ['key' => 'List-Unsubscribe', 'value' => '<https://example.test/u?h=1>'],
+            ['key' => 'X-Probe', 'value' => 'fallback'],
+        ], $storedHeaders($sent['rows'][0]), 'stored custom headers');
+    });
+};
