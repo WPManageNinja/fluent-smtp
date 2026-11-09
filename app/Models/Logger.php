@@ -586,12 +586,21 @@ class Logger extends Model
         return $statuses;
     }
 
+    /**
+     * One log row, with `extra` and `response` unserialized.
+     *
+     * @param int $id
+     * @return array|null Null when no row has this id.
+     */
     public function find($id)
     {
-
         $row = $this->getDb()->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
             ->where('id', $id)
             ->first();
+
+        if (!$row) {
+            return null;
+        }
 
         $row->extra = $this->unserialize($row->extra);
 
@@ -603,6 +612,11 @@ class Logger extends Model
     public function resendEmailFromLog($id, $type = 'retry', $recipients = [])
     {
         $email = $this->find($id);
+
+        // Deleted since the list was loaded (another admin, the log purge, Delete All).
+        if (!$email) {
+            throw new \Exception(esc_html__('This email log no longer exists.', 'fluent-smtp'), 404);
+        }
 
         $email['to']          = $this->normalizeLoggedRecipients($this->unserialize($email['to']));
         $email['headers']     = $this->unserialize($email['headers']);
