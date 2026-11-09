@@ -132,10 +132,12 @@ class SecretMasker
         'outlook'     => ['client_secret' => 1, 'access_token' => 2, 'refresh_token' => 2],
         'tosend'      => ['api_key' => 1],
         'cloudflare'  => ['api_key' => 1],
+        'postal'      => ['api_key' => 1],
     ];
 
     const ENDPOINT_FIELDS = [
-        'smtp' => ['host', 'port', 'username'],
+        'smtp'   => ['host', 'port', 'username'],
+        'postal' => ['server_url'],
     ];
 
     public static function endpointChanged($values, $stored)
@@ -157,6 +159,11 @@ class SecretMasker
             if ($field === 'host') {
                 $submitted = strtolower($submitted);
                 $saved = strtolower($saved);
+            }
+
+            if ($field === 'server_url') {
+                $submitted = strtolower(rtrim($submitted, '/'));
+                $saved = strtolower(rtrim($saved, '/'));
             }
 
             if ($submitted !== $saved) {
