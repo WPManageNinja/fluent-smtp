@@ -22,6 +22,22 @@ class Handler extends BaseHandler
 
     public function postSend()
     {
+        /*
+         * Postal's structured /send/message API only accepts name, content_type
+         * and data on attachments — no Content-ID. HTML that references an
+         * embedded image as cid:... would arrive without a matching part, so
+         * those messages go out as a prepared RFC 2822 payload on /send/raw,
+         * which keeps PHPMailer's Content-ID and disposition intact.
+         */
+        if ($this->hasInlineAttachments()) {
+            return $this->postSendRaw();
+        }
+
+        return $this->postSendMessage();
+    }
+
+    protected function postSendMessage()
+    {
         $body = [
             'to'      => $this->getTo(),
             'from'    => $this->getFormattedFrom(),
@@ -66,6 +82,22 @@ class Handler extends BaseHandler
             $body['headers'] = $headers;
         }
 
+        return $this->dispatch($this->getApiUrl('send/message'), $body);
+    }
+
+    protected function postSendRaw()
+    {
+        $body = [
+            'mail_from' => $this->getParam('sender_email'),
+            'rcpt_to'   => $this->getEnvelopeRecipients(),
+            'data'      => base64_encode($this->phpMailer->getSentMIMEMessage()),
+        ];
+
+        return $this->dispatch($this->getApiUrl('send/raw'), $body);
+    }
+
+    protected function dispatch($url, array $body)
+    {
         $params = [
             'headers' => $this->getRequestHeaders(),
             'body'    => wp_json_encode($body),
@@ -73,7 +105,7 @@ class Handler extends BaseHandler
 
         $params = array_merge($params, $this->getDefaultParams());
 
-        $response = wp_safe_remote_post($this->getApiUrl(), $params);
+        $response = wp_safe_remote_post($url, $params);
 
         if (is_wp_error($response)) {
             $returnResponse = new \WP_Error($response->get_error_code(), $response->get_error_message(), $response->get_error_messages());
@@ -116,11 +148,44 @@ class Handler extends BaseHandler
         return $this;
     }
 
-    protected function getApiUrl()
+    protected function getApiUrl($path = 'send/message')
     {
         $base = rtrim((string)$this->getSetting('server_url'), '/');
+        $url = $base . '/api/v1/' . ltrim($path, '/');
 
-        return apply_filters('fluentsmtp_postal_api_url', $base . '/api/v1/send/message', $base);
+        return apply_filters('fluentsmtp_postal_api_url', $url, $base, $path);
+    }
+
+    protected function hasInlineAttachments()
+    {
+        $attachments = $this->getParam('attachments');
+
+        if (empty($attachments) || !is_array($attachments)) {
+            return false;
+        }
+
+        foreach (self::inlineContentIds($attachments) as $contentId) {
+            if ($contentId !== '') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function getEnvelopeRecipients()
+    {
+        $emails = [];
+
+        foreach (['to', 'headers.cc', 'headers.bcc'] as $key) {
+            foreach ((array)$this->getParam($key) as $recipient) {
+                if (!empty($recipient['email'])) {
+                    $emails[] = $recipient['email'];
+                }
+            }
+        }
+
+        return array_values(array_unique($emails));
     }
 
     protected function getReplyTo()
@@ -206,9 +271,9 @@ class Handler extends BaseHandler
     protected function getRequestHeaders()
     {
         return [
-            'Accept'            => 'application/json',
-            'Content-Type'      => 'application/json',
-            'X-Server-API-Key'  => $this->getSetting('api_key'),
+            'Accept'           => 'application/json',
+            'Content-Type'     => 'application/json',
+            'X-Server-API-Key' => $this->getSetting('api_key'),
         ];
     }
 }
