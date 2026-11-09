@@ -16,6 +16,15 @@ Requires PHP: 7.4
 
 !defined('WPINC') && die;
 
+/*
+ * A plugin upload that replaces an existing install can leave a second folder
+ * beside fluent-smtp/ (WordPress names it fluent-smtp-<random>). Both get loaded,
+ * and a second define()/fluentSmtpInit() is fatal. Bail if we are that leftover.
+ */
+if (defined('FLUENTMAIL_PLUGIN_FILE')) {
+    return;
+}
+
 define('FLUENTMAIL_PLUGIN_FILE', __FILE__);
 
 require_once plugin_dir_path(__FILE__) . 'boot.php';
@@ -37,11 +46,13 @@ register_deactivation_hook(
  *
  * @since 1.0.0
  */
-function fluentSmtpInit() {
-    $application = new FluentMail\Includes\Core\Application;
-    add_action('plugins_loaded', function () use ($application) {
-        do_action('fluentMail_loaded', $application);
-    });
+if (!function_exists('fluentSmtpInit')) {
+    function fluentSmtpInit() {
+        $application = new FluentMail\Includes\Core\Application;
+        add_action('plugins_loaded', function () use ($application) {
+            do_action('fluentMail_loaded', $application);
+        });
+    }
 }
 
 fluentSmtpInit();
