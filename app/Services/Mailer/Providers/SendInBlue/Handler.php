@@ -59,12 +59,23 @@ class Handler extends BaseHandler
 
         $body = array_merge($body, $recipients);
 
+        // Brevo takes headers as a name => value object; replyTo above carries Reply-To.
+        $headers = [];
+        foreach ($this->getCustomHeaderList() as $header) {
+            if (strtolower($header['key']) !== 'reply-to') {
+                $headers[$header['key']] = $header['value'];
+            }
+        }
+        if ($headers) {
+            $body['headers'] = (object) $headers;
+        }
+
         if (!empty($this->getParam('attachments'))) {
             $body['attachment'] = $this->getAttachments();
         }
 
         $params = [
-            'body'    => json_encode($body),
+            'body'    => wp_json_encode($body),
             'headers' => $this->getRequestHeaders()
         ];
 
