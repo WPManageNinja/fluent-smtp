@@ -51,7 +51,24 @@ return function () {
         return $phpmailer;
     };
 
-    $send = function (array $settings, $mailer = null, array $bcc = []) use ($freshMailer) {
+    $smtpSettings = [
+        'provider'         => 'smtp',
+        'key_store'        => 'db',
+        'host'             => '127.0.0.1',
+        'port'             => 25,
+        'auth'             => 'no',
+        'username'         => '',
+        'password'         => '',
+        'encryption'       => 'none',
+        'auto_tls'         => 'no',
+        'sender_email'     => 'sender@example.test',
+        'sender_name'      => '',
+        'force_from_name'  => 'no',
+        'force_from_email' => 'no',
+        'return_path'      => 'no',
+    ];
+
+    $send = function (array $settings, $mailer = null, array $bcc = []) use ($freshMailer, $smtpSettings) {
         global $phpmailer, $wpdb;
         $mailer = $mailer ?: $freshMailer();
         $phpmailer = $mailer;
@@ -72,22 +89,7 @@ return function () {
         $message = null;
         try {
             (new SmtpHandler())
-                ->setSettings(array_merge([
-                    'provider'         => 'smtp',
-                    'key_store'        => 'db',
-                    'host'             => '127.0.0.1',
-                    'port'             => 25,
-                    'auth'             => 'no',
-                    'username'         => '',
-                    'password'         => '',
-                    'encryption'       => 'none',
-                    'auto_tls'         => 'no',
-                    'sender_email'     => 'sender@example.test',
-                    'sender_name'      => '',
-                    'force_from_name'  => 'no',
-                    'force_from_email' => 'no',
-                    'return_path'      => 'no',
-                ], $settings))
+                ->setSettings(array_merge($smtpSettings, $settings))
                 ->setPhpMailer($mailer)
                 ->send();
         } catch (\PHPMailer\PHPMailer\Exception $e) {
@@ -243,6 +245,92 @@ return function () {
         }
     });
 
+    /*
+     * The log's sanitize_text_field() reads <...> as an HTML tag and erases it, which took the address out of
+     * every Postfix refusal. In an SMTP reply the brackets are protocol syntax, so the log keeps what is inside;
+     * the thrown message (wp_mail_failed, Send Test Email) keeps the reply as the server sent it. Shapes from
+     * Postfix 3.7 (smtpd_check.c: sender, recipient, HELO, client) and Courier (a refused local part).
+     */
+    $bracketed = [
+        'a 550 recipient refusal'      => ['rcpt', [], '<to@example.test>: Recipient address rejected', 'to@example.test: Recipient address rejected'],
+        'a 553 sender refusal'         => ['sender', [], '<sender@example.test>: Sender address rejected', 'sender@example.test: Sender address rejected'],
+        'a HELO name refusal'          => ['custom', ['FAKE_SMTP_AT' => 'rcpt', 'FAKE_SMTP_REPLY' => base64_encode('554 5.7.1 <site.example.org>: Helo command rejected: Host not found')], '<site.example.org>: Helo command rejected', 'site.example.org: Helo command rejected'],
+        'a client host refusal'        => ['custom', ['FAKE_SMTP_AT' => 'rcpt', 'FAKE_SMTP_REPLY' => base64_encode('554 5.7.1 <client.example.net[192.0.2.4]>: Client host rejected: Access denied')], '<client.example.net[192.0.2.4]>: Client host', 'client.example.net[192.0.2.4]: Client host rejected'],
+        'a refused local part'         => ['custom', ['FAKE_SMTP_AT' => 'rcpt', 'FAKE_SMTP_REPLY' => base64_encode('550 <nobody>: User unknown')], '<nobody>: User unknown', 'nobody: User unknown'],
+        'a punycode domain refusal'    => ['custom', ['FAKE_SMTP_AT' => 'rcpt', 'FAKE_SMTP_REPLY' => base64_encode('550 5.1.1 <info@xn--bcher-kva.example>: Recipient address rejected')], '<info@xn--bcher-kva.example>: Recipient', 'info@xn--bcher-kva.example: Recipient address rejected'],
+        'a UTF-8 domain refusal'       => ['custom', ['FAKE_SMTP_AT' => 'rcpt', 'FAKE_SMTP_REPLY' => base64_encode('550 5.1.1 <info@bücher.example>: Recipient address rejected')], '<info@bücher.example>: Recipient', 'info@bücher.example: Recipient address rejected'],
+    ];
+    foreach ($bracketed as $label => $case) {
+        FsmtpTest::case($label . ' keeps what the server put in angle brackets in the log', function () use ($start, $stop, $send, $case) {
+            list($mode, $environment, $thrown, $logged) = $case;
+            $server = $start($mode, '', $environment);
+            try {
+                $result = $send(['port' => $server['port']]);
+            } finally {
+                $stop($server);
+            }
+            FsmtpTest::assert(false !== strpos((string) $result['message'], $thrown), 'thrown as the server sent it: ' . $result['message']);
+            FsmtpTest::assertSame('failed', $result['status'], 'log status');
+            FsmtpTest::assert(false !== strpos((string) $result['response']['message'], $logged), 'logged with the inner text: ' . $result['response']['message']);
+        });
+    }
+
+    FsmtpTest::case('a reply with markup in angle brackets still has the markup stripped from the log', function () use ($start, $stop, $send) {
+        $server = $start('custom', '', ['FAKE_SMTP_AT' => 'rcpt', 'FAKE_SMTP_REPLY' => base64_encode('550 5.7.1 <img src=x onerror=alert(1)> <svg/onload=alert(1)> refused')]);
+        try {
+            $result = $send(['port' => $server['port']]);
+        } finally {
+            $stop($server);
+        }
+        FsmtpTest::assert(false !== strpos((string) $result['message'], '<img src=x onerror=alert(1)>'), 'thrown as the server sent it: ' . $result['message']);
+        $logged = (string) $result['response']['message'];
+        // A bracket with a space inside is left to the sanitiser, as before.
+        FsmtpTest::assertSame(false, strpos($logged, 'onerror'), 'tag with attributes stripped: ' . $logged);
+        // One without becomes plain text, with no bracket left to read as a tag.
+        FsmtpTest::assert(false !== strpos($logged, 'svg/onload=alert(1) refused'), 'unspaced token kept as text: ' . $logged);
+    });
+
+    // A pin, not a catch: the null sender <> has nothing inside, so removing its brackets logs it as before.
+    FsmtpTest::case('a refusal of the null sender <> is logged as before', function () use ($start, $stop, $send) {
+        $server = $start('custom', '', ['FAKE_SMTP_AT' => 'mail', 'FAKE_SMTP_REPLY' => base64_encode('553 5.1.8 <>: Sender address rejected: Domain not found')]);
+        try {
+            $result = $send(['port' => $server['port']]);
+        } finally {
+            $stop($server);
+        }
+        FsmtpTest::assert(false !== strpos((string) $result['message'], '<>: Sender address rejected'), 'thrown as the server sent it: ' . $result['message']);
+        FsmtpTest::assert(false !== strpos((string) $result['response']['message'], ': Sender address rejected: Domain not found'), 'logged: ' . $result['response']['message']);
+    });
+
+    /*
+     * The fallback as FluentPHPMailer::sendViaFallback() runs it once it has its driver: inside the primary's
+     * failed-send filter, on the same PHPMailer, with the primary's log row. The suite's Simulator would answer
+     * the driver lookup itself, so the case builds the SMTP driver.
+     */
+    FsmtpTest::case('a failing SMTP fallback keeps what both servers put in angle brackets in the log', function () use ($start, $stop, $send, $smtpSettings) {
+        $primary = $start('sender');
+        $fallback = $start('rcpt');
+        $runFallback = function ($status, $logId, $handler) use ($fallback, $smtpSettings) {
+            $driver = (new SmtpHandler())->setSettings(array_merge($smtpSettings, ['port' => $fallback['port']]));
+            $driver->setRowId($logId);
+            return $driver->setPhpMailer($handler->getPhpMailer())->send();
+        };
+        add_filter('fluentmail_email_sending_failed', $runFallback, 9, 3);
+        try {
+            $result = $send(['port' => $primary['port']]);
+        } finally {
+            remove_filter('fluentmail_email_sending_failed', $runFallback, 9);
+            $stop($primary);
+            $stop($fallback);
+        }
+        // processResponse() catches what the fallback throws inside the filter, so the primary's refusal is thrown.
+        FsmtpTest::assert(false !== strpos((string) $result['message'], '<sender@example.test>: Sender address rejected'), 'the primary\'s refusal thrown as sent: ' . $result['message']);
+        FsmtpTest::assertSame('failed', $result['status'], 'log status');
+        FsmtpTest::assert(false !== strpos((string) $result['response']['message'], 'sender@example.test: Sender address rejected'), 'primary logged: ' . $result['response']['message']);
+        $fallbackMessage = isset($result['response']['fallback_response']['message']) ? (string) $result['response']['fallback_response']['message'] : '';
+        FsmtpTest::assert(false !== strpos($fallbackMessage, 'to@example.test: Recipient address rejected'), 'fallback logged: ' . $fallbackMessage);
+    });
+
     FsmtpTest::case('a failed connection is logged with the network error', function () use ($send, $start, $stop, $sentence) {
         // A port nothing listens on: start a server to learn a free port, then stop it.
         $server = $start('ok');
@@ -337,6 +425,21 @@ return function () {
         }
     });
 
+    // The log keeps what is inside angle brackets, so a login echoed inside them must still be left out.
+    FsmtpTest::case('a login echoed inside angle brackets is left out of the message and the log', function () use ($start, $stop, $send, $sentence) {
+        $password = 'S3cret-suite-pass';
+        $server = $start('custom', '', ['FAKE_SMTP_AT' => 'auth', 'FAKE_SMTP_REPLY' => base64_encode('535 5.7.8 Authentication failed for <' . base64_encode($password) . '>')]);
+        try {
+            $result = $send(['port' => $server['port'], 'auth' => 'yes', 'username' => 'suite-user@example.test', 'password' => $password]);
+        } finally {
+            $stop($server);
+        }
+        FsmtpTest::assertSame($sentence('authenticate'), $result['message'], 'the echoing reply is left out');
+        FsmtpTest::assertSame('failed', $result['status'], 'log status');
+        $stored = serialize($result['response']);
+        FsmtpTest::assertSame(false, strpos($stored, base64_encode($password)), 'the login is not logged: ' . $stored);
+    });
+
     FsmtpTest::case('a later failure does not carry an earlier send\'s reason', function () use ($start, $stop, $send, $freshMailer, $sentence) {
         $mailer = $freshMailer();
         $server = $start('greet');
@@ -428,6 +531,31 @@ return function () {
         }
         FsmtpTest::assert(false !== strpos($second['response']['message'], '421 4.7.0'), 'the retry\'s reason: ' . $second['response']['message']);
         FsmtpTest::assertSame(false, strpos($second['response']['message'], '550 5.1.1'), 'the first attempt\'s 550 is not reported for the retry');
+    });
+
+    FsmtpTest::case('when the bulk retry is refused with angle brackets, the retry\'s reply is logged with what was inside them', function () use ($start, $stop, $send, $freshMailer) {
+        $log = wp_tempnam('fake-smtp-log');
+        $commands = [];
+        $server = $start('busy', $log, ['FAKE_SMTP_REPLY' => base64_encode('554 5.7.1 <client.example.net[192.0.2.4]>: Client host rejected: Access denied')]);
+        $mailer = $freshMailer();
+        do_action('fluent_crm/email_sender_session_started');
+        try {
+            $first = $send(['port' => $server['port']], $mailer);
+            FsmtpTest::assertSame('sent', $first['status'], 'first send');
+            // 550 on the open connection; the retry reconnects and its recipient is refused.
+            $second = $send(['port' => $server['port']], $mailer);
+        } finally {
+            do_action('fluent_crm/email_sender_session_ended');
+            $stop($server);
+            $commands = array_values(array_filter(array_map('trim', (array) file($log))));
+            unlink($log);
+        }
+        FsmtpTest::assertSame(2, count(array_filter($commands, function ($c) { return 0 === stripos($c, 'EHLO'); })), 'the retry reconnected');
+        FsmtpTest::assert(false !== strpos((string) $second['message'], '<client.example.net[192.0.2.4]>: Client host rejected'), 'thrown as the server sent it: ' . $second['message']);
+        FsmtpTest::assertSame('failed', $second['status'], 'second send');
+        $logged = (string) $second['response']['message'];
+        FsmtpTest::assert(false !== strpos($logged, 'client.example.net[192.0.2.4]: Client host rejected'), 'the retry\'s reply logged with the inner text: ' . $logged);
+        FsmtpTest::assertSame(false, strpos($logged, 'User unknown'), 'the first attempt\'s 550 is not reported for the retry');
     });
 
     FsmtpTest::case('when the server closes an idle bulk connection with 421 and the retry cannot connect, the retry\'s reason is logged, not the 421', function () use ($start, $stop, $send, $freshMailer) {

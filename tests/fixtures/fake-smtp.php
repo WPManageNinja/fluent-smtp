@@ -17,8 +17,9 @@
  *   custom    answers one stage with the reply in the FAKE_SMTP_REPLY environment
  *             variable (base64 of the lines joined by "\n", so any bytes can be
  *             sent; empty sends nothing), for unusual replies. FAKE_SMTP_AT names
- *             the stage: greeting, starttls (STARTTLS is then offered), auth or
- *             eod (the end of the message, the default). With FAKE_SMTP_CLOSE=1
+ *             the stage: greeting, starttls (STARTTLS is then offered), auth,
+ *             mail (MAIL FROM), rcpt (every RCPT TO) or eod (the end of the
+ *             message, the default). With FAKE_SMTP_CLOSE=1
  *             the server closes the connection after that reply; a greeting
  *             without it then answers 503 to everything but QUIT, as Postfix
  *             does after a 554 greeting
@@ -26,7 +27,8 @@
  *   starttls  offers STARTTLS with a self-signed certificate, then as ok
  *   busy      on its first connection accepts one email and refuses the
  *             next recipient with 550, keeping the connection open; every
- *             later connection gets a 421 greeting
+ *             later connection gets a 421 greeting, or, with FAKE_SMTP_REPLY
+ *             (as for custom), is greeted and answers every RCPT TO with it
  *   mixed     accepts the first recipient, refuses the second with 550, then
  *             refuses the message after DATA with 554
  *   drop      accepts the first recipient, refuses the next two with 450, then
@@ -49,7 +51,7 @@
  * and nothing between DATA and the final dot), so tests can see RSET and QUIT.
  */
 $mode = isset($argv[1]) ? $argv[1] : 'ok';
-$customReply = 'custom' === $mode ? array_filter(explode("\n", (string) base64_decode((string) getenv('FAKE_SMTP_REPLY'))), 'strlen') : [];
+$customReply = in_array($mode, ['custom', 'busy'], true) ? array_filter(explode("\n", (string) base64_decode((string) getenv('FAKE_SMTP_REPLY'))), 'strlen') : [];
 $customAt = 'custom' === $mode ? (getenv('FAKE_SMTP_AT') ?: 'eod') : '';
 $customClose = '1' === getenv('FAKE_SMTP_CLOSE');
 $log = isset($argv[2]) ? $argv[2] : '';
@@ -86,7 +88,7 @@ while (true) {
     $say = function ($line) use ($c) {
         fwrite($c, $line . "\r\n");
     };
-    if ('greet' === $mode || ('busy' === $mode && $connections > 1)) {
+    if ('greet' === $mode || ('busy' === $mode && $connections > 1 && !$customReply)) {
         $say('421 4.7.0 mail.example.test Too many connections from your IP, try again later');
         fclose($c);
         continue;
@@ -188,10 +190,20 @@ while (true) {
         } elseif ('MAIL' === $cmd && 'idle' === $mode && !empty($accepted)) {
             $say('421 4.4.2 mail.example.test Error: timeout exceeded, closing connection');
             exit(0);
+        } elseif (('MAIL' === $cmd && 'mail' === $customAt) || ('RCPT' === $cmd && 'rcpt' === $customAt)) {
+            if ($custom($customAt)) {
+                break;
+            }
         } elseif ('MAIL' === $cmd) {
             $say('sender' === $mode ? '553 5.7.1 <sender@example.test>: Sender address rejected: not owned by user probe-user' : '250 2.1.0 Ok');
         } elseif ('RCPT' === $cmd) {
             $rcptCount++;
+            if ('busy' === $mode && $connections > 1) {
+                foreach ($customReply as $replyLine) {
+                    $say($replyLine);
+                }
+                continue;
+            }
             if ('mixed' === $mode && $rcptCount > 1) {
                 $say('550 5.1.1 <bad@example.test>: Recipient address rejected: User unknown');
                 continue;

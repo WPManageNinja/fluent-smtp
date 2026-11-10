@@ -287,6 +287,28 @@ class Handler extends BaseHandler
     }
 
     /**
+     * Keep the text inside an SMTP reply's angle brackets in the logged copy of a failure.
+     *
+     * In an SMTP reply <...> is protocol syntax (an address, local part or host), which the log's
+     * sanitize_text_field() would erase as a tag. Only the stored copy changes; the thrown message keeps
+     * the reply as sent. A bracket with whitespace inside, such as a tag with attributes, is left for the
+     * sanitiser to strip, and so is anything this could leave behind, such as <x> from <<x>>. A bare tag
+     * such as <b> becomes plain text.
+     *
+     * @param mixed $response The response or error payload to log.
+     * @param bool  $status   Whether the send succeeded.
+     * @return bool
+     */
+    public function processResponse($response, $status)
+    {
+        if (!$status && is_array($response) && isset($response['message']) && is_string($response['message'])) {
+            $response['message'] = preg_replace('/<([^<>\s]*)>/', '$1', $response['message']);
+        }
+
+        return parent::processResponse($response, $status);
+    }
+
+    /**
      * Connection-identifying settings for the keep-alive session guard.
      *
      * @return array
