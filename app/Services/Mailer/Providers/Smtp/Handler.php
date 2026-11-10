@@ -44,6 +44,8 @@ class Handler extends BaseHandler
 
             $this->phpMailer->isSMTP();
 
+            $this->installServerReplies();
+
             // The shared instance keeps this transport, and this relay's host
             // and credentials, until something resets it. Flag it so a fallback
             // to PHP mail() knows to switch back.
@@ -144,7 +146,7 @@ class Handler extends BaseHandler
             ];
 
         } catch (\Exception $e) {
-            $returnResponse = new \WP_Error(422, $e->getMessage(), []);
+            $returnResponse = new \WP_Error(422, $this->failureMessage($e), []);
 
             // During a bulk session the relay may drop the kept-alive socket
             // under us (idle timeout, per-connection message cap, LB reset);
@@ -161,6 +163,12 @@ class Handler extends BaseHandler
                 // bad credentials) are never retried either.
                 if ($socketWasReused && $this->isRetrySafe($e)) {
                     try {
+                        // closeConnection() sent QUIT on the old socket, which noted the first attempt's reason.
+                        $smtp = $this->phpMailer->getSMTPInstance();
+                        if ($smtp instanceof ServerReplies) {
+                            $smtp->clearRecorded();
+                        }
+
                         $this->phpMailer->send();
 
                         // Healthy fresh connection — re-declare its identity
@@ -172,7 +180,7 @@ class Handler extends BaseHandler
                         ];
                     } catch (\Exception $retryException) {
                         BulkSendSessionHandler::closeConnection();
-                        $returnResponse = new \WP_Error(422, $retryException->getMessage(), []);
+                        $returnResponse = new \WP_Error(422, $this->failureMessage($retryException), []);
                     }
                 }
             }
@@ -219,6 +227,63 @@ class Handler extends BaseHandler
         }
 
         return stripos($e->getMessage(), $dataNotAccepted) === false;
+    }
+
+    /**
+     * PHPMailer's SMTP connection, swapped for one that keeps the server's replies.
+     *
+     * Only PHPMailer's own class is swapped, and only while it is not connected,
+     * so a bulk session's open socket and another plugin's SMTP class are left
+     * alone. Anything recorded by an earlier send is cleared.
+     *
+     * @return void
+     */
+    private function installServerReplies()
+    {
+        // PHPMailer creates its SMTP object on first use; wp_mail() loads the class.
+        if (!class_exists(\PHPMailer\PHPMailer\SMTP::class, false)) {
+            return;
+        }
+
+        $smtp = $this->phpMailer->getSMTPInstance();
+
+        if (get_class($smtp) === \PHPMailer\PHPMailer\SMTP::class && !$smtp->connected()) {
+            $smtp = new ServerReplies();
+            $this->phpMailer->setSMTPInstance($smtp);
+        }
+
+        if ($smtp instanceof ServerReplies) {
+            $smtp->clearRecorded();
+        }
+    }
+
+    /**
+     * PHPMailer's failure message with the server's own reason added.
+     *
+     * @param \Exception $e The failure thrown by PHPMailer::send().
+     * @return string
+     */
+    private function failureMessage(\Exception $e)
+    {
+        $smtp = $this->phpMailer->getSMTPInstance();
+
+        if (!$smtp instanceof ServerReplies) {
+            return $e->getMessage();
+        }
+
+        $secrets = [];
+        if ($this->getSetting('auth') == 'yes') {
+            $username = (string) $this->getSetting('username');
+            $password = (string) $this->getSetting('password');
+            // What the login puts on the wire: LOGIN sends both base64-encoded, PLAIN one base64 line.
+            $secrets = array_filter([
+                base64_encode($username),
+                base64_encode($password),
+                base64_encode("\0" . $username . "\0" . $password),
+            ], 'strlen');
+        }
+
+        return $smtp->withReason($e->getMessage(), $secrets);
     }
 
     /**
