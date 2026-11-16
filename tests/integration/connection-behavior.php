@@ -7,6 +7,7 @@ use FluentMail\App\Models\Settings;
 use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\Mailer\Providers\Factory;
 use FluentMail\App\Services\Mailer\Providers\Gmail\Handler as GmailHandler;
+use FluentMail\App\Services\Mailer\Providers\Groundmail\Handler as GroundmailHandler;
 use FluentMail\App\Services\Mailer\Providers\Outlook\API as OutlookApi;
 use FluentMail\App\Services\Mailer\Providers\Outlook\Handler as OutlookHandler;
 use FluentMail\App\Services\Mailer\Providers\ToSend\Handler as ToSendHandler;
@@ -174,6 +175,29 @@ class FsmtpSuiteToSendProbe extends \FluentMail\App\Services\Mailer\Providers\To
  * shape left the handler and what it carried.
  */
 class FsmtpSuiteOutlookProbe extends \FluentMail\App\Services\Mailer\Providers\Outlook\Handler
+{
+    public function runPostSend($phpMailer, $settings)
+    {
+        $this->phpMailer = $phpMailer;
+        $this->setSettings($settings);
+        $this->attributes = $this->setAttributes();
+        $phpMailer->preSend();
+
+        return $this->postSend();
+    }
+
+    public function handleResponse($response)
+    {
+        return $response;
+    }
+}
+
+/**
+ * Runs the real Groundmail postSend() against the harness HTTP interceptor with
+ * the logging tail replaced, so the assertions are about the JSON payload the
+ * handler sent and how it read the answer.
+ */
+class FsmtpSuiteGroundmailProbe extends \FluentMail\App\Services\Mailer\Providers\Groundmail\Handler
 {
     public function runPostSend($phpMailer, $settings)
     {
@@ -718,6 +742,179 @@ return function () {
         FsmtpTest::assert(is_string($mime) && strpos($mime, 'To: to@example.test') !== false, 'MIME message carries the To header');
         FsmtpTest::assert(strpos($mime, 'Cc: cc@example.test') !== false, 'MIME message carries the Cc header');
         FsmtpTest::assert(strpos($mime, 'List-Unsubscribe: <https://example.test/unsubscribe>') !== false, 'MIME message keeps the List-Unsubscribe header');
+    });
+
+    /**
+     * Send one message through the Groundmail probe and return the API request
+     * it produced with the handler's result. The harness answers only the send
+     * endpoint, with the given status and body.
+     */
+    $groundmailSend = function (callable $configure, $status = 200, $answer = null) {
+        FsmtpTest::requirePhpMailer();
+
+        $phpMailer = new \PHPMailer\PHPMailer\PHPMailer(true);
+        $phpMailer->CharSet = 'UTF-8';
+        $phpMailer->setFrom('sender@example.test', 'Suite Sender');
+        $phpMailer->Subject = 'Suite Groundmail message';
+        $phpMailer->Body = 'Suite Groundmail body';
+        $configure($phpMailer);
+
+        if ($answer === null) {
+            $answer = ['id' => 'msg_suite', 'status' => 'sent'];
+        }
+
+        FsmtpTest::interceptHttp(function ($url) use ($status, $answer) {
+            if ($url !== 'https://api.groundmail.dev/emails') {
+                return null;
+            }
+
+            return [
+                'headers'  => [],
+                'body'     => json_encode($answer),
+                'response' => ['code' => $status, 'message' => ''],
+                'cookies'  => [],
+            ];
+        });
+
+        try {
+            $probe = new FsmtpSuiteGroundmailProbe();
+            $result = $probe->runPostSend($phpMailer, [
+                'provider'     => 'groundmail',
+                'sender_email' => 'sender@example.test',
+                'sender_name'  => 'Suite Sender',
+                'key_store'    => 'db',
+                'api_key'      => 'gm_suite_key',
+            ]);
+
+            $requests = FsmtpTest::httpRequests();
+        } finally {
+            FsmtpTest::releaseHttpInterceptor();
+        }
+
+        FsmtpTest::assertSame(1, count($requests), 'API requests made by one Groundmail send');
+
+        return [$requests[0], $result];
+    };
+
+    FsmtpTest::case('Groundmail sends a message as one Email API payload', function () use ($groundmailSend) {
+        $file = get_temp_dir() . 'suite-groundmail-' . wp_generate_password(8, false) . '.txt';
+        file_put_contents($file, 'suite file bytes');
+
+        try {
+            list($request, $result) = $groundmailSend(function ($phpMailer) use ($file) {
+                $phpMailer->addAddress('to@example.test', 'To Person');
+                $phpMailer->addCC('cc@example.test');
+                $phpMailer->addBCC('hidden@example.test', 'Hidden');
+                $phpMailer->addReplyTo('replies@example.test', 'Replies');
+                $phpMailer->addReplyTo('help@example.test');
+                $phpMailer->addCustomHeader('X-Suite-Tag', 'suite');
+                $phpMailer->addCustomHeader('List-Unsubscribe', '<https://example.test/unsubscribe>');
+                // The API refuses a request naming a header it sets itself.
+                $phpMailer->addCustomHeader('Sender', 'bounce@example.test');
+                $phpMailer->addAttachment($file, 'report.txt');
+                // The shape the plain-text option in helpers.php hands over.
+                $phpMailer->ContentType = 'multipart/alternative';
+                $phpMailer->Body = '<p>Suite Groundmail body</p>';
+                $phpMailer->AltBody = 'Suite Groundmail body';
+            });
+        } finally {
+            @unlink($file);
+        }
+
+        FsmtpTest::assert(!is_wp_error($result), 'Groundmail probe send failed: ' . (is_wp_error($result) ? $result->get_error_message() : ''));
+        FsmtpTest::assertSame('msg_suite', isset($result['id']) ? $result['id'] : null, 'Groundmail send result message id');
+
+        FsmtpTest::assertSame('https://api.groundmail.dev/emails', $request['url'], 'Groundmail send endpoint');
+        FsmtpTest::assert(
+            isset($request['args']['headers']['Authorization']) && $request['args']['headers']['Authorization'] === 'Bearer gm_suite_key',
+            'Groundmail request does not carry the API key as a Bearer credential'
+        );
+        FsmtpTest::assertSame(true, isset($request['args']['sslverify']) ? $request['args']['sslverify'] : null, 'TLS verification for the Groundmail send');
+
+        $payload = json_decode($request['args']['body'], true);
+
+        FsmtpTest::assertSame(['email' => 'sender@example.test', 'name' => 'Suite Sender'], $payload['from'], 'Groundmail from address');
+        FsmtpTest::assertSame(['to@example.test'], $payload['to'], 'Groundmail to recipients');
+        FsmtpTest::assertSame(['cc@example.test'], isset($payload['cc']) ? $payload['cc'] : null, 'Groundmail cc recipients');
+        FsmtpTest::assertSame(['hidden@example.test'], isset($payload['bcc']) ? $payload['bcc'] : null, 'Groundmail bcc recipients');
+        FsmtpTest::assertSame(['replies@example.test', 'help@example.test'], isset($payload['reply_to']) ? $payload['reply_to'] : null, 'Groundmail reply_to keeps every address');
+        FsmtpTest::assertSame('Suite Groundmail message', $payload['subject'], 'Groundmail subject');
+        FsmtpTest::assertSame('<p>Suite Groundmail body</p>', isset($payload['html']) ? $payload['html'] : null, 'Groundmail html body');
+        FsmtpTest::assertSame('Suite Groundmail body', isset($payload['text']) ? $payload['text'] : null, 'Groundmail text body');
+        FsmtpTest::assertSame(
+            ['X-Suite-Tag' => 'suite', 'List-Unsubscribe' => '<https://example.test/unsubscribe>'],
+            isset($payload['headers']) ? $payload['headers'] : null,
+            'Groundmail custom headers as an object map, without headers the API sets'
+        );
+
+        $attachments = isset($payload['attachments']) ? $payload['attachments'] : [];
+        FsmtpTest::assertSame(1, count($attachments), 'Groundmail attachment count');
+        FsmtpTest::assertSame('report.txt', $attachments[0]['name'], 'Groundmail attachment name');
+        FsmtpTest::assertSame('text/plain', $attachments[0]['content_type'], 'Groundmail attachment content type');
+        FsmtpTest::assertSame('suite file bytes', base64_decode($attachments[0]['data']), 'Groundmail attachment bytes');
+    });
+
+    FsmtpTest::case('Groundmail sends a plain-text message without an html body', function () use ($groundmailSend) {
+        list($request) = $groundmailSend(function ($phpMailer) {
+            $phpMailer->addAddress('to@example.test');
+        });
+
+        $payload = json_decode($request['args']['body'], true);
+
+        FsmtpTest::assertSame('Suite Groundmail body', isset($payload['text']) ? $payload['text'] : null, 'Groundmail plain-text body');
+        FsmtpTest::assert(!array_key_exists('html', $payload), 'a plain-text Groundmail message carried an html body');
+        FsmtpTest::assert(!array_key_exists('headers', $payload), 'a Groundmail message without custom headers carried a headers field');
+    });
+
+    FsmtpTest::case('Groundmail reports the API error message on a refused send', function () use ($groundmailSend) {
+        list(, $result) = $groundmailSend(function ($phpMailer) {
+            $phpMailer->addAddress('to@example.test');
+        }, 403, ['error' => ['message' => 'Domain example.test is not verified', 'code' => 'domain_not_verified']]);
+
+        FsmtpTest::assert(is_wp_error($result), 'a refused Groundmail send was not reported as an error');
+        FsmtpTest::assertSame(403, $result->get_error_code(), 'Groundmail refused send error code');
+        FsmtpTest::assertSame('Domain example.test is not verified', $result->get_error_message(), 'Groundmail refused send error message');
+    });
+
+    FsmtpTest::case('Groundmail key check rejects only a 401', function () {
+        $status = null;
+        FsmtpTest::interceptHttp(function ($url) use (&$status) {
+            if ($url !== 'https://api.groundmail.dev/emails?limit=1') {
+                return null;
+            }
+
+            return [
+                'headers'  => [],
+                'body'     => $status === 200 ? json_encode(['data' => []]) : json_encode(['error' => ['message' => 'suite']]),
+                'response' => ['code' => $status, 'message' => ''],
+                'cookies'  => [],
+            ];
+        });
+
+        $connection = [
+            'provider'  => 'groundmail',
+            'key_store' => 'db',
+            'api_key'   => 'gm_suite_key',
+        ];
+
+        try {
+            // A send-only key answers 403 here and still sends, so only a 401
+            // may block the save.
+            foreach ([401 => true, 403 => false, 200 => false] as $status => $expectRejected) {
+                $errors = null;
+                try {
+                    (new GroundmailHandler())->checkConnection($connection);
+                } catch (\FluentMail\Includes\Support\ValidationException $e) {
+                    $errors = $e->errors();
+                }
+
+                FsmtpTest::assertSame($expectRejected, isset($errors['api_key']), 'Groundmail key rejected on a ' . $status . ' answer');
+            }
+
+            FsmtpTest::assertSame(3, count(FsmtpTest::httpRequests()), 'API requests made by three key checks');
+        } finally {
+            FsmtpTest::releaseHttpInterceptor();
+        }
     });
 
     $outlookSettings = function ($sender) {
