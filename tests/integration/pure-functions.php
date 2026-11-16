@@ -4,6 +4,7 @@ use FluentMail\App\Http\Controllers\SettingsController;
 use FluentMail\App\Models\Logger;
 use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\Mailer\Providers\Simulator\Handler as SimulatorHandler;
+use FluentMail\App\Services\NotificationHelper;
 use FluentMail\App\Services\Reporting;
 use FluentMail\Includes\Support\ValidationException;
 
@@ -233,5 +234,139 @@ return function () {
         ]]);
 
         FsmtpTest::assertSame($recipients, $row['to'], 'complete serialized to column');
+    });
+
+    FsmtpTest::case('notification heading flips to the fallback wording for delivered-by-fallback alerts', function () {
+        FsmtpTest::assertSame(
+            '[' . fluentMailSiteTitle() . '] Failed to send email',
+            NotificationHelper::getNotificationHeading(false),
+            'plain failure notification heading'
+        );
+        FsmtpTest::assertSame(
+            '[' . fluentMailSiteTitle() . '] Email sent via fallback after primary failure',
+            NotificationHelper::getNotificationHeading(true),
+            'fallback notification heading'
+        );
+    });
+
+    FsmtpTest::case('slack alert block gains fallback wording and a plain logs link when delivered by fallback', function () {
+        $handler = new class {
+            public function getSetting($key) { return 'smtp'; }
+        };
+        $logData = [
+            'to'       => maybe_serialize([['email' => 'person@example.test', 'name' => 'Person']]),
+            'subject'  => 'Suite slack subject',
+            'response' => maybe_serialize(['message' => 'primary connection refused']),
+        ];
+
+        $failed = NotificationHelper::formatSlackMessageBlock($handler, $logData);
+        FsmtpTest::assertSame('[' . fluentMailSiteTitle() . '] Failed to send email', $failed['text'], 'failed slack heading');
+        FsmtpTest::assert(
+            strpos($failed['blocks'][3]['text']['text'], 'status=failed') !== false,
+            'failed slack logs link keeps the failed filter'
+        );
+        FsmtpTest::assert(
+            strpos($failed['blocks'][3]['text']['text'], 'View Failed Email(s)') !== false,
+            'failed slack logs link label'
+        );
+
+        $fallback = NotificationHelper::formatSlackMessageBlock($handler, $logData, true);
+        FsmtpTest::assertSame(
+            '[' . fluentMailSiteTitle() . '] Email sent via fallback after primary failure',
+            $fallback['text'],
+            'fallback slack heading'
+        );
+        FsmtpTest::assert(
+            strpos($fallback['blocks'][3]['text']['text'], 'status=failed') === false,
+            'fallback slack logs link drops the failed filter'
+        );
+        FsmtpTest::assert(
+            strpos($fallback['blocks'][3]['text']['text'], 'View Email Logs') !== false,
+            'fallback slack logs link label'
+        );
+        FsmtpTest::assert(
+            strpos($fallback['blocks'][2]['text']['text'], 'primary connection refused') !== false,
+            'fallback slack shows the primary error message'
+        );
+    });
+
+    FsmtpTest::case('discord alert block gains fallback wording and a plain logs link when delivered by fallback', function () {
+        $handler = new class {
+            public function getSetting($key) { return 'smtp'; }
+        };
+        $logData = [
+            'to'       => maybe_serialize([['email' => 'person@example.test', 'name' => 'Person']]),
+            'subject'  => 'Suite discord subject',
+            'response' => maybe_serialize(['message' => 'primary connection refused']),
+        ];
+
+        $failed = NotificationHelper::formatDiscordMessageBlock($handler, $logData);
+        FsmtpTest::assert(
+            strpos($failed, '## [' . fluentMailSiteTitle() . '] Failed to send email') === 0,
+            'failed discord heading'
+        );
+        FsmtpTest::assert(strpos($failed, 'status=failed') !== false, 'failed discord logs link keeps the failed filter');
+
+        $fallback = NotificationHelper::formatDiscordMessageBlock($handler, $logData, true);
+        FsmtpTest::assert(
+            strpos($fallback, '## [' . fluentMailSiteTitle() . '] Email sent via fallback after primary failure') === 0,
+            'fallback discord heading'
+        );
+        FsmtpTest::assert(strpos($fallback, 'status=failed') === false, 'fallback discord logs link drops the failed filter');
+        FsmtpTest::assert(strpos($fallback, 'View Email Logs') !== false, 'fallback discord logs link label');
+        FsmtpTest::assert(strpos($fallback, 'primary connection refused') !== false, 'fallback discord shows the primary error message');
+    });
+
+    FsmtpTest::case('pushover alert body gains a plain logs link when delivered by fallback', function () {
+        $handler = new class {
+            public function getSetting($key) { return 'smtp'; }
+        };
+        $logData = [
+            'to'       => maybe_serialize([['email' => 'person@example.test', 'name' => 'Person']]),
+            'subject'  => 'Suite pushover subject',
+            'response' => maybe_serialize(['message' => 'primary connection refused']),
+        ];
+
+        $failed = NotificationHelper::formatPushoverMessage($handler, $logData);
+        FsmtpTest::assert(strpos($failed, 'status=failed') !== false, 'failed pushover logs link keeps the failed filter');
+        FsmtpTest::assert(strpos($failed, 'View Failed Email(s)') !== false, 'failed pushover logs link label');
+
+        $fallback = NotificationHelper::formatPushoverMessage($handler, $logData, true);
+        FsmtpTest::assert(strpos($fallback, 'status=failed') === false, 'fallback pushover logs link drops the failed filter');
+        FsmtpTest::assert(strpos($fallback, 'View Email Logs') !== false, 'fallback pushover logs link label');
+        FsmtpTest::assert(strpos($fallback, 'primary connection refused') !== false, 'fallback pushover shows the primary error message');
+    });
+
+    FsmtpTest::case('pushover alert accepts a custom title without breaking the default', function () {
+        $captured = [];
+        $recorder = function ($preempt, $args, $url) use (&$captured) {
+            if (strpos((string)$url, 'api.pushover.net') !== false) {
+                $captured[] = $args['body'];
+                return [
+                    'response' => ['code' => 200],
+                    'body'     => wp_json_encode(['status' => 1]),
+                ];
+            }
+            return $preempt;
+        };
+        add_filter('pre_http_request', $recorder, 1, 3);
+
+        try {
+            NotificationHelper::sendPushoverMessage('suite body', 'suite-token', 'suite-user', true, 1);
+            FsmtpTest::assertSame(
+                '[' . fluentMailSiteTitle() . '] Failed to send email',
+                isset($captured[0]['title']) ? $captured[0]['title'] : '',
+                'default pushover title'
+            );
+
+            NotificationHelper::sendPushoverMessage('suite body', 'suite-token', 'suite-user', true, 1, 'Suite Custom Title');
+            FsmtpTest::assertSame(
+                'Suite Custom Title',
+                isset($captured[1]['title']) ? $captured[1]['title'] : '',
+                'custom pushover title'
+            );
+        } finally {
+            remove_filter('pre_http_request', $recorder, 1);
+        }
     });
 };

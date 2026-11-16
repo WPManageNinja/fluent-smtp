@@ -370,6 +370,139 @@ return function () {
         FsmtpTest::assertSame($beforeCounts, FsmtpTest::protectedTableCounts(), 'fallback transaction cleanup');
     });
 
+    FsmtpTest::case('successful fallback fires the sent-via-fallback action with the primary failure data', function () use (
+        $baseSettings,
+        $withSettings
+    ) {
+        global $wpdb;
+
+        if (!class_exists('PHPMailer\\PHPMailer\\PHPMailer')) {
+            require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
+            require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+            require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+        }
+
+        $fallbackEmail = 'fallback-alert-' . FsmtpTest::uniq() . '@example.test';
+        $settings = $baseSettings();
+        $settings['misc']['fallback_connection'] = 'suite-fallback';
+        $settings['connections']['suite-fallback'] = [
+            'title' => 'Suite Fallback Alert',
+            'provider_settings' => [
+                'provider'     => 'smtp',
+                'sender_email' => $fallbackEmail,
+            ],
+        ];
+
+        $beforeCounts = FsmtpTest::protectedTableCounts();
+        $wpdb->query('START TRANSACTION');
+        try {
+            $table = $wpdb->prefix . 'fsmpt_email_logs';
+            $logId = FsmtpFactory::insertLog($table, [
+                'subject'  => 'fallback alert source ' . FsmtpTest::uniq(),
+                'body'     => 'source body',
+                'headers'  => maybe_serialize([]),
+                'response' => maybe_serialize(['message' => 'primary connection refused']),
+                'extra'    => maybe_serialize(['provider' => 'Suite Primary']),
+                'status'   => 'failed',
+            ]);
+
+            $phpMailer = new \PHPMailer\PHPMailer\PHPMailer(true);
+            $phpMailer->CharSet = 'UTF-8';
+            $phpMailer->setFrom('primary-' . FsmtpTest::uniq() . '@example.test', 'Suite Primary');
+            $phpMailer->addAddress('recipient@example.test');
+            $phpMailer->Subject = 'Suite fallback alert message';
+            $phpMailer->Body = 'Suite fallback alert body';
+            $handler = new FsmtpSuiteFailedHandler($phpMailer);
+
+            $viaFallbackObserved = [];
+            $viaFallbackObserver = function ($rowId, $observedHandler, $data) use (&$viaFallbackObserved) {
+                $viaFallbackObserved[] = [$rowId, $observedHandler, $data];
+            };
+            add_action('fluentmail_email_sent_via_fallback', $viaFallbackObserver, PHP_INT_MAX, 3);
+
+            $noFallbackCount = 0;
+            $noFallbackObserver = function () use (&$noFallbackCount) {
+                $noFallbackCount++;
+            };
+            add_action('fluentmail_email_sending_failed_no_fallback', $noFallbackObserver, PHP_INT_MAX, 3);
+
+            try {
+                $withSettings($settings, function () use ($handler, $logId, &$viaFallbackObserved, &$noFallbackCount) {
+                    $data = [
+                        'response' => ['message' => 'primary connection refused'],
+                        'subject'  => 'Suite fallback alert message',
+                    ];
+                    $result = (new SchedulerHandler())->maybeHandleFallbackConnection(false, $logId, $handler, $data);
+
+                    FsmtpTest::assertSame(true, $result, 'fallback alert send result');
+                    FsmtpTest::assertSame(1, count($viaFallbackObserved), 'sent-via-fallback action count');
+                    $payload = isset($viaFallbackObserved[0]) ? $viaFallbackObserved[0] : [null, null, null];
+                    FsmtpTest::assertSame($logId, $payload[0], 'sent-via-fallback log ID');
+                    FsmtpTest::assertSame($handler, $payload[1], 'sent-via-fallback handler');
+                    FsmtpTest::assertSame($data, $payload[2], 'sent-via-fallback data');
+                    FsmtpTest::assertSame(0, $noFallbackCount, 'no-fallback action count on fallback success');
+                });
+            } finally {
+                remove_action('fluentmail_email_sent_via_fallback', $viaFallbackObserver, PHP_INT_MAX);
+                remove_action('fluentmail_email_sending_failed_no_fallback', $noFallbackObserver, PHP_INT_MAX);
+            }
+        } finally {
+            $wpdb->query('ROLLBACK');
+        }
+
+        FsmtpTest::assertSame($beforeCounts, FsmtpTest::protectedTableCounts(), 'fallback alert transaction cleanup');
+    });
+
+    FsmtpTest::case('unresolvable fallback send fires neither alert action', function () use ($baseSettings, $withSettings) {
+        if (!class_exists('PHPMailer\\PHPMailer\\PHPMailer')) {
+            require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
+            require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+            require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+        }
+
+        $settings = $baseSettings();
+        $settings['misc']['simulate_emails'] = 'no';
+        $settings['misc']['fallback_connection'] = 'suite-ghost';
+        $settings['connections']['suite-ghost'] = [
+            'title' => 'Suite Ghost Fallback',
+            'provider_settings' => [
+                'provider'     => 'smtp',
+                'sender_email' => 'ghost-' . FsmtpTest::uniq() . '@example.test',
+            ],
+        ];
+
+        $phpMailer = new \PHPMailer\PHPMailer\PHPMailer(true);
+        $phpMailer->CharSet = 'UTF-8';
+        $phpMailer->setFrom('primary-' . FsmtpTest::uniq() . '@example.test', 'Suite Primary');
+        $handler = new FsmtpSuiteFailedHandler($phpMailer);
+
+        $viaFallbackCount = 0;
+        $viaFallbackObserver = function () use (&$viaFallbackCount) {
+            $viaFallbackCount++;
+        };
+        add_action('fluentmail_email_sent_via_fallback', $viaFallbackObserver, PHP_INT_MAX, 3);
+
+        $noFallbackCount = 0;
+        $noFallbackObserver = function () use (&$noFallbackCount) {
+            $noFallbackCount++;
+        };
+        add_action('fluentmail_email_sending_failed_no_fallback', $noFallbackObserver, PHP_INT_MAX, 3);
+
+        try {
+            $withSettings($settings, function () use ($handler) {
+                $result = (new SchedulerHandler())->maybeHandleFallbackConnection(false, 123456789, $handler, []);
+
+                FsmtpTest::assertSame(false, $result, 'unresolvable fallback send result');
+                FsmtpTest::assertSame(1, $handler->getPhpMailerCalls, 'unresolvable fallback mailer access count');
+                FsmtpTest::assertSame(0, $viaFallbackCount, 'sent-via-fallback action count');
+                FsmtpTest::assertSame(0, $noFallbackCount, 'no-fallback action count');
+            });
+        } finally {
+            remove_action('fluentmail_email_sent_via_fallback', $viaFallbackObserver, PHP_INT_MAX);
+            remove_action('fluentmail_email_sending_failed_no_fallback', $noFallbackObserver, PHP_INT_MAX);
+        }
+    });
+
     FsmtpTest::case('daily health pass re-arms Gmail renewal after a failed event ends the chain', function () use (
         $baseSettings,
         $withSettings

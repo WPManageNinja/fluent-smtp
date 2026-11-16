@@ -284,9 +284,11 @@ class NotificationHelper
         return json_decode($body, true);
     }
 
-    public static function sendPushoverMessage($message, $apiToken, $userKey, $blocking = false, $priority = 1)
+    public static function sendPushoverMessage($message, $apiToken, $userKey, $blocking = false, $priority = 1, $title = '')
     {
-        $title = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), fluentMailSiteTitle());
+        if (!$title) {
+            $title = self::getNotificationHeading();
+        }
 
         $args = array(
             'body'        => array(
@@ -334,7 +336,44 @@ class NotificationHelper
         return $responseData;
     }
 
-    public static function formatSlackMessageBlock($handler, $logData = [])
+    /**
+     * The heading every alert channel starts with. $viaFallback flips it to
+     * the "primary failed, the fallback delivered" wording.
+     *
+     * @param bool $viaFallback
+     * @return string
+     */
+    public static function getNotificationHeading($viaFallback = false)
+    {
+        if ($viaFallback) {
+            return sprintf(
+                /* translators: %s: site title */
+                __('[%s] Email sent via fallback after primary failure', 'fluent-smtp'),
+                fluentMailSiteTitle()
+            );
+        }
+
+        return sprintf(
+            /* translators: %s: site title */
+            __('[%s] Failed to send email', 'fluent-smtp'),
+            fluentMailSiteTitle()
+        );
+    }
+
+    /**
+     * The logs deep link. The failed filter only helps for outright failures;
+     * a fallback success updates the row to sent, so that variant links the
+     * plain log list.
+     *
+     * @param bool $viaFallback
+     * @return string
+     */
+    public static function getLogsLinkLabel($viaFallback = false)
+    {
+        return $viaFallback ? __('View Email Logs', 'fluent-smtp') : __('View Failed Email(s)', 'fluent-smtp');
+    }
+
+    public static function formatSlackMessageBlock($handler, $logData = [], $viaFallback = false)
     {
         $sendingTo = self::unserialize(Arr::get($logData, 'to'));
 
@@ -346,7 +385,12 @@ class NotificationHelper
             $sendingTo = Arr::get($logData, 'to');
         }
 
-        $heading = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), fluentMailSiteTitle());
+        $heading = self::getNotificationHeading($viaFallback);
+
+        $logsUrl = admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&search=');
+        if (!$viaFallback) {
+            $logsUrl = admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=');
+        }
 
         return [
             'text'   => $heading,
@@ -391,14 +435,14 @@ class NotificationHelper
                     'type' => 'section',
                     'text' => [
                         'type' => "mrkdwn",
-                        'text' => "<" . admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=') . '|' . __('View Failed Email(s)', 'fluent-smtp') . '>'
+                        'text' => "<" . $logsUrl . '|' . self::getLogsLinkLabel($viaFallback) . '>'
                     ]
                 ]
             ]
         ];
     }
 
-    public static function formatDiscordMessageBlock($handler, $logData = [])
+    public static function formatDiscordMessageBlock($handler, $logData = [], $viaFallback = false)
     {
         $sendingTo = self::unserialize(Arr::get($logData, 'to'));
 
@@ -410,7 +454,12 @@ class NotificationHelper
             $sendingTo = Arr::get($logData, 'to');
         }
 
-        $heading = sprintf(__('[%s] Failed to send email', 'fluent-smtp'), fluentMailSiteTitle());
+        $heading = self::getNotificationHeading($viaFallback);
+
+        $logsUrl = admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&search=');
+        if (!$viaFallback) {
+            $logsUrl = admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=');
+        }
 
         $content = '## ' . $heading . "\n";
         $content .= __('**Website URL:** ', 'fluent-smtp') . site_url() . "\n";
@@ -418,12 +467,12 @@ class NotificationHelper
         $content .= __('**To Email Address:** ', 'fluent-smtp') . $sendingTo . "\n";
         $content .= __('**Email Subject:** ', 'fluent-smtp') . Arr::get($logData, 'subject') . "\n";
         $content .= __('**Error Message:** ```', 'fluent-smtp') . self::getErrorMessageFromResponse(self::unserialize(Arr::get($logData, 'response'))) . "```\n";
-        $content .= __('[View Failed Email(s)](', 'fluent-smtp') . admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=') . ')';
+        $content .= '[' . self::getLogsLinkLabel($viaFallback) . '](' . $logsUrl . ')';
 
         return $content;
     }
 
-    public static function formatPushoverMessage($handler, $logData = [])
+    public static function formatPushoverMessage($handler, $logData = [], $viaFallback = false)
     {
         $sendingTo = self::unserialize(Arr::get($logData, 'to'));
 
@@ -446,10 +495,11 @@ class NotificationHelper
         $message .= '<code>' . esc_html(self::getErrorMessageFromResponse(
             self::unserialize(Arr::get($logData, 'response'))
         )) . '</code><br>';
-        $logsUrl = admin_url(
-            'options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search='
-        );
-        $message .= '<a href="' . esc_url($logsUrl) . '">' . __('View Failed Email(s)', 'fluent-smtp') . '</a>';
+        $logsUrl = admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&search=');
+        if (!$viaFallback) {
+            $logsUrl = admin_url('options-general.php?page=fluent-mail#/logs?per_page=10&page=1&status=failed&search=');
+        }
+        $message .= '<a href="' . esc_url($logsUrl) . '">' . self::getLogsLinkLabel($viaFallback) . '</a>';
 
         return $message;
     }
