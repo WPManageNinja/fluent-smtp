@@ -60,8 +60,17 @@ abstract class Controller
      */
     public function verify()
     {
-        $permission = fluentMailManageCapability();
-        if(!current_user_can($permission)) {
+        return $this->verifyAccess(fluentMailCurrentUserCanManage());
+    }
+
+    protected function verifyLogAccess()
+    {
+        return $this->verifyAccess(fluentMailCurrentUserCanViewLogs());
+    }
+
+    protected function verifyAccess($allowed)
+    {
+        if(!$allowed) {
             wp_send_json_error([
                 'message' => __('You do not have permission to do this.', 'fluent-smtp')
             ], 403);

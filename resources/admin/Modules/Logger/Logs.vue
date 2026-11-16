@@ -12,12 +12,12 @@
                     <LogBulkAction
                         @on-bulk-action="handleBulkAction"
                         :selected="selectedLogs"
-                        v-if="selectedLogs.length"
+                        v-if="canManage && selectedLogs.length"
                     />
                 </div>
             </div>
 
-            <el-alert v-if="!isLogsOn" :closable="false" show-icon type="warning"
+            <el-alert v-if="canManage && !isLogsOn" :closable="false" show-icon type="warning"
                       style="margin-bottom: 20px;">
                 {{ $t('__EMAIL_LOGGING_OFF') }}
                 <el-button link @click="turnOnEmailLogging">{{ $t('Turn On') }}</el-button>
@@ -56,7 +56,7 @@
                             style="width:100%"
                             @selection-change="handleSelectionChange"
                         >
-                            <el-table-column type="selection" width="55"/>
+                            <el-table-column v-if="canManage" type="selection" width="55"/>
 
                             <!--
                                 Subject is the only column that takes what is left over, and
@@ -137,14 +137,14 @@
                                             size="small"
                                             icon="FsmIconRefresh"
                                             @click="handleRetryClick(scope.row)"
-                                            v-if="scope.row.status == 'failed'"
+                                            v-if="canManage && scope.row.status == 'failed'"
                                         >{{ $t('Retry') }}
                                         </el-button>
                                         <el-button
                                             size="small"
                                             icon="FsmIconRefreshRight"
                                             @click="handleResendClick(scope.row)"
-                                            v-if="scope.row.status == 'sent'"
+                                            v-if="canManage && scope.row.status == 'sent'"
                                         >
                                             {{ $t('Resend') }}
                                             <span v-if="scope.row.resent_count > 0">({{ scope.row.resent_count }})</span>
@@ -158,7 +158,7 @@
                                             @click="handleView(scope.row)"
                                         />
 
-                                        <confirm @yes="handleDelete(scope.row.id)">
+                                        <confirm v-if="canManage" @yes="handleDelete(scope.row.id)">
                                             <template #reference>
                                                 <el-button
                                                     size="small"
@@ -176,7 +176,7 @@
 
                     <div class="fsm_pager">
                         <div>
-                            <confirm v-if="logs.length" placement="right"
+                            <confirm v-if="canManage && logs.length" placement="right"
                                      :message="$t('Delete every logged email? This cannot be undone.')"
                                      @yes="handleDelete(['all'])">
                                 <template #reference>

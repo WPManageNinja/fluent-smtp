@@ -60,6 +60,14 @@ if (!function_exists('fluentMailCurrentUserCanManage')) {
     }
 }
 
+if (!function_exists('fluentMailCurrentUserCanViewLogs')) {
+    /** Explicit site-wide email-log access; never implies management authority. */
+    function fluentMailCurrentUserCanViewLogs()
+    {
+        return fluentMailCurrentUserCanManage() || current_user_can('fluentmail_view_logs');
+    }
+}
+
 if (!function_exists('fluentMailMix')) {
     /**
      * Generate the mixed URL for the given asset path.

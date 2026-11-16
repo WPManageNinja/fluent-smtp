@@ -73,6 +73,8 @@ Like any WP mail SMTP plugin, FluentSMTP replaces the WordPress <code>wp_mail()<
 == Email Logging and Debugging ==
 FluentSMTP logs every email your WordPress site sends, so you can check at any time what went out, what did not, and what the mail server said about it. Failed emails can be retried, and any logged email can be resent.
 
+Administrators may explicitly grant the WordPress capability `fluentmail_view_logs` to trusted users through their role tools or WP-CLI (`wp user add-cap USERNAME fluentmail_view_logs`). This permits searching and viewing all email logs on that site, including recipients, message bodies and logged headers. It does not permit SMTP settings, sending/retrying/resending emails, or deleting logs. These users receive a separate Email Logs menu outside Settings. No role receives this capability automatically. Revoke it with `wp user remove-cap USERNAME fluentmail_view_logs`. Existing FluentSMTP managers retain their current access.
+
 == 🎉 Amazon SES (Native API Connection) ==
 The Amazon SES connection sends your WordPress email through Amazon's low-cost, high-deliverability infrastructure, set up in a couple of minutes. It uses Amazon's current SES API and supports every SES region, including the EU Sovereign Cloud.
 
@@ -344,6 +346,9 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 6. Email details: preview the message and check how it was delivered
 
 == Changelog ==
+
+= Next =
+* Add read-only email-log access through the explicit fluentmail_view_logs capability, with a separate Email Logs menu and no settings, resend or deletion permission.
 
 = 2.4.5 (Date: Nov 04, 2026) =
 - Added the SendGrid EU region and an API region choice for SMTP2GO

@@ -9,22 +9,37 @@ class LoggerController extends Controller
 {
     public function get(Request $request, Logger $logger)
     {
-        $this->verify();
+        $this->verifyLogAccess();
 
         return $this->send(
-            $logger->get(
+            $this->readerPayload($logger->get(
                 $request->except(['nonce', 'action'])
-            )
+            ))
         );
     }
 
     public function show(Request $request, Logger $logger)
     {
-        $this->verify();
+        $this->verifyLogAccess();
 
         $result = $logger->navigate($request->all());
 
-        return $this->sendSuccess($result);
+        return $this->sendSuccess($this->readerPayload($result));
+    }
+
+    /** Raw attachment paths/data are needed by managers' resend flows only. */
+    protected function readerPayload(array $data)
+    {
+        if (fluentMailCurrentUserCanManage()) {
+            return $data;
+        }
+        unset($data['attachments']);
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->readerPayload($value);
+            }
+        }
+        return $data;
     }
 
     /**

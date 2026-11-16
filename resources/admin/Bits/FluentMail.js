@@ -52,6 +52,14 @@ export default class FluentMail {
         this.appVars = window.FluentMailAdmin;
     }
 
+    // Existing app extensions assume management access; readers use core routes only.
+    getApplicationRoutes(routes) {
+        if (this.appVars.permissions?.manage === false) {
+            return routes;
+        }
+        return this.applyFilters('fluent_mail_global_routes', routes);
+    }
+
     /**
      * The helpers every component reaches for through `this.`.
      *
@@ -69,6 +77,11 @@ export default class FluentMail {
         const self = this;
 
         return {
+            computed: {
+                canManage() {
+                    return !self.appVars.permissions || self.appVars.permissions.manage === true;
+                }
+            },
             data() {
                 return {
                     appVars: self.appVars,
