@@ -12,7 +12,7 @@ use FluentMail\App\Services\Mailer\Providers\Factory;
 use FluentMail\App\Services\ConnectionHealth;
 use FluentMail\App\Services\Converter;
 use FluentMail\App\Services\SecretMasker;
-use FluentMail\App\Services\Mailer\Providers\Smtp\Handler as SmtpHandler;
+use FluentMail\App\Services\ConnectionSaver;
 
 class SettingsController extends Controller
 {
@@ -62,8 +62,6 @@ class SettingsController extends Controller
     {
         $this->verify();
 
-        $passWordKeys = ['password', 'access_key', 'secret_key', 'api_key', 'client_id', 'client_secret', 'auth_token', 'access_token', 'refresh_token'];
-
         try {
             $data = $request->except(['action', 'nonce']);
 
@@ -71,8 +69,8 @@ class SettingsController extends Controller
 
             /*
              * The credentials come back masked unless the admin typed over them, so
-             * the stored ones are put back here - before validateConnection() and
-             * checkConnection() below, which both have to test the real key rather
+             * the stored ones are put back here - before ConnectionSaver::save() validates
+             * and checks the connection, which both have to test the real key rather
              * than the sentinel standing in for it.
              *
              * An empty value is not a mask and is not restored: clearing a field is
@@ -103,52 +101,7 @@ class SettingsController extends Controller
 
             $data['connection'] = SecretMasker::resolve($data['connection'], $storedConnection);
 
-            $provider = $factory->make($data['connection']['provider']);
-
-            $connection = $data['connection'];
-
-            foreach ($connection as $index => $value) {
-                if ($index == 'sender_email') {
-                    $connection['sender_email'] = sanitize_email($connection['sender_email']);
-                }
-
-                if (in_array($index, $passWordKeys)) {
-                    if ($value) {
-                        $connection[$index] = trim($value);
-                    }
-                    continue;
-                }
-
-                if (is_string($value) && $value) {
-                    $connection[$index] = sanitize_text_field($value);
-
-                    // Store the name the admin typed. A sender name copied from
-                    // the site title arrives HTML-escaped, and it is plain text
-                    // everywhere it is used. fluentMailGetSettings() decodes on
-                    // read as well, so installs that already hold an escaped
-                    // name are fixed whether or not they ever save again.
-                    if ($index === 'sender_name') {
-                        $connection[$index] = wp_specialchars_decode($connection[$index], ENT_QUOTES);
-                    }
-                }
-            }
-
-            // Store the connection security in the one form the SMTP handler sends with.
-            if ($connection['provider'] === 'smtp' && array_key_exists('encryption', $connection)) {
-                $connection['encryption'] = SmtpHandler::normalizeEncryption($connection['encryption']);
-            }
-
-            $data['connection'] = $connection;
-
-            $this->validateConnection($provider, $connection);
-
-            $provider->checkConnection($connection);
-
-            $data['valid_senders'] = $provider->getValidSenders($connection);
-
-            $data = apply_filters('fluentmail_saving_connection_data', $data, $data['connection']['provider']);
-
-            $settings->store($data);
+            ConnectionSaver::save($data['connection'], (string) Arr::get($data, 'connection_key', ''));
 
             return $this->sendSuccess([
                 'message'     => __('Settings saved.', 'fluent-smtp'),
@@ -364,23 +317,7 @@ class SettingsController extends Controller
 
     public function validateConnection($provider, $connection)
     {
-        $errors = [];
-
-        try {
-            $provider->validateBasicInformation($connection);
-        } catch (ValidationException $e) {
-            $errors = $e->errors();
-        }
-
-        try {
-            $provider->validateProviderInformation($connection);
-        } catch (ValidationException $e) {
-            $errors = array_merge($errors, $e->errors());
-        }
-
-        if ($errors) {
-            throw new ValidationException(esc_html__('Unprocessable Entity', 'fluent-smtp'), 422, null, $errors); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
-        }
+        ConnectionSaver::validate($provider, $connection);
     }
 
     public function getConnectionInfo(Request $request, Settings $settings, Factory $factory)

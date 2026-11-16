@@ -1006,6 +1006,48 @@ if (!function_exists('fluentMailSetSettings')) {
     }
 }
 
+if (!function_exists('fluentMailSaveConnection')) {
+    /**
+     * Saves a connection the way the "Save Connection Settings" button does: the fields are
+     * sanitized and validated, the connection is checked with the provider, and it is stored
+     * with the senders it may send as. For code that offers its own settings screen.
+     *
+     * Credentials are stored encrypted as usual. Pass them in plain text: a masked value
+     * from the admin screen is not resolved here.
+     *
+     * Example:
+     *     $key = fluentMailSaveConnection([
+     *         'provider'     => 'smtp',
+     *         'sender_email' => 'hello@example.com',
+     *         'sender_name'  => 'Example',
+     *         'host'         => 'smtp.example.com',
+     *         'port'         => '587',
+     *         'encryption'   => 'tls',
+     *         'auth'         => 'yes',
+     *         'username'     => 'hello@example.com',
+     *         'password'     => '...',
+     *     ]);
+     *
+     * @param array  $connection    The connection fields. 'provider' is a key from the providers
+     *                              config (smtp, ses, mailgun, sendgrid, postmark, ...); the other
+     *                              fields are that provider's settings form fields.
+     * @param string $connectionKey The key of the connection to replace; empty to add one.
+     * @return string|WP_Error The key the connection is stored under, or the reason it was not
+     *                         saved: code 'validation_failed' with the errors by field as data,
+     *                         else 'connection_failed' with the provider's message.
+     */
+    function fluentMailSaveConnection(array $connection, $connectionKey = '')
+    {
+        try {
+            return \FluentMail\App\Services\ConnectionSaver::save($connection, (string) $connectionKey);
+        } catch (\FluentMail\Includes\Support\ValidationException $e) {
+            return new \WP_Error('validation_failed', $e->getMessage(), $e->errors());
+        } catch (\Exception $e) {
+            return new \WP_Error('connection_failed', $e->getMessage());
+        }
+    }
+}
+
 if (!function_exists('fluentMailEncryptDecrypt')) {
     /**
      * Encrypts or decrypts a value using AES-256-CTR encryption.
