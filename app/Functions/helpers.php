@@ -304,9 +304,13 @@ if (!function_exists('fluentMailSend')) {
      * `<img src="cid:my-image" alt="Image">`
      *
      * Note: embedded images go out inline on SMTP, Amazon SES, Gmail, Outlook,
-     * SendGrid, Mailgun, Postmark, SparkPost, SMTP2GO and Cloudflare. The other
-     * API providers (Brevo, Elastic Email, PepiPost, toSend) have no inline field
-     * in their API, so they deliver an embedded image as a normal attachment.
+     * SendGrid, Mailgun, Postmark, SparkPost, SMTP2GO and Cloudflare. Mailgun and
+     * SMTP2GO name an inline part by its cid, so where the cid cannot be a file
+     * name, such as "abc@example.com", the image gets a name like inline-1.png and
+     * the HTML in the request is edited to match, for img tags with a quoted src;
+     * one that cannot be renamed goes as a normal attachment. The other API
+     * providers (Brevo, Elastic Email, PepiPost, toSend) have no inline field in
+     * their API, so they deliver an embedded image as a normal attachment.
      *
      * @since 6.9.0 The `$embeds` parameter was added, matching WP core.
      *

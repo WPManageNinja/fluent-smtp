@@ -175,6 +175,13 @@ class Handler extends BaseHandler
         $payload = '';
         $attachments = $this->attributes['attachments'];
         $contentIds = self::inlineContentIds($attachments);
+        $html = isset($params['body']['html']) ? (string) $params['body']['html'] : '';
+
+        // Mailgun uses an "inline" part's filename as its Content-ID and types the
+        // part from that name, ignoring the type sent: an image under the cid
+        // "abc@example.com" goes out as a Windows program and Gmail refuses it.
+        // Such an image gets a name like inline-1.png and the HTML is pointed at it.
+        $inlineNames = self::inlineNamesForUnsafeCids($attachments, $html);
 
         foreach ($attachments as $index => $attachment) {
             try {
@@ -184,16 +191,30 @@ class Handler extends BaseHandler
                 continue;
             }
 
-            // Mailgun uses an "inline" part's filename as its Content-ID, so an
-            // embedded image goes out under its cid and the HTML's cid: reference shows it.
             $contentId = $contentIds[$index];
+            $name = self::attachmentName($attachment);
+            $inline = $contentId !== '';
+
+            if (isset($inlineNames[$index])) {
+                $name = $inlineNames[$index]['name'];
+            } elseif ($inline && self::isImageAttachment($attachment, $name) && !self::canNameByCid($contentId, $attachment, $name)) {
+                // Not shown by a quoted src, so it cannot be renamed: it goes as a
+                // normal attachment under its real name rather than be typed from the cid.
+                $inline = false;
+            } elseif ($inline) {
+                $name = $contentId;
+            }
 
             $data[] = [
                 'content' => $file,
-                'name'    => $contentId !== '' ? $contentId : self::attachmentName($attachment),
+                'name'    => $name,
                 'type'    => self::attachmentType($attachment),
-                'inline'  => $contentId !== '',
+                'inline'  => $inline,
             ];
+        }
+
+        if ($inlineNames) {
+            $params['body']['html'] = self::pointHtmlAtInlineNames($html, $inlineNames, array_column($data, 'name'));
         }
 
         if (!empty($data)) {
