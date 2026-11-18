@@ -848,6 +848,33 @@ return function () {
         FsmtpTest::assertSame('suite failure', is_array($response) && isset($response['message']) ? $response['message'] : null, 'retried row keeps the provider error message');
     });
 
+    $failedLogCase('an engine error on both log writes still runs fallback routing', 0, function ($table, &$seen) use ($rowFor) {
+        $routed = [];
+        $router = function ($status, $logId) use (&$routed) {
+            $routed[] = $logId;
+            return $status;
+        };
+        $thrower = function ($sql) use ($table) {
+            if (stripos(ltrim($sql), 'INSERT') === 0 && strpos($sql, $table) !== false) {
+                throw new \Error('suite engine error');
+            }
+            return $sql;
+        };
+        add_filter('fluentmail_email_sending_failed', $router, PHP_INT_MAX, 2);
+        add_filter('query', $thrower, PHP_INT_MAX);
+        try {
+            $subject = 'failed log engine error ' . FsmtpTest::uniq();
+            $result = (new FsmtpSuiteLogWriteHandler($subject))->processResponse(['message' => 'suite failure'], false);
+        } finally {
+            remove_filter('query', $thrower, PHP_INT_MAX);
+            remove_filter('fluentmail_email_sending_failed', $router, PHP_INT_MAX);
+        }
+        FsmtpTest::assertSame(false, $result, 'failed send result is unchanged');
+        FsmtpTest::assertSame(null, $rowFor($table, $subject), 'no row when both writes throw');
+        FsmtpTest::assertSame([0], array_map('intval', $routed), 'the fallback routing filter still ran once, with no log id');
+        FsmtpTest::assertSame([], $seen, 'no built-in alert without a stored row');
+    });
+
     $failedLogCase('retry drops characters the log table rejected', 0, function ($table, &$seen, &$restore) use ($rowFor) {
         $restore = FsmtpTest::failInsertsInto($table, 5, function ($sql) {
             return (bool) preg_match('/[\x{10000}-\x{10FFFF}]/u', $sql);

@@ -805,14 +805,13 @@ class BaseHandler
                     throw $e;
                 }
 
-                /*
-                 * The failure filter also dispatches the configured fallback,
-                 * so a log outage must not prevent a backup provider from
-                 * delivering the message. Keep the existing zero-ID contract
-                 * for that filter, but record why there is no durable row.
-                 */
                 fluentMailDebugLog('Failed to write email log - ' . $e->getMessage());
-                $logId = $this->logFailedSendWithoutContent($response, $e->getMessage());
+                try {
+                    $logId = $this->logFailedSendWithoutContent($response, $e->getMessage());
+                } catch (\Throwable $retryError) {
+                    fluentMailDebugLog('Failed to write email log without its content - ' . $retryError->getMessage());
+                    $logId = 0;
+                }
             }
 
             if(!$status) {
@@ -882,6 +881,10 @@ class BaseHandler
         }
 
         $value = wp_check_invalid_utf8($value, true);
+        if (!seems_utf8($value)) {
+            return $value;
+        }
+
         $stripped = preg_replace('/[\x{10000}-\x{10FFFF}]/u', '', $value);
 
         return is_string($stripped) ? $stripped : '';
