@@ -881,13 +881,9 @@ class BaseHandler
         }
 
         $value = wp_check_invalid_utf8($value, true);
-        if (!seems_utf8($value)) {
-            return $value;
-        }
-
         $stripped = preg_replace('/[\x{10000}-\x{10FFFF}]/u', '', $value);
 
-        return is_string($stripped) ? $stripped : '';
+        return is_string($stripped) ? $stripped : $value;
     }
 
     protected function shouldBeLogged($status)

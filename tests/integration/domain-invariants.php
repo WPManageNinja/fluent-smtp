@@ -876,15 +876,25 @@ return function () {
     });
 
     $failedLogCase('retry drops characters the log table rejected', 0, function ($table, &$seen, &$restore) use ($rowFor) {
+        $deprecated = [];
+        $deprecationObserver = function ($function) use (&$deprecated) {
+            $deprecated[] = $function;
+        };
+        add_action('deprecated_function_run', $deprecationObserver, PHP_INT_MAX, 1);
         $restore = FsmtpTest::failInsertsInto($table, 5, function ($sql) {
             return (bool) preg_match('/[\x{10000}-\x{10FFFF}]/u', $sql);
         });
         $subject = 'failed log emoji ' . FsmtpTest::uniq();
-        $result = (new FsmtpSuiteLogWriteHandler($subject . " \u{1F389}"))->processResponse(['message' => 'suite failure'], false);
+        try {
+            $result = (new FsmtpSuiteLogWriteHandler($subject . " \u{1F389}"))->processResponse(['message' => 'suite failure'], false);
+        } finally {
+            remove_action('deprecated_function_run', $deprecationObserver, PHP_INT_MAX);
+        }
         $row = $rowFor($table, $subject);
         FsmtpTest::assertSame(false, $result, 'failed send result is unchanged');
         FsmtpTest::assert(!empty($row['id']), 'the retry carried the same 4-byte character the table rejected');
         FsmtpTest::assertSame($subject, $row ? $row['subject'] : null, 'the stored subject has no trailing space left by the removed character');
+        FsmtpTest::assertSame([], $deprecated, 'the retry calls no deprecated WordPress function');
         FsmtpTest::assertSame($row ? [(int) $row['id']] : [0], array_map('intval', $seen), 'the failure hook received the retried row id');
     });
 
