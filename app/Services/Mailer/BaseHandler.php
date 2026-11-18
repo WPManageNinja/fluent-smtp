@@ -777,7 +777,19 @@ class BaseHandler
                 $data['retries'] = $row['retries'] + 1;
                 $updated = (new Logger())->updateLog($data, ['id' => $row['id']]);
 
-                if (!$updated) {
+                if ($updated === false) {
+                    global $wpdb;
+                    fluentMailDebugLog('Failed to update email log after the fallback attempt - ' . $wpdb->last_error);
+                    $fallbackNote = $row['response'];
+                    unset($fallbackNote['fallback_response']);
+                    $updated = (new Logger())->updateLog([
+                        'status'   => $data['status'],
+                        'retries'  => $data['retries'],
+                        'response' => $this->serialize($fallbackNote)
+                    ], ['id' => $row['id']]);
+                }
+
+                if ($updated === false) {
                     throw new \RuntimeException('Failed to update the email log.');
                 }
 
@@ -800,7 +812,7 @@ class BaseHandler
                  * for that filter, but record why there is no durable row.
                  */
                 fluentMailDebugLog('Failed to write email log - ' . $e->getMessage());
-                $logId = 0;
+                $logId = $this->logFailedSendWithoutContent($response, $e->getMessage());
             }
 
             if(!$status) {
@@ -826,15 +838,53 @@ class BaseHandler
     {
         $logId = (new Logger)->add($data);
 
-        if ($logId instanceof \Throwable) {
-            throw $logId;
-        }
-
-        if (!is_numeric($logId) || (int) $logId < 1) {
+        if ((int) $logId < 1) {
             throw new \RuntimeException('Failed to insert the email log.');
         }
 
         return (int) $logId;
+    }
+
+    protected function logFailedSendWithoutContent($response, $fallbackReason = '')
+    {
+        global $wpdb;
+
+        $reason = $wpdb->last_error ? $wpdb->last_error : ($fallbackReason ? $fallbackReason : 'unknown database error');
+        fluentMailDebugLog('Failed to write email log, storing it without its content - ' . $reason);
+
+        $extra = (array) $this->getExtraParams();
+        $extra['body_not_logged'] = true;
+        $extra['log_error'] = substr($reason, 0, 500);
+
+        $errorMessage = is_array($response) && isset($response['message']) && is_scalar($response['message']) ? (string) $response['message'] : '';
+
+        return (int) (new Logger)->add([
+            'to'          => $this->serialize(self::storableText($this->attributes['to'])),
+            'from'        => self::storableText($this->attributes['from']),
+            'subject'     => trim(self::storableText(sanitize_text_field($this->attributes['subject']))),
+            'body'        => '',
+            'attachments' => $this->serialize([]),
+            'status'      => 'failed',
+            'response'    => $this->serialize(['message' => self::storableText(substr($errorMessage, 0, 500))]),
+            'headers'     => $this->serialize([]),
+            'extra'       => $this->serialize($extra)
+        ]);
+    }
+
+    protected static function storableText($value)
+    {
+        if (is_array($value)) {
+            return array_map([static::class, 'storableText'], $value);
+        }
+
+        if (!is_string($value)) {
+            return $value;
+        }
+
+        $value = wp_check_invalid_utf8($value, true);
+        $stripped = preg_replace('/[\x{10000}-\x{10FFFF}]/u', '', $value);
+
+        return is_string($stripped) ? $stripped : '';
     }
 
     protected function shouldBeLogged($status)

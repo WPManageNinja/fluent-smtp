@@ -79,6 +79,31 @@ class FsmtpSuiteLogPersistenceHandler extends BaseHandler
     }
 }
 
+/**
+ * A real BaseHandler whose provider call has already failed: drives the production processResponse()/writeLog() path
+ * (log row + failure hook) without any provider or network involvement.
+ */
+class FsmtpSuiteLogWriteHandler extends \FluentMail\App\Services\Mailer\BaseHandler
+{
+    public function __construct($subject, $phpMailer = null)
+    {
+        parent::__construct();
+        $this->settings = ['provider' => 'Suite Primary'];
+        $this->attributes = [
+            'to'          => [['email' => 'recipient@example.test', 'name' => '']],
+            'from'        => 'suite-sender@example.test',
+            'subject'     => $subject,
+            'message'     => 'suite failed body ' . $subject,
+            'attachments' => [],
+            'headers'     => [],
+            'extra'       => [],
+        ];
+        if ($phpMailer) {
+            $this->setPhpMailer($phpMailer);
+        }
+    }
+}
+
 // The Google client is an outbound provider seam. Keeping the same class name
 // as connection-behavior.php lets this file run both alone and in the full tier.
 if (!class_exists('FsmtpSuiteGoogleClient', false)) {
@@ -770,5 +795,224 @@ return function () {
         }
 
         FsmtpTest::assertSame($beforeCron, wp_next_scheduled('fluentsmtp_renew_gmail_token'), 'OAuth cron state');
+    });
+
+    // ---- failed-send logging: the failed email is recorded when the database can store it, and a failed log write
+    // never changes delivery (the failure hook fires exactly as before). Fixtures live in a rolled-back transaction.
+    $failedLogCase = function ($name, $failInserts, callable $assertions, ?callable $settingsFor = null) use ($baseSettings, $withSettings) {
+        FsmtpTest::case($name, function () use ($name, $failInserts, $assertions, $settingsFor, $baseSettings, $withSettings) {
+            global $wpdb;
+            $table = $wpdb->prefix . 'fsmpt_email_logs';
+            $seen = [];
+            $observer = function ($logId) use (&$seen) {
+                $seen[] = $logId;
+            };
+            add_action('fluentmail_email_sending_failed_no_fallback', $observer, PHP_INT_MAX, 1);
+            $settings = $settingsFor ? $settingsFor($baseSettings()) : $baseSettings();
+            $beforeCounts = FsmtpTest::protectedTableCounts();
+            $wpdb->query('START TRANSACTION');
+            $restore = $failInserts ? FsmtpTest::failInsertsInto($table, $failInserts) : null;
+            try {
+                $withSettings($settings, function () use ($assertions, $table, &$seen, &$restore) {
+                    $assertions($table, $seen, $restore);
+                });
+            } finally {
+                if ($restore) {
+                    $restore();
+                }
+                $wpdb->query('ROLLBACK');
+                remove_action('fluentmail_email_sending_failed_no_fallback', $observer, PHP_INT_MAX);
+            }
+            FsmtpTest::assertSame($beforeCounts, FsmtpTest::protectedTableCounts(), $name . ' cleanup');
+        });
+    };
+    $rowFor = function ($table, $subject) {
+        global $wpdb;
+        return $wpdb->get_row($wpdb->prepare("SELECT id, status, body, extra, subject FROM `{$table}` WHERE subject LIKE %s", $wpdb->esc_like($subject) . '%'), ARRAY_A);
+    };
+
+    $failedLogCase('failed send logs once and passes its id', 0, function ($table, &$seen) use ($rowFor) {
+        $subject = 'failed log ' . FsmtpTest::uniq();
+        $result = (new FsmtpSuiteLogWriteHandler($subject))->processResponse(['message' => 'suite failure'], false);
+        $row = $rowFor($table, $subject);
+        FsmtpTest::assertSame(false, $result, 'failed send result');
+        FsmtpTest::assert(!empty($row['id']), 'the failed send was stored');
+        FsmtpTest::assertSame('failed', $row['status'], 'stored status');
+        FsmtpTest::assertSame([(int) $row['id']], array_map('intval', $seen), 'the failure hook received the stored id');
+    });
+
+    $failedLogCase('failed log insert is retried with a metadata-only row', 1, function ($table, &$seen) use ($rowFor) {
+        $subject = 'failed log retry ' . FsmtpTest::uniq();
+        $result = (new FsmtpSuiteLogWriteHandler($subject))->processResponse(['message' => 'suite failure'], false);
+        $row = $rowFor($table, $subject);
+        FsmtpTest::assertSame(false, $result, 'failed send result is unchanged');
+        FsmtpTest::assert(!empty($row['id']), 'a failed log INSERT left no row in Failed Logs');
+        $extra = $row ? maybe_unserialize($row['extra']) : [];
+        FsmtpTest::assertSame('failed', $row ? $row['status'] : null, 'retried row status');
+        FsmtpTest::assert($row && (string) $row['body'] === '', 'retried row stores no body');
+        FsmtpTest::assert(!empty($extra['body_not_logged']), 'retried row is marked body_not_logged');
+        FsmtpTest::assert(!empty($extra['log_error']), 'retried row records why the full log was not saved');
+        FsmtpTest::assertSame($row ? [(int) $row['id']] : [0], array_map('intval', $seen), 'the failure hook received the retried row id');
+        global $wpdb;
+        $response = $row ? maybe_unserialize($wpdb->get_var($wpdb->prepare("SELECT response FROM `{$table}` WHERE id = %d", $row['id']))) : [];
+        FsmtpTest::assertSame('suite failure', is_array($response) && isset($response['message']) ? $response['message'] : null, 'retried row keeps the provider error message');
+    });
+
+    $failedLogCase('retry drops characters the log table rejected', 0, function ($table, &$seen, &$restore) use ($rowFor) {
+        $restore = FsmtpTest::failInsertsInto($table, 5, function ($sql) {
+            return (bool) preg_match('/[\x{10000}-\x{10FFFF}]/u', $sql);
+        });
+        $subject = 'failed log emoji ' . FsmtpTest::uniq();
+        $result = (new FsmtpSuiteLogWriteHandler($subject . " \u{1F389}"))->processResponse(['message' => 'suite failure'], false);
+        $row = $rowFor($table, $subject);
+        FsmtpTest::assertSame(false, $result, 'failed send result is unchanged');
+        FsmtpTest::assert(!empty($row['id']), 'the retry carried the same 4-byte character the table rejected');
+        FsmtpTest::assertSame($subject, $row ? $row['subject'] : null, 'the stored subject has no trailing space left by the removed character');
+        FsmtpTest::assertSame($row ? [(int) $row['id']] : [0], array_map('intval', $seen), 'the failure hook received the retried row id');
+    });
+
+    FsmtpTest::case('a fallback delivery marks the stored row sent when the full update fails', function () {
+        global $wpdb;
+        $table = $wpdb->prefix . 'fsmpt_email_logs';
+        $beforeCounts = FsmtpTest::protectedTableCounts();
+        $wpdb->query('START TRANSACTION');
+        $restore = null;
+        try {
+            $logId = FsmtpFactory::insertLog($table, [
+                'subject'     => 'fallback update ' . FsmtpTest::uniq(),
+                'body'        => '',
+                'status'      => 'failed',
+                'headers'     => maybe_serialize([]),
+                'attachments' => maybe_serialize([]),
+                'response'    => maybe_serialize(['message' => 'primary failed']),
+                'extra'       => maybe_serialize(['provider' => 'Suite Primary', 'body_not_logged' => true, 'log_error' => 'suite']),
+            ]);
+            $handler = new FsmtpSuiteLogWriteHandler('fallback update subject');
+            $handler->setRowId($logId);
+            $restore = FsmtpTest::failStatementsOn($table, 'UPDATE', 1);
+            $result = $handler->processResponse(['message' => 'fallback delivered'], true);
+            $restore();
+            $restore = null;
+            $status = $wpdb->get_var($wpdb->prepare("SELECT status FROM `{$table}` WHERE id = %d", $logId));
+            FsmtpTest::assertSame(true, $result, 'fallback result');
+            FsmtpTest::assertSame('sent', $status, 'the delivered fallback still left the row marked failed');
+            $response = maybe_unserialize($wpdb->get_var($wpdb->prepare("SELECT response FROM `{$table}` WHERE id = %d", $logId)));
+            FsmtpTest::assert(is_array($response) && !empty($response['fallback']), 'the row notes that the fallback connection delivered it');
+            FsmtpTest::assertSame('primary failed', is_array($response) && isset($response['message']) ? $response['message'] : null, 'the primary error message is kept');
+        } finally {
+            if ($restore) {
+                $restore();
+            }
+            $wpdb->query('ROLLBACK');
+        }
+        FsmtpTest::assertSame($beforeCounts, FsmtpTest::protectedTableCounts(), 'fallback update cleanup');
+    });
+
+    $failedLogCase('double log failure keeps fallback routing and sends no alert without a row', 2, function ($table, &$seen) use ($rowFor) {
+        $routed = [];
+        $router = function ($status, $logId) use (&$routed) {
+            $routed[] = $logId;
+            return $status;
+        };
+        add_filter('fluentmail_email_sending_failed', $router, PHP_INT_MAX, 2);
+        try {
+            $subject = 'failed log twice ' . FsmtpTest::uniq();
+            $result = (new FsmtpSuiteLogWriteHandler($subject))->processResponse(['message' => 'suite failure'], false);
+        } finally {
+            remove_filter('fluentmail_email_sending_failed', $router, PHP_INT_MAX);
+        }
+        FsmtpTest::assertSame(false, $result, 'failed send result is unchanged');
+        FsmtpTest::assertSame(null, $rowFor($table, $subject), 'no row when both writes fail');
+        FsmtpTest::assertSame([0], array_map('intval', $routed), 'the fallback routing filter still ran once, with no log id');
+        FsmtpTest::assertSame([], $seen, 'no built-in alert without a stored row');
+    });
+
+    $failedLogCase('fallback still runs when the log write fails', 2, function ($table, &$seen) {
+        FsmtpTest::requirePhpMailer();
+        $phpMailer = new \PHPMailer\PHPMailer\PHPMailer(true);
+        $phpMailer->CharSet = 'UTF-8';
+        $phpMailer->setFrom('primary-' . FsmtpTest::uniq() . '@example.test', 'Suite Primary');
+        $phpMailer->addAddress('recipient@example.test');
+        $phpMailer->Subject = 'Suite fallback after log failure';
+        $phpMailer->Body = 'Suite fallback body';
+        $result = (new FsmtpSuiteLogWriteHandler('fallback log failure ' . FsmtpTest::uniq(), $phpMailer))
+            ->processResponse(['message' => 'primary failed'], false);
+        FsmtpTest::assertSame(true, $result, 'the fallback connection still delivered');
+        FsmtpTest::assertSame([], $seen, 'no "no fallback" alert when the fallback delivered');
+    }, function (array $settings) {
+        $settings['misc']['fallback_connection'] = 'suite-fallback';
+        $settings['connections']['suite-fallback'] = [
+            'title'             => 'Suite Fallback',
+            'provider_settings' => ['provider' => 'smtp', 'sender_email' => 'fallback-' . FsmtpTest::uniq() . '@example.test'],
+        ];
+        return $settings;
+    });
+
+    FsmtpTest::case('metadata-only row is not resent', function () {
+        global $wpdb;
+        FsmtpTest::assertMailSimulationActive();
+        $table = $wpdb->prefix . 'fsmpt_email_logs';
+        $beforeCounts = FsmtpTest::protectedTableCounts();
+        $wpdb->query('START TRANSACTION');
+        try {
+            $logId = FsmtpFactory::insertLog($table, [
+                'subject' => 'metadata only ' . FsmtpTest::uniq(),
+                'body'    => '',
+                'status'  => 'failed',
+                'headers' => maybe_serialize([]),
+                'attachments' => maybe_serialize([]),
+                'extra'   => maybe_serialize(['provider' => 'Suite Primary', 'body_not_logged' => true, 'log_error' => 'suite']),
+            ]);
+            $rowsBefore = (int) $wpdb->get_var("SELECT COUNT(*) FROM `{$table}`");
+            $message = null;
+            try {
+                (new \FluentMail\App\Models\Logger())->resendEmailFromLog($logId, 'retry');
+            } catch (\Exception $e) {
+                $message = $e->getMessage();
+            }
+            FsmtpTest::assertSame(
+                __("This email can't be resent because its content could not be saved in the log.", 'fluent-smtp'),
+                $message,
+                'resend of a metadata-only row is refused with the agreed message'
+            );
+            FsmtpTest::assertSame($rowsBefore, (int) $wpdb->get_var("SELECT COUNT(*) FROM `{$table}`"), 'nothing was sent or logged');
+        } finally {
+            $wpdb->query('ROLLBACK');
+        }
+        FsmtpTest::assertSame($beforeCounts, FsmtpTest::protectedTableCounts(), 'metadata-only resend cleanup');
+    });
+
+    FsmtpTest::case('the resend routes refuse a metadata-only row without sending', function () {
+        global $wpdb;
+        FsmtpTest::assertMailSimulationActive();
+        $table = $wpdb->prefix . 'fsmpt_email_logs';
+        $beforeCounts = FsmtpTest::protectedTableCounts();
+        $wpdb->query('START TRANSACTION');
+        try {
+            $logId = FsmtpFactory::insertLog($table, [
+                'subject'     => 'metadata only route ' . FsmtpTest::uniq(),
+                'body'        => '',
+                'status'      => 'failed',
+                'headers'     => maybe_serialize([]),
+                'attachments' => maybe_serialize([]),
+                'extra'       => maybe_serialize(['provider' => 'Suite Primary', 'body_not_logged' => true, 'log_error' => 'suite']),
+            ]);
+            $rowsBefore = (int) $wpdb->get_var("SELECT COUNT(*) FROM `{$table}`");
+
+            $single = FsmtpTest::ajax('POST', '/logs/retry', ['id' => $logId, 'type' => 'retry']);
+            FsmtpTest::assertSame(false, !empty($single['success']), 'single resend is not reported as sent');
+            FsmtpTest::assertSame(
+                __("This email can't be resent because its content could not be saved in the log.", 'fluent-smtp'),
+                FsmtpTest::ajaxMessage($single),
+                'single resend shows the agreed message'
+            );
+
+            $bulk = FsmtpTest::ajax('POST', '/logs/retry-bulk', ['log_ids' => [$logId]]);
+            FsmtpTest::assertAjaxHealthy($bulk, 'bulk resend still answers');
+            FsmtpTest::assertSame($rowsBefore, (int) $wpdb->get_var("SELECT COUNT(*) FROM `{$table}`"), 'neither route sent or logged an email');
+        } finally {
+            $wpdb->query('ROLLBACK');
+        }
+        FsmtpTest::assertSame($beforeCounts, FsmtpTest::protectedTableCounts(), 'resend route cleanup');
     });
 };

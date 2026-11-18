@@ -453,11 +453,13 @@ class Logger extends Model
                 'created_at' => current_time('mysql')
             ]);
 
-            return $this->getDb()->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
+            $id = $this->getDb()->table(FLUENT_MAIL_DB_PREFIX . 'email_logs')
                 ->insert($data);
 
+            return is_numeric($id) ? (int) $id : 0;
         } catch (Exception $e) {
-            return $e;
+            fluentMailDebugLog('Failed to insert email log - ' . $e->getMessage());
+            return 0;
         }
     }
 
@@ -608,6 +610,10 @@ class Logger extends Model
         $email['headers']     = $this->unserialize($email['headers']);
         $email['attachments'] = $this->unserialize($email['attachments']);
         $email['extra']       = $this->unserialize($email['extra']);
+
+        if (is_array($email['extra']) && !empty($email['extra']['body_not_logged'])) {
+            throw new Exception(__("This email can't be resent because its content could not be saved in the log.", 'fluent-smtp'), 422);
+        }
 
         /*
          * Files still on disk go out again under their original name, and inline
