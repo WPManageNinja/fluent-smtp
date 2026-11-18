@@ -31,6 +31,8 @@ class BaseHandler
 
     protected $existing_row_id = null;
 
+    protected $is_fallback_attempt = false;
+
     protected $sendStartedAt = null;
 
     protected $sendDurationMs = null;
@@ -773,21 +775,115 @@ class BaseHandler
 
                 $data['response'] = $this->serialize( $row['response']);
                 $data['retries'] = $row['retries'] + 1;
-                (new Logger())->updateLog($data, ['id' => $row['id']]);
+                $updated = (new Logger())->updateLog($data, ['id' => $row['id']]);
+
+                if ($updated === false) {
+                    global $wpdb;
+                    fluentMailDebugLog('Failed to update email log after the fallback attempt - ' . $wpdb->last_error);
+                    $fallbackNote = $row['response'];
+                    unset($fallbackNote['fallback_response']);
+                    $updated = (new Logger())->updateLog([
+                        'status'   => $data['status'],
+                        'retries'  => $data['retries'],
+                        'response' => $this->serialize($fallbackNote)
+                    ], ['id' => $row['id']]);
+                }
+
+                if ($updated === false) {
+                    throw new \RuntimeException('Failed to update the email log.');
+                }
 
                 if(!$status) {
                     do_action('fluentmail_email_sending_failed_no_fallback', $row['id'], $this, $data);
                 }
             }
         } else {
-            $logId = (new Logger)->add($data);
+            try {
+                $logId = $this->insertLog($data);
+            } catch (\Throwable $e) {
+                if ($status || $this->is_fallback_attempt) {
+                    throw $e;
+                }
+
+                fluentMailDebugLog('Failed to write email log - ' . $e->getMessage());
+                try {
+                    $logId = $this->logFailedSendWithoutContent($response, $e->getMessage());
+                } catch (\Throwable $retryError) {
+                    fluentMailDebugLog('Failed to write email log without its content - ' . $retryError->getMessage());
+                    $logId = 0;
+                }
+            }
+
             if(!$status) {
-                // We have to fire an action for this failed job
-                $status = apply_filters('fluentmail_email_sending_failed', $status, $logId, $this, $data);
+                if ($this->is_fallback_attempt) {
+                    do_action('fluentmail_email_sending_failed_no_fallback', $logId, $this, $data);
+                } else {
+                    // We have to fire an action for this failed job
+                    $status = apply_filters('fluentmail_email_sending_failed', $status, $logId, $this, $data);
+                }
             }
         }
 
         return $status;
+    }
+
+    /**
+     * Insert a completed-send log and return its durable row ID.
+     *
+     * @param array $data
+     * @return int
+     */
+    protected function insertLog($data)
+    {
+        $logId = (new Logger)->add($data);
+
+        if ((int) $logId < 1) {
+            throw new \RuntimeException('Failed to insert the email log.');
+        }
+
+        return (int) $logId;
+    }
+
+    protected function logFailedSendWithoutContent($response, $fallbackReason = '')
+    {
+        global $wpdb;
+
+        $reason = $wpdb->last_error ? $wpdb->last_error : ($fallbackReason ? $fallbackReason : 'unknown database error');
+        fluentMailDebugLog('Failed to write email log, storing it without its content - ' . $reason);
+
+        $extra = (array) $this->getExtraParams();
+        $extra['body_not_logged'] = true;
+        $extra['log_error'] = substr($reason, 0, 500);
+
+        $errorMessage = is_array($response) && isset($response['message']) && is_scalar($response['message']) ? (string) $response['message'] : '';
+
+        return (int) (new Logger)->add([
+            'to'          => $this->serialize(self::storableText($this->attributes['to'])),
+            'from'        => self::storableText($this->attributes['from']),
+            'subject'     => trim(self::storableText(sanitize_text_field($this->attributes['subject']))),
+            'body'        => '',
+            'attachments' => $this->serialize([]),
+            'status'      => 'failed',
+            'response'    => $this->serialize(['message' => self::storableText(substr($errorMessage, 0, 500))]),
+            'headers'     => $this->serialize([]),
+            'extra'       => $this->serialize($extra)
+        ]);
+    }
+
+    protected static function storableText($value)
+    {
+        if (is_array($value)) {
+            return array_map([static::class, 'storableText'], $value);
+        }
+
+        if (!is_string($value)) {
+            return $value;
+        }
+
+        $value = wp_check_invalid_utf8($value, true);
+        $stripped = preg_replace('/[\x{10000}-\x{10FFFF}]/u', '', $value);
+
+        return is_string($stripped) ? $stripped : $value;
     }
 
     protected function shouldBeLogged($status)
@@ -893,6 +989,7 @@ class BaseHandler
     public function setRowId($id)
     {
         $this->existing_row_id = $id;
+        $this->is_fallback_attempt = true;
     }
 
     public function addNewSenderEmail($connection, $email)

@@ -680,6 +680,48 @@ class FsmtpTest
         ];
     }
 
+    /**
+     * Make the next $count INSERT statements into $table fail the way a real database error does (oversized packet,
+     * lost connection, charset rejection), by rewriting only those statements to target a table that does not exist.
+     * The real database, query builder and models stay in use, which AGENT.md requires, and nothing is written.
+     * Returns a remover: always call it in `finally`.
+     *
+     * @return callable
+     */
+    public static function failInsertsInto($table, $count = 1, ?callable $when = null)
+    {
+        return self::failStatementsOn($table, 'INSERT', $count, $when);
+    }
+
+    /**
+     * Same as failInsertsInto() for any statement verb (INSERT, UPDATE). $when, when given, receives the SQL and decides
+     * whether this statement is one the database rejects (for example: only statements carrying 4-byte characters, as a
+     * legacy non-utf8mb4 table does).
+     *
+     * @return callable
+     */
+    public static function failStatementsOn($table, $verb, $count = 1, ?callable $when = null)
+    {
+        global $wpdb;
+        $left = (int) $count;
+        $verb = strtoupper($verb);
+        $filter = function ($sql) use ($table, $verb, $when, &$left) {
+            if ($left > 0 && stripos(ltrim($sql), $verb) === 0 && strpos($sql, $table) !== false && (!$when || $when($sql))) {
+                $left--;
+                return 'INSERT INTO `fsmtp_suite_forced_failure` (`x`) VALUES (1)';
+            }
+            return $sql;
+        };
+        add_filter('query', $filter, PHP_INT_MAX);
+        $previous = $wpdb->suppress_errors(true);
+
+        return function () use ($filter, $previous) {
+            global $wpdb;
+            remove_filter('query', $filter, PHP_INT_MAX);
+            $wpdb->suppress_errors($previous);
+        };
+    }
+
     public static function uniq($prefix = 'fsmtptest')
     {
         return $prefix . '-' . strtolower(wp_generate_password(8, false, false));
