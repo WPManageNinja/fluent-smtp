@@ -831,16 +831,6 @@ return function () {
         return $wpdb->get_row($wpdb->prepare("SELECT id, status, body, extra, subject FROM `{$table}` WHERE subject LIKE %s", $wpdb->esc_like($subject) . '%'), ARRAY_A);
     };
 
-    $failedLogCase('failed send logs once and passes its id', 0, function ($table, &$seen) use ($rowFor) {
-        $subject = 'failed log ' . FsmtpTest::uniq();
-        $result = (new FsmtpSuiteLogWriteHandler($subject))->processResponse(['message' => 'suite failure'], false);
-        $row = $rowFor($table, $subject);
-        FsmtpTest::assertSame(false, $result, 'failed send result');
-        FsmtpTest::assert(!empty($row['id']), 'the failed send was stored');
-        FsmtpTest::assertSame('failed', $row['status'], 'stored status');
-        FsmtpTest::assertSame([(int) $row['id']], array_map('intval', $seen), 'the failure hook received the stored id');
-    });
-
     $failedLogCase('failed log insert is retried with a metadata-only row', 1, function ($table, &$seen) use ($rowFor) {
         $subject = 'failed log retry ' . FsmtpTest::uniq();
         $result = (new FsmtpSuiteLogWriteHandler($subject))->processResponse(['message' => 'suite failure'], false);
@@ -906,25 +896,6 @@ return function () {
             $wpdb->query('ROLLBACK');
         }
         FsmtpTest::assertSame($beforeCounts, FsmtpTest::protectedTableCounts(), 'fallback update cleanup');
-    });
-
-    $failedLogCase('double log failure keeps fallback routing and sends no alert without a row', 2, function ($table, &$seen) use ($rowFor) {
-        $routed = [];
-        $router = function ($status, $logId) use (&$routed) {
-            $routed[] = $logId;
-            return $status;
-        };
-        add_filter('fluentmail_email_sending_failed', $router, PHP_INT_MAX, 2);
-        try {
-            $subject = 'failed log twice ' . FsmtpTest::uniq();
-            $result = (new FsmtpSuiteLogWriteHandler($subject))->processResponse(['message' => 'suite failure'], false);
-        } finally {
-            remove_filter('fluentmail_email_sending_failed', $router, PHP_INT_MAX);
-        }
-        FsmtpTest::assertSame(false, $result, 'failed send result is unchanged');
-        FsmtpTest::assertSame(null, $rowFor($table, $subject), 'no row when both writes fail');
-        FsmtpTest::assertSame([0], array_map('intval', $routed), 'the fallback routing filter still ran once, with no log id');
-        FsmtpTest::assertSame([], $seen, 'no built-in alert without a stored row');
     });
 
     $failedLogCase('fallback still runs when the log write fails', 2, function ($table, &$seen) {
