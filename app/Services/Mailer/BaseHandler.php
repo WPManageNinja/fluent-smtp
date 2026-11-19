@@ -667,6 +667,50 @@ class BaseHandler
         return $subject;
     }
 
+    /**
+     * The email's custom headers, for handlers that send them through an API field.
+     *
+     * A list of ['key' => name, 'value' => value] in the order they were added.
+     * A name can repeat when a phpmailer_init listener adds it twice. A header
+     * named exactly Return-Path is removed. Values are raw UTF-8: not RFC 2047
+     * encoded, not folded, and never holding CR or LF (PHPMailer refuses them).
+     * Nothing is filtered: the handler puts each header in its API's field with
+     * any encoding that API documents, and the provider decides what it accepts.
+     * A handler with its own Reply-To field skips a custom Reply-To: a Reply-To
+     * belongs in PHPMailer's reply-to list, which the handler sends in that field.
+     *
+     * @return array<int, array{key: string, value: string}>
+     */
+    protected function getCustomHeaderList()
+    {
+        return (array) $this->getParam('custom_headers', []);
+    }
+
+    /**
+     * The log row's `extra` column.
+     *
+     * The custom headers are added after the sanitiser on purpose: it erases
+     * `<https://...>` values such as List-Unsubscribe and References, and throws
+     * on a value that looks serialized, which loses the row. They are replayed
+     * only into wp_mail(), where they came from, and shown as text in the log
+     * viewer's Email Headers panel.
+     *
+     * @return string
+     */
+    protected function extraForLog()
+    {
+        $extra = $this->recursiveSanitize($this->getExtraParams());
+
+        foreach ($this->getCustomHeaderList() as $header) {
+            $extra['custom_headers'][] = [
+                'key'   => (string) wp_check_invalid_utf8((string) $header['key'], true),
+                'value' => (string) wp_check_invalid_utf8((string) $header['value'], true),
+            ];
+        }
+
+        return serialize($extra);
+    }
+
     protected function getExtraParams()
     {
         $this->attributes['extra']['provider'] = $this->getSetting('provider');
@@ -756,7 +800,7 @@ class BaseHandler
             'status'   => $status ? 'sent' : 'failed',
             'response' => $this->serialize($response),
             'headers'  => $this->serialize($this->getParam('headers')),
-            'extra'    => $this->serialize($this->getExtraParams())
+            'extra'    => $this->extraForLog()
         ];
 
         if($this->existing_row_id) {

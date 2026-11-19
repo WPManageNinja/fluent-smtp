@@ -203,7 +203,7 @@ class Handler extends BaseHandler
     {
         $headers = [];
 
-        foreach ((array)$this->getParam('custom_headers') as $header) {
+        foreach ($this->getCustomHeaderList() as $header) {
             $name = trim((string)Arr::get($header, 'key'));
             $value = trim((string)Arr::get($header, 'value'));
 
