@@ -175,6 +175,7 @@ import Error from '@/Pieces/Error';
 import each from 'lodash/each';
 import ConnectionProvider from './Partials/_ConnectionSelector';
 import Tosend from "./Partials/Providers/Tosend.vue";
+import mailchannels from './Partials/Providers/MailChannels';
 import cloudflare from './Partials/Providers/Cloudflare';
 
 export default {
@@ -196,6 +197,7 @@ export default {
         Error,
         ConnectionProvider,
         Tosend,
+        mailchannels,
         cloudflare
     },
     data() {
