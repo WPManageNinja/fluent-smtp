@@ -573,7 +573,7 @@ class AdminMenuHandler
         ];
         ob_start();
         ?>
-        <table class="fsmtp_dash_table wp-list-table widefat fixed striped">
+        <table class="fsmtp_dash_table widefat fixed striped">
             <thead>
             <tr>
                 <th><?php esc_html_e('Period', 'fluent-smtp'); ?></th>
