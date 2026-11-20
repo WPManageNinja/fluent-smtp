@@ -9,7 +9,7 @@ return function () {
         $originalScripts = wp_scripts();
         $originalStyles = wp_styles();
         $originalHooks = [];
-        foreach (['wp_print_scripts', 'admin_footer_text'] as $hook) {
+        foreach (['init', 'wp_print_scripts', 'admin_footer_text'] as $hook) {
             $originalHooks[$hook] = $wp_filter[$hook] ?? null;
             if (isset($wp_filter[$hook])) {
                 $wp_filter[$hook] = clone $wp_filter[$hook];
