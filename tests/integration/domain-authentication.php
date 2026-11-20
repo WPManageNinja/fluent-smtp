@@ -68,7 +68,8 @@ return function () {
             FsmtpTest::assertSame('skipped', $result['dkim']['status'], 'No selector supplied');
         });
         FsmtpTest::case('malformed DKIM tags cannot report a published key', function () use ($dns, $domain, &$names) {
-            foreach (['v=DKIM1; p=YWJj; p=', 'v=; p=YWJj', 'p=YWJj; v=DKIM1', 'v=DKIM1; bad; p=YWJj'] as $i => $record) {
+            foreach (['v=DKIM1; p=YWJj; p=', 'v=; p=YWJj', 'p=YWJj; v=DKIM1', 'v=DKIM1; bad; p=YWJj',
+                "v=DKIM1; p=YWJj\0", "v=DKIM1; p=\0", "v=DKIM1; p=YWJj\x0B"] as $i => $record) {
                 $selector = 'bad' . $i;
                 $name = $selector . '._domainkey.' . $domain;
                 $names[] = $name;
@@ -76,6 +77,14 @@ return function () {
                 $result = $dns->check($domain, $domain, $selector);
                 FsmtpTest::assertSame('incomplete', $result['dkim']['status'], 'Malformed tag list ' . $i);
             }
+            $name = 'version._domainkey.' . $domain;
+            $names[] = $name;
+            $dns->answers[$name] = [
+                ['type' => 'TXT', 'txt' => "v=DKIM1;\r\n p=YW\r\n Jj"],
+                ['type' => 'TXT', 'txt' => 'v=DKIM2; p=YWJj; x=one; x=two'],
+            ];
+            $result = $dns->check($domain, $domain, 'version');
+            FsmtpTest::assertSame('published', $result['dkim']['status'], 'One folded key alongside an unsupported version');
         });
         FsmtpTest::case('resolver failures and aliases', function () use ($dns, $domain, &$names) {
             FsmtpTest::assertMailSimulationActive();

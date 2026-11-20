@@ -118,11 +118,22 @@ class DomainAuthentication
 
     private function dkimStatus($record)
     {
+        // Unfold header-style whitespace before checking the DKIM tag grammar.
+        $record = trim(preg_replace('/\r\n(?=[ \t])/', '', $record), " \t");
+        if (preg_match('/^v[ \t]*=[ \t]*([^;]*)/', $record, $version)) {
+            $value = rtrim($version[1], " \t");
+            if ($value !== '' && $value !== 'DKIM1') {
+                return null;
+            }
+        }
         // Ignore unrelated TXT records. The version tag is optional in a DKIM key.
         if (!preg_match('/(?:^|;)\s*(?:p\s*=|v\s*=\s*DKIM1\s*(?:;|$))/', $record)) {
             return null;
         }
-        $parts = explode(';', trim($record));
+        if (preg_match('/[^\x20-\x7e\t]/', $record)) {
+            return 'incomplete';
+        }
+        $parts = explode(';', $record);
         if (end($parts) === '') {
             array_pop($parts);
         }
@@ -137,10 +148,7 @@ class DomainAuthentication
             }
             $tags[$tag] = trim($pair[2]);
         }
-        if (isset($tags['v']) && $tags['v'] !== 'DKIM1') {
-            return $tags['v'] === '' ? 'incomplete' : null;
-        }
-        if (!isset($tags['p'])) {
+        if (($tags['v'] ?? 'DKIM1') !== 'DKIM1' || !isset($tags['p'])) {
             return 'incomplete';
         }
         $key = preg_replace('/[ \t\r\n]/', '', $tags['p']);
