@@ -271,7 +271,7 @@ class AdminMenuHandler
          * bundled library, so it cannot drift.
          */
         wp_enqueue_script(
-            'dompurify',
+            'fluent_mail_dompurify',
             fluentMailMix('libs/purify/purify.min.js'),
             [],
             fluentMailAssetVersion('libs/purify/purify.min.js')
@@ -353,7 +353,7 @@ class AdminMenuHandler
         wp_enqueue_script(
             'fluent_mail_admin_app',
             fluentMailMix('admin/js/fluent-mail-admin-app.js'),
-            ['fluent_mail_admin_app_boot'],
+            ['fluent_mail_admin_app_boot', 'fluent_mail_dompurify'],
             fluentMailAssetVersion('admin/js/fluent-mail-admin-app.js'),
             true
         );
