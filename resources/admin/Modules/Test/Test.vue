@@ -127,17 +127,20 @@
                 </div>
             </div>
         </div>
+        <domain-authentication :key="senderDomain" :suggested-domain="senderDomain" />
     </div>
 </template>
 
 <script type="text/babel">
     import isEmpty from 'lodash/isEmpty'
     import EmailSubscriber from '../../Pieces/_Subscribe';
+    import DomainAuthentication from './DomainAuthentication.vue';
 
     export default {
         name: 'EmailTest',
         components: {
-            EmailSubscriber
+            EmailSubscriber,
+            DomainAuthentication
         },
         data() {
             return {
@@ -209,6 +212,12 @@
             }
         },
         computed: {
+            senderDomain() {
+                const connections = this.settings.connections || {};
+                const connection = connections[this.settings.misc.default_connection];
+                const sender = this.form.from || connection?.provider_settings?.sender_email || '';
+                return sender.includes('@') ? sender.split('@').pop() : '';
+            },
             active: function() {
                 if (this.settings.misc.is_inactive === 'yes') {
                     return false;
