@@ -40,6 +40,10 @@ class Handler extends BaseHandler
             'content'          => $this->getBody()
         ];
 
+        if ($headers = $this->getCustomEmailHeaders()) {
+            $body['headers'] = $headers;
+        }
+
         if ($replyTo = $this->getReplyTo()) {
             $body['reply_to'] = $replyTo;
         }
@@ -209,7 +213,20 @@ class Handler extends BaseHandler
 
     protected function getCustomEmailHeaders()
     {
-        return [];
+        $names = [
+            'list-unsubscribe'      => 'List-Unsubscribe',
+            'list-unsubscribe-post' => 'List-Unsubscribe-Post',
+        ];
+        $headers = [];
+
+        foreach ($this->getParam('custom_headers', []) as $header) {
+            $name = strtolower($header['key']);
+            if (isset($names[$name]) && $header['value'] !== '') {
+                $headers[$names[$name]] = $header['value'];
+            }
+        }
+
+        return $headers;
     }
 
     protected function getRequestHeaders()
