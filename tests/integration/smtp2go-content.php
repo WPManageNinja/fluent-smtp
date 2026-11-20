@@ -11,6 +11,8 @@ return function () {
     $cases = [
         // Content type, primary body, alternative, expected HTML, expected text, attachment.
         'plain text' => ['text/plain', $plain, '', '', $plain, false],
+        'empty primary text' => ['text/plain', '', $plain, '', $plain, false],
+        'zero primary text' => ['text/plain', '0', $plain, '', '0', false],
         'plain text with attachment' => ['Text/Plain; charset=UTF-8', $plain, 'unused alternative', '', $plain, true],
         'HTML' => ['text/html', $html, '', $html, '', false],
         'HTML with alternative' => ['text/html', $html, $plain, $html, $plain, false],
