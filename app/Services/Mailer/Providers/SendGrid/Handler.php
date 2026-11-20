@@ -40,6 +40,10 @@ class Handler extends BaseHandler
             'content'          => $this->getBody()
         ];
 
+        if ($headers = $this->getCustomEmailHeaders()) {
+            $body['headers'] = $headers;
+        }
+
         if ($replyTo = $this->getReplyTo()) {
             $body['reply_to'] = $replyTo;
         }
@@ -209,7 +213,22 @@ class Handler extends BaseHandler
 
     protected function getCustomEmailHeaders()
     {
-        return [];
+        $names = [
+            'list-unsubscribe'      => 'List-Unsubscribe',
+            'list-unsubscribe-post' => 'List-Unsubscribe-Post',
+        ];
+        $headers = [];
+
+        foreach ($this->getParam('custom_headers', []) as $header) {
+            $name = strtolower($header['key']);
+            $value = $header['value'];
+            // An optional header with invalid UTF-8 would prevent encoding the entire message.
+            if (isset($names[$name]) && $value !== '' && preg_match('//u', $value)) {
+                $headers[$names[$name]] = $value;
+            }
+        }
+
+        return $headers;
     }
 
     protected function getRequestHeaders()
