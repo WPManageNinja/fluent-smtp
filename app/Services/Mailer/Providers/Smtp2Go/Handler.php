@@ -37,14 +37,15 @@ class Handler extends BaseHandler {
     }
 
     public function postSend() {
+        $isPlainText = strcasecmp($this->getHeader('content-type', ''), 'text/plain') === 0;
         $body = [
             'sender'    => $this->getFrom(),
             'to'        => $this->getTo(),
             'cc'        => $this->getCarbonCopy(),
             'bcc'       => $this->getBlindCarbonCopy(),
             'subject'   => $this->getSubject(),
-            'html_body' => $this->getBody(),
-            'text_body' => $this->phpMailer->AltBody,
+            'html_body' => $isPlainText ? '' : $this->getBody(),
+            'text_body' => $isPlainText ? $this->getBody() : $this->phpMailer->AltBody,
             /*
              * Without fastaccept SMTP2GO holds the request open until the email is
              * sent, which can outlast the HTTP timeout: the email is delivered but
