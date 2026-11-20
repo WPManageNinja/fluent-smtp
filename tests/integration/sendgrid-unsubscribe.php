@@ -16,6 +16,11 @@ return function () {
             ['List-Unsubscribe' => $destination],
         ],
         'instruction only' => [['list-unsubscribe-post' => $instruction], ['List-Unsubscribe-Post' => $instruction]],
+        'unencodable destination' => [
+            ['List-Unsubscribe' => "<mailto:caf\xe9@example.test>", 'List-Unsubscribe-Post' => $instruction],
+            ['List-Unsubscribe-Post' => $instruction],
+        ],
+        'unencodable instruction only' => [['List-Unsubscribe-Post' => "caf\xe9"], null],
         'unrelated headers' => [['X-Fixture' => 'omit'], null],
         'ordinary message' => [[], null],
     ];
@@ -53,6 +58,10 @@ return function () {
             }
 
             FsmtpTest::assert(is_array($payload), 'captured SendGrid JSON request');
+            FsmtpTest::assertSame('Message', $payload['content'][0]['value'] ?? null, 'original message preserved');
+            if (!is_array($payload)) {
+                return;
+            }
             FsmtpTest::assertSame($expected !== null, array_key_exists('headers', $payload), 'message headers present');
             FsmtpTest::assert($expected === ($payload['headers'] ?? null), 'message header values match the fixture');
         });

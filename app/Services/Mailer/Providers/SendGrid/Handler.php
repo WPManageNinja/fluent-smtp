@@ -221,8 +221,10 @@ class Handler extends BaseHandler
 
         foreach ($this->getParam('custom_headers', []) as $header) {
             $name = strtolower($header['key']);
-            if (isset($names[$name]) && $header['value'] !== '') {
-                $headers[$names[$name]] = $header['value'];
+            $value = $header['value'];
+            // An optional header with invalid UTF-8 would prevent encoding the entire message.
+            if (isset($names[$name]) && $value !== '' && preg_match('//u', $value)) {
+                $headers[$names[$name]] = $value;
             }
         }
 
