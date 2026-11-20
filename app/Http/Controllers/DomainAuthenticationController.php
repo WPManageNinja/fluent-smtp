@@ -13,8 +13,8 @@ class DomainAuthenticationController extends Controller
         try {
             $result = $checker->check(
                 $request->get('envelope_domain', ''),
-                $request->get('signing_domain', ''),
-                $request->get('selector', '')
+                $request->get('signing_domain') ?? '',
+                $request->get('selector') ?? ''
             );
         } catch (\InvalidArgumentException $e) {
             return $this->sendError(['message' => $e->getMessage()], 422);

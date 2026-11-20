@@ -47,6 +47,10 @@ return function () {
                 'envelope_domain' => $domain, 'signing_domain' => $domain, 'selector' => 'key1',
             ]);
             FsmtpTest::assertSame($result, $ajax['data']['data'], 'Admin AJAX returns both cached classifications');
+            $spfOnly = FsmtpTest::ajax('POST', '/settings/domain-authentication', [
+                'envelope_domain' => $domain, 'signing_domain' => '', 'selector' => '',
+            ]);
+            FsmtpTest::assertSame('skipped', $spfOnly['data']['data']['dkim']['status'] ?? '', 'Blank DKIM fields permit an SPF-only check through AJAX');
         });
         FsmtpTest::case('ambiguous or missing records', function () use ($dns, $domain) {
             FsmtpTest::assertMailSimulationActive();
