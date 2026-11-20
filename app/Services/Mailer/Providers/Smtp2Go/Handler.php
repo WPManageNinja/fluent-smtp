@@ -60,6 +60,16 @@ class Handler extends BaseHandler {
             ];
         }
 
+        foreach ((array) $this->phpMailer->getCustomHeaders() as $header) {
+            if (strtolower($header[0]) === 'reply-to') {
+                continue;
+            }
+            $body['custom_headers'][] = [
+                'header' => $header[0],
+                'value'  => $header[1]
+            ];
+        }
+
 
         if (!empty($this->getParam('attachments'))) {
             if ($attachments = $this->getAttachments()) {
