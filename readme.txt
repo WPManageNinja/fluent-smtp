@@ -345,6 +345,9 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 
 == Changelog ==
 
+= Unreleased =
+- Fixed SMTP2GO sending plain-text messages as HTML.
+
 = 2.4.5 (Date: Nov 04, 2026) =
 - Added the SendGrid EU region and an API region choice for SMTP2GO
 - Added support for in-memory attachments (such as generated PDF invoices) and inline images on API providers
