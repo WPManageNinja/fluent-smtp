@@ -17,13 +17,10 @@ class Handler extends BaseHandler
 
     protected $url = 'https://api.brevo.com/v3/smtp/email';
 
-    protected $allowedAttachmentExts = [
-        'xlsx', 'xls', 'ods', 'docx', 'docm', 'doc', 'csv', 'pdf', 'txt', 'gif',
-        'jpg', 'jpeg', 'png', 'tif', 'tiff', 'rtf', 'bmp', 'cgm', 'css', 'shtml',
-        'html', 'htm', 'zip', 'xml', 'ppt', 'pptx', 'tar', 'ez', 'ics', 'mobi',
-        'msg', 'pub', 'eps', 'odt', 'mp3', 'm4a', 'm4v', 'wma', 'ogg', 'flac',
-        'wav', 'aif', 'aifc', 'aiff', 'mp4', 'mov', 'avi', 'mkv', 'mpeg', 'mpg', 'wmv'
-    ];
+    /**
+     * Attachment key => ['cid' => string, 'name' => string], set for each send.
+     */
+    protected $inlineNames = [];
 
     public function send()
     {
@@ -60,7 +57,12 @@ class Handler extends BaseHandler
         $body = array_merge($body, $recipients);
 
         if (!empty($this->getParam('attachments'))) {
+            $this->inlineNames = isset($body['htmlContent']) ? $this->inlineNames($body['htmlContent']) : [];
             $body['attachment'] = $this->getAttachments();
+
+            if ($this->inlineNames) {
+                $body['htmlContent'] = self::pointHtmlAtInlineNames($body['htmlContent'], $this->inlineNames, array_column($body['attachment'], 'name'));
+            }
         }
 
         $params = [
@@ -163,29 +165,38 @@ class Handler extends BaseHandler
         return $this->getParam('message');
     }
 
+    /**
+     * File names for the inline images this HTML shows.
+     *
+     * Brevo documents no inline images and its staff say they are unsupported,
+     * but it embeds an attachment when the HTML's cid equals its whole file
+     * name (seen in live sends). It refuses a name without an allowed extension,
+     * so most cids cannot be the name: the image gets a generated one, and
+     * pointHtmlAtInlineNames() edits the request's HTML to match.
+     *
+     * @param string $html
+     * @return array Attachment key => ['cid' => string, 'name' => string].
+     */
+    protected function inlineNames($html)
+    {
+        $attachments = $this->getParam('attachments');
+
+        // Already embeds as it stands when the cid is the whole name, written src="cid:<name>".
+        $keep = function ($cid, $attachment, $name, $plainSrc) {
+            return pathinfo($name, PATHINFO_EXTENSION) !== '' && $cid === $name && $plainSrc;
+        };
+
+        return self::inlineImageNames($attachments, $html, $keep, array_map(function ($attachment) {
+            return self::attachmentName($attachment);
+        }, $attachments));
+    }
+
     protected function getAttachments()
     {
         $files = [];
 
-        foreach ($this->getParam('attachments') as $attachment) {
-            $name = self::attachmentName($attachment);
-
-            // The allow-list is applied to the delivered name, the only file name
-            // Brevo receives; an in-memory attachment has no path. A file on disk
-            // also passes on its path's extension, as before, so a name such as
-            // "Rechnung Nr. 2024-001" for /uploads/r.pdf is still sent.
-            $allowed = in_array(strtolower(pathinfo($name, PATHINFO_EXTENSION)), $this->allowedAttachmentExts, true);
-            if (!$allowed && empty($attachment[5])) {
-                $allowed = in_array(strtolower(pathinfo((string) $attachment[0], PATHINFO_EXTENSION)), $this->allowedAttachmentExts, true);
-            }
-
-            if (!$allowed) {
-                fluentMailDebugLog(sprintf(
-                    'SendInBlue: Skipped attachment %s - Brevo does not accept this file type',
-                    $name
-                ));
-                continue;
-            }
+        foreach ($this->getParam('attachments') as $key => $attachment) {
+            $name = isset($this->inlineNames[$key]) ? $this->inlineNames[$key]['name'] : self::attachmentName($attachment);
 
             try {
                 $file = self::attachmentContent($attachment);
