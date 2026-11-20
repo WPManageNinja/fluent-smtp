@@ -51,6 +51,10 @@ return function () {
                 'envelope_domain' => $domain, 'signing_domain' => '', 'selector' => '',
             ]);
             FsmtpTest::assertSame('skipped', $spfOnly['data']['data']['dkim']['status'] ?? '', 'Blank DKIM fields permit an SPF-only check through AJAX');
+            $partial = FsmtpTest::ajax('POST', '/settings/domain-authentication', [
+                'envelope_domain' => $domain, 'signing_domain' => 'unfinished', 'selector' => '',
+            ]);
+            FsmtpTest::assertSame($result['spf'], $partial['data']['data']['spf'] ?? null, 'An unused signing domain cannot block SPF');
         });
         FsmtpTest::case('ambiguous or missing records', function () use ($dns, $domain) {
             FsmtpTest::assertMailSimulationActive();
@@ -63,14 +67,38 @@ return function () {
             FsmtpTest::assertSame('missing', $result['spf']['status'], 'No SPF policy');
             FsmtpTest::assertSame('skipped', $result['dkim']['status'], 'No selector supplied');
         });
-        FsmtpTest::case('resolver failures and aliases', function () use ($dns, $domain) {
+        FsmtpTest::case('malformed DKIM tags cannot report a published key', function () use ($dns, $domain, &$names) {
+            foreach (['v=DKIM1; p=YWJj; p=', 'v=; p=YWJj', 'p=YWJj; v=DKIM1', 'v=DKIM1; bad; p=YWJj'] as $i => $record) {
+                $selector = 'bad' . $i;
+                $name = $selector . '._domainkey.' . $domain;
+                $names[] = $name;
+                $dns->answers[$name] = [['type' => 'TXT', 'txt' => $record]];
+                $result = $dns->check($domain, $domain, $selector);
+                FsmtpTest::assertSame('incomplete', $result['dkim']['status'], 'Malformed tag list ' . $i);
+            }
+        });
+        FsmtpTest::case('resolver failures and aliases', function () use ($dns, $domain, &$names) {
             FsmtpTest::assertMailSimulationActive();
             $dns->answers['down.' . $domain] = false;
             $dns->answers['alias._domainkey.' . $domain] = [['type' => 'CNAME', 'target' => 'key.' . $domain]];
             $dns->answers['key.' . $domain] = [['type' => 'TXT', 'txt' => 'p=YWJj']];
+            $start = count($dns->queries);
             $result = $dns->check('down.' . $domain, $domain, 'alias');
             FsmtpTest::assertSame('unavailable', $result['spf']['status'], 'Resolver error');
             FsmtpTest::assertSame('published', $result['dkim']['status'], 'Provider alias');
+            FsmtpTest::assertSame(3, count($dns->queries) - $start, 'One SPF call and two split-answer DKIM calls');
+            $name = 'combined._domainkey.' . $domain;
+            $names[] = $name;
+            $dns->answers[$name] = [
+                ['host' => 'unrelated.' . $domain, 'type' => 'TXT', 'txt' => 'p='],
+                ['host' => 'key.' . $domain, 'type' => 'TXT', 'txt' => 'p=YWJj'],
+                ['host' => $name, 'type' => 'CNAME', 'target' => 'key.' . $domain],
+            ];
+            $dns->answers['key.' . $domain] = false;
+            $start = count($dns->queries);
+            $combined = $dns->check($domain, $domain, 'combined');
+            FsmtpTest::assertSame('published', $combined['dkim']['status'], 'Combined CNAME/TXT answer suffices');
+            FsmtpTest::assertSame(1, count($dns->queries) - $start, 'Only the selector needs a query');
         });
     } finally {
         foreach ($names as $name) {
