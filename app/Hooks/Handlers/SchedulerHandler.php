@@ -221,7 +221,7 @@ class SchedulerHandler
         $phpMailer->setFrom($fallbackSettings['sender_email'], $phpMailer->FromName);
 
         // Trap the fluentSMTPMail mailer here
-        $phpMailer = new \FluentMail\App\Services\Mailer\FluentPHPMailer($phpMailer);
+        $phpMailer = new \FluentMail\App\Services\Mailer\FluentPHPMailer($phpMailer, $fallbackSettings);
         return $phpMailer->sendViaFallback($logId);
     }
 
