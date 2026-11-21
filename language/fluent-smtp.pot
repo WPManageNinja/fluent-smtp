@@ -3530,6 +3530,28 @@ msgstr ""
 msgid "Invalid response received from Authorization Server. Expected JSON."
 msgstr ""
 
+#: app/Models/Logger.php app/Services/TransStrings.php
+msgid "The email body was omitted from this log. This email cannot be resent."
+msgstr ""
+
+#. translators: %d: number of skipped emails
+#: app/Http/Controllers/LoggerController.php
+#, php-format
+msgid "%d email was skipped because its body was omitted."
+msgid_plural "%d emails were skipped because their bodies were omitted."
+msgstr[0] ""
+msgstr[1] ""
+
+#: app/Services/TransStrings.php
+msgid "Bulk resend"
+msgstr ""
+
+#. translators: %d: number of successfully resent emails
+#: app/Http/Controllers/LoggerController.php
+#, php-format
+msgid "Emails resent: %d."
+msgstr ""
+
 #. translators: %s: error description returned by the OAuth authorization server
 #: includes/OAuth2Provider.php:220
 #, php-format

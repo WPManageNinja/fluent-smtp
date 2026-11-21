@@ -137,14 +137,14 @@
                                             size="small"
                                             icon="FsmIconRefresh"
                                             @click="handleRetryClick(scope.row)"
-                                            v-if="scope.row.status == 'failed'"
+                                            v-if="scope.row.status == 'failed' && !scope.row.extra?.body_omitted"
                                         >{{ $t('Retry') }}
                                         </el-button>
                                         <el-button
                                             size="small"
                                             icon="FsmIconRefreshRight"
                                             @click="handleResendClick(scope.row)"
-                                            v-if="scope.row.status == 'sent'"
+                                            v-if="scope.row.status == 'sent' && !scope.row.extra?.body_omitted"
                                         >
                                             {{ $t('Resend') }}
                                             <span v-if="scope.row.resent_count > 0">({{ scope.row.resent_count }})</span>
@@ -558,10 +558,10 @@ export default {
             this.$post('logs/retry-bulk', {
                 log_ids: selectedIds
             }).then(res => {
-                if (res.data.without_attachments) {
+                if (res.data.without_attachments || res.data.body_omitted) {
                     this.$notify.warning({
                         offset: 19,
-                        title: this.$t('Sent without some attachments'),
+                        title: res.data.body_omitted ? this.$t('Bulk resend') : this.$t('Sent without some attachments'),
                         message: res.data.message,
                         duration: 8000
                     });

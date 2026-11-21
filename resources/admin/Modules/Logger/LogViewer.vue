@@ -34,7 +34,7 @@
                                     @click="handleRetryClick(log)"
                                     :plain="true"
                                     :loading="retrying"
-                                    v-if="log.status == 'failed'"
+                                    v-if="log.status == 'failed' && !log.extra?.body_omitted"
                                 >{{ $t('Retry') }}</el-button>
 
                                 <el-button
@@ -43,7 +43,7 @@
                                     icon="FsmIconRefreshRight"
                                     @click="handleResendClick"
                                     :disabled="retrying"
-                                    v-if="log.status == 'sent'"
+                                    v-if="log.status == 'sent' && !log.extra?.body_omitted"
                                 >
                                     {{ $t('Resend') }}
                                 </el-button>
@@ -125,7 +125,8 @@
                             <strong style="color:var(--fsm-text-mid)">{{ isPlainText ? $t('Email Body') : $t('Email Body (sanitized)') }}</strong>
                         </template>
                         <hr class="log-border">
-                        <EmailbodyContainer :content="isPlainText ? log.body : sanitize(log.body)" :plain-text="isPlainText"/>
+                        <p v-if="log.extra?.body_omitted">{{ $t('The email body was omitted from this log. This email cannot be resent.') }}</p>
+                        <EmailbodyContainer v-else :content="isPlainText ? log.body : sanitize(log.body)" :plain-text="isPlainText"/>
                         <hr/>
                     </el-collapse-item>
                     <p><strong>{{ $t('Server Response') }}</strong></p>

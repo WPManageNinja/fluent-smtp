@@ -760,7 +760,8 @@ class BaseHandler
         ];
 
         if($this->existing_row_id) {
-            $row = (new Logger())->find($this->existing_row_id);
+            $logger = new Logger();
+            $row = $logger->find($this->existing_row_id);
             if($row) {
                 $row['response'] = (array) $row['response'];
                 if($status) {
@@ -773,7 +774,8 @@ class BaseHandler
 
                 $data['response'] = $this->serialize( $row['response']);
                 $data['retries'] = $row['retries'] + 1;
-                (new Logger())->updateLog($data, ['id' => $row['id']]);
+                $storedData = empty($row['extra']['body_omitted']) ? $data : $logger->omitEmailBody($data);
+                $logger->updateLog($storedData, ['id' => $row['id']]);
 
                 if(!$status) {
                     do_action('fluentmail_email_sending_failed_no_fallback', $row['id'], $this, $data);

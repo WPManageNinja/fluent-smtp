@@ -71,7 +71,19 @@ Most importantly, this plugin is free and will always be free.
 Like any WP mail SMTP plugin, FluentSMTP replaces the WordPress <code>wp_mail()</code> function and hands every email to the service you connected, using that service's own API where one exists, or the SMTP host, port and credentials you gave it for a plain SMTP connection. Every plugin and theme that sends email through <code>wp_mail()</code> is covered, with nothing to change on their side.
 
 == Email Logging and Debugging ==
-FluentSMTP logs every email your WordPress site sends, so you can check at any time what went out, what did not, and what the mail server said about it. Failed emails can be retried, and any logged email can be resent.
+FluentSMTP email logs show what went out, what failed, and what the mail server reported. You can retry or resend emails whose bodies were retained.
+
+Developers can use the `fluentmail_log_email_body` filter in a site plugin to omit bodies from selected new logs. For example, to exclude messages with a subject prefix:
+
+`
+add_filter('fluentmail_log_email_body', function ($store, $mail) {
+    return $store && strpos($mail['subject'], '[Private]') !== 0;
+}, 10, 2);
+`
+
+The filter receives the current decision (true by default) and the log's subject, original body, from, to (a list of primary recipient addresses), provider and status. Returning false keeps the sender, primary recipients, subject, delivery status, timing and available numeric response codes. Headers, attachments and raw provider responses are also omitted because they can contain message content. Keep sensitive text out of subjects when using this filter.
+
+The decision applies when the log is created and carries through fallback delivery. An omitted message is delivered normally but cannot be previewed or resent from its log. Earlier logs retain their original contents.
 
 == 🎉 Amazon SES (Native API Connection) ==
 The Amazon SES connection sends your WordPress email through Amazon's low-cost, high-deliverability infrastructure, set up in a couple of minutes. It uses Amazon's current SES API and supports every SES region, including the EU Sovereign Cloud.
@@ -344,6 +356,9 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 6. Email details: preview the message and check how it was delivered
 
 == Changelog ==
+
+= Unreleased =
+- Added a developer filter to omit selected email bodies from new logs while retaining delivery metadata.
 
 = 2.4.5 (Date: Nov 04, 2026) =
 - Added the SendGrid EU region and an API region choice for SMTP2GO

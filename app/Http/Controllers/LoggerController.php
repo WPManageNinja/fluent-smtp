@@ -3,6 +3,7 @@
 namespace FluentMail\App\Http\Controllers;
 
 use FluentMail\App\Models\Logger;
+use FluentMail\App\Models\LogBodyOmittedException;
 use FluentMail\Includes\Request\Request;
 
 class LoggerController extends Controller
@@ -208,20 +209,37 @@ class LoggerController extends Controller
         });
 
         $failedInitiated = 0;
-        $successCount = 0;
+        $omittedCount = 0;
+        $sentCount = 0;
         $withoutAttachments = 0;
         foreach ($logIds as $logId) {
             try {
                 $email = $logger->resendEmailFromLog($logId, 'check_realtime');
-                $successCount++;
+                if (!empty($email['resend_succeeded'])) {
+                    $sentCount++;
+                }
                 if (!empty($email['skipped_attachments']) && !empty($email['resend_succeeded'])) {
                     $withoutAttachments++;
                 }
+            } catch (LogBodyOmittedException $exception) {
+                $omittedCount++;
             } catch (\Exception $exception) {
                 $failedInitiated++;
             }
         }
         $message = __('The selected emails have been resent.', 'fluent-smtp');
+        if ($omittedCount) {
+            $message = sprintf(
+                /* translators: %d: number of skipped emails */
+                _n('%d email was skipped because its body was omitted.', '%d emails were skipped because their bodies were omitted.', $omittedCount, 'fluent-smtp'),
+                $omittedCount
+            );
+            $message .= ' ' . sprintf(
+                /* translators: %d: number of successfully resent emails */
+                __('Emails resent: %d.', 'fluent-smtp'),
+                $sentCount
+            );
+        }
 
         if ($withoutAttachments) {
             $message .= sprintf(
@@ -246,7 +264,8 @@ class LoggerController extends Controller
 
         return $this->sendSuccess([
             'message'             => $message,
-            'without_attachments' => $withoutAttachments
+            'without_attachments' => $withoutAttachments,
+            'body_omitted'        => $omittedCount
         ]);
 
     }
