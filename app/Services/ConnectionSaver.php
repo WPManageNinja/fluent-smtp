@@ -59,6 +59,12 @@ class ConnectionSaver
     {
         foreach ($connection as $index => $value) {
             if ($index == 'sender_email') {
+                // A percent sequence is valid in a mailbox and is part of a toSend config key's identity.
+                if (($connection['provider'] ?? '') === 'tosend' && ($connection['key_store'] ?? '') === 'wp_config') {
+                    // Keep the mailbox intact for validateBasicInformation(), including quoted local parts.
+                    $connection[$index] = is_string($value) ? trim($value) : '';
+                    continue;
+                }
                 $connection['sender_email'] = sanitize_email($connection['sender_email']);
             }
 

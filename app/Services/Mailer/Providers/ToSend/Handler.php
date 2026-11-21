@@ -10,6 +10,8 @@ class Handler extends BaseHandler
 {
     use ValidatorTrait;
 
+    const CONFIG_KEY = 'FLUENTMAIL_TOSEND_API_KEY';
+
     protected $emailSentCode = 200;
 
     protected $baseUrl = 'https://api.tosend.com/v2/';
@@ -129,14 +131,15 @@ class Handler extends BaseHandler
         ];
     }
 
-    public function setSettings($settings)
+    public function getSetting($key = null, $default = null)
     {
-        if ($settings['key_store'] == 'wp_config') {
-            $settings['api_key'] = defined('FLUENTMAIL_TOSEND_API_KEY') ? FLUENTMAIL_TOSEND_API_KEY : '';
+        // A cached mail driver may be used after WordPress switches sites.
+        if (($key === 'api_key' || !$key) && parent::getSetting('key_store') === 'wp_config') {
+            $settings = $this->filterConnectionVars(parent::getSetting());
+            return $key ? $settings['api_key'] : $settings;
         }
 
-        $this->settings = $settings;
-        return $this;
+        return parent::getSetting($key, $default);
     }
 
     protected function getReplyTo()
@@ -296,12 +299,29 @@ class Handler extends BaseHandler
         ];
     }
 
+    public static function configKeyPrefix()
+    {
+        return static::CONFIG_KEY . '_' . (is_multisite() ? get_current_blog_id() . '_' : '');
+    }
+
     private function filterConnectionVars($connection)
     {
-        if ($connection['key_store'] == 'wp_config') {
-            $connection['api_key'] = defined('FLUENTMAIL_TOSEND_API_KEY') ? FLUENTMAIL_TOSEND_API_KEY : '';
+        if (Arr::get($connection, 'key_store') !== 'wp_config') {
+            return $connection;
         }
 
+        $name = static::CONFIG_KEY;
+        $sender = Arr::get($connection, 'sender_email');
+        if (is_string($sender) && trim($sender) !== '') {
+            // Use the configured primary, including when the message From is an alias.
+            $scoped = static::configKeyPrefix() . md5(strtolower(trim($sender)));
+            if (defined($scoped)) {
+                $name = $scoped;
+            }
+        }
+
+        $key = defined($name) ? constant($name) : '';
+        $connection['api_key'] = is_string($key) && trim($key) !== '' ? $key : '';
         return $connection;
     }
 
