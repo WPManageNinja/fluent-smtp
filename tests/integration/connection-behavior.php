@@ -192,6 +192,15 @@ class FsmtpSuiteOutlookProbe extends \FluentMail\App\Services\Mailer\Providers\O
 }
 
 return function () {
+    FsmtpTest::case('toSend uses each primary sender’s config key across send, validation and account details', function () {
+        $result = FsmtpTest::wpCli(
+            ['eval-file', __DIR__ . '/fixtures/tosend-config-keys.php'],
+            ['FSMTP_SUITE_SETTINGS_B64' => base64_encode(wp_json_encode(['misc' => ['simulate_emails' => 'yes']]))]
+        );
+        FsmtpTest::assertSame(0, $result['code'], 'toSend credential fixture exit code');
+        FsmtpTest::assert(strpos($result['stdout'], 'toSend scoped and legacy credential checks passed.') !== false, 'all toSend key checks passed');
+    });
+
     /** Build one toSend request body from a PHPMailer carrying custom headers. */
     $toSendBodyWithHeaders = function (array $headers) {
         FsmtpTest::requirePhpMailer();

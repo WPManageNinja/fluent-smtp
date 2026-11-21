@@ -68,8 +68,9 @@
             <el-form-item>
                 <label>{{ $t('__WP_CONFIG_INSTRUCTION') }}</label>
                 <div class="code_snippet">
-                    <textarea readonly style="width: 100%;">define( 'FLUENTMAIL_TOSEND_API_KEY', '********************' );</textarea>
+                    <textarea readonly rows="3" style="width: 100%;" :value="configKeyExample"></textarea>
                 </div>
+                <p class="small-help-text">{{ $t('Enter the primary From Email for a connection-specific example. If its constant is absent, FluentSMTP uses FLUENTMAIL_TOSEND_API_KEY.') }}</p>
                 <error :error="errors.get('api_key')"/>
             </el-form-item>
         </div>
@@ -112,7 +113,7 @@ import Error from '@/Pieces/Error';
 
 export default {
     name: 'ToSend',
-    props: ['connection', 'errors', 'is_new'],
+    props: ['connection', 'provider', 'errors', 'is_new'],
     components: {
         InputPassword,
         Error
@@ -129,6 +130,15 @@ export default {
         }
     },
     computed: {
+        configKeyExample() {
+            const sender = (this.connection.sender_email || '').trim().toLowerCase();
+            if (!sender) {
+                return "define( 'FLUENTMAIL_TOSEND_API_KEY', '********************' );";
+            }
+            // Escape the address for the PHP single-quoted literal in the example.
+            const quotedSender = sender.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+            return "define( '" + this.provider.config_key_prefix + "' . md5( '" + quotedSender + "' ), '********************' );";
+        },
         additional_senders() {
             return Array.isArray(this.connection.additional_senders) ? this.connection.additional_senders : [];
         }

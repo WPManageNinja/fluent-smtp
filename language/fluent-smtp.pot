@@ -1232,8 +1232,12 @@ msgstr ""
 msgid "You can not remove the primary sender email of this connection."
 msgstr ""
 
-#: app/Services/Mailer/Providers/ToSend/ValidatorTrait.php:27
-msgid "Please define FLUENTMAIL_TOSEND_API_KEY in wp-config.php file."
+#: app/Services/TransStrings.php:178
+msgid "Enter the primary From Email for a connection-specific example. If its constant is absent, FluentSMTP uses FLUENTMAIL_TOSEND_API_KEY."
+msgstr ""
+
+#: app/Services/Mailer/Providers/ToSend/ValidatorTrait.php:28
+msgid "Check the toSend API key in wp-config.php. A connection-specific definition takes precedence over FLUENTMAIL_TOSEND_API_KEY."
 msgstr ""
 
 #: app/Services/Mailer/Providers/ToSend/ValidatorTrait.php:45

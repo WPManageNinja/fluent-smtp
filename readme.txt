@@ -137,6 +137,14 @@ Send WordPress emails through **Cloudflare Email Sending** using their native RE
 
 Read the <a href="https://tosend.com/docs/guide/wordpress/">toSend WordPress setup guide</a>
 
+To use a different wp-config.php key for each toSend connection, select “Store in wp-config.php” and copy the example for its primary From Email. For billing@example.test, use:
+
+`define( 'FLUENTMAIL_TOSEND_API_KEY_' . md5( 'billing@example.test' ), 'your-domain-key' );`
+
+Use the lowercase primary address without surrounding spaces. Additional sender addresses use their parent connection's key. If you change the primary address, update the definition. When the connection-specific constant is absent, FluentSMTP uses the shared FLUENTMAIL_TOSEND_API_KEY. A defined but empty connection-specific key must be corrected before sending.
+
+On WordPress multisite, copy the example from the site that owns the connection. Its definition includes that site's numeric ID before the address hash. For example, site 2 uses the prefix FLUENTMAIL_TOSEND_API_KEY_2_. This lets two sites use different keys for the same From Email. The original shared constant applies network-wide.
+
 == 🎉 Any SMTP Server ==
 FluentSMTP works with any service that offers an SMTP connection, including your web host's mail server, Gmail SMTP, Yahoo, Outlook.com, Zoho Mail and Yandex Mail.
 
@@ -344,6 +352,9 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 6. Email details: preview the message and check how it was delivered
 
 == Changelog ==
+
+= Unreleased =
+- Added an optional per-connection wp-config.php API key for toSend.
 
 = 2.4.5 (Date: Nov 04, 2026) =
 - Added the SendGrid EU region and an API region choice for SMTP2GO

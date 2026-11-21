@@ -175,6 +175,7 @@ class TransStrings
             'Enable Email Summary' => __('Enable Email Summary', 'fluent-smtp'),
             'Encryption' => __('Encryption', 'fluent-smtp'),
             'End date' => __('End date', 'fluent-smtp'),
+            'Enter the primary From Email for a connection-specific example. If its constant is absent, FluentSMTP uses FLUENTMAIL_TOSEND_API_KEY.' => __('Enter the primary From Email for a connection-specific example. If its constant is absent, FluentSMTP uses FLUENTMAIL_TOSEND_API_KEY.', 'fluent-smtp'),
             'Entire Account' => __('Entire Account', 'fluent-smtp'),
             'Error' => __('Error', 'fluent-smtp'),
             'Exclude FluentCRM Emails' => __('Exclude FluentCRM Emails', 'fluent-smtp'),

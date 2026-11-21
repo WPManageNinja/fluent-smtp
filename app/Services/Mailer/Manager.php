@@ -8,6 +8,7 @@ use FluentMail\Includes\Support\Arr;
 use FluentMail\Includes\Core\Application;
 use FluentMail\Includes\Support\ValidationException;
 use FluentMail\App\Services\Mailer\Providers\Factory;
+use FluentMail\App\Services\Mailer\Providers\ToSend\Handler as ToSendHandler;
 
 class Manager
 {
@@ -86,7 +87,9 @@ class Manager
 
     public function getMailerConfigAndSettings()
     {
-        return static::$config;
+        $config = static::$config;
+        $config['providers']['tosend']['config_key_prefix'] = ToSendHandler::configKeyPrefix();
+        return $config;
     }
 
     public function getConfig($key = null, $default = null)

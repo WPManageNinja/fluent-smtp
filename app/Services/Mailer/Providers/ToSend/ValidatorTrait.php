@@ -23,10 +23,9 @@ trait ValidatorTrait
                 $errors['api_key']['required'] = __('Api key is required.', 'fluent-smtp');
             }
         } else if ($keyStoreType == 'wp_config') {
-            if (!defined('FLUENTMAIL_TOSEND_API_KEY') || !FLUENTMAIL_TOSEND_API_KEY) {
-                $errors['api_key']['required'] = __('Please define FLUENTMAIL_TOSEND_API_KEY in wp-config.php file.', 'fluent-smtp');
-            } else {
-                $apiKey = FLUENTMAIL_TOSEND_API_KEY;
+            $apiKey = $this->filterConnectionVars($connection)['api_key'];
+            if (!$apiKey) {
+                $errors['api_key']['required'] = __('Check the toSend API key in wp-config.php. A connection-specific definition takes precedence over FLUENTMAIL_TOSEND_API_KEY.', 'fluent-smtp');
             }
         }
 
