@@ -82,7 +82,7 @@ add_action('fluentmail_delivery_outcome', static function ($outcome, $log_id) {
 
 No built-in alert channel needs to be enabled. Each send is evaluated separately, including retries. Ordinary primary successes and FluentSMTP test-mode sends are silent. The action covers sends that reach transport dispatch. A plugin that short-circuits `pre_wp_mail` owns that outcome. Backup acceptance indicates that the transport accepted the message, not that it reached the inbox.
 
-Keep callbacks short and handle collector errors inside the callback. WordPress runs listeners synchronously; an uncaught exception interrupts dispatch even if the transport has already accepted the message. If the collector needs a remote request, queue it outside the send. Mail sent from inside an outcome callback does not generate another outcome notification.
+Catch collector errors inside the callback so the next listener can run. If a listener throws a PHPMailer exception after the backup accepts a message, WordPress can fire `wp_mail_failed` and return `false`. Retrying on that signal can send a duplicate. Other uncaught exceptions can propagate to the caller. Queue slow collector requests outside the send. Mail sent by the callback does not generate another outcome notification.
 
 #### Contribute
 FluentSMTP is built with Vue 3 and Element Plus (frontend), bundled with Vite. It's backend communication is based on standard WordPress AJAX endpoints.

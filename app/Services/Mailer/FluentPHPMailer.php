@@ -3,8 +3,6 @@
 namespace FluentMail\App\Services\Mailer;
 
 use FluentMail\App\Hooks\Handlers\BulkSendSessionHandler;
-use FluentMail\App\Services\Mailer\Providers\Factory;
-use FluentMail\App\Services\Mailer\Providers\Simulator\Handler as Simulator;
 
 class FluentPHPMailer
 {
@@ -91,21 +89,13 @@ class FluentPHPMailer
 
     public function sendViaFallback($rowId)
     {
-        if ($this->fallbackConnection === null) {
-            // Preserve the original single-argument entry point for extensions.
-            $driver = fluentMailGetProvider($this->phpMailer->From);
-            if (!$driver) {
-                return false;
-            }
-            $driver = clone $driver;
-        } elseif (fluentMail(Manager::class)->isSimulating()) {
-            $driver = new Simulator();
-        } else {
-            // The scheduler already selected the saved connection. Looking up
-            // its From address again can quietly choose the primary instead.
-            $driver = clone fluentMail(Factory::class)->make($this->fallbackConnection['provider']);
-            $driver->setSettings($this->fallbackConnection);
+        $driver = $this->fallbackConnection === null
+            ? fluentMailGetProvider($this->phpMailer->From)
+            : fluentMailGetProvider($this->phpMailer->From, false, $this->fallbackConnection);
+        if (!$driver) {
+            return false;
         }
+        $driver = clone $driver;
         $driver->setRowId(is_numeric($rowId) ? (int) $rowId : 0);
         $sent = $driver->setPhpMailer($this->phpMailer)->send();
         if ($sent && self::$activeSend && self::$activeSend->phpMailer === $this->phpMailer) {

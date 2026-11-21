@@ -201,11 +201,23 @@ if (!function_exists('fluentMailGetProvider')) {
      *
      * @param string $fromEmail The email address to get the provider for.
      * @param bool $cacheClear Whether to clear the provider cache.
+     * @param array|null $connection Explicit connection settings for a scheduled backup.
      * @return \FluentMail\App\Services\Mailer\Providers\Simulator\Handler|false The FluentMail provider for the given email address, or false if no provider is found.
      */
-    function fluentMailGetProvider($fromEmail, $cacheClear = false)
+    function fluentMailGetProvider($fromEmail, $cacheClear = false, $connection = null)
     {
         static $providers = [];
+
+        // A saved backup may share a From address with another connection.
+        // Resolve it without reading or populating the ordinary address cache.
+        if ($connection !== null) {
+            if (fluentMail(Manager::class)->isSimulating()) {
+                return new FluentMail\App\Services\Mailer\Providers\Simulator\Handler();
+            }
+            $driver = clone fluentMail(Factory::class)->make($connection['provider']);
+            $driver->setSettings($connection);
+            return $driver;
+        }
 
         if (isset($providers[$fromEmail]) && !$cacheClear) {
             return $providers[$fromEmail];
