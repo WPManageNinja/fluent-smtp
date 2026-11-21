@@ -25,7 +25,11 @@ export const adminScreens = [
     { name: 'new connection', hash: '/connection', markers: ['Add Connection', 'Connection Provider'] },
     { name: 'email test', hash: '/test', markers: ['Send Test Email', 'Send To'] },
     { name: 'email logs', hash: '/logs', markers: ['Email Logs', 'Filter'] },
-    { name: 'alerts', hash: '/notification-settings', markers: ['Summary Email', 'Email Sending Error Notifications'] },
+    {
+        name: 'alerts',
+        hash: '/notification-settings',
+        markers: ['Summary Email', 'Email Sending Error Notifications', 'the most frequent subject lines for each'],
+    },
     { name: 'about', hash: '/support', markers: ['About', 'Contributors'] },
     { name: 'documentation', hash: '/documentation', markers: ['How can we help you?', 'Please view the documentation first.'] },
 ];
