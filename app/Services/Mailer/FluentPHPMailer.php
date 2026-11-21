@@ -3,9 +3,8 @@
 namespace FluentMail\App\Services\Mailer;
 
 use FluentMail\App\Hooks\Handlers\BulkSendSessionHandler;
-use FluentMail\App\Models\Logger;
 use FluentMail\App\Services\Mailer\Providers\Factory;
-use FluentMail\App\Services\Mailer\Providers\DefaultMail\Handler as PHPMailer;
+use FluentMail\App\Services\Mailer\Providers\Simulator\Handler as Simulator;
 
 class FluentPHPMailer
 {
@@ -18,18 +17,19 @@ class FluentPHPMailer
     private static $notifying = false;
     private $failedLogId = 0;
     private $sentViaFallback = false;
+    private $fallbackConnection;
 
-    public function __construct($phpMailer)
+    public function __construct($phpMailer, $fallbackConnection = null)
     {
         $this->app = fluentMail();
 
         $this->phpMailer = $phpMailer;
+        $this->fallbackConnection = $fallbackConnection;
     }
 
     public function send()
     {
-        if (defined('FLUENTMAIL_EMAIL_TESTING') || self::$notifying
-            || (!self::$activeSend && !has_action('fluentmail_delivery_outcome'))) {
+        if (defined('FLUENTMAIL_EMAIL_TESTING') || self::$notifying) {
             return $this->sendPrimary();
         }
 
@@ -56,9 +56,6 @@ class FluentPHPMailer
                      */
                     do_action('fluentmail_delivery_outcome', $this->sentViaFallback ? 'sent_via_fallback' : 'failed', $this->failedLogId);
                 }
-            } catch (\Throwable $e) {
-                // Reporting a send must not turn accepted mail into a retry.
-                fluentMailDebugLog('A delivery outcome listener failed.');
             } finally {
                 self::$notifying = false;
                 self::$activeSend = $previous;
@@ -74,7 +71,7 @@ class FluentPHPMailer
         }
     }
 
-    protected function sendPrimary()
+    private function sendPrimary()
     {
         if ($driver = fluentMailGetProvider($this->phpMailer->From)) {
             if ($forceFromEmail = $driver->getSetting('force_from_email_id')) {
@@ -94,17 +91,27 @@ class FluentPHPMailer
 
     public function sendViaFallback($rowId)
     {
-        $driver = fluentMailGetProvider($this->phpMailer->From);
-        if($driver) {
-            $driver = clone $driver;
-            $driver->setRowId(is_numeric($rowId) ? (int) $rowId : 0);
-            $sent = $driver->setPhpMailer($this->phpMailer)->send();
-            if ($sent && self::$activeSend && self::$activeSend->phpMailer === $this->phpMailer) {
-                self::$activeSend->sentViaFallback = true;
+        if ($this->fallbackConnection === null) {
+            // Preserve the original single-argument entry point for extensions.
+            $driver = fluentMailGetProvider($this->phpMailer->From);
+            if (!$driver) {
+                return false;
             }
-            return $sent;
+            $driver = clone $driver;
+        } elseif (fluentMail(Manager::class)->isSimulating()) {
+            $driver = new Simulator();
+        } else {
+            // The scheduler already selected the saved connection. Looking up
+            // its From address again can quietly choose the primary instead.
+            $driver = clone fluentMail(Factory::class)->make($this->fallbackConnection['provider']);
+            $driver->setSettings($this->fallbackConnection);
         }
-        return false;
+        $driver->setRowId(is_numeric($rowId) ? (int) $rowId : 0);
+        $sent = $driver->setPhpMailer($this->phpMailer)->send();
+        if ($sent && self::$activeSend && self::$activeSend->phpMailer === $this->phpMailer) {
+            self::$activeSend->sentViaFallback = true;
+        }
+        return $sent;
     }
 
     public function __get($key)

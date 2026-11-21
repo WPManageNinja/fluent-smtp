@@ -99,6 +99,13 @@ class Manager
         return $key ? Arr::get(static::$settings, $key, $default) : static::$settings;
     }
 
+    public function isSimulating()
+    {
+        $misc = $this->getSettings('misc');
+        return (defined('FLUENTMAIL_SIMULATE_EMAILS') && FLUENTMAIL_SIMULATE_EMAILS)
+            || (!empty($misc['simulate_emails']) && $misc['simulate_emails'] == 'yes');
+    }
+
     public function getWPConfig($key = null, $default = null)
     {
         return $key ? Arr::get(

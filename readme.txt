@@ -347,6 +347,7 @@ We use Patchstack to manage security reports. <a href="https://patchstack.com/da
 
 = Unreleased =
 - Added a developer action for final sending failures and successful fallback sends.
+- Use the selected backup connection when its sender mapping is missing or stale.
 
 = 2.4.5 (Date: Nov 04, 2026) =
 - Added the SendGrid EU region and an API region choice for SMTP2GO
