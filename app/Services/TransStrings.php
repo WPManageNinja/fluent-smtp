@@ -447,7 +447,7 @@ class TransStrings
             '__DISCORD_INTRO' => __('Get a Discord message whenever an email fails to send. Add a webhook for the channel you want them in.', 'fluent-smtp'),
             '__DISCORD_NOTIFICATION_ENABLED' => __('FluentSMTP is connected to your Discord channel. When an email fails to send, you will get a message there.', 'fluent-smtp'),
             '__EMAIL_LOGGING_OFF' => __('Email logging is off. Only failed and resent emails appear here.', 'fluent-smtp'),
-            '__EMAIL_SUMMARY_INTRO' => __('A regular email with how much this site sent, and how much of it failed.', 'fluent-smtp'),
+            '__EMAIL_SUMMARY_INTRO' => __('See how many emails were sent or failed, and the most frequent subject lines for each.', 'fluent-smtp'),
             '__Email_Simulation_Label' => __('Stop delivering email. Messages are still written to the log, so you can see what would have been sent.', 'fluent-smtp'),
             '__Email_Simulation_Yes' => __('No email is leaving this site.', 'fluent-smtp'),
             '__Email_TEXT_PART_Label' => __('Send a plain text copy alongside each HTML email, for clients that cannot show HTML. Still in beta.', 'fluent-smtp'),

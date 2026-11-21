@@ -3006,8 +3006,8 @@ msgstr ""
 msgid "Email logging is off. Only failed and resent emails appear here."
 msgstr ""
 
-#: app/Services/TransStrings.php:430
-msgid "A regular email with how much this site sent, and how much of it failed."
+#: app/Services/TransStrings.php:450
+msgid "See how many emails were sent or failed, and the most frequent subject lines for each."
 msgstr ""
 
 #: app/Services/TransStrings.php:431

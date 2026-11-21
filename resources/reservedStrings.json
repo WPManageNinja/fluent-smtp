@@ -35,7 +35,7 @@
   "__SMTP_CRED_HELP": "Turn this on to send a username and password to the SMTP server. Most servers require it.",
   "__ANOTHER_CONNECTION_NOTICE": "Another connection already uses this address. Saving will replace it.",
   "__EMAIL_LOGGING_OFF": "Email logging is off. Only failed and resent emails appear here.",
-  "__EMAIL_SUMMARY_INTRO": "A regular email with how much this site sent, and how much of it failed.",
+  "__EMAIL_SUMMARY_INTRO": "See how many emails were sent or failed, and the most frequent subject lines for each.",
   "__SUBSCRIBE_INTRO": "Get an email when there is a new release, and the occasional tip.",
   "__DEFAULT_MAIL_WARNING": "The Default (none) option does not use SMTP and will not improve delivery on your site.",
   "__TELE_RESPONSE_ERROR": "Could not read the Telegram connection status. The server said: ",
