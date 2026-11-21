@@ -52,6 +52,33 @@ Fluent SMTP is the fastest and most advanced WordPress Mail SMTP plugin on the m
 Most importantly, this plugin is free and will always be free.
 👉 <a href="https://fluentsmtp.com/articles/why-we-built-fluentsmtp-plugin/">Read Why it's 100% free (always)</a> 👈
 
+#### Monitor delivery failures and fallback sends from an MU plugin
+
+FluentSMTP fires the WordPress action `fluentmail_delivery_outcome` when a transport send fails or the configured backup accepts a message after the primary connection fails. It passes two arguments:
+
+| Argument | Meaning |
+| --- | --- |
+| `$outcome` | `failed` when the send fails, including when a configured backup cannot be resolved. `sent_via_fallback` when the backup accepts the message. |
+| `$log_id` | Integer ID of the primary failure in this site's FluentSMTP email log, or `0` when unavailable. A listener can report the event in either case. |
+
+For example, sites with a central PHP log collector can deploy the following as `wp-content/mu-plugins/managed-mail-alerts.php` using MainWP. The collector can route the two event types to different channels. The example records the site and outcome without including message content.
+
+```php
+<?php
+/**
+ * Plugin Name: Managed Mail Alerts
+ */
+defined('ABSPATH') || exit;
+
+add_action('fluentmail_delivery_outcome', static function ($outcome, $log_id) {
+    error_log(sprintf('[managed-mail] site=%s event=%s log_id=%d', home_url('/'), $outcome, $log_id));
+}, 10, 2);
+```
+
+No built-in alert channel needs to be enabled. Each send is evaluated separately, including retries. Ordinary primary successes and FluentSMTP test-mode sends are silent. The action covers sends that reach transport dispatch. A plugin that short-circuits `pre_wp_mail` owns that outcome. Backup acceptance indicates that the transport accepted the message, not that it reached the inbox.
+
+Keep callbacks short. If the collector needs a remote request, queue it outside the send. Mail sent from inside an outcome callback does not generate another outcome notification.
+
 #### Contribute
 FluentSMTP is built with Vue 3 and Element Plus (frontend), bundled with Vite. It's backend communication is based on standard WordPress AJAX endpoints.
 

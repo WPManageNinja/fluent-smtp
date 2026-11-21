@@ -781,7 +781,10 @@ class BaseHandler
             }
         } else {
             $logId = (new Logger)->add($data);
-            if(!$status) {
+            // A fallback may have no original row when the primary INSERT
+            // failed. Its own rejection must not select the backup again.
+            if(!$status && $this->existing_row_id === null) {
+                FluentPHPMailer::recordFailedLog($this->phpMailer, $logId);
                 // We have to fire an action for this failed job
                 $status = apply_filters('fluentmail_email_sending_failed', $status, $logId, $this, $data);
             }

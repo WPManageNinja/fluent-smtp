@@ -13,6 +13,12 @@ class FluentPHPMailer
 
     protected $phpMailer = null;
 
+    /** @var self|null The send whose provider and fallback are currently executing. */
+    private static $activeSend;
+    private static $notifying = false;
+    private $failedLogId = 0;
+    private $sentViaFallback = false;
+
     public function __construct($phpMailer)
     {
         $this->app = fluentMail();
@@ -21,6 +27,54 @@ class FluentPHPMailer
     }
 
     public function send()
+    {
+        if (defined('FLUENTMAIL_EMAIL_TESTING') || self::$notifying
+            || (!self::$activeSend && !has_action('fluentmail_delivery_outcome'))) {
+            return $this->sendPrimary();
+        }
+
+        $previous = self::$activeSend;
+        self::$activeSend = $this;
+        $this->failedLogId = 0;
+        $this->sentViaFallback = false;
+        $sent = false;
+        try {
+            $sent = $this->sendPrimary();
+            return $sent;
+        } finally {
+            // A listener may invoke wp_mail() itself. Finish this send before
+            // calling it, then resume whichever send was active on entry.
+            self::$activeSend = null;
+            try {
+                if (!$sent || $this->sentViaFallback) {
+                    self::$notifying = true;
+                    /**
+                     * Reports a transport failure or acceptance by the backup.
+                     *
+                     * @param string $outcome 'failed' or 'sent_via_fallback'.
+                     * @param int $logId Primary failed log ID, or zero if unavailable.
+                     */
+                    do_action('fluentmail_delivery_outcome', $this->sentViaFallback ? 'sent_via_fallback' : 'failed', $this->failedLogId);
+                }
+            } catch (\Throwable $e) {
+                // Reporting a send must not turn accepted mail into a retry.
+                fluentMailDebugLog('A delivery outcome listener failed.');
+            } finally {
+                self::$notifying = false;
+                self::$activeSend = $previous;
+            }
+        }
+    }
+
+    /** @internal Associate the primary provider's log with this specific send. */
+    public static function recordFailedLog($mailer, $id)
+    {
+        if (self::$activeSend && self::$activeSend->phpMailer === $mailer && is_numeric($id)) {
+            self::$activeSend->failedLogId = max(0, (int) $id);
+        }
+    }
+
+    protected function sendPrimary()
     {
         if ($driver = fluentMailGetProvider($this->phpMailer->From)) {
             if ($forceFromEmail = $driver->getSetting('force_from_email_id')) {
@@ -43,8 +97,12 @@ class FluentPHPMailer
         $driver = fluentMailGetProvider($this->phpMailer->From);
         if($driver) {
             $driver = clone $driver;
-            $driver->setRowId($rowId);
-            return $driver->setPhpMailer($this->phpMailer)->send();
+            $driver->setRowId(is_numeric($rowId) ? (int) $rowId : 0);
+            $sent = $driver->setPhpMailer($this->phpMailer)->send();
+            if ($sent && self::$activeSend && self::$activeSend->phpMailer === $this->phpMailer) {
+                self::$activeSend->sentViaFallback = true;
+            }
+            return $sent;
         }
         return false;
     }
