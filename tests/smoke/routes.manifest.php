@@ -1,6 +1,6 @@
 <?php
 /**
- * All 41 routes from app/Http/routes.php.
+ * Admin routes from app/Http/routes.php.
  *
  * GET variations mirror the actual values/options in resources/admin. POST
  * payloads preserve the request shapes used by the SPA and are intentionally
@@ -66,6 +66,9 @@ return [
     ]),
     $post('/settings/test', 'SettingsController@sendTestEmail', 'resources/admin/Modules/Test/Test.vue:115', [
         'email' => 'fsmtp-suite@example.test', 'from' => '', 'isHtml' => 'true',
+    ]),
+    $post('/settings/domain-authentication', 'DomainAuthenticationController@check', 'resources/admin/Modules/Test/DomainAuthentication.vue', [
+        'envelope_domain' => '', 'signing_domain' => '', 'selector' => '',
     ]),
     $post('/settings/subscribe', 'SettingsController@subscribe', 'resources/admin/Pieces/_Subscribe.vue:56', [
         'email' => 'fsmtp-suite@example.test', 'display_name' => 'FluentSMTP Suite', 'share_essentials' => 'no',
