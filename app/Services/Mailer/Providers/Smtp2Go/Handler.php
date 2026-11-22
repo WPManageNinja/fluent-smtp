@@ -62,15 +62,17 @@ class Handler extends BaseHandler {
 
 
         if (!empty($this->getParam('attachments'))) {
-            if ($attachments = $this->getAttachments()) {
-                $body['attachments'] = $attachments;
+            $parts = $this->attachmentParts($body['html_body']);
+
+            if ($parts['attachments']) {
+                $body['attachments'] = $parts['attachments'];
             }
 
-            // SMTP2GO uses an inline image's filename as its cid, so embedded
-            // images go in "inlines" under their cid.
-            if ($inlines = $this->attachmentRows(true)) {
-                $body['inlines'] = $inlines;
+            if ($parts['inlines']) {
+                $body['inlines'] = $parts['inlines'];
             }
+
+            $body['html_body'] = $parts['html'];
         }
 
         $params = [
@@ -160,31 +162,26 @@ class Handler extends BaseHandler {
     }
 
     /**
-     * The normal attachments; embedded images are sent separately (attachmentRows(true)).
+     * The attachment and inline rows for the request, and the HTML to send with them.
      *
-     * @return array
+     * SMTP2GO uses an inline image's filename as its cid. A cid that ends like a
+     * risky file name (Gmail refuses an image named "abc@example.com") gets a name
+     * like inline-1.png, and the HTML is pointed at it; an image whose cid cannot be
+     * a file name and cannot be renamed goes as a normal attachment under its real name.
+     *
+     * @param string $html The body being sent as html_body.
+     * @return array ['attachments' => array, 'inlines' => array, 'html' => string]
      */
-    protected function getAttachments() {
-        return $this->attachmentRows(false);
-    }
-
-    /**
-     * @param bool $inline True for the embedded images, false for normal attachments.
-     * @return array
-     */
-    protected function attachmentRows($inline) {
-        $data = [];
+    protected function attachmentParts($html) {
+        $parts = ['attachments' => [], 'inlines' => [], 'html' => $html];
 
         $attachments = $this->getParam('attachments');
         $contentIds = self::inlineContentIds($attachments);
+        $isHtml = $this->getParam('headers.content-type') !== 'text/plain';
+        $inlineNames = $isHtml ? self::inlineNamesForUnsafeCids($attachments, (string) $html) : [];
+        $sentNames = [];
 
         foreach ($attachments as $key => $attachment) {
-            $contentId = $contentIds[$key];
-
-            if (($contentId !== '') !== $inline) {
-                continue;
-            }
-
             try {
                 $file = self::attachmentContent($attachment);
             } catch (\Exception $e) {
@@ -192,14 +189,31 @@ class Handler extends BaseHandler {
                 continue;
             }
 
-            $data[] = [
+            $contentId = $contentIds[$key];
+            $name = self::attachmentName($attachment);
+            $inline = $contentId !== '';
+
+            if (isset($inlineNames[$key])) {
+                $name = $inlineNames[$key]['name'];
+            } elseif ($inline && self::isImageAttachment($attachment, $name) && !self::canNameByCid($contentId, $attachment, $name)) {
+                $inline = false;
+            } elseif ($inline) {
+                $name = $contentId;
+            }
+
+            $sentNames[] = $name;
+            $parts[$inline ? 'inlines' : 'attachments'][] = [
                 'mimetype' => self::attachmentType($attachment),
-                'filename' => $inline ? $contentId : self::attachmentName($attachment),
+                'filename' => $name,
                 'fileblob' => base64_encode($file)
             ];
         }
 
-        return $data;
+        if ($inlineNames) {
+            $parts['html'] = self::pointHtmlAtInlineNames($html, $inlineNames, $sentNames);
+        }
+
+        return $parts;
     }
 
     protected function getCustomEmailHeaders() {
