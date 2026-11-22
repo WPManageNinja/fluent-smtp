@@ -13,6 +13,11 @@ use FluentMail\App\Services\Mailer\ValidatorTrait;
 
 class BaseHandler
 {
+    /**
+     * An img tag's quoted src="cid:...": 1 is the tag up to src, 2 the quote, 3 the cid.
+     */
+    const INLINE_IMAGE_SRC = '/(<img\b[^>]*?\s)src\s*=\s*(["\'])cid:([^"\']+)\2/i';
+
     use ValidatorTrait;
 
     protected $app = null;
@@ -1102,6 +1107,199 @@ class BaseHandler
         }
 
         return $ids;
+    }
+
+    /**
+     * Whether a cid can safely be an embedded image's file name, for providers that
+     * tie the two together. It must be an image, and the cid must not say it is
+     * some other kind of file: as a name, "abc@example.com" reads as a DOS program.
+     * A space does not embed; a backslash would escape a header's quote; a slash or
+     * trailing dot would hide what the name says.
+     *
+     * @param string $cid
+     * @param array  $attachment One row of PHPMailer::getAttachments()
+     * @param string $name       Its delivered name.
+     * @return bool
+     */
+    protected static function canNameByCid($cid, $attachment, $name)
+    {
+        if ($cid === '' || preg_match('/[\s\\\\\/]|\.$/', $cid) || !self::isImageAttachment($attachment, $name)) {
+            return false;
+        }
+
+        $suffix = pathinfo($cid, PATHINFO_EXTENSION);
+
+        return $suffix === '' || \PHPMailer\PHPMailer\PHPMailer::_mime_types($suffix) === self::attachmentType($attachment);
+    }
+
+    /**
+     * The cids an HTML body shows with an img tag's quoted src, each with whether
+     * every use is written exactly src="cid:<cid>".
+     *
+     * @param string $html
+     * @return array cid => bool
+     */
+    protected static function inlineImageSources($html)
+    {
+        if (!preg_match_all(self::INLINE_IMAGE_SRC, (string) $html, $matches)) {
+            return [];
+        }
+
+        $sources = [];
+
+        foreach ($matches[3] as $i => $cid) {
+            $doubleQuoted = 'src="cid:' . $cid . '"';
+            $isPlain = substr($matches[0][$i], -strlen($doubleQuoted)) === $doubleQuoted;
+            $sources[$cid] = $isPlain && (!isset($sources[$cid]) || $sources[$cid]);
+        }
+
+        return $sources;
+    }
+
+    /**
+     * Generated file names (inline-1.png and so on) for the embedded images an HTML
+     * body shows, for providers that embed an image by its file name. Only images
+     * are named, with their own extension or one from their type; $keep decides
+     * which keep the name they have.
+     *
+     * @param array    $attachments PHPMailer::getAttachments()
+     * @param string   $html
+     * @param callable $keep  fn(string $cid, array $attachment, string $name, bool $plainSrc): bool
+     * @param array    $taken Names a generated name must not take.
+     * @return array Attachment key => ['cid' => string, 'name' => string].
+     */
+    protected static function inlineImageNames($attachments, $html, $keep, $taken)
+    {
+        $sources = self::inlineImageSources($html);
+
+        if (!$sources) {
+            return [];
+        }
+
+        $taken = array_flip($taken);
+        $names = [];
+        $number = 0;
+
+        foreach (self::inlineContentIds($attachments) as $key => $cid) {
+            if (!isset($sources[$cid])) {
+                continue;
+            }
+
+            $name = self::attachmentName($attachments[$key]);
+
+            if (!self::isImageAttachment($attachments[$key], $name) || $keep($cid, $attachments[$key], $name, $sources[$cid])) {
+                continue;
+            }
+
+            $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+
+            if ($extension === '') {
+                $extension = ltrim(self::extensionForType(self::attachmentType($attachments[$key])), '.');
+            }
+
+            if ($extension === '') {
+                continue;
+            }
+
+            do {
+                $number++;
+                $generated = 'inline-' . $number . '.' . $extension;
+            } while (isset($taken[$generated]));
+
+            $names[$key] = ['cid' => $cid, 'name' => $generated];
+        }
+
+        return $names;
+    }
+
+    /**
+     * Generated names for the embedded images whose cid cannot be a file name, for
+     * providers that otherwise send an image under its cid. Every real name and cid
+     * is reserved, so a generated name never clashes with one kept as it is.
+     *
+     * @param array  $attachments PHPMailer::getAttachments()
+     * @param string $html        The HTML being sent, '' for a plain-text email.
+     * @return array Attachment key => ['cid' => string, 'name' => string].
+     */
+    protected static function inlineNamesForUnsafeCids($attachments, $html)
+    {
+        if ($html === '') {
+            return [];
+        }
+
+        $taken = array_merge(array_map(function ($attachment) {
+            return self::attachmentName($attachment);
+        }, $attachments), array_values(array_filter(self::inlineContentIds($attachments), 'strlen')));
+
+        return self::inlineImageNames($attachments, $html, function ($cid, $attachment, $name) {
+            return self::canNameByCid($cid, $attachment, $name);
+        }, $taken);
+    }
+
+    /**
+     * The HTML with each generated name's src pointed at it, for images really in
+     * the request, always written src="...". Only the request is edited: the log,
+     * a fallback connection and a resend all keep the original.
+     *
+     * @param string $html
+     * @param array  $inlineNames From inlineImageNames().
+     * @param array  $sentNames   File names going to the provider.
+     * @return string
+     */
+    protected static function pointHtmlAtInlineNames($html, $inlineNames, $sentNames)
+    {
+        $sent = array_flip($sentNames);
+        $map = [];
+
+        foreach ($inlineNames as $inline) {
+            if (isset($sent[$inline['name']])) {
+                $map[$inline['cid']] = $inline['name'];
+            }
+        }
+
+        if (!$map) {
+            return $html;
+        }
+
+        $edited = preg_replace_callback(self::INLINE_IMAGE_SRC, function ($match) use ($map) {
+            if (!isset($map[$match[3]])) {
+                return $match[0];
+            }
+
+            return $match[1] . 'src="cid:' . $map[$match[3]] . '"';
+        }, $html);
+
+        return is_string($edited) ? $edited : $html;
+    }
+
+    /**
+     * Whether everything an attachment says about itself says image: its type,
+     * its name and, for a file on disk, its path. For handlers that choose a
+     * name for an embedded image, which must never make another file look like one.
+     *
+     * @param array  $attachment One row of PHPMailer::getAttachments()
+     * @param string $name       Its delivered name.
+     * @return bool
+     */
+    protected static function isImageAttachment($attachment, $name)
+    {
+        $types = [self::attachmentType($attachment)];
+
+        foreach ([$name, empty($attachment[5]) ? (string) $attachment[0] : ''] as $file) {
+            $extension = pathinfo($file, PATHINFO_EXTENSION);
+
+            if ($extension !== '') {
+                $types[] = \PHPMailer\PHPMailer\PHPMailer::_mime_types($extension);
+            }
+        }
+
+        foreach ($types as $type) {
+            if (strpos($type, 'image/') !== 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
