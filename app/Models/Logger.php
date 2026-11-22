@@ -859,6 +859,15 @@ class Logger extends Model
                 $email['resend_succeeded']    = (bool) $result;
                 return $email;
             }
+
+            if ($type === 'check_realtime') {
+                // Delivery already finished, even if the row expired while the provider was sending.
+                return [
+                    'resend_succeeded'    => (bool) $result,
+                    'skipped_attachments' => $skippedAttachments,
+                    'log_update_failed'   => true,
+                ];
+            }
         } catch (\PHPMailer\PHPMailer\Exception $e) {
             throw $e;
         }

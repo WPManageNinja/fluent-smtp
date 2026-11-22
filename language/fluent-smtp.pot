@@ -3552,6 +3552,12 @@ msgstr ""
 msgid "Emails resent: %d."
 msgstr ""
 
+#. translators: %d: number of delivery log updates that failed
+#: app/Http/Controllers/LoggerController.php
+#, php-format
+msgid "Delivery log updates that failed: %d."
+msgstr ""
+
 #. translators: %s: error description returned by the OAuth authorization server
 #: includes/OAuth2Provider.php:220
 #, php-format

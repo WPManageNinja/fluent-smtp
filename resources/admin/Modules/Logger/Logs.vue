@@ -558,10 +558,11 @@ export default {
             this.$post('logs/retry-bulk', {
                 log_ids: selectedIds
             }).then(res => {
-                if (res.data.without_attachments || res.data.body_omitted) {
+                const bulkWarning = res.data.body_omitted || res.data.log_update_failed;
+                if (res.data.without_attachments || bulkWarning) {
                     this.$notify.warning({
                         offset: 19,
-                        title: res.data.body_omitted ? this.$t('Bulk resend') : this.$t('Sent without some attachments'),
+                        title: bulkWarning ? this.$t('Bulk resend') : this.$t('Sent without some attachments'),
                         message: res.data.message,
                         duration: 8000
                     });

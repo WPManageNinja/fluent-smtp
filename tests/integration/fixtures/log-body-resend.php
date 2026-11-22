@@ -10,8 +10,14 @@ FsmtpTest::assertMailSimulationActive();
 $table = FsmtpFactory::emailLogTable();
 $redirect = FsmtpFactory::productionLogTableRedirect($table);
 $sent = [];
-$intercept = static function ($result, $mail) use (&$sent) {
+$expireDuringDelivery = 0;
+$intercept = static function ($result, $mail) use (&$sent, &$expireDuringDelivery, $table) {
     $sent[] = $mail['subject'];
+    if ($expireDuringDelivery) {
+        global $wpdb;
+        $wpdb->delete($table, ['id' => $expireDuringDelivery]);
+        $expireDuringDelivery = 0;
+    }
     return true;
 };
 add_filter('pre_wp_mail', $intercept, PHP_INT_MAX, 2);
@@ -26,6 +32,15 @@ try {
         $mixed['data']['data']['body_omitted'] !== 1 || $sent !== ['Retained empty body'] ||
         (int) (new Logger())->find($omitted)['retries'] !== 0) {
         throw new RuntimeException('Single or bulk resend did not respect the omission marker.');
+    }
+
+    // A retention job can remove a row between delivery and updating its retry count.
+    $expireDuringDelivery = FsmtpFactory::insertLog($table, ['subject' => 'Expired after delivery']);
+    $expired = FsmtpTest::ajax('POST', '/logs/retry-bulk', ['log_ids' => [$omitted, $expireDuringDelivery]]);
+    $summary = $expired['data']['data'];
+    if (end($sent) !== 'Expired after delivery' || strpos($summary['message'], 'Emails resent: 1.') === false ||
+        empty($summary['log_update_failed'])) {
+        throw new RuntimeException('Bulk resend must count successful delivery even when its log update fails.');
     }
 } finally {
     remove_filter('pre_wp_mail', $intercept, PHP_INT_MAX);

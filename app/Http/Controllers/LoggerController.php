@@ -210,11 +210,15 @@ class LoggerController extends Controller
 
         $failedInitiated = 0;
         $omittedCount = 0;
+        $failedLogUpdates = 0;
         $sentCount = 0;
         $withoutAttachments = 0;
         foreach ($logIds as $logId) {
             try {
                 $email = $logger->resendEmailFromLog($logId, 'check_realtime');
+                if (!empty($email['log_update_failed'])) {
+                    $failedLogUpdates++;
+                }
                 if (!empty($email['resend_succeeded'])) {
                     $sentCount++;
                 }
@@ -262,10 +266,19 @@ class LoggerController extends Controller
             $message .= sprintf(__(' %d could not be prepared for sending.', 'fluent-smtp'), $failedInitiated);
         }
 
+        if ($failedLogUpdates) {
+            $message .= ' ' . sprintf(
+                /* translators: %d: number of delivery log updates that failed */
+                __('Delivery log updates that failed: %d.', 'fluent-smtp'),
+                $failedLogUpdates
+            );
+        }
+
         return $this->sendSuccess([
             'message'             => $message,
             'without_attachments' => $withoutAttachments,
-            'body_omitted'        => $omittedCount
+            'body_omitted'        => $omittedCount,
+            'log_update_failed'   => $failedLogUpdates
         ]);
 
     }
