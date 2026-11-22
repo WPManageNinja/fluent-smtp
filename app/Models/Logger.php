@@ -446,8 +446,33 @@ class Logger extends Model
         return $headers;
     }
 
-    public function add($data)
+    public function shouldStoreEmailBody(array $data)
     {
+        if (!has_filter('fluentmail_log_email_body') || !array_key_exists('body', $data)) {
+            return true;
+        }
+        $extra = $this->unserialize($data['extra'] ?? []);
+        $recipients = $this->normalizeLoggedRecipients($this->unserialize($data['to'] ?? []));
+        $mail = [
+            'body'     => $data['body'],
+            'subject'  => $data['subject'] ?? '',
+            'from'     => $data['from'] ?? '',
+            'to'       => is_array($recipients) ? array_column($recipients, 'email') : [],
+            'provider' => $extra['provider'] ?? '',
+            'status'   => $data['status'] ?? '',
+        ];
+
+        /** Filters whether this new log may retain the email body. Callbacks must return a boolean. */
+        return (bool) apply_filters('fluentmail_log_email_body', true, $mail);
+    }
+
+    public function add($data, $storeBody = null)
+    {
+        $storeBody = $storeBody ?? $this->shouldStoreEmailBody($data);
+        if (!$storeBody) {
+            $data = $this->omitEmailBody($data);
+        }
+
         try {
             $data = array_merge($data, [
                 'created_at' => current_time('mysql')
@@ -459,6 +484,31 @@ class Logger extends Model
         } catch (Exception $e) {
             return $e;
         }
+    }
+
+    /**
+     * Build a storage-only copy. Headers, attachments and raw provider diagnostics
+     * can also contain the message (including an SMTP transcript or an inline file).
+     */
+    public function omitEmailBody(array $data)
+    {
+        $extra = $this->unserialize($data['extra'] ?? []);
+        $safeExtra = array_intersect_key((array) $extra, ['provider' => true, 'send_time_ms' => true]);
+        $safeExtra['body_omitted'] = true;
+        $response = $this->unserialize($data['response'] ?? []);
+        $safeResponse = [];
+        if (isset($response['code']) && is_numeric($response['code'])) {
+            $safeResponse['code'] = (int) $response['code'];
+        }
+        if (isset($response['fallback_response']['code']) && is_numeric($response['fallback_response']['code'])) {
+            $safeResponse['fallback_response']['code'] = (int) $response['fallback_response']['code'];
+        }
+        $data['body'] = '';
+        $data['headers'] = serialize([]);
+        $data['attachments'] = serialize([]);
+        $data['response'] = serialize($safeResponse);
+        $data['extra'] = serialize($safeExtra);
+        return $data;
     }
 
     public function delete(array $id)
@@ -603,6 +653,13 @@ class Logger extends Model
     public function resendEmailFromLog($id, $type = 'retry', $recipients = [])
     {
         $email = $this->find($id);
+
+        if (!empty($email['extra']['body_omitted'])) {
+            throw new LogBodyOmittedException(
+                __('The email body was omitted from this log. This email cannot be resent.', 'fluent-smtp'),
+                409
+            );
+        }
 
         $email['to']          = $this->normalizeLoggedRecipients($this->unserialize($email['to']));
         $email['headers']     = $this->unserialize($email['headers']);
@@ -799,6 +856,15 @@ class Logger extends Model
                 $email['skipped_attachments'] = $skippedAttachments;
                 $email['resend_succeeded']    = (bool) $result;
                 return $email;
+            }
+
+            if ($type === 'check_realtime') {
+                // Delivery already finished, even if the row expired while the provider was sending.
+                return [
+                    'resend_succeeded'    => (bool) $result,
+                    'skipped_attachments' => $skippedAttachments,
+                    'log_update_failed'   => true,
+                ];
             }
         } catch (\PHPMailer\PHPMailer\Exception $e) {
             throw $e;

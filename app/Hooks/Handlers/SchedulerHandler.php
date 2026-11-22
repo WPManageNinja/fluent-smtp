@@ -16,7 +16,7 @@ class SchedulerHandler
     public function register()
     {
         add_action($this->dailyActionName, array($this, 'handleScheduledJobs'));
-        add_filter('fluentmail_email_sending_failed', array($this, 'maybeHandleFallbackConnection'), 10, 4);
+        add_filter('fluentmail_email_sending_failed', array($this, 'maybeHandleFallbackConnection'), 10, 5);
 
         add_action('fluentsmtp_renew_gmail_token', array($this, 'renewGmailToken'));
         add_action('fluentsmtp_renew_outlook_token', array($this, 'renewOutlookToken'));
@@ -193,7 +193,7 @@ class SchedulerHandler
         return untrailingslashit($url);
     }
 
-    public function maybeHandleFallbackConnection($status, $logId, $handler, $data = [])
+    public function maybeHandleFallbackConnection($status, $logId, $handler, $data = [], $context = [])
     {
         if (defined('FLUENTMAIL_EMAIL_TESTING')) {
             return false;
@@ -222,7 +222,7 @@ class SchedulerHandler
 
         // Trap the fluentSMTPMail mailer here
         $phpMailer = new \FluentMail\App\Services\Mailer\FluentPHPMailer($phpMailer);
-        return $phpMailer->sendViaFallback($logId);
+        return $phpMailer->sendViaFallback($logId, $context);
     }
 
     public function renewGmailToken()

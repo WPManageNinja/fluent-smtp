@@ -38,12 +38,13 @@ class FluentPHPMailer
         return $this->phpMailer->send();
     }
 
-    public function sendViaFallback($rowId)
+    public function sendViaFallback($rowId, array $context = [])
     {
         $driver = fluentMailGetProvider($this->phpMailer->From);
         if($driver) {
             $driver = clone $driver;
-            $driver->setRowId($rowId);
+            $driver->setRowId(is_numeric($rowId) ? (int) $rowId : 0);
+            $driver->setFallbackLogContext($context);
             return $driver->setPhpMailer($this->phpMailer)->send();
         }
         return false;
