@@ -129,7 +129,10 @@ return function () {
     FsmtpTest::case('SMTP2GO: a plain-text email sends an unsafe-cid image as a normal attachment and keeps its text', function () use ($send, $image) {
         $sent = $send('see <img src="cid:abc@example.com">', function ($m) use ($image) { $image($m, 'abc@example.com', 'embed0'); }, false);
         FsmtpTest::assertSame([['attachment', 'embed0']], $sent['parts'], 'parts');
-        FsmtpTest::assertSame('see <img src="cid:abc@example.com">', $sent['html'], 'body unchanged');
+        // Which field carries a plain-text body is the handler's choice (text_body once
+        // it sends plain text as text); what matters here is that the text is untouched.
+        $text = empty($sent['body']['text_body']) ? $sent['html'] : $sent['body']['text_body'];
+        FsmtpTest::assertSame('see <img src="cid:abc@example.com">', $text, 'body unchanged');
     });
 
     FsmtpTest::case('SMTP2GO: an inline part that is not an image keeps its cid, as before', function () use ($send, $pdf) {
