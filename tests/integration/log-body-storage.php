@@ -64,13 +64,14 @@ return function () {
             // With no primary log to update, the site's success-logging policy still applies.
             $handler->setRowId(0);
             $mailer->Subject = FsmtpTest::uniq('unlogged-backup');
-            add_filter('fluentmail_will_log_email', '__return_false', PHP_INT_MAX);
+            $veto = static function () { return false; };
+            add_filter('fluentmail_will_log_email', $veto, PHP_INT_MAX);
             try {
                 FsmtpTest::assertSame(true, $handler->send(), 'backup delivery succeeds under a log veto');
                 $count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$table} WHERE subject=%s", $mailer->Subject));
                 FsmtpTest::assertSame(0, (int) $count, 'backup without an existing row respects the whole-log veto');
             } finally {
-                remove_filter('fluentmail_will_log_email', '__return_false', PHP_INT_MAX);
+                remove_filter('fluentmail_will_log_email', $veto, PHP_INT_MAX);
             }
             $blocked = false;
             try {
