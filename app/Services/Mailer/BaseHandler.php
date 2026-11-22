@@ -797,7 +797,7 @@ class BaseHandler
 
     protected function shouldBeLogged($status)
     {
-        if ($this->existing_row_id !== null) {
+        if ($this->existing_row_id) {
             return true;
         }
         if (defined('FLUENTMAIL_LOG_OFF') && FLUENTMAIL_LOG_OFF) {
