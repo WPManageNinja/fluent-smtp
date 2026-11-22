@@ -446,36 +446,34 @@ class Logger extends Model
         return $headers;
     }
 
-    public function add($data)
+    public function shouldStoreEmailBody(array $data)
     {
+        if (!has_filter('fluentmail_log_email_body') || !array_key_exists('body', $data)) {
+            return true;
+        }
+        $extra = $this->unserialize($data['extra'] ?? []);
+        $recipients = $this->normalizeLoggedRecipients($this->unserialize($data['to'] ?? []));
+        $mail = [
+            'body'     => $data['body'],
+            'subject'  => $data['subject'] ?? '',
+            'from'     => $data['from'] ?? '',
+            'to'       => is_array($recipients) ? array_column($recipients, 'email') : [],
+            'provider' => $extra['provider'] ?? '',
+            'status'   => $data['status'] ?? '',
+        ];
+
+        /** Filters whether this new log may retain the email body. Callbacks must return a boolean. */
+        return (bool) apply_filters('fluentmail_log_email_body', true, $mail);
+    }
+
+    public function add($data, $storeBody = null)
+    {
+        $storeBody = $storeBody ?? $this->shouldStoreEmailBody($data);
+        if (!$storeBody) {
+            $data = $this->omitEmailBody($data);
+        }
+
         try {
-            if (has_filter('fluentmail_log_email_body') && array_key_exists('body', $data)) {
-                $extra = $this->unserialize($data['extra'] ?? []);
-                $recipients = $this->normalizeLoggedRecipients($this->unserialize($data['to'] ?? []));
-                $mail = [
-                    'body'     => $data['body'],
-                    'subject'  => $data['subject'] ?? '',
-                    'from'     => $data['from'] ?? '',
-                    'to'       => is_array($recipients) ? array_column($recipients, 'email') : [],
-                    'provider' => $extra['provider'] ?? '',
-                    'status'   => $data['status'] ?? '',
-                ];
-                try {
-                    /**
-                     * Filters whether this new log may retain the message body.
-                     *
-                     * @param bool  $storeBody Defaults to true.
-                     * @param array $mail      Body, subject, logged sender, To addresses, provider and status.
-                     */
-                    $storeBody = apply_filters('fluentmail_log_email_body', true, $mail);
-                } catch (\Throwable $exception) {
-                    // A broken privacy callback must neither expose the body nor interrupt delivery.
-                    $storeBody = false;
-                }
-                if (!$storeBody) {
-                    $data = $this->omitEmailBody($data);
-                }
-            }
             $data = array_merge($data, [
                 'created_at' => current_time('mysql')
             ]);

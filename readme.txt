@@ -85,6 +85,18 @@ The filter receives the current decision (true by default) and the log's subject
 
 The decision applies when the log is created and carries through fallback delivery. An omitted message is delivered normally but cannot be previewed or resent from its log. Earlier logs retain their original contents.
 
+Return a boolean from the callback. If your policy calls code that can throw, handle the exception inside the callback before it returns to WordPress. For example, a site with a custom policy function can omit the body when the policy is unavailable:
+
+`
+add_filter('fluentmail_log_email_body', function ($store, $mail) {
+    try {
+        return $store && my_site_may_store_email($mail);
+    } catch (\Throwable $error) {
+        return false;
+    }
+}, 10, 2);
+`
+
 == 🎉 Amazon SES (Native API Connection) ==
 The Amazon SES connection sends your WordPress email through Amazon's low-cost, high-deliverability infrastructure, set up in a couple of minutes. It uses Amazon's current SES API and supports every SES region, including the EU Sovereign Cloud.
 

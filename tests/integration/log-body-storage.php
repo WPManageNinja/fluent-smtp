@@ -75,22 +75,33 @@ return function () {
         }
     });
 
-    FsmtpTest::case('a broken body policy keeps the body out of its log', function () {
+    FsmtpTest::case('a policy can return false on error inside another WordPress hook', function () {
         $table = FsmtpFactory::emailLogTable();
         $redirect = FsmtpFactory::productionLogTableRedirect($table);
-        $broken = static function () {
-            throw new \Error('Synthetic policy error');
+        $policy = static function () {
+            try {
+                throw new \RuntimeException('Synthetic policy error');
+            } catch (\RuntimeException $error) {
+                return false;
+            }
+        };
+        $outer = static function () {
+            $logger = new Logger();
+            $id = $logger->add(['body' => 'Synthetic text', 'subject' => 'Policy fixture', 'status' => 'sent']);
+            FsmtpTest::assertSame('fsmtp_test_log_message', current_filter(), 'outer hook is current after logging');
+            return $logger->find($id);
         };
         add_filter('query', $redirect, PHP_INT_MAX);
-        add_filter('fluentmail_log_email_body', $broken);
+        add_filter('fluentmail_log_email_body', $policy);
+        add_filter('fsmtp_test_log_message', $outer);
         try {
-            $logger = new Logger();
-            $id = $logger->add(['body' => 'Synthetic text', 'subject' => 'Broken callback', 'status' => 'sent']);
-            $row = $logger->find($id);
+            $row = apply_filters('fsmtp_test_log_message', []);
             FsmtpTest::assertSame('', $row['body'], 'callback failure omits content');
             FsmtpTest::assert(!empty($row['extra']['body_omitted']), 'callback failure retains delivery record');
+            FsmtpTest::assert(!doing_filter('fsmtp_test_log_message') && !doing_filter('fluentmail_log_email_body'), 'both hooks have returned');
         } finally {
-            remove_filter('fluentmail_log_email_body', $broken);
+            remove_filter('fsmtp_test_log_message', $outer);
+            remove_filter('fluentmail_log_email_body', $policy);
             remove_filter('query', $redirect, PHP_INT_MAX);
         }
     });

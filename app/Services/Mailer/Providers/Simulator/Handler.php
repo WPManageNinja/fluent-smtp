@@ -33,7 +33,7 @@ class Handler extends BaseHandler
                 'extra'    => maybe_serialize(['provider' => 'Simulator'])
             ];
 
-            (new Logger)->add($logData);
+            (new Logger)->add($logData, $this->fallbackLogContext['store_body'] ?? null);
         }
 
         return true;

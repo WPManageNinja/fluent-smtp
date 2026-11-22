@@ -30,6 +30,7 @@ class BaseHandler
     protected $response = null;
 
     protected $existing_row_id = null;
+    protected $fallbackLogContext = [];
 
     protected $sendStartedAt = null;
 
@@ -759,42 +760,44 @@ class BaseHandler
             'extra'    => $this->serialize($this->getExtraParams())
         ];
 
-        if($this->existing_row_id) {
-            $logger = new Logger();
-            $row = $logger->find($this->existing_row_id);
-            if($row) {
-                $row['response'] = (array) $row['response'];
-                if($status) {
-                    $row['response']['fallback'] = __('Sent using fallback connection ', 'fluent-smtp') . $this->attributes['from'];
-                    $row['response']['fallback_response'] = $response;
-                } else {
-                    $row['response']['fallback'] = __('Tried to send using fallback but failed. ', 'fluent-smtp') . $this->attributes['from'];
-                    $row['response']['fallback_response'] = $response;
-                }
+        $logger = new Logger();
+        if ($this->existing_row_id !== null) {
+            $row = $this->existing_row_id ? $logger->find($this->existing_row_id) : [];
+            $diagnostic = (array) ($this->fallbackLogContext['response'] ?? $row['response'] ?? []);
+            $diagnostic['fallback'] = ($status
+                ? __('Sent using fallback connection ', 'fluent-smtp')
+                : __('Tried to send using fallback but failed. ', 'fluent-smtp')) . $this->attributes['from'];
+            $diagnostic['fallback_response'] = $response;
+            $data['response'] = $this->serialize($diagnostic);
+            $data['retries'] = (int) ($row['retries'] ?? 0) + 1;
 
-                $data['response'] = $this->serialize( $row['response']);
-                $data['retries'] = $row['retries'] + 1;
-                $storedData = empty($row['extra']['body_omitted']) ? $data : $logger->omitEmailBody($data);
-                $logger->updateLog($storedData, ['id' => $row['id']]);
-
-                if(!$status) {
-                    do_action('fluentmail_email_sending_failed_no_fallback', $row['id'], $this, $data);
-                }
+            $storeBody = $this->fallbackLogContext['store_body'] ?? null;
+            $logId = $this->existing_row_id;
+            if ($row) {
+                $storeBody = $storeBody !== false && empty($row['extra']['body_omitted']);
+                $logger->updateLog($storeBody ? $data : $logger->omitEmailBody($data), ['id' => $row['id']]);
+            } elseif (!$logId) {
+                $logId = $logger->add($data, $storeBody);
             }
-        } else {
-            $logId = (new Logger)->add($data);
-            if(!$status) {
-                // We have to fire an action for this failed job
-                $status = apply_filters('fluentmail_email_sending_failed', $status, $logId, $this, $data);
+            if (!$status) {
+                do_action('fluentmail_email_sending_failed_no_fallback', $logId, $this, $data);
             }
+            return $status;
         }
 
+        $storeBody = $logger->shouldStoreEmailBody($data);
+        $logId = $logger->add($data, $storeBody);
+        if (!$status) {
+            // Carry the live diagnostic and the storage decision separately from the stored record.
+            $context = ['store_body' => $storeBody, 'response' => $response];
+            $status = apply_filters('fluentmail_email_sending_failed', $status, $logId, $this, $data, $context);
+        }
         return $status;
     }
 
     protected function shouldBeLogged($status)
     {
-        if($this->existing_row_id) {
+        if ($this->existing_row_id !== null) {
             return true;
         }
         if (defined('FLUENTMAIL_LOG_OFF') && FLUENTMAIL_LOG_OFF) {
@@ -895,6 +898,11 @@ class BaseHandler
     public function setRowId($id)
     {
         $this->existing_row_id = $id;
+    }
+
+    public function setFallbackLogContext(array $context)
+    {
+        $this->fallbackLogContext = $context;
     }
 
     public function addNewSenderEmail($connection, $email)
