@@ -60,5 +60,21 @@ return [
                 'disconnect' => 'settings/pushover/disconnect',
             ],
         ],
+        'webhook' => [
+            'key'         => 'webhook',
+            'title'       => __('Webhook', 'fluent-smtp'),
+            'logo'        => fluentMailAssetUrl('images/webhook.svg'),
+            'logo_name'   => 'webhook.svg',
+            'controller'  => 'FluentMail\App\Http\Controllers\WebhookController',
+            'component'   => '_WebhookNotification',
+            'info_component' => '_WebhookConnectionInfo',
+            // The form's hint lists these, so it names exactly what the template accepts.
+            'placeholders' => \FluentMail\App\Services\NotificationHelper::WEBHOOK_PLACEHOLDER_KEYS,
+            'routes'      => [
+                'register'  => 'settings/webhook/register',
+                'test'      => 'settings/webhook/send-test',
+                'disconnect' => 'settings/webhook/disconnect',
+            ],
+        ],
     ],
 ];

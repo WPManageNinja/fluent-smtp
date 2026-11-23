@@ -312,6 +312,15 @@ class SchedulerHandler
                     );
                     continue;
                 }
+
+                if ($driver == 'webhook') {
+                    NotificationHelper::sendWebhookEvent(
+                        'connection_unhealthy',
+                        NotificationHelper::eventContextFromConnection($connection, $message),
+                        $channelSettings
+                    );
+                    continue;
+                }
             }
         }
     }
@@ -444,6 +453,15 @@ class SchedulerHandler
                     Arr::get($channelSettings, 'user_key'),
                     false,
                     1 // High priority for failed emails
+                );
+                continue;
+            }
+
+            if ($driver == 'webhook') {
+                NotificationHelper::sendWebhookEvent(
+                    'email_failed',
+                    NotificationHelper::eventContextFromLog($handler, $logData),
+                    $channelSettings
                 );
                 continue;
             }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Phase 3 — permission smoke for all 31 mutating admin-AJAX routes.
+ * Phase 3 — permission smoke for all 33 mutating admin-AJAX routes.
  *
  * Anonymous coverage verifies that no nopriv action exists. Low-privilege
  * coverage dispatches each real wp_ajax callback as a temporary subscriber.
