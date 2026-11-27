@@ -34,8 +34,9 @@ class Logger extends Model
      * Columns log navigation may filter on. `filter_by` arrives from the
      * request and lands in the query as an identifier, which prepare() cannot
      * bind, so a value outside this list is dropped instead of interpolated.
-     * Every key is re-checked against it in buildWhere()'s loop, which is the
-     * one place an identifier is written into SQL.
+     * Every key is re-checked against it in buildWhere()'s loop. The only other
+     * identifiers buildWhere() writes are search columns, taken from
+     * $fillables and $searchables.
      */
     protected $filterables = [
         'status',
@@ -137,33 +138,24 @@ class Logger extends Model
             $where['created_at'] = $dateRange;
         }
 
-        if (isset($data['query']) && is_scalar($data['query']) && trim($data['query']) !== '') {
-            $query = trim($data['query']);
-            $columns = $this->searchables;
+        /*
+         * The search box, read exactly as get() reads it for the list: a
+         * `column:text` search of any fillable column, otherwise the text in
+         * any searchable column, always LIKE, and ANDed with the filters. The
+         * viewer's Prev and Next walk the list the search produced, so any
+         * other reading leaves them on rows the list did not show.
+         */
+        $hasSearch = !empty($data['query']) && is_scalar($data['query']);
+        $search = $hasSearch ? trim(sanitize_text_field($data['query'])) : '';
+        $searchColumns = $this->searchables;
 
-            /*
-             * The same reading get() gives the search box: `subject:invoice` is a
-             * search of that one column, not of every column for the literal text.
-             * The viewer's Prev and Next walk the list the search produced, so a
-             * column search that the list understood and the navigation did not
-             * left Next with nothing to land on.
-             */
-            if (strpos($query, ':')) {
-                $parts = explode(':', $query);
-                $column = array_shift($parts);
+        if ($hasSearch && strpos($search, ':')) {
+            $parts = explode(':', $search);
+            $column = array_shift($parts);
 
-                if (in_array($column, $this->filterables, true)) {
-                    $columns = [$column];
-                    $query = trim(implode(':', $parts));
-                }
-            }
-
-            foreach ($columns as $column) {
-                if (isset($where[$column])) {
-                    $where[$column] .= '|' . $query;
-                } else {
-                    $where[$column] = $query;
-                }
+            if (in_array($column, $this->fillables, true)) {
+                $searchColumns = [$column];
+                $search = trim(implode(':', $parts));
             }
         }
 
@@ -208,6 +200,15 @@ class Logger extends Model
 
         if ($orWhere) {
             $orWhere = 'AND (' . trim($orWhere, 'OR ') . ')';
+        }
+
+        if ($hasSearch) {
+            $searchOr = [];
+            foreach ($searchColumns as $column) {
+                $args[] = '%' . $this->db->esc_like($search) . '%';
+                $searchOr[] = "`{$column}` LIKE '%s'";
+            }
+            $orWhere .= ' AND (' . implode(' OR ', $searchOr) . ')';
         }
 
         $whereClause = implode(' ', [$whereClause, trim($andWhere), $orWhere]);
