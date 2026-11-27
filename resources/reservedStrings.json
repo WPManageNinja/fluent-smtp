@@ -45,6 +45,8 @@
   "__MAILGUN_URL_TIP": "Which Mailgun endpoint to send through.",
   "__PEPIPOST_HELP": "Your API key is on the Pepipost settings page - click Show to reveal it:",
   "__POSTMARK_HELP": "Your API key is on the API Tokens tab of your Postmark server:",
+  "__POSTAL_HELP": "Create a server API credential in your Postal mail server, then paste the key here:",
+  "__POSTAL_URL_HELP": "The base URL of your Postal installation, without a trailing slash. FluentSMTP appends /api/v1/send/message.",
   "__TELE_INTRO": "Get a message on Telegram whenever an email fails to send. Connect FluentSMTP\\'s official telegram bot to start.",
   "__SLACK_TERMS": "I agree to the terms and conditions of this Slack integration.",
   "__GIT_CONTRIBUTE": "If you are a developer and would like to contribute to the project, please contribute on GitHub.",

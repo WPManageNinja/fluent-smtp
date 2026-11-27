@@ -879,6 +879,7 @@ return function () {
             'Smtp2Go'    => ['class' => \FluentMail\App\Services\Mailer\Providers\Smtp2Go\Handler::class, 'typed' => true, 'url' => 'https://api.smtp2go.com/', 'status' => 200, 'settings' => [], 'rows' => $jsonRows(['attachments'], 'filename', 'mimetype', 'fileblob')],
             'PepiPost'   => ['class' => \FluentMail\App\Services\Mailer\Providers\PepiPost\Handler::class, 'typed' => false, 'url' => 'https://api.pepipost.com/', 'status' => 202, 'settings' => [], 'rows' => $jsonRows(['attachments'], 'name', null, 'content')],
             'Cloudflare' => ['class' => \FluentMail\App\Services\Mailer\Providers\Cloudflare\Handler::class, 'typed' => true, 'url' => 'https://api.cloudflare.com/', 'status' => 200, 'settings' => ['account_id' => 'suite-account'], 'rows' => $jsonRows(['attachments'], 'filename', 'type', 'content')],
+            'Postal'     => ['class' => \FluentMail\App\Services\Mailer\Providers\Postal\Handler::class, 'typed' => true, 'url' => 'https://postal.example.test/', 'status' => 200, 'settings' => ['server_url' => 'https://postal.example.test', 'api_key' => 'suite-postal-key'], 'rows' => $jsonRows(['attachments'], 'name', 'content_type', 'data')],
             'SendInBlue' => ['class' => \FluentMail\App\Services\Mailer\Providers\SendInBlue\Handler::class, 'typed' => false, 'url' => 'https://api.brevo.com/', 'status' => 201, 'settings' => [], 'rows' => $jsonRows(['attachment'], 'name', null, 'content')],
             'Mailgun'    => ['class' => \FluentMail\App\Services\Mailer\Providers\Mailgun\Handler::class, 'typed' => true, 'url' => 'https://api.mailgun.net/', 'status' => 200, 'settings' => ['domain_name' => 'mg.example.test', 'region' => 'us'], 'rows' => $formRows('attachment')],
             'ElasticMail' => ['class' => \FluentMail\App\Services\Mailer\Providers\ElasticMail\Handler::class, 'typed' => true, 'url' => 'https://api.elasticemail.com/', 'status' => 200, 'settings' => ['mail_type' => 'transactional'], 'rows' => $formRows('attachments')],
@@ -913,7 +914,8 @@ return function () {
                     'body'     => wp_json_encode([
                         'MessageID' => 'suite', 'ErrorCode' => 0, 'Message' => 'OK', 'id' => '<suite@example.test>',
                         'message' => 'Queued', 'success' => true, 'messageId' => 'suite',
-                        'data' => ['succeeded' => 1, 'failed' => 0],
+                        'status' => 'success',
+                        'data' => ['succeeded' => 1, 'failed' => 0, 'message_id' => 'suite@postal.example.test'],
                         'results' => ['total_accepted_recipients' => 1, 'id' => 'suite'],
                         'result' => ['delivered' => ['to@example.test']],
                     ]),

@@ -279,6 +279,21 @@ return [
             ],
             'note'     => __('Cloudflare Email Sending requires a verified domain in your Cloudflare account and an API token with Email Sending permissions.', 'fluent-smtp')
         ],
+        'postal'      => [
+            'key'      => 'postal',
+            'title'    => __('Postal', 'fluent-smtp'),
+            'image'    => fluentMailAssetUrl('images/provider-postal.svg'),
+            'provider' => 'Postal',
+            'options'  => [
+                'sender_name'     => '',
+                'sender_email'    => '',
+                'force_from_name' => 'no',
+                'server_url'      => '',
+                'api_key'         => '',
+                'key_store'       => 'db'
+            ],
+            'note'     => '<a href="https://docs.postalserver.io/developer/api/" target="_blank" rel="noopener">' . __('Read the Postal API documentation', 'fluent-smtp') . '</a>' . __(' for how to create a server API credential and send through your self-hosted Postal cluster.', 'fluent-smtp')
+        ],
         'default'     => [
             'key'      => 'default',
             'title'    => __('PHP mail()', 'fluent-smtp'),

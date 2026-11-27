@@ -106,7 +106,8 @@ return function () {
                 'body'     => wp_json_encode([
                     'MessageID' => 'suite', 'ErrorCode' => 0, 'Message' => 'OK', 'id' => '<suite@example.test>',
                     'message' => 'Queued', 'success' => true, 'messageId' => 'suite',
-                    'data' => ['succeeded' => 1, 'failed' => 0],
+                    'status' => 'success',
+                    'data' => ['succeeded' => 1, 'failed' => 0, 'message_id' => 'suite@postal.example.test'],
                     'results' => ['total_accepted_recipients' => 1, 'id' => 'suite'],
                     'result' => ['delivered' => ['to@example.test']],
                 ]),
@@ -163,6 +164,23 @@ return function () {
 
         FsmtpTest::assertSame('cid:suite-logo', $byName['logo.png']['ContentID'], 'image ContentID');
         FsmtpTest::assert(!isset($byName['invoice.pdf']['ContentID']), 'no ContentID on the pdf');
+    });
+
+    FsmtpTest::case('inline images: Postal sends prepared MIME over /send/raw so the cid survives', function () use ($send, $json) {
+        $request = $send(
+            \FluentMail\App\Services\Mailer\Providers\Postal\Handler::class,
+            'https://postal.example.test/',
+            200,
+            ['server_url' => 'https://postal.example.test']
+        );
+        $body = $json($request);
+        $mime = base64_decode($body['data']);
+
+        FsmtpTest::assertSame('sender@example.test', $body['mail_from'], 'envelope sender');
+        FsmtpTest::assertSame(['to@example.test'], $body['rcpt_to'], 'envelope recipients');
+        FsmtpTest::assert(strpos($mime, 'Content-ID: <suite-logo>') !== false, 'cid kept in MIME');
+        FsmtpTest::assert(strpos($mime, 'filename=logo.png') !== false || strpos($mime, 'filename="logo.png"') !== false, 'filename differs from cid');
+        FsmtpTest::assert(strpos($mime, 'invoice.pdf') !== false, 'normal attachment kept');
     });
 
     FsmtpTest::case('inline images: SparkPost and SMTP2GO put the image in their inline list, named by cid', function () use ($send, $json, $png) {
