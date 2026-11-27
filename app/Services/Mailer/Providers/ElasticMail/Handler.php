@@ -47,9 +47,11 @@ class Handler extends BaseHandler
             'isTransactional' => ($this->getSetting('mail_type') == 'transactional') ? true : false
         ];
 
-        if ($this->phpMailer->ContentType == 'text/html') {
+        $contentType = $this->getHeader('content-type');
+
+        if ($contentType == 'text/html') {
             $postData['bodyHtml'] = $this->getBody();
-        } else if ($this->phpMailer->ContentType == 'multipart/alternative') {
+        } else if ($contentType == 'multipart/alternative') {
             $postData['bodyHtml'] = $this->getBody();
             $postData['bodyText'] = $this->phpMailer->AltBody;
         } else {
