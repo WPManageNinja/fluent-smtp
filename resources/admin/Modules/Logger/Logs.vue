@@ -389,7 +389,7 @@ export default {
                 return this.handleResendBulk(this.selectedLogs);
             }
         },
-        handleRetry(row, type, recipients = null) {
+        handleRetry(row, type, recipients = null, target = null) {
             this.loading = true;
 
             const payload = {
@@ -399,6 +399,10 @@ export default {
 
             if (recipients && recipients.length) {
                 payload.recipients = recipients;
+            }
+
+            if (target) {
+                payload.target = target;
             }
 
             return this.$post('logs/retry', payload).then(res => {
@@ -451,10 +455,10 @@ export default {
                 return;
             }
 
-            const recipients = payload.target === 'original' ? null : payload.recipients;
+            const recipients = payload.target === 'custom' ? payload.recipients : null;
 
             this.resendDialog.resending = true;
-            this.handleRetry(row, 'resend', recipients).always(() => {
+            this.handleRetry(row, 'resend', recipients, payload.target).always(() => {
                 this.resendDialog.resending = false;
                 this.resendDialog.visible = false;
             });
