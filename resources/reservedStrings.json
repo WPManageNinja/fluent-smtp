@@ -63,6 +63,8 @@
   "__REAL_NOTIFICATION_DESC": "Get a message when an email fails to send, on a channel you already watch. Set up any one of these to start.",
   "__PUSHOVER_INTRO": "Pushover delivers notifications to your Android, iPhone, iPad and desktop.",
   "__PUSHOVER_NOTIFICATION_ENABLED": "FluentSMTP is connected to Pushover. When an email fails to send, you will get a push notification.",
+  "__GOTIFY_INTRO": "Gotify is a self-hosted server for sending and receiving push notifications. Enter the URL of your Gotify server and an application token to start getting real time notifications.",
+  "__GOTIFY_NOTIFICATION_ENABLED": "Gotify channel is enabled",
   "Mon": "Mon",
   "Tue": "Tue",
   "Wed": "Wed",
